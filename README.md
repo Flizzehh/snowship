@@ -1,9 +1,5 @@
 # README #
 
-### Release ###
-
-* [Development Changelog](https://docs.google.com/document/d/1T2idGSMZVB-Pm8pucB4PCetMq1kNHIdmBIWKOwsd_2I/edit?usp=sharing)
-
 ### What is this repository for? ###
 
 * Snowship is a colony survival management simulation game developed by Ryan White.
