@@ -111,12 +111,12 @@ public class ColonistManager : BaseManager {
 		}
 
 		public void SetPriority(int priority) {
-			if (priority > colonist.professions.Count) {
+			if (priority > 9) {
 				priority = 0;
 			}
 
 			if (priority < 0) {
-				priority = colonist.professions.Count;
+				priority = 9;
 			}
 
 			this.priority = priority;

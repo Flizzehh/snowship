@@ -3740,7 +3740,7 @@ public class UIManager : BaseManager {
 			button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(
 				GetColour(Colours.DarkGreen),
 				GetColour(Colours.DarkRed),
-				professionInstance.colonist.professions.Count >= 2 ? (priority - 1f) / (professionInstance.colonist.professions.Count - 1f) : 1
+				(priority - 1f) / (9 - 1f)
 			);
 		}
 
