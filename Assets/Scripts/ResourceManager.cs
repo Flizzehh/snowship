@@ -242,8 +242,8 @@ public class ResourceManager : BaseManager {
 																			objectSubGroupEnum,
 																			null
 																		);
-																		manufacturingObjects[objectSubGroupEnum] = new List<ObjectEnum>();
 																		if (objectSubGroupString.Split(':').Count() > 1) {
+																			manufacturingObjects[objectSubGroupEnum] = new List<ObjectEnum>();
 																			foreach (string objectString in objectSubGroupString.Split(':')[1].Split(',')) {
 																				manufacturingObjects[objectSubGroupEnum].Add((ObjectEnum)Enum.Parse(typeof(ObjectEnum), objectString));
 																			}
@@ -643,6 +643,19 @@ public class ResourceManager : BaseManager {
 
 		public int GetAvailableAmount() {
 			return availableAmount;
+		}
+
+		public bool CanBeManufacturedBy(ObjectPrefab prefab) {
+			if (manufacturingObjects.ContainsKey(prefab.subGroupType)) {
+				if (manufacturingObjects[prefab.subGroupType] == null) {
+					return true;
+				} else {
+					if (manufacturingObjects[prefab.subGroupType].Contains(prefab.type)) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 

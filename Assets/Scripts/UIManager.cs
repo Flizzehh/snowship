@@ -4449,7 +4449,7 @@ public class UIManager : BaseManager {
 			obj.transform.Find("SelectedManufacturingTileObjectSprite-Panel/SelectedManufacturingTileObjectSprite-Image").GetComponent<Image>().sprite = selectedManufacturingObject.obj.GetComponent<SpriteRenderer>().sprite;
 
 			foreach (ResourceManager.Resource manufacturableResource in ResourceManager.GetResourcesInClass(ResourceManager.ResourceClassEnum.Manufacturable)) {
-				if (manufacturableResource.manufacturingObjects.Values.Any(objList => objList.Contains(selectedManufacturingObject.prefab.type)) || (manufacturableResource.manufacturingObjects.ContainsKey(selectedManufacturingObject.prefab.subGroupType) && manufacturableResource.manufacturingObjects[selectedManufacturingObject.prefab.subGroupType] == null)) {
+				if (manufacturableResource.CanBeManufacturedBy(selectedManufacturingObject.prefab)) {
 				//if (manufacturableResource.manufacturingObjects.Contains(selectedManufacturingObject.prefab.type) || (manufacturableResource.manufacturingObjects.Count <= 0 && manufacturableResource.manufacturingObjectSubGroups.Contains(selectedManufacturingObject.prefab.subGroupType))) {
 					GameObject selectResourceButton = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/SelectManufacturedResource-Panel"), selectResourceList.transform, false);
 					selectResourceButton.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = manufacturableResource.image;
