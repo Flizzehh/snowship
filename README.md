@@ -27,8 +27,8 @@
 ### Who do I talk to? ###
 
 + Ryan White
-    * [@Flizzehh](https://twitter.com/flizzehh) on Twitter
-    * @Flizzehh on GitHub
+    * [@rythwh](https://twitter.com/rythwh) on Twitter
+    * @rythwh on GitHub
 
 ### Release ###
 
