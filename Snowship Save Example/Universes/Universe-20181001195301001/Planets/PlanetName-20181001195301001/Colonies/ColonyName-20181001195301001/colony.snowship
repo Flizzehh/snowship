@@ -1,0 +1,13 @@
+// This file stores the colony and its planet-tile properties
+<Name>ColonyName
+<PlanetPosition>25,35
+<Seed>1720133050
+<Size>100
+<AverageTemperature>20
+<AveragePrecipitation>0.36
+<TerrainTypeHeights>
+	<GrassWater>0.059
+	<Stone>0.495
+<SurroundingPlanetTileHeights>5,-1,0,0
+<OnRiver>True
+<SurroundingPlanetTileRivers>3,5,-1,-1

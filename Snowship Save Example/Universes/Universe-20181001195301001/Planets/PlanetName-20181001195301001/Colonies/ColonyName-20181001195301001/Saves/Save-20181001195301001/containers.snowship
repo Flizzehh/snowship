@@ -1,0 +1,18 @@
+<Container>
+	<Position>60,80
+	<InventoryMaxSize>250
+	<Inventory>
+		<ResourceAmount>
+			<Type>Apple
+			<Amount>5
+		<ResourceAmount>
+			<Type>Wood
+			<Amount>30
+		<ReservedResourcesColonist>
+			<Name>Steve
+			<ResourceAmount>
+				<Type>Wood
+				<Amount>5
+			<ResourceAmount>
+				<Type>Apple
+				<Amount>1

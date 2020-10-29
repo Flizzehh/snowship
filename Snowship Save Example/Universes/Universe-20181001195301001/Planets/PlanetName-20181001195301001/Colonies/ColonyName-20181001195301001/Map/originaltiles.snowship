@@ -1,0 +1,18 @@
+// This file stores all properties of all tiles required to rebuild the map
+<Tile>
+	<TileType>Stone
+	<SpriteIndex>0
+	<Plant>
+		<Type>Cactus
+		<SpriteIndex>0
+		<Small>False
+		<GrowthProgress>0
+		<HarvestResource>Apple
+		<Integrity>75
+	<Roof>True
+	<Dug>False
+<Tile>
+	<TileType>Grass
+	<SpriteIndex>0
+	<Roof>False
+	<Dug>False

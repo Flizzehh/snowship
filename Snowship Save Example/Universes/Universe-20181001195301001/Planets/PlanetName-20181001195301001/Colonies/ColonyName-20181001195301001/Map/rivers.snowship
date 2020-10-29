@@ -1,0 +1,13 @@
+// This file stores all large river properties and tiles
+<River>
+	<StartTilePosition>0,60
+	<EndTilePosition>70,99
+	<ExpandRadius>0
+	<IgnoreStone>False
+	<TilePositions>50,50;50,51;50,52
+<River>
+	<StartTilePosition>0,60
+	<EndTilePosition>70,99
+	<ExpandRadius>0
+	<IgnoreStone>False
+	<TilePositions>50,50;50,51;50,52

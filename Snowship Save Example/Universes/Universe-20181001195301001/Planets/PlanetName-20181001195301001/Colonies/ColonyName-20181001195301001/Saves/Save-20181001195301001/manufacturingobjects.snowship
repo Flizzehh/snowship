@@ -1,0 +1,5 @@
+<ManufacturingObject>
+	<Position>30,70
+	<CreateResource>Brick
+	<FuelResource>Firewood
+	<Active>True

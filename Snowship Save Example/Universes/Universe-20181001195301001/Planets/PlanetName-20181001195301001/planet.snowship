@@ -1,0 +1,8 @@
+// This file stores all planet properties
+<Name>Planet
+<Seed>1088066118
+<Size>60
+<SunDistance>1
+<TempRange>60
+<RandomOffsets>True
+<WindDirection>0

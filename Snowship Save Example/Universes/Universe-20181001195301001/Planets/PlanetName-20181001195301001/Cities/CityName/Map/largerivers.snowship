@@ -1,0 +1,15 @@
+// This file stores all large river properties and tiles
+<LargeRiver>
+	<StartTilePosition>0,60
+	<CentreTilePosition>50,70
+	<EndTilePosition>70,99
+	<ExpandRadius>5
+	<IgnoreStone>True
+	<TilePositions>50,50;50,51;50,52
+<LargeRiver>
+	<StartTilePosition>0,60
+	<CentreTilePosition>50,70
+	<EndTilePosition>70,99
+	<ExpandRadius>5
+	<IgnoreStone>True
+	<TilePositions>50,50;50,51;50,52

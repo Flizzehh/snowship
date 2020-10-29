@@ -1,0 +1,5 @@
+<Farm>
+	<Position>50,60
+	<SeedType>WheatSeed
+	<GrowTimer>5000
+	<MaxGrowthTime>6000

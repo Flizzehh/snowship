@@ -1,0 +1,12 @@
+// This file stores the difference between the originaltiles.snowship file
+// and the map state at the time of this save (only differences)
+<Tile>
+	<Position>30,50
+	<TileType>DirtHole
+	<Plant>None
+	<Dug>True
+<Tile>
+	<Position>31,52
+	<TileType>DirtHole
+	<Plant>None
+	<Dug>True
