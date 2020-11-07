@@ -1,21 +1,14 @@
 <Biome>
-	<Type>PolarDesert
-	<TileTypes>
-		<Water>SnowIce
-		<Hole>SnowHole
-		<Ground>SnowStone
-		<Stone>Basalt
-	<PlantChances>
-		<SnowTree>0.01
-		<DeadTree>0.01
-	<Colour>5A5A5A
-<Biome>
 	<Type>IceCap
 	<TileTypes>
 		<Water>SnowIce
 		<Hole>SnowHole
 		<Ground>Snow
 		<Stone>Basalt
+	<Ranges>
+		<Range>
+			<Precipitation>-Inf,Inf
+			<Temperature>-Inf,-50
 	<Colour>FFFFFF
 <Biome>
 	<Type>Tundra
@@ -27,6 +20,10 @@
 	<PlantChances>
 		<Bush>0.2
 		<DeadTree>0.05
+	<Ranges>
+		<Range>
+			<Precipitation>0.2,0.5,
+			<Temperature>-50,-30
 	<Colour>BFBFBF
 <Biome>
 	<Type>WetTundra
@@ -38,6 +35,10 @@
 	<PlantChances>
 		<Bush>0.3
 		<ThinTree>0.025
+	<Ranges>
+		<Range>
+			<Precipitation>0.5,0.9
+			<Temperature>-50,-30
 	<Colour>CCC0DA
 <Biome>
 	<Type>PolarWetlands
@@ -49,29 +50,11 @@
 	<PlantChances>
 		<Bush>0.2
 		<ThinTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.9,Inf
+			<Temperature>-50,-20
 	<Colour>60497B
-<Biome>
-	<Type>CoolDesert
-	<TileTypes>
-		<Water>StoneWater
-		<Hole>StoneHole
-		<Ground>StoneSnow
-		<Stone>Basalt
-	<PlantChances>
-		<ThinTree>0.01
-		<DeadTree>0.05
-	<Colour>953735
-<Biome>
-	<Type>TemperateDesert
-	<TileTypes>
-		<Water>DirtWater
-		<Hole>DirtHole
-		<Ground>Dirt
-		<Stone>Granite
-	<PlantChances>
-		<WideTree>0.01
-		<DeadTree>0.1
-	<Colour>77574A
 <Biome>
 	<Type>Steppe
 	<TileTypes>
@@ -81,6 +64,10 @@
 		<Stone>Granite
 	<PlantChances>
 		<Bush>0.25
+	<Ranges>
+		<Range>
+			<Precipitation>0.1,0.2
+			<Temperature>-30,20
 	<Colour>948B54
 <Biome>
 	<Type>BorealForest
@@ -92,6 +79,10 @@
 	<PlantChances>
 		<ThinTree>0.95
 		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.2,0.9
+			<Temperature>-30,0
 	<Colour>9DB195
 <Biome>
 	<Type>TemperateWoodlands
@@ -104,6 +95,13 @@
 		<WideTree>0.8
 		<ThinTree>0.8
 		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.2,0.5
+			<Temperature>0,15
+		<Range>
+			<Precipitation>0.2,0.35
+			<Temperature>15,20
 	<Colour>F2DDDC
 <Biome>
 	<Type>TemperateForest
@@ -117,6 +115,13 @@
 		<ThinTree>0.2
 		<Bush>0.2
 		<DeadTree>0.05
+	<Ranges>
+		<Range>
+			<Precipitation>0.5,0.7
+			<Temperature>0,15
+		<Range>
+			<Precipitation>0.6,0.7
+			<Temperature>15,20
 	<Colour>DBEEF3
 <Biome>
 	<Type>TemperateWetForest
@@ -129,6 +134,10 @@
 		<WideTree>0.9
 		<ThinTree>0.1
 		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.7,0.9
+			<Temperature>0,20
 	<Colour>93CDDD
 <Biome>
 	<Type>TemperateWetlands
@@ -139,29 +148,28 @@
 		<Stone>Granite
 	<PlantChances>
 		<Bush>0.4
+	<Ranges>
+		<Range>
+			<Precipitation>0.9,Inf
+			<Temperature>-20,20
 	<Colour>31849B
 <Biome>
-	<Type>ExtremeDesert
+	<Type>Mediterranean
 	<TileTypes>
-		<Water>SandWater
-		<Hole>SandHole
-		<Ground>Sand
-		<Stone>Sandstone
+		<Water>GrassWater
+		<Hole>DirtHole
+		<Ground>Grass
+		<Stone>Granite
 	<PlantChances>
-		<Cactus>0.02
-		<DeadTree>0.02
-	<Colour>FF5050
-<Biome>
-	<Type>Desert
-	<TileTypes>
-		<Water>SandWater
-		<Hole>SandHole
-		<Ground>Sand
-		<Stone>Sandstone
-	<PlantChances>
-		<Cactus>0.1
-		<DeadTree>0.05
-	<Colour>FF9900
+		<Bush>0.7
+		<PalmTree>0.7
+		<WideTree>0.7
+		<DeadTree>0.01
+	<Ranges>
+		<Range>
+			<Precipitation>0.35,0.6
+			<Temperature>15,25
+	<Colour>D99795
 <Biome>
 	<Type>SubtropicalScrub
 	<TileTypes>
@@ -171,17 +179,11 @@
 		<Stone>Granite
 	<PlantChances>
 		<Bush>0.2
+	<Ranges>
+		<Range>
+			<Precipitation>0.1,0.2
+			<Temperature>20,30
 	<Colour>CCCC00
-<Biome>
-	<Type>TropicalScrub
-	<TileTypes>
-		<Water>DryGrassWater
-		<Hole>DirtHole
-		<Ground>DryGrass
-		<Stone>Granite
-	<PlantChances>
-		<Bush>0.3
-	<Colour>FFFF00
 <Biome>
 	<Type>SubtropicalWoodlands
 	<TileTypes>
@@ -193,31 +195,11 @@
 		<WideTree>0.7
 		<Bush>0.3
 		<DeadTree>0.05
+	<Ranges>
+		<Range>
+			<Precipitation>0.2,0.35
+			<Temperature>20,30
 	<Colour>FCD5B4
-<Biome>
-	<Type>TropicalWoodlands
-	<TileTypes>
-		<Water>DryGrassWater
-		<Hole>DirtHole
-		<Ground>DryGrass
-		<Stone>Granite
-	<PlantChances>
-		<Bush>0.4
-		<WideTree>0.3
-		<DeadTree>0.02
-	<Colour>FFFBC1
-<Biome>
-	<Type>Mediterranean
-	<TileTypes>
-		<Water>GrassWater
-		<Hole>DirtHole
-		<Ground>Grass
-		<Stone>Granite
-	<PlantChances>
-		<Bush>0.7
-		<WideTree>0.7
-		<DeadTree>0.01
-	<Colour>D99795
 <Biome>
 	<Type>SubtropicalDryForest
 	<TileTypes>
@@ -228,22 +210,13 @@
 	<PlantChances>
 		<Bush>0.1
 		<WideTree>0.5
-		<ThinTree>0.5
+		<PalmTree>0.5
 		<DeadTree>0.1
+	<Ranges>
+		<Range>
+			<Precipitation>0.35,0.5
+			<Temperature>25,30
 	<Colour>D7E4BC
-<Biome>
-	<Type>TropicalDryForest
-	<TileTypes>
-		<Water>DryGrassWater
-		<Hole>DirtHole
-		<Ground>DryGrass
-		<Stone>Granite
-	<PlantChances>
-		<Bush>0.2
-		<WideTree>0.4
-		<ThinTree>0.4
-		<DeadTree>0.05
-	<Colour>CCFF33
 <Biome>
 	<Type>SubtropicalForest
 	<TileTypes>
@@ -253,9 +226,16 @@
 		<Stone>Granite
 	<PlantChances>
 		<WideTree>0.8
-		<ThinTree>0.8
+		<PalmTree>0.8
 		<Bush>0.5
 		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.6,0.7
+			<Temperature>20,25
+		<Range>
+			<Precipitation>0.5,0.7
+			<Temperature>25,30
 	<Colour>66FF66
 <Biome>
 	<Type>SubtropicalWetForest
@@ -265,10 +245,14 @@
 		<Ground>Grass
 		<Stone>Granite
 	<PlantChances>
+		<PalmTree>0.8
 		<WideTree>0.8
-		<ThinTree>0.8
 		<Bush>0.7
 		<DeadTree>0.01
+	<Ranges>
+		<Range>
+			<Precipitation>0.7,0.9
+			<Temperature>20,30
 	<Colour>00B050
 <Biome>
 	<Type>SubtropicalWetlands
@@ -281,7 +265,76 @@
 		<Bush>0.6
 		<WideTree>0.2
 		<DeadTree>0.01
+	<Ranges>
+		<Range>
+			<Precipitation>0.9,Inf
+			<Temperature>20,30
 	<Colour>00823B
+<Biome>
+	<Type>TropicalScrub
+	<TileTypes>
+		<Water>DryGrassWater
+		<Hole>DirtHole
+		<Ground>DryGrass
+		<Stone>Granite
+	<PlantChances>
+		<Bush>0.3
+	<Ranges>
+		<Range>
+			<Precipitation>0.1,0.2
+			<Temperature>30,40
+	<Colour>FFFF00
+<Biome>
+	<Type>TropicalWoodlands
+	<TileTypes>
+		<Water>DryGrassWater
+		<Hole>DirtHole
+		<Ground>DryGrass
+		<Stone>Granite
+	<PlantChances>
+		<Bush>0.4
+		<PalmTree>0.3
+		<WideTree>0.3
+		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.2,0.35
+			<Temperature>30,40
+	<Colour>FFFBC1
+<Biome>
+	<Type>TropicalDryForest
+	<TileTypes>
+		<Water>DryGrassWater
+		<Hole>DirtHole
+		<Ground>DryGrass
+		<Stone>Granite
+	<PlantChances>
+		<Bush>0.2
+		<WideTree>0.4
+		<PalmTree>0.4
+		<DeadTree>0.05
+	<Ranges>
+		<Range>
+			<Precipitation>0.35,0.5
+			<Temperature>30,40
+	<Colour>CCFF33
+<Biome>
+	<Type>TropicalForest
+	<TileTypes>
+		<Water>GrassWater
+		<Hole>DirtHole
+		<Ground>ThickGrass
+		<Stone>Granite
+	<PlantChances>
+		<WideTree>0.6
+		<PalmTree>0.8
+		<Bush>0.5
+		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>0.5,0.7
+			<Temperature>30,40
+	<Colour>A1C938
 <Biome>
 	<Type>TropicalWetForest
 	<TileTypes>
@@ -290,10 +343,14 @@
 		<Ground>ThickGrass
 		<Stone>Granite
 	<PlantChances>
+		<PalmTree>0.9
 		<WideTree>0.9
 		<Bush>0.9
-		<ThinTree>0.9
 		<DeadTree>0.01
+	<Ranges>
+		<Range>
+			<Precipitation>0.7,0.9
+			<Temperature>30,40
 	<Colour>75923C
 <Biome>
 	<Type>TropicalWetlands
@@ -304,6 +361,89 @@
 		<Stone>Granite
 	<PlantChances>
 		<Bush>0.8
+		<PalmTree>0.4
 		<WideTree>0.4
 		<DeadTree>0.01
+	<Ranges>
+		<Range>
+			<Precipitation>0.9,Inf
+			<Temperature>30,40
 	<Colour>4F6228
+<Biome>
+	<Type>PolarDesert
+	<TileTypes>
+		<Water>SnowIce
+		<Hole>SnowHole
+		<Ground>SnowStone
+		<Stone>Basalt
+	<PlantChances>
+		<SnowTree>0.01
+		<DeadTree>0.01
+	<Ranges>
+		<Range>
+			<Precipitation>-Inf,0.2
+			<Temperature>-50,-30
+	<Colour>5A5A5A
+<Biome>
+	<Type>CoolDesert
+	<TileTypes>
+		<Water>StoneWater
+		<Hole>StoneHole
+		<Ground>StoneSnow
+		<Stone>Basalt
+	<PlantChances>
+		<ThinTree>0.01
+		<DeadTree>0.05
+	<Ranges>
+		<Range>
+			<Precipitation>-Inf,0.1
+			<Temperature>-30,-10
+	<Colour>953735
+<Biome>
+	<Type>TemperateDesert
+	<TileTypes>
+		<Water>DirtWater
+		<Hole>DirtHole
+		<Ground>Dirt
+		<Stone>Granite
+	<PlantChances>
+		<WideTree>0.01
+		<DeadTree>0.1
+	<Ranges>
+		<Range>
+			<Precipitation>-Inf,0.1
+			<Temperature>-10,30
+	<Colour>77574A
+<Biome>
+	<Type>Desert
+	<TileTypes>
+		<Water>SandWater
+		<Hole>SandHole
+		<Ground>Sand
+		<Stone>Sandstone
+	<PlantChances>
+		<Cactus>0.1
+		<DeadTree>0.05
+	<Ranges>
+		<Range>
+			<Precipitation>-Inf,0.1
+			<Temperature>30,40
+		<Range>
+			<Precipitation>-Inf,Inf
+			<Temperature>40,50
+	<Colour>FF9900
+<Biome>
+	<Type>ExtremeDesert
+	<TileTypes>
+		<Water>SandWater
+		<Hole>SandHole
+		<Ground>Sand
+		<Stone>Sandstone
+	<PlantChances>
+		<Cactus>0.02
+		<DeadTree>0.02
+	<Ranges>
+		<Range>
+			<Precipitation>-Inf,Inf
+			<Temperature>50,Inf
+	<Colour>FF5050

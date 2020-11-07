@@ -1,74 +1,201 @@
 fileFormatVersion: 2
 guid: f03602c8e0b5c614488610c164fa56b0
-timeCreated: 1512734035
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: wall-stone_0
-    21300002: wall-stone_1
-    21300004: wall-stone_2
-    21300006: wall-stone_3
-    21300008: wall-stone_4
-    21300010: wall-stone_5
-    21300012: wall-stone_6
-    21300014: wall-stone_7
-    21300016: wall-stone_8
-    21300018: wall-stone_9
-    21300020: wall-stone_10
-    21300022: wall-stone_11
-    21300024: wall-stone_12
-    21300026: wall-stone_13
-    21300028: wall-stone_14
-    21300030: wall-stone_15
-    21300032: stonewall-bitmask_0
-    21300034: stonewall-bitmask_1
-    21300036: stonewall-bitmask_2
-    21300038: stonewall-bitmask_3
-    21300040: stonewall-bitmask_4
-    21300042: stonewall-bitmask_5
-    21300044: stonewall-bitmask_6
-    21300046: stonewall-bitmask_7
-    21300048: stonewall-bitmask_8
-    21300050: stonewall-bitmask_9
-    21300052: stonewall-bitmask_10
-    21300054: stonewall-bitmask_11
-    21300056: stonewall-bitmask_12
-    21300058: stonewall-bitmask_13
-    21300060: stonewall-bitmask_14
-    21300062: stonewall-bitmask_15
-    21300064: stone-wall-bitmask_0
-    21300066: stone-wall-bitmask_1
-    21300068: stone-wall-bitmask_2
-    21300070: stone-wall-bitmask_3
-    21300072: stone-wall-bitmask_4
-    21300074: stone-wall-bitmask_5
-    21300076: stone-wall-bitmask_6
-    21300078: stone-wall-bitmask_7
-    21300080: stone-wall-bitmask_8
-    21300082: stone-wall-bitmask_9
-    21300084: stone-wall-bitmask_10
-    21300086: stone-wall-bitmask_11
-    21300088: stone-wall-bitmask_12
-    21300090: stone-wall-bitmask_13
-    21300092: stone-wall-bitmask_14
-    21300094: stone-wall-bitmask_15
-    21300096: stone-wall-bitmask_OLD_0
-    21300098: stone-wall-bitmask_OLD_1
-    21300100: stone-wall-bitmask_OLD_2
-    21300102: stone-wall-bitmask_OLD_3
-    21300104: stone-wall-bitmask_OLD_4
-    21300106: stone-wall-bitmask_OLD_5
-    21300108: stone-wall-bitmask_OLD_6
-    21300110: stone-wall-bitmask_OLD_7
-    21300112: stone-wall-bitmask_OLD_8
-    21300114: stone-wall-bitmask_OLD_9
-    21300116: stone-wall-bitmask_OLD_10
-    21300118: stone-wall-bitmask_OLD_11
-    21300120: stone-wall-bitmask_OLD_12
-    21300122: stone-wall-bitmask_OLD_13
-    21300124: stone-wall-bitmask_OLD_14
-    21300126: stone-wall-bitmask_OLD_15
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: wall-stone_0
+  - first:
+      213: 21300002
+    second: wall-stone_1
+  - first:
+      213: 21300004
+    second: wall-stone_2
+  - first:
+      213: 21300006
+    second: wall-stone_3
+  - first:
+      213: 21300008
+    second: wall-stone_4
+  - first:
+      213: 21300010
+    second: wall-stone_5
+  - first:
+      213: 21300012
+    second: wall-stone_6
+  - first:
+      213: 21300014
+    second: wall-stone_7
+  - first:
+      213: 21300016
+    second: wall-stone_8
+  - first:
+      213: 21300018
+    second: wall-stone_9
+  - first:
+      213: 21300020
+    second: wall-stone_10
+  - first:
+      213: 21300022
+    second: wall-stone_11
+  - first:
+      213: 21300024
+    second: wall-stone_12
+  - first:
+      213: 21300026
+    second: wall-stone_13
+  - first:
+      213: 21300028
+    second: wall-stone_14
+  - first:
+      213: 21300030
+    second: wall-stone_15
+  - first:
+      213: 21300032
+    second: stonewall-bitmask_0
+  - first:
+      213: 21300034
+    second: stonewall-bitmask_1
+  - first:
+      213: 21300036
+    second: stonewall-bitmask_2
+  - first:
+      213: 21300038
+    second: stonewall-bitmask_3
+  - first:
+      213: 21300040
+    second: stonewall-bitmask_4
+  - first:
+      213: 21300042
+    second: stonewall-bitmask_5
+  - first:
+      213: 21300044
+    second: stonewall-bitmask_6
+  - first:
+      213: 21300046
+    second: stonewall-bitmask_7
+  - first:
+      213: 21300048
+    second: stonewall-bitmask_8
+  - first:
+      213: 21300050
+    second: stonewall-bitmask_9
+  - first:
+      213: 21300052
+    second: stonewall-bitmask_10
+  - first:
+      213: 21300054
+    second: stonewall-bitmask_11
+  - first:
+      213: 21300056
+    second: stonewall-bitmask_12
+  - first:
+      213: 21300058
+    second: stonewall-bitmask_13
+  - first:
+      213: 21300060
+    second: stonewall-bitmask_14
+  - first:
+      213: 21300062
+    second: stonewall-bitmask_15
+  - first:
+      213: 21300064
+    second: stone-wall-bitmask_0
+  - first:
+      213: 21300066
+    second: stone-wall-bitmask_1
+  - first:
+      213: 21300068
+    second: stone-wall-bitmask_2
+  - first:
+      213: 21300070
+    second: stone-wall-bitmask_3
+  - first:
+      213: 21300072
+    second: stone-wall-bitmask_4
+  - first:
+      213: 21300074
+    second: stone-wall-bitmask_5
+  - first:
+      213: 21300076
+    second: stone-wall-bitmask_6
+  - first:
+      213: 21300078
+    second: stone-wall-bitmask_7
+  - first:
+      213: 21300080
+    second: stone-wall-bitmask_8
+  - first:
+      213: 21300082
+    second: stone-wall-bitmask_9
+  - first:
+      213: 21300084
+    second: stone-wall-bitmask_10
+  - first:
+      213: 21300086
+    second: stone-wall-bitmask_11
+  - first:
+      213: 21300088
+    second: stone-wall-bitmask_12
+  - first:
+      213: 21300090
+    second: stone-wall-bitmask_13
+  - first:
+      213: 21300092
+    second: stone-wall-bitmask_14
+  - first:
+      213: 21300094
+    second: stone-wall-bitmask_15
+  - first:
+      213: 21300096
+    second: stone-wall-bitmask_OLD_0
+  - first:
+      213: 21300098
+    second: stone-wall-bitmask_OLD_1
+  - first:
+      213: 21300100
+    second: stone-wall-bitmask_OLD_2
+  - first:
+      213: 21300102
+    second: stone-wall-bitmask_OLD_3
+  - first:
+      213: 21300104
+    second: stone-wall-bitmask_OLD_4
+  - first:
+      213: 21300106
+    second: stone-wall-bitmask_OLD_5
+  - first:
+      213: 21300108
+    second: stone-wall-bitmask_OLD_6
+  - first:
+      213: 21300110
+    second: stone-wall-bitmask_OLD_7
+  - first:
+      213: 21300112
+    second: stone-wall-bitmask_OLD_8
+  - first:
+      213: 21300114
+    second: stone-wall-bitmask_OLD_9
+  - first:
+      213: 21300116
+    second: stone-wall-bitmask_OLD_10
+  - first:
+      213: 21300118
+    second: stone-wall-bitmask_OLD_11
+  - first:
+      213: 21300120
+    second: stone-wall-bitmask_OLD_12
+  - first:
+      213: 21300122
+    second: stone-wall-bitmask_OLD_13
+  - first:
+      213: 21300124
+    second: stone-wall-bitmask_OLD_14
+  - first:
+      213: 21300126
+    second: stone-wall-bitmask_OLD_15
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -86,6 +213,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -96,7 +225,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -1
+    mipBias: -100
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -108,33 +237,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -152,6 +291,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 08305410000000000800000000000000
+      internalID: 21300096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_1
       rect:
@@ -166,6 +312,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 28305410000000000800000000000000
+      internalID: 21300098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_2
       rect:
@@ -180,6 +333,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 48305410000000000800000000000000
+      internalID: 21300100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_3
       rect:
@@ -194,6 +354,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 68305410000000000800000000000000
+      internalID: 21300102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_4
       rect:
@@ -208,6 +375,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 88305410000000000800000000000000
+      internalID: 21300104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_5
       rect:
@@ -222,6 +396,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a8305410000000000800000000000000
+      internalID: 21300106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_6
       rect:
@@ -236,6 +417,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c8305410000000000800000000000000
+      internalID: 21300108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_7
       rect:
@@ -250,6 +438,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e8305410000000000800000000000000
+      internalID: 21300110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_8
       rect:
@@ -264,6 +459,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 09305410000000000800000000000000
+      internalID: 21300112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_9
       rect:
@@ -278,6 +480,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 29305410000000000800000000000000
+      internalID: 21300114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_10
       rect:
@@ -292,6 +501,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 49305410000000000800000000000000
+      internalID: 21300116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_11
       rect:
@@ -306,6 +522,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 69305410000000000800000000000000
+      internalID: 21300118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_12
       rect:
@@ -320,6 +543,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 89305410000000000800000000000000
+      internalID: 21300120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_13
       rect:
@@ -334,6 +564,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a9305410000000000800000000000000
+      internalID: 21300122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_14
       rect:
@@ -348,6 +585,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c9305410000000000800000000000000
+      internalID: 21300124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stone-wall-bitmask_OLD_15
       rect:
@@ -362,9 +606,26 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e9305410000000000800000000000000
+      internalID: 21300126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

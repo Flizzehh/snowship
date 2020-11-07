@@ -270,13 +270,22 @@ public class TileManager : BaseManager {
 	public class Biome {
 
 		public enum PropertyEnum {
-			Biome, Type, TileTypes, PlantChances, Colour
+			Biome, Type, TileTypes, PlantChances, Ranges, Colour
+		}
+
+		public enum RangePropertyEnum {
+			Range, Precipitation, Temperature
 		}
 
 		public enum TypeEnum {
-			PolarDesert, IceCap, Tundra, WetTundra, PolarWetlands, CoolDesert, TemperateDesert, Steppe, BorealForest, TemperateWoodlands, TemperateForest,
-			TemperateWetForest, TemperateWetlands, ExtremeDesert, Desert, SubtropicalScrub, TropicalScrub, SubtropicalWoodlands, TropicalWoodlands,
-			Mediterranean, SubtropicalDryForest, TropicalDryForest, SubtropicalForest, SubtropicalWetForest, SubtropicalWetlands, TropicalWetForest, TropicalWetlands
+			IceCap,
+			Tundra, WetTundra, PolarWetlands,
+			Steppe, BorealForest,
+			TemperateWoodlands, TemperateForest, TemperateWetForest, TemperateWetlands,
+			Mediterranean,
+			SubtropicalScrub, SubtropicalWoodlands, SubtropicalDryForest, SubtropicalForest, SubtropicalWetForest, SubtropicalWetlands,
+			TropicalScrub, TropicalWoodlands, TropicalDryForest, TropicalForest, TropicalWetForest, TropicalWetlands,
+			PolarDesert, CoolDesert, TemperateDesert, Desert, ExtremeDesert
 		};
 
 		public static readonly List<Biome> biomes = new List<Biome>();
@@ -288,15 +297,25 @@ public class TileManager : BaseManager {
 
 		public readonly Dictionary<ResourceManager.PlantEnum, float> plantChances;
 
+		public readonly List<Range> ranges;
+
 		public readonly Color colour;
 
-		public Biome(TypeEnum type, Dictionary<TileTypeGroup.TypeEnum, TileType> tileTypes, Dictionary<ResourceManager.PlantEnum, float> plantChances, Color colour) {
+		public Biome(
+			TypeEnum type,
+			Dictionary<TileTypeGroup.TypeEnum, TileType> tileTypes,
+			Dictionary<ResourceManager.PlantEnum, float> plantChances,
+			List<Range> ranges,
+			Color colour
+		) {
 			this.type = type;
 			name = UIManager.SplitByCapitals(type.ToString());
 
 			this.tileTypes = tileTypes;
 
 			this.plantChances = plantChances;
+
+			this.ranges = ranges;
 
 			this.colour = colour;
 		}
@@ -310,6 +329,7 @@ public class TileManager : BaseManager {
 						TypeEnum? type = null;
 						Dictionary<TileTypeGroup.TypeEnum, TileType> tileTypes = new Dictionary<TileTypeGroup.TypeEnum, TileType>();
 						Dictionary<ResourceManager.PlantEnum, float> plantChances = new Dictionary<ResourceManager.PlantEnum, float>();
+						List<Range> ranges = new List<Range>();
 						Color? colour = null;
 
 						foreach (KeyValuePair<string, object> biomeSubProperty in (List<KeyValuePair<string, object>>)biomeProperty.Value) {
@@ -333,6 +353,74 @@ public class TileManager : BaseManager {
 										);
 									}
 									break;
+								case PropertyEnum.Ranges:
+									foreach (KeyValuePair<string, object> rangeProperty in (List<KeyValuePair<string, object>>)biomeSubProperty.Value) {
+										switch ((RangePropertyEnum)Enum.Parse(typeof(RangePropertyEnum), rangeProperty.Key)) {
+											case RangePropertyEnum.Range:
+
+												float? pMin = null;
+												float? pMax = null;
+
+												float? tMin = null;
+												float? tMax = null;
+
+												foreach (KeyValuePair<string, object> rangeSubProperty in (List<KeyValuePair<string, object>>)rangeProperty.Value) {
+													switch ((RangePropertyEnum)Enum.Parse(typeof(RangePropertyEnum), rangeSubProperty.Key)) {
+														case RangePropertyEnum.Precipitation:
+
+															string[] pString = ((string)rangeSubProperty.Value).Split(',');
+
+															if (pString[0] == "-Inf") {
+																pMin = float.MinValue;
+															} else {
+																pMin = float.Parse(pString[0]);
+															}
+
+															if (pString[1] == "Inf") {
+																pMax = float.MaxValue;
+															} else {
+																pMax = float.Parse(pString[1]);
+															}
+
+															break;
+														case RangePropertyEnum.Temperature:
+															string[] tString = ((string)rangeSubProperty.Value).Split(',');
+
+															if (tString[0] == "-Inf") {
+																tMin = float.MinValue;
+															} else {
+																tMin = float.Parse(tString[0]);
+															}
+
+															if (tString[1] == "Inf") {
+																tMax = float.MaxValue;
+															} else {
+																tMax = float.Parse(tString[1]);
+															}
+
+															break;
+														default:
+															Debug.LogError("Unknown range sub property: " + rangeSubProperty.Key + " " + rangeSubProperty.Value);
+															break;
+													}
+												}
+
+												ranges.Add(
+													new Range(
+														pMin.Value,
+														pMax.Value,
+														tMin.Value,
+														tMax.Value
+													)
+												);
+
+												break;
+											default:
+												Debug.LogError("Unknown range property: " + rangeProperty.Key + " " + rangeProperty.Value);
+												break;
+										}
+									}
+									break;
 								case PropertyEnum.Colour:
 									colour = UIManager.HexToColor((string)biomeSubProperty.Value);
 									break;
@@ -347,6 +435,7 @@ public class TileManager : BaseManager {
 							type.Value,
 							tileTypes,
 							plantChances,
+							ranges,
 							colour.Value
 						);
 						biomes.Add(biome);
@@ -366,69 +455,31 @@ public class TileManager : BaseManager {
 		public static Biome GetBiomeByEnum(TypeEnum biomeTypeEnum) {
 			return biomes.Find(biome => biome.type == biomeTypeEnum);
 		}
-	}
 
-	public class PrecipitationRange {
+		public class Range {
 
-		public float min = 0;
-		public float max = 0;
+			public readonly float pMin;
+			public readonly float pMax;
 
-		public List<TemperatureRange> temperatureRanges = new List<TemperatureRange>();
+			public readonly float tMin;
+			public readonly float tMax;
 
-		public PrecipitationRange(string dataString) {
-			List<string> precipitationRangeData = dataString.Split(':').ToList();
+			public Range(float pMin, float pMax, float tMin, float tMax) {
+				this.pMin = pMin;
+				this.pMax = pMax;
 
-			min = float.Parse(precipitationRangeData[0].Split(',')[0]);
-			max = float.Parse(precipitationRangeData[0].Split(',')[1]);
-
-			if (Mathf.RoundToInt(min) == -1) {
-				min = float.MinValue;
-			}
-			if (Mathf.RoundToInt(max) == 2) {
-				max = float.MaxValue;
+				this.tMin = tMin;
+				this.tMax = tMax;
 			}
 
-			foreach (string temperatureRangeString in precipitationRangeData[1].Split('`')) {
-				temperatureRanges.Add(new TemperatureRange(temperatureRangeString, this));
-			}
-		}
-
-		public class TemperatureRange {
-
-			public PrecipitationRange precipitationRange;
-
-			public int min = 0;
-			public int max = 0;
-
-			public Biome biome;
-
-			public TemperatureRange(string dataString, PrecipitationRange precipitationRange) {
-
-				this.precipitationRange = precipitationRange;
-
-				List<string> temperatureRangeData = dataString.Split('/').ToList();
-
-				min = int.Parse(temperatureRangeData[0].Split(',')[0]);
-				max = int.Parse(temperatureRangeData[0].Split(',')[1]);
-
-				if (min == -1000) {
-					min = int.MinValue;
+			public bool IsInRange(float precipitation, float temperature) {
+				if (pMin <= precipitation && pMax > precipitation) {
+					if (tMin <= temperature && tMax > temperature) {
+						return true;
+					}
 				}
-				if (max == 1000) {
-					max = int.MaxValue;
-				}
-
-				biome = Biome.GetBiomeByString(temperatureRangeData[1]);
+				return false;
 			}
-		}
-	}
-
-	public List<PrecipitationRange> biomeRanges = new List<PrecipitationRange>();
-
-	public void CreateBiomeRanges() {
-		List<string> biomeRangeStrings = Resources.Load<TextAsset>(@"Data/biome-ranges").text.Replace("\n", string.Empty).Replace("\t", string.Empty).Split('~').ToList();
-		foreach (string biomeRangeString in biomeRangeStrings) {
-			biomeRanges.Add(new PrecipitationRange(biomeRangeString));
 		}
 	}
 
@@ -2403,23 +2454,27 @@ public class TileManager : BaseManager {
 		}
 
 		public void SetBiomes(bool setPlant) {
+
+			/* Biome Testing
+			for (int y = mapData.mapSize - 1; y >= 0; y--) {
+				for (int x = 0; x < mapData.mapSize; x++) {
+					Tile tile = sortedTiles[y][x];
+					tile.SetTileType(TileType.GetTileTypeByEnum(TileType.TypeEnum.Grass), false, false, false);
+					tile.temperature = 2f * (mapData.temperatureRange * (y / (float)mapData.mapSize) - (mapData.temperatureRange / 2f));
+					tile.SetPrecipitation(x / (float)mapData.mapSize);
+				}
+			}
+			*/
+
 			foreach (Tile tile in tiles) {
-				bool next = false;
-				foreach (PrecipitationRange precipitationRange in GameManager.tileM.biomeRanges) {
-					if (tile.GetPrecipitation() >= precipitationRange.min && tile.GetPrecipitation() < precipitationRange.max) {
-						foreach (PrecipitationRange.TemperatureRange temperatureRange in precipitationRange.temperatureRanges) {
-							if (tile.temperature >= temperatureRange.min && tile.temperature < temperatureRange.max) {
-								tile.SetBiome(temperatureRange.biome, setPlant);
-								if (tile.plant != null && tile.plant.small) {
-									tile.plant.growthProgress = UnityEngine.Random.Range(0, TimeManager.dayLengthSeconds * 4);
-								}
-								next = true;
-								break;
+				foreach (Biome biome in TileManager.Biome.biomes) {
+					foreach (Biome.Range range in biome.ranges) {
+						if (range.IsInRange(tile.GetPrecipitation(), tile.temperature)) {
+							tile.SetBiome(biome, setPlant);
+							if (tile.plant != null && tile.plant.small) {
+								tile.plant.growthProgress = UnityEngine.Random.Range(0, TimeManager.dayLengthSeconds * 4);
 							}
 						}
-					}
-					if (next) {
-						break;
 					}
 				}
 			}

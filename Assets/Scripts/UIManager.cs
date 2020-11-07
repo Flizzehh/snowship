@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,16 +17,14 @@ public class UIManager : BaseManager {
 	}
 
 	public static readonly string gameVersionString = "Snowship " + PersistenceManager.gameVersion.Value;
-	public static readonly string disclaimerText = "Snowship by Ryan White - flizzehh.itch.io/snowship\n<size=20>" + gameVersionString + "</size>";
+	public static readonly string disclaimerText = "Snowship by Ryan White - rywh.itch.io/snowship\n<size=20>" + gameVersionString + "</size>";
 
 	public bool playerTyping = false;
 
 	public static string SplitByCapitals(string combinedString) {
-		var r = new Regex(@"
-                (?<=[A-Z])(?=[A-Z][a-z]) |
-                 (?<=[^A-Z])(?=[A-Z]) |
-                 (?<=[A-Za-z])(?=[^A-Za-z])",
-				 RegexOptions.IgnorePatternWhitespace);
+		var r = new Regex(
+			@"(?<=[A-Z])(?=[A-Z][a-z]) | (?<=[^A-Z])(?=[A-Z]) | (?<=[A-Za-z])(?=[^A-Za-z])",
+			RegexOptions.IgnorePatternWhitespace);
 		return r.Replace(combinedString, " ");
 	}
 
@@ -39,11 +39,12 @@ public class UIManager : BaseManager {
 		return new Regex("[^a-zA-Z0-9 -]").Replace(removeFromString, string.Empty);
 	}
 
-	public enum Colours { Clear, WhiteAlpha100, White, DarkRed, DarkGreen, LightRed, LightGreen, LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, DarkPurple };
+	public enum Colours { Clear, WhiteAlpha64, WhiteAlpha128, White, DarkRed, DarkGreen, LightRed, LightGreen, LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, DarkPurple };
 
 	private static readonly Dictionary<Colours, Color> colourMap = new Dictionary<Colours, Color>() {
 		{ Colours.Clear, new Color(255f, 255f, 255f, 0f) / 255f },
-		{ Colours.WhiteAlpha100, new Color(255f, 255f, 255f, 100f) / 255f },
+		{ Colours.WhiteAlpha128, new Color(255f, 255f, 255f, 128f) / 255f },
+		{ Colours.WhiteAlpha64, new Color(255f, 255f, 255f, 64f) / 255f },
 		{ Colours.White, new Color(255f, 255f, 255f, 255f) / 255f },
 		{ Colours.DarkRed, new Color(192f, 57f, 43f, 255f) / 255f },
 		{ Colours.DarkGreen, new Color(39f, 174f, 96f, 255f) / 255f },
@@ -68,8 +69,18 @@ public class UIManager : BaseManager {
 		return colourMap[colourKey];
 	}
 
+	public static Color ChangeAlpha(Color colour, float alpha) {
+		return new Color(colour.r, colour.g, colour.b, alpha);
+	}
+
 	public static bool IsAlphanumericWithSpaces(string text) {
 		return Regex.IsMatch(text, @"^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$");
+	}
+
+	public interface ISelectable {
+		void Select();
+
+		void Deselect();
 	}
 
 	public int screenWidth = 0;
@@ -115,23 +126,20 @@ public class UIManager : BaseManager {
 		InitializeTileInformation();
 		InitializeSelectedContainerIndicator();
 		InitializeSelectedTradingPostIndicator();
-		InitializeSelectedManufacturingTileObjectIndicator();
+		InitializeSelectedManufacturingObjectIndicator();
 
 		CreateActionsPanel();
 
-		//CreateProfessionsList();
 		CreateProfessionsMenu();
 		CreateClothesList();
 		CreateResourcesList();
-
-		selectedMTOFuelPanel = new MTOPanel(mtoFuelPanelObj, true);
-		selectedMTONoFuelPanel = new MTOPanel(mtoNoFuelPanelObj, false);
 
 		SetSelectedColonistInformation(false);
 		SetSelectedColonistTab(selectedColonistNeedsSkillsTabButton);
 		SetSelectedTraderMenu();
 		SetSelectedContainerInfo();
 		SetSelectedTradingPostInfo();
+		SetSelectedManufacturingObjectPanel();
 
 		SetTradeMenu();
 
@@ -229,8 +237,12 @@ public class UIManager : BaseManager {
 			string saveVersionColour = ColorUtility.ToHtmlStringRGB(GetColour(Colours.DarkGrey50));
 			string gameVersionColour = ColorUtility.ToHtmlStringRGB(GetColour(Colours.DarkGrey50));
 
-			if (saveVersion == PersistenceManager.saveVersion.Value && gameVersion == PersistenceManager.gameVersion.Value) {
+			if (saveVersion == PersistenceManager.saveVersion.Value) {
 				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiM.SetSelectedUniverseElement(this); });
+				if (gameVersion != PersistenceManager.gameVersion.Value) {
+					obj.GetComponent<Image>().color = GetColour(Colours.DarkYellow);
+					gameVersionColour = ColorUtility.ToHtmlStringRGB((GetColour(Colours.DarkRed) + GetColour(Colours.DarkGrey50)) / 2f);
+				}
 			} else {
 				obj.GetComponent<Image>().color = GetColour(Colours.DarkRed);
 				obj.GetComponent<Button>().interactable = false;
@@ -1101,7 +1113,7 @@ public class UIManager : BaseManager {
 
 	private GameObject gameUI;
 
-	private Vector2 mousePosition;
+	public static Vector2 mousePosition;
 	public TileManager.Tile mouseOverTile;
 
 	private GameObject tileInformation;
@@ -1137,8 +1149,11 @@ public class UIManager : BaseManager {
 
 	private GameObject dateTimeInformationPanel;
 
-	private GameObject selectionSizeCanvas;
-	private GameObject selectionSizePanel;
+	private SelectionSizePanel selectionSizePanel;
+
+	public SelectionSizePanel GetSelectionSizePanel() {
+		return selectionSizePanel;
+	}
 
 	private GameObject selectedContainerIndicator;
 	private GameObject selectedContainerInventoryPanel;
@@ -1147,7 +1162,6 @@ public class UIManager : BaseManager {
 	private GameObject selectedTradingPostPanel;
 
 	private GameObject professionsMenuButton;
-	//private GameObject professionsList;
 	private GameObject professionsMenu;
 
 	private GameObject objectsMenuButton;
@@ -1163,12 +1177,14 @@ public class UIManager : BaseManager {
 	private InputField resourcesSearchInputField;
 	private GameObject resourcesList;
 
-	private GameObject selectedMTOIndicator;
-	private GameObject mtoNoFuelPanelObj;
-	private GameObject mtoFuelPanelObj;
-	private MTOPanel selectedMTOFuelPanel;
-	private MTOPanel selectedMTONoFuelPanel;
-	public MTOPanel selectedMTOPanel;
+	private GameObject selectedManufacturingObjectIndicator;
+	private GameObject selectedManufacturingObjectPanel;
+	private Button selectedManufacturingObjectPanelSelectResourcesButton;
+	private GameObject selectedManufacturingObjectSelectResourcesPanel;
+	private Button selectedManufacturingObjectPanelSelectFuelsButton;
+	private GameObject selectedManufacturingObjectSelectFuelsPanel;
+	private Button selectedManufacturingObjectPanelActiveButton;
+	private Text selectedManufacturingObjectPanelActiveButtonText;
 
 	private void SetupGameUI() {
 		gameUI = canvas.transform.Find("Game-BackgroundPanel").gameObject;
@@ -1228,9 +1244,7 @@ public class UIManager : BaseManager {
 
 		dateTimeInformationPanel = gameUI.transform.Find("DateTimeInformation-Panel").gameObject;
 
-		selectionSizeCanvas = GameObject.Find("SelectionSize-Canvas");
-		selectionSizeCanvas.GetComponent<Canvas>().sortingOrder = 100; // Selection Area Size Canvas
-		selectionSizePanel = selectionSizeCanvas.transform.Find("SelectionSize-Panel/Content-Panel").gameObject;
+		selectionSizePanel = new SelectionSizePanel(GameObject.Find("SelectionSize-Canvas").GetComponent<Canvas>());
 
 		selectedContainerInventoryPanel = gameUI.transform.Find("SelectedContainerInventory-Panel").gameObject;
 
@@ -1238,8 +1252,6 @@ public class UIManager : BaseManager {
 
 		professionsMenuButton = gameUI.transform.Find("Management-Panel/ProfessionsMenu-Button").gameObject;
 		professionsMenu = professionsMenuButton.transform.Find("ProfessionsMenu-Panel").gameObject;
-		//professionsList = professionMenuButton.transform.Find("ProfessionsList-Panel").gameObject;
-		//professionMenuButton.GetComponent<Button>().onClick.AddListener(delegate { SetProfessionsList(); });
 		professionsMenuButton.GetComponent<Button>().onClick.AddListener(delegate { ToggleProfessionsMenu(); });
 
 		objectsMenuButton = gameUI.transform.Find("Management-Panel/ObjectsMenu-Button").gameObject;
@@ -1265,8 +1277,32 @@ public class UIManager : BaseManager {
 		resourcesMenuButton.GetComponent<Button>().onClick.AddListener(delegate { SetResourcesList(); });
 		resourcesMenuPanel.SetActive(false);
 
-		mtoNoFuelPanelObj = gameUI.transform.Find("SelectedManufacturingTileObjectNoFuel-Panel").gameObject;
-		mtoFuelPanelObj = gameUI.transform.Find("SelectedManufacturingTileObjectFuel-Panel").gameObject;
+		selectedManufacturingObjectPanel = gameUI.transform.Find("SelectedManufacturingObject-Panel").gameObject;
+		selectedManufacturingObjectSelectResourcesPanel = selectedManufacturingObjectPanel.transform.Find("SelectResources-Panel").gameObject;
+		selectedManufacturingObjectSelectFuelsPanel = selectedManufacturingObjectPanel.transform.Find("SelectFuels-Panel").gameObject;
+
+		selectedManufacturingObjectPanelSelectResourcesButton = selectedManufacturingObjectPanel.transform.Find("Settings-Panel/SelectResources-Button").GetComponent<Button>();
+		selectedManufacturingObjectPanelSelectResourcesButton.onClick.AddListener(delegate {
+			SetSelectedManufacturingObjectSelectResourcesPanel();
+		});
+		selectedManufacturingObjectSelectResourcesPanel.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate {
+			SetSelectedManufacturingObjectSelectResourcesPanel();
+		});
+
+		selectedManufacturingObjectPanelSelectFuelsButton = selectedManufacturingObjectPanel.transform.Find("Settings-Panel/SelectFuels-Button").GetComponent<Button>();
+		selectedManufacturingObjectPanelSelectFuelsButton.onClick.AddListener(delegate {
+			SetSelectedManufacturingObjectSelectFuelsPanel();
+		});
+		selectedManufacturingObjectSelectFuelsPanel.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate {
+			SetSelectedManufacturingObjectSelectFuelsPanel();
+		});
+
+		selectedManufacturingObjectPanelActiveButton = selectedManufacturingObjectPanel.transform.Find("Settings-Panel/ActiveValueToggle-Button").GetComponent<Button>();
+		selectedManufacturingObjectPanelActiveButton.onClick.AddListener(delegate {
+			selectedManufacturingObject.SetActive(!selectedManufacturingObject.active);
+		});
+
+		selectedManufacturingObjectPanelActiveButtonText = selectedManufacturingObjectPanelActiveButton.transform.Find("ActiveValue-Text").GetComponent<Text>();
 	}
 
 	public GameObject pauseMenu;
@@ -1344,6 +1380,10 @@ public class UIManager : BaseManager {
 				UpdateSelectedContainerInfo();
 			}
 
+			if (selectedManufacturingObject != null) {
+				UpdateSelectedManufacturingObjectPanel();
+			}
+
 			if (selectedTradingPost != null) {
 				if (Input.GetMouseButtonDown(1)) {
 					SetSelectedTradingPost(null);
@@ -1351,10 +1391,9 @@ public class UIManager : BaseManager {
 				UpdateSelectedTradingPostInfo();
 			}
 
-			if (selectedMTO != null) {
-				selectedMTOPanel.Update(selectedMTO);
-				if (Input.GetMouseButtonDown(1)) {
-					SetSelectedManufacturingTileObject(null);
+			if (selectedManufacturingObject != null) {
+				if (Input.GetMouseButtonDown(1) && !GetUIElementsUnderPointer().Find(result => result.gameObject.name.Contains("Priority")).isValid) {
+					SetSelectedManufacturingObject(null);
 				}
 			}
 
@@ -1369,7 +1408,7 @@ public class UIManager : BaseManager {
 				}
 				ResourceManager.ManufacturingObject mto = GameManager.resourceM.manufacturingObjectInstances.Find(mtoi => mtoi.tile == newMouseOverTile || mtoi.additionalTiles.Contains(newMouseOverTile));
 				if (mto != null) {
-					SetSelectedManufacturingTileObject(mto);
+					SetSelectedManufacturingObject(mto);
 				}
 			}
 
@@ -1451,8 +1490,8 @@ public class UIManager : BaseManager {
 		if (selectedTradingPost != null) {
 			SetSelectedTradingPost(null);
 		}
-		if (selectedMTO != null) {
-			SetSelectedManufacturingTileObject(null);
+		if (selectedManufacturingObject != null) {
+			SetSelectedManufacturingObject(null);
 		}
 
 		selectedContainer = container;
@@ -1467,19 +1506,19 @@ public class UIManager : BaseManager {
 		if (selectedContainer != null) {
 			SetSelectedContainer(null);
 		}
-		if (selectedMTO != null) {
-			SetSelectedManufacturingTileObject(null);
+		if (selectedManufacturingObject != null) {
+			SetSelectedManufacturingObject(null);
 		}
 
 		selectedTradingPost = tradingPost;
 		SetSelectedTradingPostInfo();
 	}
 
-	public ResourceManager.ManufacturingObject selectedMTO;
+	public ResourceManager.ManufacturingObject selectedManufacturingObject;
 
-	public void SetSelectedManufacturingTileObject(ResourceManager.ManufacturingObject newSelectedMTO) {
+	public void SetSelectedManufacturingObject(ResourceManager.ManufacturingObject newSelectedManufacturingObject) {
 
-		selectedMTO = null;
+		selectedManufacturingObject = null;
 		if (selectedContainer != null) {
 			SetSelectedContainer(null);
 		}
@@ -1487,20 +1526,8 @@ public class UIManager : BaseManager {
 			SetSelectedTradingPost(null);
 		}
 
-		selectedMTO = newSelectedMTO;
-
-		if (selectedMTOPanel != null) {
-			selectedMTOPanel.Deselect(selectedMTOIndicator);
-		}
-
-		if (selectedMTO != null) {
-			if (selectedMTO.prefab.usesFuel) {
-				selectedMTOPanel = selectedMTOFuelPanel;
-			} else {
-				selectedMTOPanel = selectedMTONoFuelPanel;
-			}
-			selectedMTOPanel.Select(selectedMTO, selectedMTOIndicator);
-		}
+		selectedManufacturingObject = newSelectedManufacturingObject;
+		SetSelectedManufacturingObjectPanel();
 	}
 
 	void ToggleMainMenuButtons(GameObject coverPanel) {
@@ -1639,10 +1666,10 @@ public class UIManager : BaseManager {
 			variationsIndicator = obj.transform.Find("VariationsIndicator-Image").gameObject;
 
 			obj.GetComponent<HoverToggleScript>().Initialize(
-				requiredResourceElementsPanel, 
-				true, 
+				requiredResourceElementsPanel,
+				true,
 				prefab.variations.Count > 0
-					? new List<GameObject>() { variationElementsPanel } 
+					? new List<GameObject>() { variationElementsPanel }
 					: null
 			);
 
@@ -1693,7 +1720,7 @@ public class UIManager : BaseManager {
 			foreach (ResourceManager.ResourceAmount resourceAmount in prefab.commonResources) {
 				requiredResourceElements.Add(
 					new RequiredResourceElement(
-						resourceAmount, 
+						resourceAmount,
 						requiredResourceElementsPanel.transform
 					)
 				);
@@ -1798,17 +1825,17 @@ public class UIManager : BaseManager {
 
 			obj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
 			obj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
-			obj.transform.Find("RequiredAmount-Text").GetComponent<Text>().text = "Need " + resourceAmount.amount;
 
 			Update();
 		}
 
 		public void Update() {
-			obj.GetComponent<Image>().color = resourceAmount.resource.GetAvailableAmount() >= resourceAmount.amount
-				? GetColour(Colours.LightGreen)
-				: GetColour(Colours.LightRed);
 
-			obj.transform.Find("AvailableAmount-Text").GetComponent<Text>().text = "Have " + resourceAmount.resource.GetAvailableAmount();
+			int availableAmount = resourceAmount.resource.GetAvailableAmount();
+
+			obj.GetComponent<Image>().color = availableAmount >= resourceAmount.amount ? GetColour(Colours.LightGreen) : GetColour(Colours.LightRed);
+
+			obj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = availableAmount + " / " + resourceAmount.amount;
 		}
 
 		public void Destroy() {
@@ -2118,8 +2145,8 @@ public class UIManager : BaseManager {
 						integritySlider.maxValue = mouseOverTile.plant.prefab.integrity;
 						integritySlider.value = mouseOverTile.plant.integrity;
 						integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(
-							GetColour(Colours.LightRed), 
-							GetColour(Colours.LightGreen), 
+							GetColour(Colours.LightRed),
+							GetColour(Colours.LightGreen),
 							mouseOverTile.plant.integrity / mouseOverTile.plant.prefab.integrity
 						);
 					} else {
@@ -2160,8 +2187,8 @@ public class UIManager : BaseManager {
 							integritySlider.maxValue = tileObject.prefab.integrity;
 							integritySlider.value = tileObject.integrity;
 							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(
-								GetColour(Colours.LightRed), 
-								GetColour(Colours.LightGreen), 
+								GetColour(Colours.LightRed),
+								GetColour(Colours.LightGreen),
 								tileObject.integrity / tileObject.prefab.integrity
 							);
 						} else {
@@ -2263,7 +2290,17 @@ public class UIManager : BaseManager {
 	}
 
 	public class ResourceTransferElement {
-		public ResourceManager.ResourceAmount resourceAmount;
+
+		public enum TransferType {
+			In,
+			Out
+		}
+
+		public ResourceManager.Resource resource;
+		public ResourceManager.TradingPost tradingPost;
+
+		public TransferType transferType;
+
 		public GameObject obj;
 
 		public InputField transferAmountInput;
@@ -2271,14 +2308,16 @@ public class UIManager : BaseManager {
 
 		public int transferAmount = 0;
 
-		public ResourceTransferElement(ResourceManager.ResourceAmount resourceAmount, Transform parent) {
-			this.resourceAmount = resourceAmount;
+		public ResourceTransferElement(ResourceManager.Resource resource, ResourceManager.TradingPost tradingPost, TransferType transferType, Transform parent) {
+			this.resource = resource;
+			this.tradingPost = tradingPost;
+			this.transferType = transferType;
 
 			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ResourceTransferElement-Panel"), parent, false);
 
-			obj.transform.Find("Name").GetComponent<Text>().text = resourceAmount.resource.name;
+			obj.transform.Find("Name").GetComponent<Text>().text = resource.name;
 
-			obj.transform.Find("Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
+			obj.transform.Find("Image").GetComponent<Image>().sprite = resource.image;
 
 			transferAmountInput = obj.transform.Find("TransferAmount-Input").GetComponent<InputField>();
 			transferAmountText = transferAmountInput.transform.Find("Text").GetComponent<Text>();
@@ -2286,7 +2325,7 @@ public class UIManager : BaseManager {
 				int newTransferAmount = 0;
 				if (int.TryParse(transferAmountInput.text, out newTransferAmount)) {
 					if (newTransferAmount != transferAmount && newTransferAmount >= 0) {
-						int availableAmount = resourceAmount.amount;
+						int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.resource == resource).amount;
 						if (newTransferAmount > availableAmount) {
 							newTransferAmount = availableAmount;
 						}
@@ -2305,7 +2344,7 @@ public class UIManager : BaseManager {
 		}
 
 		public void Update() {
-			int availableAmount = resourceAmount.amount;
+			int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.resource == resource).amount;
 			obj.transform.Find("Amount").GetComponent<Text>().text = availableAmount.ToString();
 			if (transferAmount > availableAmount) {
 				transferAmount = availableAmount;
@@ -2711,13 +2750,15 @@ public class UIManager : BaseManager {
 		selectedColonistClothingPanel.transform.Find("ColonistBody-Image").GetComponent<Image>().sprite = selectedColonist.moveSprites[0];
 
 		foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in selectedColonist.clothes) {
-			Sprite clothingSprite = GameManager.resourceM.clearSquareSprite;
+			Sprite clothingSpriteFront = GameManager.resourceM.clearSquareSprite;
+			Sprite clothingSpriteBack = GameManager.resourceM.clearSquareSprite;
 			string clothingName = "None";
 			if (selectedColonist.clothes[appearanceToClothingKVP.Key] != null) {
-				clothingSprite = selectedColonist.clothes[appearanceToClothingKVP.Key].moveSprites[0];
+				clothingSpriteFront = selectedColonist.clothes[appearanceToClothingKVP.Key].moveSprites[0];
+				clothingSpriteBack = selectedColonist.clothes[appearanceToClothingKVP.Key].moveSprites[1];
 				clothingName = selectedColonist.clothes[appearanceToClothingKVP.Key].name;
 			}
-			selectedColonistClothingPanel.transform.Find("ColonistBody-Image/Colonist" + appearanceToClothingKVP.Key + "-Image").GetComponent<Image>().sprite = clothingSprite;
+			selectedColonistClothingPanel.transform.Find("ColonistBody-Image/Colonist" + appearanceToClothingKVP.Key + "-Image").GetComponent<Image>().sprite = clothingSpriteFront;
 
 			Button clothingTypeButton = selectedColonistClothingPanel.transform.Find("ClothingButtons-List/" + appearanceToClothingKVP.Key + "-Button").GetComponent<Button>();
 			clothingTypeButton.interactable = GameManager.resourceM.GetClothesByAppearance(appearanceToClothingKVP.Key).Count > 0 || selectedColonist.clothes[appearanceToClothingKVP.Key] != null;
@@ -2725,7 +2766,7 @@ public class UIManager : BaseManager {
 			clothingTypeButton.onClick.AddListener(delegate { SetSelectedColonistClothingSelectionPanel(true, appearanceToClothingKVP.Key, selectedColonist); });
 
 			clothingTypeButton.transform.Find("Name").GetComponent<Text>().text = clothingName;
-			clothingTypeButton.transform.Find("Image").GetComponent<Image>().sprite = clothingSprite;
+			clothingTypeButton.transform.Find("Image").GetComponent<Image>().sprite = appearanceToClothingKVP.Key == HumanManager.Human.Appearance.Backpack ? clothingSpriteBack : clothingSpriteFront;
 		}
 
 		if (!selectionPanelKeepState) {
@@ -3032,7 +3073,12 @@ public class UIManager : BaseManager {
 			GameObject jobInfo = obj.transform.Find("Content/JobInfo").gameObject;
 			Text jobInfoNameText = jobInfo.transform.Find("Name").GetComponent<Text>();
 
-			jobInfo.transform.Find("Image").GetComponent<Image>().sprite = job.prefab.GetBaseSpriteForVariation(job.variation);
+			if (job.prefab.type == ResourceManager.ObjectEnum.CreateResource) {
+				jobInfo.transform.Find("Image").GetComponent<Image>().sprite = job.createResource.resource.image;
+			} else {
+				jobInfo.transform.Find("Image").GetComponent<Image>().sprite = job.prefab.GetBaseSpriteForVariation(job.variation);
+			}
+
 			switch (job.prefab.jobType) {
 				case JobManager.JobEnum.Mine:
 				case JobManager.JobEnum.Dig:
@@ -3051,7 +3097,7 @@ public class UIManager : BaseManager {
 					jobInfoNameText.text = job.tile.farm.name;
 					break;
 				case JobManager.JobEnum.CreateResource:
-					jobInfoNameText.text = job.createResource.name;
+					jobInfoNameText.text = job.createResource.resource.name;
 					break;
 				case JobManager.JobEnum.Remove:
 					jobInfoNameText.text = job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name;
@@ -3080,14 +3126,24 @@ public class UIManager : BaseManager {
 				priorityText.text = string.Empty;
 			}
 
-			if (colonist != null) {
-				obj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<RectTransform>().sizeDelta.x, 134);
+			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
+				GameObject resourceAmountObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), obj.transform.Find("Content/RequiredResources-Panel"), false);
 
+				resourceAmountObj.GetComponent<Image>().color = GetColour(Colours.Clear);
+
+				resourceAmountObj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
+				resourceAmountObj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
+				resourceAmountObj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = resourceAmount.amount.ToString();
+			}
+
+			if (colonist != null) {
 				colonistObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistInfoElement-Panel"), obj.transform.Find("Content"), false);
 				colonistObj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
 				colonistObj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
 				colonistObj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
-				colonistObj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<RectTransform>().sizeDelta.x - 6, colonistObj.GetComponent<RectTransform>().sizeDelta.y);
+				
+				colonistObj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<LayoutElement>().minWidth - 6, colonistObj.GetComponent<RectTransform>().sizeDelta.y);
+				obj.transform.Find("Content").GetComponent<VerticalLayoutGroup>().padding.bottom = 3;
 
 				if (job.started) {
 					obj.GetComponent<Image>().color = GetColour(Colours.LightGreen);
@@ -3190,29 +3246,50 @@ public class UIManager : BaseManager {
 
 	public void UpdateDateTimeInformation(int minute, int hour, int day, TimeManager.Season season, int year, bool isDay) {
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Speed-Text").GetComponent<Text>().text = GameManager.timeM.GetTimeModifier() > 0 ? new string('>', GameManager.timeM.GetTimeModifier()) : "-";
-		dateTimeInformationPanel.transform.Find("DateTimeInformation-Time-Text").GetComponent<Text>().text = GameManager.timeM.Get12HourTime() + ":" + (minute < 10 ? ("0" + minute) : minute.ToString()) + " " + (hour < 12 || hour > 23 ? "AM" : "PM") + " (" + (isDay ? "D" : "N") + ")";
+		dateTimeInformationPanel.transform.Find("DateTimeInformation-Time-Text").GetComponent<Text>().text = GameManager.timeM.Get12HourTime() + ":" + (minute < 10 ? ("0" + minute) : minute.ToString()) + " " + (hour < 12 || hour > 23 ? "AM" : "PM") + " - " + (isDay ? "Day" : "Night");
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = GameManager.timeM.GetDayWithSuffix(GameManager.timeM.GetDay()) + " of " + season;
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Year-Text").GetComponent<Text>().text = "Year " + year;
 	}
 
-	public void SelectionSizeCanvasSetActive(bool active) {
-		selectionSizeCanvas.SetActive(active);
-	}
+	public class SelectionSizePanel {
 
-	public void UpdateSelectionSizePanel(float xSize, float ySize, int selectionAreaCount, JobManager.SelectedPrefab selectedPrefab) {
-		int ixSize = Mathf.Abs(Mathf.FloorToInt(xSize));
-		int iySize = Mathf.Abs(Mathf.FloorToInt(ySize));
+		public Canvas canvas;
 
-		selectionSizePanel.transform.Find("Dimensions-Text").GetComponent<Text>().text = ixSize + " × " + iySize;
-		selectionSizePanel.transform.Find("TotalSize-Text").GetComponent<Text>().text = selectionAreaCount + " / " + Mathf.RoundToInt(ixSize * iySize);
-		selectionSizePanel.transform.Find("SelectedPrefabName-Text").GetComponent<Text>().text = selectedPrefab.prefab.GetInstanceNameFromVariation(selectedPrefab.variation);
-		selectionSizePanel.transform.Find("SelectedPrefabSprite-Image").GetComponent<Image>().sprite = selectedPrefab.prefab.GetBaseSpriteForVariation(selectedPrefab.variation);
+		public GameObject panel;
 
-		selectionSizeCanvas.transform.localScale = Vector2.one * 0.005f * 0.5f * GameManager.cameraM.cameraComponent.orthographicSize;
-		selectionSizeCanvas.transform.position = new Vector2(
-			mousePosition.x + (selectionSizeCanvas.GetComponent<RectTransform>().sizeDelta.x / 2f * selectionSizeCanvas.transform.localScale.x),
-			mousePosition.y + (selectionSizeCanvas.GetComponent<RectTransform>().sizeDelta.y / 2f * selectionSizeCanvas.transform.localScale.y)
-		);
+		public Text sizeValue;
+		public Text countValue;
+		public Text selectedValue;
+
+		public SelectionSizePanel(Canvas canvas) {
+			this.canvas = canvas;
+			canvas.sortingOrder = 100; // Selection Area Size Canvas
+
+			panel = canvas.transform.Find("SelectionSize-Panel").gameObject;
+
+			sizeValue = panel.transform.Find("SizeValue-Text").GetComponent<Text>();
+			countValue = panel.transform.Find("AreaValue-Text").GetComponent<Text>();
+			selectedValue = panel.transform.Find("SelectedValue-Text").GetComponent<Text>();
+		}
+
+		public void SetActive(bool active) {
+			canvas.gameObject.SetActive(active);
+		}
+
+		public void Update(float xSizeRaw, float ySizeRaw, int selectionAreaCount) {
+			int xSizeFloored = Mathf.Abs(Mathf.FloorToInt(xSizeRaw));
+			int ySizeFloored = Mathf.Abs(Mathf.FloorToInt(ySizeRaw));
+
+			sizeValue.text = xSizeFloored + " × " + ySizeFloored;
+			countValue.text = (xSizeFloored * ySizeFloored).ToString();
+			selectedValue.text = selectionAreaCount.ToString();
+
+			canvas.transform.localScale = Vector2.one * 0.005f * 0.5f * GameManager.cameraM.cameraComponent.orthographicSize;
+			canvas.transform.position = new Vector2(
+				mousePosition.x + ((canvas.GetComponent<RectTransform>().sizeDelta.x / 2f + 10) * canvas.transform.localScale.x),
+				mousePosition.y + ((canvas.GetComponent<RectTransform>().sizeDelta.y / 2f + 10) * canvas.transform.localScale.y)
+			);
+		}
 	}
 
 	public void InitializeSelectedContainerIndicator() {
@@ -3320,7 +3397,6 @@ public class UIManager : BaseManager {
 
 	public void SetSelectedTradingPostInfo() {
 
-		selectedTradingPostIndicator.SetActive(false);
 		foreach (ResourceTransferElement resourceTransferElement in tradingPostResourceTransferElements) {
 			MonoBehaviour.Destroy(resourceTransferElement.obj);
 		}
@@ -3340,11 +3416,11 @@ public class UIManager : BaseManager {
 		selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().onClick.RemoveAllListeners();
 		selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().onClick.RemoveAllListeners();
 
-		if (selectedTradingPost != null) {
-			selectedTradingPostIndicator.SetActive(true);
-			selectedTradingPostIndicator.transform.position = selectedTradingPost.obj.transform.position;
+		selectedTradingPostPanel.SetActive(selectedTradingPost != null);
+		selectedTradingPostIndicator.SetActive(selectedTradingPost != null);
 
-			selectedTradingPostPanel.SetActive(true);
+		if (selectedTradingPost != null) {
+			selectedTradingPostIndicator.transform.position = selectedTradingPost.obj.transform.position;
 
 			selectedTradingPostPanel.transform.Find("Name-Text").GetComponent<Text>().text = selectedTradingPost.prefab.name;
 			selectedTradingPostPanel.transform.Find("Sprite-Image").GetComponent<Image>().sprite = selectedTradingPost.obj.GetComponent<SpriteRenderer>().sprite;
@@ -3357,8 +3433,15 @@ public class UIManager : BaseManager {
 			selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.GetInventory().maxVolume;
 
 			foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources()) {
-				if (resource.GetUnreservedContainerTotalAmount() > 0) {
-					tradingPostResourceTransferElements.Add(new ResourceTransferElement(new ResourceManager.ResourceAmount(resource, resource.GetUnreservedContainerTotalAmount()), selectedTradingPostPanel.transform.Find("AvailableResources-Panel/AvailableResources-ScrollPanel/AvailableResourcesList-Panel")));
+				if (resource.GetAvailableAmount() > 0) {
+					tradingPostResourceTransferElements.Add(
+						new ResourceTransferElement(
+							resource,
+							selectedTradingPost,
+							ResourceTransferElement.TransferType.In,
+							selectedTradingPostPanel.transform.Find("AvailableResources-Panel/AvailableResources-ScrollPanel/AvailableResourcesList-Panel")
+						)
+					);
 				}
 			}
 
@@ -3371,7 +3454,7 @@ public class UIManager : BaseManager {
 				);
 				foreach (ResourceTransferElement rte in tradingPostResourceTransferElements) {
 					if (rte.transferAmount > 0) {
-						job.resourcesToBuild.Add(new ResourceManager.ResourceAmount(rte.resourceAmount.resource, rte.transferAmount));
+						job.resourcesToBuild.Add(new ResourceManager.ResourceAmount(rte.resource, rte.transferAmount));
 					}
 				}
 				if (job.resourcesToBuild.Count > 0) {
@@ -3394,7 +3477,12 @@ public class UIManager : BaseManager {
 				tradingPostReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel")));
 			}
 			foreach (ResourceManager.ResourceAmount ra in selectedTradingPost.GetInventory().resources) {
-				ResourceTransferElement inventoryElement = new ResourceTransferElement(ra, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel"));
+				ResourceTransferElement inventoryElement = new ResourceTransferElement(
+					ra.resource,
+					selectedTradingPost,
+					ResourceTransferElement.TransferType.Out,
+					selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel")
+				);
 				tradingPostInventoryElements.Add(inventoryElement);
 			}
 
@@ -3409,7 +3497,7 @@ public class UIManager : BaseManager {
 				};
 				foreach (ResourceTransferElement rte in tradingPostInventoryElements) {
 					if (rte.transferAmount > 0) {
-						job.transferResources.Add(new ResourceManager.ResourceAmount(rte.resourceAmount.resource, rte.transferAmount));
+						job.transferResources.Add(new ResourceManager.ResourceAmount(rte.resource, rte.transferAmount));
 						rte.transferAmountInput.text = "0";
 					}
 				}
@@ -3419,8 +3507,6 @@ public class UIManager : BaseManager {
 			});
 
 			UpdateSelectedTradingPostInfo();
-		} else {
-			selectedTradingPostPanel.SetActive(false);
 		}
 	}
 
@@ -3429,13 +3515,17 @@ public class UIManager : BaseManager {
 			selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().interactable = tradingPostResourceTransferElements.Sum(rte => rte.transferAmount) > 0;
 			selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().interactable = tradingPostInventoryElements.Sum(rte => rte.transferAmount) > 0;
 
-			int plannedSpaceWeight = selectedTradingPost.GetInventory().UsedWeight() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resourceAmount.resource.weight);
+			int plannedSpaceWeight = selectedTradingPost.GetInventory().UsedWeight() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resource.weight);
 			selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceWeight-Slider").GetComponent<Slider>().value = plannedSpaceWeight;
 
-			int plannedSpaceVolume = selectedTradingPost.GetInventory().UsedVolume() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resourceAmount.resource.volume);
+			int plannedSpaceVolume = selectedTradingPost.GetInventory().UsedVolume() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resource.volume);
 			selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().value = plannedSpaceVolume;
 
 			//selectedTradingPostPanel.transform.Find("AvailableResources-Panel/PlannedSpacePercentage-Text").GetComponent<Text>().text = Mathf.RoundToInt((plannedSpace / (float)selectedTradingPost.prefab.maxInventoryAmount) * 100) + "%";
+
+			foreach (ResourceTransferElement resourceTransferElement in tradingPostResourceTransferElements) {
+				resourceTransferElement.Update();
+			}
 		}
 	}
 
@@ -3452,240 +3542,6 @@ public class UIManager : BaseManager {
 		}
 		if (resourcesMenuPanel.activeSelf && parentObj != resourcesMenuPanel) {
 			DisableResourcesList();
-		}
-	}
-
-	public class ProfessionElement {
-		public ColonistManager.Profession profession;
-		public GameObject obj;
-		public GameObject colonistsInProfessionListObj;
-		public List<GameObject> colonistsInProfessionElements = new List<GameObject>();
-		public GameObject editColonistsInProfessionListObj;
-		public List<GameObject> editColonistsInProfessionElements = new List<GameObject>();
-		public bool lastRemoveState = false;
-
-		public ProfessionElement(ColonistManager.Profession profession, Transform parent, UIManager uiM) {
-			this.profession = profession;
-
-			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ProfessionInfoElement-Panel"), parent, false);
-
-			colonistsInProfessionListObj = obj.transform.Find("ColonistsInProfessionList-Panel").gameObject;
-			obj.transform.Find("ColonistsInProfession-Button").GetComponent<Button>().onClick.AddListener(delegate {
-				foreach (ProfessionElement professionElement in uiM.professionElements) {
-					if (professionElement != this) {
-						professionElement.colonistsInProfessionListObj.SetActive(false);
-					}
-					foreach (GameObject obj in professionElement.colonistsInProfessionElements) {
-						MonoBehaviour.Destroy(obj);
-					}
-				}
-				colonistsInProfessionListObj.SetActive(!colonistsInProfessionListObj.activeSelf);
-				if (colonistsInProfessionListObj.activeSelf) {
-					uiM.SetColonistsInProfessionList(this);
-				}
-			});
-
-			editColonistsInProfessionListObj = obj.transform.Find("EditColonistsInProfessionList-Panel").gameObject;
-
-			obj.transform.Find("ColonistsInProfession-Button/ColonistsInProfessionAmount-Text").GetComponent<Text>().text = profession.colonistsInProfession.Count.ToString();
-
-			obj.transform.Find("ProfessionName-Text").GetComponent<Text>().text = profession.name;
-
-			obj.transform.Find("AddColonists-Button").GetComponent<Button>().onClick.AddListener(delegate {
-				foreach (ProfessionElement professionElement in uiM.professionElements) {
-					if (professionElement != this) {
-						professionElement.editColonistsInProfessionListObj.SetActive(false);
-					}
-					foreach (GameObject obj in professionElement.editColonistsInProfessionElements) {
-						MonoBehaviour.Destroy(obj);
-					}
-				}
-				editColonistsInProfessionListObj.SetActive(!editColonistsInProfessionListObj.activeSelf);
-				if (lastRemoveState) {
-					editColonistsInProfessionListObj.SetActive(true);
-				}
-				if (editColonistsInProfessionListObj.activeSelf) {
-					uiM.SetEditColonistsInProfessionList(this, false);
-				}
-				lastRemoveState = false;
-			});
-			if (profession.type != ColonistManager.ProfessionTypeEnum.Nothing) {
-				obj.transform.Find("RemoveColonists-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					foreach (ProfessionElement professionElement in uiM.professionElements) {
-						if (professionElement != this) {
-							professionElement.editColonistsInProfessionListObj.SetActive(false);
-						}
-						foreach (GameObject obj in professionElement.editColonistsInProfessionElements) {
-							MonoBehaviour.Destroy(obj);
-						}
-					}
-					editColonistsInProfessionListObj.SetActive(!editColonistsInProfessionListObj.activeSelf);
-					if (!lastRemoveState) {
-						editColonistsInProfessionListObj.SetActive(true);
-					}
-					if (editColonistsInProfessionListObj.activeSelf) {
-						uiM.SetEditColonistsInProfessionList(this, true);
-					}
-					lastRemoveState = true;
-				});
-			} else {
-				obj.transform.Find("RemoveColonists-Button").gameObject.SetActive(false);
-			}
-			colonistsInProfessionListObj.SetActive(false);
-			editColonistsInProfessionListObj.SetActive(false);
-		}
-
-		public void Update(int colonistCount) {
-			obj.transform.Find("ColonistsInProfession-Button/ColonistsInProfessionAmount-Text").GetComponent<Text>().text = profession.colonistsInProfession.Count.ToString();
-
-			bool colonistsInProfessionGreaterThanZero = profession.colonistsInProfession.Count > 0;
-			obj.transform.Find("ColonistsInProfession-Button").GetComponent<Button>().interactable = colonistsInProfessionGreaterThanZero;
-			obj.transform.Find("AddColonists-Button").GetComponent<Button>().interactable = colonistCount != profession.colonistsInProfession.Count;
-			obj.transform.Find("RemoveColonists-Button").GetComponent<Button>().interactable = colonistsInProfessionGreaterThanZero;
-		}
-	}
-
-	public void SetColonistsInProfessionList(ProfessionElement professionElement) {
-		foreach (GameObject obj in professionElement.colonistsInProfessionElements) {
-			MonoBehaviour.Destroy(obj);
-		}
-		professionElement.colonistsInProfessionElements.Clear();
-		foreach (ColonistManager.Colonist colonist in professionElement.profession.colonistsInProfession) {
-			GameObject obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistInfoElement-Panel"), professionElement.colonistsInProfessionListObj.transform, false);
-			obj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
-			obj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
-			obj.GetComponent<Button>().onClick.AddListener(delegate {
-				GameManager.humanM.SetSelectedHuman(colonist);
-			});
-			professionElement.colonistsInProfessionElements.Add(obj);
-		}
-	}
-
-
-
-	private void UpdateProfessionLevelInfo(GameObject obj, ColonistManager.Colonist colonist, ColonistManager.Profession currentProfession, ColonistManager.Profession nextProfession) {
-		obj.transform.Find("ColonistCurrentProfession-Text").GetComponent<Text>().text = currentProfession.name;
-		if (colonist.profession.type != ColonistManager.ProfessionTypeEnum.Nothing) {
-			double currentSkillLevel = currentProfession.CalculateSkillLevelFromPrimarySkill(colonist, true, 2);
-			obj.transform.Find("ColonistProfessionLevel-Text").GetComponent<Text>().text = currentSkillLevel.ToString();
-		} else {
-			obj.transform.Find("ColonistProfessionLevel-Text").GetComponent<Text>().text = "0";
-		}
-
-		obj.transform.Find("ColonistNextProfession-Text").GetComponent<Text>().text = nextProfession.name;
-		if (nextProfession.type != ColonistManager.ProfessionTypeEnum.Nothing) {
-			double nextSkillLevel = nextProfession.CalculateSkillLevelFromPrimarySkill(colonist, true, 2);
-			obj.transform.Find("ColonistNextProfessionLevel-Text").GetComponent<Text>().text = nextSkillLevel.ToString();
-		} else {
-			obj.transform.Find("ColonistNextProfessionLevel-Text").GetComponent<Text>().text = "0";
-		}
-	}
-
-	public void SetEditColonistsInProfessionList(ProfessionElement professionElement, bool remove) {
-		foreach (GameObject obj in professionElement.editColonistsInProfessionElements) {
-			MonoBehaviour.Destroy(obj);
-		}
-		professionElement.editColonistsInProfessionElements.Clear();
-		if (remove) { // User clicked red minus button
-			List<ColonistManager.Colonist> validColonists = GameManager.colonistM.colonists.Where(c => c.profession == professionElement.profession).ToList();
-			validColonists = validColonists.OrderBy(colonist => colonist.profession.CalculateSkillLevelFromPrimarySkill(colonist, false, 0)).ToList();
-			foreach (ColonistManager.Colonist colonist in validColonists) {
-				GameObject obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/EditColonistInProfessionInfoElement-Panel"), professionElement.editColonistsInProfessionListObj.transform, false);
-				obj.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
-				obj.GetComponent<Button>().onClick.AddListener(delegate {
-					if (colonist.profession == professionElement.profession) {
-						colonist.ChangeProfession(colonist.oldProfession);
-						obj.GetComponent<Image>().color = GetColour(Colours.LightRed);
-					} else {
-						colonist.ChangeProfession(professionElement.profession);
-						obj.GetComponent<Image>().color = GetColour(Colours.LightBlue);
-					}
-					UpdateProfessionLevelInfo(obj, colonist, colonist.profession, colonist.oldProfession);
-				});
-				obj.transform.Find("ColonistImage").GetComponent<Image>().sprite = colonist.moveSprites[0];
-				obj.transform.Find("ColonistName-Text").GetComponent<Text>().text = colonist.name;
-
-				UpdateProfessionLevelInfo(obj, colonist, colonist.profession, colonist.oldProfession);
-
-				obj.GetComponent<Image>().color = GetColour(Colours.LightBlue);
-				professionElement.editColonistsInProfessionElements.Add(obj);
-			}
-		} else { // User clicked green plus button
-			List<ColonistManager.Colonist> validColonists = GameManager.colonistM.colonists.Where(c => c.profession != professionElement.profession).ToList();
-			if (professionElement.profession.type == ColonistManager.ProfessionTypeEnum.Nothing) {
-				validColonists = validColonists.OrderBy(colonist => professionElement.profession.CalculateSkillLevelFromPrimarySkill(colonist, false, 0)).ToList();
-			} else {
-				validColonists = validColonists.OrderByDescending(colonist => professionElement.profession.CalculateSkillLevelFromPrimarySkill(colonist, false, 0)).ToList();
-			}
-			foreach (ColonistManager.Colonist colonist in validColonists) {
-				GameObject obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/EditColonistInProfessionInfoElement-Panel"), professionElement.editColonistsInProfessionListObj.transform, false);
-				obj.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
-				obj.GetComponent<Button>().onClick.AddListener(delegate {
-					if (colonist.profession == professionElement.profession) {
-						colonist.ChangeProfession(colonist.oldProfession);
-						obj.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
-					} else {
-						colonist.ChangeProfession(professionElement.profession);
-						obj.GetComponent<Image>().color = GetColour(Colours.LightBlue);
-					}
-					UpdateProfessionLevelInfo(obj, colonist, colonist.profession, colonist.oldProfession);
-				});
-				obj.transform.Find("ColonistImage").GetComponent<Image>().sprite = colonist.moveSprites[0];
-				obj.transform.Find("ColonistName-Text").GetComponent<Text>().text = colonist.name;
-
-				UpdateProfessionLevelInfo(obj, colonist, colonist.profession, professionElement.profession);
-
-				professionElement.editColonistsInProfessionElements.Add(obj);
-			}
-		}
-	}
-
-	private List<ProfessionElement> professionElements = new List<ProfessionElement>();
-	public void CreateProfessionsList() {
-		foreach (ProfessionElement professionElement in professionElements) {
-			MonoBehaviour.Destroy(professionElement.obj);
-		}
-		professionElements.Clear();
-		foreach (ColonistManager.Profession profession in GameManager.colonistM.professions) {
-			professionElements.Add(new ProfessionElement(profession, professionsList.transform, this));
-		}
-		SetProfessionsList();
-	}
-
-	public void SetProfessionsList() {
-		DisableAdminPanels(professionsList);
-		professionsList.SetActive(!professionsList.activeSelf);
-		foreach (ProfessionElement professionElement in professionElements) {
-			foreach (GameObject obj in professionElement.colonistsInProfessionElements) {
-				MonoBehaviour.Destroy(obj);
-			}
-			foreach (GameObject obj in professionElement.editColonistsInProfessionElements) {
-				MonoBehaviour.Destroy(obj);
-			}
-			professionElement.colonistsInProfessionListObj.SetActive(false);
-			professionElement.editColonistsInProfessionListObj.SetActive(false);
-			professionElement.obj.SetActive(professionsList.activeSelf);
-		}
-	}
-
-	public void DisableProfessionsList() {
-		professionsList.SetActive(false);
-		foreach (ProfessionElement professionElement in professionElements) {
-			foreach (GameObject obj in professionElement.colonistsInProfessionElements) {
-				MonoBehaviour.Destroy(obj);
-			}
-			foreach (GameObject obj in professionElement.editColonistsInProfessionElements) {
-				MonoBehaviour.Destroy(obj);
-			}
-			professionElement.colonistsInProfessionListObj.SetActive(false);
-			professionElement.editColonistsInProfessionListObj.SetActive(false);
-			professionElement.obj.SetActive(false);
-		}
-	}
-
-	public void UpdateProfessionsList() {
-		foreach (ProfessionElement professionElement in professionElements) {
-			professionElement.Update(GameManager.colonistM.colonists.Count);
 		}
 	}
 	*/
@@ -3963,7 +3819,6 @@ public class UIManager : BaseManager {
 				}
 			}
 
-			
 			foreach (TradeResourceElement tradeResourceElement in tradeResourceElements) {
 				bool removed = tradeResourceElement.Update();
 				if (removed) {
@@ -3994,7 +3849,7 @@ public class UIManager : BaseManager {
 			tradeMenu.transform.Find("CaravanTradeValue-Text").GetComponent<Text>().text = caravanTradeAmount != 0 ? caravanTradeValue + " value" : string.Empty;
 
 			tradeMenu.transform.Find("ColonyTradeAmount-Text").GetComponent<Text>().text = colonyTradeAmount != 0 ? colonyTradeAmount + " resource" + (colonyTradeAmount == 1 ? string.Empty : "s") : string.Empty;
-			tradeMenu.transform.Find("ColonyTradeValue-Text").GetComponent<Text>().text = colonyTradeAmount != 0 ? colonyTradeValue + " value": string.Empty;
+			tradeMenu.transform.Find("ColonyTradeValue-Text").GetComponent<Text>().text = colonyTradeAmount != 0 ? colonyTradeValue + " value" : string.Empty;
 
 			int tradeValueDifference = caravanTradeValue - colonyTradeValue;
 			string tradeFairness = "Equal Trade";
@@ -4124,7 +3979,7 @@ public class UIManager : BaseManager {
 			ResourceManager.ManufacturingObject mto = GameManager.resourceM.manufacturingObjectInstances.Find(findMTO => findMTO == instance);
 			if (mto != null) {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
-					GameManager.uiM.SetSelectedManufacturingTileObject(mto);
+					GameManager.uiM.SetSelectedManufacturingObject(mto);
 				});
 			}
 		}
@@ -4220,8 +4075,7 @@ public class UIManager : BaseManager {
 			desiredAmountInput = obj.transform.Find("DesiredAmount-Input").GetComponent<InputField>();
 			desiredAmountText = desiredAmountInput.transform.Find("Text").GetComponent<Text>();
 			desiredAmountInput.onEndEdit.AddListener(delegate {
-				int newDesiredAmount = 0;
-				if (int.TryParse(desiredAmountInput.text, out newDesiredAmount)) {
+				if (int.TryParse(desiredAmountInput.text, out int newDesiredAmount)) {
 					if (newDesiredAmount >= 0) {
 						resource.SetDesiredAmount(newDesiredAmount);
 						if (newDesiredAmount == 0) {
@@ -4356,296 +4210,424 @@ public class UIManager : BaseManager {
 			index += 1;
 		}
 	}
-
-	public void InitializeSelectedManufacturingTileObjectIndicator() {
-		selectedMTOIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
-		SpriteRenderer sCISR = selectedMTOIndicator.GetComponent<SpriteRenderer>();
-		sCISR.sprite = GameManager.resourceM.selectionCornersSprite;
-		sCISR.name = "SelectedMTOIndicator";
-		sCISR.sortingOrder = 20; // Selected MTO Indicator Sprite
-		sCISR.color = new Color(1f, 1f, 1f, 0.75f);
-		selectedMTOIndicator.transform.localScale = new Vector2(1f, 1f) * 1.2f;
-		selectedMTOIndicator.SetActive(false);
+	public void InitializeSelectedManufacturingObjectIndicator() {
+		selectedManufacturingObjectIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
+		SpriteRenderer spriteRenderer = selectedManufacturingObjectIndicator.GetComponent<SpriteRenderer>();
+		spriteRenderer.sprite = GameManager.resourceM.selectionCornersSprite;
+		spriteRenderer.name = "SelectedManufacturingObjectIndicator";
+		spriteRenderer.sortingOrder = 20; // Selected MTO Indicator Sprite
+		spriteRenderer.color = new Color(1f, 1f, 1f, 0.75f);
+		selectedManufacturingObjectIndicator.transform.localScale = new Vector2(1f, 1f) * 1.2f;
+		selectedManufacturingObjectIndicator.SetActive(false);
 	}
 
-	public class MTOPanel {
+	private static readonly List<ManufacturingResourceElement> manufacturingResourceElements = new List<ManufacturingResourceElement>();
 
-		public GameObject obj;
-		private readonly bool fuel;
+	public void SetSelectedManufacturingObjectPanel() {
 
-		private Dictionary<GameObject, ResourceManager.Resource> selectResourceListElements = new Dictionary<GameObject, ResourceManager.Resource>();
-		private Dictionary<GameObject, ResourceManager.Resource> selectFuelResourceListElements = new Dictionary<GameObject, ResourceManager.Resource>();
+		selectedManufacturingObjectPanel.SetActive(selectedManufacturingObject != null);
+		selectedManufacturingObjectIndicator.SetActive(selectedManufacturingObject != null);
 
-		private GameObject selectResourcePanel = null;
-		private GameObject selectResourceList = null;
+		manufacturingResourceElements.Clear();
 
-		private GameObject selectFuelResourcePanel = null;
-		private GameObject selectFuelResourceList = null;
+		selectedManufacturingObjectSelectResourcesPanel.SetActive(false);
+		selectedManufacturingObjectSelectFuelsPanel.SetActive(false);
 
-		private GameObject activeValueButton = null; // Independent of fuel/no-fuel panel
-		private GameObject activeValueText = null; // Independent of fuel/no-fuel panel
+		if (selectedManufacturingObject != null) {
 
-		public MTOPanel(GameObject obj, bool fuel) {
-			this.obj = obj;
-			this.fuel = fuel;
+			selectedManufacturingObjectIndicator.transform.position = selectedManufacturingObject.tile.obj.transform.position;
 
-			Initialize();
+			GameObject settingsPanel = selectedManufacturingObjectPanel.transform.Find("Settings-Panel").gameObject;
 
-			obj.SetActive(false);
+			settingsPanel.transform.Find("SelectedManufacturingObjectInfo-Panel/Name-Text").GetComponent<Text>().text = selectedManufacturingObject.prefab.GetInstanceNameFromVariation(selectedManufacturingObject.variation);
+			settingsPanel.transform.Find("SelectedManufacturingObjectInfo-Panel/Sprite-Panel/Sprite-Image").GetComponent<Image>().sprite = selectedManufacturingObject.prefab.GetBaseSpriteForVariation(selectedManufacturingObject.variation);
+
+			selectedManufacturingObjectPanelSelectFuelsButton.gameObject.SetActive(selectedManufacturingObject.prefab.usesFuel);
+
+			Transform selectedResourcesPanel = settingsPanel.transform.Find("SelectResources-Button/SelectedResources-Panel");
+			foreach (Transform child in selectedResourcesPanel) {
+				MonoBehaviour.Destroy(child.gameObject);
+			}
+			Transform manufacturableResourcesPanel = settingsPanel.transform.Find("ManufacturableResources-Panel/ManufacturableResources-ScrollPanel/ManufacturableResourcesList-Panel");
+			foreach (Transform child in manufacturableResourcesPanel) {
+				MonoBehaviour.Destroy(child.gameObject);
+			}
+			foreach (ResourceManager.ManufacturableResourceInstance resource in selectedManufacturingObject.resources.OrderBy(r => r.priority.Get())) {
+				GameObject selectedResourcePreview = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/SelectedResourcePreview-Image"), selectedResourcesPanel, false);
+				selectedResourcePreview.GetComponent<Image>().sprite = resource.resource.image;
+
+				ManufacturingResourceElement manufacturableResourceElement = new ManufacturingResourceElement(resource, manufacturableResourcesPanel);
+				manufacturingResourceElements.Add(manufacturableResourceElement);
+			}
+
+			Transform selectedFuelsPanel = settingsPanel.transform.Find("SelectFuels-Button/SelectedFuels-Panel");
+			foreach (Transform child in selectedFuelsPanel) {
+				MonoBehaviour.Destroy(child.gameObject);
+			}
+			foreach (ResourceManager.PriorityResourceInstance fuel in selectedManufacturingObject.fuels.OrderBy(f => f.priority.Get())) {
+				GameObject selectedFuelPreview = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/SelectedResourcePreview-Image"), selectedFuelsPanel, false);
+				selectedFuelPreview.GetComponent<Image>().sprite = fuel.resource.image;
+			}
+
+			UpdateSelectedManufacturingObjectPanel();
+		}
+	}
+
+	public void UpdateSelectedManufacturingObjectPanel() {
+		foreach (ManufacturingResourceElement manufacturingResourceElement in manufacturingResourceElements) {
+			manufacturingResourceElement.Update();
 		}
 
-		private void Initialize() {
-			selectResourcePanel = obj.transform.Find("SelectResource-Panel").gameObject;
-			selectResourceList = selectResourcePanel.transform.Find("SelectResource-ScrollPanel/SelectResourceList-Panel").gameObject;
+		if (selectedManufacturingObject.active) {
+			selectedManufacturingObjectPanelActiveButtonText.text = "Enabled";
+			if (selectedManufacturingObject.resources.Any(resource => resource.enableable)) {
+				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+			} else {
+				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+			}
+		} else {
+			selectedManufacturingObjectPanelActiveButtonText.text = "Disabled";
+			if (selectedManufacturingObject.resources.Any(resource => resource.enableable)) {
+				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+			} else {
+				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
+			}
+		}
+	}
 
-			obj.transform.Find("SelectResource-Button").GetComponent<Button>().onClick.AddListener(delegate {
-				selectResourcePanel.SetActive(!selectResourcePanel.activeSelf);
-				if (fuel) {
-					selectFuelResourcePanel.SetActive(false);
+	private abstract class PriorityResourceElement {
+
+		public enum Type {
+			Resource,
+			Fuel
+		}
+
+		public Type type;
+
+		public ResourceManager.Resource resource;
+		public ResourceManager.ManufacturingObject manufacturingObject;
+
+		public GameObject panel;
+
+		public PriorityResourceElement(
+			Type type,
+			ResourceManager.Resource resource,
+			Transform parent,
+			ResourceManager.ManufacturingObject manufacturingObject
+		) {
+			this.type = type;
+			this.resource = resource;
+			this.manufacturingObject = manufacturingObject;
+
+			panel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/SelectPriorityResource-Panel"), parent, false);
+
+			panel.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resource.image;
+			panel.transform.Find("ResourceName-Text").GetComponent<Text>().text = resource.name;
+
+			panel.transform.Find("Details-Panel/EnergyValue-Text").GetComponent<Text>().text = (type == Type.Resource ? resource.manufacturingEnergy : resource.fuelEnergy) + " energy";
+
+			panel.GetComponent<Button>().onClick.AddListener(delegate {
+				if (type == Type.Resource) {
+					manufacturingObject.ToggleResource(resource, 1);
+				} else if (type == Type.Fuel) {
+					manufacturingObject.ToggleFuel(resource, 1);
+				}
+				
+				Update();
+
+				if (type == Type.Resource) {
+					UpdatePriorityButtonText(manufacturingObject.GetManufacturableResourceFromResource(resource) == null ? 0 : 1);
+				} else if (type == Type.Fuel) {
+					UpdatePriorityButtonText(manufacturingObject.GetFuelFromFuelResource(resource) == null ? 0 : 1);
 				}
 			});
 
-			selectResourcePanel.SetActive(false);
-
-			if (fuel) {
-				selectFuelResourcePanel = obj.transform.Find("SelectFuelResource-Panel").gameObject;
-				selectFuelResourceList = selectFuelResourcePanel.transform.Find("SelectFuelResource-ScrollPanel/SelectFuelResourceList-Panel").gameObject;
-
-				foreach (ResourceManager.Resource fuelResource in ResourceManager.GetResourcesInClass(ResourceManager.ResourceClassEnum.Fuel)) {
-					GameObject selectFuelResourceButton = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/SelectFuelResource-Panel"), selectFuelResourceList.transform, false);
-					selectFuelResourceButton.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = fuelResource.image;
-					selectFuelResourceButton.transform.Find("ResourceName-Text").GetComponent<Text>().text = fuelResource.name;
-					selectFuelResourceButton.transform.Find("EnergyValue-Text").GetComponent<Text>().text = fuelResource.fuelEnergy.ToString();
-
-					selectFuelResourceListElements.Add(selectFuelResourceButton, fuelResource);
+			UpdatePriorityButtonText(0);
+			if (type == Type.Resource) {
+				ResourceManager.ManufacturableResourceInstance manufacturableResource = manufacturingObject.GetManufacturableResourceFromResource(resource);
+				if (manufacturableResource != null) {
+					UpdatePriorityButtonText(manufacturableResource.priority.Get());
 				}
-
-				obj.transform.Find("SelectFuelResource-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					selectFuelResourcePanel.SetActive(!selectFuelResourcePanel.activeSelf);
-					selectResourcePanel.SetActive(false);
-				});
-
-				selectFuelResourcePanel.SetActive(false);
-			} else {
-				selectFuelResourcePanel = null;
-				selectFuelResourceList = null;
-				selectFuelResourceListElements.Clear();
+			} else if (type == Type.Fuel) {
+				ResourceManager.PriorityResourceInstance fuel = manufacturingObject.GetFuelFromFuelResource(resource);
+				if (fuel != null) {
+					UpdatePriorityButtonText(fuel.priority.Get());
+				}
 			}
+
+			panel.transform.Find("Priority-Button").GetComponent<HandleClickScript>().Initialize(
+				delegate {
+					ChangePriority(1);
+				},
+				null,
+				delegate {
+					ChangePriority(-1);
+				}
+			);
+
+			Update();
 		}
 
-		public void Select(ResourceManager.ManufacturingObject selectedManufacturingObject, GameObject selectedMTOIndicator) {
-			foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectResourceListElementKVP in selectResourceListElements) {
-				MonoBehaviour.Destroy(selectResourceListElementKVP.Key);
+		public virtual void Update() {
+			panel.transform.Find("Details-Panel/AvailableAmount-Text").GetComponent<Text>().text = resource.GetAvailableAmount() + " available";
+
+			panel.transform.Find("Details-Panel/AvailableAmount-Text").GetComponent<Text>().color =
+				resource.GetAvailableAmount() > 0
+					? GetColour(Colours.DarkGreen)
+					: GetColour(Colours.DarkRed);
+		}
+
+		public void UpdatePriorityButtonText(int priority) {
+			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().text = priority > 0 ? priority.ToString() : string.Empty;
+
+			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().color = Color.Lerp(
+				GetColour(Colours.DarkGreen),
+				GetColour(Colours.DarkRed),
+				(priority - 1f) / (ResourceManager.PriorityResourceInstance.priorityMax - 1f)
+			);
+		}
+
+		public abstract void ChangePriority(int amount);
+
+		public void Remove() {
+			MonoBehaviour.Destroy(panel);
+		}
+	}
+
+	private readonly List<ManufacturableResourceElement> manufacturableResourceElements = new List<ManufacturableResourceElement>();
+
+	private void SetSelectedManufacturingObjectSelectResourcesPanel() {
+
+		selectedManufacturingObjectSelectResourcesPanel.SetActive(!selectedManufacturingObjectSelectResourcesPanel.activeSelf);
+
+		foreach (ManufacturableResourceElement manufacturableResourceElement in manufacturableResourceElements) {
+			manufacturableResourceElement.Remove();
+		}
+		manufacturableResourceElements.Clear();
+
+		if (selectedManufacturingObjectSelectResourcesPanel.activeSelf) {
+			foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResourcesByManufacturingObject(selectedManufacturingObject).OrderBy(r => r.name)) {
+				manufacturableResourceElements.Add(
+					new ManufacturableResourceElement(
+						PriorityResourceElement.Type.Resource,
+						resource,
+						selectedManufacturingObjectSelectResourcesPanel.transform.Find("SelectResources-ScrollPanel/SelectResourcesList-Panel"),
+						selectedManufacturingObject
+					)
+				);
 			}
-			selectResourceListElements.Clear();
+		} else {
+			SetSelectedManufacturingObjectPanel();
+		}
+	}
 
-			obj.SetActive(true);
+	private class ManufacturableResourceElement : PriorityResourceElement {
 
-			selectedMTOIndicator.SetActive(true);
-			selectedMTOIndicator.transform.position = selectedManufacturingObject.obj.transform.position;
+		public ManufacturableResourceElement(
+			Type type,
+			ResourceManager.Resource resource,
+			Transform parent,
+			ResourceManager.ManufacturingObject manufacturingObject
+		) : base(
+			type,
+			resource,
+			parent,
+			manufacturingObject
+		) {
+			
+		}
 
-			obj.transform.Find("SelectedManufacturingTileObjectName-Text").GetComponent<Text>().text = selectedManufacturingObject.prefab.name;
+		public override void Update() {
+			base.Update();
 
-			obj.transform.Find("SelectedManufacturingTileObjectSprite-Panel/SelectedManufacturingTileObjectSprite-Image").GetComponent<Image>().sprite = selectedManufacturingObject.obj.GetComponent<SpriteRenderer>().sprite;
+			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color =
+				manufacturingObject.GetManufacturableResourceFromResource(resource) != null
+					? (resource.GetAvailableAmount() > 0
+						? GetColour(Colours.LightGreen)
+						: GetColour(Colours.LightOrange))
+					: GetColour(Colours.Clear);
+		}
 
-			foreach (ResourceManager.Resource manufacturableResource in ResourceManager.GetResourcesInClass(ResourceManager.ResourceClassEnum.Manufacturable)) {
-				if (manufacturableResource.CanBeManufacturedBy(selectedManufacturingObject.prefab)) {
-				//if (manufacturableResource.manufacturingObjects.Contains(selectedManufacturingObject.prefab.type) || (manufacturableResource.manufacturingObjects.Count <= 0 && manufacturableResource.manufacturingObjectSubGroups.Contains(selectedManufacturingObject.prefab.subGroupType))) {
-					GameObject selectResourceButton = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/SelectManufacturedResource-Panel"), selectResourceList.transform, false);
-					selectResourceButton.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = manufacturableResource.image;
-					selectResourceButton.transform.Find("ResourceName-Text").GetComponent<Text>().text = manufacturableResource.name;
-					//selectResourceButton.transform.Find("ResourceManufactureTileObjectSubGroupName-Text").GetComponent<Text>().text = manufacturableResource.manufacturingTileObjectSubGroup.name;
-					selectResourceButton.transform.Find("RequiredEnergy-Text").GetComponent<Text>().text = manufacturableResource.manufacturingEnergy.ToString();
+		public override void ChangePriority(int amount) {
 
-					selectResourceListElements.Add(selectResourceButton, manufacturableResource);
-				}
+			ResourceManager.ManufacturableResourceInstance manufacturableResource = manufacturingObject.GetManufacturableResourceFromResource(resource);
+			if (manufacturableResource == null) {
+				manufacturableResource = manufacturingObject.ToggleResource(resource, 0);
 			}
 
-			foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectResourceButtonKVP in selectResourceListElements) {
-				selectResourceButtonKVP.Key.GetComponent<Button>().onClick.AddListener(delegate {
-					SetSelectedMTOCreateResource(selectResourceButtonKVP.Value, selectedManufacturingObject);
-				});
+			int priority = manufacturableResource.priority.Change(amount);
+
+			if (priority <= manufacturableResource.priority.min && manufacturableResource != null) {
+				manufacturingObject.ToggleResource(resource, 0);
 			}
 
-			foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectFuelResourceButtonKVP in selectFuelResourceListElements) {
-				selectFuelResourceButtonKVP.Key.GetComponent<Button>().onClick.AddListener(delegate {
-					SetSelectedMTOFuelResource(selectFuelResourceButtonKVP.Value, selectedManufacturingObject);
-				});
+			UpdatePriorityButtonText(priority);
+
+			Update();
+		}
+	}
+
+	private readonly List<FuelResourceElement> fuelResourceElements = new List<FuelResourceElement>();
+
+	private void SetSelectedManufacturingObjectSelectFuelsPanel() {
+		selectedManufacturingObjectSelectFuelsPanel.SetActive(!selectedManufacturingObjectSelectFuelsPanel.activeSelf);
+
+		foreach (FuelResourceElement fuelResourceElement in fuelResourceElements) {
+			fuelResourceElement.Remove();
+		}
+		fuelResourceElements.Clear();
+
+		if (selectedManufacturingObjectSelectFuelsPanel.activeSelf) {
+			foreach (ResourceManager.Resource resource in ResourceManager.GetResourcesInClass(ResourceManager.ResourceClassEnum.Fuel).OrderBy(r => r.fuelEnergy)) {
+				fuelResourceElements.Add(
+					new FuelResourceElement(
+						PriorityResourceElement.Type.Fuel,
+						resource,
+						selectedManufacturingObjectSelectFuelsPanel.transform.Find("SelectFuels-ScrollPanel/SelectFuelsList-Panel"),
+						selectedManufacturingObject
+					)
+				);
+			}
+		} else {
+			SetSelectedManufacturingObjectPanel();
+		}
+	}
+
+	private class FuelResourceElement : PriorityResourceElement {
+
+		public FuelResourceElement(
+			Type type,
+			ResourceManager.Resource resource,
+			Transform parent,
+			ResourceManager.ManufacturingObject manufacturingObject
+		) : base(
+			type,
+			resource,
+			parent,
+			manufacturingObject
+		) {
+			
+		}
+
+		public override void Update() {
+			base.Update();
+
+			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color = 
+				manufacturingObject.GetFuelFromFuelResource(resource) != null
+					? (resource.GetAvailableAmount() > 0
+						? GetColour(Colours.LightGreen)
+						: GetColour(Colours.LightOrange))
+					: GetColour(Colours.Clear);
+		}
+
+		public override void ChangePriority(int amount) {
+
+			ResourceManager.PriorityResourceInstance fuel = manufacturingObject.GetFuelFromFuelResource(resource);
+			if (fuel == null) {
+				fuel = manufacturingObject.ToggleFuel(resource, 0);
 			}
 
-			activeValueButton = obj.transform.Find("ActiveValueToggle-Button").gameObject;
-			activeValueText = activeValueButton.transform.Find("ActiveValue-Text").gameObject;
+			int priority = fuel.priority.Change(amount);
 
-			activeValueButton.GetComponent<Button>().onClick.AddListener(delegate {
-				selectedManufacturingObject.SetActive(!selectedManufacturingObject.active);
+			if (priority <= fuel.priority.min && fuel != null) {
+				manufacturingObject.ToggleFuel(resource, 0);
+			}
+
+			UpdatePriorityButtonText(priority);
+
+			Update();
+		}
+	}
+
+	private class ManufacturingResourceElement {
+		public ResourceManager.ManufacturableResourceInstance resource;
+
+		public GameObject panel;
+		public List<RequiredResourceElement> requiredResourceElements = new List<RequiredResourceElement>();
+
+		private readonly Transform singleRunButton;
+		private readonly Transform maintainStockButton;
+		private readonly Transform continuousRunButton;
+
+		private readonly Transform createAmountPanel;
+		private readonly InputField createAmountInputField;
+		private readonly Text remainingAmountText;
+
+		public ManufacturingResourceElement(ResourceManager.ManufacturableResourceInstance resource, Transform parent) {
+			this.resource = resource;
+
+			panel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/ManufacturableResource-Panel"), parent, false);
+
+			panel.transform.Find("ResourceData-Panel/Name").GetComponent<Text>().text = resource.resource.name;
+			panel.transform.Find("ResourceData-Panel/Image").GetComponent<Image>().sprite = resource.resource.image;
+
+			foreach (ResourceManager.ResourceAmount resourceAmount in resource.resource.manufacturingResources) {
+				requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, panel.transform.Find("RequiredResources-Panel")));
+			}
+
+			singleRunButton = panel.transform.Find("CreationMethod-Panel/CreationMethodsList-Panel/SingleRun-Button");
+			maintainStockButton = panel.transform.Find("CreationMethod-Panel/CreationMethodsList-Panel/MaintainStock-Button");
+			continuousRunButton = panel.transform.Find("CreationMethod-Panel/CreationMethodsList-Panel/ContinuousRun-Button");
+
+			singleRunButton.GetComponent<Button>().onClick.AddListener(delegate {
+				SetCreationMethod(ResourceManager.CreationMethod.SingleRun);
+			});
+			maintainStockButton.GetComponent<Button>().onClick.AddListener(delegate {
+				SetCreationMethod(ResourceManager.CreationMethod.MaintainStock);
+			});
+			continuousRunButton.GetComponent<Button>().onClick.AddListener(delegate {
+				SetCreationMethod(ResourceManager.CreationMethod.ContinuousRun);
 			});
 
-			SetSelectedMTOCreateResource(selectedManufacturingObject.createResource, selectedManufacturingObject);
-			if (selectedManufacturingObject.createResource != null) {
-				selectedManufacturingObject.createResource.UpdateDesiredAmountText();
-			}
+			createAmountPanel = panel.transform.Find("CreateAmount-Panel");
+			remainingAmountText = createAmountPanel.transform.Find("RemainingAmount-Text").GetComponent<Text>();
+			createAmountInputField = createAmountPanel.transform.Find("CreateAmount-InputField").GetComponent<InputField>();
 
-			if (fuel) {
-				SetSelectedMTOFuelResource(selectedManufacturingObject.fuelResource, selectedManufacturingObject);
-			}
+			createAmountInputField.onEndEdit.AddListener(delegate {
+				if (int.TryParse(createAmountInputField.text, out int targetAmount)) {
+					resource.UpdateTargetAmount(targetAmount);
+				}
+			});
+
+			SetCreationMethod(resource.creationMethod);
 		}
 
-		private void SetSelectedMTOCreateResource(ResourceManager.Resource newCreateResource, ResourceManager.ManufacturingObject selectedMTO) {
-			selectedMTO.createResource = newCreateResource;
-
-			selectResourcePanel.SetActive(false);
-			SetSelectedMTOResourceRequiredResources(selectedMTO);
-			if (selectedMTO.createResource != null) {
-				selectedMTO.createResource.UpdateDesiredAmountText();
-				obj.transform.Find("SelectResource-Button/SelectedResourceImage-Image").GetComponent<Image>().sprite = selectedMTO.createResource.image;
-				obj.transform.Find("CreateResourceAmount-Text").GetComponent<Text>().text = "Creates " + selectedMTO.createResource.amountCreated + " " + selectedMTO.createResource.name;
-			} else {
-				obj.transform.Find("SelectResource-Button/SelectedResourceImage-Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(@"UI/NoSelectedResourceImage");
-				obj.transform.Find("CreateResourceAmount-Text").GetComponent<Text>().text = "No Resource Selected";
+		public void Update() {
+			foreach (RequiredResourceElement requiredResourceElement in requiredResourceElements) {
+				requiredResourceElement.Update();
 			}
+			remainingAmountText.text = resource.GetRemainingAmount().ToString();
 		}
 
-		private Dictionary<GameObject, ResourceManager.ResourceAmount> selectedMTOResourceRequiredResources = new Dictionary<GameObject, ResourceManager.ResourceAmount>(); // Independent of fuel/no-fuel panel
+		public void SetCreationMethod(ResourceManager.CreationMethod creationMethod) {
 
-		private void SetSelectedMTOResourceRequiredResources(ResourceManager.ManufacturingObject selectedMTO) {
-			foreach (KeyValuePair<GameObject, ResourceManager.ResourceAmount> selectedMTOResourceRequiredResourceKVP in selectedMTOResourceRequiredResources) {
-				MonoBehaviour.Destroy(selectedMTOResourceRequiredResourceKVP.Key);
-			}
-			selectedMTOResourceRequiredResources.Clear();
+			resource.creationMethod = creationMethod;
 
-			if (selectedMTO.createResource != null) {
-				Transform requiredResourcesList = obj.transform.Find("RequiredResources-Panel/RequiredResources-ScrollPanel/RequiredResourcesList-Panel");
-				foreach (ResourceManager.ResourceAmount requiredResource in selectedMTO.createResource.manufacturingResources) {
-					GameObject requiredResourcePanel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), requiredResourcesList, false);
+			singleRunButton.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
+			maintainStockButton.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
+			continuousRunButton.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
 
-					requiredResourcePanel.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = requiredResource.resource.image;
-					requiredResourcePanel.transform.Find("ResourceName-Text").GetComponent<Text>().text = requiredResource.resource.name;
-					requiredResourcePanel.transform.Find("RequiredAmount-Text").GetComponent<Text>().text = "Need " + requiredResource.amount.ToString();
+			createAmountPanel.gameObject.SetActive(true);
 
-					selectedMTOResourceRequiredResources.Add(requiredResourcePanel, requiredResource);
-				}
-
-				InputField desiredAmountInput = obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>();
-				desiredAmountInput.onEndEdit.AddListener(delegate {
-					int newDesiredAmount = 0;
-					if (int.TryParse(desiredAmountInput.text, out newDesiredAmount)) {
-						if (newDesiredAmount >= 0) {
-							selectedMTO.createResource.SetDesiredAmount(newDesiredAmount);
-							if (newDesiredAmount == 0) {
-								desiredAmountInput.text = String.Empty;
-							}
-						}
-					} else {
-						selectedMTO.createResource.SetDesiredAmount(0);
-					}
-				});
-			}
-		}
-
-		private void SetSelectedMTOFuelResource(ResourceManager.Resource newFuelResource, ResourceManager.ManufacturingObject selectedMTO) {
-			selectedMTO.fuelResource = newFuelResource;
-
-			selectFuelResourcePanel.SetActive(false);
-			if (selectedMTO.fuelResource != null) {
-				obj.transform.Find("SelectFuelResource-Button/SelectedFuelResourceImage-Image").GetComponent<Image>().sprite = selectedMTO.fuelResource.image;
-			} else {
-				obj.transform.Find("SelectFuelResource-Button/SelectedFuelResourceImage-Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(@"UI/NoSelectedResourceImage");
-			}
-		}
-
-		public void Update(ResourceManager.ManufacturingObject selectedMTO) {
-			if (selectedMTO.createResource != null) {
-				obj.transform.Find("SelectResource-Button/SelectedResourceName-Text").GetComponent<Text>().text = selectedMTO.createResource.name;
-
-				foreach (KeyValuePair<GameObject, ResourceManager.ResourceAmount> selectedMTOResourceRequiredResourceKVP in selectedMTOResourceRequiredResources) {
-					selectedMTOResourceRequiredResourceKVP.Key.transform.Find("AvailableAmount-Text").GetComponent<Text>().text = "Have " + selectedMTOResourceRequiredResourceKVP.Value.resource.GetAvailableAmount();
-					if (selectedMTOResourceRequiredResourceKVP.Value.resource.GetAvailableAmount() < selectedMTOResourceRequiredResourceKVP.Value.amount) {
-						selectedMTOResourceRequiredResourceKVP.Key.GetComponent<Image>().color = GetColour(Colours.LightRed);
-					} else {
-						selectedMTOResourceRequiredResourceKVP.Key.GetComponent<Image>().color = GetColour(Colours.LightGreen);
-					}
-				}
-
-				obj.transform.Find("ResourceTargetAmount-Panel/CurrentAmountValue-Text").GetComponent<Text>().text = selectedMTO.createResource.GetAvailableAmount().ToString();
-
-			} else {
-				obj.transform.Find("SelectResource-Button/SelectedResourceName-Text").GetComponent<Text>().text = "Select Resource";
-
-				obj.transform.Find("ResourceTargetAmount-Panel/CurrentAmountValue-Text").GetComponent<Text>().text = String.Empty;
-				obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>().text = String.Empty;
-			}
-			if (fuel) {
-				if (selectedMTO.fuelResource != null) {
-					obj.transform.Find("SelectFuelResource-Button/SelectedFuelResourceName-Text").GetComponent<Text>().text = selectedMTO.fuelResource.name;
-				} else {
-					obj.transform.Find("SelectFuelResource-Button/SelectedFuelResourceName-Text").GetComponent<Text>().text = "Select Fuel";
-				}
-				if (selectFuelResourcePanel.activeSelf) {
-					foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectFuelResourceButtonKVP in selectFuelResourceListElements) {
-						selectFuelResourceButtonKVP.Key.transform.Find("AmountAvailableValue-Text").GetComponent<Text>().text = selectFuelResourceButtonKVP.Value.GetAvailableAmount().ToString();
-					}
-					if (selectedMTO.createResource != null) {
-						foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectFuelResourceButtonKVP in selectFuelResourceListElements) {
-							GameObject selectFuelResourceButton = selectFuelResourceButtonKVP.Key;
-							ResourceManager.Resource fuelResource = selectFuelResourceButtonKVP.Value;
-							float energyRatio = (float)Math.Round((selectedMTO.createResource.manufacturingEnergy) / ((float)fuelResource.fuelEnergy), 2);
-							selectFuelResourceButtonKVP.Key.transform.Find("EnergyValue-Text").GetComponent<Text>().text = selectFuelResourceButtonKVP.Value.fuelEnergy + " (" + energyRatio + " : 1)";
-							if (Mathf.CeilToInt(energyRatio) > fuelResource.GetAvailableAmount()) {
-								selectFuelResourceButtonKVP.Key.GetComponent<Image>().color = GetColour(Colours.LightRed);
-							} else {
-								selectFuelResourceButtonKVP.Key.GetComponent<Image>().color = GetColour(Colours.LightGreen);
-							}
-						}
-					} else {
-						foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectFuelResourceButtonKVP in selectFuelResourceListElements) {
-							selectFuelResourceButtonKVP.Key.transform.Find("EnergyValue-Text").GetComponent<Text>().text = selectFuelResourceButtonKVP.Value.fuelEnergy.ToString();
-							if (selectFuelResourceButtonKVP.Value.GetAvailableAmount() <= 0) {
-								selectFuelResourceButtonKVP.Key.GetComponent<Image>().color = GetColour(Colours.LightRed);
-							} else {
-								selectFuelResourceButtonKVP.Key.GetComponent<Image>().color = GetColour(Colours.LightGreen);
-							}
-						}
-					}
-				}
+			if (resource.creationMethod == ResourceManager.CreationMethod.SingleRun) {
+				singleRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+				createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Create Amount";
+			} else if (resource.creationMethod == ResourceManager.CreationMethod.MaintainStock) {
+				maintainStockButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+				createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Maintain Amount";
+			} else if (resource.creationMethod == ResourceManager.CreationMethod.ContinuousRun) {
+				continuousRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+				createAmountPanel.gameObject.SetActive(false);
 			}
 
-			if (selectedMTO.active) {
-				activeValueText.GetComponent<Text>().text = "Active";
-				if (selectedMTO.canActivate) {
-					activeValueButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
-				} else {
-					activeValueButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
-				}
-			} else {
-				activeValueText.GetComponent<Text>().text = "Inactive";
-				if (selectedMTO.canActivate) {
-					activeValueButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
-				} else {
-					activeValueButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
-				}
-			}
+			int targetAmount = resource.GetTargetAmount();
+			createAmountInputField.text = targetAmount > 0 ? targetAmount.ToString() : string.Empty;
 
-			obj.transform.Find("SelectResource-Button").GetComponent<Image>().color = (selectedMTO.createResource != null ? (selectedMTO.hasEnoughRequiredResources ? GetColour(Colours.LightGreen) : GetColour(Colours.LightRed)) : GetColour(Colours.LightGrey200));
-			if (fuel) {
-				obj.transform.Find("SelectFuelResource-Button").GetComponent<Image>().color = (selectedMTO.fuelResource != null ? (selectedMTO.hasEnoughFuel ? GetColour(Colours.LightGreen) : GetColour(Colours.LightRed)) : GetColour(Colours.LightGrey200));
-			}
-		}
-
-		public void Deselect(GameObject selectedMTOIndicator) {
-			foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectResourceButtonKVP in selectResourceListElements) {
-				selectResourceButtonKVP.Key.GetComponent<Button>().onClick.RemoveAllListeners();
-			}
-			foreach (KeyValuePair<GameObject, ResourceManager.ResourceAmount> selectedMTOResourceRequiredResourceKVP in selectedMTOResourceRequiredResources) {
-				MonoBehaviour.Destroy(selectedMTOResourceRequiredResourceKVP.Key);
-			}
-			selectedMTOResourceRequiredResources.Clear();
-			foreach (KeyValuePair<GameObject, ResourceManager.Resource> selectFuelResourceButtonKVP in selectFuelResourceListElements) {
-				selectFuelResourceButtonKVP.Key.GetComponent<Button>().onClick.RemoveAllListeners();
-			}
-			activeValueButton.GetComponent<Button>().onClick.RemoveAllListeners();
-			obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>().onEndEdit.RemoveAllListeners();
-			selectedMTOIndicator.SetActive(false);
-			obj.SetActive(false);
+			// The following lines (including the redundant-looking disable/enable) are required to get the ScrollRect to 
+			// update its size when enabling or disabling the createAmountPanel.
+			Canvas.ForceUpdateCanvases();
+			panel.GetComponent<VerticalLayoutGroup>().enabled = false;
+			panel.GetComponent<VerticalLayoutGroup>().enabled = true;
 		}
 	}
 
@@ -4721,6 +4703,19 @@ public class UIManager : BaseManager {
 	}
 
 	public bool IsPointerOverUI() {
-		return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+		return EventSystem.current.IsPointerOverGameObject();
+	}
+
+	public List<RaycastResult> GetUIElementsUnderPointer() {
+		PointerEventData pointerEventData = new PointerEventData(EventSystem.current) {
+			pointerId = -1,
+		};
+
+		pointerEventData.position = Input.mousePosition;
+
+		List<RaycastResult> results = new List<RaycastResult>();
+		EventSystem.current.RaycastAll(pointerEventData, results);
+
+		return results;
 	}
 }

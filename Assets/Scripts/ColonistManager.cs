@@ -1209,7 +1209,6 @@ public class ColonistManager : BaseManager {
 		public void WorkJob() {
 
 			if (job.prefab.jobType == JobManager.JobEnum.HarvestFarm && job.tile.farm == null) {
-				job.jobUIElement.Remove();
 				job.Remove();
 				job = null;
 				return;
@@ -1220,7 +1219,6 @@ public class ColonistManager : BaseManager {
 
 				ResourceManager.Container containerOnTile = GameManager.resourceM.containers.Find(container => container.tile == job.tile);
 				if (containerOnTile == null) {
-					job.jobUIElement.Remove();
 					job.Remove();
 					job = null;
 					return;
@@ -1232,16 +1230,13 @@ public class ColonistManager : BaseManager {
 			}
 
 			if (job.activeTileObject != null) {
-				job.activeTileObject.SetActiveSprite(job);
+				job.activeTileObject.SetActiveSprite(job, true);
 			}
 
 			job.jobProgress -= 1 * GameManager.timeM.deltaTime;
 
 			if (job.jobProgress <= 0 || Mathf.Approximately(job.jobProgress, 0)) {
 				job.jobProgress = 0;
-				if (job.activeTileObject != null) {
-					job.activeTileObject.SetActiveSprite(job);
-				}
 				FinishJob();
 				return;
 			}
@@ -1272,6 +1267,10 @@ public class ColonistManager : BaseManager {
 
 			JobManager.finishJobFunctions[finishedJob.prefab.jobType](this, finishedJob);
 
+			if (finishedJob.activeTileObject != null) {
+				finishedJob.activeTileObject.SetActiveSprite(finishedJob, false);
+			}
+
 			GameManager.jobM.UpdateSingleColonistJobs(this);
 			GameManager.uiM.SetJobElements();
 			GameManager.uiM.UpdateSelectedColonistInformation();
@@ -1291,16 +1290,10 @@ public class ColonistManager : BaseManager {
 			if (storedJob != null) {
 				if (GameManager.colonistM.jobToNeedMap.ContainsKey(storedJob.prefab.jobType) || JobManager.nonReturnableJobs.Contains(storedJob.prefab.jobType)) {
 					storedJob.Remove();
-					if (storedJob.jobUIElement != null) {
-						storedJob.jobUIElement.Remove();
-					}
 					storedJob = null;
 					if (job != null) {
 						if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.prefab.jobType) || JobManager.nonReturnableJobs.Contains(job.prefab.jobType)) {
 							job.Remove();
-							if (job.jobUIElement != null) {
-								job.jobUIElement.Remove();
-							}
 						}
 						job = null;
 					}

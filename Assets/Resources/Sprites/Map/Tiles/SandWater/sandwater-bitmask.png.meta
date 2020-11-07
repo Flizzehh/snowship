@@ -1,407 +1,1200 @@
 fileFormatVersion: 2
 guid: b7105b9b5e6a92e4a8cab13cfdc97251
-timeCreated: 1495477339
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: water-8bit_0
-    21300002: water-8bit_1
-    21300004: water-8bit_2
-    21300006: water-8bit_3
-    21300008: water-8bit_4
-    21300010: water-8bit_5
-    21300012: water-8bit_6
-    21300014: water-8bit_7
-    21300016: water-8bit_8
-    21300018: water-8bit_9
-    21300020: water-8bit_10
-    21300022: water-8bit_11
-    21300024: water-8bit_12
-    21300026: water-8bit_13
-    21300028: water-8bit_14
-    21300030: water-8bit_15
-    21300032: water-8bit_16
-    21300034: water-8bit_17
-    21300036: water-8bit_18
-    21300038: water-8bit_19
-    21300040: water-8bit_20
-    21300042: water-8bit_21
-    21300044: water-8bit_22
-    21300046: water-8bit_23
-    21300048: water-8bit_24
-    21300050: water-8bit_25
-    21300052: water-8bit_26
-    21300054: water-8bit_27
-    21300056: water-8bit_28
-    21300058: water-8bit_29
-    21300060: water-8bit_30
-    21300062: water-8bit_31
-    21300064: water-8bit_32
-    21300066: water-8bit_33
-    21300068: water-8bit_34
-    21300070: water-8bit_35
-    21300072: water-8bit_36
-    21300074: water-8bit_37
-    21300076: water-8bit_38
-    21300078: water-8bit_39
-    21300080: water-8bit_40
-    21300082: water-8bit_41
-    21300084: water-8bit_42
-    21300086: water-8bit_43
-    21300088: water-8bit_44
-    21300090: water-8bit_45
-    21300092: water-8bit_46
-    21300094: water-8bit_47
-    21300096: water-8bit_48
-    21300098: water-8bit_49
-    21300100: water-8bit_50
-    21300102: water-8bit_51
-    21300104: water-8bit_52
-    21300106: water-8bit_53
-    21300108: water-8bit_54
-    21300110: water-8bit_55
-    21300112: water-8bit_56
-    21300114: water-8bit_57
-    21300116: water-8bit_58
-    21300118: water-8bit_59
-    21300120: water-8bit_60
-    21300122: water-8bit_61
-    21300124: water-8bit_62
-    21300126: water-8bit_63
-    21300128: water-8bit_64
-    21300130: water-8bit_65
-    21300132: water-8bit_66
-    21300134: water-8bit_67
-    21300136: water-8bit_68
-    21300138: water-8bit_69
-    21300140: water-8bit_70
-    21300142: water-8bit_71
-    21300144: water-8bit_72
-    21300146: water-8bit_73
-    21300148: water-8bit_74
-    21300150: water-8bit_75
-    21300152: water-8bit_76
-    21300154: water-8bit_77
-    21300156: water-8bit_78
-    21300158: water-8bit_79
-    21300160: water-8bit_80
-    21300162: water-8bit_81
-    21300164: water-8bit_82
-    21300166: water-8bit_83
-    21300168: water-8bit_84
-    21300170: water-8bit_85
-    21300172: water-8bit_86
-    21300174: water-8bit_87
-    21300176: water-8bit_88
-    21300178: water-8bit_89
-    21300180: water-8bit_90
-    21300182: water-8bit_91
-    21300184: water-8bit_92
-    21300186: water-8bit_93
-    21300188: water-8bit_94
-    21300190: water-8bit_95
-    21300192: water-8bit_96
-    21300194: water-8bit_97
-    21300196: water-8bit_98
-    21300198: water-8bit_99
-    21300200: water-8bit_100
-    21300202: water-8bit_101
-    21300204: water-8bit_102
-    21300206: water-8bit_103
-    21300208: water-8bit_104
-    21300210: water-8bit_105
-    21300212: water-8bit_106
-    21300214: water-8bit_107
-    21300216: water-8bit_108
-    21300218: water-8bit_109
-    21300220: water-8bit_110
-    21300222: water-8bit_111
-    21300224: water-8bit_112
-    21300226: water-8bit_113
-    21300228: water-8bit_114
-    21300230: water-8bit_115
-    21300232: water-8bit_116
-    21300234: water-8bit_117
-    21300236: water-8bit_118
-    21300238: water-8bit_119
-    21300240: water-8bit_120
-    21300242: water-8bit_121
-    21300244: water-8bit_122
-    21300246: water-8bit_123
-    21300248: water-8bit_124
-    21300250: water-8bit_125
-    21300252: water-8bit_126
-    21300254: water-8bit_127
-    21300256: water-8bit_128
-    21300258: water-8bit_129
-    21300260: water-8bit_130
-    21300262: water-8bit_131
-    21300264: water-8bit_132
-    21300266: water-8bit_133
-    21300268: water-8bit_134
-    21300270: water-8bit_135
-    21300272: water-8bit_136
-    21300274: water-8bit_137
-    21300276: water-8bit_138
-    21300278: water-8bit_139
-    21300280: water-8bit_140
-    21300282: water-8bit_141
-    21300284: water-8bit_142
-    21300286: water-8bit_143
-    21300288: water-8bit_144
-    21300290: water-8bit_145
-    21300292: water-8bit_146
-    21300294: water-8bit_147
-    21300296: water-8bit_148
-    21300298: water-8bit_149
-    21300300: water-8bit_150
-    21300302: water-8bit_151
-    21300304: water-8bit_152
-    21300306: water-8bit_153
-    21300308: water-8bit_154
-    21300310: water-8bit_155
-    21300312: water-8bit_156
-    21300314: water-8bit_157
-    21300316: water-8bit_158
-    21300318: water-8bit_159
-    21300320: water-8bit_160
-    21300322: water-8bit_161
-    21300324: water-8bit_162
-    21300326: water-8bit_163
-    21300328: water-8bit_164
-    21300330: water-8bit_165
-    21300332: water-8bit_166
-    21300334: water-8bit_167
-    21300336: water-8bit_168
-    21300338: water-8bit_169
-    21300340: water-8bit_170
-    21300342: water-8bit_171
-    21300344: water-8bit_172
-    21300346: water-8bit_173
-    21300348: water-8bit_174
-    21300350: water-8bit_175
-    21300352: water-8bit_176
-    21300354: water-8bit_177
-    21300356: water-8bit_178
-    21300358: water-8bit_179
-    21300360: water-8bit_180
-    21300362: water-8bit_181
-    21300364: water-8bit_182
-    21300366: water-8bit_183
-    21300368: water-8bit_184
-    21300370: water-8bit_185
-    21300372: water-8bit_186
-    21300374: water-8bit_187
-    21300376: water-8bit_188
-    21300378: water-8bit_189
-    21300380: water-8bit_190
-    21300382: water-8bit_191
-    21300384: water-8bit_192
-    21300386: water-8bit_193
-    21300388: water-8bit_194
-    21300390: water-8bit_195
-    21300392: water-8bit_196
-    21300394: water-8bit_197
-    21300396: water-8bit_198
-    21300398: water-8bit_199
-    21300400: water-8bit_200
-    21300402: water-8bit_201
-    21300404: water-8bit_202
-    21300406: water-8bit_203
-    21300408: water-8bit_204
-    21300410: water-8bit_205
-    21300412: water-8bit_206
-    21300414: water-8bit_207
-    21300416: water-8bit_208
-    21300418: water-8bit_209
-    21300420: water-8bit_210
-    21300422: water-8bit_211
-    21300424: water-8bit_212
-    21300426: water-8bit_213
-    21300428: water-8bit_214
-    21300430: water-8bit_215
-    21300432: water-8bit_216
-    21300434: water-8bit_217
-    21300436: water-8bit_218
-    21300438: water-8bit_219
-    21300440: water-8bit_220
-    21300442: water-8bit_221
-    21300444: water-8bit_222
-    21300446: water-8bit_223
-    21300448: water-8bit_224
-    21300450: water-8bit_225
-    21300452: water-8bit_226
-    21300454: water-8bit_227
-    21300456: water-8bit_228
-    21300458: water-8bit_229
-    21300460: water-8bit_230
-    21300462: water-8bit_231
-    21300464: water-8bit_232
-    21300466: water-8bit_233
-    21300468: water-8bit_234
-    21300470: water-8bit_235
-    21300472: water-8bit_236
-    21300474: water-8bit_237
-    21300476: water-8bit_238
-    21300478: water-8bit_239
-    21300480: water-8bit_240
-    21300482: water-8bit_241
-    21300484: water-8bit_242
-    21300486: water-8bit_243
-    21300488: water-8bit_244
-    21300490: water-8bit_245
-    21300492: water-8bit_246
-    21300494: water-8bit_247
-    21300496: water-8bit_248
-    21300498: water-8bit_249
-    21300500: water-8bit_250
-    21300502: water-8bit_251
-    21300504: water-8bit_252
-    21300506: water-8bit_253
-    21300508: water-8bit_254
-    21300510: water-8bit_255
-    21300512: grasswater-bitmask_0
-    21300514: grasswater-bitmask_1
-    21300516: grasswater-bitmask_2
-    21300518: grasswater-bitmask_3
-    21300520: grasswater-bitmask_4
-    21300522: grasswater-bitmask_5
-    21300524: grasswater-bitmask_6
-    21300526: grasswater-bitmask_7
-    21300528: grasswater-bitmask_8
-    21300530: grasswater-bitmask_9
-    21300532: grasswater-bitmask_10
-    21300534: grasswater-bitmask_11
-    21300536: grasswater-bitmask_12
-    21300538: grasswater-bitmask_13
-    21300540: grasswater-bitmask_14
-    21300542: grasswater-bitmask_15
-    21300544: grasswater-bitmask_16
-    21300546: grasswater-bitmask_17
-    21300548: grasswater-bitmask_18
-    21300550: grasswater-bitmask_19
-    21300552: grasswater-bitmask_20
-    21300554: grasswater-bitmask_21
-    21300556: grasswater-bitmask_22
-    21300558: grasswater-bitmask_23
-    21300560: grasswater-bitmask_24
-    21300562: grasswater-bitmask_25
-    21300564: grasswater-bitmask_26
-    21300566: grasswater-bitmask_27
-    21300568: grasswater-bitmask_28
-    21300570: grasswater-bitmask_29
-    21300572: grasswater-bitmask_30
-    21300574: grasswater-bitmask_31
-    21300576: grasswater-bitmask_32
-    21300578: grasswater-bitmask_33
-    21300580: grasswater-bitmask_34
-    21300582: grasswater-bitmask_35
-    21300584: grasswater-bitmask_36
-    21300586: grasswater-bitmask_37
-    21300588: grasswater-bitmask_38
-    21300590: grasswater-bitmask_39
-    21300592: grasswater-bitmask_40
-    21300594: grasswater-bitmask_41
-    21300596: grasswater-bitmask_42
-    21300598: grasswater-bitmask_43
-    21300600: grasswater-bitmask_44
-    21300602: grasswater-bitmask_45
-    21300604: grasswater-bitmask_46
-    21300606: dirtwater-bitmask_0
-    21300608: dirtwater-bitmask_1
-    21300610: dirtwater-bitmask_2
-    21300612: dirtwater-bitmask_3
-    21300614: dirtwater-bitmask_4
-    21300616: dirtwater-bitmask_5
-    21300618: dirtwater-bitmask_6
-    21300620: dirtwater-bitmask_7
-    21300622: dirtwater-bitmask_8
-    21300624: dirtwater-bitmask_9
-    21300626: dirtwater-bitmask_10
-    21300628: dirtwater-bitmask_11
-    21300630: dirtwater-bitmask_12
-    21300632: dirtwater-bitmask_13
-    21300634: dirtwater-bitmask_14
-    21300636: dirtwater-bitmask_15
-    21300638: dirtwater-bitmask_16
-    21300640: dirtwater-bitmask_17
-    21300642: dirtwater-bitmask_18
-    21300644: dirtwater-bitmask_19
-    21300646: dirtwater-bitmask_20
-    21300648: dirtwater-bitmask_21
-    21300650: dirtwater-bitmask_22
-    21300652: dirtwater-bitmask_23
-    21300654: dirtwater-bitmask_24
-    21300656: dirtwater-bitmask_25
-    21300658: dirtwater-bitmask_26
-    21300660: dirtwater-bitmask_27
-    21300662: dirtwater-bitmask_28
-    21300664: dirtwater-bitmask_29
-    21300666: dirtwater-bitmask_30
-    21300668: dirtwater-bitmask_31
-    21300670: dirtwater-bitmask_32
-    21300672: dirtwater-bitmask_33
-    21300674: dirtwater-bitmask_34
-    21300676: dirtwater-bitmask_35
-    21300678: dirtwater-bitmask_36
-    21300680: dirtwater-bitmask_37
-    21300682: dirtwater-bitmask_38
-    21300684: dirtwater-bitmask_39
-    21300686: dirtwater-bitmask_40
-    21300688: dirtwater-bitmask_41
-    21300690: dirtwater-bitmask_42
-    21300692: dirtwater-bitmask_43
-    21300694: dirtwater-bitmask_44
-    21300696: dirtwater-bitmask_45
-    21300698: dirtwater-bitmask_46
-    21300700: sandwater-bitmask_0
-    21300702: sandwater-bitmask_1
-    21300704: sandwater-bitmask_2
-    21300706: sandwater-bitmask_3
-    21300708: sandwater-bitmask_4
-    21300710: sandwater-bitmask_5
-    21300712: sandwater-bitmask_6
-    21300714: sandwater-bitmask_7
-    21300716: sandwater-bitmask_8
-    21300718: sandwater-bitmask_9
-    21300720: sandwater-bitmask_10
-    21300722: sandwater-bitmask_11
-    21300724: sandwater-bitmask_12
-    21300726: sandwater-bitmask_13
-    21300728: sandwater-bitmask_14
-    21300730: sandwater-bitmask_15
-    21300732: sandwater-bitmask_16
-    21300734: sandwater-bitmask_17
-    21300736: sandwater-bitmask_18
-    21300738: sandwater-bitmask_19
-    21300740: sandwater-bitmask_20
-    21300742: sandwater-bitmask_21
-    21300744: sandwater-bitmask_22
-    21300746: sandwater-bitmask_23
-    21300748: sandwater-bitmask_24
-    21300750: sandwater-bitmask_25
-    21300752: sandwater-bitmask_26
-    21300754: sandwater-bitmask_27
-    21300756: sandwater-bitmask_28
-    21300758: sandwater-bitmask_29
-    21300760: sandwater-bitmask_30
-    21300762: sandwater-bitmask_31
-    21300764: sandwater-bitmask_32
-    21300766: sandwater-bitmask_33
-    21300768: sandwater-bitmask_34
-    21300770: sandwater-bitmask_35
-    21300772: sandwater-bitmask_36
-    21300774: sandwater-bitmask_37
-    21300776: sandwater-bitmask_38
-    21300778: sandwater-bitmask_39
-    21300780: sandwater-bitmask_40
-    21300782: sandwater-bitmask_41
-    21300784: sandwater-bitmask_42
-    21300786: sandwater-bitmask_43
-    21300788: sandwater-bitmask_44
-    21300790: sandwater-bitmask_45
-    21300792: sandwater-bitmask_46
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: water-8bit_0
+  - first:
+      213: 21300002
+    second: water-8bit_1
+  - first:
+      213: 21300004
+    second: water-8bit_2
+  - first:
+      213: 21300006
+    second: water-8bit_3
+  - first:
+      213: 21300008
+    second: water-8bit_4
+  - first:
+      213: 21300010
+    second: water-8bit_5
+  - first:
+      213: 21300012
+    second: water-8bit_6
+  - first:
+      213: 21300014
+    second: water-8bit_7
+  - first:
+      213: 21300016
+    second: water-8bit_8
+  - first:
+      213: 21300018
+    second: water-8bit_9
+  - first:
+      213: 21300020
+    second: water-8bit_10
+  - first:
+      213: 21300022
+    second: water-8bit_11
+  - first:
+      213: 21300024
+    second: water-8bit_12
+  - first:
+      213: 21300026
+    second: water-8bit_13
+  - first:
+      213: 21300028
+    second: water-8bit_14
+  - first:
+      213: 21300030
+    second: water-8bit_15
+  - first:
+      213: 21300032
+    second: water-8bit_16
+  - first:
+      213: 21300034
+    second: water-8bit_17
+  - first:
+      213: 21300036
+    second: water-8bit_18
+  - first:
+      213: 21300038
+    second: water-8bit_19
+  - first:
+      213: 21300040
+    second: water-8bit_20
+  - first:
+      213: 21300042
+    second: water-8bit_21
+  - first:
+      213: 21300044
+    second: water-8bit_22
+  - first:
+      213: 21300046
+    second: water-8bit_23
+  - first:
+      213: 21300048
+    second: water-8bit_24
+  - first:
+      213: 21300050
+    second: water-8bit_25
+  - first:
+      213: 21300052
+    second: water-8bit_26
+  - first:
+      213: 21300054
+    second: water-8bit_27
+  - first:
+      213: 21300056
+    second: water-8bit_28
+  - first:
+      213: 21300058
+    second: water-8bit_29
+  - first:
+      213: 21300060
+    second: water-8bit_30
+  - first:
+      213: 21300062
+    second: water-8bit_31
+  - first:
+      213: 21300064
+    second: water-8bit_32
+  - first:
+      213: 21300066
+    second: water-8bit_33
+  - first:
+      213: 21300068
+    second: water-8bit_34
+  - first:
+      213: 21300070
+    second: water-8bit_35
+  - first:
+      213: 21300072
+    second: water-8bit_36
+  - first:
+      213: 21300074
+    second: water-8bit_37
+  - first:
+      213: 21300076
+    second: water-8bit_38
+  - first:
+      213: 21300078
+    second: water-8bit_39
+  - first:
+      213: 21300080
+    second: water-8bit_40
+  - first:
+      213: 21300082
+    second: water-8bit_41
+  - first:
+      213: 21300084
+    second: water-8bit_42
+  - first:
+      213: 21300086
+    second: water-8bit_43
+  - first:
+      213: 21300088
+    second: water-8bit_44
+  - first:
+      213: 21300090
+    second: water-8bit_45
+  - first:
+      213: 21300092
+    second: water-8bit_46
+  - first:
+      213: 21300094
+    second: water-8bit_47
+  - first:
+      213: 21300096
+    second: water-8bit_48
+  - first:
+      213: 21300098
+    second: water-8bit_49
+  - first:
+      213: 21300100
+    second: water-8bit_50
+  - first:
+      213: 21300102
+    second: water-8bit_51
+  - first:
+      213: 21300104
+    second: water-8bit_52
+  - first:
+      213: 21300106
+    second: water-8bit_53
+  - first:
+      213: 21300108
+    second: water-8bit_54
+  - first:
+      213: 21300110
+    second: water-8bit_55
+  - first:
+      213: 21300112
+    second: water-8bit_56
+  - first:
+      213: 21300114
+    second: water-8bit_57
+  - first:
+      213: 21300116
+    second: water-8bit_58
+  - first:
+      213: 21300118
+    second: water-8bit_59
+  - first:
+      213: 21300120
+    second: water-8bit_60
+  - first:
+      213: 21300122
+    second: water-8bit_61
+  - first:
+      213: 21300124
+    second: water-8bit_62
+  - first:
+      213: 21300126
+    second: water-8bit_63
+  - first:
+      213: 21300128
+    second: water-8bit_64
+  - first:
+      213: 21300130
+    second: water-8bit_65
+  - first:
+      213: 21300132
+    second: water-8bit_66
+  - first:
+      213: 21300134
+    second: water-8bit_67
+  - first:
+      213: 21300136
+    second: water-8bit_68
+  - first:
+      213: 21300138
+    second: water-8bit_69
+  - first:
+      213: 21300140
+    second: water-8bit_70
+  - first:
+      213: 21300142
+    second: water-8bit_71
+  - first:
+      213: 21300144
+    second: water-8bit_72
+  - first:
+      213: 21300146
+    second: water-8bit_73
+  - first:
+      213: 21300148
+    second: water-8bit_74
+  - first:
+      213: 21300150
+    second: water-8bit_75
+  - first:
+      213: 21300152
+    second: water-8bit_76
+  - first:
+      213: 21300154
+    second: water-8bit_77
+  - first:
+      213: 21300156
+    second: water-8bit_78
+  - first:
+      213: 21300158
+    second: water-8bit_79
+  - first:
+      213: 21300160
+    second: water-8bit_80
+  - first:
+      213: 21300162
+    second: water-8bit_81
+  - first:
+      213: 21300164
+    second: water-8bit_82
+  - first:
+      213: 21300166
+    second: water-8bit_83
+  - first:
+      213: 21300168
+    second: water-8bit_84
+  - first:
+      213: 21300170
+    second: water-8bit_85
+  - first:
+      213: 21300172
+    second: water-8bit_86
+  - first:
+      213: 21300174
+    second: water-8bit_87
+  - first:
+      213: 21300176
+    second: water-8bit_88
+  - first:
+      213: 21300178
+    second: water-8bit_89
+  - first:
+      213: 21300180
+    second: water-8bit_90
+  - first:
+      213: 21300182
+    second: water-8bit_91
+  - first:
+      213: 21300184
+    second: water-8bit_92
+  - first:
+      213: 21300186
+    second: water-8bit_93
+  - first:
+      213: 21300188
+    second: water-8bit_94
+  - first:
+      213: 21300190
+    second: water-8bit_95
+  - first:
+      213: 21300192
+    second: water-8bit_96
+  - first:
+      213: 21300194
+    second: water-8bit_97
+  - first:
+      213: 21300196
+    second: water-8bit_98
+  - first:
+      213: 21300198
+    second: water-8bit_99
+  - first:
+      213: 21300200
+    second: water-8bit_100
+  - first:
+      213: 21300202
+    second: water-8bit_101
+  - first:
+      213: 21300204
+    second: water-8bit_102
+  - first:
+      213: 21300206
+    second: water-8bit_103
+  - first:
+      213: 21300208
+    second: water-8bit_104
+  - first:
+      213: 21300210
+    second: water-8bit_105
+  - first:
+      213: 21300212
+    second: water-8bit_106
+  - first:
+      213: 21300214
+    second: water-8bit_107
+  - first:
+      213: 21300216
+    second: water-8bit_108
+  - first:
+      213: 21300218
+    second: water-8bit_109
+  - first:
+      213: 21300220
+    second: water-8bit_110
+  - first:
+      213: 21300222
+    second: water-8bit_111
+  - first:
+      213: 21300224
+    second: water-8bit_112
+  - first:
+      213: 21300226
+    second: water-8bit_113
+  - first:
+      213: 21300228
+    second: water-8bit_114
+  - first:
+      213: 21300230
+    second: water-8bit_115
+  - first:
+      213: 21300232
+    second: water-8bit_116
+  - first:
+      213: 21300234
+    second: water-8bit_117
+  - first:
+      213: 21300236
+    second: water-8bit_118
+  - first:
+      213: 21300238
+    second: water-8bit_119
+  - first:
+      213: 21300240
+    second: water-8bit_120
+  - first:
+      213: 21300242
+    second: water-8bit_121
+  - first:
+      213: 21300244
+    second: water-8bit_122
+  - first:
+      213: 21300246
+    second: water-8bit_123
+  - first:
+      213: 21300248
+    second: water-8bit_124
+  - first:
+      213: 21300250
+    second: water-8bit_125
+  - first:
+      213: 21300252
+    second: water-8bit_126
+  - first:
+      213: 21300254
+    second: water-8bit_127
+  - first:
+      213: 21300256
+    second: water-8bit_128
+  - first:
+      213: 21300258
+    second: water-8bit_129
+  - first:
+      213: 21300260
+    second: water-8bit_130
+  - first:
+      213: 21300262
+    second: water-8bit_131
+  - first:
+      213: 21300264
+    second: water-8bit_132
+  - first:
+      213: 21300266
+    second: water-8bit_133
+  - first:
+      213: 21300268
+    second: water-8bit_134
+  - first:
+      213: 21300270
+    second: water-8bit_135
+  - first:
+      213: 21300272
+    second: water-8bit_136
+  - first:
+      213: 21300274
+    second: water-8bit_137
+  - first:
+      213: 21300276
+    second: water-8bit_138
+  - first:
+      213: 21300278
+    second: water-8bit_139
+  - first:
+      213: 21300280
+    second: water-8bit_140
+  - first:
+      213: 21300282
+    second: water-8bit_141
+  - first:
+      213: 21300284
+    second: water-8bit_142
+  - first:
+      213: 21300286
+    second: water-8bit_143
+  - first:
+      213: 21300288
+    second: water-8bit_144
+  - first:
+      213: 21300290
+    second: water-8bit_145
+  - first:
+      213: 21300292
+    second: water-8bit_146
+  - first:
+      213: 21300294
+    second: water-8bit_147
+  - first:
+      213: 21300296
+    second: water-8bit_148
+  - first:
+      213: 21300298
+    second: water-8bit_149
+  - first:
+      213: 21300300
+    second: water-8bit_150
+  - first:
+      213: 21300302
+    second: water-8bit_151
+  - first:
+      213: 21300304
+    second: water-8bit_152
+  - first:
+      213: 21300306
+    second: water-8bit_153
+  - first:
+      213: 21300308
+    second: water-8bit_154
+  - first:
+      213: 21300310
+    second: water-8bit_155
+  - first:
+      213: 21300312
+    second: water-8bit_156
+  - first:
+      213: 21300314
+    second: water-8bit_157
+  - first:
+      213: 21300316
+    second: water-8bit_158
+  - first:
+      213: 21300318
+    second: water-8bit_159
+  - first:
+      213: 21300320
+    second: water-8bit_160
+  - first:
+      213: 21300322
+    second: water-8bit_161
+  - first:
+      213: 21300324
+    second: water-8bit_162
+  - first:
+      213: 21300326
+    second: water-8bit_163
+  - first:
+      213: 21300328
+    second: water-8bit_164
+  - first:
+      213: 21300330
+    second: water-8bit_165
+  - first:
+      213: 21300332
+    second: water-8bit_166
+  - first:
+      213: 21300334
+    second: water-8bit_167
+  - first:
+      213: 21300336
+    second: water-8bit_168
+  - first:
+      213: 21300338
+    second: water-8bit_169
+  - first:
+      213: 21300340
+    second: water-8bit_170
+  - first:
+      213: 21300342
+    second: water-8bit_171
+  - first:
+      213: 21300344
+    second: water-8bit_172
+  - first:
+      213: 21300346
+    second: water-8bit_173
+  - first:
+      213: 21300348
+    second: water-8bit_174
+  - first:
+      213: 21300350
+    second: water-8bit_175
+  - first:
+      213: 21300352
+    second: water-8bit_176
+  - first:
+      213: 21300354
+    second: water-8bit_177
+  - first:
+      213: 21300356
+    second: water-8bit_178
+  - first:
+      213: 21300358
+    second: water-8bit_179
+  - first:
+      213: 21300360
+    second: water-8bit_180
+  - first:
+      213: 21300362
+    second: water-8bit_181
+  - first:
+      213: 21300364
+    second: water-8bit_182
+  - first:
+      213: 21300366
+    second: water-8bit_183
+  - first:
+      213: 21300368
+    second: water-8bit_184
+  - first:
+      213: 21300370
+    second: water-8bit_185
+  - first:
+      213: 21300372
+    second: water-8bit_186
+  - first:
+      213: 21300374
+    second: water-8bit_187
+  - first:
+      213: 21300376
+    second: water-8bit_188
+  - first:
+      213: 21300378
+    second: water-8bit_189
+  - first:
+      213: 21300380
+    second: water-8bit_190
+  - first:
+      213: 21300382
+    second: water-8bit_191
+  - first:
+      213: 21300384
+    second: water-8bit_192
+  - first:
+      213: 21300386
+    second: water-8bit_193
+  - first:
+      213: 21300388
+    second: water-8bit_194
+  - first:
+      213: 21300390
+    second: water-8bit_195
+  - first:
+      213: 21300392
+    second: water-8bit_196
+  - first:
+      213: 21300394
+    second: water-8bit_197
+  - first:
+      213: 21300396
+    second: water-8bit_198
+  - first:
+      213: 21300398
+    second: water-8bit_199
+  - first:
+      213: 21300400
+    second: water-8bit_200
+  - first:
+      213: 21300402
+    second: water-8bit_201
+  - first:
+      213: 21300404
+    second: water-8bit_202
+  - first:
+      213: 21300406
+    second: water-8bit_203
+  - first:
+      213: 21300408
+    second: water-8bit_204
+  - first:
+      213: 21300410
+    second: water-8bit_205
+  - first:
+      213: 21300412
+    second: water-8bit_206
+  - first:
+      213: 21300414
+    second: water-8bit_207
+  - first:
+      213: 21300416
+    second: water-8bit_208
+  - first:
+      213: 21300418
+    second: water-8bit_209
+  - first:
+      213: 21300420
+    second: water-8bit_210
+  - first:
+      213: 21300422
+    second: water-8bit_211
+  - first:
+      213: 21300424
+    second: water-8bit_212
+  - first:
+      213: 21300426
+    second: water-8bit_213
+  - first:
+      213: 21300428
+    second: water-8bit_214
+  - first:
+      213: 21300430
+    second: water-8bit_215
+  - first:
+      213: 21300432
+    second: water-8bit_216
+  - first:
+      213: 21300434
+    second: water-8bit_217
+  - first:
+      213: 21300436
+    second: water-8bit_218
+  - first:
+      213: 21300438
+    second: water-8bit_219
+  - first:
+      213: 21300440
+    second: water-8bit_220
+  - first:
+      213: 21300442
+    second: water-8bit_221
+  - first:
+      213: 21300444
+    second: water-8bit_222
+  - first:
+      213: 21300446
+    second: water-8bit_223
+  - first:
+      213: 21300448
+    second: water-8bit_224
+  - first:
+      213: 21300450
+    second: water-8bit_225
+  - first:
+      213: 21300452
+    second: water-8bit_226
+  - first:
+      213: 21300454
+    second: water-8bit_227
+  - first:
+      213: 21300456
+    second: water-8bit_228
+  - first:
+      213: 21300458
+    second: water-8bit_229
+  - first:
+      213: 21300460
+    second: water-8bit_230
+  - first:
+      213: 21300462
+    second: water-8bit_231
+  - first:
+      213: 21300464
+    second: water-8bit_232
+  - first:
+      213: 21300466
+    second: water-8bit_233
+  - first:
+      213: 21300468
+    second: water-8bit_234
+  - first:
+      213: 21300470
+    second: water-8bit_235
+  - first:
+      213: 21300472
+    second: water-8bit_236
+  - first:
+      213: 21300474
+    second: water-8bit_237
+  - first:
+      213: 21300476
+    second: water-8bit_238
+  - first:
+      213: 21300478
+    second: water-8bit_239
+  - first:
+      213: 21300480
+    second: water-8bit_240
+  - first:
+      213: 21300482
+    second: water-8bit_241
+  - first:
+      213: 21300484
+    second: water-8bit_242
+  - first:
+      213: 21300486
+    second: water-8bit_243
+  - first:
+      213: 21300488
+    second: water-8bit_244
+  - first:
+      213: 21300490
+    second: water-8bit_245
+  - first:
+      213: 21300492
+    second: water-8bit_246
+  - first:
+      213: 21300494
+    second: water-8bit_247
+  - first:
+      213: 21300496
+    second: water-8bit_248
+  - first:
+      213: 21300498
+    second: water-8bit_249
+  - first:
+      213: 21300500
+    second: water-8bit_250
+  - first:
+      213: 21300502
+    second: water-8bit_251
+  - first:
+      213: 21300504
+    second: water-8bit_252
+  - first:
+      213: 21300506
+    second: water-8bit_253
+  - first:
+      213: 21300508
+    second: water-8bit_254
+  - first:
+      213: 21300510
+    second: water-8bit_255
+  - first:
+      213: 21300512
+    second: grasswater-bitmask_0
+  - first:
+      213: 21300514
+    second: grasswater-bitmask_1
+  - first:
+      213: 21300516
+    second: grasswater-bitmask_2
+  - first:
+      213: 21300518
+    second: grasswater-bitmask_3
+  - first:
+      213: 21300520
+    second: grasswater-bitmask_4
+  - first:
+      213: 21300522
+    second: grasswater-bitmask_5
+  - first:
+      213: 21300524
+    second: grasswater-bitmask_6
+  - first:
+      213: 21300526
+    second: grasswater-bitmask_7
+  - first:
+      213: 21300528
+    second: grasswater-bitmask_8
+  - first:
+      213: 21300530
+    second: grasswater-bitmask_9
+  - first:
+      213: 21300532
+    second: grasswater-bitmask_10
+  - first:
+      213: 21300534
+    second: grasswater-bitmask_11
+  - first:
+      213: 21300536
+    second: grasswater-bitmask_12
+  - first:
+      213: 21300538
+    second: grasswater-bitmask_13
+  - first:
+      213: 21300540
+    second: grasswater-bitmask_14
+  - first:
+      213: 21300542
+    second: grasswater-bitmask_15
+  - first:
+      213: 21300544
+    second: grasswater-bitmask_16
+  - first:
+      213: 21300546
+    second: grasswater-bitmask_17
+  - first:
+      213: 21300548
+    second: grasswater-bitmask_18
+  - first:
+      213: 21300550
+    second: grasswater-bitmask_19
+  - first:
+      213: 21300552
+    second: grasswater-bitmask_20
+  - first:
+      213: 21300554
+    second: grasswater-bitmask_21
+  - first:
+      213: 21300556
+    second: grasswater-bitmask_22
+  - first:
+      213: 21300558
+    second: grasswater-bitmask_23
+  - first:
+      213: 21300560
+    second: grasswater-bitmask_24
+  - first:
+      213: 21300562
+    second: grasswater-bitmask_25
+  - first:
+      213: 21300564
+    second: grasswater-bitmask_26
+  - first:
+      213: 21300566
+    second: grasswater-bitmask_27
+  - first:
+      213: 21300568
+    second: grasswater-bitmask_28
+  - first:
+      213: 21300570
+    second: grasswater-bitmask_29
+  - first:
+      213: 21300572
+    second: grasswater-bitmask_30
+  - first:
+      213: 21300574
+    second: grasswater-bitmask_31
+  - first:
+      213: 21300576
+    second: grasswater-bitmask_32
+  - first:
+      213: 21300578
+    second: grasswater-bitmask_33
+  - first:
+      213: 21300580
+    second: grasswater-bitmask_34
+  - first:
+      213: 21300582
+    second: grasswater-bitmask_35
+  - first:
+      213: 21300584
+    second: grasswater-bitmask_36
+  - first:
+      213: 21300586
+    second: grasswater-bitmask_37
+  - first:
+      213: 21300588
+    second: grasswater-bitmask_38
+  - first:
+      213: 21300590
+    second: grasswater-bitmask_39
+  - first:
+      213: 21300592
+    second: grasswater-bitmask_40
+  - first:
+      213: 21300594
+    second: grasswater-bitmask_41
+  - first:
+      213: 21300596
+    second: grasswater-bitmask_42
+  - first:
+      213: 21300598
+    second: grasswater-bitmask_43
+  - first:
+      213: 21300600
+    second: grasswater-bitmask_44
+  - first:
+      213: 21300602
+    second: grasswater-bitmask_45
+  - first:
+      213: 21300604
+    second: grasswater-bitmask_46
+  - first:
+      213: 21300606
+    second: dirtwater-bitmask_0
+  - first:
+      213: 21300608
+    second: dirtwater-bitmask_1
+  - first:
+      213: 21300610
+    second: dirtwater-bitmask_2
+  - first:
+      213: 21300612
+    second: dirtwater-bitmask_3
+  - first:
+      213: 21300614
+    second: dirtwater-bitmask_4
+  - first:
+      213: 21300616
+    second: dirtwater-bitmask_5
+  - first:
+      213: 21300618
+    second: dirtwater-bitmask_6
+  - first:
+      213: 21300620
+    second: dirtwater-bitmask_7
+  - first:
+      213: 21300622
+    second: dirtwater-bitmask_8
+  - first:
+      213: 21300624
+    second: dirtwater-bitmask_9
+  - first:
+      213: 21300626
+    second: dirtwater-bitmask_10
+  - first:
+      213: 21300628
+    second: dirtwater-bitmask_11
+  - first:
+      213: 21300630
+    second: dirtwater-bitmask_12
+  - first:
+      213: 21300632
+    second: dirtwater-bitmask_13
+  - first:
+      213: 21300634
+    second: dirtwater-bitmask_14
+  - first:
+      213: 21300636
+    second: dirtwater-bitmask_15
+  - first:
+      213: 21300638
+    second: dirtwater-bitmask_16
+  - first:
+      213: 21300640
+    second: dirtwater-bitmask_17
+  - first:
+      213: 21300642
+    second: dirtwater-bitmask_18
+  - first:
+      213: 21300644
+    second: dirtwater-bitmask_19
+  - first:
+      213: 21300646
+    second: dirtwater-bitmask_20
+  - first:
+      213: 21300648
+    second: dirtwater-bitmask_21
+  - first:
+      213: 21300650
+    second: dirtwater-bitmask_22
+  - first:
+      213: 21300652
+    second: dirtwater-bitmask_23
+  - first:
+      213: 21300654
+    second: dirtwater-bitmask_24
+  - first:
+      213: 21300656
+    second: dirtwater-bitmask_25
+  - first:
+      213: 21300658
+    second: dirtwater-bitmask_26
+  - first:
+      213: 21300660
+    second: dirtwater-bitmask_27
+  - first:
+      213: 21300662
+    second: dirtwater-bitmask_28
+  - first:
+      213: 21300664
+    second: dirtwater-bitmask_29
+  - first:
+      213: 21300666
+    second: dirtwater-bitmask_30
+  - first:
+      213: 21300668
+    second: dirtwater-bitmask_31
+  - first:
+      213: 21300670
+    second: dirtwater-bitmask_32
+  - first:
+      213: 21300672
+    second: dirtwater-bitmask_33
+  - first:
+      213: 21300674
+    second: dirtwater-bitmask_34
+  - first:
+      213: 21300676
+    second: dirtwater-bitmask_35
+  - first:
+      213: 21300678
+    second: dirtwater-bitmask_36
+  - first:
+      213: 21300680
+    second: dirtwater-bitmask_37
+  - first:
+      213: 21300682
+    second: dirtwater-bitmask_38
+  - first:
+      213: 21300684
+    second: dirtwater-bitmask_39
+  - first:
+      213: 21300686
+    second: dirtwater-bitmask_40
+  - first:
+      213: 21300688
+    second: dirtwater-bitmask_41
+  - first:
+      213: 21300690
+    second: dirtwater-bitmask_42
+  - first:
+      213: 21300692
+    second: dirtwater-bitmask_43
+  - first:
+      213: 21300694
+    second: dirtwater-bitmask_44
+  - first:
+      213: 21300696
+    second: dirtwater-bitmask_45
+  - first:
+      213: 21300698
+    second: dirtwater-bitmask_46
+  - first:
+      213: 21300700
+    second: sandwater-bitmask_0
+  - first:
+      213: 21300702
+    second: sandwater-bitmask_1
+  - first:
+      213: 21300704
+    second: sandwater-bitmask_2
+  - first:
+      213: 21300706
+    second: sandwater-bitmask_3
+  - first:
+      213: 21300708
+    second: sandwater-bitmask_4
+  - first:
+      213: 21300710
+    second: sandwater-bitmask_5
+  - first:
+      213: 21300712
+    second: sandwater-bitmask_6
+  - first:
+      213: 21300714
+    second: sandwater-bitmask_7
+  - first:
+      213: 21300716
+    second: sandwater-bitmask_8
+  - first:
+      213: 21300718
+    second: sandwater-bitmask_9
+  - first:
+      213: 21300720
+    second: sandwater-bitmask_10
+  - first:
+      213: 21300722
+    second: sandwater-bitmask_11
+  - first:
+      213: 21300724
+    second: sandwater-bitmask_12
+  - first:
+      213: 21300726
+    second: sandwater-bitmask_13
+  - first:
+      213: 21300728
+    second: sandwater-bitmask_14
+  - first:
+      213: 21300730
+    second: sandwater-bitmask_15
+  - first:
+      213: 21300732
+    second: sandwater-bitmask_16
+  - first:
+      213: 21300734
+    second: sandwater-bitmask_17
+  - first:
+      213: 21300736
+    second: sandwater-bitmask_18
+  - first:
+      213: 21300738
+    second: sandwater-bitmask_19
+  - first:
+      213: 21300740
+    second: sandwater-bitmask_20
+  - first:
+      213: 21300742
+    second: sandwater-bitmask_21
+  - first:
+      213: 21300744
+    second: sandwater-bitmask_22
+  - first:
+      213: 21300746
+    second: sandwater-bitmask_23
+  - first:
+      213: 21300748
+    second: sandwater-bitmask_24
+  - first:
+      213: 21300750
+    second: sandwater-bitmask_25
+  - first:
+      213: 21300752
+    second: sandwater-bitmask_26
+  - first:
+      213: 21300754
+    second: sandwater-bitmask_27
+  - first:
+      213: 21300756
+    second: sandwater-bitmask_28
+  - first:
+      213: 21300758
+    second: sandwater-bitmask_29
+  - first:
+      213: 21300760
+    second: sandwater-bitmask_30
+  - first:
+      213: 21300762
+    second: sandwater-bitmask_31
+  - first:
+      213: 21300764
+    second: sandwater-bitmask_32
+  - first:
+      213: 21300766
+    second: sandwater-bitmask_33
+  - first:
+      213: 21300768
+    second: sandwater-bitmask_34
+  - first:
+      213: 21300770
+    second: sandwater-bitmask_35
+  - first:
+      213: 21300772
+    second: sandwater-bitmask_36
+  - first:
+      213: 21300774
+    second: sandwater-bitmask_37
+  - first:
+      213: 21300776
+    second: sandwater-bitmask_38
+  - first:
+      213: 21300778
+    second: sandwater-bitmask_39
+  - first:
+      213: 21300780
+    second: sandwater-bitmask_40
+  - first:
+      213: 21300782
+    second: sandwater-bitmask_41
+  - first:
+      213: 21300784
+    second: sandwater-bitmask_42
+  - first:
+      213: 21300786
+    second: sandwater-bitmask_43
+  - first:
+      213: 21300788
+    second: sandwater-bitmask_44
+  - first:
+      213: 21300790
+    second: sandwater-bitmask_45
+  - first:
+      213: 21300792
+    second: sandwater-bitmask_46
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -409,6 +1202,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -417,6 +1212,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -424,10 +1221,13 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 0
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -436,33 +1236,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -478,7 +1288,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cd505410000000000800000000000000
+      internalID: 21300700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_1
       rect:
@@ -491,7 +1309,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ed505410000000000800000000000000
+      internalID: 21300702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_2
       rect:
@@ -504,7 +1330,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0e505410000000000800000000000000
+      internalID: 21300704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_3
       rect:
@@ -517,7 +1351,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2e505410000000000800000000000000
+      internalID: 21300706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_4
       rect:
@@ -530,7 +1372,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4e505410000000000800000000000000
+      internalID: 21300708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_5
       rect:
@@ -543,7 +1393,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6e505410000000000800000000000000
+      internalID: 21300710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_6
       rect:
@@ -556,7 +1414,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8e505410000000000800000000000000
+      internalID: 21300712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_7
       rect:
@@ -569,7 +1435,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ae505410000000000800000000000000
+      internalID: 21300714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_8
       rect:
@@ -582,7 +1456,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ce505410000000000800000000000000
+      internalID: 21300716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_9
       rect:
@@ -595,7 +1477,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ee505410000000000800000000000000
+      internalID: 21300718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_10
       rect:
@@ -608,7 +1498,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0f505410000000000800000000000000
+      internalID: 21300720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_11
       rect:
@@ -621,7 +1519,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2f505410000000000800000000000000
+      internalID: 21300722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_12
       rect:
@@ -634,7 +1540,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4f505410000000000800000000000000
+      internalID: 21300724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_13
       rect:
@@ -647,7 +1561,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6f505410000000000800000000000000
+      internalID: 21300726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_14
       rect:
@@ -660,7 +1582,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8f505410000000000800000000000000
+      internalID: 21300728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_15
       rect:
@@ -673,7 +1603,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: af505410000000000800000000000000
+      internalID: 21300730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_16
       rect:
@@ -686,7 +1624,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cf505410000000000800000000000000
+      internalID: 21300732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_17
       rect:
@@ -699,7 +1645,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ef505410000000000800000000000000
+      internalID: 21300734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_18
       rect:
@@ -712,7 +1666,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 00605410000000000800000000000000
+      internalID: 21300736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_19
       rect:
@@ -725,7 +1687,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 20605410000000000800000000000000
+      internalID: 21300738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_20
       rect:
@@ -738,7 +1708,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 40605410000000000800000000000000
+      internalID: 21300740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_21
       rect:
@@ -751,7 +1729,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 60605410000000000800000000000000
+      internalID: 21300742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_22
       rect:
@@ -764,7 +1750,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 80605410000000000800000000000000
+      internalID: 21300744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_23
       rect:
@@ -777,7 +1771,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a0605410000000000800000000000000
+      internalID: 21300746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_24
       rect:
@@ -790,7 +1792,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c0605410000000000800000000000000
+      internalID: 21300748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_25
       rect:
@@ -803,7 +1813,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e0605410000000000800000000000000
+      internalID: 21300750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_26
       rect:
@@ -816,7 +1834,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 01605410000000000800000000000000
+      internalID: 21300752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_27
       rect:
@@ -829,7 +1855,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 21605410000000000800000000000000
+      internalID: 21300754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_28
       rect:
@@ -842,7 +1876,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 41605410000000000800000000000000
+      internalID: 21300756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_29
       rect:
@@ -855,7 +1897,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 61605410000000000800000000000000
+      internalID: 21300758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_30
       rect:
@@ -868,7 +1918,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 81605410000000000800000000000000
+      internalID: 21300760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_31
       rect:
@@ -881,7 +1939,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a1605410000000000800000000000000
+      internalID: 21300762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_32
       rect:
@@ -894,7 +1960,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c1605410000000000800000000000000
+      internalID: 21300764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_33
       rect:
@@ -907,7 +1981,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e1605410000000000800000000000000
+      internalID: 21300766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_34
       rect:
@@ -920,7 +2002,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 02605410000000000800000000000000
+      internalID: 21300768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_35
       rect:
@@ -933,7 +2023,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 22605410000000000800000000000000
+      internalID: 21300770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_36
       rect:
@@ -946,7 +2044,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 42605410000000000800000000000000
+      internalID: 21300772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_37
       rect:
@@ -959,7 +2065,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 62605410000000000800000000000000
+      internalID: 21300774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_38
       rect:
@@ -972,7 +2086,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 82605410000000000800000000000000
+      internalID: 21300776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_39
       rect:
@@ -985,7 +2107,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a2605410000000000800000000000000
+      internalID: 21300778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_40
       rect:
@@ -998,7 +2128,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c2605410000000000800000000000000
+      internalID: 21300780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_41
       rect:
@@ -1011,7 +2149,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e2605410000000000800000000000000
+      internalID: 21300782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_42
       rect:
@@ -1024,7 +2170,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 03605410000000000800000000000000
+      internalID: 21300784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_43
       rect:
@@ -1037,7 +2191,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 23605410000000000800000000000000
+      internalID: 21300786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_44
       rect:
@@ -1050,7 +2212,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 43605410000000000800000000000000
+      internalID: 21300788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_45
       rect:
@@ -1063,7 +2233,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 63605410000000000800000000000000
+      internalID: 21300790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: sandwater-bitmask_46
       rect:
@@ -1076,9 +2254,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 83605410000000000800000000000000
+      internalID: 21300792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

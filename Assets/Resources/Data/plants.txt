@@ -37,6 +37,12 @@
 			<ReturnResources>Log:3-6,TreeSeed:1-2,Leaf:2-4,Sap:2-4
 			<HarvestResources>Apple:1-6
 		<Plant>
+			<Type>PalmTree
+			<Living>true
+			<Integrity>125
+			<Seed>TreeSeed
+			<ReturnResources>Log:3-6,TreeSeed:1-2,Leaf:2-4,Sap:2-4
+		<Plant>
 			<Type>DeadTree
 			<Living>false
 			<Integrity>25

@@ -1,197 +1,573 @@
 fileFormatVersion: 2
 guid: c517dac6de29aea45b73b15238ca633f
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: stone-bitmask_0
-    21300002: stone-bitmask_1
-    21300004: stone-bitmask_2
-    21300006: stone-bitmask_3
-    21300008: stone-bitmask_4
-    21300010: stone-bitmask_5
-    21300012: stone-bitmask_6
-    21300014: stone-bitmask_7
-    21300016: stone-bitmask_8
-    21300018: stone-bitmask_9
-    21300020: stone-bitmask_10
-    21300022: stone-bitmask_11
-    21300024: stone-bitmask_12
-    21300026: stone-bitmask_13
-    21300028: stone-bitmask_14
-    21300030: stone-bitmask_15
-    21300032: stone-bitmask_16
-    21300034: stone-bitmask_17
-    21300036: stone-bitmask_18
-    21300038: stone-bitmask_19
-    21300040: stone-bitmask_20
-    21300042: stone-bitmask_21
-    21300044: stone-bitmask_22
-    21300046: stone-bitmask_23
-    21300048: stone-bitmask_24
-    21300050: stone-bitmask_25
-    21300052: stone-bitmask_26
-    21300054: stone-bitmask_27
-    21300056: stone-bitmask_28
-    21300058: stone-bitmask_29
-    21300060: stone-bitmask_30
-    21300062: stone-bitmask_31
-    21300064: stone-bitmask_32
-    21300066: stone-bitmask_33
-    21300068: stone-bitmask_34
-    21300070: stone-bitmask_35
-    21300072: stone-bitmask_36
-    21300074: stone-bitmask_37
-    21300076: stone-bitmask_38
-    21300078: stone-bitmask_39
-    21300080: stone-bitmask_40
-    21300082: stone-bitmask_41
-    21300084: stone-bitmask_42
-    21300086: stone-bitmask_43
-    21300088: stone-bitmask_44
-    21300090: stone-bitmask_45
-    21300092: stone-bitmask_46
-    21300094: granite-bitmask_0
-    21300096: granite-bitmask_1
-    21300098: granite-bitmask_2
-    21300100: granite-bitmask_3
-    21300102: granite-bitmask_4
-    21300104: granite-bitmask_5
-    21300106: granite-bitmask_6
-    21300108: granite-bitmask_7
-    21300110: granite-bitmask_8
-    21300112: granite-bitmask_9
-    21300114: granite-bitmask_10
-    21300116: granite-bitmask_11
-    21300118: granite-bitmask_12
-    21300120: granite-bitmask_13
-    21300122: granite-bitmask_14
-    21300124: granite-bitmask_15
-    21300126: granite-bitmask_16
-    21300128: granite-bitmask_17
-    21300130: granite-bitmask_18
-    21300132: granite-bitmask_19
-    21300134: granite-bitmask_20
-    21300136: granite-bitmask_21
-    21300138: granite-bitmask_22
-    21300140: granite-bitmask_23
-    21300142: granite-bitmask_24
-    21300144: granite-bitmask_25
-    21300146: granite-bitmask_26
-    21300148: granite-bitmask_27
-    21300150: granite-bitmask_28
-    21300152: granite-bitmask_29
-    21300154: granite-bitmask_30
-    21300156: granite-bitmask_31
-    21300158: granite-bitmask_32
-    21300160: granite-bitmask_33
-    21300162: granite-bitmask_34
-    21300164: granite-bitmask_35
-    21300166: granite-bitmask_36
-    21300168: granite-bitmask_37
-    21300170: granite-bitmask_38
-    21300172: granite-bitmask_39
-    21300174: granite-bitmask_40
-    21300176: granite-bitmask_41
-    21300178: granite-bitmask_42
-    21300180: granite-bitmask_43
-    21300182: granite-bitmask_44
-    21300184: granite-bitmask_45
-    21300186: granite-bitmask_46
-    21300188: kimberlite-bitmask_0
-    21300190: kimberlite-bitmask_1
-    21300192: kimberlite-bitmask_2
-    21300194: kimberlite-bitmask_3
-    21300196: kimberlite-bitmask_4
-    21300198: kimberlite-bitmask_5
-    21300200: kimberlite-bitmask_6
-    21300202: kimberlite-bitmask_7
-    21300204: kimberlite-bitmask_8
-    21300206: kimberlite-bitmask_9
-    21300208: kimberlite-bitmask_10
-    21300210: kimberlite-bitmask_11
-    21300212: kimberlite-bitmask_12
-    21300214: kimberlite-bitmask_13
-    21300216: kimberlite-bitmask_14
-    21300218: kimberlite-bitmask_15
-    21300220: kimberlite-bitmask_16
-    21300222: kimberlite-bitmask_17
-    21300224: kimberlite-bitmask_18
-    21300226: kimberlite-bitmask_19
-    21300228: kimberlite-bitmask_20
-    21300230: kimberlite-bitmask_21
-    21300232: kimberlite-bitmask_22
-    21300234: kimberlite-bitmask_23
-    21300236: kimberlite-bitmask_24
-    21300238: kimberlite-bitmask_25
-    21300240: kimberlite-bitmask_26
-    21300242: kimberlite-bitmask_27
-    21300244: kimberlite-bitmask_28
-    21300246: kimberlite-bitmask_29
-    21300248: kimberlite-bitmask_30
-    21300250: kimberlite-bitmask_31
-    21300252: kimberlite-bitmask_32
-    21300254: kimberlite-bitmask_33
-    21300256: kimberlite-bitmask_34
-    21300258: kimberlite-bitmask_35
-    21300260: kimberlite-bitmask_36
-    21300262: kimberlite-bitmask_37
-    21300264: kimberlite-bitmask_38
-    21300266: kimberlite-bitmask_39
-    21300268: kimberlite-bitmask_40
-    21300270: kimberlite-bitmask_41
-    21300272: kimberlite-bitmask_42
-    21300274: kimberlite-bitmask_43
-    21300276: kimberlite-bitmask_44
-    21300278: kimberlite-bitmask_45
-    21300280: kimberlite-bitmask_46
-    21300282: obsidian-bitmask_0
-    21300284: obsidian-bitmask_1
-    21300286: obsidian-bitmask_2
-    21300288: obsidian-bitmask_3
-    21300290: obsidian-bitmask_4
-    21300292: obsidian-bitmask_5
-    21300294: obsidian-bitmask_6
-    21300296: obsidian-bitmask_7
-    21300298: obsidian-bitmask_8
-    21300300: obsidian-bitmask_9
-    21300302: obsidian-bitmask_10
-    21300304: obsidian-bitmask_11
-    21300306: obsidian-bitmask_12
-    21300308: obsidian-bitmask_13
-    21300310: obsidian-bitmask_14
-    21300312: obsidian-bitmask_15
-    21300314: obsidian-bitmask_16
-    21300316: obsidian-bitmask_17
-    21300318: obsidian-bitmask_18
-    21300320: obsidian-bitmask_19
-    21300322: obsidian-bitmask_20
-    21300324: obsidian-bitmask_21
-    21300326: obsidian-bitmask_22
-    21300328: obsidian-bitmask_23
-    21300330: obsidian-bitmask_24
-    21300332: obsidian-bitmask_25
-    21300334: obsidian-bitmask_26
-    21300336: obsidian-bitmask_27
-    21300338: obsidian-bitmask_28
-    21300340: obsidian-bitmask_29
-    21300342: obsidian-bitmask_30
-    21300344: obsidian-bitmask_31
-    21300346: obsidian-bitmask_32
-    21300348: obsidian-bitmask_33
-    21300350: obsidian-bitmask_34
-    21300352: obsidian-bitmask_35
-    21300354: obsidian-bitmask_36
-    21300356: obsidian-bitmask_37
-    21300358: obsidian-bitmask_38
-    21300360: obsidian-bitmask_39
-    21300362: obsidian-bitmask_40
-    21300364: obsidian-bitmask_41
-    21300366: obsidian-bitmask_42
-    21300368: obsidian-bitmask_43
-    21300370: obsidian-bitmask_44
-    21300372: obsidian-bitmask_45
-    21300374: obsidian-bitmask_46
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: stone-bitmask_0
+  - first:
+      213: 21300002
+    second: stone-bitmask_1
+  - first:
+      213: 21300004
+    second: stone-bitmask_2
+  - first:
+      213: 21300006
+    second: stone-bitmask_3
+  - first:
+      213: 21300008
+    second: stone-bitmask_4
+  - first:
+      213: 21300010
+    second: stone-bitmask_5
+  - first:
+      213: 21300012
+    second: stone-bitmask_6
+  - first:
+      213: 21300014
+    second: stone-bitmask_7
+  - first:
+      213: 21300016
+    second: stone-bitmask_8
+  - first:
+      213: 21300018
+    second: stone-bitmask_9
+  - first:
+      213: 21300020
+    second: stone-bitmask_10
+  - first:
+      213: 21300022
+    second: stone-bitmask_11
+  - first:
+      213: 21300024
+    second: stone-bitmask_12
+  - first:
+      213: 21300026
+    second: stone-bitmask_13
+  - first:
+      213: 21300028
+    second: stone-bitmask_14
+  - first:
+      213: 21300030
+    second: stone-bitmask_15
+  - first:
+      213: 21300032
+    second: stone-bitmask_16
+  - first:
+      213: 21300034
+    second: stone-bitmask_17
+  - first:
+      213: 21300036
+    second: stone-bitmask_18
+  - first:
+      213: 21300038
+    second: stone-bitmask_19
+  - first:
+      213: 21300040
+    second: stone-bitmask_20
+  - first:
+      213: 21300042
+    second: stone-bitmask_21
+  - first:
+      213: 21300044
+    second: stone-bitmask_22
+  - first:
+      213: 21300046
+    second: stone-bitmask_23
+  - first:
+      213: 21300048
+    second: stone-bitmask_24
+  - first:
+      213: 21300050
+    second: stone-bitmask_25
+  - first:
+      213: 21300052
+    second: stone-bitmask_26
+  - first:
+      213: 21300054
+    second: stone-bitmask_27
+  - first:
+      213: 21300056
+    second: stone-bitmask_28
+  - first:
+      213: 21300058
+    second: stone-bitmask_29
+  - first:
+      213: 21300060
+    second: stone-bitmask_30
+  - first:
+      213: 21300062
+    second: stone-bitmask_31
+  - first:
+      213: 21300064
+    second: stone-bitmask_32
+  - first:
+      213: 21300066
+    second: stone-bitmask_33
+  - first:
+      213: 21300068
+    second: stone-bitmask_34
+  - first:
+      213: 21300070
+    second: stone-bitmask_35
+  - first:
+      213: 21300072
+    second: stone-bitmask_36
+  - first:
+      213: 21300074
+    second: stone-bitmask_37
+  - first:
+      213: 21300076
+    second: stone-bitmask_38
+  - first:
+      213: 21300078
+    second: stone-bitmask_39
+  - first:
+      213: 21300080
+    second: stone-bitmask_40
+  - first:
+      213: 21300082
+    second: stone-bitmask_41
+  - first:
+      213: 21300084
+    second: stone-bitmask_42
+  - first:
+      213: 21300086
+    second: stone-bitmask_43
+  - first:
+      213: 21300088
+    second: stone-bitmask_44
+  - first:
+      213: 21300090
+    second: stone-bitmask_45
+  - first:
+      213: 21300092
+    second: stone-bitmask_46
+  - first:
+      213: 21300094
+    second: granite-bitmask_0
+  - first:
+      213: 21300096
+    second: granite-bitmask_1
+  - first:
+      213: 21300098
+    second: granite-bitmask_2
+  - first:
+      213: 21300100
+    second: granite-bitmask_3
+  - first:
+      213: 21300102
+    second: granite-bitmask_4
+  - first:
+      213: 21300104
+    second: granite-bitmask_5
+  - first:
+      213: 21300106
+    second: granite-bitmask_6
+  - first:
+      213: 21300108
+    second: granite-bitmask_7
+  - first:
+      213: 21300110
+    second: granite-bitmask_8
+  - first:
+      213: 21300112
+    second: granite-bitmask_9
+  - first:
+      213: 21300114
+    second: granite-bitmask_10
+  - first:
+      213: 21300116
+    second: granite-bitmask_11
+  - first:
+      213: 21300118
+    second: granite-bitmask_12
+  - first:
+      213: 21300120
+    second: granite-bitmask_13
+  - first:
+      213: 21300122
+    second: granite-bitmask_14
+  - first:
+      213: 21300124
+    second: granite-bitmask_15
+  - first:
+      213: 21300126
+    second: granite-bitmask_16
+  - first:
+      213: 21300128
+    second: granite-bitmask_17
+  - first:
+      213: 21300130
+    second: granite-bitmask_18
+  - first:
+      213: 21300132
+    second: granite-bitmask_19
+  - first:
+      213: 21300134
+    second: granite-bitmask_20
+  - first:
+      213: 21300136
+    second: granite-bitmask_21
+  - first:
+      213: 21300138
+    second: granite-bitmask_22
+  - first:
+      213: 21300140
+    second: granite-bitmask_23
+  - first:
+      213: 21300142
+    second: granite-bitmask_24
+  - first:
+      213: 21300144
+    second: granite-bitmask_25
+  - first:
+      213: 21300146
+    second: granite-bitmask_26
+  - first:
+      213: 21300148
+    second: granite-bitmask_27
+  - first:
+      213: 21300150
+    second: granite-bitmask_28
+  - first:
+      213: 21300152
+    second: granite-bitmask_29
+  - first:
+      213: 21300154
+    second: granite-bitmask_30
+  - first:
+      213: 21300156
+    second: granite-bitmask_31
+  - first:
+      213: 21300158
+    second: granite-bitmask_32
+  - first:
+      213: 21300160
+    second: granite-bitmask_33
+  - first:
+      213: 21300162
+    second: granite-bitmask_34
+  - first:
+      213: 21300164
+    second: granite-bitmask_35
+  - first:
+      213: 21300166
+    second: granite-bitmask_36
+  - first:
+      213: 21300168
+    second: granite-bitmask_37
+  - first:
+      213: 21300170
+    second: granite-bitmask_38
+  - first:
+      213: 21300172
+    second: granite-bitmask_39
+  - first:
+      213: 21300174
+    second: granite-bitmask_40
+  - first:
+      213: 21300176
+    second: granite-bitmask_41
+  - first:
+      213: 21300178
+    second: granite-bitmask_42
+  - first:
+      213: 21300180
+    second: granite-bitmask_43
+  - first:
+      213: 21300182
+    second: granite-bitmask_44
+  - first:
+      213: 21300184
+    second: granite-bitmask_45
+  - first:
+      213: 21300186
+    second: granite-bitmask_46
+  - first:
+      213: 21300188
+    second: kimberlite-bitmask_0
+  - first:
+      213: 21300190
+    second: kimberlite-bitmask_1
+  - first:
+      213: 21300192
+    second: kimberlite-bitmask_2
+  - first:
+      213: 21300194
+    second: kimberlite-bitmask_3
+  - first:
+      213: 21300196
+    second: kimberlite-bitmask_4
+  - first:
+      213: 21300198
+    second: kimberlite-bitmask_5
+  - first:
+      213: 21300200
+    second: kimberlite-bitmask_6
+  - first:
+      213: 21300202
+    second: kimberlite-bitmask_7
+  - first:
+      213: 21300204
+    second: kimberlite-bitmask_8
+  - first:
+      213: 21300206
+    second: kimberlite-bitmask_9
+  - first:
+      213: 21300208
+    second: kimberlite-bitmask_10
+  - first:
+      213: 21300210
+    second: kimberlite-bitmask_11
+  - first:
+      213: 21300212
+    second: kimberlite-bitmask_12
+  - first:
+      213: 21300214
+    second: kimberlite-bitmask_13
+  - first:
+      213: 21300216
+    second: kimberlite-bitmask_14
+  - first:
+      213: 21300218
+    second: kimberlite-bitmask_15
+  - first:
+      213: 21300220
+    second: kimberlite-bitmask_16
+  - first:
+      213: 21300222
+    second: kimberlite-bitmask_17
+  - first:
+      213: 21300224
+    second: kimberlite-bitmask_18
+  - first:
+      213: 21300226
+    second: kimberlite-bitmask_19
+  - first:
+      213: 21300228
+    second: kimberlite-bitmask_20
+  - first:
+      213: 21300230
+    second: kimberlite-bitmask_21
+  - first:
+      213: 21300232
+    second: kimberlite-bitmask_22
+  - first:
+      213: 21300234
+    second: kimberlite-bitmask_23
+  - first:
+      213: 21300236
+    second: kimberlite-bitmask_24
+  - first:
+      213: 21300238
+    second: kimberlite-bitmask_25
+  - first:
+      213: 21300240
+    second: kimberlite-bitmask_26
+  - first:
+      213: 21300242
+    second: kimberlite-bitmask_27
+  - first:
+      213: 21300244
+    second: kimberlite-bitmask_28
+  - first:
+      213: 21300246
+    second: kimberlite-bitmask_29
+  - first:
+      213: 21300248
+    second: kimberlite-bitmask_30
+  - first:
+      213: 21300250
+    second: kimberlite-bitmask_31
+  - first:
+      213: 21300252
+    second: kimberlite-bitmask_32
+  - first:
+      213: 21300254
+    second: kimberlite-bitmask_33
+  - first:
+      213: 21300256
+    second: kimberlite-bitmask_34
+  - first:
+      213: 21300258
+    second: kimberlite-bitmask_35
+  - first:
+      213: 21300260
+    second: kimberlite-bitmask_36
+  - first:
+      213: 21300262
+    second: kimberlite-bitmask_37
+  - first:
+      213: 21300264
+    second: kimberlite-bitmask_38
+  - first:
+      213: 21300266
+    second: kimberlite-bitmask_39
+  - first:
+      213: 21300268
+    second: kimberlite-bitmask_40
+  - first:
+      213: 21300270
+    second: kimberlite-bitmask_41
+  - first:
+      213: 21300272
+    second: kimberlite-bitmask_42
+  - first:
+      213: 21300274
+    second: kimberlite-bitmask_43
+  - first:
+      213: 21300276
+    second: kimberlite-bitmask_44
+  - first:
+      213: 21300278
+    second: kimberlite-bitmask_45
+  - first:
+      213: 21300280
+    second: kimberlite-bitmask_46
+  - first:
+      213: 21300282
+    second: obsidian-bitmask_0
+  - first:
+      213: 21300284
+    second: obsidian-bitmask_1
+  - first:
+      213: 21300286
+    second: obsidian-bitmask_2
+  - first:
+      213: 21300288
+    second: obsidian-bitmask_3
+  - first:
+      213: 21300290
+    second: obsidian-bitmask_4
+  - first:
+      213: 21300292
+    second: obsidian-bitmask_5
+  - first:
+      213: 21300294
+    second: obsidian-bitmask_6
+  - first:
+      213: 21300296
+    second: obsidian-bitmask_7
+  - first:
+      213: 21300298
+    second: obsidian-bitmask_8
+  - first:
+      213: 21300300
+    second: obsidian-bitmask_9
+  - first:
+      213: 21300302
+    second: obsidian-bitmask_10
+  - first:
+      213: 21300304
+    second: obsidian-bitmask_11
+  - first:
+      213: 21300306
+    second: obsidian-bitmask_12
+  - first:
+      213: 21300308
+    second: obsidian-bitmask_13
+  - first:
+      213: 21300310
+    second: obsidian-bitmask_14
+  - first:
+      213: 21300312
+    second: obsidian-bitmask_15
+  - first:
+      213: 21300314
+    second: obsidian-bitmask_16
+  - first:
+      213: 21300316
+    second: obsidian-bitmask_17
+  - first:
+      213: 21300318
+    second: obsidian-bitmask_18
+  - first:
+      213: 21300320
+    second: obsidian-bitmask_19
+  - first:
+      213: 21300322
+    second: obsidian-bitmask_20
+  - first:
+      213: 21300324
+    second: obsidian-bitmask_21
+  - first:
+      213: 21300326
+    second: obsidian-bitmask_22
+  - first:
+      213: 21300328
+    second: obsidian-bitmask_23
+  - first:
+      213: 21300330
+    second: obsidian-bitmask_24
+  - first:
+      213: 21300332
+    second: obsidian-bitmask_25
+  - first:
+      213: 21300334
+    second: obsidian-bitmask_26
+  - first:
+      213: 21300336
+    second: obsidian-bitmask_27
+  - first:
+      213: 21300338
+    second: obsidian-bitmask_28
+  - first:
+      213: 21300340
+    second: obsidian-bitmask_29
+  - first:
+      213: 21300342
+    second: obsidian-bitmask_30
+  - first:
+      213: 21300344
+    second: obsidian-bitmask_31
+  - first:
+      213: 21300346
+    second: obsidian-bitmask_32
+  - first:
+      213: 21300348
+    second: obsidian-bitmask_33
+  - first:
+      213: 21300350
+    second: obsidian-bitmask_34
+  - first:
+      213: 21300352
+    second: obsidian-bitmask_35
+  - first:
+      213: 21300354
+    second: obsidian-bitmask_36
+  - first:
+      213: 21300356
+    second: obsidian-bitmask_37
+  - first:
+      213: 21300358
+    second: obsidian-bitmask_38
+  - first:
+      213: 21300360
+    second: obsidian-bitmask_39
+  - first:
+      213: 21300362
+    second: obsidian-bitmask_40
+  - first:
+      213: 21300364
+    second: obsidian-bitmask_41
+  - first:
+      213: 21300366
+    second: obsidian-bitmask_42
+  - first:
+      213: 21300368
+    second: obsidian-bitmask_43
+  - first:
+      213: 21300370
+    second: obsidian-bitmask_44
+  - first:
+      213: 21300372
+    second: obsidian-bitmask_45
+  - first:
+      213: 21300374
+    second: obsidian-bitmask_46
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -246,7 +622,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -257,7 +633,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -268,6 +645,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -287,6 +665,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8a68e37cbc7db7a40be129a063257a33
+      internalID: 21300282
       vertices: []
       indices: 
       edges: []
@@ -307,6 +686,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 35c9392c468c61b459e4f92c07ed7078
+      internalID: 21300284
       vertices: []
       indices: 
       edges: []
@@ -327,6 +707,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: e1f0d16107e93e94698a35453f2383f0
+      internalID: 21300286
       vertices: []
       indices: 
       edges: []
@@ -347,6 +728,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1056f3e8dca77d14aa3fcee952151778
+      internalID: 21300288
       vertices: []
       indices: 
       edges: []
@@ -367,6 +749,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: cb2cd94db5657234ba71df227aae2d7c
+      internalID: 21300290
       vertices: []
       indices: 
       edges: []
@@ -387,6 +770,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 79279a6353e789f4c8dbda145ab7c3d8
+      internalID: 21300292
       vertices: []
       indices: 
       edges: []
@@ -407,6 +791,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 28fcf63cbd5895042929d48177b23fee
+      internalID: 21300294
       vertices: []
       indices: 
       edges: []
@@ -427,6 +812,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: fb088b728192acf4b91fb38963a43655
+      internalID: 21300296
       vertices: []
       indices: 
       edges: []
@@ -447,6 +833,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: a661b912388562a42a9c7567ae96e678
+      internalID: 21300298
       vertices: []
       indices: 
       edges: []
@@ -467,6 +854,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 2b0956ab79a69eb41a18eb4b4d82b336
+      internalID: 21300300
       vertices: []
       indices: 
       edges: []
@@ -487,6 +875,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f519620ddd8a4c148a2528d97df41cdd
+      internalID: 21300302
       vertices: []
       indices: 
       edges: []
@@ -507,6 +896,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8e063eddd9b9b0a4d85182bdd8f532de
+      internalID: 21300304
       vertices: []
       indices: 
       edges: []
@@ -527,6 +917,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: ed0683a828189ac4d9ea86a3f7b8729b
+      internalID: 21300306
       vertices: []
       indices: 
       edges: []
@@ -547,6 +938,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: ef157199bf0255847b0c52a282a4da47
+      internalID: 21300308
       vertices: []
       indices: 
       edges: []
@@ -567,6 +959,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: d41062586153bcc43b51935f98ee9a58
+      internalID: 21300310
       vertices: []
       indices: 
       edges: []
@@ -587,6 +980,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5c01d8db5e537e743b0377cb2de586a8
+      internalID: 21300312
       vertices: []
       indices: 
       edges: []
@@ -607,6 +1001,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7b466dfb9842db54da3f0528be2f0916
+      internalID: 21300314
       vertices: []
       indices: 
       edges: []
@@ -627,6 +1022,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 48451440f15865342b9410f26b1d2715
+      internalID: 21300316
       vertices: []
       indices: 
       edges: []
@@ -647,6 +1043,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: e701fd1d828c0554b978ad67396cbe96
+      internalID: 21300318
       vertices: []
       indices: 
       edges: []
@@ -667,6 +1064,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 32cffda2bf101314dbe7ff4c0b454b11
+      internalID: 21300320
       vertices: []
       indices: 
       edges: []
@@ -687,6 +1085,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8846c6efd549eee47a9e40949dde1f2a
+      internalID: 21300322
       vertices: []
       indices: 
       edges: []
@@ -707,6 +1106,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f741ba4ae90692445b0528259903acdc
+      internalID: 21300324
       vertices: []
       indices: 
       edges: []
@@ -727,6 +1127,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: be79fe4df1420db45b3721b78465ef18
+      internalID: 21300326
       vertices: []
       indices: 
       edges: []
@@ -747,6 +1148,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 6b56f25f1840ddb499ee3e835dae1c97
+      internalID: 21300328
       vertices: []
       indices: 
       edges: []
@@ -767,6 +1169,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 6f119fb8899a07e4286dc1f538060cd1
+      internalID: 21300330
       vertices: []
       indices: 
       edges: []
@@ -787,6 +1190,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: be4617032dc958e48aa373d066ea5e69
+      internalID: 21300332
       vertices: []
       indices: 
       edges: []
@@ -807,6 +1211,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: c8ef54f1a93b11a489915a8dd41b0f55
+      internalID: 21300334
       vertices: []
       indices: 
       edges: []
@@ -827,6 +1232,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1e139cac81a7b4547a384440aa6fe6cc
+      internalID: 21300336
       vertices: []
       indices: 
       edges: []
@@ -847,6 +1253,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: a0fc4008804b2334dbfb7a5e5d8cb944
+      internalID: 21300338
       vertices: []
       indices: 
       edges: []
@@ -867,6 +1274,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 53ce2c2d2ab945342b2615e5b4e47f92
+      internalID: 21300340
       vertices: []
       indices: 
       edges: []
@@ -887,6 +1295,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8b5b746dfe74dad45bb759bd1a43fb78
+      internalID: 21300342
       vertices: []
       indices: 
       edges: []
@@ -907,6 +1316,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: a628ec8c694258e469c7732b946aba7b
+      internalID: 21300344
       vertices: []
       indices: 
       edges: []
@@ -927,6 +1337,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 714665dc88a01504eaea61dfdf321af9
+      internalID: 21300346
       vertices: []
       indices: 
       edges: []
@@ -947,6 +1358,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 203ef2a6d24604a47aa731ecf25fb3c0
+      internalID: 21300348
       vertices: []
       indices: 
       edges: []
@@ -967,6 +1379,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f24ebb586d9924847bf178ab319d925d
+      internalID: 21300350
       vertices: []
       indices: 
       edges: []
@@ -987,6 +1400,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: c4f83f8212e7a114fb6a29d313be5b16
+      internalID: 21300352
       vertices: []
       indices: 
       edges: []
@@ -1007,6 +1421,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 45fb752aabb97844d9de4ee461405297
+      internalID: 21300354
       vertices: []
       indices: 
       edges: []
@@ -1027,6 +1442,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1836519dd33df9b458f56c2ae4141530
+      internalID: 21300356
       vertices: []
       indices: 
       edges: []
@@ -1047,6 +1463,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 792ef92ac1fede949a2de5f9ae7c4050
+      internalID: 21300358
       vertices: []
       indices: 
       edges: []
@@ -1067,6 +1484,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: eb62612626adfdc47aa900e7cb9170fc
+      internalID: 21300360
       vertices: []
       indices: 
       edges: []
@@ -1087,6 +1505,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1bf4355b20ace704184a6d96da6cfc36
+      internalID: 21300362
       vertices: []
       indices: 
       edges: []
@@ -1107,6 +1526,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: b9d405c9631278346adcf1d789fbd9e8
+      internalID: 21300364
       vertices: []
       indices: 
       edges: []
@@ -1127,6 +1547,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 4fd8a2126fe29a04fb5595f8ac342eac
+      internalID: 21300366
       vertices: []
       indices: 
       edges: []
@@ -1147,6 +1568,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 87dc134d90102de4e99d090142a38f87
+      internalID: 21300368
       vertices: []
       indices: 
       edges: []
@@ -1167,6 +1589,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 9f5fd93535cf41b4cbe145f894121290
+      internalID: 21300370
       vertices: []
       indices: 
       edges: []
@@ -1187,6 +1610,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7eca9b6d8d8568c4e89cf25a16c397a3
+      internalID: 21300372
       vertices: []
       indices: 
       edges: []
@@ -1207,6 +1631,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 79ce8ec99e00b9f408ff1be7d3ccddc6
+      internalID: 21300374
       vertices: []
       indices: 
       edges: []
@@ -1215,10 +1640,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 53a980efc0e0f6c4f8eab58b2fc364dd
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

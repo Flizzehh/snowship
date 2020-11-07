@@ -1,25 +1,57 @@
 fileFormatVersion: 2
 guid: baa701dc67fb1cd4ab71e225047cf10e
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: colonists-body-base-1_0
-    21300002: colonists-body-base-1_1
-    21300004: colonists-body-base-1_2
-    21300006: colonists-body-base-1_3
-    21300008: colonists-body-base-1_4
-    21300010: colonists-body-base-1_5
-    21300012: colonists-body-base-1_6
-    21300014: colonists-body-base-1_7
-    21300016: colonists-body-base-1_8
-    21300018: colonists-body-base-1_9
-    21300020: colonists-body-base-1_10
-    21300022: colonists-body-base-1_11
-    21300024: colonists-body-base-1_12
-    21300026: colonists-body-base-1_13
-    21300028: colonists-body-base-1_14
-    21300030: colonists-body-base-1_15
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: colonists-body-base-1_0
+  - first:
+      213: 21300002
+    second: colonists-body-base-1_1
+  - first:
+      213: 21300004
+    second: colonists-body-base-1_2
+  - first:
+      213: 21300006
+    second: colonists-body-base-1_3
+  - first:
+      213: 21300008
+    second: colonists-body-base-1_4
+  - first:
+      213: 21300010
+    second: colonists-body-base-1_5
+  - first:
+      213: 21300012
+    second: colonists-body-base-1_6
+  - first:
+      213: 21300014
+    second: colonists-body-base-1_7
+  - first:
+      213: 21300016
+    second: colonists-body-base-1_8
+  - first:
+      213: 21300018
+    second: colonists-body-base-1_9
+  - first:
+      213: 21300020
+    second: colonists-body-base-1_10
+  - first:
+      213: 21300022
+    second: colonists-body-base-1_11
+  - first:
+      213: 21300024
+    second: colonists-body-base-1_12
+  - first:
+      213: 21300026
+    second: colonists-body-base-1_13
+  - first:
+      213: 21300028
+    second: colonists-body-base-1_14
+  - first:
+      213: 21300030
+    second: colonists-body-base-1_15
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -74,7 +106,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -85,7 +117,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -96,6 +129,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -115,6 +149,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 087b151267cdfb84291c140e1d20ed74
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -135,6 +170,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0ded165ca0ffa0d4c9f2f2e821a50026
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -155,6 +191,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 6b18c108cd902224a913d2dbcde361b9
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -175,6 +212,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 805ec586b56479545aaaf635192c18a6
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -183,10 +221,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 187fc6269170e764bbc44db305f03775
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

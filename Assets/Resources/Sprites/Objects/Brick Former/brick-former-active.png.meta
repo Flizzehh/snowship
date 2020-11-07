@@ -1,29 +1,69 @@
 fileFormatVersion: 2
 guid: 646925ea58b62e5419c54c0c6666199d
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: bed-comfy_0
-    21300002: bed-comfy_1
-    21300004: bed-comfy_2
-    21300006: bed-comfy_3
-    21300008: wooden-bed-bitmask_0
-    21300010: wooden-bed-bitmask_1
-    21300012: wooden-bed-bitmask_2
-    21300014: wooden-bed-bitmask_3
-    21300016: stone-furnace-active_0
-    21300018: stone-furnace-active_1
-    21300020: stone-furnace-active_2
-    21300022: stone-furnace-active_3
-    21300024: basalt-furnace-active_0
-    21300026: basalt-furnace-active_1
-    21300028: basalt-furnace-active_2
-    21300030: basalt-furnace-active_3
-    21300032: brick-former-active_0
-    21300034: brick-former-active_1
-    21300036: brick-former-active_2
-    21300038: brick-former-active_3
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: bed-comfy_0
+  - first:
+      213: 21300002
+    second: bed-comfy_1
+  - first:
+      213: 21300004
+    second: bed-comfy_2
+  - first:
+      213: 21300006
+    second: bed-comfy_3
+  - first:
+      213: 21300008
+    second: wooden-bed-bitmask_0
+  - first:
+      213: 21300010
+    second: wooden-bed-bitmask_1
+  - first:
+      213: 21300012
+    second: wooden-bed-bitmask_2
+  - first:
+      213: 21300014
+    second: wooden-bed-bitmask_3
+  - first:
+      213: 21300016
+    second: stone-furnace-active_0
+  - first:
+      213: 21300018
+    second: stone-furnace-active_1
+  - first:
+      213: 21300020
+    second: stone-furnace-active_2
+  - first:
+      213: 21300022
+    second: stone-furnace-active_3
+  - first:
+      213: 21300024
+    second: basalt-furnace-active_0
+  - first:
+      213: 21300026
+    second: basalt-furnace-active_1
+  - first:
+      213: 21300028
+    second: basalt-furnace-active_2
+  - first:
+      213: 21300030
+    second: basalt-furnace-active_3
+  - first:
+      213: 21300032
+    second: brick-former-active_0
+  - first:
+      213: 21300034
+    second: brick-former-active_1
+  - first:
+      213: 21300036
+    second: brick-former-active_2
+  - first:
+      213: 21300038
+    second: brick-former-active_3
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -78,7 +118,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -89,6 +129,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -108,6 +149,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1a85113c8e96bba41a3a395d8898a0c5
+      internalID: 21300032
       vertices: []
       indices: 
       edges: []
@@ -128,6 +170,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: abcd4cb4fe97188499b58495378bd25c
+      internalID: 21300034
       vertices: []
       indices: 
       edges: []
@@ -148,6 +191,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: e64cde05240d9734ca02cf48274977ac
+      internalID: 21300036
       vertices: []
       indices: 
       edges: []
@@ -168,6 +212,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5115da85742bc6c4193075d08aa021b2
+      internalID: 21300038
       vertices: []
       indices: 
       edges: []
@@ -176,10 +221,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: bf3b4f2d6ba2482488ce392e1e67775f
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

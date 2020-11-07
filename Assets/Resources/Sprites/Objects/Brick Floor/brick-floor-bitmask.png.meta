@@ -1,183 +1,528 @@
 fileFormatVersion: 2
 guid: 7e9abd7ad22a8eb48b43331f5e45656b
-timeCreated: 1512733870
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: wall-wood_0
-    21300002: wall-wood_1
-    21300004: wall-wood_2
-    21300006: wall-wood_3
-    21300008: wall-wood_4
-    21300010: wall-wood_5
-    21300012: wall-wood_6
-    21300014: wall-wood_7
-    21300016: wall-wood_8
-    21300018: wall-wood_9
-    21300020: wall-wood_10
-    21300022: wall-wood_11
-    21300024: wall-wood_12
-    21300026: wall-wood_13
-    21300028: wall-wood_14
-    21300030: wall-wood_15
-    21300032: woodenwall-bitmask_0
-    21300034: woodenwall-bitmask_1
-    21300036: woodenwall-bitmask_2
-    21300038: woodenwall-bitmask_3
-    21300040: woodenwall-bitmask_4
-    21300042: woodenwall-bitmask_5
-    21300044: woodenwall-bitmask_6
-    21300046: woodenwall-bitmask_7
-    21300048: woodenwall-bitmask_8
-    21300050: woodenwall-bitmask_9
-    21300052: woodenwall-bitmask_10
-    21300054: woodenwall-bitmask_11
-    21300056: woodenwall-bitmask_12
-    21300058: woodenwall-bitmask_13
-    21300060: woodenwall-bitmask_14
-    21300062: woodenwall-bitmask_15
-    21300064: wooden-wall-bitmask_0
-    21300066: wooden-wall-bitmask_1
-    21300068: wooden-wall-bitmask_2
-    21300070: wooden-wall-bitmask_3
-    21300072: wooden-wall-bitmask_4
-    21300074: wooden-wall-bitmask_5
-    21300076: wooden-wall-bitmask_6
-    21300078: wooden-wall-bitmask_7
-    21300080: wooden-wall-bitmask_8
-    21300082: wooden-wall-bitmask_9
-    21300084: wooden-wall-bitmask_10
-    21300086: wooden-wall-bitmask_11
-    21300088: wooden-wall-bitmask_12
-    21300090: wooden-wall-bitmask_13
-    21300092: wooden-wall-bitmask_14
-    21300094: wooden-wall-bitmask_15
-    21300096: wooden-wall-bitmask_16
-    21300098: wooden-wall-bitmask_17
-    21300100: wooden-wall-bitmask_18
-    21300102: wooden-wall-bitmask_19
-    21300104: wooden-wall-bitmask_20
-    21300106: wooden-wall-bitmask_21
-    21300108: wooden-wall-bitmask_22
-    21300110: wooden-wall-bitmask_23
-    21300112: wooden-wall-bitmask_24
-    21300114: wooden-wall-bitmask_25
-    21300116: wooden-wall-bitmask_26
-    21300118: wooden-wall-bitmask_27
-    21300120: wooden-wall-bitmask_28
-    21300122: wooden-wall-bitmask_29
-    21300124: wooden-wall-bitmask_30
-    21300126: wooden-wall-bitmask_31
-    21300128: wooden-wall-bitmask_32
-    21300130: wooden-wall-bitmask_33
-    21300132: wooden-wall-bitmask_34
-    21300134: wooden-wall-bitmask_35
-    21300136: wooden-wall-bitmask_36
-    21300138: wooden-wall-bitmask_37
-    21300140: wooden-wall-bitmask_38
-    21300142: wooden-wall-bitmask_39
-    21300144: wooden-wall-bitmask_40
-    21300146: wooden-wall-bitmask_41
-    21300148: wooden-wall-bitmask_42
-    21300150: wooden-wall-bitmask_43
-    21300152: wooden-wall-bitmask_44
-    21300154: wooden-wall-bitmask_45
-    21300156: wooden-wall-bitmask_46
-    21300158: brick-wall-bitmask_0
-    21300160: brick-wall-bitmask_1
-    21300162: brick-wall-bitmask_2
-    21300164: brick-wall-bitmask_3
-    21300166: brick-wall-bitmask_4
-    21300168: brick-wall-bitmask_5
-    21300170: brick-wall-bitmask_6
-    21300172: brick-wall-bitmask_7
-    21300174: brick-wall-bitmask_8
-    21300176: brick-wall-bitmask_9
-    21300178: brick-wall-bitmask_10
-    21300180: brick-wall-bitmask_11
-    21300182: brick-wall-bitmask_12
-    21300184: brick-wall-bitmask_13
-    21300186: brick-wall-bitmask_14
-    21300188: brick-wall-bitmask_15
-    21300190: brick-wall-bitmask_16
-    21300192: brick-wall-bitmask_17
-    21300194: brick-wall-bitmask_18
-    21300196: brick-wall-bitmask_19
-    21300198: brick-wall-bitmask_20
-    21300200: brick-wall-bitmask_21
-    21300202: brick-wall-bitmask_22
-    21300204: brick-wall-bitmask_23
-    21300206: brick-wall-bitmask_24
-    21300208: brick-wall-bitmask_25
-    21300210: brick-wall-bitmask_26
-    21300212: brick-wall-bitmask_27
-    21300214: brick-wall-bitmask_28
-    21300216: brick-wall-bitmask_29
-    21300218: brick-wall-bitmask_30
-    21300220: brick-wall-bitmask_31
-    21300222: brick-wall-bitmask_32
-    21300224: brick-wall-bitmask_33
-    21300226: brick-wall-bitmask_34
-    21300228: brick-wall-bitmask_35
-    21300230: brick-wall-bitmask_36
-    21300232: brick-wall-bitmask_37
-    21300234: brick-wall-bitmask_38
-    21300236: brick-wall-bitmask_39
-    21300238: brick-wall-bitmask_40
-    21300240: brick-wall-bitmask_41
-    21300242: brick-wall-bitmask_42
-    21300244: brick-wall-bitmask_43
-    21300246: brick-wall-bitmask_44
-    21300248: brick-wall-bitmask_45
-    21300250: brick-wall-bitmask_46
-    21300252: brick-floor-bitmask_0
-    21300254: brick-floor-bitmask_1
-    21300256: brick-floor-bitmask_2
-    21300258: brick-floor-bitmask_3
-    21300260: brick-floor-bitmask_4
-    21300262: brick-floor-bitmask_5
-    21300264: brick-floor-bitmask_6
-    21300266: brick-floor-bitmask_7
-    21300268: brick-floor-bitmask_8
-    21300270: brick-floor-bitmask_9
-    21300272: brick-floor-bitmask_10
-    21300274: brick-floor-bitmask_11
-    21300276: brick-floor-bitmask_12
-    21300278: brick-floor-bitmask_13
-    21300280: brick-floor-bitmask_14
-    21300282: brick-floor-bitmask_15
-    21300284: brick-floor-bitmask_16
-    21300286: brick-floor-bitmask_17
-    21300288: brick-floor-bitmask_18
-    21300290: brick-floor-bitmask_19
-    21300292: brick-floor-bitmask_20
-    21300294: brick-floor-bitmask_21
-    21300296: brick-floor-bitmask_22
-    21300298: brick-floor-bitmask_23
-    21300300: brick-floor-bitmask_24
-    21300302: brick-floor-bitmask_25
-    21300304: brick-floor-bitmask_26
-    21300306: brick-floor-bitmask_27
-    21300308: brick-floor-bitmask_28
-    21300310: brick-floor-bitmask_29
-    21300312: brick-floor-bitmask_30
-    21300314: brick-floor-bitmask_31
-    21300316: brick-floor-bitmask_32
-    21300318: brick-floor-bitmask_33
-    21300320: brick-floor-bitmask_34
-    21300322: brick-floor-bitmask_35
-    21300324: brick-floor-bitmask_36
-    21300326: brick-floor-bitmask_37
-    21300328: brick-floor-bitmask_38
-    21300330: brick-floor-bitmask_39
-    21300332: brick-floor-bitmask_40
-    21300334: brick-floor-bitmask_41
-    21300336: brick-floor-bitmask_42
-    21300338: brick-floor-bitmask_43
-    21300340: brick-floor-bitmask_44
-    21300342: brick-floor-bitmask_45
-    21300344: brick-floor-bitmask_46
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: wall-wood_0
+  - first:
+      213: 21300002
+    second: wall-wood_1
+  - first:
+      213: 21300004
+    second: wall-wood_2
+  - first:
+      213: 21300006
+    second: wall-wood_3
+  - first:
+      213: 21300008
+    second: wall-wood_4
+  - first:
+      213: 21300010
+    second: wall-wood_5
+  - first:
+      213: 21300012
+    second: wall-wood_6
+  - first:
+      213: 21300014
+    second: wall-wood_7
+  - first:
+      213: 21300016
+    second: wall-wood_8
+  - first:
+      213: 21300018
+    second: wall-wood_9
+  - first:
+      213: 21300020
+    second: wall-wood_10
+  - first:
+      213: 21300022
+    second: wall-wood_11
+  - first:
+      213: 21300024
+    second: wall-wood_12
+  - first:
+      213: 21300026
+    second: wall-wood_13
+  - first:
+      213: 21300028
+    second: wall-wood_14
+  - first:
+      213: 21300030
+    second: wall-wood_15
+  - first:
+      213: 21300032
+    second: woodenwall-bitmask_0
+  - first:
+      213: 21300034
+    second: woodenwall-bitmask_1
+  - first:
+      213: 21300036
+    second: woodenwall-bitmask_2
+  - first:
+      213: 21300038
+    second: woodenwall-bitmask_3
+  - first:
+      213: 21300040
+    second: woodenwall-bitmask_4
+  - first:
+      213: 21300042
+    second: woodenwall-bitmask_5
+  - first:
+      213: 21300044
+    second: woodenwall-bitmask_6
+  - first:
+      213: 21300046
+    second: woodenwall-bitmask_7
+  - first:
+      213: 21300048
+    second: woodenwall-bitmask_8
+  - first:
+      213: 21300050
+    second: woodenwall-bitmask_9
+  - first:
+      213: 21300052
+    second: woodenwall-bitmask_10
+  - first:
+      213: 21300054
+    second: woodenwall-bitmask_11
+  - first:
+      213: 21300056
+    second: woodenwall-bitmask_12
+  - first:
+      213: 21300058
+    second: woodenwall-bitmask_13
+  - first:
+      213: 21300060
+    second: woodenwall-bitmask_14
+  - first:
+      213: 21300062
+    second: woodenwall-bitmask_15
+  - first:
+      213: 21300064
+    second: wooden-wall-bitmask_0
+  - first:
+      213: 21300066
+    second: wooden-wall-bitmask_1
+  - first:
+      213: 21300068
+    second: wooden-wall-bitmask_2
+  - first:
+      213: 21300070
+    second: wooden-wall-bitmask_3
+  - first:
+      213: 21300072
+    second: wooden-wall-bitmask_4
+  - first:
+      213: 21300074
+    second: wooden-wall-bitmask_5
+  - first:
+      213: 21300076
+    second: wooden-wall-bitmask_6
+  - first:
+      213: 21300078
+    second: wooden-wall-bitmask_7
+  - first:
+      213: 21300080
+    second: wooden-wall-bitmask_8
+  - first:
+      213: 21300082
+    second: wooden-wall-bitmask_9
+  - first:
+      213: 21300084
+    second: wooden-wall-bitmask_10
+  - first:
+      213: 21300086
+    second: wooden-wall-bitmask_11
+  - first:
+      213: 21300088
+    second: wooden-wall-bitmask_12
+  - first:
+      213: 21300090
+    second: wooden-wall-bitmask_13
+  - first:
+      213: 21300092
+    second: wooden-wall-bitmask_14
+  - first:
+      213: 21300094
+    second: wooden-wall-bitmask_15
+  - first:
+      213: 21300096
+    second: wooden-wall-bitmask_16
+  - first:
+      213: 21300098
+    second: wooden-wall-bitmask_17
+  - first:
+      213: 21300100
+    second: wooden-wall-bitmask_18
+  - first:
+      213: 21300102
+    second: wooden-wall-bitmask_19
+  - first:
+      213: 21300104
+    second: wooden-wall-bitmask_20
+  - first:
+      213: 21300106
+    second: wooden-wall-bitmask_21
+  - first:
+      213: 21300108
+    second: wooden-wall-bitmask_22
+  - first:
+      213: 21300110
+    second: wooden-wall-bitmask_23
+  - first:
+      213: 21300112
+    second: wooden-wall-bitmask_24
+  - first:
+      213: 21300114
+    second: wooden-wall-bitmask_25
+  - first:
+      213: 21300116
+    second: wooden-wall-bitmask_26
+  - first:
+      213: 21300118
+    second: wooden-wall-bitmask_27
+  - first:
+      213: 21300120
+    second: wooden-wall-bitmask_28
+  - first:
+      213: 21300122
+    second: wooden-wall-bitmask_29
+  - first:
+      213: 21300124
+    second: wooden-wall-bitmask_30
+  - first:
+      213: 21300126
+    second: wooden-wall-bitmask_31
+  - first:
+      213: 21300128
+    second: wooden-wall-bitmask_32
+  - first:
+      213: 21300130
+    second: wooden-wall-bitmask_33
+  - first:
+      213: 21300132
+    second: wooden-wall-bitmask_34
+  - first:
+      213: 21300134
+    second: wooden-wall-bitmask_35
+  - first:
+      213: 21300136
+    second: wooden-wall-bitmask_36
+  - first:
+      213: 21300138
+    second: wooden-wall-bitmask_37
+  - first:
+      213: 21300140
+    second: wooden-wall-bitmask_38
+  - first:
+      213: 21300142
+    second: wooden-wall-bitmask_39
+  - first:
+      213: 21300144
+    second: wooden-wall-bitmask_40
+  - first:
+      213: 21300146
+    second: wooden-wall-bitmask_41
+  - first:
+      213: 21300148
+    second: wooden-wall-bitmask_42
+  - first:
+      213: 21300150
+    second: wooden-wall-bitmask_43
+  - first:
+      213: 21300152
+    second: wooden-wall-bitmask_44
+  - first:
+      213: 21300154
+    second: wooden-wall-bitmask_45
+  - first:
+      213: 21300156
+    second: wooden-wall-bitmask_46
+  - first:
+      213: 21300158
+    second: brick-wall-bitmask_0
+  - first:
+      213: 21300160
+    second: brick-wall-bitmask_1
+  - first:
+      213: 21300162
+    second: brick-wall-bitmask_2
+  - first:
+      213: 21300164
+    second: brick-wall-bitmask_3
+  - first:
+      213: 21300166
+    second: brick-wall-bitmask_4
+  - first:
+      213: 21300168
+    second: brick-wall-bitmask_5
+  - first:
+      213: 21300170
+    second: brick-wall-bitmask_6
+  - first:
+      213: 21300172
+    second: brick-wall-bitmask_7
+  - first:
+      213: 21300174
+    second: brick-wall-bitmask_8
+  - first:
+      213: 21300176
+    second: brick-wall-bitmask_9
+  - first:
+      213: 21300178
+    second: brick-wall-bitmask_10
+  - first:
+      213: 21300180
+    second: brick-wall-bitmask_11
+  - first:
+      213: 21300182
+    second: brick-wall-bitmask_12
+  - first:
+      213: 21300184
+    second: brick-wall-bitmask_13
+  - first:
+      213: 21300186
+    second: brick-wall-bitmask_14
+  - first:
+      213: 21300188
+    second: brick-wall-bitmask_15
+  - first:
+      213: 21300190
+    second: brick-wall-bitmask_16
+  - first:
+      213: 21300192
+    second: brick-wall-bitmask_17
+  - first:
+      213: 21300194
+    second: brick-wall-bitmask_18
+  - first:
+      213: 21300196
+    second: brick-wall-bitmask_19
+  - first:
+      213: 21300198
+    second: brick-wall-bitmask_20
+  - first:
+      213: 21300200
+    second: brick-wall-bitmask_21
+  - first:
+      213: 21300202
+    second: brick-wall-bitmask_22
+  - first:
+      213: 21300204
+    second: brick-wall-bitmask_23
+  - first:
+      213: 21300206
+    second: brick-wall-bitmask_24
+  - first:
+      213: 21300208
+    second: brick-wall-bitmask_25
+  - first:
+      213: 21300210
+    second: brick-wall-bitmask_26
+  - first:
+      213: 21300212
+    second: brick-wall-bitmask_27
+  - first:
+      213: 21300214
+    second: brick-wall-bitmask_28
+  - first:
+      213: 21300216
+    second: brick-wall-bitmask_29
+  - first:
+      213: 21300218
+    second: brick-wall-bitmask_30
+  - first:
+      213: 21300220
+    second: brick-wall-bitmask_31
+  - first:
+      213: 21300222
+    second: brick-wall-bitmask_32
+  - first:
+      213: 21300224
+    second: brick-wall-bitmask_33
+  - first:
+      213: 21300226
+    second: brick-wall-bitmask_34
+  - first:
+      213: 21300228
+    second: brick-wall-bitmask_35
+  - first:
+      213: 21300230
+    second: brick-wall-bitmask_36
+  - first:
+      213: 21300232
+    second: brick-wall-bitmask_37
+  - first:
+      213: 21300234
+    second: brick-wall-bitmask_38
+  - first:
+      213: 21300236
+    second: brick-wall-bitmask_39
+  - first:
+      213: 21300238
+    second: brick-wall-bitmask_40
+  - first:
+      213: 21300240
+    second: brick-wall-bitmask_41
+  - first:
+      213: 21300242
+    second: brick-wall-bitmask_42
+  - first:
+      213: 21300244
+    second: brick-wall-bitmask_43
+  - first:
+      213: 21300246
+    second: brick-wall-bitmask_44
+  - first:
+      213: 21300248
+    second: brick-wall-bitmask_45
+  - first:
+      213: 21300250
+    second: brick-wall-bitmask_46
+  - first:
+      213: 21300252
+    second: brick-floor-bitmask_0
+  - first:
+      213: 21300254
+    second: brick-floor-bitmask_1
+  - first:
+      213: 21300256
+    second: brick-floor-bitmask_2
+  - first:
+      213: 21300258
+    second: brick-floor-bitmask_3
+  - first:
+      213: 21300260
+    second: brick-floor-bitmask_4
+  - first:
+      213: 21300262
+    second: brick-floor-bitmask_5
+  - first:
+      213: 21300264
+    second: brick-floor-bitmask_6
+  - first:
+      213: 21300266
+    second: brick-floor-bitmask_7
+  - first:
+      213: 21300268
+    second: brick-floor-bitmask_8
+  - first:
+      213: 21300270
+    second: brick-floor-bitmask_9
+  - first:
+      213: 21300272
+    second: brick-floor-bitmask_10
+  - first:
+      213: 21300274
+    second: brick-floor-bitmask_11
+  - first:
+      213: 21300276
+    second: brick-floor-bitmask_12
+  - first:
+      213: 21300278
+    second: brick-floor-bitmask_13
+  - first:
+      213: 21300280
+    second: brick-floor-bitmask_14
+  - first:
+      213: 21300282
+    second: brick-floor-bitmask_15
+  - first:
+      213: 21300284
+    second: brick-floor-bitmask_16
+  - first:
+      213: 21300286
+    second: brick-floor-bitmask_17
+  - first:
+      213: 21300288
+    second: brick-floor-bitmask_18
+  - first:
+      213: 21300290
+    second: brick-floor-bitmask_19
+  - first:
+      213: 21300292
+    second: brick-floor-bitmask_20
+  - first:
+      213: 21300294
+    second: brick-floor-bitmask_21
+  - first:
+      213: 21300296
+    second: brick-floor-bitmask_22
+  - first:
+      213: 21300298
+    second: brick-floor-bitmask_23
+  - first:
+      213: 21300300
+    second: brick-floor-bitmask_24
+  - first:
+      213: 21300302
+    second: brick-floor-bitmask_25
+  - first:
+      213: 21300304
+    second: brick-floor-bitmask_26
+  - first:
+      213: 21300306
+    second: brick-floor-bitmask_27
+  - first:
+      213: 21300308
+    second: brick-floor-bitmask_28
+  - first:
+      213: 21300310
+    second: brick-floor-bitmask_29
+  - first:
+      213: 21300312
+    second: brick-floor-bitmask_30
+  - first:
+      213: 21300314
+    second: brick-floor-bitmask_31
+  - first:
+      213: 21300316
+    second: brick-floor-bitmask_32
+  - first:
+      213: 21300318
+    second: brick-floor-bitmask_33
+  - first:
+      213: 21300320
+    second: brick-floor-bitmask_34
+  - first:
+      213: 21300322
+    second: brick-floor-bitmask_35
+  - first:
+      213: 21300324
+    second: brick-floor-bitmask_36
+  - first:
+      213: 21300326
+    second: brick-floor-bitmask_37
+  - first:
+      213: 21300328
+    second: brick-floor-bitmask_38
+  - first:
+      213: 21300330
+    second: brick-floor-bitmask_39
+  - first:
+      213: 21300332
+    second: brick-floor-bitmask_40
+  - first:
+      213: 21300334
+    second: brick-floor-bitmask_41
+  - first:
+      213: 21300336
+    second: brick-floor-bitmask_42
+  - first:
+      213: 21300338
+    second: brick-floor-bitmask_43
+  - first:
+      213: 21300340
+    second: brick-floor-bitmask_44
+  - first:
+      213: 21300342
+    second: brick-floor-bitmask_45
+  - first:
+      213: 21300344
+    second: brick-floor-bitmask_46
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -195,6 +540,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -205,7 +552,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -1
+    mipBias: -100
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -217,33 +564,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -261,6 +618,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c1405410000000000800000000000000
+      internalID: 21300252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_1
       rect:
@@ -275,6 +639,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e1405410000000000800000000000000
+      internalID: 21300254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_2
       rect:
@@ -289,6 +660,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 02405410000000000800000000000000
+      internalID: 21300256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_3
       rect:
@@ -303,6 +681,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 22405410000000000800000000000000
+      internalID: 21300258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_4
       rect:
@@ -317,6 +702,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 42405410000000000800000000000000
+      internalID: 21300260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_5
       rect:
@@ -331,6 +723,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 62405410000000000800000000000000
+      internalID: 21300262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_6
       rect:
@@ -345,6 +744,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 82405410000000000800000000000000
+      internalID: 21300264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_7
       rect:
@@ -359,6 +765,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a2405410000000000800000000000000
+      internalID: 21300266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_8
       rect:
@@ -373,6 +786,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c2405410000000000800000000000000
+      internalID: 21300268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_9
       rect:
@@ -387,6 +807,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e2405410000000000800000000000000
+      internalID: 21300270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_10
       rect:
@@ -401,6 +828,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 03405410000000000800000000000000
+      internalID: 21300272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_11
       rect:
@@ -415,6 +849,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 23405410000000000800000000000000
+      internalID: 21300274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_12
       rect:
@@ -429,6 +870,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 43405410000000000800000000000000
+      internalID: 21300276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_13
       rect:
@@ -443,6 +891,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 63405410000000000800000000000000
+      internalID: 21300278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_14
       rect:
@@ -457,6 +912,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 83405410000000000800000000000000
+      internalID: 21300280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_15
       rect:
@@ -471,6 +933,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a3405410000000000800000000000000
+      internalID: 21300282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_16
       rect:
@@ -485,6 +954,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c3405410000000000800000000000000
+      internalID: 21300284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_17
       rect:
@@ -499,6 +975,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e3405410000000000800000000000000
+      internalID: 21300286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_18
       rect:
@@ -513,6 +996,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 04405410000000000800000000000000
+      internalID: 21300288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_19
       rect:
@@ -527,6 +1017,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 24405410000000000800000000000000
+      internalID: 21300290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_20
       rect:
@@ -541,6 +1038,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 44405410000000000800000000000000
+      internalID: 21300292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_21
       rect:
@@ -555,6 +1059,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 64405410000000000800000000000000
+      internalID: 21300294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_22
       rect:
@@ -569,6 +1080,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 84405410000000000800000000000000
+      internalID: 21300296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_23
       rect:
@@ -583,6 +1101,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a4405410000000000800000000000000
+      internalID: 21300298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_24
       rect:
@@ -597,6 +1122,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c4405410000000000800000000000000
+      internalID: 21300300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_25
       rect:
@@ -611,6 +1143,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e4405410000000000800000000000000
+      internalID: 21300302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_26
       rect:
@@ -625,6 +1164,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 05405410000000000800000000000000
+      internalID: 21300304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_27
       rect:
@@ -639,6 +1185,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 25405410000000000800000000000000
+      internalID: 21300306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_28
       rect:
@@ -653,6 +1206,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 45405410000000000800000000000000
+      internalID: 21300308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_29
       rect:
@@ -667,6 +1227,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 65405410000000000800000000000000
+      internalID: 21300310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_30
       rect:
@@ -681,6 +1248,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 85405410000000000800000000000000
+      internalID: 21300312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_31
       rect:
@@ -695,6 +1269,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a5405410000000000800000000000000
+      internalID: 21300314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_32
       rect:
@@ -709,6 +1290,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c5405410000000000800000000000000
+      internalID: 21300316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_33
       rect:
@@ -723,6 +1311,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e5405410000000000800000000000000
+      internalID: 21300318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_34
       rect:
@@ -737,6 +1332,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 06405410000000000800000000000000
+      internalID: 21300320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_35
       rect:
@@ -751,6 +1353,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 26405410000000000800000000000000
+      internalID: 21300322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_36
       rect:
@@ -765,6 +1374,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 46405410000000000800000000000000
+      internalID: 21300324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_37
       rect:
@@ -779,6 +1395,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 66405410000000000800000000000000
+      internalID: 21300326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_38
       rect:
@@ -793,6 +1416,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 86405410000000000800000000000000
+      internalID: 21300328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_39
       rect:
@@ -807,6 +1437,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a6405410000000000800000000000000
+      internalID: 21300330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_40
       rect:
@@ -821,6 +1458,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c6405410000000000800000000000000
+      internalID: 21300332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_41
       rect:
@@ -835,6 +1479,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e6405410000000000800000000000000
+      internalID: 21300334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_42
       rect:
@@ -849,6 +1500,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 07405410000000000800000000000000
+      internalID: 21300336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_43
       rect:
@@ -863,6 +1521,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 27405410000000000800000000000000
+      internalID: 21300338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_44
       rect:
@@ -877,6 +1542,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 47405410000000000800000000000000
+      internalID: 21300340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_45
       rect:
@@ -891,6 +1563,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 67405410000000000800000000000000
+      internalID: 21300342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: brick-floor-bitmask_46
       rect:
@@ -905,9 +1584,26 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 87405410000000000800000000000000
+      internalID: 21300344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

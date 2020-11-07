@@ -1,0 +1,158 @@
+### 2015-2017
+- In pre-release development.
+
+### 2017-2018
+- Rewritten from ground up.
+
+### 2018.1 (January 12, 2018)
+- First public release.
+
+### 2018.1.1 (March 4, 2018)
+- Colonists' health now decreases when Rest need gets too high.
+- Colonists no longer attempt to sleep in an available bed and then end up sleeping on the ground.
+- Needs no longer compete with each other. When a colonist is tending to one need, another need won't interrupt them unless it has a higher priority. (Needs are sorted in the needs list based on their priority (from most to least important)).
+- Colonists can no longer have multiple need-related jobs at the same time. If they are unable to complete a need-related job it will be completely removed rather than returned to the job pool.
+- Beds will no longer say they are occupied when they are not.
+- Jobs in a colonist's profession should be greatly prioritized over others (this might still need some work).
+- Berry Bushes and Apple Trees now have small sprites (for when they are growing).
+- Selected tile coordinates are now visible on the planet map (bottom right corner).
+- Colonists no longer keep resources reserved in containers if their job prematurely changed.
+- Holes will now properly fill with water if adjacent to water in situations where they wouldn't.
+
+### 2020.1 (?)
+- Terrain Generation
+	- Selecting a map location next to a mountain on the planet-view will now make mountains on that side of the map.
+	- Selecting a map location next to water will now make larger bodies of water on the map edge than it previously did.
+	- Clay veins no longer appear in very cold regions (less than -30C).
+	- Gold, Silver, Bronze, Iron, and Copper can now be found in veins in stone formations.
+	- Shrubs are now Bushes.
+	- Made some tweaks to the precipitation and temperature distribution/calculation.
+	- Added large rivers that flow through maps when choosing to settle on a tile that has a river on the planet view.
+	- Added an option to randomly offset the temperature calculation of a planet to get more interesting temperature variation.
+	- The stone type will now change depending on the biome that tile is in (i.e. in a Desert: Stone will be Sandstone, etc.).
+	- Walking over water is now 25% slower than previously.
+	- If there is no possible place to spawn colonists on a map, the tiles that are flattened by the generator now use the biome’s grown tile type rather than Grass.
+	- Fixed memory leak/plant growth errors related to planets incorrectly generating plants and then losing them.
+	- Added palm trees to tropical climates.
+- Colonists
+	- Colonists and other living things now have genders and their names are based on their gender.
+	- Added Clothing
+		- Clothing:
+			- Small Backpack (increases carrying capacity)
+			- Parkas
+			- Shirts
+		- Clothing is created in a Loom using Cloth.
+		- All clothing has an associated insulation and water resistance value which protects colonists from cold/weather.
+	- Added a Water need.
+	- Colonists will now only empty their inventories when there is an available non-full container and their inventory is full, or their inventory has some amount of resources and there are no jobs the colonist can do.
+	- Colonists can now have job types prioritized or blocked completely to better control what a colonist will do.
+	- Colonist professions are now more detailed. A profession will automatically strongly prioritize jobs related to that profession (i.e. a Tailor will prioritize making clothes, cloth, etc.) and through the prioritization table, they can be allowed to do additional types of jobs.
+	- Fixed issue where colonists would not wander around if there existed an accessible but non-completable job.
+- Objects
+	- Object rotation no longer resets after placing an object.
+	- Objects now have integrity (essentially their health).
+		- Integrity is displayed as a bar on the tile information panel when the tile with the object on it is moused-over.
+	- Objects can now take up multiple tiles worth of space.
+	- Added objects:
+		- Wooden Tables (merges with neighbouring tables to form larger/differently shaped tables).
+		- Anvil (for shaping non-ore metals into other resources).
+		- Wooden Drawers (container).
+		- Wooden Chairs.
+		- Splitting Log (same functionality as Splitting Block but only requires 1 Log instead of 1 Stone).
+		- Loom (used for turning cloth into clothing).
+		- Wooden Bridge (allows faster water crossings, supports building on water).
+		- Trading Post (traders will go to the nearest trading post upon entering the map, resources stored in a trading post will be available to trade).
+	- Cotton Gin now requires 2 Iron instead of 2 Stone.
+	- Cotton Gins can now be rotated.
+	- Wooden Chests can now be rotated.
+	- Fixed issue where light colours were being parsed incorrectly (lime green lights instead of orange).
+	- Lights now have a larger effective range.
+	- Changed build times of many objects (mostly decreased).
+	- Added a Fences subgroup for Fence objects (e.g. Wooden Fence).
+	- Adding an object to a tile now properly changes the tiles walk speed.
+	- Objects with multiple variations are now combined and the specific variation desired can be selected by right clicking on the object button (e.g. Walls have Wooden Walls, Brick Walls, Granite Walls, etc.)
+	- Removing an object now returns all resources used to create it.
+- Resources
+	- Resources now have weights and volumes associated with each unit of them.
+	- Inventory size is now limited by the weight and volume (when being carried) and just the volume when in a container.
+	- Added the resources:
+		- Leaf.
+		- Sap.
+		- Gold/Silver/Bronze (ore, bar, and coin).
+		- Iron (ore and bar).
+		- Copper (ore and bar).
+		- Cactus (cactus’ drop when chopped down).
+		- Many stone-based resources.
+	- Added images for many resources.
+	- Added missing fuel energy value for Cloth.
+	- Renamed resource group “Natural” to “Natural Resources”.
+	- Changed Berries to Blueberry.
+- Farming
+	- Planting a farm now changes its terrain type to mud.
+- Camera
+	- Camera position at the start of a new game is now centered on the colonists.
+	- Camera can now be moved by holding down the middle mouse button and moving the mouse.
+	- Having the cursor over a colonist’s name tag no longer prevents zooming in and out.
+	- Pressing or holding F to focus on something no longer automatically zooms in the camera, the previous zoom level is maintained.
+	- Added smooth zooming.
+	- Reduced occurrences of jump-zooming (instantly zooming all of the way in or out).
+- Saving/Loading
+	- Save files from an incompatible save version can no longer be loaded (going to look into adding backwards-compatibility for save files in the future).
+	- Fixed issues with settings file causing it to not properly save and load data.
+	- Rewrote and reorganized game save files to be more reliable and extensible at the expense of slightly increased initial save file size. Subsequent save files should be significantly smaller as only changes to the map are saved rather than re-saving the entire map in every save file.
+	- Games are now saved and created in a Universe/Planet/Colony configuration.
+	- Switched save image loading to using direct file loading rather than web request formatting.
+- User Interface
+	- Job elements in the job list now show more detailed information about what the job is doing (e.g. creating a resource shows the resource being created, etc.).
+	- Colonists with remove jobs now properly show the name of the object they are removing when selected.
+	- The most recent object instance element in the Objects list now has the correct sprite.
+	- Colonist name panels now have a border indicating the current health of the colonist (from green to red).
+	- Job elements will indicate the priority of the job with a yellow (>0), grey (0), or red (<0) background on the job component of the job element.
+	- Redesigned and improved aspects of the colonist information and tile information panels.
+	- The primary resource on a tile is now shown on the tile information panel.
+	- Needs and skills are now sorted by highest (value/skill) to lowest.
+	- A colonist’s distance to the job they have taken is now shown in orange on job elements before they start completing the job.
+	- Happiness modifiers are now properly added/removed from their list.
+	- Caravans on the map are displayed below the Colonists list and above the Jobs list.
+	- Resources now display their available amount / total amount when the values are different. Available amount only includes resources that aren’t reserved whereas total amount includes all resources that exist on the map.
+	- Changed the resource amount displayed in many places from total amount to available amount.
+	- Added a Clothes list next to the existing Resources list. Clothes and Resources that the colony does not currently have will not be shown in the list. Both lists can now also be searched to more quickly find the resources/clothes you’re looking for.
+	- Made all UI elements have rounded corners.
+	- Redesigned many UI elements.
+	- Removed Exit to Main Menu button on the Pause Menu as there are some roadblocks to getting it working again.
+	- Changing UI and resolution settings should now properly resize the main menu background.
+	- Actual layer names now shown instead of the layer number.
+	- Added automatically suggested names for new universes, planets, and colonies.
+	- Job elements now list the resources required to complete the job.
+	- Significantly changed and improved the interface for manufacturing/crafting resources.
+	- Jobs to craft a resource now show the resource being crafted on the map and in the UI.
+- Jobs
+	- Priority of jobs can now be modified. Priority can be increased or decreased by any amount. Priority default is 0. Colonists will check if they can complete jobs with a higher priority before jobs with a lower priority. Job priority can be reset and changed with the two draggable commands in Command > Priority > Increase/Decrease Priority. Cancelling a job will also remove its priority.
+	- The cancel command has been moved to Command > Cancel > Cancel rather than having a standalone button for it.
+	- The Maker profession (for Create Resource jobs) now works.
+	- Colonist’s who are a Builder and have the resources to make a container (chest, basket, etc.) will prioritize that over other building jobs.
+	- Planting plants can only be done in biomes that have living plants that aren’t cactus’.
+	- Most jobs now have reduced completion times.
+	- Fixed an issue where cancelling a job would not properly cancel its associated job.
+	- Fixed an issue where cancelling a job would not release the resources the colonist had reserved in a container.
+	- Fixed an issue where cancelling jobs would not update the job list UI.
+	- Fixed an issue where an empty inventory job could be endlessly duplicated and lost.
+	- Added ability to plant specific plants (Tree, Bush, Cactus) where applicable rather than the generic Plant Plant job.
+- Time
+	- Fixed minutes skipping the 00 minute and going straight from 59 to 01.
+	- Fixed issues where some lighting updates wouldn’t happen until the in-game minutes hit a multiple of 10 (i.e. objects would not be properly lit until that occured).
+	- Changed maximum time speed modifier from 5x to 3x.
+- Trading
+	- Added caravans of traders which will occasionally enter the map carrying various types of resources with them to trade.
+
+> In future updates, traders will change their prices depending on the supply/demand of resources where they originated, and confirming a trade will cause the colonists and traders to meet and exchange resources rather than magically teleporting them as happens currently.
+
+- Pathfinding
+	- Decreased weight of “Region Block Distance” on path cost.
+	- Increased weight of the tile walk speed on path cost.
+	- Added walking over liquid water as a cost factor.
+- Optimization
+	- Improved performance of various tasks.
+	- Fixed issue where job area selection indicators were not cleared from memory resulting in a build-up and significant performance degradation over time.
+- Miscellaneous Fixes
+	- Added handling for error that occured when there was an issue determining which sprite to use when a colonist is moving.

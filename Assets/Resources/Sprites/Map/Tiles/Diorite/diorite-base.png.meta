@@ -1,12 +1,18 @@
 fileFormatVersion: 2
 guid: de58af0845fab734d978ab94f41e4d83
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: stone-base_0
-    21300002: basalt-base_0
-    21300004: diorite-base_0
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: stone-base_0
+  - first:
+      213: 21300002
+    second: basalt-base_0
+  - first:
+      213: 21300004
+    second: diorite-base_0
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -61,7 +67,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -72,7 +78,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -83,6 +90,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -102,6 +110,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: ba2532890c61c8f49a79388e24b0faad
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -110,10 +119,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 3056fb2ebeeea44479a2ae08e929358a
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

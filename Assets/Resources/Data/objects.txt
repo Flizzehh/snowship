@@ -496,7 +496,7 @@
 				<Object>
 					<Type>PlantTree
 					<Layer>0
-					<Plants>WideTree:None,ThinTree:None
+					<Plants>WideTree:None,ThinTree:None,PalmTree:None
 					<TimeToBuild>2
 					<CommonResources>TreeSeed:1
 					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,LivingTreeOrBushBiomes

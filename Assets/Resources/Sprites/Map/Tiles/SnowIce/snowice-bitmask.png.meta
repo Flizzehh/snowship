@@ -1,104 +1,291 @@
 fileFormatVersion: 2
 guid: 7213e8b63e9aab94ab6e794f6ff090f6
-timeCreated: 1495476954
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: ice-bitmask_0
-    21300002: ice-bitmask_1
-    21300004: ice-bitmask_2
-    21300006: ice-bitmask_3
-    21300008: ice-bitmask_4
-    21300010: ice-bitmask_5
-    21300012: ice-bitmask_6
-    21300014: ice-bitmask_7
-    21300016: ice-bitmask_8
-    21300018: ice-bitmask_9
-    21300020: ice-bitmask_10
-    21300022: ice-bitmask_11
-    21300024: ice-bitmask_12
-    21300026: ice-bitmask_13
-    21300028: ice-bitmask_14
-    21300030: ice-bitmask_15
-    21300032: ice-bitmask_16
-    21300034: ice-bitmask_17
-    21300036: ice-bitmask_18
-    21300038: ice-bitmask_19
-    21300040: ice-bitmask_20
-    21300042: ice-bitmask_21
-    21300044: ice-bitmask_22
-    21300046: ice-bitmask_23
-    21300048: ice-bitmask_24
-    21300050: ice-bitmask_25
-    21300052: ice-bitmask_26
-    21300054: ice-bitmask_27
-    21300056: ice-bitmask_28
-    21300058: ice-bitmask_29
-    21300060: ice-bitmask_30
-    21300062: ice-bitmask_31
-    21300064: ice-bitmask_32
-    21300066: ice-bitmask_33
-    21300068: ice-bitmask_34
-    21300070: ice-bitmask_35
-    21300072: ice-bitmask_36
-    21300074: ice-bitmask_37
-    21300076: ice-bitmask_38
-    21300078: ice-bitmask_39
-    21300080: ice-bitmask_40
-    21300082: ice-bitmask_41
-    21300084: ice-bitmask_42
-    21300086: ice-bitmask_43
-    21300088: ice-bitmask_44
-    21300090: ice-bitmask_45
-    21300092: ice-bitmask_46
-    21300094: snowice-bitmask_0
-    21300096: snowice-bitmask_1
-    21300098: snowice-bitmask_2
-    21300100: snowice-bitmask_3
-    21300102: snowice-bitmask_4
-    21300104: snowice-bitmask_5
-    21300106: snowice-bitmask_6
-    21300108: snowice-bitmask_7
-    21300110: snowice-bitmask_8
-    21300112: snowice-bitmask_9
-    21300114: snowice-bitmask_10
-    21300116: snowice-bitmask_11
-    21300118: snowice-bitmask_12
-    21300120: snowice-bitmask_13
-    21300122: snowice-bitmask_14
-    21300124: snowice-bitmask_15
-    21300126: snowice-bitmask_16
-    21300128: snowice-bitmask_17
-    21300130: snowice-bitmask_18
-    21300132: snowice-bitmask_19
-    21300134: snowice-bitmask_20
-    21300136: snowice-bitmask_21
-    21300138: snowice-bitmask_22
-    21300140: snowice-bitmask_23
-    21300142: snowice-bitmask_24
-    21300144: snowice-bitmask_25
-    21300146: snowice-bitmask_26
-    21300148: snowice-bitmask_27
-    21300150: snowice-bitmask_28
-    21300152: snowice-bitmask_29
-    21300154: snowice-bitmask_30
-    21300156: snowice-bitmask_31
-    21300158: snowice-bitmask_32
-    21300160: snowice-bitmask_33
-    21300162: snowice-bitmask_34
-    21300164: snowice-bitmask_35
-    21300166: snowice-bitmask_36
-    21300168: snowice-bitmask_37
-    21300170: snowice-bitmask_38
-    21300172: snowice-bitmask_39
-    21300174: snowice-bitmask_40
-    21300176: snowice-bitmask_41
-    21300178: snowice-bitmask_42
-    21300180: snowice-bitmask_43
-    21300182: snowice-bitmask_44
-    21300184: snowice-bitmask_45
-    21300186: snowice-bitmask_46
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: ice-bitmask_0
+  - first:
+      213: 21300002
+    second: ice-bitmask_1
+  - first:
+      213: 21300004
+    second: ice-bitmask_2
+  - first:
+      213: 21300006
+    second: ice-bitmask_3
+  - first:
+      213: 21300008
+    second: ice-bitmask_4
+  - first:
+      213: 21300010
+    second: ice-bitmask_5
+  - first:
+      213: 21300012
+    second: ice-bitmask_6
+  - first:
+      213: 21300014
+    second: ice-bitmask_7
+  - first:
+      213: 21300016
+    second: ice-bitmask_8
+  - first:
+      213: 21300018
+    second: ice-bitmask_9
+  - first:
+      213: 21300020
+    second: ice-bitmask_10
+  - first:
+      213: 21300022
+    second: ice-bitmask_11
+  - first:
+      213: 21300024
+    second: ice-bitmask_12
+  - first:
+      213: 21300026
+    second: ice-bitmask_13
+  - first:
+      213: 21300028
+    second: ice-bitmask_14
+  - first:
+      213: 21300030
+    second: ice-bitmask_15
+  - first:
+      213: 21300032
+    second: ice-bitmask_16
+  - first:
+      213: 21300034
+    second: ice-bitmask_17
+  - first:
+      213: 21300036
+    second: ice-bitmask_18
+  - first:
+      213: 21300038
+    second: ice-bitmask_19
+  - first:
+      213: 21300040
+    second: ice-bitmask_20
+  - first:
+      213: 21300042
+    second: ice-bitmask_21
+  - first:
+      213: 21300044
+    second: ice-bitmask_22
+  - first:
+      213: 21300046
+    second: ice-bitmask_23
+  - first:
+      213: 21300048
+    second: ice-bitmask_24
+  - first:
+      213: 21300050
+    second: ice-bitmask_25
+  - first:
+      213: 21300052
+    second: ice-bitmask_26
+  - first:
+      213: 21300054
+    second: ice-bitmask_27
+  - first:
+      213: 21300056
+    second: ice-bitmask_28
+  - first:
+      213: 21300058
+    second: ice-bitmask_29
+  - first:
+      213: 21300060
+    second: ice-bitmask_30
+  - first:
+      213: 21300062
+    second: ice-bitmask_31
+  - first:
+      213: 21300064
+    second: ice-bitmask_32
+  - first:
+      213: 21300066
+    second: ice-bitmask_33
+  - first:
+      213: 21300068
+    second: ice-bitmask_34
+  - first:
+      213: 21300070
+    second: ice-bitmask_35
+  - first:
+      213: 21300072
+    second: ice-bitmask_36
+  - first:
+      213: 21300074
+    second: ice-bitmask_37
+  - first:
+      213: 21300076
+    second: ice-bitmask_38
+  - first:
+      213: 21300078
+    second: ice-bitmask_39
+  - first:
+      213: 21300080
+    second: ice-bitmask_40
+  - first:
+      213: 21300082
+    second: ice-bitmask_41
+  - first:
+      213: 21300084
+    second: ice-bitmask_42
+  - first:
+      213: 21300086
+    second: ice-bitmask_43
+  - first:
+      213: 21300088
+    second: ice-bitmask_44
+  - first:
+      213: 21300090
+    second: ice-bitmask_45
+  - first:
+      213: 21300092
+    second: ice-bitmask_46
+  - first:
+      213: 21300094
+    second: snowice-bitmask_0
+  - first:
+      213: 21300096
+    second: snowice-bitmask_1
+  - first:
+      213: 21300098
+    second: snowice-bitmask_2
+  - first:
+      213: 21300100
+    second: snowice-bitmask_3
+  - first:
+      213: 21300102
+    second: snowice-bitmask_4
+  - first:
+      213: 21300104
+    second: snowice-bitmask_5
+  - first:
+      213: 21300106
+    second: snowice-bitmask_6
+  - first:
+      213: 21300108
+    second: snowice-bitmask_7
+  - first:
+      213: 21300110
+    second: snowice-bitmask_8
+  - first:
+      213: 21300112
+    second: snowice-bitmask_9
+  - first:
+      213: 21300114
+    second: snowice-bitmask_10
+  - first:
+      213: 21300116
+    second: snowice-bitmask_11
+  - first:
+      213: 21300118
+    second: snowice-bitmask_12
+  - first:
+      213: 21300120
+    second: snowice-bitmask_13
+  - first:
+      213: 21300122
+    second: snowice-bitmask_14
+  - first:
+      213: 21300124
+    second: snowice-bitmask_15
+  - first:
+      213: 21300126
+    second: snowice-bitmask_16
+  - first:
+      213: 21300128
+    second: snowice-bitmask_17
+  - first:
+      213: 21300130
+    second: snowice-bitmask_18
+  - first:
+      213: 21300132
+    second: snowice-bitmask_19
+  - first:
+      213: 21300134
+    second: snowice-bitmask_20
+  - first:
+      213: 21300136
+    second: snowice-bitmask_21
+  - first:
+      213: 21300138
+    second: snowice-bitmask_22
+  - first:
+      213: 21300140
+    second: snowice-bitmask_23
+  - first:
+      213: 21300142
+    second: snowice-bitmask_24
+  - first:
+      213: 21300144
+    second: snowice-bitmask_25
+  - first:
+      213: 21300146
+    second: snowice-bitmask_26
+  - first:
+      213: 21300148
+    second: snowice-bitmask_27
+  - first:
+      213: 21300150
+    second: snowice-bitmask_28
+  - first:
+      213: 21300152
+    second: snowice-bitmask_29
+  - first:
+      213: 21300154
+    second: snowice-bitmask_30
+  - first:
+      213: 21300156
+    second: snowice-bitmask_31
+  - first:
+      213: 21300158
+    second: snowice-bitmask_32
+  - first:
+      213: 21300160
+    second: snowice-bitmask_33
+  - first:
+      213: 21300162
+    second: snowice-bitmask_34
+  - first:
+      213: 21300164
+    second: snowice-bitmask_35
+  - first:
+      213: 21300166
+    second: snowice-bitmask_36
+  - first:
+      213: 21300168
+    second: snowice-bitmask_37
+  - first:
+      213: 21300170
+    second: snowice-bitmask_38
+  - first:
+      213: 21300172
+    second: snowice-bitmask_39
+  - first:
+      213: 21300174
+    second: snowice-bitmask_40
+  - first:
+      213: 21300176
+    second: snowice-bitmask_41
+  - first:
+      213: 21300178
+    second: snowice-bitmask_42
+  - first:
+      213: 21300180
+    second: snowice-bitmask_43
+  - first:
+      213: 21300182
+    second: snowice-bitmask_44
+  - first:
+      213: 21300184
+    second: snowice-bitmask_45
+  - first:
+      213: 21300186
+    second: snowice-bitmask_46
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -106,6 +293,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -114,6 +303,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -121,10 +312,13 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 0
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -133,33 +327,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -175,7 +379,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e7305410000000000800000000000000
+      internalID: 21300094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_1
       rect:
@@ -188,7 +400,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 08305410000000000800000000000000
+      internalID: 21300096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_2
       rect:
@@ -201,7 +421,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 28305410000000000800000000000000
+      internalID: 21300098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_3
       rect:
@@ -214,7 +442,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 48305410000000000800000000000000
+      internalID: 21300100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_4
       rect:
@@ -227,7 +463,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 68305410000000000800000000000000
+      internalID: 21300102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_5
       rect:
@@ -240,7 +484,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 88305410000000000800000000000000
+      internalID: 21300104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_6
       rect:
@@ -253,7 +505,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a8305410000000000800000000000000
+      internalID: 21300106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_7
       rect:
@@ -266,7 +526,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c8305410000000000800000000000000
+      internalID: 21300108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_8
       rect:
@@ -279,7 +547,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e8305410000000000800000000000000
+      internalID: 21300110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_9
       rect:
@@ -292,7 +568,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 09305410000000000800000000000000
+      internalID: 21300112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_10
       rect:
@@ -305,7 +589,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 29305410000000000800000000000000
+      internalID: 21300114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_11
       rect:
@@ -318,7 +610,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 49305410000000000800000000000000
+      internalID: 21300116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_12
       rect:
@@ -331,7 +631,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 69305410000000000800000000000000
+      internalID: 21300118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_13
       rect:
@@ -344,7 +652,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 89305410000000000800000000000000
+      internalID: 21300120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_14
       rect:
@@ -357,7 +673,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a9305410000000000800000000000000
+      internalID: 21300122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_15
       rect:
@@ -370,7 +694,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c9305410000000000800000000000000
+      internalID: 21300124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_16
       rect:
@@ -383,7 +715,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e9305410000000000800000000000000
+      internalID: 21300126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_17
       rect:
@@ -396,7 +736,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0a305410000000000800000000000000
+      internalID: 21300128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_18
       rect:
@@ -409,7 +757,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2a305410000000000800000000000000
+      internalID: 21300130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_19
       rect:
@@ -422,7 +778,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4a305410000000000800000000000000
+      internalID: 21300132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_20
       rect:
@@ -435,7 +799,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6a305410000000000800000000000000
+      internalID: 21300134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_21
       rect:
@@ -448,7 +820,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8a305410000000000800000000000000
+      internalID: 21300136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_22
       rect:
@@ -461,7 +841,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: aa305410000000000800000000000000
+      internalID: 21300138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_23
       rect:
@@ -474,7 +862,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ca305410000000000800000000000000
+      internalID: 21300140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_24
       rect:
@@ -487,7 +883,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ea305410000000000800000000000000
+      internalID: 21300142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_25
       rect:
@@ -500,7 +904,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0b305410000000000800000000000000
+      internalID: 21300144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_26
       rect:
@@ -513,7 +925,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2b305410000000000800000000000000
+      internalID: 21300146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_27
       rect:
@@ -526,7 +946,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4b305410000000000800000000000000
+      internalID: 21300148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_28
       rect:
@@ -539,7 +967,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6b305410000000000800000000000000
+      internalID: 21300150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_29
       rect:
@@ -552,7 +988,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8b305410000000000800000000000000
+      internalID: 21300152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_30
       rect:
@@ -565,7 +1009,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ab305410000000000800000000000000
+      internalID: 21300154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_31
       rect:
@@ -578,7 +1030,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cb305410000000000800000000000000
+      internalID: 21300156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_32
       rect:
@@ -591,7 +1051,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: eb305410000000000800000000000000
+      internalID: 21300158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_33
       rect:
@@ -604,7 +1072,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0c305410000000000800000000000000
+      internalID: 21300160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_34
       rect:
@@ -617,7 +1093,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2c305410000000000800000000000000
+      internalID: 21300162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_35
       rect:
@@ -630,7 +1114,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4c305410000000000800000000000000
+      internalID: 21300164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_36
       rect:
@@ -643,7 +1135,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6c305410000000000800000000000000
+      internalID: 21300166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_37
       rect:
@@ -656,7 +1156,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8c305410000000000800000000000000
+      internalID: 21300168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_38
       rect:
@@ -669,7 +1177,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ac305410000000000800000000000000
+      internalID: 21300170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_39
       rect:
@@ -682,7 +1198,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cc305410000000000800000000000000
+      internalID: 21300172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_40
       rect:
@@ -695,7 +1219,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ec305410000000000800000000000000
+      internalID: 21300174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_41
       rect:
@@ -708,7 +1240,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0d305410000000000800000000000000
+      internalID: 21300176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_42
       rect:
@@ -721,7 +1261,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2d305410000000000800000000000000
+      internalID: 21300178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_43
       rect:
@@ -734,7 +1282,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4d305410000000000800000000000000
+      internalID: 21300180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_44
       rect:
@@ -747,7 +1303,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6d305410000000000800000000000000
+      internalID: 21300182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_45
       rect:
@@ -760,7 +1324,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8d305410000000000800000000000000
+      internalID: 21300184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snowice-bitmask_46
       rect:
@@ -773,9 +1345,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ad305410000000000800000000000000
+      internalID: 21300186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

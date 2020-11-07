@@ -1,25 +1,57 @@
 fileFormatVersion: 2
 guid: 37fb7b97dc45c284e8192a2b9f69b174
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: bed-comfy_0
-    21300002: bed-comfy_1
-    21300004: bed-comfy_2
-    21300006: bed-comfy_3
-    21300008: wooden-bed-bitmask_0
-    21300010: wooden-bed-bitmask_1
-    21300012: wooden-bed-bitmask_2
-    21300014: wooden-bed-bitmask_3
-    21300016: stone-furnace-active_0
-    21300018: stone-furnace-active_1
-    21300020: stone-furnace-active_2
-    21300022: stone-furnace-active_3
-    21300024: basalt-furnace-active_0
-    21300026: basalt-furnace-active_1
-    21300028: basalt-furnace-active_2
-    21300030: basalt-furnace-active_3
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: bed-comfy_0
+  - first:
+      213: 21300002
+    second: bed-comfy_1
+  - first:
+      213: 21300004
+    second: bed-comfy_2
+  - first:
+      213: 21300006
+    second: bed-comfy_3
+  - first:
+      213: 21300008
+    second: wooden-bed-bitmask_0
+  - first:
+      213: 21300010
+    second: wooden-bed-bitmask_1
+  - first:
+      213: 21300012
+    second: wooden-bed-bitmask_2
+  - first:
+      213: 21300014
+    second: wooden-bed-bitmask_3
+  - first:
+      213: 21300016
+    second: stone-furnace-active_0
+  - first:
+      213: 21300018
+    second: stone-furnace-active_1
+  - first:
+      213: 21300020
+    second: stone-furnace-active_2
+  - first:
+      213: 21300022
+    second: stone-furnace-active_3
+  - first:
+      213: 21300024
+    second: basalt-furnace-active_0
+  - first:
+      213: 21300026
+    second: basalt-furnace-active_1
+  - first:
+      213: 21300028
+    second: basalt-furnace-active_2
+  - first:
+      213: 21300030
+    second: basalt-furnace-active_3
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -74,7 +106,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -85,6 +117,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -104,6 +137,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 2cc15b6667d1f374f9f286fd5c611b7d
+      internalID: 21300024
       vertices: []
       indices: 
       edges: []
@@ -124,6 +158,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: ff0cae9ade47b68499d021995119b6f6
+      internalID: 21300026
       vertices: []
       indices: 
       edges: []
@@ -144,6 +179,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 484f9cfee9e7c8645ab3a73b923f7c32
+      internalID: 21300028
       vertices: []
       indices: 
       edges: []
@@ -164,6 +200,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 78c94ccc8bc2f5348b04fdfcb94a4b62
+      internalID: 21300030
       vertices: []
       indices: 
       edges: []
@@ -172,10 +209,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: bf3b4f2d6ba2482488ce392e1e67775f
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

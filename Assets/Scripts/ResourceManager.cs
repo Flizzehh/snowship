@@ -567,9 +567,9 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void UpdateDesiredAmountText() {
-			if (GameManager.uiM.selectedMTO != null && GameManager.uiM.selectedMTO.createResource == this) {
-				GameManager.uiM.selectedMTOPanel.obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>().text = desiredAmount.ToString();
-			}
+			//if (GameManager.uiM.selectedManufacturingObject != null && GameManager.uiM.selectedManufacturingObject.createResource == this) {
+			//	GameManager.uiM.selectedMTOPanel.obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>().text = desiredAmount.ToString();
+			//}
 			resourceListElement.desiredAmountInput.text = desiredAmount.ToString();
 		}
 
@@ -659,6 +659,10 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
+	public List<Resource> GetResources() {
+		return resources.Values.ToList();
+	}
+
 	public Resource GetResourceByString(string resourceString) {
 		return GetResourceByEnum((ResourceEnum)Enum.Parse(typeof(ResourceEnum), resourceString));
 	}
@@ -667,8 +671,26 @@ public class ResourceManager : BaseManager {
 		return resources[resourceEnum];
 	}
 
-	public List<Resource> GetResources() {
-		return resources.Values.ToList();
+	public List<Resource> GetResourcesByManufacturingObject(ManufacturingObject manufacturingObject) {
+		List<Resource> resources = new List<Resource>();
+		foreach (Resource resource in GetResourcesInClass(ResourceClassEnum.Manufacturable)) {
+			foreach (ObjectSubGroupEnum manufacturingObjectSubGroupEnum in resource.manufacturingObjects.Keys) {
+				if (manufacturingObject.prefab.subGroupType == manufacturingObjectSubGroupEnum) {
+					if (resource.manufacturingObjects[manufacturingObjectSubGroupEnum] == null) {
+						resources.Add(resource);
+						break;
+					} else {
+						foreach (ObjectEnum manufacturingObjectEnum in resource.manufacturingObjects[manufacturingObjectSubGroupEnum]) {
+							if (manufacturingObjectEnum == manufacturingObject.prefab.type) {
+								resources.Add(resource);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		return resources;
 	}
 
 	public class Food : Resource {
@@ -891,13 +913,11 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public void CreateResource(Resource resource, int amount, ManufacturingObject manufacturingTileObject) {
-		for (int i = 0; i < amount; i++) {
-			JobManager.Job job = new JobManager.Job(manufacturingTileObject.tile, GetObjectPrefabByEnum(ObjectEnum.CreateResource), null, 0);
-			job.SetCreateResourceData(resource, manufacturingTileObject);
-			GameManager.jobM.CreateJob(job);
-			manufacturingTileObject.jobBacklog.Add(job);
-		}
+	public JobManager.Job CreateResource(ManufacturableResourceInstance resource, ManufacturingObject manufacturingTileObject) {
+		JobManager.Job job = new JobManager.Job(manufacturingTileObject.tile, GetObjectPrefabByEnum(ObjectEnum.CreateResource), null, 0);
+		job.SetCreateResourceData(resource);
+		GameManager.jobM.CreateJob(job);
+		return job;
 	}
 
 	public interface IInventory {
@@ -993,7 +1013,7 @@ public class ResourceManager : BaseManager {
 			GameManager.uiM.SetSelectedColonistInformation(true);
 			GameManager.uiM.SetSelectedTraderMenu();
 			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.SetSelectedTradingPostInfo();
+			GameManager.uiM.UpdateSelectedTradingPostInfo();
 			GameManager.jobM.UpdateColonistJobs();
 
 			//return remainingAmount;
@@ -1018,7 +1038,7 @@ public class ResourceManager : BaseManager {
 			GameManager.uiM.SetSelectedColonistInformation(true);
 			GameManager.uiM.SetSelectedTraderMenu();
 			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.SetSelectedTradingPostInfo();
+			GameManager.uiM.UpdateSelectedTradingPostInfo();
 			return allResourcesFound;
 		}
 
@@ -1035,7 +1055,7 @@ public class ResourceManager : BaseManager {
 			GameManager.uiM.SetSelectedColonistInformation(true);
 			GameManager.uiM.SetSelectedTraderMenu();
 			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.SetSelectedTradingPostInfo();
+			GameManager.uiM.UpdateSelectedTradingPostInfo();
 			return reservedResourcesByHuman;
 		}
 
@@ -1056,7 +1076,7 @@ public class ResourceManager : BaseManager {
 			GameManager.uiM.SetSelectedColonistInformation(true);
 			GameManager.uiM.SetSelectedTraderMenu();
 			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.SetSelectedTradingPostInfo();
+			GameManager.uiM.UpdateSelectedTradingPostInfo();
 		}
 
 		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, ResourceAmount resourceAmount, bool limitToMaxAmount) {
@@ -2100,8 +2120,8 @@ public class ResourceManager : BaseManager {
 			case ObjectInstanceType.ManufacturingObject:
 				ManufacturingObject manufacturingTileObject = (ManufacturingObject)instance;
 
-				if (GameManager.uiM.selectedMTO == manufacturingTileObject) {
-					GameManager.uiM.SetSelectedManufacturingTileObject(null);
+				if (GameManager.uiM.selectedManufacturingObject == manufacturingTileObject) {
+					GameManager.uiM.SetSelectedManufacturingObject(null);
 				}
 
 				manufacturingObjectInstances.Remove(manufacturingTileObject);
@@ -2175,7 +2195,7 @@ public class ResourceManager : BaseManager {
 		return instance;
 	}
 
-	public class ObjectInstance {
+	public class ObjectInstance : UIManager.ISelectable {
 
 		public readonly TileManager.Tile tile; // The tile that this object covers that is closest to the zeroPointTile (usually they are the same tile)
 		public readonly List<TileManager.Tile> additionalTiles = new List<TileManager.Tile>();
@@ -2255,14 +2275,14 @@ public class ResourceManager : BaseManager {
 			sr.color = new Color(newColour.r, newColour.g, newColour.b, 1f);
 		}
 
-		public void SetActiveSprite(JobManager.Job job) {
-			if (active) {
+		public void SetActiveSprite(JobManager.Job job, bool jobActive) {
+			if (active && jobActive) {
 				if (prefab.GetActiveSpritesForVariation(variation).Count > 0) {
 					if (prefab.type == ObjectEnum.SplittingBlock) {
 						int customActiveSpriteIndex = 0;
-						if (job.createResource.type == ResourceEnum.Wood) {
+						if (job.createResource.resource.type == ResourceEnum.Wood) {
 							customActiveSpriteIndex = 0;
-						} else if (job.createResource.type == ResourceEnum.Firewood) {
+						} else if (job.createResource.resource.type == ResourceEnum.Firewood) {
 							customActiveSpriteIndex = 1;
 						}
 						sr.sprite = prefab.GetActiveSpritesForVariation(variation)[4 * customActiveSpriteIndex + rotationIndex];
@@ -2279,7 +2299,7 @@ public class ResourceManager : BaseManager {
 			}
 		}
 
-		public void SetActive(bool active) {
+		public virtual void SetActive(bool active) {
 			this.active = active;
 		}
 
@@ -2291,6 +2311,14 @@ public class ResourceManager : BaseManager {
 			this.visible = visible;
 
 			obj.SetActive(visible);
+		}
+
+		public void Select() {
+			throw new NotImplementedException();
+		}
+
+		public void Deselect() {
+			throw new NotImplementedException();
 		}
 	}
 
@@ -2375,18 +2403,112 @@ public class ResourceManager : BaseManager {
 
 	public List<ManufacturingObject> manufacturingObjectInstances = new List<ManufacturingObject>();
 
+	public class Priority {
+
+		public readonly int min;
+		public readonly int max;
+
+		private int priority = 0;
+
+		public Priority(int priority = 0, int min = 0, int max = 9) {
+			this.priority = priority;
+			this.min = min;
+			this.max = max;
+		}
+
+		public int Set(int priority) {
+			if (priority > max) {
+				priority = min;
+			} else if (priority < min) {
+				priority = max;
+			}
+
+			this.priority = priority;
+			
+			return this.priority;
+		}
+
+		public int Change(int amount) {
+			return Set(Get() + amount);
+		}
+
+		public int Get() {
+			return priority;
+		}
+	}
+
+	public class PriorityResourceInstance {
+		public Resource resource;
+
+		public readonly static int priorityMax = 9;
+		public Priority priority;
+
+		public PriorityResourceInstance(Resource resource, int priority) {
+			this.resource = resource;
+			
+			this.priority = new Priority(priority);
+		}
+	}
+
+	public enum CreationMethod {
+		SingleRun,
+		MaintainStock,
+		ContinuousRun
+	}
+
+	public class ManufacturableResourceInstance {
+
+		public Resource resource;
+
+		public Priority priority;
+
+		public CreationMethod creationMethod;
+		private int targetAmount;
+		private int remainingAmount;
+
+		public ManufacturingObject manufacturingObject;
+
+		public bool enableable = false;
+		public List<ResourceAmount> fuelAmounts = new List<ResourceAmount>();
+		public JobManager.Job job = null;
+
+		public ManufacturableResourceInstance(
+			Resource resource,
+			int priority,
+			CreationMethod creationMethod,
+			int targetAmount,
+			ManufacturingObject manufacturingObject,
+			int? remainingAmount = null
+		) {
+			this.resource = resource;
+			
+			this.priority = new Priority(priority);
+			
+			this.creationMethod = creationMethod;
+			this.targetAmount = targetAmount;
+			this.remainingAmount = remainingAmount == null ? targetAmount : remainingAmount.Value;
+			
+			this.manufacturingObject = manufacturingObject;
+		}
+
+		public void UpdateTargetAmount(int targetAmount) {
+			remainingAmount += this.targetAmount - targetAmount;
+			this.targetAmount = targetAmount;
+		}
+
+		public int GetTargetAmount() {
+			return targetAmount;
+		}
+
+		public int GetRemainingAmount() {
+			return remainingAmount;
+		}
+	}
+
 	public class ManufacturingObject : ObjectInstance {
 
-		public Resource createResource;
-		public bool hasEnoughRequiredResources;
-
-		public Resource fuelResource;
-		public bool hasEnoughFuel;
-		public int fuelResourcesRequired = 0;
-
-		public bool canActivate;
-
-		public List<JobManager.Job> jobBacklog = new List<JobManager.Job>();
+		public List<ManufacturableResourceInstance> resources = new List<ManufacturableResourceInstance>();
+		public List<PriorityResourceInstance> fuels = new List<PriorityResourceInstance>();
 
 		public ManufacturingObject(ObjectPrefab prefab, Variation variation, TileManager.Tile tile, int rotationIndex) : base(prefab, variation, tile, rotationIndex) {
 
@@ -2395,33 +2517,121 @@ public class ResourceManager : BaseManager {
 		public override void Update() {
 			base.Update();
 
-			hasEnoughRequiredResources = createResource != null;
-			if (createResource != null) {
-				foreach (ResourceAmount resourceAmount in createResource.manufacturingResources) {
-					if (resourceAmount.resource.GetWorldTotalAmount() < resourceAmount.amount) {
-						hasEnoughRequiredResources = false;
+			if (active) {
+				foreach (ManufacturableResourceInstance resource in resources) {
+
+					if (resource.job != null) {
+						continue;
 					}
-				}
-			}
-			if (createResource != null) {
-				if (createResource.manufacturingEnergy != 0) {
-					hasEnoughFuel = fuelResource != null;
-					if (fuelResource != null && createResource != null) {
-						fuelResourcesRequired = Mathf.CeilToInt((createResource.manufacturingEnergy) / ((float)fuelResource.fuelEnergy));
-						if (fuelResource.GetWorldTotalAmount() < fuelResourcesRequired) {
-							hasEnoughFuel = false;
+
+					resource.enableable = true;
+
+					foreach (ResourceAmount resourceAmount in resource.resource.manufacturingResources) {
+						if (resourceAmount.resource.GetAvailableAmount() < resourceAmount.amount) {
+							resource.enableable = false;
+							break;
 						}
 					}
-					canActivate = hasEnoughRequiredResources && hasEnoughFuel;
-				} else {
-					canActivate = hasEnoughRequiredResources;
+					if (!resource.enableable) {
+						continue;
+					}
+
+					if (resource.resource.manufacturingEnergy != 0) {
+						int remainingManufacturingEnergy = resource.resource.manufacturingEnergy;
+						foreach (PriorityResourceInstance fuel in fuels.OrderBy(f => f.priority.Get())) {
+							if ((fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy) >= remainingManufacturingEnergy) {
+								ResourceAmount fuelResourceAmount = new ResourceAmount(fuel.resource, Mathf.CeilToInt(remainingManufacturingEnergy / (float)fuel.resource.fuelEnergy));
+								//Debug.Log(resource.resource.name + " " + resource.resource.manufacturingEnergy + " " + fuelResourceAmount.resource.name + " " + fuelResourceAmount.amount);
+								resource.fuelAmounts.Add(fuelResourceAmount);
+								remainingManufacturingEnergy = 0;
+							} else if (fuel.resource.GetAvailableAmount() > 0) {
+								ResourceAmount fuelResourceAmount = new ResourceAmount(fuel.resource, fuel.resource.GetAvailableAmount());
+								resource.fuelAmounts.Add(fuelResourceAmount);
+								remainingManufacturingEnergy -= fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy;
+							}
+							if (remainingManufacturingEnergy <= 0) {
+								break;
+							}
+						}
+						if (remainingManufacturingEnergy > 0) {
+							resource.enableable = false;
+							resource.fuelAmounts.Clear();
+							continue;
+						}
+					}
+
+					if (resource.enableable) {
+						if (resource.creationMethod != CreationMethod.ContinuousRun) {
+							if (resource.GetTargetAmount() > resource.resource.GetAvailableAmount()) {
+								resource.job = GameManager.resourceM.CreateResource(resource, this);
+							}
+						} else {
+							resource.job = GameManager.resourceM.CreateResource(resource, this);
+						}
+					}
+
+					if (resource.fuelAmounts.Count > 0) {
+						resource.fuelAmounts.Clear();
+					}
 				}
 			}
-			if (active) {
-				if (canActivate && createResource.GetDesiredAmount() > createResource.GetWorldTotalAmount() && jobBacklog.Count < 1) {
-					GameManager.resourceM.CreateResource(createResource, 1, this);
+		}
+
+		public override void SetActive(bool active) {
+			base.SetActive(active);
+
+			if (!active) {
+				foreach (ManufacturableResourceInstance resource in resources) {
+					if (resource.job != null) {
+						GameManager.jobM.CancelJob(resource.job);
+						resource.job = null;
+					}
 				}
 			}
+		}
+
+		public ManufacturableResourceInstance ToggleResource(Resource resource, int priority) {
+			ManufacturableResourceInstance existingResource = resources.Find(r => r.resource == resource);
+			if (existingResource == null) {
+				existingResource = new ManufacturableResourceInstance(resource, priority, CreationMethod.MaintainStock, 0, this);
+				resources.Add(existingResource);
+			} else {
+				resources.Remove(existingResource);
+				if (existingResource.job != null) {
+					GameManager.jobM.CancelJob(existingResource.job);
+					existingResource.job = null;
+				}
+				existingResource = null;
+			}
+			return existingResource;
+		}
+
+		public PriorityResourceInstance ToggleFuel(Resource fuel, int priority) {
+			PriorityResourceInstance existingFuel = fuels.Find(f => f.resource == fuel);
+			if (existingFuel == null) {
+				existingFuel = new PriorityResourceInstance(fuel, priority);
+				fuels.Add(existingFuel);
+			} else {
+				fuels.Remove(existingFuel);
+				foreach (ManufacturableResourceInstance resource in resources) {
+					if (resource.fuelAmounts.Find(ra => ra.resource == fuel) != null) {
+						if (resource.job != null) {
+							GameManager.jobM.CancelJob(resource.job);
+							resource.job = null;
+						}
+					}
+				}
+				existingFuel = null;
+			}
+			return existingFuel;
+		}
+
+		public ManufacturableResourceInstance GetManufacturableResourceFromResource(Resource resource) {
+			return resources.Find(r => r.resource == resource);
+		}
+
+		public PriorityResourceInstance GetFuelFromFuelResource(Resource resource) {
+			return fuels.Find(f => f.resource == resource);
 		}
 	}
 
@@ -2514,6 +2724,7 @@ public class ResourceManager : BaseManager {
 		SnowTree,
 		ThinTree,
 		WideTree,
+		PalmTree,
 		DeadTree,
 		Bush
 	};

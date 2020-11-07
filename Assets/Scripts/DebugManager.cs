@@ -119,6 +119,7 @@ public class DebugManager : BaseManager {
 		viewshadowsto,          // viewshadowsto							-- highlights all tiles that the selected tile affects the brightness of through the day (green = earlier, pink = later)
 		viewblockingfrom,       // viewblockingfrom							-- highlights all tiles that the selected tile blocks shadows from (tiles that have shadows that were cut short because this tile was in the way)
 		viewroofs,              // viewroofs								-- higlights all tiles with a roof above it
+		viewhidden,				// viewhidden								-- shows all tiles on the map, including ones that are hidden from the player's view
 		listjobs				// listjobs (colonist)						-- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument
 	};
 
@@ -174,6 +175,7 @@ public class DebugManager : BaseManager {
 		{Commands.viewshadowsto,"viewshadowsto -- highlights all tiles that the selected tile affects the brightness of through the day (green = earlier, pink = later)" },
 		{Commands.viewblockingfrom,"viewblockingfrom -- highlights all tiles that the selected tile blocks shadows from (tiles that have shadows that were cut short because this tile was in the way)" },
 		{Commands.viewroofs,"viewroofs -- higlights all tiles with a roof above it" },
+		{Commands.viewhidden, "viewhidden -- shows all tiles on the map, including ones that are hidden from the player's view" },
 		{Commands.listjobs,"listjobs (colonist) -- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument" }
 	};
 
@@ -1384,6 +1386,15 @@ public class DebugManager : BaseManager {
 						tile.sr.sprite = GameManager.resourceM.whiteSquareSprite;
 						tile.sr.color = Color.red;
 					}
+				}
+			} else {
+				OutputToConsole("ERROR: Invalid number of parameters specified.");
+			}
+		});
+		commandFunctions.Add(Commands.viewhidden, delegate (Commands selectedCommand, List<string> parameters) {
+			if (parameters.Count == 0) {
+				foreach (TileManager.Tile tile in GameManager.colonyM.colony.map.tiles) {
+					tile.SetVisible(true);
 				}
 			} else {
 				OutputToConsole("ERROR: Invalid number of parameters specified.");

@@ -8,6 +8,7 @@ public class JobManager : BaseManager {
 	public override void Awake() {
 		selectedPrefabPreview = GameObject.Find("SelectedPrefabPreview");
 		selectedPrefabPreview.GetComponent<SpriteRenderer>().sortingOrder = 50;
+		selectedPrefabPreview.GetComponent<SpriteRenderer>().color = UIManager.GetColour(UIManager.Colours.WhiteAlpha128);
 	}
 
 	private bool changedJobList = false;
@@ -48,7 +49,7 @@ public class JobManager : BaseManager {
 
 		public UIManager.JobElement jobUIElement;
 
-		public ResourceManager.Resource createResource;
+		public ResourceManager.ManufacturableResourceInstance createResource;
 		public ResourceManager.ObjectInstance activeTileObject;
 
 		public int priority;
@@ -79,19 +80,22 @@ public class JobManager : BaseManager {
 				jPSR.sprite = prefab.GetBitmaskSpritesForVariation(variation)[rotationIndex];
 			}
 			jPSR.sortingOrder = 5 + prefab.layer; // Job Preview Sprite
-			jPSR.color = new Color(1f, 1f, 1f, 0.25f);
+			jPSR.color = UIManager.GetColour(UIManager.Colours.WhiteAlpha128);
 
 			jobProgress = prefab.timeToBuild;
 			colonistBuildTime = prefab.timeToBuild;
 		}
 
-		public void SetCreateResourceData(ResourceManager.Resource createResource, ResourceManager.ManufacturingObject manufacturingTileObject) {
-			this.createResource = createResource;
-			resourcesToBuild.AddRange(createResource.manufacturingResources);
-			if (manufacturingTileObject.fuelResource != null) {
-				resourcesToBuild.Add(new ResourceManager.ResourceAmount(manufacturingTileObject.fuelResource, manufacturingTileObject.fuelResourcesRequired));
+		public void SetCreateResourceData(ResourceManager.ManufacturableResourceInstance resource, bool addToResourcesToBuild = true) {
+			createResource = resource;
+			if (addToResourcesToBuild) {
+				resourcesToBuild.AddRange(createResource.resource.manufacturingResources);
+				if (resource.resource.manufacturingEnergy != 0) {
+					resourcesToBuild.AddRange(resource.fuelAmounts);
+				}
 			}
-			activeTileObject = manufacturingTileObject;
+			activeTileObject = resource.manufacturingObject;
+			jobPreview.GetComponent<SpriteRenderer>().sprite = resource.resource.image;
 		}
 
 		public void SetColonist(ColonistManager.Colonist colonist) {
@@ -120,6 +124,9 @@ public class JobManager : BaseManager {
 		}
 
 		public void Remove() {
+			if (jobUIElement != null) {
+				jobUIElement.Remove();
+			}
 			MonoBehaviour.Destroy(jobPreview);
 		}
 	}
@@ -165,7 +172,7 @@ public class JobManager : BaseManager {
 			return "Harvesting a farm of " + job.tile.farm.name + ".";
 		} },
 		{ JobEnum.CreateResource, delegate (Job job) {
-			return "Creating " + job.createResource.name + ".";
+			return "Creating " + job.createResource.resource.name + ".";
 		} },
 		{ JobEnum.PickupResources, delegate (Job job) {
 			return "Picking up some resources.";
@@ -221,7 +228,12 @@ public class JobManager : BaseManager {
 				Debug.LogError("Instance being removed at layer " + job.prefab.layer + " is null.");
 			}
 			foreach (ResourceManager.ResourceAmount resourceAmount in instance.prefab.commonResources) {
-				colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount / 2f), false);
+				colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+			}
+			if (instance.variation != null) {
+				foreach (ResourceManager.ResourceAmount resourceAmount in instance.variation.uniqueResources) {
+					colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+				}
 			}
 			if (instance is ResourceManager.Farm) {
 				ResourceManager.Farm farm = (ResourceManager.Farm)instance;
@@ -253,15 +265,13 @@ public class JobManager : BaseManager {
 				}
 				GameManager.uiM.SetSelectedColonistInformation(true);
 				GameManager.uiM.SetSelectedContainerInfo();
-				GameManager.uiM.SetSelectedTradingPostInfo();
+				GameManager.uiM.UpdateSelectedTradingPostInfo();
 			} else if (instance is ResourceManager.ManufacturingObject) {
 				ResourceManager.ManufacturingObject manufacturingTileObject = (ResourceManager.ManufacturingObject)instance;
-				foreach (Job removeJob in manufacturingTileObject.jobBacklog) {
-					job.jobUIElement.Remove();
+				foreach (Job removeJob in manufacturingTileObject.resources.Select(resource => resource.job)) {
 					job.Remove();
 					GameManager.jobM.jobs.Remove(job);
 				}
-				manufacturingTileObject.jobBacklog.Clear();
 			} else if (instance is ResourceManager.SleepSpot) {
 				ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)instance;
 				if (sleepSpot.occupyingColonist != null) {
@@ -383,10 +393,8 @@ public class JobManager : BaseManager {
 			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
 				colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
 			}
-			colonist.GetInventory().ChangeResourceAmount(job.createResource, job.createResource.amountCreated, false);
-			if (job.activeTileObject is ResourceManager.ManufacturingObject) {
-				((ResourceManager.ManufacturingObject)job.activeTileObject).jobBacklog.Remove(job);
-			}
+			colonist.GetInventory().ChangeResourceAmount(job.createResource.resource, job.createResource.resource.amountCreated, false);
+			job.createResource.job = null;
 		} },
 		{ JobEnum.PickupResources, delegate (ColonistManager.Colonist colonist, Job job) {
 			ResourceManager.Container container = GameManager.resourceM.GetContainerOrChildOnTile(colonist.overTile);
@@ -545,7 +553,7 @@ public class JobManager : BaseManager {
 					if (selectedPrefab.prefab.canRotate) {
 						selectedPrefabPreview.GetComponent<SpriteRenderer>().sprite = selectedPrefab.prefab.GetBitmaskSpritesForVariation(selectedPrefab.variation)[rotationIndex];
 					}
-					GameManager.uiM.SelectionSizeCanvasSetActive(false);
+					GameManager.uiM.GetSelectionSizePanel().SetActive(false);
 				}
 				SelectedPrefabPreview();
 				if (Input.GetKeyDown(KeyCode.R)) {
@@ -561,11 +569,11 @@ public class JobManager : BaseManager {
 				if (selectedPrefabPreview.activeSelf) {
 					selectedPrefabPreview.SetActive(false);
 				}
-				GameManager.uiM.SelectionSizeCanvasSetActive(true);
+				GameManager.uiM.GetSelectionSizePanel().SetActive(true);
 			}
 		} else {
 			selectedPrefabPreview.SetActive(false);
-			GameManager.uiM.SelectionSizeCanvasSetActive(false);
+			GameManager.uiM.GetSelectionSizePanel().SetActive(false);
 		}
 	}
 
@@ -797,17 +805,20 @@ public class JobManager : BaseManager {
 								addedToSelectionArea = true;
 
 								GameObject selectionIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, GameManager.resourceM.selectionParent.transform, false);
-								selectionIndicator.transform.position = tile.obj.transform.position;
+								selectionIndicator.transform.position = tile.obj.transform.position + (Vector3)selectedPrefab.prefab.anchorPositionOffset[rotationIndex]; ;
 								selectionIndicator.name = "Selection Indicator";
 								SpriteRenderer sISR = selectionIndicator.GetComponent<SpriteRenderer>();
-								sISR.sprite = Resources.Load<Sprite>(@"UI/selectionIndicator");
+								sISR.sprite = selectedPrefab.prefab.canRotate 
+									? selectedPrefab.prefab.GetBitmaskSpritesForVariation(selectedPrefab.variation)[rotationIndex] 
+									: selectedPrefab.prefab.GetBaseSpriteForVariation(selectedPrefab.variation);
 								sISR.sortingOrder = 20; // Selection Indicator Sprite
+								sISR.color = UIManager.GetColour(UIManager.Colours.WhiteAlpha64);
 								selectionIndicators.Add(selectionIndicator);
 							}
 						}
 					}
 
-					GameManager.uiM.UpdateSelectionSizePanel(smallerX - maxX, smallerY - maxY, selectionArea.Count, selectedPrefab);
+					GameManager.uiM.GetSelectionSizePanel().Update(smallerX - maxX, smallerY - maxY, selectionArea.Count);
 
 					if (Input.GetMouseButtonUp(0)) {
 						if (selectedPrefab.prefab.jobType == JobEnum.Cancel) {
@@ -835,9 +846,8 @@ public class JobManager : BaseManager {
 		}
 		foreach (Job job in removeJobs) {
 			if (job.prefab.jobType == JobEnum.CreateResource) {
-				((ResourceManager.ManufacturingObject)job.activeTileObject).jobBacklog.Remove(job);
+				job.createResource.job = null;
 			}
-			job.jobUIElement.Remove();
 			job.Remove();
 			jobs.Remove(job);
 		}
@@ -855,10 +865,7 @@ public class JobManager : BaseManager {
 					}
 				}
 				if (colonist.storedJob.prefab.jobType == JobEnum.CreateResource) {
-					((ResourceManager.ManufacturingObject)colonist.storedJob.activeTileObject).jobBacklog.Remove(colonist.storedJob);
-				}
-				if (colonist.storedJob.jobUIElement != null) {
-					colonist.storedJob.jobUIElement.Remove();
+					colonist.storedJob.createResource.job = null;
 				}
 				colonist.storedJob.Remove();
 				colonist.storedJob = null;
@@ -871,10 +878,7 @@ public class JobManager : BaseManager {
 					}
 				}
 				if (colonist.job.prefab.jobType == JobEnum.CreateResource) {
-					((ResourceManager.ManufacturingObject)colonist.job.activeTileObject).jobBacklog.Remove(colonist.job);
-				}
-				if (colonist.job.jobUIElement != null) {
-					colonist.job.jobUIElement.Remove();
+					colonist.job.createResource.job = null;
 				}
 				colonist.job.Remove();
 				colonist.job = null;
@@ -882,6 +886,41 @@ public class JobManager : BaseManager {
 				colonist.MoveToClosestWalkableTile(false);
 			}
 		}
+
+		UpdateColonistJobs();
+		GameManager.uiM.SetJobElements();
+	}
+
+	public void CancelJob(Job job) {
+		ColonistManager.Colonist colonist = GameManager.colonistM.colonists.Find(c => c.job == job || c.storedJob == job);
+		if (colonist != null) {
+			if (job.containerPickups != null) {
+				foreach (ContainerPickup containerPickup in job.containerPickups) {
+					containerPickup.container.GetInventory().ReleaseReservedResources(colonist);
+				}
+			}
+
+			if (colonist.job == job) {
+				colonist.job = null;
+				colonist.path.Clear();
+				colonist.MoveToClosestWalkableTile(false);
+			}
+
+			if (colonist.storedJob == job) {
+				colonist.storedJob = null;
+			}
+		}
+
+		if (job.prefab.jobType == JobEnum.CreateResource) {
+			job.createResource.job = null;
+		}
+
+		if (job.activeTileObject != null) {
+			job.activeTileObject.SetActiveSprite(job, false);
+		}
+
+		job.Remove();
+		jobs.Remove(job);
 
 		UpdateColonistJobs();
 		GameManager.uiM.SetJobElements();

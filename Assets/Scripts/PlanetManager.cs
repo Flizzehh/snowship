@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
 
 public class PlanetManager : BaseManager {
 
 	public static string GetRandomPlanetName() {
-		return GameManager.resourceM.GetRandomLocationName();
+		const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		string twoCharacters = new string(Enumerable.Repeat(chars, 2).Select(s => s[UnityEngine.Random.Range(0, chars.Length)]).ToArray());
+		return twoCharacters + UnityEngine.Random.Range(1000, 9999);
 	}
 
 	public static int GetRandomPlanetSeed() {
@@ -82,7 +86,7 @@ public class PlanetManager : BaseManager {
 
 		float sigma = 5.6703f * Mathf.Pow(10, -5);
 		float L = 3.846f * Mathf.Pow(10, 33) * Mathf.Pow(starMass, 3);
-		float D = distance * 1.496f * Mathf.Pow(10, 13);
+		float D = (distance + 0.2f) * 1.496f * Mathf.Pow(10, 13);
 		float A = albedo / 100f;
 		float T = greenhouse * 0.5841f;
 		float X = Mathf.Sqrt((1 - A) * L / (16 * Mathf.PI * sigma));

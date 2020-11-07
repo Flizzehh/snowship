@@ -1,151 +1,432 @@
 fileFormatVersion: 2
 guid: d3f46d7e8bd99f647b95615bbef0e3ca
-timeCreated: 1495477047
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: ice-bitmask_0
-    21300002: ice-bitmask_1
-    21300004: ice-bitmask_2
-    21300006: ice-bitmask_3
-    21300008: ice-bitmask_4
-    21300010: ice-bitmask_5
-    21300012: ice-bitmask_6
-    21300014: ice-bitmask_7
-    21300016: ice-bitmask_8
-    21300018: ice-bitmask_9
-    21300020: ice-bitmask_10
-    21300022: ice-bitmask_11
-    21300024: ice-bitmask_12
-    21300026: ice-bitmask_13
-    21300028: ice-bitmask_14
-    21300030: ice-bitmask_15
-    21300032: ice-bitmask_16
-    21300034: ice-bitmask_17
-    21300036: ice-bitmask_18
-    21300038: ice-bitmask_19
-    21300040: ice-bitmask_20
-    21300042: ice-bitmask_21
-    21300044: ice-bitmask_22
-    21300046: ice-bitmask_23
-    21300048: ice-bitmask_24
-    21300050: ice-bitmask_25
-    21300052: ice-bitmask_26
-    21300054: ice-bitmask_27
-    21300056: ice-bitmask_28
-    21300058: ice-bitmask_29
-    21300060: ice-bitmask_30
-    21300062: ice-bitmask_31
-    21300064: ice-bitmask_32
-    21300066: ice-bitmask_33
-    21300068: ice-bitmask_34
-    21300070: ice-bitmask_35
-    21300072: ice-bitmask_36
-    21300074: ice-bitmask_37
-    21300076: ice-bitmask_38
-    21300078: ice-bitmask_39
-    21300080: ice-bitmask_40
-    21300082: ice-bitmask_41
-    21300084: ice-bitmask_42
-    21300086: ice-bitmask_43
-    21300088: ice-bitmask_44
-    21300090: ice-bitmask_45
-    21300092: ice-bitmask_46
-    21300094: snowice-bitmask_0
-    21300096: snowice-bitmask_1
-    21300098: snowice-bitmask_2
-    21300100: snowice-bitmask_3
-    21300102: snowice-bitmask_4
-    21300104: snowice-bitmask_5
-    21300106: snowice-bitmask_6
-    21300108: snowice-bitmask_7
-    21300110: snowice-bitmask_8
-    21300112: snowice-bitmask_9
-    21300114: snowice-bitmask_10
-    21300116: snowice-bitmask_11
-    21300118: snowice-bitmask_12
-    21300120: snowice-bitmask_13
-    21300122: snowice-bitmask_14
-    21300124: snowice-bitmask_15
-    21300126: snowice-bitmask_16
-    21300128: snowice-bitmask_17
-    21300130: snowice-bitmask_18
-    21300132: snowice-bitmask_19
-    21300134: snowice-bitmask_20
-    21300136: snowice-bitmask_21
-    21300138: snowice-bitmask_22
-    21300140: snowice-bitmask_23
-    21300142: snowice-bitmask_24
-    21300144: snowice-bitmask_25
-    21300146: snowice-bitmask_26
-    21300148: snowice-bitmask_27
-    21300150: snowice-bitmask_28
-    21300152: snowice-bitmask_29
-    21300154: snowice-bitmask_30
-    21300156: snowice-bitmask_31
-    21300158: snowice-bitmask_32
-    21300160: snowice-bitmask_33
-    21300162: snowice-bitmask_34
-    21300164: snowice-bitmask_35
-    21300166: snowice-bitmask_36
-    21300168: snowice-bitmask_37
-    21300170: snowice-bitmask_38
-    21300172: snowice-bitmask_39
-    21300174: snowice-bitmask_40
-    21300176: snowice-bitmask_41
-    21300178: snowice-bitmask_42
-    21300180: snowice-bitmask_43
-    21300182: snowice-bitmask_44
-    21300184: snowice-bitmask_45
-    21300186: snowice-bitmask_46
-    21300188: stoneice-bitmask_0
-    21300190: stoneice-bitmask_1
-    21300192: stoneice-bitmask_2
-    21300194: stoneice-bitmask_3
-    21300196: stoneice-bitmask_4
-    21300198: stoneice-bitmask_5
-    21300200: stoneice-bitmask_6
-    21300202: stoneice-bitmask_7
-    21300204: stoneice-bitmask_8
-    21300206: stoneice-bitmask_9
-    21300208: stoneice-bitmask_10
-    21300210: stoneice-bitmask_11
-    21300212: stoneice-bitmask_12
-    21300214: stoneice-bitmask_13
-    21300216: stoneice-bitmask_14
-    21300218: stoneice-bitmask_15
-    21300220: stoneice-bitmask_16
-    21300222: stoneice-bitmask_17
-    21300224: stoneice-bitmask_18
-    21300226: stoneice-bitmask_19
-    21300228: stoneice-bitmask_20
-    21300230: stoneice-bitmask_21
-    21300232: stoneice-bitmask_22
-    21300234: stoneice-bitmask_23
-    21300236: stoneice-bitmask_24
-    21300238: stoneice-bitmask_25
-    21300240: stoneice-bitmask_26
-    21300242: stoneice-bitmask_27
-    21300244: stoneice-bitmask_28
-    21300246: stoneice-bitmask_29
-    21300248: stoneice-bitmask_30
-    21300250: stoneice-bitmask_31
-    21300252: stoneice-bitmask_32
-    21300254: stoneice-bitmask_33
-    21300256: stoneice-bitmask_34
-    21300258: stoneice-bitmask_35
-    21300260: stoneice-bitmask_36
-    21300262: stoneice-bitmask_37
-    21300264: stoneice-bitmask_38
-    21300266: stoneice-bitmask_39
-    21300268: stoneice-bitmask_40
-    21300270: stoneice-bitmask_41
-    21300272: stoneice-bitmask_42
-    21300274: stoneice-bitmask_43
-    21300276: stoneice-bitmask_44
-    21300278: stoneice-bitmask_45
-    21300280: stoneice-bitmask_46
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: ice-bitmask_0
+  - first:
+      213: 21300002
+    second: ice-bitmask_1
+  - first:
+      213: 21300004
+    second: ice-bitmask_2
+  - first:
+      213: 21300006
+    second: ice-bitmask_3
+  - first:
+      213: 21300008
+    second: ice-bitmask_4
+  - first:
+      213: 21300010
+    second: ice-bitmask_5
+  - first:
+      213: 21300012
+    second: ice-bitmask_6
+  - first:
+      213: 21300014
+    second: ice-bitmask_7
+  - first:
+      213: 21300016
+    second: ice-bitmask_8
+  - first:
+      213: 21300018
+    second: ice-bitmask_9
+  - first:
+      213: 21300020
+    second: ice-bitmask_10
+  - first:
+      213: 21300022
+    second: ice-bitmask_11
+  - first:
+      213: 21300024
+    second: ice-bitmask_12
+  - first:
+      213: 21300026
+    second: ice-bitmask_13
+  - first:
+      213: 21300028
+    second: ice-bitmask_14
+  - first:
+      213: 21300030
+    second: ice-bitmask_15
+  - first:
+      213: 21300032
+    second: ice-bitmask_16
+  - first:
+      213: 21300034
+    second: ice-bitmask_17
+  - first:
+      213: 21300036
+    second: ice-bitmask_18
+  - first:
+      213: 21300038
+    second: ice-bitmask_19
+  - first:
+      213: 21300040
+    second: ice-bitmask_20
+  - first:
+      213: 21300042
+    second: ice-bitmask_21
+  - first:
+      213: 21300044
+    second: ice-bitmask_22
+  - first:
+      213: 21300046
+    second: ice-bitmask_23
+  - first:
+      213: 21300048
+    second: ice-bitmask_24
+  - first:
+      213: 21300050
+    second: ice-bitmask_25
+  - first:
+      213: 21300052
+    second: ice-bitmask_26
+  - first:
+      213: 21300054
+    second: ice-bitmask_27
+  - first:
+      213: 21300056
+    second: ice-bitmask_28
+  - first:
+      213: 21300058
+    second: ice-bitmask_29
+  - first:
+      213: 21300060
+    second: ice-bitmask_30
+  - first:
+      213: 21300062
+    second: ice-bitmask_31
+  - first:
+      213: 21300064
+    second: ice-bitmask_32
+  - first:
+      213: 21300066
+    second: ice-bitmask_33
+  - first:
+      213: 21300068
+    second: ice-bitmask_34
+  - first:
+      213: 21300070
+    second: ice-bitmask_35
+  - first:
+      213: 21300072
+    second: ice-bitmask_36
+  - first:
+      213: 21300074
+    second: ice-bitmask_37
+  - first:
+      213: 21300076
+    second: ice-bitmask_38
+  - first:
+      213: 21300078
+    second: ice-bitmask_39
+  - first:
+      213: 21300080
+    second: ice-bitmask_40
+  - first:
+      213: 21300082
+    second: ice-bitmask_41
+  - first:
+      213: 21300084
+    second: ice-bitmask_42
+  - first:
+      213: 21300086
+    second: ice-bitmask_43
+  - first:
+      213: 21300088
+    second: ice-bitmask_44
+  - first:
+      213: 21300090
+    second: ice-bitmask_45
+  - first:
+      213: 21300092
+    second: ice-bitmask_46
+  - first:
+      213: 21300094
+    second: snowice-bitmask_0
+  - first:
+      213: 21300096
+    second: snowice-bitmask_1
+  - first:
+      213: 21300098
+    second: snowice-bitmask_2
+  - first:
+      213: 21300100
+    second: snowice-bitmask_3
+  - first:
+      213: 21300102
+    second: snowice-bitmask_4
+  - first:
+      213: 21300104
+    second: snowice-bitmask_5
+  - first:
+      213: 21300106
+    second: snowice-bitmask_6
+  - first:
+      213: 21300108
+    second: snowice-bitmask_7
+  - first:
+      213: 21300110
+    second: snowice-bitmask_8
+  - first:
+      213: 21300112
+    second: snowice-bitmask_9
+  - first:
+      213: 21300114
+    second: snowice-bitmask_10
+  - first:
+      213: 21300116
+    second: snowice-bitmask_11
+  - first:
+      213: 21300118
+    second: snowice-bitmask_12
+  - first:
+      213: 21300120
+    second: snowice-bitmask_13
+  - first:
+      213: 21300122
+    second: snowice-bitmask_14
+  - first:
+      213: 21300124
+    second: snowice-bitmask_15
+  - first:
+      213: 21300126
+    second: snowice-bitmask_16
+  - first:
+      213: 21300128
+    second: snowice-bitmask_17
+  - first:
+      213: 21300130
+    second: snowice-bitmask_18
+  - first:
+      213: 21300132
+    second: snowice-bitmask_19
+  - first:
+      213: 21300134
+    second: snowice-bitmask_20
+  - first:
+      213: 21300136
+    second: snowice-bitmask_21
+  - first:
+      213: 21300138
+    second: snowice-bitmask_22
+  - first:
+      213: 21300140
+    second: snowice-bitmask_23
+  - first:
+      213: 21300142
+    second: snowice-bitmask_24
+  - first:
+      213: 21300144
+    second: snowice-bitmask_25
+  - first:
+      213: 21300146
+    second: snowice-bitmask_26
+  - first:
+      213: 21300148
+    second: snowice-bitmask_27
+  - first:
+      213: 21300150
+    second: snowice-bitmask_28
+  - first:
+      213: 21300152
+    second: snowice-bitmask_29
+  - first:
+      213: 21300154
+    second: snowice-bitmask_30
+  - first:
+      213: 21300156
+    second: snowice-bitmask_31
+  - first:
+      213: 21300158
+    second: snowice-bitmask_32
+  - first:
+      213: 21300160
+    second: snowice-bitmask_33
+  - first:
+      213: 21300162
+    second: snowice-bitmask_34
+  - first:
+      213: 21300164
+    second: snowice-bitmask_35
+  - first:
+      213: 21300166
+    second: snowice-bitmask_36
+  - first:
+      213: 21300168
+    second: snowice-bitmask_37
+  - first:
+      213: 21300170
+    second: snowice-bitmask_38
+  - first:
+      213: 21300172
+    second: snowice-bitmask_39
+  - first:
+      213: 21300174
+    second: snowice-bitmask_40
+  - first:
+      213: 21300176
+    second: snowice-bitmask_41
+  - first:
+      213: 21300178
+    second: snowice-bitmask_42
+  - first:
+      213: 21300180
+    second: snowice-bitmask_43
+  - first:
+      213: 21300182
+    second: snowice-bitmask_44
+  - first:
+      213: 21300184
+    second: snowice-bitmask_45
+  - first:
+      213: 21300186
+    second: snowice-bitmask_46
+  - first:
+      213: 21300188
+    second: stoneice-bitmask_0
+  - first:
+      213: 21300190
+    second: stoneice-bitmask_1
+  - first:
+      213: 21300192
+    second: stoneice-bitmask_2
+  - first:
+      213: 21300194
+    second: stoneice-bitmask_3
+  - first:
+      213: 21300196
+    second: stoneice-bitmask_4
+  - first:
+      213: 21300198
+    second: stoneice-bitmask_5
+  - first:
+      213: 21300200
+    second: stoneice-bitmask_6
+  - first:
+      213: 21300202
+    second: stoneice-bitmask_7
+  - first:
+      213: 21300204
+    second: stoneice-bitmask_8
+  - first:
+      213: 21300206
+    second: stoneice-bitmask_9
+  - first:
+      213: 21300208
+    second: stoneice-bitmask_10
+  - first:
+      213: 21300210
+    second: stoneice-bitmask_11
+  - first:
+      213: 21300212
+    second: stoneice-bitmask_12
+  - first:
+      213: 21300214
+    second: stoneice-bitmask_13
+  - first:
+      213: 21300216
+    second: stoneice-bitmask_14
+  - first:
+      213: 21300218
+    second: stoneice-bitmask_15
+  - first:
+      213: 21300220
+    second: stoneice-bitmask_16
+  - first:
+      213: 21300222
+    second: stoneice-bitmask_17
+  - first:
+      213: 21300224
+    second: stoneice-bitmask_18
+  - first:
+      213: 21300226
+    second: stoneice-bitmask_19
+  - first:
+      213: 21300228
+    second: stoneice-bitmask_20
+  - first:
+      213: 21300230
+    second: stoneice-bitmask_21
+  - first:
+      213: 21300232
+    second: stoneice-bitmask_22
+  - first:
+      213: 21300234
+    second: stoneice-bitmask_23
+  - first:
+      213: 21300236
+    second: stoneice-bitmask_24
+  - first:
+      213: 21300238
+    second: stoneice-bitmask_25
+  - first:
+      213: 21300240
+    second: stoneice-bitmask_26
+  - first:
+      213: 21300242
+    second: stoneice-bitmask_27
+  - first:
+      213: 21300244
+    second: stoneice-bitmask_28
+  - first:
+      213: 21300246
+    second: stoneice-bitmask_29
+  - first:
+      213: 21300248
+    second: stoneice-bitmask_30
+  - first:
+      213: 21300250
+    second: stoneice-bitmask_31
+  - first:
+      213: 21300252
+    second: stoneice-bitmask_32
+  - first:
+      213: 21300254
+    second: stoneice-bitmask_33
+  - first:
+      213: 21300256
+    second: stoneice-bitmask_34
+  - first:
+      213: 21300258
+    second: stoneice-bitmask_35
+  - first:
+      213: 21300260
+    second: stoneice-bitmask_36
+  - first:
+      213: 21300262
+    second: stoneice-bitmask_37
+  - first:
+      213: 21300264
+    second: stoneice-bitmask_38
+  - first:
+      213: 21300266
+    second: stoneice-bitmask_39
+  - first:
+      213: 21300268
+    second: stoneice-bitmask_40
+  - first:
+      213: 21300270
+    second: stoneice-bitmask_41
+  - first:
+      213: 21300272
+    second: stoneice-bitmask_42
+  - first:
+      213: 21300274
+    second: stoneice-bitmask_43
+  - first:
+      213: 21300276
+    second: stoneice-bitmask_44
+  - first:
+      213: 21300278
+    second: stoneice-bitmask_45
+  - first:
+      213: 21300280
+    second: stoneice-bitmask_46
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -153,6 +434,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -161,6 +444,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -168,10 +453,13 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 0
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -180,33 +468,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -222,7 +520,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cd305410000000000800000000000000
+      internalID: 21300188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_1
       rect:
@@ -235,7 +541,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ed305410000000000800000000000000
+      internalID: 21300190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_2
       rect:
@@ -248,7 +562,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0e305410000000000800000000000000
+      internalID: 21300192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_3
       rect:
@@ -261,7 +583,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2e305410000000000800000000000000
+      internalID: 21300194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_4
       rect:
@@ -274,7 +604,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4e305410000000000800000000000000
+      internalID: 21300196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_5
       rect:
@@ -287,7 +625,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6e305410000000000800000000000000
+      internalID: 21300198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_6
       rect:
@@ -300,7 +646,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8e305410000000000800000000000000
+      internalID: 21300200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_7
       rect:
@@ -313,7 +667,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ae305410000000000800000000000000
+      internalID: 21300202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_8
       rect:
@@ -326,7 +688,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ce305410000000000800000000000000
+      internalID: 21300204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_9
       rect:
@@ -339,7 +709,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ee305410000000000800000000000000
+      internalID: 21300206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_10
       rect:
@@ -352,7 +730,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0f305410000000000800000000000000
+      internalID: 21300208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_11
       rect:
@@ -365,7 +751,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2f305410000000000800000000000000
+      internalID: 21300210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_12
       rect:
@@ -378,7 +772,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4f305410000000000800000000000000
+      internalID: 21300212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_13
       rect:
@@ -391,7 +793,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6f305410000000000800000000000000
+      internalID: 21300214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_14
       rect:
@@ -404,7 +814,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8f305410000000000800000000000000
+      internalID: 21300216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_15
       rect:
@@ -417,7 +835,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: af305410000000000800000000000000
+      internalID: 21300218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_16
       rect:
@@ -430,7 +856,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cf305410000000000800000000000000
+      internalID: 21300220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_17
       rect:
@@ -443,7 +877,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ef305410000000000800000000000000
+      internalID: 21300222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_18
       rect:
@@ -456,7 +898,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 00405410000000000800000000000000
+      internalID: 21300224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_19
       rect:
@@ -469,7 +919,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 20405410000000000800000000000000
+      internalID: 21300226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_20
       rect:
@@ -482,7 +940,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 40405410000000000800000000000000
+      internalID: 21300228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_21
       rect:
@@ -495,7 +961,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 60405410000000000800000000000000
+      internalID: 21300230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_22
       rect:
@@ -508,7 +982,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 80405410000000000800000000000000
+      internalID: 21300232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_23
       rect:
@@ -521,7 +1003,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a0405410000000000800000000000000
+      internalID: 21300234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_24
       rect:
@@ -534,7 +1024,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c0405410000000000800000000000000
+      internalID: 21300236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_25
       rect:
@@ -547,7 +1045,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e0405410000000000800000000000000
+      internalID: 21300238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_26
       rect:
@@ -560,7 +1066,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 01405410000000000800000000000000
+      internalID: 21300240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_27
       rect:
@@ -573,7 +1087,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 21405410000000000800000000000000
+      internalID: 21300242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_28
       rect:
@@ -586,7 +1108,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 41405410000000000800000000000000
+      internalID: 21300244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_29
       rect:
@@ -599,7 +1129,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 61405410000000000800000000000000
+      internalID: 21300246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_30
       rect:
@@ -612,7 +1150,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 81405410000000000800000000000000
+      internalID: 21300248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_31
       rect:
@@ -625,7 +1171,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a1405410000000000800000000000000
+      internalID: 21300250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_32
       rect:
@@ -638,7 +1192,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c1405410000000000800000000000000
+      internalID: 21300252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_33
       rect:
@@ -651,7 +1213,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e1405410000000000800000000000000
+      internalID: 21300254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_34
       rect:
@@ -664,7 +1234,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 02405410000000000800000000000000
+      internalID: 21300256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_35
       rect:
@@ -677,7 +1255,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 22405410000000000800000000000000
+      internalID: 21300258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_36
       rect:
@@ -690,7 +1276,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 42405410000000000800000000000000
+      internalID: 21300260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_37
       rect:
@@ -703,7 +1297,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 62405410000000000800000000000000
+      internalID: 21300262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_38
       rect:
@@ -716,7 +1318,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 82405410000000000800000000000000
+      internalID: 21300264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_39
       rect:
@@ -729,7 +1339,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a2405410000000000800000000000000
+      internalID: 21300266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_40
       rect:
@@ -742,7 +1360,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c2405410000000000800000000000000
+      internalID: 21300268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_41
       rect:
@@ -755,7 +1381,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e2405410000000000800000000000000
+      internalID: 21300270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_42
       rect:
@@ -768,7 +1402,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 03405410000000000800000000000000
+      internalID: 21300272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_43
       rect:
@@ -781,7 +1423,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 23405410000000000800000000000000
+      internalID: 21300274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_44
       rect:
@@ -794,7 +1444,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 43405410000000000800000000000000
+      internalID: 21300276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_45
       rect:
@@ -807,7 +1465,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 63405410000000000800000000000000
+      internalID: 21300278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: stoneice-bitmask_46
       rect:
@@ -820,9 +1486,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 83405410000000000800000000000000
+      internalID: 21300280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

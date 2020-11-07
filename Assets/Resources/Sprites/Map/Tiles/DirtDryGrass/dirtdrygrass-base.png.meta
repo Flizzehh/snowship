@@ -1,26 +1,57 @@
 fileFormatVersion: 2
 guid: 1b2bdb63ad1501e468b2b607d90965d6
-timeCreated: 1495437609
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: dirt-base_0
-    21300002: dirt-base_1
-    21300004: dirt-base_2
-    21300006: dirt-base_3
-    21300008: dirtgrass-base_0
-    21300010: dirtgrass-base_1
-    21300012: dirtgrass-base_2
-    21300014: dirtgrass-base_3
-    21300016: dirtthingrass-base_0
-    21300018: dirtthingrass-base_1
-    21300020: dirtthingrass-base_2
-    21300022: dirtthingrass-base_3
-    21300024: dirtdrygrass-base_0
-    21300026: dirtdrygrass-base_1
-    21300028: dirtdrygrass-base_2
-    21300030: dirtdrygrass-base_3
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: dirt-base_0
+  - first:
+      213: 21300002
+    second: dirt-base_1
+  - first:
+      213: 21300004
+    second: dirt-base_2
+  - first:
+      213: 21300006
+    second: dirt-base_3
+  - first:
+      213: 21300008
+    second: dirtgrass-base_0
+  - first:
+      213: 21300010
+    second: dirtgrass-base_1
+  - first:
+      213: 21300012
+    second: dirtgrass-base_2
+  - first:
+      213: 21300014
+    second: dirtgrass-base_3
+  - first:
+      213: 21300016
+    second: dirtthingrass-base_0
+  - first:
+      213: 21300018
+    second: dirtthingrass-base_1
+  - first:
+      213: 21300020
+    second: dirtthingrass-base_2
+  - first:
+      213: 21300022
+    second: dirtthingrass-base_3
+  - first:
+      213: 21300024
+    second: dirtdrygrass-base_0
+  - first:
+      213: 21300026
+    second: dirtdrygrass-base_1
+  - first:
+      213: 21300028
+    second: dirtdrygrass-base_2
+  - first:
+      213: 21300030
+    second: dirtdrygrass-base_3
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -28,6 +59,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -36,6 +69,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -43,10 +78,13 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 0
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -55,33 +93,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -97,7 +145,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dirtdrygrass-base_1
       rect:
@@ -110,7 +166,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a3305410000000000800000000000000
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dirtdrygrass-base_2
       rect:
@@ -123,7 +187,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c3305410000000000800000000000000
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dirtdrygrass-base_3
       rect:
@@ -136,9 +208,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e3305410000000000800000000000000
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

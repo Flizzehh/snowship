@@ -1,38 +1,93 @@
 fileFormatVersion: 2
 guid: bc2d4b59e88970340a5235b0c4cfb385
-timeCreated: 1512733973
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: cotton_0
-    21300002: cotton_1
-    21300004: cotton_2
-    21300006: cotton_3
-    21300008: cotton_4
-    21300010: cotton_5
-    21300012: cotton_6
-    21300014: cotton_7
-    21300016: cotton-farm-bitmask_0
-    21300018: cotton-farm-bitmask_1
-    21300020: cotton-farm-bitmask_2
-    21300022: cotton-farm-bitmask_3
-    21300024: cotton-farm-bitmask_4
-    21300026: cotton-farm-bitmask_5
-    21300028: cotton-farm-bitmask_6
-    21300030: cotton-farm-bitmask_7
-    21300032: cotton-farm-bitmask_8
-    21300034: cotton-farm-bitmask_9
-    21300036: potato-farm-bitmask_0
-    21300038: potato-farm-bitmask_1
-    21300040: potato-farm-bitmask_2
-    21300042: potato-farm-bitmask_3
-    21300044: potato-farm-bitmask_4
-    21300046: potato-farm-bitmask_5
-    21300048: potato-farm-bitmask_6
-    21300050: potato-farm-bitmask_7
-    21300052: potato-farm-bitmask_8
-    21300054: potato-farm-bitmask_9
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: cotton_0
+  - first:
+      213: 21300002
+    second: cotton_1
+  - first:
+      213: 21300004
+    second: cotton_2
+  - first:
+      213: 21300006
+    second: cotton_3
+  - first:
+      213: 21300008
+    second: cotton_4
+  - first:
+      213: 21300010
+    second: cotton_5
+  - first:
+      213: 21300012
+    second: cotton_6
+  - first:
+      213: 21300014
+    second: cotton_7
+  - first:
+      213: 21300016
+    second: cotton-farm-bitmask_0
+  - first:
+      213: 21300018
+    second: cotton-farm-bitmask_1
+  - first:
+      213: 21300020
+    second: cotton-farm-bitmask_2
+  - first:
+      213: 21300022
+    second: cotton-farm-bitmask_3
+  - first:
+      213: 21300024
+    second: cotton-farm-bitmask_4
+  - first:
+      213: 21300026
+    second: cotton-farm-bitmask_5
+  - first:
+      213: 21300028
+    second: cotton-farm-bitmask_6
+  - first:
+      213: 21300030
+    second: cotton-farm-bitmask_7
+  - first:
+      213: 21300032
+    second: cotton-farm-bitmask_8
+  - first:
+      213: 21300034
+    second: cotton-farm-bitmask_9
+  - first:
+      213: 21300036
+    second: potato-farm-bitmask_0
+  - first:
+      213: 21300038
+    second: potato-farm-bitmask_1
+  - first:
+      213: 21300040
+    second: potato-farm-bitmask_2
+  - first:
+      213: 21300042
+    second: potato-farm-bitmask_3
+  - first:
+      213: 21300044
+    second: potato-farm-bitmask_4
+  - first:
+      213: 21300046
+    second: potato-farm-bitmask_5
+  - first:
+      213: 21300048
+    second: potato-farm-bitmask_6
+  - first:
+      213: 21300050
+    second: potato-farm-bitmask_7
+  - first:
+      213: 21300052
+    second: potato-farm-bitmask_8
+  - first:
+      213: 21300054
+    second: potato-farm-bitmask_9
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -50,6 +105,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -60,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: -1
-    mipBias: -1
+    mipBias: -100
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -72,33 +129,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -116,6 +183,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 44305410000000000800000000000000
+      internalID: 21300036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_1
       rect:
@@ -130,6 +204,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 64305410000000000800000000000000
+      internalID: 21300038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_2
       rect:
@@ -144,6 +225,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 84305410000000000800000000000000
+      internalID: 21300040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_3
       rect:
@@ -158,6 +246,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a4305410000000000800000000000000
+      internalID: 21300042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_4
       rect:
@@ -172,6 +267,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c4305410000000000800000000000000
+      internalID: 21300044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_5
       rect:
@@ -186,6 +288,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e4305410000000000800000000000000
+      internalID: 21300046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_6
       rect:
@@ -200,6 +309,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 05305410000000000800000000000000
+      internalID: 21300048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_7
       rect:
@@ -214,6 +330,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 25305410000000000800000000000000
+      internalID: 21300050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_8
       rect:
@@ -228,6 +351,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 45305410000000000800000000000000
+      internalID: 21300052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: potato-farm-bitmask_9
       rect:
@@ -242,9 +372,26 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 65305410000000000800000000000000
+      internalID: 21300054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

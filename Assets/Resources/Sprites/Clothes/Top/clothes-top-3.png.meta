@@ -1,129 +1,369 @@
 fileFormatVersion: 2
 guid: 237693dd69abd8b468a3145f9129963d
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: clothes-shirts-base_0
-    21300002: clothes-shirts-base_1
-    21300004: clothes-shirts-base_2
-    21300006: clothes-shirts-base_3
-    21300008: clothes-shirts-base_4
-    21300010: clothes-shirts-base_5
-    21300012: clothes-shirts-base_6
-    21300014: clothes-shirts-base_7
-    21300016: clothes-shirts-base_8
-    21300018: clothes-shirts-base_9
-    21300020: clothes-shirts-base_10
-    21300022: clothes-shirts-base_11
-    21300024: clothes-shirts-base_12
-    21300026: clothes-shirts-base_13
-    21300028: clothes-shirts-base_14
-    21300030: clothes-shirts-base_15
-    21300032: clothes-shirts-base_16
-    21300034: clothes-shirts-base_17
-    21300036: clothes-shirts-base_18
-    21300038: clothes-shirts-base_19
-    21300040: clothes-shirts-base_20
-    21300042: clothes-shirts-base_21
-    21300044: clothes-shirts-base_22
-    21300046: clothes-shirts-base_23
-    21300048: clothes-shirts-base_24
-    21300050: clothes-shirts-base_25
-    21300052: clothes-shirts-base_26
-    21300054: clothes-shirts-base_27
-    21300056: clothes-shirts-base_28
-    21300058: clothes-shirts-base_29
-    21300060: clothes-tops-base_0
-    21300062: clothes-tops-base_1
-    21300064: clothes-tops-base_2
-    21300066: clothes-tops-base_3
-    21300068: clothes-tops-base_4
-    21300070: clothes-tops-base_5
-    21300072: clothes-tops-base_6
-    21300074: clothes-tops-base_7
-    21300076: clothes-tops-base_8
-    21300078: clothes-tops-base_9
-    21300080: clothes-tops-base_10
-    21300082: clothes-tops-base_11
-    21300084: clothes-tops-base_12
-    21300086: clothes-tops-base_13
-    21300088: clothes-tops-base_14
-    21300090: clothes-tops-base_15
-    21300092: clothes-tops-base_16
-    21300094: clothes-tops-base_17
-    21300096: clothes-tops-base_18
-    21300098: clothes-tops-base_19
-    21300100: clothes-tops-base_20
-    21300102: clothes-tops-base_21
-    21300104: clothes-tops-base_22
-    21300106: clothes-tops-base_23
-    21300108: clothes-tops-base_24
-    21300110: clothes-tops-base_25
-    21300112: clothes-tops-base_26
-    21300114: clothes-tops-base_27
-    21300116: clothes-tops-base_28
-    21300118: clothes-tops-base_29
-    21300120: clothes-tops-3_0
-    21300122: clothes-tops-3_1
-    21300124: clothes-tops-3_2
-    21300126: clothes-tops-3_3
-    21300128: clothes-tops-3_4
-    21300130: clothes-tops-3_5
-    21300132: clothes-tops-3_6
-    21300134: clothes-tops-3_7
-    21300136: clothes-tops-3_8
-    21300138: clothes-tops-3_9
-    21300140: clothes-tops-3_10
-    21300142: clothes-tops-3_11
-    21300144: clothes-tops-3_12
-    21300146: clothes-tops-3_13
-    21300148: clothes-tops-3_14
-    21300150: clothes-tops-3_15
-    21300152: clothes-tops-3_16
-    21300154: clothes-tops-3_17
-    21300156: clothes-tops-3_18
-    21300158: clothes-tops-3_19
-    21300160: clothes-tops-3_20
-    21300162: clothes-tops-3_21
-    21300164: clothes-tops-3_22
-    21300166: clothes-tops-3_23
-    21300168: clothes-tops-3_24
-    21300170: clothes-tops-3_25
-    21300172: clothes-tops-3_26
-    21300174: clothes-tops-3_27
-    21300176: clothes-tops-3_28
-    21300178: clothes-tops-3_29
-    21300180: clothes-top-3_0
-    21300182: clothes-top-3_1
-    21300184: clothes-top-3_2
-    21300186: clothes-top-3_3
-    21300188: clothes-top-3_4
-    21300190: clothes-top-3_5
-    21300192: clothes-top-3_6
-    21300194: clothes-top-3_7
-    21300196: clothes-top-3_8
-    21300198: clothes-top-3_9
-    21300200: clothes-top-3_10
-    21300202: clothes-top-3_11
-    21300204: clothes-top-3_12
-    21300206: clothes-top-3_13
-    21300208: clothes-top-3_14
-    21300210: clothes-top-3_15
-    21300212: clothes-top-3_16
-    21300214: clothes-top-3_17
-    21300216: clothes-top-3_18
-    21300218: clothes-top-3_19
-    21300220: clothes-top-3_20
-    21300222: clothes-top-3_21
-    21300224: clothes-top-3_22
-    21300226: clothes-top-3_23
-    21300228: clothes-top-3_24
-    21300230: clothes-top-3_25
-    21300232: clothes-top-3_26
-    21300234: clothes-top-3_27
-    21300236: clothes-top-3_28
-    21300238: clothes-top-3_29
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: clothes-shirts-base_0
+  - first:
+      213: 21300002
+    second: clothes-shirts-base_1
+  - first:
+      213: 21300004
+    second: clothes-shirts-base_2
+  - first:
+      213: 21300006
+    second: clothes-shirts-base_3
+  - first:
+      213: 21300008
+    second: clothes-shirts-base_4
+  - first:
+      213: 21300010
+    second: clothes-shirts-base_5
+  - first:
+      213: 21300012
+    second: clothes-shirts-base_6
+  - first:
+      213: 21300014
+    second: clothes-shirts-base_7
+  - first:
+      213: 21300016
+    second: clothes-shirts-base_8
+  - first:
+      213: 21300018
+    second: clothes-shirts-base_9
+  - first:
+      213: 21300020
+    second: clothes-shirts-base_10
+  - first:
+      213: 21300022
+    second: clothes-shirts-base_11
+  - first:
+      213: 21300024
+    second: clothes-shirts-base_12
+  - first:
+      213: 21300026
+    second: clothes-shirts-base_13
+  - first:
+      213: 21300028
+    second: clothes-shirts-base_14
+  - first:
+      213: 21300030
+    second: clothes-shirts-base_15
+  - first:
+      213: 21300032
+    second: clothes-shirts-base_16
+  - first:
+      213: 21300034
+    second: clothes-shirts-base_17
+  - first:
+      213: 21300036
+    second: clothes-shirts-base_18
+  - first:
+      213: 21300038
+    second: clothes-shirts-base_19
+  - first:
+      213: 21300040
+    second: clothes-shirts-base_20
+  - first:
+      213: 21300042
+    second: clothes-shirts-base_21
+  - first:
+      213: 21300044
+    second: clothes-shirts-base_22
+  - first:
+      213: 21300046
+    second: clothes-shirts-base_23
+  - first:
+      213: 21300048
+    second: clothes-shirts-base_24
+  - first:
+      213: 21300050
+    second: clothes-shirts-base_25
+  - first:
+      213: 21300052
+    second: clothes-shirts-base_26
+  - first:
+      213: 21300054
+    second: clothes-shirts-base_27
+  - first:
+      213: 21300056
+    second: clothes-shirts-base_28
+  - first:
+      213: 21300058
+    second: clothes-shirts-base_29
+  - first:
+      213: 21300060
+    second: clothes-tops-base_0
+  - first:
+      213: 21300062
+    second: clothes-tops-base_1
+  - first:
+      213: 21300064
+    second: clothes-tops-base_2
+  - first:
+      213: 21300066
+    second: clothes-tops-base_3
+  - first:
+      213: 21300068
+    second: clothes-tops-base_4
+  - first:
+      213: 21300070
+    second: clothes-tops-base_5
+  - first:
+      213: 21300072
+    second: clothes-tops-base_6
+  - first:
+      213: 21300074
+    second: clothes-tops-base_7
+  - first:
+      213: 21300076
+    second: clothes-tops-base_8
+  - first:
+      213: 21300078
+    second: clothes-tops-base_9
+  - first:
+      213: 21300080
+    second: clothes-tops-base_10
+  - first:
+      213: 21300082
+    second: clothes-tops-base_11
+  - first:
+      213: 21300084
+    second: clothes-tops-base_12
+  - first:
+      213: 21300086
+    second: clothes-tops-base_13
+  - first:
+      213: 21300088
+    second: clothes-tops-base_14
+  - first:
+      213: 21300090
+    second: clothes-tops-base_15
+  - first:
+      213: 21300092
+    second: clothes-tops-base_16
+  - first:
+      213: 21300094
+    second: clothes-tops-base_17
+  - first:
+      213: 21300096
+    second: clothes-tops-base_18
+  - first:
+      213: 21300098
+    second: clothes-tops-base_19
+  - first:
+      213: 21300100
+    second: clothes-tops-base_20
+  - first:
+      213: 21300102
+    second: clothes-tops-base_21
+  - first:
+      213: 21300104
+    second: clothes-tops-base_22
+  - first:
+      213: 21300106
+    second: clothes-tops-base_23
+  - first:
+      213: 21300108
+    second: clothes-tops-base_24
+  - first:
+      213: 21300110
+    second: clothes-tops-base_25
+  - first:
+      213: 21300112
+    second: clothes-tops-base_26
+  - first:
+      213: 21300114
+    second: clothes-tops-base_27
+  - first:
+      213: 21300116
+    second: clothes-tops-base_28
+  - first:
+      213: 21300118
+    second: clothes-tops-base_29
+  - first:
+      213: 21300120
+    second: clothes-tops-3_0
+  - first:
+      213: 21300122
+    second: clothes-tops-3_1
+  - first:
+      213: 21300124
+    second: clothes-tops-3_2
+  - first:
+      213: 21300126
+    second: clothes-tops-3_3
+  - first:
+      213: 21300128
+    second: clothes-tops-3_4
+  - first:
+      213: 21300130
+    second: clothes-tops-3_5
+  - first:
+      213: 21300132
+    second: clothes-tops-3_6
+  - first:
+      213: 21300134
+    second: clothes-tops-3_7
+  - first:
+      213: 21300136
+    second: clothes-tops-3_8
+  - first:
+      213: 21300138
+    second: clothes-tops-3_9
+  - first:
+      213: 21300140
+    second: clothes-tops-3_10
+  - first:
+      213: 21300142
+    second: clothes-tops-3_11
+  - first:
+      213: 21300144
+    second: clothes-tops-3_12
+  - first:
+      213: 21300146
+    second: clothes-tops-3_13
+  - first:
+      213: 21300148
+    second: clothes-tops-3_14
+  - first:
+      213: 21300150
+    second: clothes-tops-3_15
+  - first:
+      213: 21300152
+    second: clothes-tops-3_16
+  - first:
+      213: 21300154
+    second: clothes-tops-3_17
+  - first:
+      213: 21300156
+    second: clothes-tops-3_18
+  - first:
+      213: 21300158
+    second: clothes-tops-3_19
+  - first:
+      213: 21300160
+    second: clothes-tops-3_20
+  - first:
+      213: 21300162
+    second: clothes-tops-3_21
+  - first:
+      213: 21300164
+    second: clothes-tops-3_22
+  - first:
+      213: 21300166
+    second: clothes-tops-3_23
+  - first:
+      213: 21300168
+    second: clothes-tops-3_24
+  - first:
+      213: 21300170
+    second: clothes-tops-3_25
+  - first:
+      213: 21300172
+    second: clothes-tops-3_26
+  - first:
+      213: 21300174
+    second: clothes-tops-3_27
+  - first:
+      213: 21300176
+    second: clothes-tops-3_28
+  - first:
+      213: 21300178
+    second: clothes-tops-3_29
+  - first:
+      213: 21300180
+    second: clothes-top-3_0
+  - first:
+      213: 21300182
+    second: clothes-top-3_1
+  - first:
+      213: 21300184
+    second: clothes-top-3_2
+  - first:
+      213: 21300186
+    second: clothes-top-3_3
+  - first:
+      213: 21300188
+    second: clothes-top-3_4
+  - first:
+      213: 21300190
+    second: clothes-top-3_5
+  - first:
+      213: 21300192
+    second: clothes-top-3_6
+  - first:
+      213: 21300194
+    second: clothes-top-3_7
+  - first:
+      213: 21300196
+    second: clothes-top-3_8
+  - first:
+      213: 21300198
+    second: clothes-top-3_9
+  - first:
+      213: 21300200
+    second: clothes-top-3_10
+  - first:
+      213: 21300202
+    second: clothes-top-3_11
+  - first:
+      213: 21300204
+    second: clothes-top-3_12
+  - first:
+      213: 21300206
+    second: clothes-top-3_13
+  - first:
+      213: 21300208
+    second: clothes-top-3_14
+  - first:
+      213: 21300210
+    second: clothes-top-3_15
+  - first:
+      213: 21300212
+    second: clothes-top-3_16
+  - first:
+      213: 21300214
+    second: clothes-top-3_17
+  - first:
+      213: 21300216
+    second: clothes-top-3_18
+  - first:
+      213: 21300218
+    second: clothes-top-3_19
+  - first:
+      213: 21300220
+    second: clothes-top-3_20
+  - first:
+      213: 21300222
+    second: clothes-top-3_21
+  - first:
+      213: 21300224
+    second: clothes-top-3_22
+  - first:
+      213: 21300226
+    second: clothes-top-3_23
+  - first:
+      213: 21300228
+    second: clothes-top-3_24
+  - first:
+      213: 21300230
+    second: clothes-top-3_25
+  - first:
+      213: 21300232
+    second: clothes-top-3_26
+  - first:
+      213: 21300234
+    second: clothes-top-3_27
+  - first:
+      213: 21300236
+    second: clothes-top-3_28
+  - first:
+      213: 21300238
+    second: clothes-top-3_29
   externalObjects: {}
-  serializedVersion: 7
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -178,7 +418,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -189,7 +429,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 8192
     resizeAlgorithm: 0
@@ -200,6 +441,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -219,6 +461,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1c54ec636ac3a13428890e1d7e4cb069
+      internalID: 21300180
       vertices: []
       indices: 
       edges: []
@@ -239,6 +482,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: e2a00f44be453b842957de0aadcd9503
+      internalID: 21300182
       vertices: []
       indices: 
       edges: []
@@ -259,6 +503,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: debde1f16b599d846bdf46f94267946b
+      internalID: 21300184
       vertices: []
       indices: 
       edges: []
@@ -279,6 +524,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 66d663c5745be5b408babfd5fbfd4445
+      internalID: 21300186
       vertices: []
       indices: 
       edges: []
@@ -299,6 +545,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0e948c3b109863b43b0a42d5bef87cd4
+      internalID: 21300188
       vertices: []
       indices: 
       edges: []
@@ -319,6 +566,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: bc7b5a92f4371144b962c5440a2d1152
+      internalID: 21300190
       vertices: []
       indices: 
       edges: []
@@ -339,6 +587,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5cec4630c358a9148b5fcbf437050147
+      internalID: 21300192
       vertices: []
       indices: 
       edges: []
@@ -359,6 +608,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 282571bc62b209f4186b349826c20f87
+      internalID: 21300194
       vertices: []
       indices: 
       edges: []
@@ -379,6 +629,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 616b7112a6ee4a14d805bb59965e7b8e
+      internalID: 21300196
       vertices: []
       indices: 
       edges: []
@@ -399,6 +650,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0c6b8d5a6c84c50499ed5b52b1bd2630
+      internalID: 21300198
       vertices: []
       indices: 
       edges: []
@@ -419,6 +671,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5f920ff79d714bb4f9c987d0c03ee436
+      internalID: 21300200
       vertices: []
       indices: 
       edges: []
@@ -439,6 +692,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7608daad814707145bc29c9c8950530f
+      internalID: 21300202
       vertices: []
       indices: 
       edges: []
@@ -459,6 +713,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8844cb20cd306474ab277684c1367759
+      internalID: 21300204
       vertices: []
       indices: 
       edges: []
@@ -479,6 +734,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: a4f9cbaba94dc9747ad5dc6e91554fbb
+      internalID: 21300206
       vertices: []
       indices: 
       edges: []
@@ -499,6 +755,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 92db6a3075c232249b16cbf1fd87991d
+      internalID: 21300208
       vertices: []
       indices: 
       edges: []
@@ -519,6 +776,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 9fafc9f3252a4ca47a2cd24c84bd9c0a
+      internalID: 21300210
       vertices: []
       indices: 
       edges: []
@@ -539,6 +797,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 84022ae1a9f060f449ce8933230b4a33
+      internalID: 21300212
       vertices: []
       indices: 
       edges: []
@@ -559,6 +818,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7ed23051c7c218c41ae3a85fed1c5344
+      internalID: 21300214
       vertices: []
       indices: 
       edges: []
@@ -579,6 +839,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 3e82a3b761578f448937154907eadde7
+      internalID: 21300216
       vertices: []
       indices: 
       edges: []
@@ -599,6 +860,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 68c348c927cce1447830ef1b14766755
+      internalID: 21300218
       vertices: []
       indices: 
       edges: []
@@ -607,10 +869,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: e908cdf0651321b4794a305e59f77ce9
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

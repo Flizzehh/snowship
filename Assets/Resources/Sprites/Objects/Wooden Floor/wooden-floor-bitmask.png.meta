@@ -1,89 +1,246 @@
 fileFormatVersion: 2
 guid: bb04b90aa0573494597584bef4111861
-timeCreated: 1498056582
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: floor-wood_0
-    21300002: floor-wood_1
-    21300004: floor-wood_2
-    21300006: floor-wood_3
-    21300008: floor-wood_4
-    21300010: floor-wood_5
-    21300012: floor-wood_6
-    21300014: floor-wood_7
-    21300016: floor-wood_8
-    21300018: floor-wood_9
-    21300020: floor-wood_10
-    21300022: floor-wood_11
-    21300024: floor-wood_12
-    21300026: floor-wood_13
-    21300028: floor-wood_14
-    21300030: floor-wood_15
-    21300032: woodenfloor-bitmask_0
-    21300034: woodenfloor-bitmask_1
-    21300036: woodenfloor-bitmask_2
-    21300038: woodenfloor-bitmask_3
-    21300040: woodenfloor-bitmask_4
-    21300042: woodenfloor-bitmask_5
-    21300044: woodenfloor-bitmask_6
-    21300046: woodenfloor-bitmask_7
-    21300048: woodenfloor-bitmask_8
-    21300050: woodenfloor-bitmask_9
-    21300052: woodenfloor-bitmask_10
-    21300054: woodenfloor-bitmask_11
-    21300056: woodenfloor-bitmask_12
-    21300058: woodenfloor-bitmask_13
-    21300060: woodenfloor-bitmask_14
-    21300062: woodenfloor-bitmask_15
-    21300064: wooden-floor-bitmask_0
-    21300066: wooden-floor-bitmask_1
-    21300068: wooden-floor-bitmask_2
-    21300070: wooden-floor-bitmask_3
-    21300072: wooden-floor-bitmask_4
-    21300074: wooden-floor-bitmask_5
-    21300076: wooden-floor-bitmask_6
-    21300078: wooden-floor-bitmask_7
-    21300080: wooden-floor-bitmask_8
-    21300082: wooden-floor-bitmask_9
-    21300084: wooden-floor-bitmask_10
-    21300086: wooden-floor-bitmask_11
-    21300088: wooden-floor-bitmask_12
-    21300090: wooden-floor-bitmask_13
-    21300092: wooden-floor-bitmask_14
-    21300094: wooden-floor-bitmask_15
-    21300096: wooden-floor-bitmask_16
-    21300098: wooden-floor-bitmask_17
-    21300100: wooden-floor-bitmask_18
-    21300102: wooden-floor-bitmask_19
-    21300104: wooden-floor-bitmask_20
-    21300106: wooden-floor-bitmask_21
-    21300108: wooden-floor-bitmask_22
-    21300110: wooden-floor-bitmask_23
-    21300112: wooden-floor-bitmask_24
-    21300114: wooden-floor-bitmask_25
-    21300116: wooden-floor-bitmask_26
-    21300118: wooden-floor-bitmask_27
-    21300120: wooden-floor-bitmask_28
-    21300122: wooden-floor-bitmask_29
-    21300124: wooden-floor-bitmask_30
-    21300126: wooden-floor-bitmask_31
-    21300128: wooden-floor-bitmask_32
-    21300130: wooden-floor-bitmask_33
-    21300132: wooden-floor-bitmask_34
-    21300134: wooden-floor-bitmask_35
-    21300136: wooden-floor-bitmask_36
-    21300138: wooden-floor-bitmask_37
-    21300140: wooden-floor-bitmask_38
-    21300142: wooden-floor-bitmask_39
-    21300144: wooden-floor-bitmask_40
-    21300146: wooden-floor-bitmask_41
-    21300148: wooden-floor-bitmask_42
-    21300150: wooden-floor-bitmask_43
-    21300152: wooden-floor-bitmask_44
-    21300154: wooden-floor-bitmask_45
-    21300156: wooden-floor-bitmask_46
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: floor-wood_0
+  - first:
+      213: 21300002
+    second: floor-wood_1
+  - first:
+      213: 21300004
+    second: floor-wood_2
+  - first:
+      213: 21300006
+    second: floor-wood_3
+  - first:
+      213: 21300008
+    second: floor-wood_4
+  - first:
+      213: 21300010
+    second: floor-wood_5
+  - first:
+      213: 21300012
+    second: floor-wood_6
+  - first:
+      213: 21300014
+    second: floor-wood_7
+  - first:
+      213: 21300016
+    second: floor-wood_8
+  - first:
+      213: 21300018
+    second: floor-wood_9
+  - first:
+      213: 21300020
+    second: floor-wood_10
+  - first:
+      213: 21300022
+    second: floor-wood_11
+  - first:
+      213: 21300024
+    second: floor-wood_12
+  - first:
+      213: 21300026
+    second: floor-wood_13
+  - first:
+      213: 21300028
+    second: floor-wood_14
+  - first:
+      213: 21300030
+    second: floor-wood_15
+  - first:
+      213: 21300032
+    second: woodenfloor-bitmask_0
+  - first:
+      213: 21300034
+    second: woodenfloor-bitmask_1
+  - first:
+      213: 21300036
+    second: woodenfloor-bitmask_2
+  - first:
+      213: 21300038
+    second: woodenfloor-bitmask_3
+  - first:
+      213: 21300040
+    second: woodenfloor-bitmask_4
+  - first:
+      213: 21300042
+    second: woodenfloor-bitmask_5
+  - first:
+      213: 21300044
+    second: woodenfloor-bitmask_6
+  - first:
+      213: 21300046
+    second: woodenfloor-bitmask_7
+  - first:
+      213: 21300048
+    second: woodenfloor-bitmask_8
+  - first:
+      213: 21300050
+    second: woodenfloor-bitmask_9
+  - first:
+      213: 21300052
+    second: woodenfloor-bitmask_10
+  - first:
+      213: 21300054
+    second: woodenfloor-bitmask_11
+  - first:
+      213: 21300056
+    second: woodenfloor-bitmask_12
+  - first:
+      213: 21300058
+    second: woodenfloor-bitmask_13
+  - first:
+      213: 21300060
+    second: woodenfloor-bitmask_14
+  - first:
+      213: 21300062
+    second: woodenfloor-bitmask_15
+  - first:
+      213: 21300064
+    second: wooden-floor-bitmask_0
+  - first:
+      213: 21300066
+    second: wooden-floor-bitmask_1
+  - first:
+      213: 21300068
+    second: wooden-floor-bitmask_2
+  - first:
+      213: 21300070
+    second: wooden-floor-bitmask_3
+  - first:
+      213: 21300072
+    second: wooden-floor-bitmask_4
+  - first:
+      213: 21300074
+    second: wooden-floor-bitmask_5
+  - first:
+      213: 21300076
+    second: wooden-floor-bitmask_6
+  - first:
+      213: 21300078
+    second: wooden-floor-bitmask_7
+  - first:
+      213: 21300080
+    second: wooden-floor-bitmask_8
+  - first:
+      213: 21300082
+    second: wooden-floor-bitmask_9
+  - first:
+      213: 21300084
+    second: wooden-floor-bitmask_10
+  - first:
+      213: 21300086
+    second: wooden-floor-bitmask_11
+  - first:
+      213: 21300088
+    second: wooden-floor-bitmask_12
+  - first:
+      213: 21300090
+    second: wooden-floor-bitmask_13
+  - first:
+      213: 21300092
+    second: wooden-floor-bitmask_14
+  - first:
+      213: 21300094
+    second: wooden-floor-bitmask_15
+  - first:
+      213: 21300096
+    second: wooden-floor-bitmask_16
+  - first:
+      213: 21300098
+    second: wooden-floor-bitmask_17
+  - first:
+      213: 21300100
+    second: wooden-floor-bitmask_18
+  - first:
+      213: 21300102
+    second: wooden-floor-bitmask_19
+  - first:
+      213: 21300104
+    second: wooden-floor-bitmask_20
+  - first:
+      213: 21300106
+    second: wooden-floor-bitmask_21
+  - first:
+      213: 21300108
+    second: wooden-floor-bitmask_22
+  - first:
+      213: 21300110
+    second: wooden-floor-bitmask_23
+  - first:
+      213: 21300112
+    second: wooden-floor-bitmask_24
+  - first:
+      213: 21300114
+    second: wooden-floor-bitmask_25
+  - first:
+      213: 21300116
+    second: wooden-floor-bitmask_26
+  - first:
+      213: 21300118
+    second: wooden-floor-bitmask_27
+  - first:
+      213: 21300120
+    second: wooden-floor-bitmask_28
+  - first:
+      213: 21300122
+    second: wooden-floor-bitmask_29
+  - first:
+      213: 21300124
+    second: wooden-floor-bitmask_30
+  - first:
+      213: 21300126
+    second: wooden-floor-bitmask_31
+  - first:
+      213: 21300128
+    second: wooden-floor-bitmask_32
+  - first:
+      213: 21300130
+    second: wooden-floor-bitmask_33
+  - first:
+      213: 21300132
+    second: wooden-floor-bitmask_34
+  - first:
+      213: 21300134
+    second: wooden-floor-bitmask_35
+  - first:
+      213: 21300136
+    second: wooden-floor-bitmask_36
+  - first:
+      213: 21300138
+    second: wooden-floor-bitmask_37
+  - first:
+      213: 21300140
+    second: wooden-floor-bitmask_38
+  - first:
+      213: 21300142
+    second: wooden-floor-bitmask_39
+  - first:
+      213: 21300144
+    second: wooden-floor-bitmask_40
+  - first:
+      213: 21300146
+    second: wooden-floor-bitmask_41
+  - first:
+      213: 21300148
+    second: wooden-floor-bitmask_42
+  - first:
+      213: 21300150
+    second: wooden-floor-bitmask_43
+  - first:
+      213: 21300152
+    second: wooden-floor-bitmask_44
+  - first:
+      213: 21300154
+    second: wooden-floor-bitmask_45
+  - first:
+      213: 21300156
+    second: wooden-floor-bitmask_46
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -91,6 +248,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -99,6 +258,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -106,10 +267,13 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -118,33 +282,43 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 8192
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -160,7 +334,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 06305410000000000800000000000000
+      internalID: 21300064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_1
       rect:
@@ -173,7 +355,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 26305410000000000800000000000000
+      internalID: 21300066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_2
       rect:
@@ -186,7 +376,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 46305410000000000800000000000000
+      internalID: 21300068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_3
       rect:
@@ -199,7 +397,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 66305410000000000800000000000000
+      internalID: 21300070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_4
       rect:
@@ -212,7 +418,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 86305410000000000800000000000000
+      internalID: 21300072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_5
       rect:
@@ -225,7 +439,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a6305410000000000800000000000000
+      internalID: 21300074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_6
       rect:
@@ -238,7 +460,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c6305410000000000800000000000000
+      internalID: 21300076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_7
       rect:
@@ -251,7 +481,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e6305410000000000800000000000000
+      internalID: 21300078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_8
       rect:
@@ -264,7 +502,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 07305410000000000800000000000000
+      internalID: 21300080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_9
       rect:
@@ -277,7 +523,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 27305410000000000800000000000000
+      internalID: 21300082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_10
       rect:
@@ -290,7 +544,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 47305410000000000800000000000000
+      internalID: 21300084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_11
       rect:
@@ -303,7 +565,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 67305410000000000800000000000000
+      internalID: 21300086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_12
       rect:
@@ -316,7 +586,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 87305410000000000800000000000000
+      internalID: 21300088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_13
       rect:
@@ -329,7 +607,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a7305410000000000800000000000000
+      internalID: 21300090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_14
       rect:
@@ -342,7 +628,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c7305410000000000800000000000000
+      internalID: 21300092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_15
       rect:
@@ -355,7 +649,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e7305410000000000800000000000000
+      internalID: 21300094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_16
       rect:
@@ -368,7 +670,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 08305410000000000800000000000000
+      internalID: 21300096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_17
       rect:
@@ -381,7 +691,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 28305410000000000800000000000000
+      internalID: 21300098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_18
       rect:
@@ -394,7 +712,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 48305410000000000800000000000000
+      internalID: 21300100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_19
       rect:
@@ -407,7 +733,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 68305410000000000800000000000000
+      internalID: 21300102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_20
       rect:
@@ -420,7 +754,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 88305410000000000800000000000000
+      internalID: 21300104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_21
       rect:
@@ -433,7 +775,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a8305410000000000800000000000000
+      internalID: 21300106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_22
       rect:
@@ -446,7 +796,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c8305410000000000800000000000000
+      internalID: 21300108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_23
       rect:
@@ -459,7 +817,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e8305410000000000800000000000000
+      internalID: 21300110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_24
       rect:
@@ -472,7 +838,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 09305410000000000800000000000000
+      internalID: 21300112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_25
       rect:
@@ -485,7 +859,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 29305410000000000800000000000000
+      internalID: 21300114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_26
       rect:
@@ -498,7 +880,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 49305410000000000800000000000000
+      internalID: 21300116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_27
       rect:
@@ -511,7 +901,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 69305410000000000800000000000000
+      internalID: 21300118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_28
       rect:
@@ -524,7 +922,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 89305410000000000800000000000000
+      internalID: 21300120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_29
       rect:
@@ -537,7 +943,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: a9305410000000000800000000000000
+      internalID: 21300122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_30
       rect:
@@ -550,7 +964,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: c9305410000000000800000000000000
+      internalID: 21300124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_31
       rect:
@@ -563,7 +985,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: e9305410000000000800000000000000
+      internalID: 21300126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_32
       rect:
@@ -576,7 +1006,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0a305410000000000800000000000000
+      internalID: 21300128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_33
       rect:
@@ -589,7 +1027,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2a305410000000000800000000000000
+      internalID: 21300130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_34
       rect:
@@ -602,7 +1048,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4a305410000000000800000000000000
+      internalID: 21300132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_35
       rect:
@@ -615,7 +1069,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6a305410000000000800000000000000
+      internalID: 21300134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_36
       rect:
@@ -628,7 +1090,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8a305410000000000800000000000000
+      internalID: 21300136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_37
       rect:
@@ -641,7 +1111,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: aa305410000000000800000000000000
+      internalID: 21300138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_38
       rect:
@@ -654,7 +1132,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ca305410000000000800000000000000
+      internalID: 21300140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_39
       rect:
@@ -667,7 +1153,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ea305410000000000800000000000000
+      internalID: 21300142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_40
       rect:
@@ -680,7 +1174,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 0b305410000000000800000000000000
+      internalID: 21300144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_41
       rect:
@@ -693,7 +1195,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 2b305410000000000800000000000000
+      internalID: 21300146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_42
       rect:
@@ -706,7 +1216,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 4b305410000000000800000000000000
+      internalID: 21300148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_43
       rect:
@@ -719,7 +1237,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 6b305410000000000800000000000000
+      internalID: 21300150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_44
       rect:
@@ -732,7 +1258,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: 8b305410000000000800000000000000
+      internalID: 21300152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_45
       rect:
@@ -745,7 +1279,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: ab305410000000000800000000000000
+      internalID: 21300154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wooden-floor-bitmask_46
       rect:
@@ -758,9 +1300,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: 0
+      bones: []
+      spriteID: cb305410000000000800000000000000
+      internalID: 21300156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
