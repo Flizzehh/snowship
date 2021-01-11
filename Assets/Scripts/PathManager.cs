@@ -63,7 +63,7 @@ public static class PathManager {
 			}
 
 			foreach (TileManager.Tile nTile in (currentTile.tile.surroundingTiles.Find(tile => tile != null && !tile.walkable) != null ? currentTile.tile.horizontalSurroundingTiles : currentTile.tile.surroundingTiles)) {
-				if (nTile != null && checkedTiles.Find(checkedTile => checkedTile.tile == nTile) == null && (allowEndTileNonWalkable && nTile == endTile ? true : (walkable ? nTile.walkable : true))) {
+				if (nTile != null && checkedTiles.Find(checkedTile => checkedTile.tile == nTile) == null && (allowEndTileNonWalkable && nTile == endTile || (!walkable || nTile.walkable))) {
 					float cost = 0;
 					cost += 1 * Vector2.Distance(nTile.obj.transform.position, endTile.obj.transform.position);
 					cost += 1 * RegionBlockDistance(nTile.regionBlock, endTile.regionBlock, true, true, true);
@@ -109,7 +109,7 @@ public static class PathManager {
 			}
 
 			foreach (TileManager.Tile nTile in (directionSetting == DirectionSetting.Horizontal ? currentTile.tile.horizontalSurroundingTiles : (directionSetting == DirectionSetting.Diagonal ? currentTile.tile.diagonalSurroundingTiles : currentTile.tile.surroundingTiles))) {
-				if (nTile != null && checkedTiles.Find(o => o.tile == nTile) == null && (walkableSetting == WalkableSetting.Walkable ? nTile.walkable : (walkableSetting == WalkableSetting.NonWalkable ? !nTile.walkable : true))) {
+				if (nTile != null && checkedTiles.Find(o => o.tile == nTile) == null && (walkableSetting == WalkableSetting.Walkable ? nTile.walkable : (walkableSetting != WalkableSetting.NonWalkable || !nTile.walkable))) {
 					PathfindingTile pTile = new PathfindingTile(nTile, null, Vector2.Distance(nTile.obj.transform.position, endTile.obj.transform.position));
 					frontier.Add(pTile);
 					checkedTiles.Add(pTile);
@@ -153,7 +153,7 @@ public static class PathManager {
 			}
 			frontier.RemoveAt(0);
 			foreach (TileManager.Map.RegionBlock regionBlock in currentRegionBlock.regionBlock.horizontalSurroundingRegionBlocks) {
-				if ((allowEndTileNonWalkable && regionBlock == endRegionBlock ? true : (careAboutWalkability ? regionBlock.tileType.walkable == walkable : true)) && !checkedBlocks.Contains(regionBlock)) {
+				if ((allowEndTileNonWalkable && regionBlock == endRegionBlock || (!careAboutWalkability || regionBlock.tileType.walkable == walkable)) && !checkedBlocks.Contains(regionBlock)) {
 					PathfindingRegionBlock pRegionBlock = new PathfindingRegionBlock(regionBlock, currentRegionBlock, Vector2.Distance(regionBlock.averagePosition, endRegionBlock.averagePosition));
 					frontier.Add(pRegionBlock);
 					checkedBlocks.Add(regionBlock);

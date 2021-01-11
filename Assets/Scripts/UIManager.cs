@@ -39,12 +39,13 @@ public class UIManager : BaseManager {
 		return new Regex("[^a-zA-Z0-9 -]").Replace(removeFromString, string.Empty);
 	}
 
-	public enum Colours { Clear, WhiteAlpha64, WhiteAlpha128, White, DarkRed, DarkGreen, LightRed, LightGreen, LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, DarkPurple };
+	public enum Colours { Clear, WhiteAlpha128, WhiteAlpha64, WhiteAlpha20, White, DarkRed, DarkGreen, LightRed, LightGreen, LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, DarkPurple };
 
 	private static readonly Dictionary<Colours, Color> colourMap = new Dictionary<Colours, Color>() {
 		{ Colours.Clear, new Color(255f, 255f, 255f, 0f) / 255f },
 		{ Colours.WhiteAlpha128, new Color(255f, 255f, 255f, 128f) / 255f },
 		{ Colours.WhiteAlpha64, new Color(255f, 255f, 255f, 64f) / 255f },
+		{ Colours.WhiteAlpha20, new Color(255f, 255f, 255f, 20f) / 255f },
 		{ Colours.White, new Color(255f, 255f, 255f, 255f) / 255f },
 		{ Colours.DarkRed, new Color(192f, 57f, 43f, 255f) / 255f },
 		{ Colours.DarkGreen, new Color(39f, 174f, 96f, 255f) / 255f },
@@ -213,7 +214,7 @@ public class UIManager : BaseManager {
 
 	private Button loadUniverseButton;
 
-	private List<UniverseElement> universeElements = new List<UniverseElement>();
+	private readonly List<UniverseElement> universeElements = new List<UniverseElement>();
 
 	private UniverseElement selectedUniverseElement;
 
@@ -390,7 +391,7 @@ public class UIManager : BaseManager {
 
 	private Button loadPlanetButton;
 
-	private List<PlanetElement> planetElements = new List<PlanetElement>();
+	private readonly List<PlanetElement> planetElements = new List<PlanetElement>();
 
 	private PlanetElement selectedPlanetElement;
 
@@ -669,7 +670,7 @@ public class UIManager : BaseManager {
 
 	private Button loadColonyButton;
 
-	private List<ColonyElement> colonyElements = new List<ColonyElement>();
+	private readonly List<ColonyElement> colonyElements = new List<ColonyElement>();
 
 	private ColonyElement selectedColonyElement;
 
@@ -909,7 +910,7 @@ public class UIManager : BaseManager {
 
 	private Button loadSaveButton;
 
-	private List<SaveElement> saveElements = new List<SaveElement>();
+	private readonly List<SaveElement> saveElements = new List<SaveElement>();
 
 	private SaveElement selectedSaveElement;
 
@@ -998,7 +999,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private List<GameObject> planetTileObjs = new List<GameObject>();
+	private readonly List<GameObject> planetTileObjs = new List<GameObject>();
 
 	private void ClearPlanet() {
 		foreach (GameObject planetTileObj in planetTileObjs) {
@@ -1932,7 +1933,7 @@ public class UIManager : BaseManager {
 		ResourceManager.ObjectGroupEnum.None
 	};
 
-	private List<ObjectPrefabButton> objectPrefabButtons = new List<ObjectPrefabButton>();
+	private readonly List<ObjectPrefabButton> objectPrefabButtons = new List<ObjectPrefabButton>();
 
 	public void CreateActionsPanel() {
 		Transform actionsPanel = gameUI.transform.Find("Actions-Panel");
@@ -2048,9 +2049,9 @@ public class UIManager : BaseManager {
 	}
 
 	private GameObject tileRoofElement = null;
-	private List<GameObject> tileResourceElements = new List<GameObject>();
-	private List<GameObject> plantObjectElements = new List<GameObject>();
-	private Dictionary<int, List<GameObject>> tileObjectElements = new Dictionary<int, List<GameObject>>();
+	private readonly List<GameObject> tileResourceElements = new List<GameObject>();
+	private readonly List<GameObject> plantObjectElements = new List<GameObject>();
+	private readonly Dictionary<int, List<GameObject>> tileObjectElements = new Dictionary<int, List<GameObject>>();
 
 	public static readonly Dictionary<int, string> layerToLayerNameMap = new Dictionary<int, string>() {
 		{ 0, "Job" },
@@ -2358,7 +2359,7 @@ public class UIManager : BaseManager {
 
 		public GameObject obj;
 
-		private InputField tradeAmountInputField;
+		private readonly InputField tradeAmountInputField;
 
 		public TradeResourceElement(ResourceManager.TradeResourceAmount tradeResourceAmount, Transform parent) {
 			this.tradeResourceAmount = tradeResourceAmount;
@@ -2605,13 +2606,13 @@ public class UIManager : BaseManager {
 		rightListPanel.offsetMin = new Vector2(rightListSize.x, verticalOffset);
 	}
 
-	private List<NeedElement> selectedColonistNeedElements = new List<NeedElement>();
-	private List<HappinessModifierElement> selectedColonistHappinessModifierElements = new List<HappinessModifierElement>();
+	private readonly List<NeedElement> selectedColonistNeedElements = new List<NeedElement>();
+	private readonly List<HappinessModifierElement> selectedColonistHappinessModifierElements = new List<HappinessModifierElement>();
 
-	private List<SkillElement> selectedColonistSkillElements = new List<SkillElement>();
+	private readonly List<SkillElement> selectedColonistSkillElements = new List<SkillElement>();
 
-	private List<InventoryElement> selectedColonistInventoryElements = new List<InventoryElement>();
-	private List<ReservedResourcesColonistElement> selectedColonistReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
+	private readonly List<InventoryElement> selectedColonistInventoryElements = new List<InventoryElement>();
+	private readonly List<ReservedResourcesColonistElement> selectedColonistReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
 
 	public void SetSelectedColonistInformation(bool sameColonistSelected) {
 		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
@@ -2681,8 +2682,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void RemakeSelectedColonistNeeds() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
-			ColonistManager.Colonist selectedColonist = (ColonistManager.Colonist)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
 			foreach (NeedElement needElement in selectedColonistNeedElements) {
 				MonoBehaviour.Destroy(needElement.obj);
 			}
@@ -2695,8 +2695,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void RemakeSelectedColonistHappinessModifiers() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
-			ColonistManager.Colonist selectedColonist = (ColonistManager.Colonist)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
 			foreach (HappinessModifierElement happinessModifierElement in selectedColonistHappinessModifierElements) {
 				MonoBehaviour.Destroy(happinessModifierElement.obj);
 			}
@@ -2708,8 +2707,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void RemakeSelectedColonistSkills() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
-			ColonistManager.Colonist selectedColonist = (ColonistManager.Colonist)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
 			foreach (SkillElement skillElement in selectedColonistSkillElements) {
 				MonoBehaviour.Destroy(skillElement.obj);
 			}
@@ -2774,8 +2772,8 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private List<ClothingElement> availableClothingElements = new List<ClothingElement>();
-	private List<ClothingElement> takenClothingElements = new List<ClothingElement>();
+	private readonly List<ClothingElement> availableClothingElements = new List<ClothingElement>();
+	private readonly List<ClothingElement> takenClothingElements = new List<ClothingElement>();
 
 	public void SetSelectedColonistClothingSelectionPanelActive(bool active) {
 		selectedColonistClothingSelectionPanel.SetActive(active);
@@ -2857,7 +2855,7 @@ public class UIManager : BaseManager {
 		{ 1, -50 }, { 2, -65 }, { 3, -70 }
 	};
 
-	private List<HappinessModifierElement> removeHME = new List<HappinessModifierElement>();
+	private readonly List<HappinessModifierElement> removeHME = new List<HappinessModifierElement>();
 
 	public void UpdateSelectedColonistInformation() {
 		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
@@ -2962,7 +2960,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	List<ColonistElement> colonistElements = new List<ColonistElement>();
+	private readonly List<ColonistElement> colonistElements = new List<ColonistElement>();
 
 	public void RemoveColonistElements() {
 		foreach (ColonistElement colonistElement in colonistElements) {
@@ -2991,8 +2989,8 @@ public class UIManager : BaseManager {
 		public CaravanManager.Caravan caravan;
 		public GameObject obj;
 
-		private Text affiliatedColonyNameText;
-		private Text resourceGroupNameText;
+		private readonly Text affiliatedColonyNameText;
+		private readonly Text resourceGroupNameText;
 
 		public CaravanElement(CaravanManager.Caravan caravan, Transform transform) {
 			this.caravan = caravan;
@@ -3029,7 +3027,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private List<CaravanElement> caravanElements = new List<CaravanElement>();
+	private readonly List<CaravanElement> caravanElements = new List<CaravanElement>();
 
 	public void RemoveCaravanElements() {
 		foreach (CaravanElement caravanElement in caravanElements) {
@@ -3126,22 +3124,29 @@ public class UIManager : BaseManager {
 				priorityText.text = string.Empty;
 			}
 
-			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
-				GameObject resourceAmountObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), obj.transform.Find("Content/RequiredResources-Panel"), false);
+			if (job.resourcesToBuild.Count > 0) {
 
-				resourceAmountObj.GetComponent<Image>().color = GetColour(Colours.Clear);
+				obj.transform.Find("Content/RequiredResources-Panel").GetComponent<Image>().color = GetColour(Colours.WhiteAlpha64);
 
-				resourceAmountObj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
-				resourceAmountObj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
-				resourceAmountObj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = resourceAmount.amount.ToString();
+				foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
+					GameObject resourceAmountObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), obj.transform.Find("Content/RequiredResources-Panel"), false);
+
+					resourceAmountObj.GetComponent<Image>().color = GetColour(Colours.Clear);
+
+					resourceAmountObj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
+					resourceAmountObj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
+					resourceAmountObj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = resourceAmount.amount.ToString();
+				}
 			}
 
 			if (colonist != null) {
+
 				colonistObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistInfoElement-Panel"), obj.transform.Find("Content"), false);
 				colonistObj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
 				colonistObj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
 				colonistObj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
-				
+				colonistObj.GetComponent<Image>().color = GetColour(Colours.WhiteAlpha64);
+
 				colonistObj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<LayoutElement>().minWidth - 6, colonistObj.GetComponent<RectTransform>().sizeDelta.y);
 				obj.transform.Find("Content").GetComponent<VerticalLayoutGroup>().padding.bottom = 3;
 
@@ -3171,9 +3176,7 @@ public class UIManager : BaseManager {
 
 		public void Update() {
 			if (colonist != null) {
-				Color lightGreen = GetColour(Colours.LightGreen);
-				Color lightRed = GetColour(Colours.LightRed);
-				colonistObj.GetComponent<Image>().color = Color.Lerp(new Color(lightRed.r, lightRed.g, lightRed.b, 150f / 255f), new Color(lightGreen.r, lightGreen.g, lightGreen.b, 150f / 255f), colonist.health);
+				//colonistObj.GetComponent<Image>().color = Color.Lerp(ChangeAlpha(GetColour(Colours.LightRed), 150f / 255f), ChangeAlpha(GetColour(Colours.LightGreen), 150f / 255f), colonist.health);
 			}
 			if (colonist != null && !job.started && colonist.startPathLength > 0 && colonist.path.Count > 0) {
 				obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().value = (1 - (colonist.path.Count / (float)colonist.startPathLength)) * colonist.startPathLength;//Mathf.Lerp((1 - (colonist.path.Count / (float)colonist.startPathLength)) * colonist.startPathLength, (1 - ((colonist.path.Count - 1) / (float)colonist.startPathLength)) * colonist.startPathLength, (1 - Vector2.Distance(colonist.obj.transform.position, colonist.path[0].obj.transform.position)) + 0.5f);
@@ -3195,7 +3198,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	public List<JobElement> jobElements = new List<JobElement>();
+	private readonly List<JobElement> jobElements = new List<JobElement>();
 
 	public void RemoveJobElements() {
 		foreach (JobElement jobElement in jobElements) {
@@ -3244,10 +3247,10 @@ public class UIManager : BaseManager {
 		LayoutRebuilder.ForceRebuildLayoutImmediate(gameUI.transform.Find("RightList-Panel/RightList-ScrollPanel/RightList-Panel").GetComponent<RectTransform>());
 	}
 
-	public void UpdateDateTimeInformation(int minute, int hour, int day, TimeManager.Season season, int year, bool isDay) {
+	public void UpdateDateTimeInformation(int minute, int hour, string day, TimeManager.Season season, int year, bool isDay) {
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Speed-Text").GetComponent<Text>().text = GameManager.timeM.GetTimeModifier() > 0 ? new string('>', GameManager.timeM.GetTimeModifier()) : "-";
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Time-Text").GetComponent<Text>().text = GameManager.timeM.Get12HourTime() + ":" + (minute < 10 ? ("0" + minute) : minute.ToString()) + " " + (hour < 12 || hour > 23 ? "AM" : "PM") + " - " + (isDay ? "Day" : "Night");
-		dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = GameManager.timeM.GetDayWithSuffix(GameManager.timeM.GetDay()) + " of " + season;
+		dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = day + " of " + season;
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Year-Text").GetComponent<Text>().text = "Year " + year;
 	}
 
@@ -3303,8 +3306,8 @@ public class UIManager : BaseManager {
 		selectedContainerIndicator.SetActive(false);
 	}
 
-	private List<ReservedResourcesColonistElement> containerReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
-	private List<InventoryElement> containerInventoryElements = new List<InventoryElement>();
+	private readonly List<ReservedResourcesColonistElement> containerReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
+	private readonly List<InventoryElement> containerInventoryElements = new List<InventoryElement>();
 
 	public void SetSelectedContainerInfo() {
 
@@ -3391,9 +3394,9 @@ public class UIManager : BaseManager {
 		selectedTradingPostIndicator.SetActive(false);
 	}
 
-	private List<ResourceTransferElement> tradingPostResourceTransferElements = new List<ResourceTransferElement>();
-	private List<ReservedResourcesColonistElement> tradingPostReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
-	private List<ResourceTransferElement> tradingPostInventoryElements = new List<ResourceTransferElement>();
+	private readonly List<ResourceTransferElement> tradingPostResourceTransferElements = new List<ResourceTransferElement>();
+	private readonly List<ReservedResourcesColonistElement> tradingPostReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
+	private readonly List<ResourceTransferElement> tradingPostInventoryElements = new List<ResourceTransferElement>();
 
 	public void SetSelectedTradingPostInfo() {
 
@@ -3546,9 +3549,9 @@ public class UIManager : BaseManager {
 	}
 	*/
 
-	public List<ProfessionColumn> professionColumns = new List<ProfessionColumn>();
-	public List<ColonistProfessionsRow> colonistProfessionsRows = new List<ColonistProfessionsRow>();
-	public List<GameObject> colonistProfessionsRowBackgrounds = new List<GameObject>();
+	public readonly List<ProfessionColumn> professionColumns = new List<ProfessionColumn>();
+	public readonly List<ColonistProfessionsRow> colonistProfessionsRows = new List<ColonistProfessionsRow>();
+	public readonly List<GameObject> colonistProfessionsRowBackgrounds = new List<GameObject>();
 
 	public class ProfessionColumn {
 		public ColonistManager.ProfessionPrefab professionPrefab;
@@ -3693,8 +3696,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void SetSelectedTraderMenu() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is CaravanManager.Trader) {
-			CaravanManager.Trader selectedTrader = (CaravanManager.Trader)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is CaravanManager.Trader selectedTrader) {
 			CaravanManager.Caravan caravan = selectedTrader.caravan;
 
 			selectedTraderMenu.SetActive(true);
@@ -3714,8 +3716,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void UpdateSelectedTraderMenu() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is CaravanManager.Trader) {
-			CaravanManager.Trader selectedTrader = (CaravanManager.Trader)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is CaravanManager.Trader selectedTrader) {
 
 			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedTrader.health * 100);
 			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedTrader.health);
@@ -3724,8 +3725,8 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private List<TradeResourceElement> tradeResourceElements = new List<TradeResourceElement>();
-	private List<ConfirmedTradeResourceElement> confirmedTradeResourceElements = new List<ConfirmedTradeResourceElement>();
+	private readonly List<TradeResourceElement> tradeResourceElements = new List<TradeResourceElement>();
+	private readonly List<ConfirmedTradeResourceElement> confirmedTradeResourceElements = new List<ConfirmedTradeResourceElement>();
 
 	public void SetTradeMenuActive(bool active) {
 		tradeMenu.SetActive(active);
@@ -3787,7 +3788,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private List<TradeResourceElement> removedTradeResourceElements = new List<TradeResourceElement>();
+	private readonly List<TradeResourceElement> removedTradeResourceElements = new List<TradeResourceElement>();
 
 	public void UpdateTradeMenu() {
 		if (tradeMenu.activeSelf) {

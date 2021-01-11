@@ -2784,7 +2784,7 @@ public class TileManager : BaseManager {
 			}
 		}
 
-		private List<RegionBlock> visibleRegionBlocks = new List<RegionBlock>();
+		private readonly List<RegionBlock> visibleRegionBlocks = new List<RegionBlock>();
 		private RegionBlock centreRegionBlock;
 		private int lastOrthographicSize = -1;
 

@@ -1212,7 +1212,7 @@ public class ResourceManager : BaseManager {
 	}
 
 	public enum ObjectGroupEnum {
-		Structure, Furniture, Industrial,
+		Structure, Furniture, Crafting,
 		Command,
 		Farm,
 		None,
@@ -1287,7 +1287,7 @@ public class ResourceManager : BaseManager {
 		Torch, WoodenLamp,
 		TradingPost,
 		Furnace,
-		CottonGin, SplittingBlock, SplittingLog, Anvil, Loom, SowingTable, BrickFormer,
+		Gin, SplittingBlock, SplittingLog, Anvil, Loom, SowingTable, BrickFormer,
 		ChopPlant, PlantPlant, PlantAppleTree, PlantBlueberryBush,
 		Mine, Dig, Fill,
 		RemoveFloor, RemoveObject, RemoveAll,
@@ -1662,7 +1662,7 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	private Dictionary<ObjectGroupEnum, ObjectPrefabGroup> objectPrefabGroups = new Dictionary<ObjectGroupEnum, ObjectPrefabGroup>();
+	private readonly Dictionary<ObjectGroupEnum, ObjectPrefabGroup> objectPrefabGroups = new Dictionary<ObjectGroupEnum, ObjectPrefabGroup>();
 
 	public class ObjectPrefabGroup {
 		public readonly ObjectGroupEnum type;
@@ -2541,7 +2541,6 @@ public class ResourceManager : BaseManager {
 						foreach (PriorityResourceInstance fuel in fuels.OrderBy(f => f.priority.Get())) {
 							if ((fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy) >= remainingManufacturingEnergy) {
 								ResourceAmount fuelResourceAmount = new ResourceAmount(fuel.resource, Mathf.CeilToInt(remainingManufacturingEnergy / (float)fuel.resource.fuelEnergy));
-								//Debug.Log(resource.resource.name + " " + resource.resource.manufacturingEnergy + " " + fuelResourceAmount.resource.name + " " + fuelResourceAmount.amount);
 								resource.fuelAmounts.Add(fuelResourceAmount);
 								remainingManufacturingEnergy = 0;
 							} else if (fuel.resource.GetAvailableAmount() > 0) {

@@ -283,7 +283,7 @@
 					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
 					<JobType>Build
 <Group>
-	<Type>Industrial
+	<Type>Crafting
 	<SubGroups>
 		<SubGroup>
 			<Type>Furnaces
@@ -318,7 +318,7 @@
 			<Type>Processing
 			<Objects>
 				<Object>
-					<Type>CottonGin
+					<Type>Gin
 					<InstanceType>ManufacturingObject
 					<Layer>2
 					<Integrity>100
@@ -343,7 +343,16 @@
 					<Flammability>0
 					<UsesFuel>false
 					<TimeToBuild>5
-					<CommonResources>Basalt:1
+					<Variations>
+						<Variation>
+							<Name>Basalt
+							<UniqueResources>Basalt:1
+						<Variation>
+							<Name>Granite
+							<UniqueResources>Granite:1
+						<Variation>
+							<Name>Sandstone
+							<UniqueResources>Sandstone:1
 					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
 					<JobType>Build
 				<Object>

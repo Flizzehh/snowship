@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class HumanManager : BaseManager {
 
-	private List<string> maleNames = new List<string>();
-	private List<string> femaleNames = new List<string>();
+	private readonly List<string> maleNames = new List<string>();
+	private readonly List<string> femaleNames = new List<string>();
 
 	public List<List<Sprite>> humanMoveSprites = new List<List<Sprite>>();
 
@@ -204,8 +204,8 @@ public class HumanManager : BaseManager {
 			Human newSelectedHuman = humans.Find(human => Vector2.Distance(human.obj.transform.position, mousePosition) < 0.5f);
 			if (newSelectedHuman != null) {
 				SetSelectedHuman(newSelectedHuman);
-			} else if (selectedHuman != null && selectedHuman is ColonistManager.Colonist) {
-				((ColonistManager.Colonist)selectedHuman).PlayerMoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition));
+			} else if (selectedHuman != null && selectedHuman is ColonistManager.Colonist colonist) {
+				colonist.PlayerMoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition));
 			}
 		}
 		if (Input.GetMouseButtonDown(1)) {

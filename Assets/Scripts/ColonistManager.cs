@@ -24,7 +24,7 @@ public class ColonistManager : BaseManager {
 
 	public enum ProfessionEnum { Building, Terraforming, Farming, Forestry, Crafting, Hauling };
 
-	public List<ProfessionPrefab> professionPrefabs = new List<ProfessionPrefab>();
+	public readonly List<ProfessionPrefab> professionPrefabs = new List<ProfessionPrefab>();
 
 	public class ProfessionPrefab {
 
@@ -140,7 +140,7 @@ public class ColonistManager : BaseManager {
 		public SkillEnum type;
 		public string name;
 
-		public Dictionary<JobManager.JobEnum, float> affectedJobTypes = new Dictionary<JobManager.JobEnum, float>();
+		public readonly Dictionary<JobManager.JobEnum, float> affectedJobTypes = new Dictionary<JobManager.JobEnum, float>();
 
 		public SkillPrefab(List<string> data) {
 			type = (SkillEnum)Enum.Parse(typeof(SkillEnum), data[0]);
@@ -185,7 +185,7 @@ public class ColonistManager : BaseManager {
 			currentExperience += amount;
 			while (currentExperience >= nextLevelExperience) {
 				level += 1;
-				currentExperience = (currentExperience - nextLevelExperience);
+				currentExperience -= nextLevelExperience;
 				nextLevelExperience = 100 + (10 * level);
 			}
 			GameManager.jobM.UpdateColonistJobCosts(colonist);
@@ -199,7 +199,7 @@ public class ColonistManager : BaseManager {
 		}
 	}
 
-	public List<SkillPrefab> skillPrefabs = new List<SkillPrefab>();
+	public readonly List<SkillPrefab> skillPrefabs = new List<SkillPrefab>();
 
 	public void CreateColonistSkills() {
 		List<string> stringSkills = Resources.Load<TextAsset>(@"Data/colonist-skills").text.Replace("\n", string.Empty).Replace("\t", string.Empty).Split('`').ToList();
@@ -220,7 +220,7 @@ public class ColonistManager : BaseManager {
 		Dieter, Overeater
 	};
 
-	public List<TraitPrefab> traitPrefabs = new List<TraitPrefab>();
+	public readonly List<TraitPrefab> traitPrefabs = new List<TraitPrefab>();
 
 	public class TraitPrefab {
 
@@ -229,7 +229,7 @@ public class ColonistManager : BaseManager {
 
 		public float effectAmount;
 
-		public TraitPrefab(List<string> data) {
+		public TraitPrefab() {
 
 		}
 	}
@@ -252,14 +252,14 @@ public class ColonistManager : BaseManager {
 	public enum NeedEnum { Rest, Water, Food, Temperature, Shelter, Clothing, Safety, Social, Esteem, Relaxation };
 
 	// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
-	private List<JobManager.JobEnum> needRelatedJobs = new List<JobManager.JobEnum>() {
+	private readonly List<JobManager.JobEnum> needRelatedJobs = new List<JobManager.JobEnum>() {
 		JobManager.JobEnum.CollectFood, JobManager.JobEnum.Eat,
 		JobManager.JobEnum.CollectWater, JobManager.JobEnum.Drink,
 		JobManager.JobEnum.Sleep
 	};
 
 	// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
-	private Dictionary<JobManager.JobEnum, NeedEnum> jobToNeedMap = new Dictionary<JobManager.JobEnum, NeedEnum>() {
+	private readonly Dictionary<JobManager.JobEnum, NeedEnum> jobToNeedMap = new Dictionary<JobManager.JobEnum, NeedEnum>() {
 		{ JobManager.JobEnum.Sleep, NeedEnum.Rest },
 		{ JobManager.JobEnum.CollectWater, NeedEnum.Water },
 		{ JobManager.JobEnum.Drink, NeedEnum.Water },
@@ -267,7 +267,7 @@ public class ColonistManager : BaseManager {
 		{ JobManager.JobEnum.Eat, NeedEnum.Food }
 	};
 
-	public Dictionary<NeedEnum, Func<NeedInstance, float>> needsValueSpecialIncreases = new Dictionary<NeedEnum, Func<NeedInstance, float>>();
+	public readonly Dictionary<NeedEnum, Func<NeedInstance, float>> needsValueSpecialIncreases = new Dictionary<NeedEnum, Func<NeedInstance, float>>();
 
 	public void InitializeNeedsValueSpecialIncreases() {
 		needsValueSpecialIncreases.Add(NeedEnum.Rest, delegate (NeedInstance need) {
@@ -354,8 +354,7 @@ public class ColonistManager : BaseManager {
 
 			List<ResourceManager.ResourceAmount> resourcesToReserve = closestFood.Value;
 			if (closestFood.Key != null) {
-				if (closestFood.Key.parent is ResourceManager.Container) {
-					ResourceManager.Container container = (ResourceManager.Container)closestFood.Key.parent;
+				if (closestFood.Key.parent is ResourceManager.Container container) {
 					container.GetInventory().ReserveResources(resourcesToReserve, need.colonist);
 					JobManager.Job job = new JobManager.Job(container.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectFood), null, 0);
 					need.colonist.SetJob(new JobManager.ColonistJob(need.colonist, job, null, null));
@@ -580,7 +579,7 @@ public class ColonistManager : BaseManager {
 
 	*/
 
-	public List<NeedPrefab> needPrefabs = new List<NeedPrefab>();
+	public readonly List<NeedPrefab> needPrefabs = new List<NeedPrefab>();
 
 	public class NeedPrefab {
 
@@ -605,9 +604,9 @@ public class ColonistManager : BaseManager {
 
 		public int priority;
 
-		public Dictionary<TraitEnum, float> traitsAffectingThisNeed = new Dictionary<TraitEnum, float>();
+		public readonly Dictionary<TraitEnum, float> traitsAffectingThisNeed = new Dictionary<TraitEnum, float>();
 
-		public List<JobManager.JobEnum> relatedJobs = new List<JobManager.JobEnum>();
+		public readonly List<JobManager.JobEnum> relatedJobs = new List<JobManager.JobEnum>();
 
 		public NeedPrefab(
 			NeedEnum type,
@@ -856,13 +855,13 @@ public class ColonistManager : BaseManager {
 		Overencumbered
 	};
 
-	public List<HappinessModifierGroup> happinessModifierGroups = new List<HappinessModifierGroup>();
+	public readonly List<HappinessModifierGroup> happinessModifierGroups = new List<HappinessModifierGroup>();
 
 	public class HappinessModifierGroup {
 		public HappinessModifierGroupEnum type;
 		public string name;
 
-		public List<HappinessModifierPrefab> prefabs = new List<HappinessModifierPrefab>();
+		public readonly List<HappinessModifierPrefab> prefabs = new List<HappinessModifierPrefab>();
 
 		public HappinessModifierGroup(string stringHappinessModifierGroup) {
 			List<string> stringHappinessModifiers = stringHappinessModifierGroup.Split(new string[] { "<HappinessModifier>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -880,7 +879,7 @@ public class ColonistManager : BaseManager {
 		return happinessModifierGroups.Find(hmiGroup => hmiGroup.type == happinessModifierGroupEnum);
 	}
 
-	public List<HappinessModifierPrefab> happinessModifierPrefabs = new List<HappinessModifierPrefab>();
+	public readonly List<HappinessModifierPrefab> happinessModifierPrefabs = new List<HappinessModifierPrefab>();
 
 	public class HappinessModifierPrefab {
 
@@ -961,9 +960,9 @@ public class ColonistManager : BaseManager {
 		}
 	}
 
-	public List<Colonist> colonists = new List<Colonist>();
+	public readonly List<Colonist> colonists = new List<Colonist>();
 
-	private List<Colonist> deadColonists = new List<Colonist>();
+	private readonly List<Colonist> deadColonists = new List<Colonist>();
 
 	public class Colonist : HumanManager.Human {
 
@@ -1337,7 +1336,7 @@ public class ColonistManager : BaseManager {
 		}
 
 		public void MoveToClosestWalkableTile(bool careIfOvertileIsWalkable) {
-			if (careIfOvertileIsWalkable ? !overTile.walkable : true) {
+			if (!careIfOvertileIsWalkable || !overTile.walkable) {
 				List<TileManager.Tile> walkableSurroundingTiles = overTile.surroundingTiles.Where(tile => tile != null && tile.walkable).ToList();
 				if (walkableSurroundingTiles.Count > 0) {
 					MoveToTile(walkableSurroundingTiles[UnityEngine.Random.Range(0, walkableSurroundingTiles.Count)], false);

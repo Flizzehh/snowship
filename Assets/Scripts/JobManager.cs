@@ -235,13 +235,11 @@ public class JobManager : BaseManager {
 					colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
 				}
 			}
-			if (instance is ResourceManager.Farm) {
-				ResourceManager.Farm farm = (ResourceManager.Farm)instance;
+			if (instance is ResourceManager.Farm farm) {
 				if (farm.growProgressSpriteIndex == 0) {
 					job.colonist.GetInventory().ChangeResourceAmount(farm.prefab.seedResource, 1, false);
 				}
-			} else if (instance is ResourceManager.Container) {
-				ResourceManager.Container container = (ResourceManager.Container)instance;
+			} else if (instance is ResourceManager.Container container) {
 				List<ResourceManager.ResourceAmount> nonReservedResourcesToRemove = new List<ResourceManager.ResourceAmount>();
 				foreach (ResourceManager.ResourceAmount resourceAmount in container.GetInventory().resources) {
 					nonReservedResourcesToRemove.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
@@ -256,8 +254,8 @@ public class JobManager : BaseManager {
 						colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
 					}
 					reservedResourcesToRemove.Add(reservedResources);
-					if (reservedResources.human is ColonistManager.Colonist) {
-						((ColonistManager.Colonist)reservedResources.human).ReturnJob();
+					if (reservedResources.human is ColonistManager.Colonist human) {
+						human.ReturnJob();
 					}
 				}
 				foreach (ResourceManager.ReservedResources reservedResourceToRemove in reservedResourcesToRemove) {
@@ -266,14 +264,12 @@ public class JobManager : BaseManager {
 				GameManager.uiM.SetSelectedColonistInformation(true);
 				GameManager.uiM.SetSelectedContainerInfo();
 				GameManager.uiM.UpdateSelectedTradingPostInfo();
-			} else if (instance is ResourceManager.ManufacturingObject) {
-				ResourceManager.ManufacturingObject manufacturingTileObject = (ResourceManager.ManufacturingObject)instance;
-				foreach (Job removeJob in manufacturingTileObject.resources.Select(resource => resource.job)) {
+			} else if (instance is ResourceManager.ManufacturingObject manufacturingObject) {
+				foreach (Job removeJob in manufacturingObject.resources.Select(resource => resource.job)) {
 					job.Remove();
 					GameManager.jobM.jobs.Remove(job);
 				}
-			} else if (instance is ResourceManager.SleepSpot) {
-				ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)instance;
+			} else if (instance is ResourceManager.SleepSpot sleepSpot) {
 				if (sleepSpot.occupyingColonist != null) {
 					sleepSpot.occupyingColonist.ReturnJob();
 				}
@@ -724,7 +720,7 @@ public class JobManager : BaseManager {
 		} },
 	};
 
-	private List<GameObject> selectionIndicators = new List<GameObject>();
+	private readonly List<GameObject> selectionIndicators = new List<GameObject>();
 
 	public TileManager.Tile firstTile;
 	private bool stopSelection;
@@ -1000,7 +996,7 @@ public class JobManager : BaseManager {
 		}
 	}
 
-	public List<ContainerPickup> CalculateColonistPickupContainers(ColonistManager.Colonist colonist, Job job, List<ResourceManager.ResourceAmount> resourcesToPickup) {
+	public List<ContainerPickup> CalculateColonistPickupContainers(ColonistManager.Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToPickup) {
 		List<ContainerPickup> containersToPickupFrom = new List<ContainerPickup>();
 		List<ResourceManager.Container> sortedContainersByDistance = GameManager.resourceM.GetContainersInRegion(colonist.overTile.region).OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).ToList();
 		if (sortedContainersByDistance.Count > 0) {
@@ -1124,7 +1120,7 @@ public class JobManager : BaseManager {
 			List<ResourceManager.ResourceAmount> resourcesToPickup = returnKVP.Value[0];
 			colonistResources = returnKVP.Value[1];
 			if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
-				containerPickups = GameManager.jobM.CalculateColonistPickupContainers(colonist, job, resourcesToPickup);
+				containerPickups = GameManager.jobM.CalculateColonistPickupContainers(colonist, resourcesToPickup);
 			} else {
 				containerPickups = null;
 			}
@@ -1178,7 +1174,7 @@ public class JobManager : BaseManager {
 
 				if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
 
-					List<ContainerPickup> containerPickups = CalculateColonistPickupContainers(colonist, job, resourcesToPickup);
+					List<ContainerPickup> containerPickups = CalculateColonistPickupContainers(colonist, resourcesToPickup);
 					if (containerPickups != null) { // If all resources were found in containers
 
 						validJobs.Add(new ColonistJob(colonist, job, resourcesColonistHas, containerPickups));
@@ -1220,7 +1216,7 @@ public class JobManager : BaseManager {
 		}
 	}
 
-	private Dictionary<ColonistManager.Colonist, List<ColonistJob>> colonistJobs = new Dictionary<ColonistManager.Colonist, List<ColonistJob>>();
+	private readonly Dictionary<ColonistManager.Colonist, List<ColonistJob>> colonistJobs = new Dictionary<ColonistManager.Colonist, List<ColonistJob>>();
 
 	public void UpdateColonistJobs() {
 		colonistJobs.Clear();

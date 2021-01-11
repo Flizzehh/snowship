@@ -123,7 +123,7 @@ public class DebugManager : BaseManager {
 		listjobs				// listjobs (colonist)						-- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument
 	};
 
-	private Dictionary<Commands, string> commandHelpOutputs = new Dictionary<Commands, string>() {
+	private readonly Dictionary<Commands, string> commandHelpOutputs = new Dictionary<Commands, string>() {
 		{Commands.help,"help (commandName) -- without (commandName): lists all commands. with (commandName), shows syntax/description of the specified command" },
 		{Commands.clear,"clear -- clear the console" },
 		{Commands.selecthuman,"selecthuman <name> -- sets the selected human to the first human named <name>" },
@@ -218,7 +218,7 @@ public class DebugManager : BaseManager {
 		}
 	}
 
-	private Dictionary<Commands, Action<Commands, List<string>>> commandFunctions = new Dictionary<Commands, Action<Commands, List<string>>>();
+	private readonly Dictionary<Commands, Action<Commands, List<string>>> commandFunctions = new Dictionary<Commands, Action<Commands, List<string>>>();
 
 	private List<TileManager.Tile> selectedTiles = new List<TileManager.Tile>();
 	private bool selectTileMouseToggle;

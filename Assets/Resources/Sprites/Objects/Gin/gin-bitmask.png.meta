@@ -1,57 +1,21 @@
 fileFormatVersion: 2
-guid: bfca7685311fb53498b66bf9a0060da6
+guid: 3dd1644e22980604f92f7eb8e0747ff2
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: 21300000
-    second: wheat_0
+    second: gin-bitmask_0
   - first:
       213: 21300002
-    second: wheat_1
+    second: gin-bitmask_1
   - first:
       213: 21300004
-    second: wheat_2
+    second: gin-bitmask_2
   - first:
       213: 21300006
-    second: wheat_3
-  - first:
-      213: 21300008
-    second: wheat_4
-  - first:
-      213: 21300010
-    second: wheat_5
-  - first:
-      213: 21300012
-    second: wheat_6
-  - first:
-      213: 21300014
-    second: wheat_7
-  - first:
-      213: 21300016
-    second: wheat-farm-bitmask_0
-  - first:
-      213: 21300018
-    second: wheat-farm-bitmask_1
-  - first:
-      213: 21300020
-    second: wheat-farm-bitmask_2
-  - first:
-      213: 21300022
-    second: wheat-farm-bitmask_3
-  - first:
-      213: 21300024
-    second: wheat-farm-bitmask_4
-  - first:
-      213: 21300026
-    second: wheat-farm-bitmask_5
-  - first:
-      213: 21300028
-    second: wheat-farm-bitmask_6
-  - first:
-      213: 21300030
-    second: wheat-farm-bitmask_7
+    second: gin-bitmask_3
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -71,6 +35,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -105,6 +70,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -134,169 +101,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wheat-farm-bitmask_0
+      name: gin-bitmask_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 246
-        width: 32
+        x: 0
+        y: 32
+        width: 64
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03305410000000000800000000000000
-      internalID: 21300016
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wheat-farm-bitmask_1
+      name: gin-bitmask_1
       rect:
         serializedVersion: 2
-        x: 1
-        y: 211
+        x: 64
+        y: 0
         width: 32
-        height: 32
+        height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23305410000000000800000000000000
-      internalID: 21300018
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wheat-farm-bitmask_2
+      name: gin-bitmask_2
       rect:
         serializedVersion: 2
-        x: 1
-        y: 176
-        width: 32
+        x: 96
+        y: 32
+        width: 64
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43305410000000000800000000000000
-      internalID: 21300020
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wheat-farm-bitmask_3
+      name: gin-bitmask_3
       rect:
         serializedVersion: 2
-        x: 1
-        y: 141
+        x: 160
+        y: 0
         width: 32
-        height: 32
+        height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63305410000000000800000000000000
-      internalID: 21300022
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wheat-farm-bitmask_4
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 106
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 83305410000000000800000000000000
-      internalID: 21300024
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wheat-farm-bitmask_5
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 71
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a3305410000000000800000000000000
-      internalID: 21300026
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wheat-farm-bitmask_6
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 36
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c3305410000000000800000000000000
-      internalID: 21300028
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wheat-farm-bitmask_7
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e3305410000000000800000000000000
-      internalID: 21300030
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -304,7 +187,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: fcb5adebcbe0a86449ae1c597ec5b556
     internalID: 0
     vertices: []
     indices: 

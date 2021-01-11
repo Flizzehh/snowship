@@ -62,8 +62,9 @@
 		- Loom (used for turning cloth into clothing).
 		- Wooden Bridge (allows faster water crossings, supports building on water).
 		- Trading Post (traders will go to the nearest trading post upon entering the map, resources stored in a trading post will be available to trade).
-	- Cotton Gin now requires 2 Iron instead of 2 Stone.
-	- Cotton Gins can now be rotated.
+	- Renamed Cotton Gin to Gin.
+	- Gin now requires 2 Iron instead of 2 Stone.
+	- Gins can now be rotated.
 	- Wooden Chests can now be rotated.
 	- Fixed issue where light colours were being parsed incorrectly (lime green lights instead of orange).
 	- Lights now have a larger effective range.
@@ -96,6 +97,7 @@
 	- Pressing or holding F to focus on something no longer automatically zooms in the camera, the previous zoom level is maintained.
 	- Added smooth zooming.
 	- Reduced occurrences of jump-zooming (instantly zooming all of the way in or out).
+	- Prevented zooming when hovering over certain UI elements with scrollable components.
 - Saving/Loading
 	- Save files from an incompatible save version can no longer be loaded (going to look into adding backwards-compatibility for save files in the future).
 	- Fixed issues with settings file causing it to not properly save and load data.
@@ -126,6 +128,9 @@
 	- Job elements now list the resources required to complete the job.
 	- Significantly changed and improved the interface for manufacturing/crafting resources.
 	- Jobs to craft a resource now show the resource being crafted on the map and in the UI.
+	- Clicking and holding/dragging on one or more tiles when creating a job now shows the actual sprite of the object/job rather than a white box.
+	- Improved interface for the selection size panel when creating a job (especially for clicking and dragging).
+	- Changed Industrial to Crafting in build menu.
 - Jobs
 	- Priority of jobs can now be modified. Priority can be increased or decreased by any amount. Priority default is 0. Colonists will check if they can complete jobs with a higher priority before jobs with a lower priority. Job priority can be reset and changed with the two draggable commands in Command > Priority > Increase/Decrease Priority. Cancelling a job will also remove its priority.
 	- The cancel command has been moved to Command > Cancel > Cancel rather than having a standalone button for it.

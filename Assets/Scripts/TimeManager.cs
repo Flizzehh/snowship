@@ -92,7 +92,7 @@ public class TimeManager : BaseManager {
 			}
 			isDay = (hour >= 6 && hour <= 18);
 
-			GameManager.uiM.UpdateDateTimeInformation(minute, hour, day, GetSeason(), year, isDay);
+			GameManager.uiM.UpdateDateTimeInformation(minute, hour, GetDayWithSuffix(day), GetSeason(), year, isDay);
 		}
 	}
 

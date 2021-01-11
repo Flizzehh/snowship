@@ -156,7 +156,7 @@ public class CaravanManager : BaseManager {
 		private static readonly int minMinimumCaravanAmount = 5;
 		private static readonly int maxMinimumCaravanAmount = 15;
 
-		private List<Trader> removeTraders = new List<Trader>();
+		private readonly List<Trader> removeTraders = new List<Trader>();
 
 		public Caravan() {
 			inventory = new ResourceManager.Inventory(this, int.MaxValue, int.MaxValue);

@@ -31,8 +31,6 @@ public class PersistenceManager : BaseManager {
 	// Settings Saving
 
 	public class SettingsState {
-		private string filePath;
-
 		public Resolution resolution;
 		public int resolutionWidth;
 		public int resolutionHeight;
@@ -117,7 +115,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public bool LoadSettings() {
-		StreamReader file = null;
+		StreamReader file;
 		try {
 			file = new StreamReader(GenerateSettingsFilePath());
 			if (file == null) {
@@ -1045,7 +1043,7 @@ public class PersistenceManager : BaseManager {
 	public PersistenceSave LoadSave(string path) {
 		PersistenceSave persistenceSave = new PersistenceSave(path);
 
-		List<KeyValuePair<string, object>> properties = null;
+		List<KeyValuePair<string, object>> properties;
 		try {
 			properties = GetKeyValuePairsFromFile(path);
 		} catch (Exception e) {
@@ -3527,12 +3525,10 @@ public class PersistenceManager : BaseManager {
 				file.WriteLine(CreateKeyValueString(ObjectProperty.Integrity, instance.integrity, 1));
 				file.WriteLine(CreateKeyValueString(ObjectProperty.Active, instance.active, 1));
 
-				if (instance is ResourceManager.Container) {
-					ResourceManager.Container container = (ResourceManager.Container)instance;
+				if (instance is ResourceManager.Container container) {
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Container, string.Empty, 1));
 					WriteInventoryLines(file, container.GetInventory(), 2);
-				} else if (instance is ResourceManager.ManufacturingObject) {
-					ResourceManager.ManufacturingObject manufacturingObject = (ResourceManager.ManufacturingObject)instance;
+				} else if (instance is ResourceManager.ManufacturingObject manufacturingObject) {
 					if (manufacturingObject.resources.Count > 0 || manufacturingObject.fuels.Count > 0) {
 						file.WriteLine(CreateKeyValueString(ObjectProperty.ManufacturingObject, string.Empty, 1));
 						if (manufacturingObject.resources.Count > 0) {
@@ -3565,12 +3561,10 @@ public class PersistenceManager : BaseManager {
 							}
 						}
 					}
-				} else if (instance is ResourceManager.Farm) {
-					ResourceManager.Farm farm = (ResourceManager.Farm)instance;
+				} else if (instance is ResourceManager.Farm farm) {
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Farm, string.Empty, 1));
 					file.WriteLine(CreateKeyValueString(FarmProperty.GrowTimer, farm.growTimer, 2));
-				} else if (instance is ResourceManager.SleepSpot) {
-					ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)instance;
+				} else if (instance is ResourceManager.SleepSpot sleepSpot) {
 					file.WriteLine(CreateKeyValueString(ObjectProperty.SleepSpot, string.Empty, 1));
 					file.WriteLine(CreateKeyValueString(SleepSpotProperty.OccupyingColonistName, sleepSpot.occupyingColonist.name, 2));
 				}

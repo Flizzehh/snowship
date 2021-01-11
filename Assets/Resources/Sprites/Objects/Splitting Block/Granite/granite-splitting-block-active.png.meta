@@ -1,57 +1,33 @@
 fileFormatVersion: 2
-guid: 6e723c846fee57a419441d83c1763f8d
+guid: f08fb2c98d0230b42ad0c7c4797b5514
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 21300000
-    second: potato_0
+      213: -4929873758758174398
+    second: granite-splitting-block-active_0
   - first:
-      213: 21300002
-    second: potato_1
+      213: 5755592398908910427
+    second: granite-splitting-block-active_1
   - first:
-      213: 21300004
-    second: potato_2
+      213: 6374954707637821301
+    second: granite-splitting-block-active_2
   - first:
-      213: 21300006
-    second: potato_3
+      213: 5786939141219631239
+    second: granite-splitting-block-active_3
   - first:
-      213: 21300008
-    second: potato_4
+      213: 1319999722910686433
+    second: granite-splitting-block-active_4
   - first:
-      213: 21300010
-    second: potato_5
+      213: 2120269661155384453
+    second: granite-splitting-block-active_5
   - first:
-      213: 21300012
-    second: potato_6
+      213: -647157877038740776
+    second: granite-splitting-block-active_6
   - first:
-      213: 21300014
-    second: potato_7
-  - first:
-      213: 21300016
-    second: potato-farm-bitmask_OLD_0
-  - first:
-      213: 21300018
-    second: potato-farm-bitmask_OLD_1
-  - first:
-      213: 21300020
-    second: potato-farm-bitmask_OLD_2
-  - first:
-      213: 21300022
-    second: potato-farm-bitmask_OLD_3
-  - first:
-      213: 21300024
-    second: potato-farm-bitmask_OLD_4
-  - first:
-      213: 21300026
-    second: potato-farm-bitmask_OLD_5
-  - first:
-      213: 21300028
-    second: potato-farm-bitmask_OLD_6
-  - first:
-      213: 21300030
-    second: potato-farm-bitmask_OLD_7
+      213: 8549261110570618660
+    second: granite-splitting-block-active_7
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -71,6 +47,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -105,10 +82,12 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 8192
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -117,10 +96,10 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 8192
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -129,16 +108,16 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_0
+      name: granite-splitting-block-active_0
       rect:
         serializedVersion: 2
         x: 1
-        y: 246
+        y: 34
         width: 32
         height: 32
       alignment: 0
@@ -148,18 +127,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03305410000000000800000000000000
-      internalID: 21300016
+      spriteID: 24103bd9fe1959bb0800000000000000
+      internalID: -4929873758758174398
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_1
+      name: granite-splitting-block-active_1
       rect:
         serializedVersion: 2
-        x: 1
-        y: 211
+        x: 34
+        y: 34
         width: 32
         height: 32
       alignment: 0
@@ -169,18 +148,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23305410000000000800000000000000
-      internalID: 21300018
+      spriteID: b5b67e8dac8ffdf40800000000000000
+      internalID: 5755592398908910427
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_2
+      name: granite-splitting-block-active_2
       rect:
         serializedVersion: 2
-        x: 1
-        y: 176
+        x: 67
+        y: 34
         width: 32
         height: 32
       alignment: 0
@@ -190,18 +169,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43305410000000000800000000000000
-      internalID: 21300020
+      spriteID: 57fd4f7d783687850800000000000000
+      internalID: 6374954707637821301
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_3
+      name: granite-splitting-block-active_3
       rect:
         serializedVersion: 2
-        x: 1
-        y: 141
+        x: 100
+        y: 34
         width: 32
         height: 32
       alignment: 0
@@ -211,77 +190,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63305410000000000800000000000000
-      internalID: 21300022
+      spriteID: 78043390d765f4050800000000000000
+      internalID: 5786939141219631239
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_4
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 106
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 83305410000000000800000000000000
-      internalID: 21300024
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_5
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 71
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a3305410000000000800000000000000
-      internalID: 21300026
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_6
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 36
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c3305410000000000800000000000000
-      internalID: 21300028
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: potato-farm-bitmask_OLD_7
+      name: granite-splitting-block-active_4
       rect:
         serializedVersion: 2
         x: 1
@@ -295,8 +211,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3305410000000000800000000000000
-      internalID: 21300030
+      spriteID: 1ec94bb11c4915210800000000000000
+      internalID: 1319999722910686433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: granite-splitting-block-active_5
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 1
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58c543de506bc6d10800000000000000
+      internalID: 2120269661155384453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: granite-splitting-block-active_6
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 1
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8da8281f655d407f0800000000000000
+      internalID: -647157877038740776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: granite-splitting-block-active_7
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42f8f932fa315a670800000000000000
+      internalID: 8549261110570618660
       vertices: []
       indices: 
       edges: []
@@ -304,7 +283,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 

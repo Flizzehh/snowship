@@ -322,7 +322,7 @@
 			<Fuel>
 				<FuelEnergy>2
 			<Manufacturing>
-				<Objects>Processing:CottonGin
+				<Objects>Processing:Gin
 				<Resources>Cotton:20
 <ResourceGroup>
 	<Type>Seeds
