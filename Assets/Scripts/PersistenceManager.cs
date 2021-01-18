@@ -15,8 +15,8 @@ public class PersistenceManager : BaseManager {
 		this.startCoroutineReference = startCoroutineReference;
 	}
 
-	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2020.1");
-	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2020.1");
+	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2021.1");
+	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2021.1");
 
 	public SettingsState settingsState;
 
@@ -2578,7 +2578,7 @@ public class PersistenceManager : BaseManager {
 
 				foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in persistenceTrader.persistenceHuman.clothes) {
 					trader.GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
-					trader.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value, appearanceToClothingKVP.Value.type);
+					trader.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value);
 				}
 
 				if (persistenceTrader.persistenceLife.pathEndPosition.HasValue) {
@@ -3070,7 +3070,7 @@ public class PersistenceManager : BaseManager {
 
 			foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in persistenceColonist.persistenceHuman.clothes) {
 				colonist.GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
-				colonist.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value, appearanceToClothingKVP.Value.type);
+				colonist.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value);
 			}
 
 			if (persistenceColonist.persistenceStoredJob != null) {

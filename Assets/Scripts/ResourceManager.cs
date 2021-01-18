@@ -742,13 +742,13 @@ public class ResourceManager : BaseManager {
 		public List<Clothing> clothes = new List<Clothing>();
 
 		public ClothingPrefab(
-			HumanManager.Human.Appearance appearance, 
-			ClothingEnum clothingType, 
-			int insulation, 
-			int waterResistance, 
-			int weightCapacity, 
-			int volumeCapacity, 
-			List<string> colours, 
+			HumanManager.Human.Appearance appearance,
+			ClothingEnum clothingType,
+			int insulation,
+			int waterResistance,
+			int weightCapacity,
+			int volumeCapacity,
+			List<string> colours,
 			int typeIndex
 		) {
 			this.appearance = appearance;
@@ -1100,6 +1100,14 @@ public class ResourceManager : BaseManager {
 				);
 			}
 		}
+
+		public bool ContainsResourceAmount(ResourceAmount resourceAmount) {
+			ResourceAmount matchingResource = resources.Find(ra => ra.resource == resourceAmount.resource);
+			if (matchingResource != null) {
+				return matchingResource.amount <= resourceAmount.amount;
+			}
+			return false;
+		}
 	}
 
 	public void CalculateResourceTotals() {
@@ -1212,7 +1220,7 @@ public class ResourceManager : BaseManager {
 	}
 
 	public enum ObjectGroupEnum {
-		Structure, Furniture, Crafting,
+		Structure, Furniture, Containers, Trading, Crafting,
 		Command,
 		Farm,
 		None,
@@ -1226,7 +1234,9 @@ public class ResourceManager : BaseManager {
 
 	public enum ObjectSubGroupEnum {
 		Walls, Fences, Doors, Floors, Foundations,
-		Containers, Beds, Chairs, Tables, Lights, TradingPosts,
+		Beds, Chairs, Tables, Lights,
+		Containers,
+		TradingPosts,
 		Furnaces, Processing,
 		Plants, Terrain, Remove, Cancel, Priority,
 		PlantFarm, HarvestFarm,
@@ -1295,7 +1305,7 @@ public class ResourceManager : BaseManager {
 		IncreasePriority, DecreasePriority,
 		WheatFarm, PotatoFarm, CottonFarm,
 		HarvestFarm,
-		CreateResource, PickupResources, TransferResources, CollectResources, EmptyInventory, Sleep, CollectWater, Drink, CollectFood, Eat,
+		CreateResource, PickupResources, TransferResources, CollectResources, EmptyInventory, Sleep, CollectWater, Drink, CollectFood, Eat, WearClothes,
 		PlantTree, PlantBush, PlantCactus
 	}
 

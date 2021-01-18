@@ -136,54 +136,6 @@
 	<Type>Furniture
 	<SubGroups>
 		<SubGroup>
-			<Type>Containers
-			<Objects>
-				<Object>
-					<Type>Basket
-					<InstanceType>Container
-					<Layer>2
-					<Integrity>25
-					<WalkSpeed>0.5
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<MaxInventoryVolume>10000
-					<MaxInventoryWeight>Max
-					<TimeToBuild>5
-					<CommonResources>Wood:1
-					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
-					<JobType>Build
-				<Object>
-					<Type>WoodenChest
-					<InstanceType>Container
-					<Layer>2
-					<Integrity>100
-					<WalkSpeed>0.5
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<MaxInventoryVolume>25000
-					<MaxInventoryWeight>Max
-					<TimeToBuild>10
-					<CommonResources>Wood:3
-					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
-					<JobType>Build
-				<Object>
-					<Type>WoodenDrawers
-					<InstanceType>Container
-					<Layer>2
-					<Integrity>100
-					<WalkSpeed>0.5
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<MaxInventoryVolume>10000
-					<MaxInventoryWeight>Max
-					<TimeToBuild>10
-					<CommonResources>Wood:4
-					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
-					<JobType>Build
-		<SubGroup>
 			<Type>Beds
 			<Objects>
 				<Object>
@@ -264,6 +216,60 @@
 					<CommonResources>Wood:1,Glass:1
 					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
 					<JobType>Build
+<Group>
+	<Type>Containers
+	<SubGroups>
+		<SubGroup>
+			<Type>Containers
+			<Objects>
+				<Object>
+					<Type>Basket
+					<InstanceType>Container
+					<Layer>2
+					<Integrity>25
+					<WalkSpeed>0.5
+					<Walkable>true
+					<Buildable>true
+					<Flammability>1
+					<MaxInventoryVolume>10000
+					<MaxInventoryWeight>Max
+					<TimeToBuild>5
+					<CommonResources>Wood:1
+					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
+					<JobType>Build
+				<Object>
+					<Type>WoodenChest
+					<InstanceType>Container
+					<Layer>2
+					<Integrity>100
+					<WalkSpeed>0.5
+					<Walkable>true
+					<Buildable>true
+					<Flammability>1
+					<MaxInventoryVolume>25000
+					<MaxInventoryWeight>Max
+					<TimeToBuild>10
+					<CommonResources>Wood:3
+					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
+					<JobType>Build
+				<Object>
+					<Type>WoodenDrawers
+					<InstanceType>Container
+					<Layer>2
+					<Integrity>100
+					<WalkSpeed>0.5
+					<Walkable>true
+					<Buildable>true
+					<Flammability>1
+					<MaxInventoryVolume>10000
+					<MaxInventoryWeight>Max
+					<TimeToBuild>10
+					<CommonResources>Wood:4
+					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
+					<JobType>Build
+<Group>
+	<Type>Trading
+	<SubGroups>
 		<SubGroup>
 			<Type>TradingPosts
 			<Objects>
@@ -685,4 +691,10 @@
 					<Layer>0
 					<TimeToBuild>3
 					<JobType>Eat
+					<AddToTileWhenBuilt>false
+				<Object>
+					<Type>WearClothes
+					<Layer>0
+					<TimeToBuild>3
+					<JobType>WearClothes
 					<AddToTileWhenBuilt>false

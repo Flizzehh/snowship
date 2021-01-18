@@ -137,16 +137,20 @@ public class HumanManager : BaseManager {
 			SetMoveSprite();
 		}
 
-		public void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing, ResourceManager.ResourceEnum resourceEnum) {
+		public void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
 			if (clothes[appearance] != clothing) {
-				clothes[appearance] = clothing;
+
 				if (clothing != null) {
 					humanObj.transform.Find(appearance.ToString()).GetComponent<SpriteRenderer>().sprite = clothing.moveSprites[0];
-					inventory.ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(resourceEnum), -1, false);
-				} else {
-					humanObj.transform.Find(appearance.ToString()).GetComponent<SpriteRenderer>().sprite = GameManager.resourceM.clearSquareSprite;
-					inventory.ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(resourceEnum), 1, false);
+					inventory.ChangeResourceAmount(clothing, -1, false);
 				}
+				
+				if (clothes[appearance] != null) {
+					humanObj.transform.Find(appearance.ToString()).GetComponent<SpriteRenderer>().sprite = GameManager.resourceM.clearSquareSprite;
+					inventory.ChangeResourceAmount(clothes[appearance], 1, false);
+				}
+
+				clothes[appearance] = clothing;
 
 				SetColour(overTile.sr.color);
 			}

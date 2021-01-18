@@ -972,24 +972,25 @@ public class ColonistManager : BaseManager {
 		public JobManager.Job job;
 		public JobManager.Job storedJob;
 		public JobManager.Job needJob;
+		public readonly List<JobManager.ColonistJob> backlog = new List<JobManager.ColonistJob>();
 
 		// Professions
-		public List<ProfessionInstance> professions = new List<ProfessionInstance>();
+		public readonly List<ProfessionInstance> professions = new List<ProfessionInstance>();
 
 		// Skills
-		public List<SkillInstance> skills = new List<SkillInstance>();
+		public readonly List<SkillInstance> skills = new List<SkillInstance>();
 
 		// Traits
-		public List<TraitInstance> traits = new List<TraitInstance>();
+		public readonly List<TraitInstance> traits = new List<TraitInstance>();
 
 		// Needs
-		public List<NeedInstance> needs = new List<NeedInstance>();
+		public readonly List<NeedInstance> needs = new List<NeedInstance>();
 
 		// Happiness
 		public float baseHappiness = 100;
 		public float happinessModifiersSum = 100;
 		public float effectiveHappiness = 100;
-		public List<HappinessModifierInstance> happinessModifiers = new List<HappinessModifierInstance>();
+		public readonly List<HappinessModifierInstance> happinessModifiers = new List<HappinessModifierInstance>();
 
 		public Colonist(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);

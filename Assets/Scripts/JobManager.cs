@@ -102,7 +102,18 @@ public class JobManager : BaseManager {
 			this.colonist = colonist;
 			if (prefab.jobType != JobEnum.PickupResources && containerPickups != null && containerPickups.Count > 0) {
 				colonist.storedJob = this;
-				colonist.SetJob(new ColonistJob(colonist, new Job(containerPickups[0].container.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.PickupResources), null, 0), null, null));
+				colonist.SetJob(
+					new ColonistJob(
+						colonist, 
+						new Job(
+							containerPickups[0].container.tile, 
+							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.PickupResources), 
+							null, 
+							0), 
+						null, 
+						null
+					)
+				);
 			}
 		}
 
@@ -135,7 +146,7 @@ public class JobManager : BaseManager {
 		Build, Remove,
 		ChopPlant, PlantPlant, Mine, Dig, Fill, PlantFarm, HarvestFarm,
 		CreateResource, PickupResources, TransferResources, CollectResources, EmptyInventory, Cancel, IncreasePriority, DecreasePriority,
-		CollectFood, Eat, CollectWater, Drink, Sleep
+		CollectFood, Eat, CollectWater, Drink, Sleep, WearClothes
 	};
 
 	public static readonly List<JobEnum> nonReturnableJobs = new List<JobEnum>() {
@@ -200,6 +211,9 @@ public class JobManager : BaseManager {
 		} },
 		{ JobEnum.Sleep, delegate (Job job) {
 			return "Sleeping.";
+		} },
+		{ JobEnum.WearClothes, delegate (Job job) {
+			return "Wearing some clothing.";
 		} }
 	};
 
@@ -266,8 +280,7 @@ public class JobManager : BaseManager {
 				GameManager.uiM.UpdateSelectedTradingPostInfo();
 			} else if (instance is ResourceManager.ManufacturingObject manufacturingObject) {
 				foreach (Job removeJob in manufacturingObject.resources.Select(resource => resource.job)) {
-					job.Remove();
-					GameManager.jobM.jobs.Remove(job);
+					GameManager.jobM.CancelJob(removeJob);
 				}
 			} else if (instance is ResourceManager.SleepSpot sleepSpot) {
 				if (sleepSpot.occupyingColonist != null) {
@@ -410,7 +423,18 @@ public class JobManager : BaseManager {
 					colonist.SetJob(new ColonistJob(colonist, colonist.storedJob, colonist.storedJob.colonistResources, null));
 					colonist.storedJob = null;
 				} else {
-					colonist.SetJob(new ColonistJob(colonist, new Job(colonist.storedJob.containerPickups[0].container.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.PickupResources), null, 0), colonist.storedJob.colonistResources, colonist.storedJob.containerPickups), false);
+					colonist.SetJob(
+						new ColonistJob(
+							colonist,
+							new Job(
+								colonist.storedJob.containerPickups[0].container.tile,
+								GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.PickupResources),
+								null,
+								0),
+							colonist.storedJob.colonistResources,
+							colonist.storedJob.containerPickups),
+						false
+					);
 				}
 			}
 		} },
@@ -495,6 +519,13 @@ public class JobManager : BaseManager {
 				if (sleepSpot.occupyingColonist == colonist) {
 					sleepSpot.StopSleeping();
 				}
+			}
+		} },
+		{ JobEnum.WearClothes, delegate (ColonistManager.Colonist colonist, Job job) {
+			foreach (ResourceManager.ResourceAmount resourceAmount in job.colonistResources.Where(ra => ra.resource.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
+				ResourceManager.Clothing clothing = (ResourceManager.Clothing)resourceAmount.resource;
+				colonist.ChangeClothing(clothing.prefab.appearance, clothing);
+				colonist.GetInventory().ChangeResourceAmount(clothing, -1, false);
 			}
 		} }
 	};
@@ -1236,10 +1267,20 @@ public class JobManager : BaseManager {
 	public void GiveJobsToColonists() {
 		bool gaveJob = false;
 		Dictionary<ColonistManager.Colonist, ColonistJob> jobsGiven = new Dictionary<ColonistManager.Colonist, ColonistJob>();
+
+		foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			if (colonist.job == null && !colonist.playerMoved && colonist.backlog.Count > 0) {
+				ColonistJob backlogJob = colonist.backlog[0];
+				gaveJob = true;
+				jobsGiven.Add(colonist, backlogJob);
+				colonist.backlog.Remove(backlogJob);
+			}
+		}
+
 		foreach (KeyValuePair<ColonistManager.Colonist, List<ColonistJob>> colonistKVP in colonistJobs) {
 			ColonistManager.Colonist colonist = colonistKVP.Key;
 			List<ColonistJob> colonistJobsList = colonistKVP.Value;
-			if (colonist.job == null && !colonist.playerMoved) {
+			if (colonist.job == null && !colonist.playerMoved && !jobsGiven.ContainsKey(colonist)) {
 				for (int i = 0; i < colonistJobsList.Count; i++) {
 					ColonistJob colonistJob = colonistJobsList[i];
 					bool bestColonistForJob = true;

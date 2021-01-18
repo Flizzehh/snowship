@@ -2801,7 +2801,7 @@ public class UIManager : BaseManager {
 
 			disrobeButton.interactable = selectedColonist.clothes[clothingType] != null;
 			disrobeButton.onClick.AddListener(delegate {
-				selectedColonist.ChangeClothing(clothingType, null, selectedColonist.clothes[clothingType].type);
+				selectedColonist.ChangeClothing(clothingType, null);
 				SetSelectedColonistClothingSelectionPanelActive(false);
 				SetSelectedColonistInformation(true);
 			});
@@ -2841,7 +2841,49 @@ public class UIManager : BaseManager {
 			}
 
 			obj.GetComponent<Button>().onClick.AddListener(delegate {
-				human.ChangeClothing(clothing.prefab.appearance, clothing, clothing.type);
+				if (human is ColonistManager.Colonist colonist) {
+					List<ResourceManager.Container> validContainers = new List<ResourceManager.Container>();
+					foreach (ResourceManager.Container container in GameManager.resourceM.GetContainersInRegion(human.overTile.region)) {
+						if (container.GetInventory().ContainsResourceAmount(new ResourceManager.ResourceAmount(clothing, 1))) {
+							validContainers.Add(container);
+						}
+					}
+					validContainers.OrderBy(container => PathManager.RegionBlockDistance(human.overTile.regionBlock, container.tile.regionBlock, true, true, false));
+					if (validContainers.Count > 0) {
+
+						validContainers[0].GetInventory().ReserveResources(
+							new List<ResourceManager.ResourceAmount>() {
+								new ResourceManager.ResourceAmount(clothing, 1)
+							},
+							human
+						);
+						
+						colonist.backlog.Add(
+							new JobManager.ColonistJob(
+								colonist,
+								new JobManager.Job(
+									validContainers[0].tile,
+									GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.WearClothes),
+									null,
+									0
+								),
+								new List<ResourceManager.ResourceAmount>() {
+									new ResourceManager.ResourceAmount(clothing, 1)
+								},
+								new List<JobManager.ContainerPickup>() {
+									new JobManager.ContainerPickup(
+										validContainers[0],
+										new List<ResourceManager.ResourceAmount>() {
+											new ResourceManager.ResourceAmount(clothing, 1)
+										}
+									)
+								}
+							)
+						);
+					}
+				} else {
+					human.ChangeClothing(clothing.prefab.appearance, clothing);
+				}
 				GameManager.uiM.SetSelectedColonistClothingSelectionPanelActive(false);
 				GameManager.uiM.SetSelectedColonistInformation(true);
 			});
@@ -3578,12 +3620,12 @@ public class UIManager : BaseManager {
 
 			button.GetComponent<HandleClickScript>().Initialize(
 				delegate {
-					professionInstance.IncreasePriority();
+					professionInstance.DecreasePriority();
 					UpdateButton(button, professionInstance);
 				},
 				null,
 				delegate {
-					professionInstance.DecreasePriority();
+					professionInstance.IncreasePriority();
 					UpdateButton(button, professionInstance);
 				}
 			);
