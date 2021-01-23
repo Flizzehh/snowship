@@ -1297,7 +1297,7 @@ public class ResourceManager : BaseManager {
 		Torch, WoodenLamp,
 		TradingPost,
 		Furnace,
-		Gin, SplittingBlock, SplittingLog, Anvil, Loom, SowingTable, BrickFormer,
+		Gin, Loom, SplittingBlock, SplittingLog, Anvil, BrickFormer,
 		ChopPlant, PlantPlant, PlantAppleTree, PlantBlueberryBush,
 		Mine, Dig, Fill,
 		RemoveFloor, RemoveObject, RemoveAll,

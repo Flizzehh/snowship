@@ -486,7 +486,7 @@
 			<Volume>500
 			<Price>50
 			<Manufacturing>
-				<Objects>Processing:SowingTable
+				<Objects>Processing:Loom
 				<Resources>Cloth:10
 			<Clothing>
 				<Appearance>Backpack

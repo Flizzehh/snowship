@@ -404,20 +404,6 @@
 					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
 					<JobType>Build
 				<Object>
-					<Type>SowingTable
-					<InstanceType>ManufacturingObject
-					<Layer>2
-					<Integrity>150
-					<WalkSpeed>0.5
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<UsesFuel>false
-					<TimeToBuild>15
-					<CommonResources>Wood:4,Iron:1
-					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
-					<JobType>Build
-				<Object>
 					<Type>BrickFormer
 					<InstanceType>ManufacturingObject
 					<Layer>2
