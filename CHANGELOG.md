@@ -1,13 +1,39 @@
-### 2015-2017
-- In pre-release development.
+### 2015-02-24
+- Development began.
 
-### 2017-2018
-- Rewritten from ground up.
+### 2016.1 (2016-03-05)
+- Initial public release on https://rywh.itch.io/snowship.
 
-### 2018.1 (January 12, 2018)
-- First public release.
+### 2016.2 (2016-04-11)
+- Added ability to see what and how many resources are in a colonist’s inventory.
+- The interface for viewing all resources in game, chest’s inventories, and colonist’s inventories are now connected in a single UI zone.
+- Loading the game from a save now adds bitmasking on objects.
+- Colonists which do not have the resources to complete a job no longer perform the job anyway.
+- Colonists no longer break when there are jobs requiring resources which do not exist.
+- Colonists no longer take resources from a chest even if the amount does not exist (causing the amount in the chest to become negative).
+- Fixed the removal of the inventory resource UI element from a chest's or colonist's inventory view.
+- Removing a farm no longer causes all farms to break.
+- Removing a farm now returns a single seed of the type of farm.
+- If a colonist is too far from their designated bed and are very tired, they will sleep on the ground where they are standing to prevent sleep deprivation and unpreventable death.
+- When a colonist transfers the contents of their inventory to a chest, the UI to view their inventory now updates.
+- Added visual of the resources required to create another resource when hovering over a resource in the resource list.
+- Resources which cannot be created no longer show a UI element to select the desired amount.
+- Save-version system prevents saves which are outdated from being able to be loaded.
+- Text in the colony name now overflows if it is too long rather than not appearing at all.
+- Adjusted colony information section (top right corner of screen).
+- Ensured saving and loading works for all features.
+- Added ability to cancel a job from the job list.
+- Resources which have an amount below their desired amount have the total amount in red, if above or equal to it is green, if the desired amount is 0 or the resource can’t be created it is the same dark grey colour.
+- Dirt holes created through digging now properly save and bitmask with the tiles around them.
+- Temporarily changed the maximum map size to 200 tiles until the map generation algorithms can be optimized to prevent crashing and huge loading times when generating large maps.
+- Fixed text truncation in the workable jobs list for colonists. It now shows the full name for each job type.
 
-### 2018.1.1 (March 4, 2018)
+### 2018.1 (2018-01-12)
+- Completely rewrote game in a much cleaner, more extensible way.
+- Game is much more stable.
+- Added some new features and removed others until they can be re-added (if they will be).
+
+### 2018.2 (2018-03-04)
 - Colonists' health now decreases when Rest need gets too high.
 - Colonists no longer attempt to sleep in an available bed and then end up sleeping on the ground.
 - Needs no longer compete with each other. When a colonist is tending to one need, another need won't interrupt them unless it has a higher priority. (Needs are sorted in the needs list based on their priority (from most to least important)).
@@ -19,7 +45,7 @@
 - Colonists no longer keep resources reserved in containers if their job prematurely changed.
 - Holes will now properly fill with water if adjacent to water in situations where they wouldn't.
 
-### 2020.1 (?)
+### 2020.1 (2020-11-06)
 - Terrain Generation
 	- Selecting a map location next to a mountain on the planet-view will now make mountains on that side of the map.
 	- Selecting a map location next to water will now make larger bodies of water on the map edge than it previously did.
@@ -62,7 +88,6 @@
 		- Loom (used for turning cloth into clothing).
 		- Wooden Bridge (allows faster water crossings, supports building on water).
 		- Trading Post (traders will go to the nearest trading post upon entering the map, resources stored in a trading post will be available to trade).
-	- Renamed Cotton Gin to Gin.
 	- Gin now requires 2 Iron instead of 2 Stone.
 	- Gins can now be rotated.
 	- Wooden Chests can now be rotated.
@@ -130,7 +155,6 @@
 	- Jobs to craft a resource now show the resource being crafted on the map and in the UI.
 	- Clicking and holding/dragging on one or more tiles when creating a job now shows the actual sprite of the object/job rather than a white box.
 	- Improved interface for the selection size panel when creating a job (especially for clicking and dragging).
-	- Changed Industrial to Crafting in build menu.
 - Jobs
 	- Priority of jobs can now be modified. Priority can be increased or decreased by any amount. Priority default is 0. Colonists will check if they can complete jobs with a higher priority before jobs with a lower priority. Job priority can be reset and changed with the two draggable commands in Command > Priority > Increase/Decrease Priority. Cancelling a job will also remove its priority.
 	- The cancel command has been moved to Command > Cancel > Cancel rather than having a standalone button for it.
@@ -161,3 +185,29 @@
 	- Fixed issue where job area selection indicators were not cleared from memory resulting in a build-up and significant performance degradation over time.
 - Miscellaneous Fixes
 	- Added handling for error that occured when there was an issue determining which sprite to use when a colonist is moving.
+
+### 2021.1 (2021-01-23)
+- Colonists
+	- Added ability to tell colonists to wear certain clothes.
+- Jobs
+	- Added ability to build floors under fences.
+	- Colonists performing a job will only take the relevant reserved resources from a container rather than all of their reserved resources.
+	- Fixed instance of error being thrown when removing a crafting object.
+- Objects
+	- Renamed Cotton Gin to Gin.
+	- Added variations for splitting blocks with different types of stone.
+	- Added sprite for Loom.
+	- Removed Sowing (Sewing) Table (at least until a proper use for it is found).
+	- Updated Wooden Chest and Wooden Floor sprites to be more artistically consistent with other wooden sprites.
+	- Updated Splitting Log sprite to have more depth.
+- Resources
+	- Clothing is now properly taken from containers so only one colonist can wear a piece of clothing at a time.
+- Trading
+	- Caravans are now only listed in the Caravans list if they are in a visible part of the map.
+- User Interface
+	- Changed Industrial to Crafting in build menu.
+	- Swapped position of skill name and skill level on a colonist's skill interface.
+	- Moved Containers and Trading objects to their own category rather than under Furniture.
+	- Swapped priority changing directions to make more sense (left click to increase priority (decreased value), right click to decrease priority (increased value)).
+	- Fixed some instances of certain resources overflowing their names on certain UI elements.
+	- The reverse side of backpacks are now shown on UI elements rather than the front.
