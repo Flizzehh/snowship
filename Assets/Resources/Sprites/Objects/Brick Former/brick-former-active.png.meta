@@ -62,8 +62,17 @@ TextureImporter:
   - first:
       213: 21300038
     second: brick-former-active_3
+  - first:
+      213: -7864859597285052051
+    second: brick-former-active_0
+  - first:
+      213: -9137626168359533938
+    second: brick-former-active_1
+  - first:
+      213: -7290726446083423660
+    second: brick-former-active_2
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -83,6 +92,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -117,6 +127,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -148,8 +160,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1a85113c8e96bba41a3a395d8898a0c5
-      internalID: 21300032
+      spriteID: d61b087bdd76ad290800000000000000
+      internalID: -7864859597285052051
       vertices: []
       indices: 
       edges: []
@@ -158,7 +170,7 @@ TextureImporter:
       name: brick-former-active_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 0
         width: 32
         height: 32
@@ -169,8 +181,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: abcd4cb4fe97188499b58495378bd25c
-      internalID: 21300034
+      spriteID: e82cd90c961a03180800000000000000
+      internalID: -9137626168359533938
       vertices: []
       indices: 
       edges: []
@@ -179,7 +191,7 @@ TextureImporter:
       name: brick-former-active_2
       rect:
         serializedVersion: 2
-        x: 66
+        x: 64
         y: 0
         width: 32
         height: 32
@@ -190,8 +202,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e64cde05240d9734ca02cf48274977ac
-      internalID: 21300036
+      spriteID: 452c6aadce222da90800000000000000
+      internalID: -7290726446083423660
       vertices: []
       indices: 
       edges: []
@@ -200,7 +212,7 @@ TextureImporter:
       name: brick-former-active_3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 96
         y: 0
         width: 32
         height: 32
@@ -211,7 +223,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5115da85742bc6c4193075d08aa021b2
+      spriteID: 64305410000000000800000000000000
       internalID: 21300038
       vertices: []
       indices: 

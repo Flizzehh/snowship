@@ -26,6 +26,15 @@ TextureImporter:
   - first:
       213: 8549261110570618660
     second: granite-splitting-block-active_7
+  - first:
+      213: -2777963129270212722
+    second: granite-splitting-block-active_4
+  - first:
+      213: -2573304283814106943
+    second: granite-splitting-block-active_5
+  - first:
+      213: -921538191843803771
+    second: granite-splitting-block-active_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -116,8 +125,8 @@ TextureImporter:
       name: granite-splitting-block-active_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 34
+        x: 0
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -137,8 +146,8 @@ TextureImporter:
       name: granite-splitting-block-active_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 34
+        x: 32
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -158,8 +167,8 @@ TextureImporter:
       name: granite-splitting-block-active_2
       rect:
         serializedVersion: 2
-        x: 67
-        y: 34
+        x: 64
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -179,8 +188,8 @@ TextureImporter:
       name: granite-splitting-block-active_3
       rect:
         serializedVersion: 2
-        x: 100
-        y: 34
+        x: 96
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -197,74 +206,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: granite-splitting-block-active_4
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1ec94bb11c4915210800000000000000
-      internalID: 1319999722910686433
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: granite-splitting-block-active_5
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 58c543de506bc6d10800000000000000
-      internalID: 2120269661155384453
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: granite-splitting-block-active_6
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8da8281f655d407f0800000000000000
-      internalID: -647157877038740776
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: granite-splitting-block-active_7
       rect:
         serializedVersion: 2
-        x: 100
-        y: 1
+        x: 96
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -276,6 +222,69 @@ TextureImporter:
       bones: []
       spriteID: 42f8f932fa315a670800000000000000
       internalID: 8549261110570618660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: granite-splitting-block-active_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8767b09041b279d0800000000000000
+      internalID: -2777963129270212722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: granite-splitting-block-active_5
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c8e4484369c94cd0800000000000000
+      internalID: -2573304283814106943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: granite-splitting-block-active_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58db134a5e90633f0800000000000000
+      internalID: -921538191843803771
       vertices: []
       indices: 
       edges: []

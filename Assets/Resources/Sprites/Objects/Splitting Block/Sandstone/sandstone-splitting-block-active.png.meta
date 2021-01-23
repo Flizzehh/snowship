@@ -26,6 +26,15 @@ TextureImporter:
   - first:
       213: -6194787562697158499
     second: sandstone-splitting-block-active_7
+  - first:
+      213: 2355940522899605985
+    second: sandstone-splitting-block-active_4
+  - first:
+      213: 5889392149535486167
+    second: sandstone-splitting-block-active_5
+  - first:
+      213: -678962753156900909
+    second: sandstone-splitting-block-active_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -116,8 +125,8 @@ TextureImporter:
       name: sandstone-splitting-block-active_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 34
+        x: 0
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -137,8 +146,8 @@ TextureImporter:
       name: sandstone-splitting-block-active_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 34
+        x: 32
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -158,8 +167,8 @@ TextureImporter:
       name: sandstone-splitting-block-active_2
       rect:
         serializedVersion: 2
-        x: 67
-        y: 34
+        x: 64
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -179,8 +188,8 @@ TextureImporter:
       name: sandstone-splitting-block-active_3
       rect:
         serializedVersion: 2
-        x: 100
-        y: 34
+        x: 96
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -197,74 +206,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sandstone-splitting-block-active_4
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d9dd8f087f042aa60800000000000000
-      internalID: 7683775346012380573
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sandstone-splitting-block-active_5
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 099e26a79b3434980800000000000000
-      internalID: -8555920403172497008
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sandstone-splitting-block-active_6
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 75af9aeff1b2116a0800000000000000
-      internalID: -6480350972392900009
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: sandstone-splitting-block-active_7
       rect:
         serializedVersion: 2
-        x: 100
-        y: 1
+        x: 96
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -276,6 +222,69 @@ TextureImporter:
       bones: []
       spriteID: d909d6a7881b70aa0800000000000000
       internalID: -6194787562697158499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sandstone-splitting-block-active_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e9016b5c6bf1b020800000000000000
+      internalID: 2355940522899605985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sandstone-splitting-block-active_5
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d07908e4f25bb150800000000000000
+      internalID: 5889392149535486167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sandstone-splitting-block-active_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d79c5a29f6d396f0800000000000000
+      internalID: -678962753156900909
       vertices: []
       indices: 
       edges: []

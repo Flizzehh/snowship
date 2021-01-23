@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class ResourceManager : BaseManager {
 
 	public GameObject tilePrefab;
+	public GameObject objectPrefab;
 	public GameObject humanPrefab;
 	public Sprite selectionCornersSprite;
 	public Sprite whiteSquareSprite;
@@ -18,6 +19,7 @@ public class ResourceManager : BaseManager {
 
 	public void SetResourceReferences() {
 		tilePrefab = Resources.Load<GameObject>(@"Prefabs/Tile");
+		objectPrefab = Resources.Load<GameObject>(@"Prefabs/Object");
 		humanPrefab = Resources.Load<GameObject>(@"Prefabs/Human");
 		selectionCornersSprite = Resources.Load<Sprite>(@"UI/selectionCorners");
 		whiteSquareSprite = Resources.Load<Sprite>(@"UI/white-square");
@@ -2213,8 +2215,12 @@ public class ResourceManager : BaseManager {
 
 		public readonly ObjectPrefab prefab;
 		public readonly Variation variation;
+		
 		public readonly GameObject obj;
 		public readonly SpriteRenderer sr;
+
+		public readonly GameObject activeOverlay;
+		public readonly SpriteRenderer aosr;
 
 		public readonly int rotationIndex;
 
@@ -2245,12 +2251,16 @@ public class ResourceManager : BaseManager {
 
 			this.rotationIndex = rotationIndex;
 
-			obj = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, zeroPointTile.obj.transform, false);
+			obj = MonoBehaviour.Instantiate(GameManager.resourceM.objectPrefab, zeroPointTile.obj.transform, false);
 			sr = obj.GetComponent<SpriteRenderer>();
 			obj.transform.position += (Vector3)prefab.anchorPositionOffset[rotationIndex];
 			obj.name = "Tile Object Instance: " + prefab.name;
 			sr.sortingOrder = 1 + prefab.layer; // Tile Object Sprite
 			sr.sprite = prefab.GetBaseSpriteForVariation(variation);
+
+			activeOverlay = obj.transform.Find("ActiveOverlay").gameObject;
+			aosr = activeOverlay.GetComponent<SpriteRenderer>();
+			aosr.sortingOrder = sr.sortingOrder + 1;
 
 			if (prefab.blocksLight) {
 				foreach (LightSource lightSource in GameManager.resourceM.lightSources) {
@@ -2295,17 +2305,13 @@ public class ResourceManager : BaseManager {
 						} else if (job.createResource.resource.type == ResourceEnum.Firewood) {
 							customActiveSpriteIndex = 1;
 						}
-						sr.sprite = prefab.GetActiveSpritesForVariation(variation)[4 * customActiveSpriteIndex + rotationIndex];
+						aosr.sprite = prefab.GetActiveSpritesForVariation(variation)[4 * customActiveSpriteIndex + rotationIndex];
 					} else {
-						sr.sprite = prefab.GetActiveSpritesForVariation(variation)[rotationIndex];
+						aosr.sprite = prefab.GetActiveSpritesForVariation(variation)[rotationIndex];
 					}
 				}
 			} else {
-				if (prefab.GetBitmaskSpritesForVariation(variation).Count > 0) {
-					sr.sprite = prefab.GetBitmaskSpritesForVariation(variation)[rotationIndex];
-				} else {
-					sr.sprite = prefab.GetBaseSpriteForVariation(variation);
-				}
+				aosr.sprite = GameManager.resourceM.clearSquareSprite;
 			}
 		}
 

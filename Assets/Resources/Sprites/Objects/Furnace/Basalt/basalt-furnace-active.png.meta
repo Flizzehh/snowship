@@ -50,8 +50,17 @@ TextureImporter:
   - first:
       213: 21300030
     second: basalt-furnace-active_3
+  - first:
+      213: -7095710259683947821
+    second: basalt-furnace-active_0
+  - first:
+      213: 655019409492546266
+    second: basalt-furnace-active_1
+  - first:
+      213: 4292020096230561312
+    second: basalt-furnace-active_2
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -71,6 +80,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -105,6 +115,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -136,8 +148,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2cc15b6667d1f374f9f286fd5c611b7d
-      internalID: 21300024
+      spriteID: 3da817e0d19f68d90800000000000000
+      internalID: -7095710259683947821
       vertices: []
       indices: 
       edges: []
@@ -146,7 +158,7 @@ TextureImporter:
       name: basalt-furnace-active_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 0
         width: 32
         height: 32
@@ -157,8 +169,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ff0cae9ade47b68499d021995119b6f6
-      internalID: 21300026
+      spriteID: ad21ac7bea8171900800000000000000
+      internalID: 655019409492546266
       vertices: []
       indices: 
       edges: []
@@ -167,7 +179,7 @@ TextureImporter:
       name: basalt-furnace-active_2
       rect:
         serializedVersion: 2
-        x: 66
+        x: 64
         y: 0
         width: 32
         height: 32
@@ -178,8 +190,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 484f9cfee9e7c8645ab3a73b923f7c32
-      internalID: 21300028
+      spriteID: 02619a49981509b30800000000000000
+      internalID: 4292020096230561312
       vertices: []
       indices: 
       edges: []
@@ -188,7 +200,7 @@ TextureImporter:
       name: basalt-furnace-active_3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 96
         y: 0
         width: 32
         height: 32
@@ -199,7 +211,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78c94ccc8bc2f5348b04fdfcb94a4b62
+      spriteID: e3305410000000000800000000000000
       internalID: 21300030
       vertices: []
       indices: 

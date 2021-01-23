@@ -50,8 +50,17 @@ TextureImporter:
   - first:
       213: 21300030
     second: mudbrick-furnace-active_3
+  - first:
+      213: 8543063211503776688
+    second: mudbrick-furnace-active_0
+  - first:
+      213: -135014388475912548
+    second: mudbrick-furnace-active_1
+  - first:
+      213: -6992079401474411702
+    second: mudbrick-furnace-active_2
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -71,6 +80,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -105,6 +115,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -136,8 +148,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 12264c33741ed244c85cfbd5f588e961
-      internalID: 21300024
+      spriteID: 0b3f36f4abe0f8670800000000000000
+      internalID: 8543063211503776688
       vertices: []
       indices: 
       edges: []
@@ -146,7 +158,7 @@ TextureImporter:
       name: mudbrick-furnace-active_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 0
         width: 32
         height: 32
@@ -157,8 +169,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bcdacde4ca46de34db40e6f5db06890b
-      internalID: 21300026
+      spriteID: c9e93570125502ef0800000000000000
+      internalID: -135014388475912548
       vertices: []
       indices: 
       edges: []
@@ -167,7 +179,7 @@ TextureImporter:
       name: mudbrick-furnace-active_2
       rect:
         serializedVersion: 2
-        x: 66
+        x: 64
         y: 0
         width: 32
         height: 32
@@ -178,8 +190,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: daf15b2453178ff489615342e712ccc6
-      internalID: 21300028
+      spriteID: a43bac974d427fe90800000000000000
+      internalID: -6992079401474411702
       vertices: []
       indices: 
       edges: []
@@ -188,7 +200,7 @@ TextureImporter:
       name: mudbrick-furnace-active_3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 96
         y: 0
         width: 32
         height: 32
@@ -199,7 +211,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36f60890e18bab647993ceb702bd360f
+      spriteID: e3305410000000000800000000000000
       internalID: 21300030
       vertices: []
       indices: 
