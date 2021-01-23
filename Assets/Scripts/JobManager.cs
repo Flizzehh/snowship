@@ -279,7 +279,7 @@ public class JobManager : BaseManager {
 				GameManager.uiM.SetSelectedContainerInfo();
 				GameManager.uiM.UpdateSelectedTradingPostInfo();
 			} else if (instance is ResourceManager.ManufacturingObject manufacturingObject) {
-				foreach (Job removeJob in manufacturingObject.resources.Select(resource => resource.job)) {
+				foreach (Job removeJob in manufacturingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
 					GameManager.jobM.CancelJob(removeJob);
 				}
 			} else if (instance is ResourceManager.SleepSpot sleepSpot) {
@@ -992,25 +992,29 @@ public class JobManager : BaseManager {
 	public void CreateJobsInSelectionArea(SelectedPrefab selectedPrefab, List<TileManager.Tile> selectionArea) {
 		foreach (TileManager.Tile tile in selectionArea) {
 			if (selectedPrefab.prefab.type == ResourceManager.ObjectEnum.RemoveAll) {
-				foreach (ResourceManager.ObjectInstance instance in tile.GetAllObjectInstances()) {
-					if (removeLayerMap.ContainsKey(instance.prefab.layer) && !JobOfPrefabTypeExistsAtTile(removeLayerMap[instance.prefab.layer], instance.tile)) {
-						ResourceManager.ObjectPrefab selectedRemovePrefab = GameManager.resourceM.GetObjectPrefabByEnum(removeLayerMap[instance.prefab.layer]);
+				foreach (ResourceManager.ObjectInstance objectInstance in tile.GetAllObjectInstances()) {
+					if (removeLayerMap.ContainsKey(objectInstance.prefab.layer) && !JobOfPrefabTypeExistsAtTile(removeLayerMap[objectInstance.prefab.layer], objectInstance.tile)) {
+						ResourceManager.ObjectPrefab selectedRemovePrefab = GameManager.resourceM.GetObjectPrefabByEnum(removeLayerMap[objectInstance.prefab.layer]);
 						bool createJobAtTile = true;
 						foreach (SelectionModifiersEnum selectionModifier in selectedRemovePrefab.selectionModifiers) {
 							if (selectionModifier != SelectionModifiersEnum.Outline) {
-								createJobAtTile = selectionModifierFunctions[selectionModifier](instance.tile, instance.tile, selectedRemovePrefab);
+								createJobAtTile = selectionModifierFunctions[selectionModifier](objectInstance.tile, objectInstance.tile, selectedRemovePrefab);
 								if (!createJobAtTile) {
 									break;
 								}
 							}
 						}
 						if (createJobAtTile) {
-							CreateJob(new Job(instance.tile, selectedRemovePrefab, null, rotationIndex));
+							CreateJob(new Job(objectInstance.tile, selectedRemovePrefab, null, rotationIndex));
+							objectInstance.SetActive(false);
 						}
 					}
 				}
 			} else {
 				CreateJob(new Job(tile, selectedPrefab.prefab, selectedPrefab.variation, rotationIndex));
+				foreach (ResourceManager.ObjectInstance objectInstance in tile.GetAllObjectInstances()) {
+					objectInstance.SetActive(false);
+				}
 			}
 		}
 	}
