@@ -605,13 +605,20 @@ public class JobManager : BaseManager {
 	}
 
 	public enum SelectionModifiersEnum {
-		Outline, Walkable, OmitWalkable, Buildable, OmitBuildable, StoneTypes, OmitStoneTypes, AllWaterTypes, OmitAllWaterTypes, LiquidWaterTypes, OmitLiquidWaterTypes, OmitNonStoneAndWaterTypes,
+		Outline, Walkable, OmitWalkable, WalkableIncludingFences, Buildable, OmitBuildable, StoneTypes, OmitStoneTypes, AllWaterTypes, OmitAllWaterTypes, LiquidWaterTypes, OmitLiquidWaterTypes, OmitNonStoneAndWaterTypes,
 		Objects, OmitObjects, Floors, OmitFloors, Plants, OmitPlants, OmitSameLayerJobs, OmitSameLayerObjectInstances, Farms, OmitFarms,
 		ObjectsAtSameLayer, OmitNonCoastWater, OmitHoles, OmitPreviousDig, LivingTreeOrBushBiomes, CactusBiomes, OmitObjectInstancesOnAdditionalTiles, Fillable
 	};
 
 	private static readonly Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, bool>> selectionModifierFunctions = new Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, bool>>() {
 		{ SelectionModifiersEnum.Walkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+			return posTile.walkable;
+		} },
+		{ SelectionModifiersEnum.WalkableIncludingFences, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+			ResourceManager.ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(2);
+			if (objectInstance != null && objectInstance.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Fences) {
+				return true;
+			}
 			return posTile.walkable;
 		} },
 		{ SelectionModifiersEnum.OmitWalkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {

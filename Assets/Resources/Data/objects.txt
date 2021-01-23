@@ -101,7 +101,7 @@
 					<Flammability>1
 					<TimeToBuild>5
 					<CommonResources>Wood:2
-					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs,OmitFarms
+					<SelectionModifiers>WalkableIncludingFences,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs,OmitFarms
 					<JobType>Build
 				<Object>
 					<Type>BrickFloor
@@ -114,7 +114,7 @@
 					<Flammability>1
 					<TimeToBuild>10
 					<CommonResources>Brick:2
-					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs,OmitFarms
+					<SelectionModifiers>WalkableIncludingFences,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs,OmitFarms
 					<JobType>Build
 		<SubGroup>
 			<Type>Foundations
