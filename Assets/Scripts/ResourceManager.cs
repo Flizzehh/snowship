@@ -811,7 +811,11 @@ public class ResourceManager : BaseManager {
 				moveSprites.Add(prefab.moveSprites[i][prefab.colours.IndexOf(colour)]);
 			}
 
-			image = moveSprites[0];
+			if (prefab.appearance == HumanManager.Human.Appearance.Backpack) {
+				image = moveSprites[1];
+			} else {
+				image = moveSprites[0];
+			}
 		}
 	}
 
@@ -1044,10 +1048,10 @@ public class ResourceManager : BaseManager {
 			return allResourcesFound;
 		}
 
-		public List<ReservedResources> TakeReservedResources(HumanManager.Human humanReservingResources) {
+		public List<ReservedResources> TakeReservedResources(HumanManager.Human humanReservingResources, List<ResourceAmount> resourcesToTake = null) {
 			List<ReservedResources> reservedResourcesByHuman = new List<ReservedResources>();
 			foreach (ReservedResources rr in reservedResources) {
-				if (rr.human == humanReservingResources) {
+				if (rr.human == humanReservingResources && (resourcesToTake == null || rr.resources.Find(ra => resourcesToTake.Find(rtt => rtt.resource == ra.resource) != null) != null)) {
 					reservedResourcesByHuman.Add(rr);
 				}
 			}

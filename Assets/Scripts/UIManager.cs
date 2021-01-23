@@ -2748,23 +2748,41 @@ public class UIManager : BaseManager {
 		selectedColonistClothingPanel.transform.Find("ColonistBody-Image").GetComponent<Image>().sprite = selectedColonist.moveSprites[0];
 
 		foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in selectedColonist.clothes) {
-			Sprite clothingSpriteFront = GameManager.resourceM.clearSquareSprite;
-			Sprite clothingSpriteBack = GameManager.resourceM.clearSquareSprite;
-			string clothingName = "None";
-			if (selectedColonist.clothes[appearanceToClothingKVP.Key] != null) {
-				clothingSpriteFront = selectedColonist.clothes[appearanceToClothingKVP.Key].moveSprites[0];
-				clothingSpriteBack = selectedColonist.clothes[appearanceToClothingKVP.Key].moveSprites[1];
-				clothingName = selectedColonist.clothes[appearanceToClothingKVP.Key].name;
-			}
-			selectedColonistClothingPanel.transform.Find("ColonistBody-Image/Colonist" + appearanceToClothingKVP.Key + "-Image").GetComponent<Image>().sprite = clothingSpriteFront;
+
+			ResourceManager.Clothing clothing = selectedColonist.clothes[appearanceToClothingKVP.Key];
 
 			Button clothingTypeButton = selectedColonistClothingPanel.transform.Find("ClothingButtons-List/" + appearanceToClothingKVP.Key + "-Button").GetComponent<Button>();
+
+			clothingTypeButton.GetComponent<Image>().color = GetColour(Colours.LightGrey180);
+
+			if (clothing == null) {
+				
+				List<JobManager.Job> checkJobs = new List<JobManager.Job>();
+				checkJobs.AddRange(selectedColonist.backlog);
+				checkJobs.Add(selectedColonist.storedJob);
+				checkJobs.Add(selectedColonist.job);
+
+				foreach (JobManager.Job checkJob in checkJobs) {
+					if (checkJob != null && checkJob.prefab.type == ResourceManager.ObjectEnum.WearClothes) {
+						ResourceManager.Clothing clothingToWear = (ResourceManager.Clothing)checkJob.resourcesToBuild[0].resource;
+						if (clothingToWear.prefab.appearance == appearanceToClothingKVP.Key) {
+							clothing = clothingToWear;
+							clothingTypeButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+						}
+					}
+				}
+
+				checkJobs.Clear();
+			}
+
+			selectedColonistClothingPanel.transform.Find("ColonistBody-Image/Colonist" + appearanceToClothingKVP.Key + "-Image").GetComponent<Image>().sprite = clothing == null ? GameManager.resourceM.clearSquareSprite : clothing.moveSprites[0];
+
 			clothingTypeButton.interactable = GameManager.resourceM.GetClothesByAppearance(appearanceToClothingKVP.Key).Count > 0 || selectedColonist.clothes[appearanceToClothingKVP.Key] != null;
 			clothingTypeButton.onClick.RemoveAllListeners();
 			clothingTypeButton.onClick.AddListener(delegate { SetSelectedColonistClothingSelectionPanel(true, appearanceToClothingKVP.Key, selectedColonist); });
 
-			clothingTypeButton.transform.Find("Name").GetComponent<Text>().text = clothingName;
-			clothingTypeButton.transform.Find("Image").GetComponent<Image>().sprite = appearanceToClothingKVP.Key == HumanManager.Human.Appearance.Backpack ? clothingSpriteBack : clothingSpriteFront;
+			clothingTypeButton.transform.Find("Name").GetComponent<Text>().text = clothing == null ? "None" : clothing.name;
+			clothingTypeButton.transform.Find("Image").GetComponent<Image>().sprite = clothing == null ? GameManager.resourceM.clearSquareSprite : clothing.image;
 		}
 
 		if (!selectionPanelKeepState) {
@@ -2841,49 +2859,9 @@ public class UIManager : BaseManager {
 			}
 
 			obj.GetComponent<Button>().onClick.AddListener(delegate {
-				if (human is ColonistManager.Colonist colonist) {
-					List<ResourceManager.Container> validContainers = new List<ResourceManager.Container>();
-					foreach (ResourceManager.Container container in GameManager.resourceM.GetContainersInRegion(human.overTile.region)) {
-						if (container.GetInventory().ContainsResourceAmount(new ResourceManager.ResourceAmount(clothing, 1))) {
-							validContainers.Add(container);
-						}
-					}
-					validContainers.OrderBy(container => PathManager.RegionBlockDistance(human.overTile.regionBlock, container.tile.regionBlock, true, true, false));
-					if (validContainers.Count > 0) {
 
-						validContainers[0].GetInventory().ReserveResources(
-							new List<ResourceManager.ResourceAmount>() {
-								new ResourceManager.ResourceAmount(clothing, 1)
-							},
-							human
-						);
-						
-						colonist.backlog.Add(
-							new JobManager.ColonistJob(
-								colonist,
-								new JobManager.Job(
-									validContainers[0].tile,
-									GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.WearClothes),
-									null,
-									0
-								),
-								new List<ResourceManager.ResourceAmount>() {
-									new ResourceManager.ResourceAmount(clothing, 1)
-								},
-								new List<JobManager.ContainerPickup>() {
-									new JobManager.ContainerPickup(
-										validContainers[0],
-										new List<ResourceManager.ResourceAmount>() {
-											new ResourceManager.ResourceAmount(clothing, 1)
-										}
-									)
-								}
-							)
-						);
-					}
-				} else {
-					human.ChangeClothing(clothing.prefab.appearance, clothing);
-				}
+				human.ChangeClothing(clothing.prefab.appearance, clothing);
+
 				GameManager.uiM.SetSelectedColonistClothingSelectionPanelActive(false);
 				GameManager.uiM.SetSelectedColonistInformation(true);
 			});
@@ -3083,7 +3061,7 @@ public class UIManager : BaseManager {
 			RemoveCaravanElements();
 			caravansPanel.SetActive(true);
 			if (caravansPanel.activeSelf) {
-				foreach (CaravanManager.Caravan caravan in GameManager.caravanM.caravans.OrderByDescending(c => c.confirmedResourcesToTrade.Count > 0)) {
+				foreach (CaravanManager.Caravan caravan in GameManager.caravanM.caravans.Where(c => c.traders[0].overTile.IsVisibleToAColonist()).OrderByDescending(c => c.confirmedResourcesToTrade.Count > 0)) {
 					caravanElements.Add(new CaravanElement(caravan, caravansPanel.transform.Find("CaravanList-Panel")));
 				}
 			}

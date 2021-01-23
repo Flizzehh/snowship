@@ -2597,7 +2597,11 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum ColonistProperty {
-		Colonist, Life, Human, PlayerMoved, Job, StoredJob, Professions, Skills, Traits, Needs, BaseHappiness, EffectiveHappiness, HappinessModifiers
+		Colonist, Life, Human, PlayerMoved, Job, StoredJob, BacklogJobs, Professions, Skills, Traits, Needs, BaseHappiness, EffectiveHappiness, HappinessModifiers
+	}
+
+	public enum BacklogJobProperty {
+		BacklogJob
 	}
 
 	public enum ProfessionProperty {
@@ -2635,6 +2639,12 @@ public class PersistenceManager : BaseManager {
 			}
 			if (colonist.storedJob != null) {
 				WriteJobLines(file, colonist.storedJob, JobProperty.StoredJob, 1);
+			}
+			if (colonist.backlog.Count > 0) {
+				file.WriteLine(CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
+				foreach (JobManager.Job backlogJob in colonist.backlog) {
+					WriteJobLines(file, backlogJob, JobProperty.BacklogJob, 2);
+				}
 			}
 
 			file.WriteLine(CreateKeyValueString(ColonistProperty.Professions, string.Empty, 1));
@@ -2695,6 +2705,7 @@ public class PersistenceManager : BaseManager {
 		public bool? playerMoved;
 		public PersistenceJob persistenceJob;
 		public PersistenceJob persistenceStoredJob;
+		public List<PersistenceJob> persistenceBacklogJobs;
 		public List<PersistenceProfession> persistenceProfessions;
 		public List<PersistenceSkill> persistenceSkills;
 		public List<PersistenceTrait> persistenceTraits;
@@ -2709,6 +2720,7 @@ public class PersistenceManager : BaseManager {
 			bool? playerMoved,
 			PersistenceJob persistenceJob,
 			PersistenceJob persistenceStoredJob,
+			List<PersistenceJob> persistenceBacklogJobs,
 			List<PersistenceProfession> persistenceProfessions,
 			List<PersistenceSkill> persistenceSkills,
 			List<PersistenceTrait> persistenceTraits,
@@ -2722,6 +2734,7 @@ public class PersistenceManager : BaseManager {
 			this.playerMoved = playerMoved;
 			this.persistenceJob = persistenceJob;
 			this.persistenceStoredJob = persistenceStoredJob;
+			this.persistenceBacklogJobs = persistenceBacklogJobs;
 			this.persistenceProfessions = persistenceProfessions;
 			this.persistenceSkills = persistenceSkills;
 			this.persistenceTraits = persistenceTraits;
@@ -2814,6 +2827,7 @@ public class PersistenceManager : BaseManager {
 					bool? playerMoved = null;
 					PersistenceJob persistenceJob = null;
 					PersistenceJob persistenceStoredJob = null;
+					List<PersistenceJob> persistenceBacklogJobs = new List<PersistenceJob>();
 					List<PersistenceProfession> persistenceProfessions = new List<PersistenceProfession>();
 					List<PersistenceSkill> persistenceSkills = new List<PersistenceSkill>();
 					List<PersistenceTrait> persistenceTraits = new List<PersistenceTrait>();
@@ -2838,6 +2852,15 @@ public class PersistenceManager : BaseManager {
 								break;
 							case ColonistProperty.StoredJob:
 								persistenceStoredJob = LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+								break;
+							case ColonistProperty.BacklogJobs:
+								foreach (KeyValuePair<string, object> backlogJobProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
+									switch ((BacklogJobProperty)Enum.Parse(typeof(BacklogJobProperty), backlogJobProperty.Key)) {
+										case BacklogJobProperty.BacklogJob:
+											persistenceBacklogJobs.Add(LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
+											break;
+									}
+								}
 								break;
 							case ColonistProperty.Professions:
 								foreach (KeyValuePair<string, object> professionProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
@@ -3024,6 +3047,7 @@ public class PersistenceManager : BaseManager {
 						playerMoved,
 						persistenceJob,
 						persistenceStoredJob,
+						persistenceBacklogJobs,
 						persistenceProfessions,
 						persistenceSkills,
 						persistenceTraits,
@@ -3083,6 +3107,11 @@ public class PersistenceManager : BaseManager {
 				colonist.SetJob(new JobManager.ColonistJob(colonist, job, persistenceColonist.persistenceJob.colonistResources, job.containerPickups));
 			}
 
+			foreach (PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
+				JobManager.Job backlogJob = LoadJob(persistenceBacklogJob);
+				colonist.backlog.Add(backlogJob);
+			}
+
 			if (persistenceColonist.persistenceLife.pathEndPosition.HasValue) {
 				colonist.MoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.pathEndPosition.Value), true);
 			}
@@ -3134,7 +3163,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum JobProperty {
-		Job, StoredJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ColonistResources, ContainerPickups, Plant, CreateResource, ActiveTileObject, TransferResources
+		Job, StoredJob, BacklogJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ColonistResources, ContainerPickups, Plant, CreateResource, ActiveTileObject, TransferResources
 	}
 
 	public enum ContainerPickupProperty {
@@ -3166,9 +3195,9 @@ public class PersistenceManager : BaseManager {
 			}
 		}
 
-		if (job.colonistResources != null && job.colonistResources.Count > 0) {
+		if (job.resourcesColonistHas != null && job.resourcesColonistHas.Count > 0) {
 			file.WriteLine(CreateKeyValueString(JobProperty.ColonistResources, string.Empty, startLevel + 1));
-			foreach (ResourceManager.ResourceAmount resourceAmount in job.colonistResources) {
+			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesColonistHas) {
 				WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 			}
 		}
@@ -3468,7 +3497,7 @@ public class PersistenceManager : BaseManager {
 			jobProgress = persistenceJob.progress ?? 0,
 			colonistBuildTime = persistenceJob.colonistBuildTime ?? 0,
 			resourcesToBuild = persistenceJob.resourcesToBuild,
-			colonistResources = persistenceJob.colonistResources,
+			resourcesColonistHas = persistenceJob.colonistResources,
 			containerPickups = containerPickups,
 			transferResources = persistenceJob.transferResources
 		};

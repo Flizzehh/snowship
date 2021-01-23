@@ -314,6 +314,18 @@ public class ColonistManager : BaseManager {
 		need.ChangeValue((needIncreaseAmount + (needsValueSpecialIncreases.ContainsKey(need.prefab.type) ? needsValueSpecialIncreases[need.prefab.type](need) : 0)) * GameManager.timeM.deltaTime);
 	}
 
+	static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceManager.ResourceAmount resourceAmount) {
+		
+		List<ResourceManager.Container> containersWithResourceAmount = new List<ResourceManager.Container>();
+
+		foreach (ResourceManager.Container container in GameManager.resourceM.GetContainersInRegion(colonist.overTile.region)) {
+			if (container.GetInventory().ContainsResourceAmount(resourceAmount)) {
+				containersWithResourceAmount.Add(container);
+			}
+		}
+		return containersWithResourceAmount.OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).FirstOrDefault();
+	}
+
 	KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>> FindClosestFood(Colonist colonist, float minimumNutritionRequired, bool takeFromOtherColonists, bool eatAnything) {
 		List<KeyValuePair<KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>, int>> resourcesPerInventory = new List<KeyValuePair<KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>, int>>();
 		int totalNutrition = 0;
@@ -972,7 +984,7 @@ public class ColonistManager : BaseManager {
 		public JobManager.Job job;
 		public JobManager.Job storedJob;
 		public JobManager.Job needJob;
-		public readonly List<JobManager.ColonistJob> backlog = new List<JobManager.ColonistJob>();
+		public readonly List<JobManager.Job> backlog = new List<JobManager.Job>();
 
 		// Professions
 		public readonly List<ProfessionInstance> professions = new List<ProfessionInstance>();
@@ -1058,7 +1070,10 @@ public class ColonistManager : BaseManager {
 					List<ResourceManager.Container> validEmptyInventoryContainers = FindValidContainersToEmptyInventory();
 					int inventoryWeight = GetInventory().UsedWeight();
 					int inventoryVolume = GetInventory().UsedVolume();
-					if (validEmptyInventoryContainers.Count > 0 && (((inventoryWeight >= GetInventory().maxWeight) || (inventoryVolume >= GetInventory().maxVolume)) || ((inventoryWeight > 0 || inventoryVolume > 0) && GameManager.jobM.GetColonistJobsCountForColonist(this) <= 0))) {
+					if (validEmptyInventoryContainers.Count > 0 
+							&& (((inventoryWeight >= GetInventory().maxWeight) || (inventoryVolume >= GetInventory().maxVolume)) 
+								|| ((inventoryWeight > 0 || inventoryVolume > 0) && GameManager.jobM.GetColonistJobsCountForColonist(this) <= 0))
+					) {
 						EmptyInventory(validEmptyInventoryContainers);
 					} else {
 						Wander(null, 0);
@@ -1171,7 +1186,7 @@ public class ColonistManager : BaseManager {
 
 		public void SetJob(JobManager.ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {
 			job = colonistJob.job;
-			job.colonistResources = colonistJob.colonistResources;
+			job.resourcesColonistHas = colonistJob.resourcesColonistHas;
 			job.containerPickups = colonistJob.containerPickups;
 			if (reserveResourcesInContainerPickups && (job.containerPickups != null && job.containerPickups.Count > 0)) {
 				foreach (JobManager.ContainerPickup containerPickup in job.containerPickups) {
@@ -1396,6 +1411,48 @@ public class ColonistManager : BaseManager {
 		public override void SetName(string name) {
 			base.SetName(name);
 			SetNameColour(UIManager.GetColour(UIManager.Colours.LightGreen));
+		}
+
+		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
+
+			if (clothing == null || GetInventory().ContainsResourceAmount(new ResourceManager.ResourceAmount(clothing, 1))) {
+
+				base.ChangeClothing(appearance, clothing);
+			
+			} else {
+
+				ResourceManager.Container container = FindClosestResourceAmountInContainers(this, new ResourceManager.ResourceAmount(clothing, 1));
+
+				if (container != null) {
+
+					ResourceManager.ResourceAmount clothingToPickup = new ResourceManager.ResourceAmount(clothing, 1);
+
+					container.GetInventory().ReserveResources(
+						new List<ResourceManager.ResourceAmount>() {
+							clothingToPickup
+						},
+						this
+					);
+
+					backlog.Add(
+						new JobManager.Job(
+							container.tile,
+							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.WearClothes),
+							null,
+							0
+						) {
+							resourcesToBuild = new List<ResourceManager.ResourceAmount>() { clothingToPickup },
+							resourcesColonistHas = new List<ResourceManager.ResourceAmount>(),
+							containerPickups = new List<JobManager.ContainerPickup>() {
+								new JobManager.ContainerPickup(
+									container,
+									new List<ResourceManager.ResourceAmount>() { clothingToPickup }
+								)
+							}
+						}
+					);
+				}
+			}
 		}
 	}
 

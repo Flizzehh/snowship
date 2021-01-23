@@ -44,7 +44,7 @@ public class JobManager : BaseManager {
 
 		public List<ResourceManager.ResourceAmount> resourcesToBuild = new List<ResourceManager.ResourceAmount>();
 
-		public List<ResourceManager.ResourceAmount> colonistResources;
+		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
 		public List<ContainerPickup> containerPickups;
 
 		public UIManager.JobElement jobUIElement;
@@ -151,7 +151,7 @@ public class JobManager : BaseManager {
 
 	public static readonly List<JobEnum> nonReturnableJobs = new List<JobEnum>() {
 		JobEnum.PickupResources, JobEnum.EmptyInventory, JobEnum.Cancel, JobEnum.IncreasePriority, JobEnum.DecreasePriority,
-		JobEnum.CollectFood, JobEnum.CollectWater, JobEnum.Drink, JobEnum.Sleep
+		JobEnum.CollectFood, JobEnum.Eat, JobEnum.CollectWater, JobEnum.Drink, JobEnum.Sleep, JobEnum.WearClothes
 	};
 
 	private static readonly Dictionary<JobEnum, Func<Job, string>> jobDescriptionFunctions = new Dictionary<JobEnum, Func<Job, string>>() {
@@ -213,7 +213,7 @@ public class JobManager : BaseManager {
 			return "Sleeping.";
 		} },
 		{ JobEnum.WearClothes, delegate (Job job) {
-			return "Wearing some clothing.";
+			return "Wearing " + job.resourcesToBuild[0].resource.name + ".";
 		} }
 	};
 
@@ -410,9 +410,11 @@ public class JobManager : BaseManager {
 			if (container != null && colonist.storedJob != null) {
 				ContainerPickup containerPickup = colonist.storedJob.containerPickups.Find(pickup => pickup.container == container);
 				if (containerPickup != null) {
-					foreach (ResourceManager.ReservedResources rr in containerPickup.container.GetInventory().TakeReservedResources(colonist)) {
+					foreach (ResourceManager.ReservedResources rr in containerPickup.container.GetInventory().TakeReservedResources(colonist, containerPickup.resourcesToPickup)) {
 						foreach (ResourceManager.ResourceAmount ra in rr.resources) {
-							colonist.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
+							if (containerPickup.resourcesToPickup.Find(rtp => rtp.resource == ra.resource) != null) {
+								colonist.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
+							}
 						}
 					}
 					colonist.storedJob.containerPickups.RemoveAt(0);
@@ -420,7 +422,7 @@ public class JobManager : BaseManager {
 			}
 			if (colonist.storedJob != null) {
 				if (colonist.storedJob.containerPickups.Count <= 0) {
-					colonist.SetJob(new ColonistJob(colonist, colonist.storedJob, colonist.storedJob.colonistResources, null));
+					colonist.SetJob(new ColonistJob(colonist, colonist.storedJob, colonist.storedJob.resourcesColonistHas, null));
 					colonist.storedJob = null;
 				} else {
 					colonist.SetJob(
@@ -431,7 +433,7 @@ public class JobManager : BaseManager {
 								GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.PickupResources),
 								null,
 								0),
-							colonist.storedJob.colonistResources,
+							colonist.storedJob.resourcesColonistHas,
 							colonist.storedJob.containerPickups),
 						false
 					);
@@ -522,10 +524,9 @@ public class JobManager : BaseManager {
 			}
 		} },
 		{ JobEnum.WearClothes, delegate (ColonistManager.Colonist colonist, Job job) {
-			foreach (ResourceManager.ResourceAmount resourceAmount in job.colonistResources.Where(ra => ra.resource.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
+			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild.Where(ra => ra.resource.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
 				ResourceManager.Clothing clothing = (ResourceManager.Clothing)resourceAmount.resource;
 				colonist.ChangeClothing(clothing.prefab.appearance, clothing);
-				colonist.GetInventory().ChangeResourceAmount(clothing, -1, false);
 			}
 		} }
 	};
@@ -1135,7 +1136,7 @@ public class JobManager : BaseManager {
 		public ColonistManager.Colonist colonist;
 		public Job job;
 
-		public List<ResourceManager.ResourceAmount> colonistResources;
+		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
 		public List<ContainerPickup> containerPickups;
 
 		public float cost;
@@ -1143,7 +1144,7 @@ public class JobManager : BaseManager {
 		public ColonistJob(ColonistManager.Colonist colonist, Job job, List<ResourceManager.ResourceAmount> colonistResources, List<ContainerPickup> containerPickups) {
 			this.colonist = colonist;
 			this.job = job;
-			this.colonistResources = colonistResources;
+			this.resourcesColonistHas = colonistResources;
 			this.containerPickups = containerPickups;
 
 			CalculateCost();
@@ -1156,7 +1157,7 @@ public class JobManager : BaseManager {
 		public void RecalculatePickupResources() {
 			KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.resourcesToBuild);
 			List<ResourceManager.ResourceAmount> resourcesToPickup = returnKVP.Value[0];
-			colonistResources = returnKVP.Value[1];
+			resourcesColonistHas = returnKVP.Value[1];
 			if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
 				containerPickups = GameManager.jobM.CalculateColonistPickupContainers(colonist, resourcesToPickup);
 			} else {
@@ -1277,10 +1278,10 @@ public class JobManager : BaseManager {
 
 		foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
 			if (colonist.job == null && !colonist.playerMoved && colonist.backlog.Count > 0) {
-				ColonistJob backlogJob = colonist.backlog[0];
+				ColonistJob backlogJob = new ColonistJob(colonist, colonist.backlog[0], colonist.backlog[0].resourcesColonistHas, colonist.backlog[0].containerPickups);
 				gaveJob = true;
 				jobsGiven.Add(colonist, backlogJob);
-				colonist.backlog.Remove(backlogJob);
+				colonist.backlog.Remove(backlogJob.job);
 			}
 		}
 
