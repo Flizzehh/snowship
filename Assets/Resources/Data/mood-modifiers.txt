@@ -1,54 +1,54 @@
-<HappinessModifierGroup>
+<MoodModifierGroup>
 	Death
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>WitnessDeath
 		<EffectAmount>-30
 		<EffectLengthSeconds>4320
-<HappinessModifierGroup>
+<MoodModifierGroup>
 	Rest
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Tired
 		<EffectAmount>-10
 		<EffectLengthSeconds>UntilNot
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Exhausted
 		<EffectAmount>-20
 		<EffectLengthSeconds>UntilNot
-<HappinessModifierGroup>
+<MoodModifierGroup>
 	Water
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Quenched
 		<EffectAmount>10
 		<EffectLengthSeconds>360
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Thirsty
 		<EffectAmount>-10
 		<EffectLengthSeconds>UntilNot
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Dehydrated
 		<EffectAmount>-20
 		<EffectLengthSeconds>UntilNot
-<HappinessModifierGroup>
+<MoodModifierGroup>
 	Food
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Stuffed
 		<EffectAmount>20
 		<EffectLengthSeconds>720
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Full
 		<EffectAmount>10
 		<EffectLengthSeconds>360
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Hungry
 		<EffectAmount>-10
 		<EffectLengthSeconds>UntilNot
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Starving
 		<EffectAmount>-20
 		<EffectLengthSeconds>UntilNot
-<HappinessModifierGroup>
+<MoodModifierGroup>
 	Inventory
-	<HappinessModifier>
+	<MoodModifier>
 		<Type>Overencumbered
 		<EffectAmount>-10
 		<EffectLengthSeconds>UntilNot

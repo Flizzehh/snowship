@@ -1138,7 +1138,7 @@ public class UIManager : BaseManager {
 	private GameObject selectedColonistClothingTabButtonLinkPanel;
 
 	private GameObject selectedColonistNeedsSkillsPanel;
-	private GameObject selectedColonistHappinessModifiersPanel;
+	private GameObject selectedColonistMoodModifiersPanel;
 	private GameObject selectedColonistInventoryPanel;
 	private GameObject selectedColonistClothingPanel;
 	private GameObject selectedColonistClothingSelectionPanel;
@@ -1209,10 +1209,10 @@ public class UIManager : BaseManager {
 		selectedColonistInformationPanel = gameUI.transform.Find("SelectedColonistInfo-Panel").gameObject;
 
 		selectedColonistNeedsSkillsPanel = selectedColonistInformationPanel.transform.Find("SelectedTab-Panel/NeedsSkills-Panel").gameObject;
-		selectedColonistHappinessModifiersPanel = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessModifier-Panel").gameObject;
-		selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessModifiers-Button").GetComponent<Button>().onClick.AddListener(delegate { selectedColonistHappinessModifiersPanel.SetActive(!selectedColonistHappinessModifiersPanel.activeSelf); });
-		selectedColonistHappinessModifiersPanel.transform.Find("Return-Button").GetComponent<Button>().onClick.AddListener(delegate { selectedColonistHappinessModifiersPanel.SetActive(!selectedColonistHappinessModifiersPanel.activeSelf); });
-		selectedColonistHappinessModifiersPanel.SetActive(false);
+		selectedColonistMoodModifiersPanel = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifier-Panel").gameObject;
+		selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button").GetComponent<Button>().onClick.AddListener(delegate { selectedColonistMoodModifiersPanel.SetActive(!selectedColonistMoodModifiersPanel.activeSelf); });
+		selectedColonistMoodModifiersPanel.transform.Find("Return-Button").GetComponent<Button>().onClick.AddListener(delegate { selectedColonistMoodModifiersPanel.SetActive(!selectedColonistMoodModifiersPanel.activeSelf); });
+		selectedColonistMoodModifiersPanel.SetActive(false);
 
 		selectedColonistInventoryPanel = selectedColonistInformationPanel.transform.Find("SelectedTab-Panel/Inventory-Panel").gameObject;
 
@@ -2551,20 +2551,20 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	public class HappinessModifierElement {
+	public class MoodModifierElement {
 
-		public ColonistManager.HappinessModifierInstance happinessModifierInstance;
+		public ColonistManager.MoodModifierInstance moodModifierInstance;
 		public GameObject obj;
 
-		public HappinessModifierElement(ColonistManager.HappinessModifierInstance happinessModifierInstance, Transform parent) {
-			this.happinessModifierInstance = happinessModifierInstance;
+		public MoodModifierElement(ColonistManager.MoodModifierInstance moodModifierInstance, Transform parent) {
+			this.moodModifierInstance = moodModifierInstance;
 
-			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/HappinessModifierElement-Panel"), parent, false);
+			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/MoodModifierElement-Panel"), parent, false);
 
-			obj.transform.Find("HappinessModifierName-Text").GetComponent<Text>().text = happinessModifierInstance.prefab.name;
-			if (happinessModifierInstance.prefab.effectAmount > 0) {
+			obj.transform.Find("MoodModifierName-Text").GetComponent<Text>().text = moodModifierInstance.prefab.name;
+			if (moodModifierInstance.prefab.effectAmount > 0) {
 				obj.GetComponent<Image>().color = GetColour(Colours.LightGreen);
-			} else if (happinessModifierInstance.prefab.effectAmount < 0) {
+			} else if (moodModifierInstance.prefab.effectAmount < 0) {
 				obj.GetComponent<Image>().color = GetColour(Colours.LightRed);
 			} else {
 				obj.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
@@ -2574,21 +2574,21 @@ public class UIManager : BaseManager {
 		}
 
 		public bool Update() {
-			if (!happinessModifierInstance.colonist.happinessModifiers.Contains(happinessModifierInstance)) {
+			if (!moodModifierInstance.colonist.moodModifiers.Contains(moodModifierInstance)) {
 				MonoBehaviour.Destroy(obj);
 				return false;
 			}
-			if (happinessModifierInstance.prefab.infinite) {
-				obj.transform.Find("HappinessModifierTime-Text").GetComponent<Text>().text = "Until Not";
+			if (moodModifierInstance.prefab.infinite) {
+				obj.transform.Find("MoodModifierTime-Text").GetComponent<Text>().text = "Until Not";
 			} else {
-				obj.transform.Find("HappinessModifierTime-Text").GetComponent<Text>().text = Mathf.RoundToInt(happinessModifierInstance.timer) + "s (" + Mathf.RoundToInt(happinessModifierInstance.prefab.effectLengthSeconds) + "s)";
+				obj.transform.Find("MoodModifierTime-Text").GetComponent<Text>().text = Mathf.RoundToInt(moodModifierInstance.timer) + "s (" + Mathf.RoundToInt(moodModifierInstance.prefab.effectLengthSeconds) + "s)";
 			}
-			if (happinessModifierInstance.prefab.effectAmount > 0) {
-				obj.transform.Find("HappinessModifierAmount-Text").GetComponent<Text>().text = "+" + happinessModifierInstance.prefab.effectAmount + "%";
-			} else if (happinessModifierInstance.prefab.effectAmount < 0) {
-				obj.transform.Find("HappinessModifierAmount-Text").GetComponent<Text>().text = happinessModifierInstance.prefab.effectAmount + "%";
+			if (moodModifierInstance.prefab.effectAmount > 0) {
+				obj.transform.Find("MoodModifierAmount-Text").GetComponent<Text>().text = "+" + moodModifierInstance.prefab.effectAmount + "%";
+			} else if (moodModifierInstance.prefab.effectAmount < 0) {
+				obj.transform.Find("MoodModifierAmount-Text").GetComponent<Text>().text = moodModifierInstance.prefab.effectAmount + "%";
 			} else {
-				obj.transform.Find("HappinessModifierAmount-Text").GetComponent<Text>().text = happinessModifierInstance.prefab.effectAmount + "%";
+				obj.transform.Find("MoodModifierAmount-Text").GetComponent<Text>().text = moodModifierInstance.prefab.effectAmount + "%";
 			}
 			return true;
 		}
@@ -2607,7 +2607,7 @@ public class UIManager : BaseManager {
 	}
 
 	private readonly List<NeedElement> selectedColonistNeedElements = new List<NeedElement>();
-	private readonly List<HappinessModifierElement> selectedColonistHappinessModifierElements = new List<HappinessModifierElement>();
+	private readonly List<MoodModifierElement> selectedColonistMoodModifierElements = new List<MoodModifierElement>();
 
 	private readonly List<SkillElement> selectedColonistSkillElements = new List<SkillElement>();
 
@@ -2626,7 +2626,7 @@ public class UIManager : BaseManager {
 			selectedColonistInformationPanel.transform.Find("AffiliationName-Text").GetComponent<Text>().text = "Colonist of " + GameManager.colonyM.colony.name;
 
 			RemakeSelectedColonistNeeds();
-			RemakeSelectedColonistHappinessModifiers();
+			RemakeSelectedColonistMoodModifiers();
 			RemakeSelectedColonistSkills();
 			RemakeSelectedColonistInventory(selectedColonist);
 			RemakeSelectedColonistClothing(selectedColonist, sameColonistSelected);
@@ -2671,7 +2671,7 @@ public class UIManager : BaseManager {
 
 		selectedColonistNeedsSkillsPanel.SetActive(needsSkillsClicked);
 		selectedColonistNeedsSkillsTabButtonLinkPanel.SetActive(needsSkillsClicked);
-		selectedColonistHappinessModifiersPanel.SetActive(false);
+		selectedColonistMoodModifiersPanel.SetActive(false);
 
 		selectedColonistInventoryPanel.SetActive(inventoryClicked);
 		selectedColonistInventoryTabButtonLinkPanel.SetActive(inventoryClicked);
@@ -2694,14 +2694,14 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	public void RemakeSelectedColonistHappinessModifiers() {
+	public void RemakeSelectedColonistMoodModifiers() {
 		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
-			foreach (HappinessModifierElement happinessModifierElement in selectedColonistHappinessModifierElements) {
-				MonoBehaviour.Destroy(happinessModifierElement.obj);
+			foreach (MoodModifierElement moodModifierElement in selectedColonistMoodModifierElements) {
+				MonoBehaviour.Destroy(moodModifierElement.obj);
 			}
-			selectedColonistHappinessModifierElements.Clear();
-			foreach (ColonistManager.HappinessModifierInstance hmi in selectedColonist.happinessModifiers) {
-				selectedColonistHappinessModifierElements.Add(new HappinessModifierElement(hmi, selectedColonistHappinessModifiersPanel.transform.Find("HappinessModifier-ScrollPanel/HappinessModifierList-Panel")));
+			selectedColonistMoodModifierElements.Clear();
+			foreach (ColonistManager.MoodModifierInstance moodModifier in selectedColonist.moodModifiers) {
+				selectedColonistMoodModifierElements.Add(new MoodModifierElement(moodModifier, selectedColonistMoodModifiersPanel.transform.Find("MoodModifier-ScrollPanel/MoodModifierList-Panel")));
 			}
 		}
 	}
@@ -2868,14 +2868,14 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private static readonly Dictionary<int, int> happinessModifierButtonSizeMap = new Dictionary<int, int>() {
+	private static readonly Dictionary<int, int> moodModifierButtonSizeMap = new Dictionary<int, int>() {
 		{ 1, 45 }, { 2, 60 }, { 3, 65 }
 	};
-	private static readonly Dictionary<int, int> happinessModifierValueHorizontalPositionMap = new Dictionary<int, int>() {
+	private static readonly Dictionary<int, int> moodModifierValueHorizontalPositionMap = new Dictionary<int, int>() {
 		{ 1, -50 }, { 2, -65 }, { 3, -70 }
 	};
 
-	private readonly List<HappinessModifierElement> removeHME = new List<HappinessModifierElement>();
+	private readonly List<MoodModifierElement> removeHME = new List<MoodModifierElement>();
 
 	public void UpdateSelectedColonistInformation() {
 		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
@@ -2886,10 +2886,10 @@ public class UIManager : BaseManager {
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.health);
 			//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealthValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.health * 100) + "%";
 
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHappiness-Panel/ColonistHappiness-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.effectiveHappiness);
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHappiness-Panel/ColonistHappiness-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedColonist.effectiveHappiness / 100f);
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHappiness-Panel/ColonistHappiness-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.effectiveHappiness / 100f);
-			//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHappiness-Panel/ColonistHappinessValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveHappiness) + "%";
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.effectiveMood);
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedColonist.effectiveMood / 100f);
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.effectiveMood / 100f);
+			//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMoodValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveMood) + "%";
 
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().minValue = 0;
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().maxValue = selectedColonist.GetInventory().maxWeight;
@@ -2908,24 +2908,24 @@ public class UIManager : BaseManager {
 				selectedColonistInformationPanel.transform.Find("ColonistStoredAction-Text").GetComponent<Text>().text = string.Empty;
 			}
 
-			int happinessModifiersSum = Mathf.RoundToInt(selectedColonist.happinessModifiersSum);
+			int moodModifiersSum = Mathf.RoundToInt(selectedColonist.moodModifiersSum);
 
-			int happinessLength = Mathf.Abs(happinessModifiersSum).ToString().Length;
-			Text happinessModifierAmountText = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessModifiers-Button/HappinessModifiersAmount-Text").GetComponent<Text>();
-			if (happinessModifiersSum > 0) {
-				happinessModifierAmountText.text = "+" + happinessModifiersSum + "%";
-				happinessModifierAmountText.color = GetColour(Colours.LightGreen);
-			} else if (happinessModifiersSum < 0) {
-				happinessModifierAmountText.text = happinessModifiersSum + "%";
-				happinessModifierAmountText.color = GetColour(Colours.LightRed);
+			int moodLength = Mathf.Abs(moodModifiersSum).ToString().Length;
+			Text moodModifierAmountText = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button/MoodModifiersAmount-Text").GetComponent<Text>();
+			if (moodModifiersSum > 0) {
+				moodModifierAmountText.text = "+" + moodModifiersSum + "%";
+				moodModifierAmountText.color = GetColour(Colours.LightGreen);
+			} else if (moodModifiersSum < 0) {
+				moodModifierAmountText.text = moodModifiersSum + "%";
+				moodModifierAmountText.color = GetColour(Colours.LightRed);
 			} else {
-				happinessModifierAmountText.text = happinessModifiersSum + "%";
-				happinessModifierAmountText.color = GetColour(Colours.DarkGrey50);
+				moodModifierAmountText.text = moodModifiersSum + "%";
+				moodModifierAmountText.color = GetColour(Colours.DarkGrey50);
 			}
-			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessModifiers-Button").GetComponent<RectTransform>().sizeDelta = new Vector2(happinessModifierButtonSizeMap[happinessLength], 20);
-			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessValue-Text").GetComponent<RectTransform>().offsetMax = new Vector2(happinessModifierValueHorizontalPositionMap[happinessLength], 0);
-			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveHappiness) + "%";
-			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/HappinessValue-Text").GetComponent<Text>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.effectiveHappiness / 100f);
+			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button").GetComponent<RectTransform>().sizeDelta = new Vector2(moodModifierButtonSizeMap[moodLength], 20);
+			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<RectTransform>().offsetMax = new Vector2(moodModifierValueHorizontalPositionMap[moodLength], 0);
+			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveMood) + "%";
+			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.effectiveMood / 100f);
 
 			foreach (SkillElement skillElement in selectedColonistSkillElements) {
 				skillElement.Update();
@@ -2936,16 +2936,16 @@ public class UIManager : BaseManager {
 			foreach (InventoryElement inventoryElement in selectedColonistInventoryElements) {
 				inventoryElement.Update();
 			}
-			foreach (HappinessModifierElement happinessModifierElement in selectedColonistHappinessModifierElements) {
-				bool keep = happinessModifierElement.Update();
+			foreach (MoodModifierElement moodModifierElement in selectedColonistMoodModifierElements) {
+				bool keep = moodModifierElement.Update();
 				if (!keep) {
-					removeHME.Add(happinessModifierElement);
+					removeHME.Add(moodModifierElement);
 				}
 			}
 			if (removeHME.Count > 0) {
-				foreach (HappinessModifierElement happinessModifierElement in removeHME) {
-					MonoBehaviour.Destroy(happinessModifierElement.obj);
-					selectedColonistHappinessModifierElements.Remove(happinessModifierElement);
+				foreach (MoodModifierElement moodModifierElement in removeHME) {
+					MonoBehaviour.Destroy(moodModifierElement.obj);
+					selectedColonistMoodModifierElements.Remove(moodModifierElement);
 				}
 				removeHME.Clear();
 			}

@@ -501,9 +501,9 @@ public class JobManager : BaseManager {
 			}
 			float amountEaten = startingFoodNeedValue - foodNeed.GetValue();
 			if (amountEaten >= 15 && foodNeed.GetValue() <= -10) {
-				colonist.AddHappinessModifier(ColonistManager.HappinessModifierEnum.Stuffed);
+				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Stuffed);
 			} else if (amountEaten >= 15) {
-				colonist.AddHappinessModifier(ColonistManager.HappinessModifierEnum.Full);
+				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Full);
 			}
 			if (foodNeed.GetValue() < 0) {
 				foodNeed.SetValue(0);
@@ -514,7 +514,7 @@ public class JobManager : BaseManager {
 			if (targetSleepSpot != null) {
 				targetSleepSpot.StopSleeping();
 				if (targetSleepSpot.prefab.restComfortAmount >= 10) {
-					colonist.AddHappinessModifier(ColonistManager.HappinessModifierEnum.Rested);
+					colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Rested);
 				}
 			}
 			foreach (ResourceManager.SleepSpot sleepSpot in GameManager.resourceM.sleepSpots) {

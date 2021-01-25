@@ -275,26 +275,26 @@ public class ColonistManager : BaseManager {
 			if (!GameManager.timeM.isDay) {
 				totalSpecialIncrease += 0.05f;
 			}
-			HappinessModifierInstance hmi = need.colonist.happinessModifiers.Find(findHMI => findHMI.prefab.group.type == HappinessModifierGroupEnum.Rest);
-			if (hmi.prefab.type == HappinessModifierEnum.Rested) {
+			MoodModifierInstance moodModifier = need.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Rest);
+			if (moodModifier.prefab.type == MoodModifierEnum.Rested) {
 				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.8f);
 			}
 			return totalSpecialIncrease;
 		});
 		needsValueSpecialIncreases.Add(NeedEnum.Water, delegate (NeedInstance need) {
 			float totalSpecialIncrease = 0;
-			HappinessModifierInstance hmi = need.colonist.happinessModifiers.Find(findHMI => findHMI.prefab.group.type == HappinessModifierGroupEnum.Water);
-			if (hmi.prefab.type == HappinessModifierEnum.Quenched) {
+			MoodModifierInstance moodModifier = need.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Water);
+			if (moodModifier.prefab.type == MoodModifierEnum.Quenched) {
 				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.5f);
 			}
 			return totalSpecialIncrease;
 		});
 		needsValueSpecialIncreases.Add(NeedEnum.Food, delegate (NeedInstance need) {
 			float totalSpecialIncrease = 0;
-			HappinessModifierInstance hmi = need.colonist.happinessModifiers.Find(findHMI => findHMI.prefab.group.type == HappinessModifierGroupEnum.Food);
-			if (hmi.prefab.type == HappinessModifierEnum.Stuffed) {
+			MoodModifierInstance moodModifier = need.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Food);
+			if (moodModifier.prefab.type == MoodModifierEnum.Stuffed) {
 				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.9f);
-			} else if (hmi.prefab.type == HappinessModifierEnum.Full) {
+			} else if (moodModifier.prefab.type == MoodModifierEnum.Full) {
 				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.5f);
 			}
 			return totalSpecialIncrease;
@@ -797,69 +797,69 @@ public class ColonistManager : BaseManager {
 		}
 	}
 
-	public static readonly Dictionary<HappinessModifierGroupEnum, Action<Colonist>> happinessModifierFunctions = new Dictionary<HappinessModifierGroupEnum, Action<Colonist>>() {
-		{ HappinessModifierGroupEnum.Death, delegate (Colonist colonist) {
+	public static readonly Dictionary<MoodModifierGroupEnum, Action<Colonist>> moodModifierFunctions = new Dictionary<MoodModifierGroupEnum, Action<Colonist>>() {
+		{ MoodModifierGroupEnum.Death, delegate (Colonist colonist) {
 			// TODO Implement colonists viewing deaths and being sad
 		} },
-		{ HappinessModifierGroupEnum.Rest, delegate (Colonist colonist) {
+		{ MoodModifierGroupEnum.Rest, delegate (Colonist colonist) {
 			NeedInstance restNeed = colonist.needs.Find(ni => ni.prefab.type == NeedEnum.Rest);
 			if (restNeed.GetValue() >= restNeed.prefab.maxValue) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Exhausted);
+				colonist.AddMoodModifier(MoodModifierEnum.Exhausted);
 			} else if (restNeed.GetValue() >= restNeed.prefab.minValue) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Tired);
+				colonist.AddMoodModifier(MoodModifierEnum.Tired);
 			} else {
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Exhausted);
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Tired);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Exhausted);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Tired);
 			}
 		} },
-		{ HappinessModifierGroupEnum.Water, delegate (Colonist colonist) {
+		{ MoodModifierGroupEnum.Water, delegate (Colonist colonist) {
 			NeedInstance waterNeed = colonist.needs.Find(ni => ni.prefab.type == NeedEnum.Water);
 			if (waterNeed.GetValue() >= waterNeed.prefab.maxValue) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Dehydrated);
+				colonist.AddMoodModifier(MoodModifierEnum.Dehydrated);
 			} else if (waterNeed.GetValue() >= waterNeed.prefab.minValue) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Thirsty);
+				colonist.AddMoodModifier(MoodModifierEnum.Thirsty);
 			} else {
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Dehydrated);
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Thirsty);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Dehydrated);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Thirsty);
 			}
 		} },
-		{ HappinessModifierGroupEnum.Food, delegate (Colonist colonist) {
+		{ MoodModifierGroupEnum.Food, delegate (Colonist colonist) {
 			NeedInstance foodNeed = colonist.needs.Find(ni => ni.prefab.type == NeedEnum.Food);
 			if (foodNeed.GetValue() >= foodNeed.prefab.maxValue) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Starving);
+				colonist.AddMoodModifier(MoodModifierEnum.Starving);
 			} else if (foodNeed.GetValue() >= foodNeed.prefab.minValue) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Hungry);
+				colonist.AddMoodModifier(MoodModifierEnum.Hungry);
 			} else {
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Starving);
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Hungry);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Starving);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Hungry);
 			}
 		} },
-		{ HappinessModifierGroupEnum.Inventory, delegate (Colonist colonist) {
+		{ MoodModifierGroupEnum.Inventory, delegate (Colonist colonist) {
 			if (colonist.GetInventory().UsedWeight() > colonist.GetInventory().maxWeight) {
-				colonist.AddHappinessModifier(HappinessModifierEnum.Overencumbered);
+				colonist.AddMoodModifier(MoodModifierEnum.Overencumbered);
 			} else {
-				colonist.RemoveHappinessModifier(HappinessModifierEnum.Overencumbered);
+				colonist.RemoveMoodModifier(MoodModifierEnum.Overencumbered);
 			}
 		} }
 	};
 
-	public void CreateHappinessModifiers() {
-		List<string> stringHappinessModifierGroups = Resources.Load<TextAsset>(@"Data/mood-modifiers").text.Replace("\t", string.Empty).Split(new string[] { "<HappinessModifierGroup>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-		foreach (string stringHappinessModifierGroup in stringHappinessModifierGroups) {
-			HappinessModifierGroup happinessModifierGroup = new HappinessModifierGroup(stringHappinessModifierGroup);
-			happinessModifierGroups.Add(happinessModifierGroup);
-			happinessModifierPrefabs.AddRange(happinessModifierGroup.prefabs);
+	public void CreateMoodModifiers() {
+		List<string> stringMoodModifierGroups = Resources.Load<TextAsset>(@"Data/mood-modifiers").text.Replace("\t", string.Empty).Split(new string[] { "<MoodModifierGroup>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+		foreach (string stringMoodModifierGroup in stringMoodModifierGroups) {
+			MoodModifierGroup moodModifierGroup = new MoodModifierGroup(stringMoodModifierGroup);
+			moodModifierGroups.Add(moodModifierGroup);
+			moodModifierPrefabs.AddRange(moodModifierGroup.prefabs);
 		}
 	}
 
-	public enum HappinessModifierGroupEnum {
+	public enum MoodModifierGroupEnum {
 		Death,
 		Food,
 		Water,
 		Rest,
 		Inventory
 	};
-	public enum HappinessModifierEnum {
+	public enum MoodModifierEnum {
 		WitnessDeath,
 		Stuffed, Full, Hungry, Starving,
 		Dehydrated, Thirsty, Quenched,
@@ -867,38 +867,38 @@ public class ColonistManager : BaseManager {
 		Overencumbered
 	};
 
-	public readonly List<HappinessModifierGroup> happinessModifierGroups = new List<HappinessModifierGroup>();
+	public readonly List<MoodModifierGroup> moodModifierGroups = new List<MoodModifierGroup>();
 
-	public class HappinessModifierGroup {
-		public HappinessModifierGroupEnum type;
+	public class MoodModifierGroup {
+		public MoodModifierGroupEnum type;
 		public string name;
 
-		public readonly List<HappinessModifierPrefab> prefabs = new List<HappinessModifierPrefab>();
+		public readonly List<MoodModifierPrefab> prefabs = new List<MoodModifierPrefab>();
 
-		public HappinessModifierGroup(string stringHappinessModifierGroup) {
-			List<string> stringHappinessModifiers = stringHappinessModifierGroup.Split(new string[] { "<HappinessModifier>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+		public MoodModifierGroup(string stringMoodModifierGroup) {
+			List<string> stringMoodModifiers = stringMoodModifierGroup.Split(new string[] { "<MoodModifier>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-			type = (HappinessModifierGroupEnum)Enum.Parse(typeof(HappinessModifierGroupEnum), stringHappinessModifiers[0]);
+			type = (MoodModifierGroupEnum)Enum.Parse(typeof(MoodModifierGroupEnum), stringMoodModifiers[0]);
 			name = UIManager.SplitByCapitals(type.ToString());
 
-			foreach (string stringHappinessModifier in stringHappinessModifiers.Skip(1)) {
-				prefabs.Add(new HappinessModifierPrefab(stringHappinessModifier, this));
+			foreach (string stringMoodModifier in stringMoodModifiers.Skip(1)) {
+				prefabs.Add(new MoodModifierPrefab(stringMoodModifier, this));
 			}
 		}
 	}
 
-	public HappinessModifierGroup GetHappinessModifierGroupFromEnum(HappinessModifierGroupEnum happinessModifierGroupEnum) {
-		return happinessModifierGroups.Find(hmiGroup => hmiGroup.type == happinessModifierGroupEnum);
+	public MoodModifierGroup GetMoodModifierGroupFromEnum(MoodModifierGroupEnum moodModifierGroupEnum) {
+		return moodModifierGroups.Find(mmiGroup => mmiGroup.type == moodModifierGroupEnum);
 	}
 
-	public readonly List<HappinessModifierPrefab> happinessModifierPrefabs = new List<HappinessModifierPrefab>();
+	public readonly List<MoodModifierPrefab> moodModifierPrefabs = new List<MoodModifierPrefab>();
 
-	public class HappinessModifierPrefab {
+	public class MoodModifierPrefab {
 
-		public HappinessModifierEnum type;
+		public MoodModifierEnum type;
 		public string name = string.Empty;
 
-		public HappinessModifierGroup group = null;
+		public MoodModifierGroup group = null;
 
 		public int effectAmount = 0;
 
@@ -906,20 +906,20 @@ public class ColonistManager : BaseManager {
 
 		public bool infinite = false;
 
-		public HappinessModifierPrefab(string stringHappinessModifier, HappinessModifierGroup group) {
+		public MoodModifierPrefab(string stringMoodModifier, MoodModifierGroup group) {
 			this.group = group;
 
-			List<string> stringHappinessModifierList = stringHappinessModifier.Split('\n').ToList();
-			foreach (string stringHappinessModifierSingle in stringHappinessModifierList.Skip(1)) {
+			List<string> stringMoodModifierList = stringMoodModifier.Split('\n').ToList();
+			foreach (string stringMoodModifierSingle in stringMoodModifierList.Skip(1)) {
 
-				if (!string.IsNullOrEmpty(stringHappinessModifierSingle)) {
+				if (!string.IsNullOrEmpty(stringMoodModifierSingle)) {
 
-					string label = stringHappinessModifierSingle.Split('>')[0].Replace("<", string.Empty);
-					string value = stringHappinessModifierSingle.Split('>')[1];
+					string label = stringMoodModifierSingle.Split('>')[0].Replace("<", string.Empty);
+					string value = stringMoodModifierSingle.Split('>')[1];
 
 					switch (label) {
 						case "Type":
-							type = (HappinessModifierEnum)Enum.Parse(typeof(HappinessModifierEnum), value);
+							type = (MoodModifierEnum)Enum.Parse(typeof(MoodModifierEnum), value);
 							name = UIManager.SplitByCapitals(type.ToString());
 							break;
 						case "EffectAmount":
@@ -934,33 +934,33 @@ public class ColonistManager : BaseManager {
 							}
 							break;
 						default:
-							MonoBehaviour.print("Unknown happiness modifier label: \"" + stringHappinessModifierSingle + "\"");
+							MonoBehaviour.print("Unknown mood modifier label: \"" + stringMoodModifierSingle + "\"");
 							break;
 					}
 				}
 			}
 
 			if (string.IsNullOrEmpty(name) || effectAmount == 0 || effectLengthSeconds == 0) {
-				MonoBehaviour.print("Potential issue parsing happiness modifier: " + stringHappinessModifier);
+				MonoBehaviour.print("Potential issue parsing mood modifier: " + stringMoodModifier);
 			}
 		}
 	}
 
-	public HappinessModifierPrefab GetHappinessModifierPrefabFromEnum(HappinessModifierEnum happinessModifierEnum) {
-		return happinessModifierPrefabs.Find(hmiPrefab => hmiPrefab.type == happinessModifierEnum);
+	public MoodModifierPrefab GetMoodModifierPrefabFromEnum(MoodModifierEnum moodModifierEnum) {
+		return moodModifierPrefabs.Find(moodModifierPrefab => moodModifierPrefab.type == moodModifierEnum);
 	}
 
-	public HappinessModifierPrefab GetHappinessModifierPrefabFromString(string happinessModifierTypeString) {
-		return happinessModifierPrefabs.Find(happiessModifierPrefab => happiessModifierPrefab.type == (HappinessModifierEnum)Enum.Parse(typeof(HappinessModifierEnum), happinessModifierTypeString));
+	public MoodModifierPrefab GetMoodModifierPrefabFromString(string moodModifierTypeString) {
+		return moodModifierPrefabs.Find(moodModifierPrefab => moodModifierPrefab.type == (MoodModifierEnum)Enum.Parse(typeof(MoodModifierEnum), moodModifierTypeString));
 	}
 
-	public class HappinessModifierInstance {
+	public class MoodModifierInstance {
 		public Colonist colonist;
-		public HappinessModifierPrefab prefab;
+		public MoodModifierPrefab prefab;
 
 		public float timer = 0;
 
-		public HappinessModifierInstance(Colonist colonist, HappinessModifierPrefab prefab) {
+		public MoodModifierInstance(Colonist colonist, MoodModifierPrefab prefab) {
 			this.colonist = colonist;
 			this.prefab = prefab;
 
@@ -998,11 +998,11 @@ public class ColonistManager : BaseManager {
 		// Needs
 		public readonly List<NeedInstance> needs = new List<NeedInstance>();
 
-		// Happiness
-		public float baseHappiness = 100;
-		public float happinessModifiersSum = 100;
-		public float effectiveHappiness = 100;
-		public readonly List<HappinessModifierInstance> happinessModifiers = new List<HappinessModifierInstance>();
+		// Mood
+		public float baseMood = 100;
+		public float moodModifiersSum = 100;
+		public float effectiveMood = 100;
+		public readonly List<MoodModifierInstance> moodModifiers = new List<MoodModifierInstance>();
 
 		public Colonist(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);
@@ -1050,8 +1050,8 @@ public class ColonistManager : BaseManager {
 			}
 
 			UpdateNeeds();
-			UpdateHappinessModifiers();
-			UpdateHappiness();
+			UpdateMoodModifiers();
+			UpdateMood();
 
 			if (overTileChanged) {
 				GameManager.jobM.UpdateColonistJobCosts(this);
@@ -1139,49 +1139,49 @@ public class ColonistManager : BaseManager {
 			}
 		}
 
-		public void UpdateHappinessModifiers() {
-			foreach (HappinessModifierGroup happinessModifierGroup in GameManager.colonistM.happinessModifierGroups) {
-				happinessModifierFunctions[happinessModifierGroup.type](this);
+		public void UpdateMoodModifiers() {
+			foreach (MoodModifierGroup moodModifierGroup in GameManager.colonistM.moodModifierGroups) {
+				moodModifierFunctions[moodModifierGroup.type](this);
 			}
 
-			for (int i = 0; i < happinessModifiers.Count; i++) {
-				HappinessModifierInstance happinessModifier = happinessModifiers[i];
-				happinessModifier.Update();
-				if (happinessModifier.timer <= 0) {
-					RemoveHappinessModifier(happinessModifier.prefab.type);
+			for (int i = 0; i < moodModifiers.Count; i++) {
+				MoodModifierInstance moodModifier = moodModifiers[i];
+				moodModifier.Update();
+				if (moodModifier.timer <= 0) {
+					RemoveMoodModifier(moodModifier.prefab.type);
 					i -= 1;
 				}
 			}
 		}
 
-		public void AddHappinessModifier(HappinessModifierEnum happinessModifierEnum) {
-			HappinessModifierInstance hmi = new HappinessModifierInstance(this, GameManager.colonistM.GetHappinessModifierPrefabFromEnum(happinessModifierEnum));
-			HappinessModifierInstance sameGroupHMI = happinessModifiers.Find(findHMI => hmi.prefab.group.type == findHMI.prefab.group.type);
-			if (sameGroupHMI != null) {
-				RemoveHappinessModifier(sameGroupHMI.prefab.type);
+		public void AddMoodModifier(MoodModifierEnum moodModifierEnum) {
+			MoodModifierInstance moodModifier = new MoodModifierInstance(this, GameManager.colonistM.GetMoodModifierPrefabFromEnum(moodModifierEnum));
+			MoodModifierInstance sameGroupMoodModifier = moodModifiers.Find(findMoodModifier => moodModifier.prefab.group.type == findMoodModifier.prefab.group.type);
+			if (sameGroupMoodModifier != null) {
+				RemoveMoodModifier(sameGroupMoodModifier.prefab.type);
 			}
-			happinessModifiers.Add(hmi);
+			moodModifiers.Add(moodModifier);
 			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.uiM.RemakeSelectedColonistHappinessModifiers();
+				GameManager.uiM.RemakeSelectedColonistMoodModifiers();
 			}
 		}
 
-		public void RemoveHappinessModifier(HappinessModifierEnum happinessModifierEnum) {
-			happinessModifiers.Remove(happinessModifiers.Find(findHMI => findHMI.prefab.type == happinessModifierEnum));
+		public void RemoveMoodModifier(MoodModifierEnum moodModifierEnum) {
+			moodModifiers.Remove(moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.type == moodModifierEnum));
 			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.uiM.RemakeSelectedColonistHappinessModifiers();
+				GameManager.uiM.RemakeSelectedColonistMoodModifiers();
 			}
 		}
 
-		public void UpdateHappiness() {
-			baseHappiness = Mathf.Clamp(Mathf.RoundToInt(100 - (needs.Sum(need => (need.GetValue() / (need.prefab.priority + 1))))), 0, 100);
+		public void UpdateMood() {
+			baseMood = Mathf.Clamp(Mathf.RoundToInt(100 - (needs.Sum(need => (need.GetValue() / (need.prefab.priority + 1))))), 0, 100);
 
-			happinessModifiersSum = happinessModifiers.Sum(hM => hM.prefab.effectAmount);
+			moodModifiersSum = moodModifiers.Sum(hM => hM.prefab.effectAmount);
 
-			float targetHappiness = Mathf.Clamp(baseHappiness + happinessModifiersSum, 0, 100);
-			float happinessChangeAmount = ((targetHappiness - effectiveHappiness) / (effectiveHappiness <= 0f ? 1f : effectiveHappiness));
-			effectiveHappiness += happinessChangeAmount * GameManager.timeM.deltaTime;
-			effectiveHappiness = Mathf.Clamp(effectiveHappiness, 0, 100);
+			float targetMood = Mathf.Clamp(baseMood + moodModifiersSum, 0, 100);
+			float moodChangeAmount = ((targetMood - effectiveMood) / (effectiveMood <= 0f ? 1f : effectiveMood));
+			effectiveMood += moodChangeAmount * GameManager.timeM.deltaTime;
+			effectiveMood = Mathf.Clamp(effectiveMood, 0, 100);
 		}
 
 		public void SetJob(JobManager.ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {

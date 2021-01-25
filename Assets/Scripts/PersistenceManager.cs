@@ -15,8 +15,8 @@ public class PersistenceManager : BaseManager {
 		this.startCoroutineReference = startCoroutineReference;
 	}
 
-	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2021.1");
-	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2021.1");
+	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2021.2");
+	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2021.2");
 
 	public SettingsState settingsState;
 
@@ -2597,7 +2597,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum ColonistProperty {
-		Colonist, Life, Human, PlayerMoved, Job, StoredJob, BacklogJobs, Professions, Skills, Traits, Needs, BaseHappiness, EffectiveHappiness, HappinessModifiers
+		Colonist, Life, Human, PlayerMoved, Job, StoredJob, BacklogJobs, Professions, Skills, Traits, Needs, BaseMood, EffectiveMood, MoodModifiers
 	}
 
 	public enum BacklogJobProperty {
@@ -2620,8 +2620,8 @@ public class PersistenceManager : BaseManager {
 		Need, Type, Value
 	}
 
-	public enum HappinessModifierProperty {
-		HappinessModifier, Type, TimeRemaining
+	public enum MoodModifierProperty {
+		MoodModifier, Type, TimeRemaining
 	}
 
 	public void SaveColonists(StreamWriter file) {
@@ -2682,16 +2682,16 @@ public class PersistenceManager : BaseManager {
 				file.WriteLine(CreateKeyValueString(NeedProperty.Value, need.GetValue(), 3));
 			}
 
-			file.WriteLine(CreateKeyValueString(ColonistProperty.BaseHappiness, colonist.baseHappiness, 1));
-			file.WriteLine(CreateKeyValueString(ColonistProperty.EffectiveHappiness, colonist.effectiveHappiness, 1));
+			file.WriteLine(CreateKeyValueString(ColonistProperty.BaseMood, colonist.baseMood, 1));
+			file.WriteLine(CreateKeyValueString(ColonistProperty.EffectiveMood, colonist.effectiveMood, 1));
 
-			if (colonist.happinessModifiers.Count > 0) {
-				file.WriteLine(CreateKeyValueString(ColonistProperty.HappinessModifiers, string.Empty, 1));
-				foreach (ColonistManager.HappinessModifierInstance happinessModifier in colonist.happinessModifiers) {
-					file.WriteLine(CreateKeyValueString(HappinessModifierProperty.HappinessModifier, string.Empty, 2));
+			if (colonist.moodModifiers.Count > 0) {
+				file.WriteLine(CreateKeyValueString(ColonistProperty.MoodModifiers, string.Empty, 1));
+				foreach (ColonistManager.MoodModifierInstance moodModifier in colonist.moodModifiers) {
+					file.WriteLine(CreateKeyValueString(MoodModifierProperty.MoodModifier, string.Empty, 2));
 
-					file.WriteLine(CreateKeyValueString(HappinessModifierProperty.Type, happinessModifier.prefab.type, 3));
-					file.WriteLine(CreateKeyValueString(HappinessModifierProperty.TimeRemaining, happinessModifier.timer, 3));
+					file.WriteLine(CreateKeyValueString(MoodModifierProperty.Type, moodModifier.prefab.type, 3));
+					file.WriteLine(CreateKeyValueString(MoodModifierProperty.TimeRemaining, moodModifier.timer, 3));
 				}
 			}
 		}
@@ -2710,9 +2710,9 @@ public class PersistenceManager : BaseManager {
 		public List<PersistenceSkill> persistenceSkills;
 		public List<PersistenceTrait> persistenceTraits;
 		public List<PersistenceNeed> persistenceNeeds;
-		public float? baseHappiness;
-		public float? effectiveHappiness;
-		public List<PersistenceHappinessModifier> persistenceHappinessModifiers;
+		public float? baseMood;
+		public float? effectiveMood;
+		public List<PersistenceMoodModifier> persistenceMoodModifiers;
 
 		public PersistenceColonist(
 			PersistenceLife persistenceLife,
@@ -2725,9 +2725,9 @@ public class PersistenceManager : BaseManager {
 			List<PersistenceSkill> persistenceSkills,
 			List<PersistenceTrait> persistenceTraits,
 			List<PersistenceNeed> persistenceNeeds,
-			float? baseHappiness,
-			float? effectiveHappiness,
-			List<PersistenceHappinessModifier> persistenceHappinessModifiers
+			float? baseMood,
+			float? effectiveMood,
+			List<PersistenceMoodModifier> persistenceMoodModifiers
 		) {
 			this.persistenceLife = persistenceLife;
 			this.persistenceHuman = persistenceHuman;
@@ -2739,9 +2739,9 @@ public class PersistenceManager : BaseManager {
 			this.persistenceSkills = persistenceSkills;
 			this.persistenceTraits = persistenceTraits;
 			this.persistenceNeeds = persistenceNeeds;
-			this.baseHappiness = baseHappiness;
-			this.effectiveHappiness = effectiveHappiness;
-			this.persistenceHappinessModifiers = persistenceHappinessModifiers;
+			this.baseMood = baseMood;
+			this.effectiveMood = effectiveMood;
+			this.persistenceMoodModifiers = persistenceMoodModifiers;
 		}
 	}
 
@@ -2798,12 +2798,12 @@ public class PersistenceManager : BaseManager {
 		}
 	}
 
-	public class PersistenceHappinessModifier {
-		public ColonistManager.HappinessModifierEnum? type;
+	public class PersistenceMoodModifier {
+		public ColonistManager.MoodModifierEnum? type;
 		public float? timeRemaining;
 
-		public PersistenceHappinessModifier(
-			ColonistManager.HappinessModifierEnum? type,
+		public PersistenceMoodModifier(
+			ColonistManager.MoodModifierEnum? type,
 			float? timeRemaining
 		) {
 			this.type = type;
@@ -2832,9 +2832,9 @@ public class PersistenceManager : BaseManager {
 					List<PersistenceSkill> persistenceSkills = new List<PersistenceSkill>();
 					List<PersistenceTrait> persistenceTraits = new List<PersistenceTrait>();
 					List<PersistenceNeed> persistenceNeeds = new List<PersistenceNeed>();
-					float? baseHappiness = null;
-					float? effectiveHappiness = null;
-					List<PersistenceHappinessModifier> persistenceHappinessModifiers = new List<PersistenceHappinessModifier>();
+					float? baseMood = null;
+					float? effectiveMood = null;
+					List<PersistenceMoodModifier> persistenceMoodModifiers = new List<PersistenceMoodModifier>();
 
 					foreach (KeyValuePair<string, object> colonistProperty in colonistProperties) {
 						switch ((ColonistProperty)Enum.Parse(typeof(ColonistProperty), colonistProperty.Key)) {
@@ -2999,38 +2999,38 @@ public class PersistenceManager : BaseManager {
 									}
 								}
 								break;
-							case ColonistProperty.BaseHappiness:
-								baseHappiness = float.Parse((string)colonistProperty.Value);
+							case ColonistProperty.BaseMood:
+								baseMood = float.Parse((string)colonistProperty.Value);
 								break;
-							case ColonistProperty.EffectiveHappiness:
-								effectiveHappiness = float.Parse((string)colonistProperty.Value);
+							case ColonistProperty.EffectiveMood:
+								effectiveMood = float.Parse((string)colonistProperty.Value);
 								break;
-							case ColonistProperty.HappinessModifiers:
-								foreach (KeyValuePair<string, object> happinessModifierProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
-									switch ((HappinessModifierProperty)Enum.Parse(typeof(HappinessModifierProperty), happinessModifierProperty.Key)) {
-										case HappinessModifierProperty.HappinessModifier:
+							case ColonistProperty.MoodModifiers:
+								foreach (KeyValuePair<string, object> moodModifierProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
+									switch ((MoodModifierProperty)Enum.Parse(typeof(MoodModifierProperty), moodModifierProperty.Key)) {
+										case MoodModifierProperty.MoodModifier:
 
-											ColonistManager.HappinessModifierEnum? happinessModifierType = null;
-											float? happinessModifierTimeRemaining = null;
+											ColonistManager.MoodModifierEnum? moodModifierType = null;
+											float? moodModifierTimeRemaining = null;
 
-											foreach (KeyValuePair<string, object> happinessModifierSubProperty in (List<KeyValuePair<string, object>>)happinessModifierProperty.Value) {
-												switch ((HappinessModifierProperty)Enum.Parse(typeof(HappinessModifierProperty), happinessModifierSubProperty.Key)) {
-													case HappinessModifierProperty.Type:
-														happinessModifierType = (ColonistManager.HappinessModifierEnum)Enum.Parse(typeof(ColonistManager.HappinessModifierEnum), (string)happinessModifierSubProperty.Value);
+											foreach (KeyValuePair<string, object> moodModifierSubProperty in (List<KeyValuePair<string, object>>)moodModifierProperty.Value) {
+												switch ((MoodModifierProperty)Enum.Parse(typeof(MoodModifierProperty), moodModifierSubProperty.Key)) {
+													case MoodModifierProperty.Type:
+														moodModifierType = (ColonistManager.MoodModifierEnum)Enum.Parse(typeof(ColonistManager.MoodModifierEnum), (string)moodModifierSubProperty.Value);
 														break;
-													case HappinessModifierProperty.TimeRemaining:
-														happinessModifierTimeRemaining = float.Parse((string)happinessModifierSubProperty.Value);
+													case MoodModifierProperty.TimeRemaining:
+														moodModifierTimeRemaining = float.Parse((string)moodModifierSubProperty.Value);
 														break;
 													default:
-														Debug.LogError("Unknown happiness modifier sub property: " + happinessModifierSubProperty.Key + " " + happinessModifierSubProperty.Value);
+														Debug.LogError("Unknown mood modifier sub property: " + moodModifierSubProperty.Key + " " + moodModifierSubProperty.Value);
 														break;
 												}
 											}
 
-											persistenceHappinessModifiers.Add(new PersistenceHappinessModifier(happinessModifierType, happinessModifierTimeRemaining));
+											persistenceMoodModifiers.Add(new PersistenceMoodModifier(moodModifierType, moodModifierTimeRemaining));
 											break;
 										default:
-											Debug.LogError("Unknown happiness modifier property: " + happinessModifierProperty.Key + " " + happinessModifierProperty.Value);
+											Debug.LogError("Unknown mood modifier property: " + moodModifierProperty.Key + " " + moodModifierProperty.Value);
 											break;
 									}
 								}
@@ -3052,9 +3052,9 @@ public class PersistenceManager : BaseManager {
 						persistenceSkills,
 						persistenceTraits,
 						persistenceNeeds,
-						baseHappiness,
-						effectiveHappiness,
-						persistenceHappinessModifiers
+						baseMood,
+						effectiveMood,
+						persistenceMoodModifiers
 					));
 					break;
 				default:
@@ -3138,13 +3138,13 @@ public class PersistenceManager : BaseManager {
 				need.SetValue(persistenceNeed.value.Value);
 			}
 
-			foreach (PersistenceHappinessModifier persistenceHappinessModifier in persistenceColonist.persistenceHappinessModifiers) {
-				colonist.AddHappinessModifier(persistenceHappinessModifier.type.Value);
-				colonist.happinessModifiers.Find(hm => hm.prefab.type == persistenceHappinessModifier.type.Value).timer = persistenceHappinessModifier.timeRemaining.Value;
+			foreach (PersistenceMoodModifier persistenceMoodModifier in persistenceColonist.persistenceMoodModifiers) {
+				colonist.AddMoodModifier(persistenceMoodModifier.type.Value);
+				colonist.moodModifiers.Find(hm => hm.prefab.type == persistenceMoodModifier.type.Value).timer = persistenceMoodModifier.timeRemaining.Value;
 			}
 
-			colonist.baseHappiness = persistenceColonist.baseHappiness.Value;
-			colonist.effectiveHappiness = persistenceColonist.effectiveHappiness.Value;
+			colonist.baseMood = persistenceColonist.baseMood.Value;
+			colonist.effectiveMood = persistenceColonist.effectiveMood.Value;
 		}
 
 		for (int i = 0; i < persistenceColonists.Count; i++) {

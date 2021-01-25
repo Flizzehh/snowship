@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour {
 		colonistM.CreateColonistSkills();
 		colonistM.CreateColonistProfessions();
 		colonistM.CreateColonistNeeds();
-		colonistM.CreateHappinessModifiers();
+		colonistM.CreateMoodModifiers();
 
 		foreach (BaseManager manager in managers) {
 			manager.Awake();
