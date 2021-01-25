@@ -1145,10 +1145,10 @@ public class JobManager : BaseManager {
 
 		public float cost;
 
-		public ColonistJob(ColonistManager.Colonist colonist, Job job, List<ResourceManager.ResourceAmount> colonistResources, List<ContainerPickup> containerPickups) {
+		public ColonistJob(ColonistManager.Colonist colonist, Job job, List<ResourceManager.ResourceAmount> resourcesColonistHas, List<ContainerPickup> containerPickups) {
 			this.colonist = colonist;
 			this.job = job;
-			this.resourcesColonistHas = colonistResources;
+			this.resourcesColonistHas = resourcesColonistHas;
 			this.containerPickups = containerPickups;
 
 			CalculateCost();

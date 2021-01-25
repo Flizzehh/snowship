@@ -3104,7 +3104,7 @@ public class PersistenceManager : BaseManager {
 
 			if (persistenceColonist.persistenceJob != null) {
 				JobManager.Job job = LoadJob(persistenceColonist.persistenceJob);
-				colonist.SetJob(new JobManager.ColonistJob(colonist, job, persistenceColonist.persistenceJob.colonistResources, job.containerPickups));
+				colonist.SetJob(new JobManager.ColonistJob(colonist, job, persistenceColonist.persistenceJob.resourcesColonistHas, job.containerPickups));
 			}
 
 			foreach (PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
@@ -3163,7 +3163,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum JobProperty {
-		Job, StoredJob, BacklogJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ColonistResources, ContainerPickups, Plant, CreateResource, ActiveTileObject, TransferResources
+		Job, StoredJob, BacklogJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ResourcesColonistHas, ContainerPickups, Plant, CreateResource, ActiveTileObject, TransferResources
 	}
 
 	public enum ContainerPickupProperty {
@@ -3196,7 +3196,7 @@ public class PersistenceManager : BaseManager {
 		}
 
 		if (job.resourcesColonistHas != null && job.resourcesColonistHas.Count > 0) {
-			file.WriteLine(CreateKeyValueString(JobProperty.ColonistResources, string.Empty, startLevel + 1));
+			file.WriteLine(CreateKeyValueString(JobProperty.ResourcesColonistHas, string.Empty, startLevel + 1));
 			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesColonistHas) {
 				WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 			}
@@ -3247,7 +3247,7 @@ public class PersistenceManager : BaseManager {
 		public float? progress;
 		public float? colonistBuildTime;
 		public List<ResourceManager.ResourceAmount> resourcesToBuild;
-		public List<ResourceManager.ResourceAmount> colonistResources;
+		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
 		public List<PersistenceContainerPickup> containerPickups;
 		public ResourceManager.Resource createResource;
 		public PersistenceObject activeTileObject;
@@ -3263,7 +3263,7 @@ public class PersistenceManager : BaseManager {
 			float? progress,
 			float? colonistBuildTime,
 			List<ResourceManager.ResourceAmount> resourcesToBuild,
-			List<ResourceManager.ResourceAmount> colonistResources,
+			List<ResourceManager.ResourceAmount> resourcesColonistHas,
 			List<PersistenceContainerPickup> containerPickups,
 			ResourceManager.Resource createResource,
 			PersistenceObject activeTileObject,
@@ -3278,7 +3278,7 @@ public class PersistenceManager : BaseManager {
 			this.progress = progress;
 			this.colonistBuildTime = colonistBuildTime;
 			this.resourcesToBuild = resourcesToBuild;
-			this.colonistResources = colonistResources;
+			this.resourcesColonistHas = resourcesColonistHas;
 			this.containerPickups = containerPickups;
 			this.createResource = createResource;
 			this.activeTileObject = activeTileObject;
@@ -3325,7 +3325,7 @@ public class PersistenceManager : BaseManager {
 		float? progress = null;
 		float? colonistBuildTime = null;
 		List<ResourceManager.ResourceAmount> resourcesToBuild = new List<ResourceManager.ResourceAmount>();
-		List<ResourceManager.ResourceAmount> colonistResources = null;
+		List<ResourceManager.ResourceAmount> resourcesColonistHas = null;
 		List<PersistenceContainerPickup> containerPickups = null;
 		ResourceManager.Resource createResource = null;
 		PersistenceObject activeTileObject = null;
@@ -3363,13 +3363,13 @@ public class PersistenceManager : BaseManager {
 						resourcesToBuild.Add(LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
 					}
 					break;
-				case JobProperty.ColonistResources:
-					colonistResources = new List<ResourceManager.ResourceAmount>();
+				case JobProperty.ResourcesColonistHas:
+					resourcesColonistHas = new List<ResourceManager.ResourceAmount>();
 					foreach (KeyValuePair<string, object> resourceAmountProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
-						colonistResources.Add(LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
+						resourcesColonistHas.Add(LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
 					}
-					if (colonistResources.Count <= 0) {
-						colonistResources = null;
+					if (resourcesColonistHas.Count <= 0) {
+						resourcesColonistHas = null;
 					}
 					break;
 				case JobProperty.ContainerPickups:
@@ -3461,7 +3461,7 @@ public class PersistenceManager : BaseManager {
 			progress,
 			colonistBuildTime,
 			resourcesToBuild,
-			colonistResources,
+			resourcesColonistHas,
 			containerPickups,
 			createResource,
 			activeTileObject,
@@ -3497,7 +3497,7 @@ public class PersistenceManager : BaseManager {
 			jobProgress = persistenceJob.progress ?? 0,
 			colonistBuildTime = persistenceJob.colonistBuildTime ?? 0,
 			resourcesToBuild = persistenceJob.resourcesToBuild,
-			resourcesColonistHas = persistenceJob.colonistResources,
+			resourcesColonistHas = persistenceJob.resourcesColonistHas,
 			containerPickups = containerPickups,
 			transferResources = persistenceJob.transferResources
 		};
