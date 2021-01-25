@@ -49,8 +49,8 @@ public class JobManager : BaseManager {
 
 		public UIManager.JobElement jobUIElement;
 
-		public ResourceManager.ManufacturableResourceInstance createResource;
-		public ResourceManager.ObjectInstance activeTileObject;
+		public ResourceManager.CraftableResourceInstance createResource;
+		public ResourceManager.ObjectInstance activeObject;
 
 		public int priority;
 
@@ -86,15 +86,15 @@ public class JobManager : BaseManager {
 			colonistBuildTime = prefab.timeToBuild;
 		}
 
-		public void SetCreateResourceData(ResourceManager.ManufacturableResourceInstance resource, bool addToResourcesToBuild = true) {
+		public void SetCreateResourceData(ResourceManager.CraftableResourceInstance resource, bool addToResourcesToBuild = true) {
 			createResource = resource;
 			if (addToResourcesToBuild) {
-				resourcesToBuild.AddRange(createResource.resource.manufacturingResources);
-				if (resource.resource.manufacturingEnergy != 0) {
+				resourcesToBuild.AddRange(createResource.resource.craftingResources);
+				if (resource.resource.craftingEnergy != 0) {
 					resourcesToBuild.AddRange(resource.fuelAmounts);
 				}
 			}
-			activeTileObject = resource.manufacturingObject;
+			activeObject = resource.craftingObject;
 			jobPreview.GetComponent<SpriteRenderer>().sprite = resource.resource.image;
 		}
 
@@ -278,8 +278,8 @@ public class JobManager : BaseManager {
 				GameManager.uiM.SetSelectedColonistInformation(true);
 				GameManager.uiM.SetSelectedContainerInfo();
 				GameManager.uiM.UpdateSelectedTradingPostInfo();
-			} else if (instance is ResourceManager.ManufacturingObject manufacturingObject) {
-				foreach (Job removeJob in manufacturingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
+			} else if (instance is ResourceManager.CraftingObject craftingObject) {
+				foreach (Job removeJob in craftingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
 					GameManager.jobM.CancelJob(removeJob);
 				}
 			} else if (instance is ResourceManager.SleepSpot sleepSpot) {
@@ -287,8 +287,8 @@ public class JobManager : BaseManager {
 					sleepSpot.occupyingColonist.ReturnJob();
 				}
 			}
-			GameManager.resourceM.RemoveTileObjectInstance(instance);
-			job.tile.RemoveTileObjectAtLayer(instance.prefab.layer);
+			GameManager.resourceM.RemoveObjectInstance(instance);
+			job.tile.RemoveObjectAtLayer(instance.prefab.layer);
 			GameManager.resourceM.Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
 			if (job.tile.walkable && !previousWalkability) {
 				GameManager.colonyM.colony.map.RemoveTileBrightnessEffect(job.tile);
@@ -307,8 +307,8 @@ public class JobManager : BaseManager {
 
 				GameManager.jobM.CreateJob(new Job(job.tile, job.tile.farm.prefab, job.tile.farm.variation, 0));
 
-				GameManager.resourceM.RemoveTileObjectInstance(job.tile.farm);
-				job.tile.RemoveTileObjectAtLayer(job.tile.farm.prefab.layer);
+				GameManager.resourceM.RemoveObjectInstance(job.tile.farm);
+				job.tile.RemoveObjectAtLayer(job.tile.farm.prefab.layer);
 			}
 			GameManager.resourceM.Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
 		} },
@@ -748,8 +748,8 @@ public class JobManager : BaseManager {
 			return false;
 		} },
 		{ SelectionModifiersEnum.OmitObjectInstancesOnAdditionalTiles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
-			ResourceManager.ObjectInstance tileObjectInstance = posTile.GetObjectInstanceAtLayer(prefab.layer);
-			if (tileObjectInstance != null && tileObjectInstance.tile != posTile) {
+			ResourceManager.ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(prefab.layer);
+			if (objectInstance != null && objectInstance.tile != posTile) {
 				return false;
 			}
 			return true;
@@ -950,8 +950,8 @@ public class JobManager : BaseManager {
 			job.createResource.job = null;
 		}
 
-		if (job.activeTileObject != null) {
-			job.activeTileObject.SetActiveSprite(job, false);
+		if (job.activeObject != null) {
+			job.activeObject.SetActiveSprite(job, false);
 		}
 
 		job.Remove();

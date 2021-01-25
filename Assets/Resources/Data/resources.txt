@@ -194,119 +194,119 @@
 	<Resources>
 		<Resource>
 			<Type>Gold
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>14490
 			<Volume>500
 			<Price>300
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>GoldOre:1
 		<Resource>
 			<Type>Silver
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>7875
 			<Volume>500
 			<Price>200
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>SilverOre:1
 		<Resource>
 			<Type>Bronze
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>6550
 			<Volume>500
 			<Price>100
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>BronzeOre:1
 		<Resource>
 			<Type>Iron
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>5900
 			<Volume>500
 			<Price>150
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>IronOre:1
 		<Resource>
 			<Type>Copper
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>6720
 			<Volume>500
 			<Price>250
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>CopperOre:1
 <ResourceGroup>
 	<Type>Materials
 	<Resources>
 		<Resource>
 			<Type>Wood
-			<Classes>Manufacturable,Fuel
+			<Classes>Craftable,Fuel
 			<Weight>175
 			<Volume>250
 			<Price>15
 			<Fuel>
 				<FuelEnergy>12
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:SplittingBlock,SplittingLog
 				<Resources>Log:0.25
 		<Resource>
 			<Type>Firewood
-			<Classes>Manufacturable,Fuel
+			<Classes>Craftable,Fuel
 			<Weight>88
 			<Volume>125
 			<Price>25
 			<Fuel>
 				<FuelEnergy>20
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:SplittingBlock,SplittingLog
 				<Resources>Wood:0.5
 		<Resource>
 			<Type>Charcoal
-			<Classes>Manufacturable,Fuel
+			<Classes>Craftable,Fuel
 			<Weight>44
 			<Volume>63
 			<Price>40
 			<Fuel>
 				<FuelEnergy>25
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>20
+				<CraftingEnergy>20
 				<Resources>Firewood:0.5
 		<Resource>
 			<Type>Mudbrick
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>3150
 			<Volume>1500
 			<Price>15
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:BrickFormer;Furnaces
 				<Resources>Mud:0.1,Clay:0.1,Grass:0.1
 		<Resource>
 			<Type>Brick
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>3150
 			<Volume>1500
 			<Price>30
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>30
+				<CraftingEnergy>30
 				<Resources>Clay:2
 		<Resource>
 			<Type>Glass
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>6500
 			<Volume>2500
 			<Price>40
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>Sand:2
 		<Resource>
 			<Type>Cotton
@@ -315,13 +315,13 @@
 			<Price>5
 		<Resource>
 			<Type>Cloth
-			<Classes>Manufacturable,Fuel
+			<Classes>Craftable,Fuel
 			<Weight>40
 			<Volume>40
 			<Price>25
 			<Fuel>
 				<FuelEnergy>2
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Gin
 				<Resources>Cotton:20
 <ResourceGroup>
@@ -378,15 +378,15 @@
 				<Nutrition>10
 		<Resource>
 			<Type>BakedPotato
-			<Classes>Food,Manufacturable
+			<Classes>Food,Craftable
 			<Weight>150
 			<Volume>150
 			<Price>20
 			<Food>
 				<Nutrition>25
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>50
+				<CraftingEnergy>50
 				<Resources>Potato:1
 		<Resource>
 			<Type>Blueberry
@@ -406,44 +406,44 @@
 				<Nutrition>10
 		<Resource>
 			<Type>BakedApple
-			<Classes>Food,Manufacturable
+			<Classes>Food,Craftable
 			<Weight>85
 			<Volume>60
 			<Price>20
 			<Food>
 				<Nutrition>15
-			<Manufacturing>
+			<Crafting>
 				<Objects>Furnaces
-				<ManufacturingEnergy>20
+				<CraftingEnergy>20
 				<Resources>Apple:1
 <ResourceGroup>
 	<Type>Coins
 	<Resources>
 		<Resource>
 			<Type>GoldCoin
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>35
 			<Volume>10
 			<Price>100
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Anvil
 				<Resources>Gold:0.1
 		<Resource>
 			<Type>SilverCoin
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>20
 			<Volume>10
 			<Price>75
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Anvil
 				<Resources>Silver:0.1
 		<Resource>
 			<Type>BronzeCoin
-			<Classes>Manufacturable
+			<Classes>Craftable
 			<Weight>20
 			<Volume>10
 			<Price>50
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Anvil
 				<Resources>Bronze:0.1
 <ResourceGroup>
@@ -451,11 +451,11 @@
 	<Resources>
 		<Resource>
 			<Type>WhiteSweater
-			<Classes>Manufacturable,Clothing
+			<Classes>Craftable,Clothing
 			<Weight>500
 			<Volume>300
 			<Price>100
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Loom
 				<Resources>Cloth:5
 			<Clothing>
@@ -466,11 +466,11 @@
 				<Colours>Cyan,Green,Blue,Purple,Navy,Yellow,Orange,Red,White,Gray
 		<Resource>
 			<Type>WhiteShirt
-			<Classes>Manufacturable,Clothing
+			<Classes>Craftable,Clothing
 			<Weight>200
 			<Volume>150
 			<Price>75
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Loom
 				<Resources>Cloth:2
 			<Clothing>
@@ -481,11 +481,11 @@
 				<Colours>Cyan,Green,Blue,Purple,Navy,Yellow,Orange,Red,White,Gray
 		<Resource>
 			<Type>BrownSmallBackpack
-			<Classes>Manufacturable,Clothing,Bag
+			<Classes>Craftable,Clothing,Bag
 			<Weight>500
 			<Volume>500
 			<Price>50
-			<Manufacturing>
+			<Crafting>
 				<Objects>Processing:Loom
 				<Resources>Cloth:10
 			<Clothing>

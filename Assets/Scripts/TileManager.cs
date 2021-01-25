@@ -983,12 +983,12 @@ public class TileManager : BaseManager {
 			SetWalkSpeed();
 		}
 
-		public void SetTileObject(ResourceManager.ObjectInstance instance) {
+		public void SetObject(ResourceManager.ObjectInstance instance) {
 			AddObjectInstanceToLayer(instance, instance.prefab.layer);
-			PostChangeTileObject();
+			PostChangeObject();
 		}
 
-		public void PostChangeTileObject() {
+		public void PostChangeObject() {
 			walkable = tileType.walkable;
 			buildable = tileType.buildable;
 			blocksLight = tileType.blocksLight;
@@ -1038,14 +1038,14 @@ public class TileManager : BaseManager {
 			objectInstances.OrderBy(kvp => kvp.Key); // Sorted from lowest layer to highest layer for iterating
 		}
 
-		public void RemoveTileObjectAtLayer(int layer) {
+		public void RemoveObjectAtLayer(int layer) {
 			if (objectInstances.ContainsKey(layer)) {
 				ResourceManager.ObjectInstance instance = objectInstances[layer];
 				if (instance != null) {
 					MonoBehaviour.Destroy(instance.obj);
 					foreach (Tile additionalTile in instance.additionalTiles) {
 						additionalTile.objectInstances[layer] = null;
-						additionalTile.PostChangeTileObject();
+						additionalTile.PostChangeObject();
 					}
 					if (instance.prefab.instanceType == ResourceManager.ObjectInstanceType.Farm) {
 						farm = null;
@@ -1053,24 +1053,24 @@ public class TileManager : BaseManager {
 					objectInstances[layer] = null;
 				}
 			}
-			PostChangeTileObject();
+			PostChangeObject();
 		}
 
-		public void SetTileObjectInstanceReference(ResourceManager.ObjectInstance tileObjectInstanceReference) {
-			if (objectInstances.ContainsKey(tileObjectInstanceReference.prefab.layer)) {
-				if (objectInstances[tileObjectInstanceReference.prefab.layer] != null) {
-					if (tileObjectInstanceReference != null) {
+		public void SetObjectInstanceReference(ResourceManager.ObjectInstance objectInstanceReference) {
+			if (objectInstances.ContainsKey(objectInstanceReference.prefab.layer)) {
+				if (objectInstances[objectInstanceReference.prefab.layer] != null) {
+					if (objectInstanceReference != null) {
 						Debug.LogError("Trying to add object where one already exists at " + obj.transform.position);
 					} else {
-						objectInstances[tileObjectInstanceReference.prefab.layer] = null;
+						objectInstances[objectInstanceReference.prefab.layer] = null;
 					}
 				} else {
-					objectInstances[tileObjectInstanceReference.prefab.layer] = tileObjectInstanceReference;
+					objectInstances[objectInstanceReference.prefab.layer] = objectInstanceReference;
 				}
 			} else {
-				objectInstances.Add(tileObjectInstanceReference.prefab.layer, tileObjectInstanceReference);
+				objectInstances.Add(objectInstanceReference.prefab.layer, objectInstanceReference);
 			}
-			PostChangeTileObject();
+			PostChangeObject();
 		}
 
 		public ResourceManager.ObjectInstance GetObjectInstanceAtLayer(int layer) {
@@ -2719,7 +2719,7 @@ public class TileManager : BaseManager {
 					sum = BitSum(TileTypeGroup.GetTileTypeGroupByEnum(TileTypeGroup.TypeEnum.Stone).tileTypes.Select(tt => tt.type).ToList(), null, surroundingTilesToUse, includeMapEdge);
 					// Not-fully-working implementation of walls and stone connecting
 					//sum += GameManager.resourceM.BitSumObjects(
-					//	GameManager.resourceM.GetTileObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Walls).prefabs.Select(prefab => prefab.type).ToList(), 
+					//	GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Walls).prefabs.Select(prefab => prefab.type).ToList(), 
 					//	surroundingTilesToUse
 					//);
 				} else if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Hole) {

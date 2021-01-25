@@ -296,7 +296,7 @@
 			<Objects>
 				<Object>
 					<Type>Furnace
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>500
 					<WalkSpeed>0.5
@@ -325,7 +325,7 @@
 			<Objects>
 				<Object>
 					<Type>Gin
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>100
 					<WalkSpeed>0.5
@@ -340,7 +340,7 @@
 					<JobType>Build
 				<Object>
 					<Type>SplittingBlock
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>500
 					<WalkSpeed>0.5
@@ -363,7 +363,7 @@
 					<JobType>Build
 				<Object>
 					<Type>SplittingLog
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>200
 					<WalkSpeed>0.5
@@ -377,7 +377,7 @@
 					<JobType>Build
 				<Object>
 					<Type>Anvil
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>1000
 					<WalkSpeed>0.5
@@ -391,7 +391,7 @@
 					<JobType>Build
 				<Object>
 					<Type>Loom
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>50
 					<WalkSpeed>0.5
@@ -405,7 +405,7 @@
 					<JobType>Build
 				<Object>
 					<Type>BrickFormer
-					<InstanceType>ManufacturingObject
+					<InstanceType>CraftingObject
 					<Layer>2
 					<Integrity>50
 					<WalkSpeed>0.25

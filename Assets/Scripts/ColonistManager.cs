@@ -1244,8 +1244,8 @@ public class ColonistManager : BaseManager {
 				needs.Find(need => need.prefab.type == NeedEnum.Rest).SetValue(originalRestValue * ((job.jobProgress - 1f * GameManager.timeM.deltaTime) / job.colonistBuildTime));
 			}
 
-			if (job.activeTileObject != null) {
-				job.activeTileObject.SetActiveSprite(job, true);
+			if (job.activeObject != null) {
+				job.activeObject.SetActiveSprite(job, true);
 			}
 
 			job.jobProgress -= 1 * GameManager.timeM.deltaTime;
@@ -1265,7 +1265,7 @@ public class ColonistManager : BaseManager {
 
 			MonoBehaviour.Destroy(finishedJob.jobPreview);
 			if (finishedJob.prefab.addToTileWhenBuilt) {
-				finishedJob.tile.SetTileObject(GameManager.resourceM.CreateTileObjectInstance(finishedJob.prefab, finishedJob.variation, finishedJob.tile, finishedJob.rotationIndex, true));
+				finishedJob.tile.SetObject(GameManager.resourceM.CreateObjectInstance(finishedJob.prefab, finishedJob.variation, finishedJob.tile, finishedJob.rotationIndex, true));
 				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.prefab.layer).obj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
 				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.prefab.layer).FinishCreation();
 				if (finishedJob.prefab.canRotate) {
@@ -1282,8 +1282,8 @@ public class ColonistManager : BaseManager {
 
 			JobManager.finishJobFunctions[finishedJob.prefab.jobType](this, finishedJob);
 
-			if (finishedJob.activeTileObject != null) {
-				finishedJob.activeTileObject.SetActiveSprite(finishedJob, false);
+			if (finishedJob.activeObject != null) {
+				finishedJob.activeObject.SetActiveSprite(finishedJob, false);
 			}
 
 			GameManager.jobM.UpdateSingleColonistJobs(this);

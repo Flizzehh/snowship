@@ -127,7 +127,7 @@ public class UIManager : BaseManager {
 		InitializeTileInformation();
 		InitializeSelectedContainerIndicator();
 		InitializeSelectedTradingPostIndicator();
-		InitializeSelectedManufacturingObjectIndicator();
+		InitializeSelectedCraftingObjectIndicator();
 
 		CreateActionsPanel();
 
@@ -140,7 +140,7 @@ public class UIManager : BaseManager {
 		SetSelectedTraderMenu();
 		SetSelectedContainerInfo();
 		SetSelectedTradingPostInfo();
-		SetSelectedManufacturingObjectPanel();
+		SetSelectedCraftingObjectPanel();
 
 		SetTradeMenu();
 
@@ -1178,14 +1178,14 @@ public class UIManager : BaseManager {
 	private InputField resourcesSearchInputField;
 	private GameObject resourcesList;
 
-	private GameObject selectedManufacturingObjectIndicator;
-	private GameObject selectedManufacturingObjectPanel;
-	private Button selectedManufacturingObjectPanelSelectResourcesButton;
-	private GameObject selectedManufacturingObjectSelectResourcesPanel;
-	private Button selectedManufacturingObjectPanelSelectFuelsButton;
-	private GameObject selectedManufacturingObjectSelectFuelsPanel;
-	private Button selectedManufacturingObjectPanelActiveButton;
-	private Text selectedManufacturingObjectPanelActiveButtonText;
+	private GameObject selectedCraftingObjectIndicator;
+	private GameObject selectedCraftingObjectPanel;
+	private Button selectedCraftingObjectPanelSelectResourcesButton;
+	private GameObject selectedCraftingObjectSelectResourcesPanel;
+	private Button selectedCraftingObjectPanelSelectFuelsButton;
+	private GameObject selectedCraftingObjectSelectFuelsPanel;
+	private Button selectedCraftingObjectPanelActiveButton;
+	private Text selectedCraftingObjectPanelActiveButtonText;
 
 	private void SetupGameUI() {
 		gameUI = canvas.transform.Find("Game-BackgroundPanel").gameObject;
@@ -1278,32 +1278,32 @@ public class UIManager : BaseManager {
 		resourcesMenuButton.GetComponent<Button>().onClick.AddListener(delegate { SetResourcesList(); });
 		resourcesMenuPanel.SetActive(false);
 
-		selectedManufacturingObjectPanel = gameUI.transform.Find("SelectedManufacturingObject-Panel").gameObject;
-		selectedManufacturingObjectSelectResourcesPanel = selectedManufacturingObjectPanel.transform.Find("SelectResources-Panel").gameObject;
-		selectedManufacturingObjectSelectFuelsPanel = selectedManufacturingObjectPanel.transform.Find("SelectFuels-Panel").gameObject;
+		selectedCraftingObjectPanel = gameUI.transform.Find("SelectedCraftingObject-Panel").gameObject;
+		selectedCraftingObjectSelectResourcesPanel = selectedCraftingObjectPanel.transform.Find("SelectResources-Panel").gameObject;
+		selectedCraftingObjectSelectFuelsPanel = selectedCraftingObjectPanel.transform.Find("SelectFuels-Panel").gameObject;
 
-		selectedManufacturingObjectPanelSelectResourcesButton = selectedManufacturingObjectPanel.transform.Find("Settings-Panel/SelectResources-Button").GetComponent<Button>();
-		selectedManufacturingObjectPanelSelectResourcesButton.onClick.AddListener(delegate {
-			SetSelectedManufacturingObjectSelectResourcesPanel();
+		selectedCraftingObjectPanelSelectResourcesButton = selectedCraftingObjectPanel.transform.Find("Settings-Panel/SelectResources-Button").GetComponent<Button>();
+		selectedCraftingObjectPanelSelectResourcesButton.onClick.AddListener(delegate {
+			SetSelectedCraftingObjectSelectResourcesPanel();
 		});
-		selectedManufacturingObjectSelectResourcesPanel.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate {
-			SetSelectedManufacturingObjectSelectResourcesPanel();
-		});
-
-		selectedManufacturingObjectPanelSelectFuelsButton = selectedManufacturingObjectPanel.transform.Find("Settings-Panel/SelectFuels-Button").GetComponent<Button>();
-		selectedManufacturingObjectPanelSelectFuelsButton.onClick.AddListener(delegate {
-			SetSelectedManufacturingObjectSelectFuelsPanel();
-		});
-		selectedManufacturingObjectSelectFuelsPanel.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate {
-			SetSelectedManufacturingObjectSelectFuelsPanel();
+		selectedCraftingObjectSelectResourcesPanel.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate {
+			SetSelectedCraftingObjectSelectResourcesPanel();
 		});
 
-		selectedManufacturingObjectPanelActiveButton = selectedManufacturingObjectPanel.transform.Find("Settings-Panel/ActiveValueToggle-Button").GetComponent<Button>();
-		selectedManufacturingObjectPanelActiveButton.onClick.AddListener(delegate {
-			selectedManufacturingObject.SetActive(!selectedManufacturingObject.active);
+		selectedCraftingObjectPanelSelectFuelsButton = selectedCraftingObjectPanel.transform.Find("Settings-Panel/SelectFuels-Button").GetComponent<Button>();
+		selectedCraftingObjectPanelSelectFuelsButton.onClick.AddListener(delegate {
+			SetSelectedCraftingObjectSelectFuelsPanel();
+		});
+		selectedCraftingObjectSelectFuelsPanel.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate {
+			SetSelectedCraftingObjectSelectFuelsPanel();
 		});
 
-		selectedManufacturingObjectPanelActiveButtonText = selectedManufacturingObjectPanelActiveButton.transform.Find("ActiveValue-Text").GetComponent<Text>();
+		selectedCraftingObjectPanelActiveButton = selectedCraftingObjectPanel.transform.Find("Settings-Panel/ActiveValueToggle-Button").GetComponent<Button>();
+		selectedCraftingObjectPanelActiveButton.onClick.AddListener(delegate {
+			selectedCraftingObject.SetActive(!selectedCraftingObject.active);
+		});
+
+		selectedCraftingObjectPanelActiveButtonText = selectedCraftingObjectPanelActiveButton.transform.Find("ActiveValue-Text").GetComponent<Text>();
 	}
 
 	public GameObject pauseMenu;
@@ -1381,8 +1381,8 @@ public class UIManager : BaseManager {
 				UpdateSelectedContainerInfo();
 			}
 
-			if (selectedManufacturingObject != null) {
-				UpdateSelectedManufacturingObjectPanel();
+			if (selectedCraftingObject != null) {
+				UpdateSelectedCraftingObjectPanel();
 			}
 
 			if (selectedTradingPost != null) {
@@ -1392,9 +1392,9 @@ public class UIManager : BaseManager {
 				UpdateSelectedTradingPostInfo();
 			}
 
-			if (selectedManufacturingObject != null) {
+			if (selectedCraftingObject != null) {
 				if (Input.GetMouseButtonDown(1) && !GetUIElementsUnderPointer().Find(result => result.gameObject.name.Contains("Priority")).isValid) {
-					SetSelectedManufacturingObject(null);
+					SetSelectedCraftingObject(null);
 				}
 			}
 
@@ -1407,9 +1407,9 @@ public class UIManager : BaseManager {
 				if (tradingPost != null) {
 					SetSelectedTradingPost(tradingPost);
 				}
-				ResourceManager.ManufacturingObject mto = GameManager.resourceM.manufacturingObjectInstances.Find(mtoi => mtoi.tile == newMouseOverTile || mtoi.additionalTiles.Contains(newMouseOverTile));
+				ResourceManager.CraftingObject mto = GameManager.resourceM.craftingObjectInstances.Find(mtoi => mtoi.tile == newMouseOverTile || mtoi.additionalTiles.Contains(newMouseOverTile));
 				if (mto != null) {
-					SetSelectedManufacturingObject(mto);
+					SetSelectedCraftingObject(mto);
 				}
 			}
 
@@ -1491,8 +1491,8 @@ public class UIManager : BaseManager {
 		if (selectedTradingPost != null) {
 			SetSelectedTradingPost(null);
 		}
-		if (selectedManufacturingObject != null) {
-			SetSelectedManufacturingObject(null);
+		if (selectedCraftingObject != null) {
+			SetSelectedCraftingObject(null);
 		}
 
 		selectedContainer = container;
@@ -1507,19 +1507,19 @@ public class UIManager : BaseManager {
 		if (selectedContainer != null) {
 			SetSelectedContainer(null);
 		}
-		if (selectedManufacturingObject != null) {
-			SetSelectedManufacturingObject(null);
+		if (selectedCraftingObject != null) {
+			SetSelectedCraftingObject(null);
 		}
 
 		selectedTradingPost = tradingPost;
 		SetSelectedTradingPostInfo();
 	}
 
-	public ResourceManager.ManufacturingObject selectedManufacturingObject;
+	public ResourceManager.CraftingObject selectedCraftingObject;
 
-	public void SetSelectedManufacturingObject(ResourceManager.ManufacturingObject newSelectedManufacturingObject) {
+	public void SetSelectedCraftingObject(ResourceManager.CraftingObject newSelectedCraftingObject) {
 
-		selectedManufacturingObject = null;
+		selectedCraftingObject = null;
 		if (selectedContainer != null) {
 			SetSelectedContainer(null);
 		}
@@ -1527,8 +1527,8 @@ public class UIManager : BaseManager {
 			SetSelectedTradingPost(null);
 		}
 
-		selectedManufacturingObject = newSelectedManufacturingObject;
-		SetSelectedManufacturingObjectPanel();
+		selectedCraftingObject = newSelectedCraftingObject;
+		SetSelectedCraftingObjectPanel();
 	}
 
 	void ToggleMainMenuButtons(GameObject coverPanel) {
@@ -2051,7 +2051,7 @@ public class UIManager : BaseManager {
 	private GameObject tileRoofElement = null;
 	private readonly List<GameObject> tileResourceElements = new List<GameObject>();
 	private readonly List<GameObject> plantObjectElements = new List<GameObject>();
-	private readonly Dictionary<int, List<GameObject>> tileObjectElements = new Dictionary<int, List<GameObject>>();
+	private readonly Dictionary<int, List<GameObject>> objectElements = new Dictionary<int, List<GameObject>>();
 
 	public static readonly Dictionary<int, string> layerToLayerNameMap = new Dictionary<int, string>() {
 		{ 0, "Job" },
@@ -2072,9 +2072,9 @@ public class UIManager : BaseManager {
 				plantObjectElement.SetActive(false);
 			}
 
-			foreach (KeyValuePair<int, List<GameObject>> tileObjectElementKVP in tileObjectElements) {
-				foreach (GameObject tileObjectDataElement in tileObjectElementKVP.Value) {
-					tileObjectDataElement.SetActive(false);
+			foreach (KeyValuePair<int, List<GameObject>> objectElementKVP in objectElements) {
+				foreach (GameObject objectDataElement in objectElementKVP.Value) {
+					objectDataElement.SetActive(false);
 				}
 			}
 
@@ -2158,39 +2158,39 @@ public class UIManager : BaseManager {
 				}
 
 				if (mouseOverTile.GetAllObjectInstances().Count > 0) {
-					foreach (ResourceManager.ObjectInstance tileObject in mouseOverTile.GetAllObjectInstances().OrderBy(o => o.prefab.layer).ToList()) {
-						if (!tileObjectElements.ContainsKey(tileObject.prefab.layer)) {
+					foreach (ResourceManager.ObjectInstance objectInstance in mouseOverTile.GetAllObjectInstances().OrderBy(o => o.prefab.layer).ToList()) {
+						if (!objectElements.ContainsKey(objectInstance.prefab.layer)) {
 							GameObject spriteObject = MonoBehaviour.Instantiate(GameManager.resourceM.tileImage, tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage"), false);
-							spriteObject.name = layerToLayerNameMap[tileObject.prefab.layer];
+							spriteObject.name = layerToLayerNameMap[objectInstance.prefab.layer];
 
 							GameObject dataObject = MonoBehaviour.Instantiate(GameManager.resourceM.objectDataPanel, tileInformation.transform, false);
-							dataObject.name = layerToLayerNameMap[tileObject.prefab.layer];
+							dataObject.name = layerToLayerNameMap[objectInstance.prefab.layer];
 
-							tileObjectElements.Add(tileObject.prefab.layer, new List<GameObject>() {
+							objectElements.Add(objectInstance.prefab.layer, new List<GameObject>() {
 								spriteObject,
 								dataObject
 							});
 						}
 
-						GameObject tileLayerSpriteObject = tileObjectElements[tileObject.prefab.layer][0];
-						tileLayerSpriteObject.GetComponent<Image>().sprite = tileObject.obj.GetComponent<SpriteRenderer>().sprite;
+						GameObject tileLayerSpriteObject = objectElements[objectInstance.prefab.layer][0];
+						tileLayerSpriteObject.GetComponent<Image>().sprite = objectInstance.obj.GetComponent<SpriteRenderer>().sprite;
 						tileLayerSpriteObject.SetActive(true);
 
-						GameObject tileObjectDataObject = tileObjectElements[tileObject.prefab.layer][1];
-						tileObjectDataObject.transform.Find("TileInfo-ObjectData-Label").GetComponent<Text>().text = layerToLayerNameMap[tileObject.prefab.layer];
-						tileObjectDataObject.transform.Find("TileInfo-ObjectData-Value").GetComponent<Text>().text = tileObject.prefab.name;
-						tileObjectDataObject.transform.Find("TileInfo-ObjectData-Image-Panel/TileInfo-ObjectData-Image").GetComponent<Image>().sprite = tileObject.obj.GetComponent<SpriteRenderer>().sprite;
+						GameObject objectDataObject = objectElements[objectInstance.prefab.layer][1];
+						objectDataObject.transform.Find("TileInfo-ObjectData-Label").GetComponent<Text>().text = layerToLayerNameMap[objectInstance.prefab.layer];
+						objectDataObject.transform.Find("TileInfo-ObjectData-Value").GetComponent<Text>().text = objectInstance.prefab.name;
+						objectDataObject.transform.Find("TileInfo-ObjectData-Image-Panel/TileInfo-ObjectData-Image").GetComponent<Image>().sprite = objectInstance.obj.GetComponent<SpriteRenderer>().sprite;
 
-						Slider integritySlider = tileObjectDataObject.transform.Find("Integrity-Slider").GetComponent<Slider>();
+						Slider integritySlider = objectDataObject.transform.Find("Integrity-Slider").GetComponent<Slider>();
 
-						if (tileObject.prefab.integrity > 0) {
+						if (objectInstance.prefab.integrity > 0) {
 							integritySlider.minValue = 0;
-							integritySlider.maxValue = tileObject.prefab.integrity;
-							integritySlider.value = tileObject.integrity;
+							integritySlider.maxValue = objectInstance.prefab.integrity;
+							integritySlider.value = objectInstance.integrity;
 							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(
 								GetColour(Colours.LightRed),
 								GetColour(Colours.LightGreen),
-								tileObject.integrity / tileObject.prefab.integrity
+								objectInstance.integrity / objectInstance.prefab.integrity
 							);
 						} else {
 							integritySlider.minValue = 0;
@@ -2199,7 +2199,7 @@ public class UIManager : BaseManager {
 							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.LightGrey200);
 						}
 
-						tileObjectDataObject.SetActive(true);
+						objectDataObject.SetActive(true);
 					}
 				}
 
@@ -3997,10 +3997,10 @@ public class UIManager : BaseManager {
 					GameManager.uiM.SetSelectedTradingPost(tradingPost);
 				});
 			}
-			ResourceManager.ManufacturingObject mto = GameManager.resourceM.manufacturingObjectInstances.Find(findMTO => findMTO == instance);
+			ResourceManager.CraftingObject mto = GameManager.resourceM.craftingObjectInstances.Find(findMTO => findMTO == instance);
 			if (mto != null) {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
-					GameManager.uiM.SetSelectedManufacturingObject(mto);
+					GameManager.uiM.SetSelectedCraftingObject(mto);
 				});
 			}
 		}
@@ -4231,87 +4231,87 @@ public class UIManager : BaseManager {
 			index += 1;
 		}
 	}
-	public void InitializeSelectedManufacturingObjectIndicator() {
-		selectedManufacturingObjectIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
-		SpriteRenderer spriteRenderer = selectedManufacturingObjectIndicator.GetComponent<SpriteRenderer>();
+	public void InitializeSelectedCraftingObjectIndicator() {
+		selectedCraftingObjectIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
+		SpriteRenderer spriteRenderer = selectedCraftingObjectIndicator.GetComponent<SpriteRenderer>();
 		spriteRenderer.sprite = GameManager.resourceM.selectionCornersSprite;
-		spriteRenderer.name = "SelectedManufacturingObjectIndicator";
+		spriteRenderer.name = "SelectedCraftingObjectIndicator";
 		spriteRenderer.sortingOrder = 20; // Selected MTO Indicator Sprite
 		spriteRenderer.color = new Color(1f, 1f, 1f, 0.75f);
-		selectedManufacturingObjectIndicator.transform.localScale = new Vector2(1f, 1f) * 1.2f;
-		selectedManufacturingObjectIndicator.SetActive(false);
+		selectedCraftingObjectIndicator.transform.localScale = new Vector2(1f, 1f) * 1.2f;
+		selectedCraftingObjectIndicator.SetActive(false);
 	}
 
-	private static readonly List<ManufacturingResourceElement> manufacturingResourceElements = new List<ManufacturingResourceElement>();
+	private static readonly List<CraftingResourceElement> craftingResourceElements = new List<CraftingResourceElement>();
 
-	public void SetSelectedManufacturingObjectPanel() {
+	public void SetSelectedCraftingObjectPanel() {
 
-		selectedManufacturingObjectPanel.SetActive(selectedManufacturingObject != null);
-		selectedManufacturingObjectIndicator.SetActive(selectedManufacturingObject != null);
+		selectedCraftingObjectPanel.SetActive(selectedCraftingObject != null);
+		selectedCraftingObjectIndicator.SetActive(selectedCraftingObject != null);
 
-		manufacturingResourceElements.Clear();
+		craftingResourceElements.Clear();
 
-		selectedManufacturingObjectSelectResourcesPanel.SetActive(false);
-		selectedManufacturingObjectSelectFuelsPanel.SetActive(false);
+		selectedCraftingObjectSelectResourcesPanel.SetActive(false);
+		selectedCraftingObjectSelectFuelsPanel.SetActive(false);
 
-		if (selectedManufacturingObject != null) {
+		if (selectedCraftingObject != null) {
 
-			selectedManufacturingObjectIndicator.transform.position = selectedManufacturingObject.tile.obj.transform.position;
+			selectedCraftingObjectIndicator.transform.position = selectedCraftingObject.tile.obj.transform.position;
 
-			GameObject settingsPanel = selectedManufacturingObjectPanel.transform.Find("Settings-Panel").gameObject;
+			GameObject settingsPanel = selectedCraftingObjectPanel.transform.Find("Settings-Panel").gameObject;
 
-			settingsPanel.transform.Find("SelectedManufacturingObjectInfo-Panel/Name-Text").GetComponent<Text>().text = selectedManufacturingObject.prefab.GetInstanceNameFromVariation(selectedManufacturingObject.variation);
-			settingsPanel.transform.Find("SelectedManufacturingObjectInfo-Panel/Sprite-Panel/Sprite-Image").GetComponent<Image>().sprite = selectedManufacturingObject.prefab.GetBaseSpriteForVariation(selectedManufacturingObject.variation);
+			settingsPanel.transform.Find("SelectedCraftingObjectInfo-Panel/Name-Text").GetComponent<Text>().text = selectedCraftingObject.prefab.GetInstanceNameFromVariation(selectedCraftingObject.variation);
+			settingsPanel.transform.Find("SelectedCraftingObjectInfo-Panel/Sprite-Panel/Sprite-Image").GetComponent<Image>().sprite = selectedCraftingObject.prefab.GetBaseSpriteForVariation(selectedCraftingObject.variation);
 
-			selectedManufacturingObjectPanelSelectFuelsButton.gameObject.SetActive(selectedManufacturingObject.prefab.usesFuel);
+			selectedCraftingObjectPanelSelectFuelsButton.gameObject.SetActive(selectedCraftingObject.prefab.usesFuel);
 
 			Transform selectedResourcesPanel = settingsPanel.transform.Find("SelectResources-Button/SelectedResources-Panel");
 			foreach (Transform child in selectedResourcesPanel) {
 				MonoBehaviour.Destroy(child.gameObject);
 			}
-			Transform manufacturableResourcesPanel = settingsPanel.transform.Find("ManufacturableResources-Panel/ManufacturableResources-ScrollPanel/ManufacturableResourcesList-Panel");
-			foreach (Transform child in manufacturableResourcesPanel) {
+			Transform craftableResourcesPanel = settingsPanel.transform.Find("CraftableResources-Panel/CraftableResources-ScrollPanel/CraftableResourcesList-Panel");
+			foreach (Transform child in craftableResourcesPanel) {
 				MonoBehaviour.Destroy(child.gameObject);
 			}
-			foreach (ResourceManager.ManufacturableResourceInstance resource in selectedManufacturingObject.resources.OrderBy(r => r.priority.Get())) {
-				GameObject selectedResourcePreview = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/SelectedResourcePreview-Image"), selectedResourcesPanel, false);
+			foreach (ResourceManager.CraftableResourceInstance resource in selectedCraftingObject.resources.OrderBy(r => r.priority.Get())) {
+				GameObject selectedResourcePreview = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/SelectedResourcePreview-Image"), selectedResourcesPanel, false);
 				selectedResourcePreview.GetComponent<Image>().sprite = resource.resource.image;
 
-				ManufacturingResourceElement manufacturableResourceElement = new ManufacturingResourceElement(resource, manufacturableResourcesPanel);
-				manufacturingResourceElements.Add(manufacturableResourceElement);
+				CraftingResourceElement craftableResourceElement = new CraftingResourceElement(resource, craftableResourcesPanel);
+				craftingResourceElements.Add(craftableResourceElement);
 			}
 
 			Transform selectedFuelsPanel = settingsPanel.transform.Find("SelectFuels-Button/SelectedFuels-Panel");
 			foreach (Transform child in selectedFuelsPanel) {
 				MonoBehaviour.Destroy(child.gameObject);
 			}
-			foreach (ResourceManager.PriorityResourceInstance fuel in selectedManufacturingObject.fuels.OrderBy(f => f.priority.Get())) {
-				GameObject selectedFuelPreview = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/SelectedResourcePreview-Image"), selectedFuelsPanel, false);
+			foreach (ResourceManager.PriorityResourceInstance fuel in selectedCraftingObject.fuels.OrderBy(f => f.priority.Get())) {
+				GameObject selectedFuelPreview = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/SelectedResourcePreview-Image"), selectedFuelsPanel, false);
 				selectedFuelPreview.GetComponent<Image>().sprite = fuel.resource.image;
 			}
 
-			UpdateSelectedManufacturingObjectPanel();
+			UpdateSelectedCraftingObjectPanel();
 		}
 	}
 
-	public void UpdateSelectedManufacturingObjectPanel() {
-		foreach (ManufacturingResourceElement manufacturingResourceElement in manufacturingResourceElements) {
-			manufacturingResourceElement.Update();
+	public void UpdateSelectedCraftingObjectPanel() {
+		foreach (CraftingResourceElement craftingResourceElement in craftingResourceElements) {
+			craftingResourceElement.Update();
 		}
 
-		if (selectedManufacturingObject.active) {
-			selectedManufacturingObjectPanelActiveButtonText.text = "Enabled";
-			if (selectedManufacturingObject.resources.Any(resource => resource.enableable)) {
-				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+		if (selectedCraftingObject.active) {
+			selectedCraftingObjectPanelActiveButtonText.text = "Enabled";
+			if (selectedCraftingObject.resources.Any(resource => resource.enableable)) {
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
 			} else {
-				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
 			}
 		} else {
-			selectedManufacturingObjectPanelActiveButtonText.text = "Disabled";
-			if (selectedManufacturingObject.resources.Any(resource => resource.enableable)) {
-				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+			selectedCraftingObjectPanelActiveButtonText.text = "Disabled";
+			if (selectedCraftingObject.resources.Any(resource => resource.enableable)) {
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
 			} else {
-				selectedManufacturingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
 			}
 		}
 	}
@@ -4326,7 +4326,7 @@ public class UIManager : BaseManager {
 		public Type type;
 
 		public ResourceManager.Resource resource;
-		public ResourceManager.ManufacturingObject manufacturingObject;
+		public ResourceManager.CraftingObject craftingObject;
 
 		public GameObject panel;
 
@@ -4334,43 +4334,43 @@ public class UIManager : BaseManager {
 			Type type,
 			ResourceManager.Resource resource,
 			Transform parent,
-			ResourceManager.ManufacturingObject manufacturingObject
+			ResourceManager.CraftingObject craftingObject
 		) {
 			this.type = type;
 			this.resource = resource;
-			this.manufacturingObject = manufacturingObject;
+			this.craftingObject = craftingObject;
 
-			panel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/SelectPriorityResource-Panel"), parent, false);
+			panel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/SelectPriorityResource-Panel"), parent, false);
 
 			panel.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resource.image;
 			panel.transform.Find("ResourceName-Text").GetComponent<Text>().text = resource.name;
 
-			panel.transform.Find("Details-Panel/EnergyValue-Text").GetComponent<Text>().text = (type == Type.Resource ? resource.manufacturingEnergy : resource.fuelEnergy) + " energy";
+			panel.transform.Find("Details-Panel/EnergyValue-Text").GetComponent<Text>().text = (type == Type.Resource ? resource.craftingEnergy : resource.fuelEnergy) + " energy";
 
 			panel.GetComponent<Button>().onClick.AddListener(delegate {
 				if (type == Type.Resource) {
-					manufacturingObject.ToggleResource(resource, 1);
+					craftingObject.ToggleResource(resource, 1);
 				} else if (type == Type.Fuel) {
-					manufacturingObject.ToggleFuel(resource, 1);
+					craftingObject.ToggleFuel(resource, 1);
 				}
 				
 				Update();
 
 				if (type == Type.Resource) {
-					UpdatePriorityButtonText(manufacturingObject.GetManufacturableResourceFromResource(resource) == null ? 0 : 1);
+					UpdatePriorityButtonText(craftingObject.GetCraftableResourceFromResource(resource) == null ? 0 : 1);
 				} else if (type == Type.Fuel) {
-					UpdatePriorityButtonText(manufacturingObject.GetFuelFromFuelResource(resource) == null ? 0 : 1);
+					UpdatePriorityButtonText(craftingObject.GetFuelFromFuelResource(resource) == null ? 0 : 1);
 				}
 			});
 
 			UpdatePriorityButtonText(0);
 			if (type == Type.Resource) {
-				ResourceManager.ManufacturableResourceInstance manufacturableResource = manufacturingObject.GetManufacturableResourceFromResource(resource);
-				if (manufacturableResource != null) {
-					UpdatePriorityButtonText(manufacturableResource.priority.Get());
+				ResourceManager.CraftableResourceInstance craftableResource = craftingObject.GetCraftableResourceFromResource(resource);
+				if (craftableResource != null) {
+					UpdatePriorityButtonText(craftableResource.priority.Get());
 				}
 			} else if (type == Type.Fuel) {
-				ResourceManager.PriorityResourceInstance fuel = manufacturingObject.GetFuelFromFuelResource(resource);
+				ResourceManager.PriorityResourceInstance fuel = craftingObject.GetFuelFromFuelResource(resource);
 				if (fuel != null) {
 					UpdatePriorityButtonText(fuel.priority.Get());
 				}
@@ -4415,45 +4415,45 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private readonly List<ManufacturableResourceElement> manufacturableResourceElements = new List<ManufacturableResourceElement>();
+	private readonly List<CraftableResourceElement> craftableResourceElements = new List<CraftableResourceElement>();
 
-	private void SetSelectedManufacturingObjectSelectResourcesPanel() {
+	private void SetSelectedCraftingObjectSelectResourcesPanel() {
 
-		selectedManufacturingObjectSelectResourcesPanel.SetActive(!selectedManufacturingObjectSelectResourcesPanel.activeSelf);
+		selectedCraftingObjectSelectResourcesPanel.SetActive(!selectedCraftingObjectSelectResourcesPanel.activeSelf);
 
-		foreach (ManufacturableResourceElement manufacturableResourceElement in manufacturableResourceElements) {
-			manufacturableResourceElement.Remove();
+		foreach (CraftableResourceElement craftableResourceElement in craftableResourceElements) {
+			craftableResourceElement.Remove();
 		}
-		manufacturableResourceElements.Clear();
+		craftableResourceElements.Clear();
 
-		if (selectedManufacturingObjectSelectResourcesPanel.activeSelf) {
-			foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResourcesByManufacturingObject(selectedManufacturingObject).OrderBy(r => r.name)) {
-				manufacturableResourceElements.Add(
-					new ManufacturableResourceElement(
+		if (selectedCraftingObjectSelectResourcesPanel.activeSelf) {
+			foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResourcesByCraftingObject(selectedCraftingObject).OrderBy(r => r.name)) {
+				craftableResourceElements.Add(
+					new CraftableResourceElement(
 						PriorityResourceElement.Type.Resource,
 						resource,
-						selectedManufacturingObjectSelectResourcesPanel.transform.Find("SelectResources-ScrollPanel/SelectResourcesList-Panel"),
-						selectedManufacturingObject
+						selectedCraftingObjectSelectResourcesPanel.transform.Find("SelectResources-ScrollPanel/SelectResourcesList-Panel"),
+						selectedCraftingObject
 					)
 				);
 			}
 		} else {
-			SetSelectedManufacturingObjectPanel();
+			SetSelectedCraftingObjectPanel();
 		}
 	}
 
-	private class ManufacturableResourceElement : PriorityResourceElement {
+	private class CraftableResourceElement : PriorityResourceElement {
 
-		public ManufacturableResourceElement(
+		public CraftableResourceElement(
 			Type type,
 			ResourceManager.Resource resource,
 			Transform parent,
-			ResourceManager.ManufacturingObject manufacturingObject
+			ResourceManager.CraftingObject craftingObject
 		) : base(
 			type,
 			resource,
 			parent,
-			manufacturingObject
+			craftingObject
 		) {
 			
 		}
@@ -4462,7 +4462,7 @@ public class UIManager : BaseManager {
 			base.Update();
 
 			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color =
-				manufacturingObject.GetManufacturableResourceFromResource(resource) != null
+				craftingObject.GetCraftableResourceFromResource(resource) != null
 					? (resource.GetAvailableAmount() > 0
 						? GetColour(Colours.LightGreen)
 						: GetColour(Colours.LightOrange))
@@ -4471,15 +4471,15 @@ public class UIManager : BaseManager {
 
 		public override void ChangePriority(int amount) {
 
-			ResourceManager.ManufacturableResourceInstance manufacturableResource = manufacturingObject.GetManufacturableResourceFromResource(resource);
-			if (manufacturableResource == null) {
-				manufacturableResource = manufacturingObject.ToggleResource(resource, 0);
+			ResourceManager.CraftableResourceInstance craftableResource = craftingObject.GetCraftableResourceFromResource(resource);
+			if (craftableResource == null) {
+				craftableResource = craftingObject.ToggleResource(resource, 0);
 			}
 
-			int priority = manufacturableResource.priority.Change(amount);
+			int priority = craftableResource.priority.Change(amount);
 
-			if (priority <= manufacturableResource.priority.min && manufacturableResource != null) {
-				manufacturingObject.ToggleResource(resource, 0);
+			if (priority <= craftableResource.priority.min && craftableResource != null) {
+				craftingObject.ToggleResource(resource, 0);
 			}
 
 			UpdatePriorityButtonText(priority);
@@ -4490,27 +4490,27 @@ public class UIManager : BaseManager {
 
 	private readonly List<FuelResourceElement> fuelResourceElements = new List<FuelResourceElement>();
 
-	private void SetSelectedManufacturingObjectSelectFuelsPanel() {
-		selectedManufacturingObjectSelectFuelsPanel.SetActive(!selectedManufacturingObjectSelectFuelsPanel.activeSelf);
+	private void SetSelectedCraftingObjectSelectFuelsPanel() {
+		selectedCraftingObjectSelectFuelsPanel.SetActive(!selectedCraftingObjectSelectFuelsPanel.activeSelf);
 
 		foreach (FuelResourceElement fuelResourceElement in fuelResourceElements) {
 			fuelResourceElement.Remove();
 		}
 		fuelResourceElements.Clear();
 
-		if (selectedManufacturingObjectSelectFuelsPanel.activeSelf) {
+		if (selectedCraftingObjectSelectFuelsPanel.activeSelf) {
 			foreach (ResourceManager.Resource resource in ResourceManager.GetResourcesInClass(ResourceManager.ResourceClassEnum.Fuel).OrderBy(r => r.fuelEnergy)) {
 				fuelResourceElements.Add(
 					new FuelResourceElement(
 						PriorityResourceElement.Type.Fuel,
 						resource,
-						selectedManufacturingObjectSelectFuelsPanel.transform.Find("SelectFuels-ScrollPanel/SelectFuelsList-Panel"),
-						selectedManufacturingObject
+						selectedCraftingObjectSelectFuelsPanel.transform.Find("SelectFuels-ScrollPanel/SelectFuelsList-Panel"),
+						selectedCraftingObject
 					)
 				);
 			}
 		} else {
-			SetSelectedManufacturingObjectPanel();
+			SetSelectedCraftingObjectPanel();
 		}
 	}
 
@@ -4520,12 +4520,12 @@ public class UIManager : BaseManager {
 			Type type,
 			ResourceManager.Resource resource,
 			Transform parent,
-			ResourceManager.ManufacturingObject manufacturingObject
+			ResourceManager.CraftingObject craftingObject
 		) : base(
 			type,
 			resource,
 			parent,
-			manufacturingObject
+			craftingObject
 		) {
 			
 		}
@@ -4534,7 +4534,7 @@ public class UIManager : BaseManager {
 			base.Update();
 
 			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color = 
-				manufacturingObject.GetFuelFromFuelResource(resource) != null
+				craftingObject.GetFuelFromFuelResource(resource) != null
 					? (resource.GetAvailableAmount() > 0
 						? GetColour(Colours.LightGreen)
 						: GetColour(Colours.LightOrange))
@@ -4543,15 +4543,15 @@ public class UIManager : BaseManager {
 
 		public override void ChangePriority(int amount) {
 
-			ResourceManager.PriorityResourceInstance fuel = manufacturingObject.GetFuelFromFuelResource(resource);
+			ResourceManager.PriorityResourceInstance fuel = craftingObject.GetFuelFromFuelResource(resource);
 			if (fuel == null) {
-				fuel = manufacturingObject.ToggleFuel(resource, 0);
+				fuel = craftingObject.ToggleFuel(resource, 0);
 			}
 
 			int priority = fuel.priority.Change(amount);
 
 			if (priority <= fuel.priority.min && fuel != null) {
-				manufacturingObject.ToggleFuel(resource, 0);
+				craftingObject.ToggleFuel(resource, 0);
 			}
 
 			UpdatePriorityButtonText(priority);
@@ -4560,8 +4560,8 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private class ManufacturingResourceElement {
-		public ResourceManager.ManufacturableResourceInstance resource;
+	private class CraftingResourceElement {
+		public ResourceManager.CraftableResourceInstance resource;
 
 		public GameObject panel;
 		public List<RequiredResourceElement> requiredResourceElements = new List<RequiredResourceElement>();
@@ -4574,15 +4574,15 @@ public class UIManager : BaseManager {
 		private readonly InputField createAmountInputField;
 		private readonly Text remainingAmountText;
 
-		public ManufacturingResourceElement(ResourceManager.ManufacturableResourceInstance resource, Transform parent) {
+		public CraftingResourceElement(ResourceManager.CraftableResourceInstance resource, Transform parent) {
 			this.resource = resource;
 
-			panel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedManufacturingObject/ManufacturableResource-Panel"), parent, false);
+			panel = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/CraftableResource-Panel"), parent, false);
 
 			panel.transform.Find("ResourceData-Panel/Name").GetComponent<Text>().text = resource.resource.name;
 			panel.transform.Find("ResourceData-Panel/Image").GetComponent<Image>().sprite = resource.resource.image;
 
-			foreach (ResourceManager.ResourceAmount resourceAmount in resource.resource.manufacturingResources) {
+			foreach (ResourceManager.ResourceAmount resourceAmount in resource.resource.craftingResources) {
 				requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, panel.transform.Find("RequiredResources-Panel")));
 			}
 

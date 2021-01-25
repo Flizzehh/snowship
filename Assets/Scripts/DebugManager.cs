@@ -792,22 +792,22 @@ public class DebugManager : BaseManager {
 		commandFunctions.Add(Commands.changetileobj, delegate (Commands selectedCommand, List<string> parameters) {
 			int counter = 0;
 			if (parameters.Count == 3) {
-				ResourceManager.ObjectPrefab tileObjectPrefab = GameManager.resourceM.GetObjectPrefabByString(parameters[0]);
-				if (tileObjectPrefab != null) {
+				ResourceManager.ObjectPrefab objectPrefab = GameManager.resourceM.GetObjectPrefabByString(parameters[0]);
+				if (objectPrefab != null) {
 					// Variation doesn't need a null check because everything is designed around it working regardless of whether it's null or not
-					ResourceManager.Variation variation = tileObjectPrefab.GetVariationFromString(parameters[1]);
+					ResourceManager.Variation variation = objectPrefab.GetVariationFromString(parameters[1]);
 
 					int rotation = 0;
 					if (int.TryParse(parameters[1], out rotation)) {
-						if (rotation >= 0 && rotation < tileObjectPrefab.GetBitmaskSpritesForVariation(variation).Count) {
+						if (rotation >= 0 && rotation < objectPrefab.GetBitmaskSpritesForVariation(variation).Count) {
 							if (selectedTiles.Count > 0) {
 								foreach (TileManager.Tile tile in selectedTiles) {
-									if (tile.objectInstances.ContainsKey(tileObjectPrefab.layer) && tile.objectInstances[tileObjectPrefab.layer] != null) {
-										GameManager.resourceM.RemoveTileObjectInstance(tile.objectInstances[tileObjectPrefab.layer]);
-										tile.RemoveTileObjectAtLayer(tileObjectPrefab.layer);
+									if (tile.objectInstances.ContainsKey(objectPrefab.layer) && tile.objectInstances[objectPrefab.layer] != null) {
+										GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[objectPrefab.layer]);
+										tile.RemoveObjectAtLayer(objectPrefab.layer);
 									}
-									tile.SetTileObject(GameManager.resourceM.CreateTileObjectInstance(tileObjectPrefab, variation, tile, rotation, true));
-									tile.GetObjectInstanceAtLayer(tileObjectPrefab.layer).FinishCreation();
+									tile.SetObject(GameManager.resourceM.CreateObjectInstance(objectPrefab, variation, tile, rotation, true));
+									tile.GetObjectInstanceAtLayer(objectPrefab.layer).FinishCreation();
 									counter += 1;
 								}
 							} else {
@@ -823,19 +823,19 @@ public class DebugManager : BaseManager {
 					OutputToConsole("ERROR: Unable to parse tile object.");
 				}
 			} else if (parameters.Count == 2) {
-				ResourceManager.ObjectPrefab tileObjectPrefab = GameManager.resourceM.GetObjectPrefabByString(parameters[0]);
-				if (tileObjectPrefab != null) {
+				ResourceManager.ObjectPrefab objectPrefab = GameManager.resourceM.GetObjectPrefabByString(parameters[0]);
+				if (objectPrefab != null) {
 					// Variation doesn't need a null check because everything is designed around it working regardless of whether it's null or not
-					ResourceManager.Variation variation = tileObjectPrefab.GetVariationFromString(parameters[1]);
+					ResourceManager.Variation variation = objectPrefab.GetVariationFromString(parameters[1]);
 
 					if (selectedTiles.Count > 0) {
 						foreach (TileManager.Tile tile in selectedTiles) {
-							if (tile.objectInstances.ContainsKey(tileObjectPrefab.layer) && tile.objectInstances[tileObjectPrefab.layer] != null) {
-								GameManager.resourceM.RemoveTileObjectInstance(tile.objectInstances[tileObjectPrefab.layer]);
-								tile.RemoveTileObjectAtLayer(tileObjectPrefab.layer);
+							if (tile.objectInstances.ContainsKey(objectPrefab.layer) && tile.objectInstances[objectPrefab.layer] != null) {
+								GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[objectPrefab.layer]);
+								tile.RemoveObjectAtLayer(objectPrefab.layer);
 							}
-							tile.SetTileObject(GameManager.resourceM.CreateTileObjectInstance(tileObjectPrefab, variation, tile, 0, true));
-							tile.GetObjectInstanceAtLayer(tileObjectPrefab.layer).FinishCreation();
+							tile.SetObject(GameManager.resourceM.CreateObjectInstance(objectPrefab, variation, tile, 0, true));
+							tile.GetObjectInstanceAtLayer(objectPrefab.layer).FinishCreation();
 							counter += 1;
 						}
 					} else {
@@ -860,8 +860,8 @@ public class DebugManager : BaseManager {
 							removeTOIs.Add(toiKVP.Value);
 						}
 						foreach (ResourceManager.ObjectInstance toi in removeTOIs) {
-							GameManager.resourceM.RemoveTileObjectInstance(tile.objectInstances[toi.prefab.layer]);
-							tile.RemoveTileObjectAtLayer(toi.prefab.layer);
+							GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[toi.prefab.layer]);
+							tile.RemoveObjectAtLayer(toi.prefab.layer);
 						}
 						counter += 1;
 					}
@@ -874,8 +874,8 @@ public class DebugManager : BaseManager {
 					if (selectedTiles.Count > 0) {
 						foreach (TileManager.Tile tile in selectedTiles) {
 							if (tile.objectInstances.ContainsKey(layer) && tile.objectInstances[layer] != null) {
-								GameManager.resourceM.RemoveTileObjectInstance(tile.objectInstances[layer]);
-								tile.RemoveTileObjectAtLayer(layer);
+								GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[layer]);
+								tile.RemoveObjectAtLayer(layer);
 								counter += 1;
 							}
 						}

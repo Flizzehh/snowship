@@ -1155,11 +1155,11 @@ public class PersistenceManager : BaseManager {
 
 			for (int i = 0; i < persistenceObjects.Count; i++) {
 				PersistenceObject persistenceObject = persistenceObjects[i];
-				ResourceManager.ObjectInstance tileObjectInstance = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value).objectInstances.Values.ToList().Find(o => o.prefab.type == persistenceObject.type);
+				ResourceManager.ObjectInstance objectInstance = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value).objectInstances.Values.ToList().Find(o => o.prefab.type == persistenceObject.type);
 
-				switch (tileObjectInstance.prefab.instanceType) {
+				switch (objectInstance.prefab.instanceType) {
 					case ResourceManager.ObjectInstanceType.Container:
-						ResourceManager.Container container = (ResourceManager.Container)tileObjectInstance;
+						ResourceManager.Container container = (ResourceManager.Container)objectInstance;
 						foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceObject.persistenceInventory.reservedResources) {
 							foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
 								container.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
@@ -1167,19 +1167,19 @@ public class PersistenceManager : BaseManager {
 							container.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 						}
 						break;
-					case ResourceManager.ObjectInstanceType.ManufacturingObject:
-						ResourceManager.ManufacturingObject manufacturingTileObject = (ResourceManager.ManufacturingObject)tileObjectInstance;
-						manufacturingTileObject.SetActive(persistenceObject.active.Value);
+					case ResourceManager.ObjectInstanceType.CraftingObject:
+						ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)objectInstance;
+						craftingObject.SetActive(persistenceObject.active.Value);
 						break;
 					case ResourceManager.ObjectInstanceType.SleepSpot:
-						ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)tileObjectInstance;
+						ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)objectInstance;
 						if (persistenceObject.occupyingColonistName != null) {
 							sleepSpot.occupyingColonist = GameManager.colonistM.colonists.Find(c => c.name == persistenceObject.occupyingColonistName);
 						}
 						break;
 				}
 
-				tileObjectInstance.Update();
+				objectInstance.Update();
 			}
 
 			for (int i = 0; i < persistenceCaravans.Count; i++) {
@@ -3163,7 +3163,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum JobProperty {
-		Job, StoredJob, BacklogJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ResourcesColonistHas, ContainerPickups, Plant, CreateResource, ActiveTileObject, TransferResources
+		Job, StoredJob, BacklogJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ResourcesColonistHas, ContainerPickups, Plant, CreateResource, ActiveObject, TransferResources
 	}
 
 	public enum ContainerPickupProperty {
@@ -3222,11 +3222,11 @@ public class PersistenceManager : BaseManager {
 			file.WriteLine(CreateKeyValueString(JobProperty.CreateResource, job.createResource.resource.type, startLevel + 1));
 		}
 
-		if (job.activeTileObject != null) {
-			file.WriteLine(CreateKeyValueString(JobProperty.ActiveTileObject, string.Empty, startLevel + 1));
+		if (job.activeObject != null) {
+			file.WriteLine(CreateKeyValueString(JobProperty.ActiveObject, string.Empty, startLevel + 1));
 
-			file.WriteLine(CreateKeyValueString(ObjectProperty.Position, FormatVector2ToString(job.activeTileObject.zeroPointTile.obj.transform.position), startLevel + 2));
-			file.WriteLine(CreateKeyValueString(ObjectProperty.Type, job.activeTileObject.prefab.type, startLevel + 2));
+			file.WriteLine(CreateKeyValueString(ObjectProperty.Position, FormatVector2ToString(job.activeObject.zeroPointTile.obj.transform.position), startLevel + 2));
+			file.WriteLine(CreateKeyValueString(ObjectProperty.Type, job.activeObject.prefab.type, startLevel + 2));
 		}
 
 		if (job.transferResources != null && job.transferResources.Count > 0) {
@@ -3250,7 +3250,7 @@ public class PersistenceManager : BaseManager {
 		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
 		public List<PersistenceContainerPickup> containerPickups;
 		public ResourceManager.Resource createResource;
-		public PersistenceObject activeTileObject;
+		public PersistenceObject activeObject;
 		public List<ResourceManager.ResourceAmount> transferResources;
 
 		public PersistenceJob(
@@ -3266,7 +3266,7 @@ public class PersistenceManager : BaseManager {
 			List<ResourceManager.ResourceAmount> resourcesColonistHas,
 			List<PersistenceContainerPickup> containerPickups,
 			ResourceManager.Resource createResource,
-			PersistenceObject activeTileObject,
+			PersistenceObject activeObject,
 			List<ResourceManager.ResourceAmount> transferResources
 		) {
 			this.type = type;
@@ -3281,7 +3281,7 @@ public class PersistenceManager : BaseManager {
 			this.resourcesColonistHas = resourcesColonistHas;
 			this.containerPickups = containerPickups;
 			this.createResource = createResource;
-			this.activeTileObject = activeTileObject;
+			this.activeObject = activeObject;
 			this.transferResources = transferResources;
 		}
 	}
@@ -3328,7 +3328,7 @@ public class PersistenceManager : BaseManager {
 		List<ResourceManager.ResourceAmount> resourcesColonistHas = null;
 		List<PersistenceContainerPickup> containerPickups = null;
 		ResourceManager.Resource createResource = null;
-		PersistenceObject activeTileObject = null;
+		PersistenceObject activeObject = null;
 		List<ResourceManager.ResourceAmount> transferResources = null;
 
 		foreach (KeyValuePair<string, object> jobProperty in properties) {
@@ -3411,28 +3411,28 @@ public class PersistenceManager : BaseManager {
 				case JobProperty.CreateResource:
 					createResource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)jobProperty.Value));
 					break;
-				case JobProperty.ActiveTileObject:
-					Vector2? activeTileObjectZeroPointTilePosition = null;
-					ResourceManager.ObjectEnum? activeTileObjectType = null;
+				case JobProperty.ActiveObject:
+					Vector2? activeObjectZeroPointTilePosition = null;
+					ResourceManager.ObjectEnum? activeObjectType = null;
 
-					foreach (KeyValuePair<string, object> activeTileObjectProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
-						switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), activeTileObjectProperty.Key)) {
+					foreach (KeyValuePair<string, object> activeObjectProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
+						switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), activeObjectProperty.Key)) {
 							case ObjectProperty.Position:
-								activeTileObjectZeroPointTilePosition = new Vector2(float.Parse(((string)activeTileObjectProperty.Value).Split(',')[0]), float.Parse(((string)activeTileObjectProperty.Value).Split(',')[1]));
+								activeObjectZeroPointTilePosition = new Vector2(float.Parse(((string)activeObjectProperty.Value).Split(',')[0]), float.Parse(((string)activeObjectProperty.Value).Split(',')[1]));
 								break;
 							case ObjectProperty.Type:
-								activeTileObjectType = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)activeTileObjectProperty.Value);
+								activeObjectType = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)activeObjectProperty.Value);
 								break;
 							default:
-								Debug.LogError("Unknown active tile object property: " + activeTileObjectProperty.Key + " " + activeTileObjectProperty.Value);
+								Debug.LogError("Unknown active tile object property: " + activeObjectProperty.Key + " " + activeObjectProperty.Value);
 								break;
 						}
 					}
 
-					activeTileObject = new PersistenceObject(
-						activeTileObjectType,
+					activeObject = new PersistenceObject(
+						activeObjectType,
 						null,
-						activeTileObjectZeroPointTilePosition,
+						activeObjectZeroPointTilePosition,
 						null, null, null, null, null, null, null, null, null
 					);
 					break;
@@ -3464,7 +3464,7 @@ public class PersistenceManager : BaseManager {
 			resourcesColonistHas,
 			containerPickups,
 			createResource,
-			activeTileObject,
+			activeObject,
 			transferResources
 		);
 	}
@@ -3506,28 +3506,28 @@ public class PersistenceManager : BaseManager {
 		}
 		
 		if (persistenceJob.createResource != null) {
-			ResourceManager.ManufacturingObject manufacturingObject = (ResourceManager.ManufacturingObject)job.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeTileObject.type);
-			ResourceManager.ManufacturableResourceInstance manufacturableResourceInstance = manufacturingObject.resources.Find(r => r.resource == persistenceJob.createResource);
-			job.SetCreateResourceData(manufacturableResourceInstance, false);
-			manufacturableResourceInstance.job = job;
+			ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)job.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeObject.type);
+			ResourceManager.CraftableResourceInstance craftableResourceInstance = craftingObject.resources.Find(r => r.resource == persistenceJob.createResource);
+			job.SetCreateResourceData(craftableResourceInstance, false);
+			craftableResourceInstance.job = job;
 		}
 		return job;
 	}
 
 	public enum ObjectProperty {
-		Object, Type, Variation, Position, RotationIndex, Integrity, Active, Container, ManufacturingObject, Farm, SleepSpot
+		Object, Type, Variation, Position, RotationIndex, Integrity, Active, Container, CraftingObject, Farm, SleepSpot
 	}
 
 	public enum ContainerProperty {
 		Inventory
 	}
 
-	public enum ManufacturingObjectProperty {
+	public enum CraftingObjectProperty {
 		Resources, Fuels
 	}
 
-	public enum ManufacturableResourceProperty {
-		ManufacturableResource, Resource, Priority, CreationMethod, TargetAmount, RemainingAmount, Enableable, FuelAmounts, Job
+	public enum CraftableResourceProperty {
+		CraftableResource, Resource, Priority, CreationMethod, TargetAmount, RemainingAmount, Enableable, FuelAmounts, Job
 	}
 
 	public enum PriorityResourceProperty {
@@ -3557,32 +3557,32 @@ public class PersistenceManager : BaseManager {
 				if (instance is ResourceManager.Container container) {
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Container, string.Empty, 1));
 					WriteInventoryLines(file, container.GetInventory(), 2);
-				} else if (instance is ResourceManager.ManufacturingObject manufacturingObject) {
-					if (manufacturingObject.resources.Count > 0 || manufacturingObject.fuels.Count > 0) {
-						file.WriteLine(CreateKeyValueString(ObjectProperty.ManufacturingObject, string.Empty, 1));
-						if (manufacturingObject.resources.Count > 0) {
-							file.WriteLine(CreateKeyValueString(ManufacturingObjectProperty.Resources, string.Empty, 2));
-							foreach (ResourceManager.ManufacturableResourceInstance resource in manufacturingObject.resources) {
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.ManufacturableResource, string.Empty, 3));
+				} else if (instance is ResourceManager.CraftingObject craftingObject) {
+					if (craftingObject.resources.Count > 0 || craftingObject.fuels.Count > 0) {
+						file.WriteLine(CreateKeyValueString(ObjectProperty.CraftingObject, string.Empty, 1));
+						if (craftingObject.resources.Count > 0) {
+							file.WriteLine(CreateKeyValueString(CraftingObjectProperty.Resources, string.Empty, 2));
+							foreach (ResourceManager.CraftableResourceInstance resource in craftingObject.resources) {
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.CraftableResource, string.Empty, 3));
 
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.Resource, resource.resource.type, 4));
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.Priority, resource.priority.Get(), 4));
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.CreationMethod, resource.creationMethod, 4));
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.TargetAmount, resource.GetTargetAmount(), 4));
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.RemainingAmount, resource.GetRemainingAmount(), 4));
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Resource, resource.resource.type, 4));
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Priority, resource.priority.Get(), 4));
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.CreationMethod, resource.creationMethod, 4));
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.TargetAmount, resource.GetTargetAmount(), 4));
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.RemainingAmount, resource.GetRemainingAmount(), 4));
 								
-								file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.Enableable, resource.enableable, 4));
+								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Enableable, resource.enableable, 4));
 								if (resource.fuelAmounts.Count > 0) {
-									file.WriteLine(CreateKeyValueString(ManufacturableResourceProperty.FuelAmounts, string.Empty, 4));
+									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.FuelAmounts, string.Empty, 4));
 									foreach (ResourceManager.ResourceAmount fuelAmount in resource.fuelAmounts) {
 										WriteResourceAmountLines(file, fuelAmount, 5);
 									}
 								}
 							}
 						}
-						if (manufacturingObject.fuels.Count > 0) {
-							file.WriteLine(CreateKeyValueString(ManufacturingObjectProperty.Fuels, string.Empty, 2));
-							foreach (ResourceManager.PriorityResourceInstance fuel in manufacturingObject.fuels) {
+						if (craftingObject.fuels.Count > 0) {
+							file.WriteLine(CreateKeyValueString(CraftingObjectProperty.Fuels, string.Empty, 2));
+							foreach (ResourceManager.PriorityResourceInstance fuel in craftingObject.fuels) {
 								file.WriteLine(CreateKeyValueString(PriorityResourceProperty.PriorityResource, string.Empty, 3));
 
 								file.WriteLine(CreateKeyValueString(PriorityResourceProperty.Resource, fuel.resource.type, 4));
@@ -3612,8 +3612,8 @@ public class PersistenceManager : BaseManager {
 		// Container
 		public PersistenceInventory persistenceInventory;
 
-		// Manufacturing Tile Object
-		public List<PersistenceManufacturableResourceInstance> persistenceResources;
+		// Crafting Object
+		public List<PersistenceCraftableResourceInstance> persistenceResources;
 		public List<ResourceManager.PriorityResourceInstance> fuels;
 
 		// Farm
@@ -3631,7 +3631,7 @@ public class PersistenceManager : BaseManager {
 			float? integrity,
 			bool? active,
 			PersistenceInventory persistenceInventory,
-			List<PersistenceManufacturableResourceInstance> persistenceResources,
+			List<PersistenceCraftableResourceInstance> persistenceResources,
 			List<ResourceManager.PriorityResourceInstance> fuels,
 			ResourceManager.Resource seedResource,
 			float? growTimer,
@@ -3656,7 +3656,7 @@ public class PersistenceManager : BaseManager {
 		}
 	}
 
-	public class PersistenceManufacturableResourceInstance {
+	public class PersistenceCraftableResourceInstance {
 		public ResourceManager.Resource resource;
 		public int? priority;
 		public ResourceManager.CreationMethod? creationMethod;
@@ -3665,7 +3665,7 @@ public class PersistenceManager : BaseManager {
 		public bool? enableable;
 		public List<ResourceManager.ResourceAmount> fuelAmounts;
 
-		public PersistenceManufacturableResourceInstance(
+		public PersistenceCraftableResourceInstance(
 			ResourceManager.Resource resource,
 			int? priority,
 			ResourceManager.CreationMethod? creationMethod,
@@ -3702,8 +3702,8 @@ public class PersistenceManager : BaseManager {
 					// Container
 					PersistenceInventory persistenceInventory = null;
 
-					// Manufacturing Object
-					List<PersistenceManufacturableResourceInstance> persistenceResources = new List<PersistenceManufacturableResourceInstance>();
+					// Crafting Object
+					List<PersistenceCraftableResourceInstance> persistenceResources = new List<PersistenceCraftableResourceInstance>();
 					List<ResourceManager.PriorityResourceInstance> fuels = new List<ResourceManager.PriorityResourceInstance>();
 
 					// Farm
@@ -3713,28 +3713,28 @@ public class PersistenceManager : BaseManager {
 					// Sleep Spot
 					string occupyingColonistName = null;
 
-					foreach (KeyValuePair<string, object> tileObjectProperty in (List<KeyValuePair<string, object>>)property.Value) {
-						switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), tileObjectProperty.Key)) {
+					foreach (KeyValuePair<string, object> objectProperty in (List<KeyValuePair<string, object>>)property.Value) {
+						switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), objectProperty.Key)) {
 							case ObjectProperty.Type:
-								type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)tileObjectProperty.Value);
+								type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)objectProperty.Value);
 								break;
 							case ObjectProperty.Variation:
-								variation = UIManager.RemoveNonAlphanumericChars((string)tileObjectProperty.Value);
+								variation = UIManager.RemoveNonAlphanumericChars((string)objectProperty.Value);
 								break;
 							case ObjectProperty.Position:
-								zeroPointTilePosition = new Vector2(float.Parse(((string)tileObjectProperty.Value).Split(',')[0]), float.Parse(((string)tileObjectProperty.Value).Split(',')[1]));
+								zeroPointTilePosition = new Vector2(float.Parse(((string)objectProperty.Value).Split(',')[0]), float.Parse(((string)objectProperty.Value).Split(',')[1]));
 								break;
 							case ObjectProperty.RotationIndex:
-								rotationIndex = int.Parse((string)tileObjectProperty.Value);
+								rotationIndex = int.Parse((string)objectProperty.Value);
 								break;
 							case ObjectProperty.Integrity:
-								integrity = float.Parse((string)tileObjectProperty.Value);
+								integrity = float.Parse((string)objectProperty.Value);
 								break;
 							case ObjectProperty.Active:
-								active = bool.Parse((string)tileObjectProperty.Value);
+								active = bool.Parse((string)objectProperty.Value);
 								break;
 							case ObjectProperty.Container:
-								foreach (KeyValuePair<string, object> containerProperty in (List<KeyValuePair<string, object>>)tileObjectProperty.Value) {
+								foreach (KeyValuePair<string, object> containerProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
 									switch ((ContainerProperty)Enum.Parse(typeof(ContainerProperty), containerProperty.Key)) {
 										case ContainerProperty.Inventory:
 											persistenceInventory = LoadPersistenceInventory((List<KeyValuePair<string, object>>)containerProperty.Value);
@@ -3745,13 +3745,13 @@ public class PersistenceManager : BaseManager {
 									}
 								}
 								break;
-							case ObjectProperty.ManufacturingObject:
-								foreach (KeyValuePair<string, object> manufacturingObjectProperty in (List<KeyValuePair<string, object>>)tileObjectProperty.Value) {
-									switch ((ManufacturingObjectProperty)Enum.Parse(typeof(ManufacturingObjectProperty), manufacturingObjectProperty.Key)) {
-										case ManufacturingObjectProperty.Resources:
-											foreach (KeyValuePair<string, object> resourcesProperty in (List<KeyValuePair<string, object>>)manufacturingObjectProperty.Value) {
-												switch ((ManufacturableResourceProperty)Enum.Parse(typeof(ManufacturableResourceProperty), resourcesProperty.Key)) {
-													case ManufacturableResourceProperty.ManufacturableResource:
+							case ObjectProperty.CraftingObject:
+								foreach (KeyValuePair<string, object> craftingObjectProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
+									switch ((CraftingObjectProperty)Enum.Parse(typeof(CraftingObjectProperty), craftingObjectProperty.Key)) {
+										case CraftingObjectProperty.Resources:
+											foreach (KeyValuePair<string, object> resourcesProperty in (List<KeyValuePair<string, object>>)craftingObjectProperty.Value) {
+												switch ((CraftableResourceProperty)Enum.Parse(typeof(CraftableResourceProperty), resourcesProperty.Key)) {
+													case CraftableResourceProperty.CraftableResource:
 
 														ResourceManager.Resource resource = null;
 														int? priority = null;
@@ -3761,28 +3761,28 @@ public class PersistenceManager : BaseManager {
 														bool? enableable = null;
 														List<ResourceManager.ResourceAmount> fuelAmounts = new List<ResourceManager.ResourceAmount>();
 
-														foreach (KeyValuePair<string, object> manufacturableResourceProperty in (List<KeyValuePair<string, object>>)resourcesProperty.Value) {
-															switch ((ManufacturableResourceProperty)Enum.Parse(typeof(ManufacturableResourceProperty), manufacturableResourceProperty.Key)) {
-																case ManufacturableResourceProperty.Resource:
-																	resource = GameManager.resourceM.GetResourceByString((string)manufacturableResourceProperty.Value);
+														foreach (KeyValuePair<string, object> craftableResourceProperty in (List<KeyValuePair<string, object>>)resourcesProperty.Value) {
+															switch ((CraftableResourceProperty)Enum.Parse(typeof(CraftableResourceProperty), craftableResourceProperty.Key)) {
+																case CraftableResourceProperty.Resource:
+																	resource = GameManager.resourceM.GetResourceByString((string)craftableResourceProperty.Value);
 																	break;
-																case ManufacturableResourceProperty.Priority:
-																	priority = int.Parse((string)manufacturableResourceProperty.Value);
+																case CraftableResourceProperty.Priority:
+																	priority = int.Parse((string)craftableResourceProperty.Value);
 																	break;
-																case ManufacturableResourceProperty.CreationMethod:
-																	creationMethod = (ResourceManager.CreationMethod)Enum.Parse(typeof(ResourceManager.CreationMethod), (string)manufacturableResourceProperty.Value);
+																case CraftableResourceProperty.CreationMethod:
+																	creationMethod = (ResourceManager.CreationMethod)Enum.Parse(typeof(ResourceManager.CreationMethod), (string)craftableResourceProperty.Value);
 																	break;
-																case ManufacturableResourceProperty.TargetAmount:
-																	targetAmount = int.Parse((string)manufacturableResourceProperty.Value);
+																case CraftableResourceProperty.TargetAmount:
+																	targetAmount = int.Parse((string)craftableResourceProperty.Value);
 																	break;
-																case ManufacturableResourceProperty.RemainingAmount:
-																	remainingAmount = int.Parse((string)manufacturableResourceProperty.Value);
+																case CraftableResourceProperty.RemainingAmount:
+																	remainingAmount = int.Parse((string)craftableResourceProperty.Value);
 																	break;
-																case ManufacturableResourceProperty.Enableable:
-																	enableable = bool.Parse((string)manufacturableResourceProperty.Value);
+																case CraftableResourceProperty.Enableable:
+																	enableable = bool.Parse((string)craftableResourceProperty.Value);
 																	break;
-																case ManufacturableResourceProperty.FuelAmounts:
-																	foreach (KeyValuePair<string, object> fuelAmountsProperty in (List<KeyValuePair<string, object>>)manufacturableResourceProperty.Value) {
+																case CraftableResourceProperty.FuelAmounts:
+																	foreach (KeyValuePair<string, object> fuelAmountsProperty in (List<KeyValuePair<string, object>>)craftableResourceProperty.Value) {
 																		fuelAmounts.Add(LoadResourceAmount((List<KeyValuePair<string, object>>)fuelAmountsProperty.Value));
 																	}
 																	break;
@@ -3790,7 +3790,7 @@ public class PersistenceManager : BaseManager {
 														}
 
 														persistenceResources.Add(
-															new PersistenceManufacturableResourceInstance(
+															new PersistenceCraftableResourceInstance(
 																resource,
 																priority,
 																creationMethod,
@@ -3805,8 +3805,8 @@ public class PersistenceManager : BaseManager {
 												}
 											}
 											break;
-										case ManufacturingObjectProperty.Fuels:
-											foreach (KeyValuePair<string, object> fuelsProperty in (List<KeyValuePair<string, object>>)manufacturingObjectProperty.Value) {
+										case CraftingObjectProperty.Fuels:
+											foreach (KeyValuePair<string, object> fuelsProperty in (List<KeyValuePair<string, object>>)craftingObjectProperty.Value) {
 												switch ((PriorityResourceProperty)Enum.Parse(typeof(PriorityResourceProperty), fuelsProperty.Key)) {
 													case PriorityResourceProperty.PriorityResource:
 
@@ -3831,13 +3831,13 @@ public class PersistenceManager : BaseManager {
 											}
 											break;
 										default:
-											Debug.LogError("Unknown manufacturing tile object property: " + manufacturingObjectProperty.Key + " " + manufacturingObjectProperty.Value);
+											Debug.LogError("Unknown crafting tile object property: " + craftingObjectProperty.Key + " " + craftingObjectProperty.Value);
 											break;
 									}
 								}
 								break;
 							case ObjectProperty.Farm:
-								foreach (KeyValuePair<string, object> farmProperty in (List<KeyValuePair<string, object>>)tileObjectProperty.Value) {
+								foreach (KeyValuePair<string, object> farmProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
 									switch ((FarmProperty)Enum.Parse(typeof(FarmProperty), farmProperty.Key)) {
 										case FarmProperty.GrowTimer:
 											growTimer = float.Parse((string)farmProperty.Value);
@@ -3849,7 +3849,7 @@ public class PersistenceManager : BaseManager {
 								}
 								break;
 							case ObjectProperty.SleepSpot:
-								foreach (KeyValuePair<string, object> sleepSpotProperty in (List<KeyValuePair<string, object>>)tileObjectProperty.Value) {
+								foreach (KeyValuePair<string, object> sleepSpotProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
 									switch ((SleepSpotProperty)Enum.Parse(typeof(SleepSpotProperty), sleepSpotProperty.Key)) {
 										case SleepSpotProperty.OccupyingColonistName:
 											occupyingColonistName = (string)sleepSpotProperty.Value;
@@ -3861,7 +3861,7 @@ public class PersistenceManager : BaseManager {
 								}
 								break;
 							default:
-								Debug.LogError("Unknown tile object property: " + tileObjectProperty.Key + " " + tileObjectProperty.Value);
+								Debug.LogError("Unknown tile object property: " + objectProperty.Key + " " + objectProperty.Value);
 								break;
 						}
 					}
@@ -3895,21 +3895,21 @@ public class PersistenceManager : BaseManager {
 		foreach (PersistenceObject persistenceObject in persistenceObjects) {
 			TileManager.Tile zeroPointTile = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value);
 
-			ResourceManager.ObjectPrefab tileObjectPrefab = GameManager.resourceM.GetObjectPrefabByEnum(persistenceObject.type.Value);
-			ResourceManager.ObjectInstance tileObjectInstance = GameManager.resourceM.CreateTileObjectInstance(
-				tileObjectPrefab,
-				tileObjectPrefab.GetVariationFromString(persistenceObject.variation),
+			ResourceManager.ObjectPrefab objectPrefab = GameManager.resourceM.GetObjectPrefabByEnum(persistenceObject.type.Value);
+			ResourceManager.ObjectInstance objectInstance = GameManager.resourceM.CreateObjectInstance(
+				objectPrefab,
+				objectPrefab.GetVariationFromString(persistenceObject.variation),
 				zeroPointTile,
 				persistenceObject.rotationIndex.Value,
 				true
 			);
-			tileObjectInstance.integrity = persistenceObject.integrity.Value;
-			tileObjectInstance.SetActive(persistenceObject.active.Value);
+			objectInstance.integrity = persistenceObject.integrity.Value;
+			objectInstance.SetActive(persistenceObject.active.Value);
 
-			switch (tileObjectPrefab.instanceType) {
+			switch (objectPrefab.instanceType) {
 				case ResourceManager.ObjectInstanceType.Container:
 				case ResourceManager.ObjectInstanceType.TradingPost:
-					ResourceManager.Container container = (ResourceManager.Container)tileObjectInstance;
+					ResourceManager.Container container = (ResourceManager.Container)objectInstance;
 					container.GetInventory().maxWeight = persistenceObject.persistenceInventory.maxWeight.Value;
 					container.GetInventory().maxVolume = persistenceObject.persistenceInventory.maxVolume.Value;
 					foreach (ResourceManager.ResourceAmount resourceAmount in persistenceObject.persistenceInventory.resources) {
@@ -3918,20 +3918,20 @@ public class PersistenceManager : BaseManager {
 					// TODO (maybe already done?) Reserved resources must be set after colonists are loaded
 					break;
 				case ResourceManager.ObjectInstanceType.Farm:
-					ResourceManager.Farm farm = (ResourceManager.Farm)tileObjectInstance;
+					ResourceManager.Farm farm = (ResourceManager.Farm)objectInstance;
 					farm.growTimer = persistenceObject.growTimer.Value;
 					break;
-				case ResourceManager.ObjectInstanceType.ManufacturingObject:
-					ResourceManager.ManufacturingObject manufacturingTileObject = (ResourceManager.ManufacturingObject)tileObjectInstance;
-					manufacturingTileObject.SetActive(false); // Gets set to proper state after loading jobBacklog, this prevents it from creating a CreateResource job before then
-					foreach (PersistenceManufacturableResourceInstance persistenceResource in persistenceObject.persistenceResources) {
-						manufacturingTileObject.resources.Add(
-							new ResourceManager.ManufacturableResourceInstance(
+				case ResourceManager.ObjectInstanceType.CraftingObject:
+					ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)objectInstance;
+					craftingObject.SetActive(false); // Gets set to proper state after loading jobBacklog, this prevents it from creating a CreateResource job before then
+					foreach (PersistenceCraftableResourceInstance persistenceResource in persistenceObject.persistenceResources) {
+						craftingObject.resources.Add(
+							new ResourceManager.CraftableResourceInstance(
 								persistenceResource.resource,
 								persistenceResource.priority.Value,
 								persistenceResource.creationMethod.Value,
 								persistenceResource.targetAmount.Value,
-								manufacturingTileObject,
+								craftingObject,
 								persistenceResource.remainingAmount
 							) {
 								enableable = persistenceResource.enableable.Value,
@@ -3939,18 +3939,18 @@ public class PersistenceManager : BaseManager {
 							}
 						);
 					}
-					manufacturingTileObject.fuels = persistenceObject.fuels;
+					craftingObject.fuels = persistenceObject.fuels;
 					break;
 				case ResourceManager.ObjectInstanceType.SleepSpot:
 					// Occupying colonist must be set after colonists are loaded
 					break;
 			}
 
-			zeroPointTile.SetTileObject(tileObjectInstance);
-			tileObjectInstance.obj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-			tileObjectInstance.FinishCreation();
-			if (tileObjectInstance.prefab.canRotate) {
-				tileObjectInstance.obj.GetComponent<SpriteRenderer>().sprite = tileObjectInstance.prefab.GetBitmaskSpritesForVariation(tileObjectInstance.variation)[tileObjectInstance.rotationIndex];
+			zeroPointTile.SetObject(objectInstance);
+			objectInstance.obj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+			objectInstance.FinishCreation();
+			if (objectInstance.prefab.canRotate) {
+				objectInstance.obj.GetComponent<SpriteRenderer>().sprite = objectInstance.prefab.GetBitmaskSpritesForVariation(objectInstance.variation)[objectInstance.rotationIndex];
 			}
 		}
 	}

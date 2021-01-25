@@ -52,8 +52,8 @@ public class ResourceManager : BaseManager {
 		foreach (Farm farm in farms) {
 			farm.Update();
 		}
-		foreach (ManufacturingObject manufacturingObject in manufacturingObjectInstances) {
-			manufacturingObject.Update();
+		foreach (CraftingObject craftingObject in craftingObjectInstances) {
+			craftingObject.Update();
 		}
 	}
 
@@ -72,7 +72,7 @@ public class ResourceManager : BaseManager {
 		Price,
 		Food,
 		Fuel,
-		Manufacturing,
+		Crafting,
 		Clothing
 	}
 
@@ -84,10 +84,10 @@ public class ResourceManager : BaseManager {
 		FuelEnergy
 	}
 
-	public enum ResourceManufacturingPropertyEnum {
+	public enum ResourceCraftingPropertyEnum {
 		Objects,
-		ManufacturingEnergy,
-		ManufacturingTime,
+		CraftingEnergy,
+		CraftingTime,
 		Resources
 	}
 
@@ -132,7 +132,7 @@ public class ResourceManager : BaseManager {
 
 	public enum ResourceClassEnum {
 		Food,
-		Manufacturable,
+		Craftable,
 		Fuel,
 		Clothing,
 		Bag
@@ -144,7 +144,7 @@ public class ResourceManager : BaseManager {
 
 	public void CreateResources() {
 
-		Dictionary<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>> manufacturingResourcesTemp = new Dictionary<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>>();
+		Dictionary<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>> craftingResourcesTemp = new Dictionary<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>>();
 
 		List<KeyValuePair<string, object>> resourceGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resources").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> resourceGroupProperty in resourceGroupProperties) {
@@ -176,11 +176,11 @@ public class ResourceManager : BaseManager {
 											// Fuel
 											int? fuelEnergy = 0;
 
-											// Manufacturing
-											Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> manufacturingObjects = new Dictionary<ObjectSubGroupEnum, List<ObjectEnum>>();
-											int? manufacturingEnergy = 0;
-											int? manufacturingTime = 0;
-											// manufacturingResources -> manufacturingResourcesTemp
+											// Crafting
+											Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> craftingObjects = new Dictionary<ObjectSubGroupEnum, List<ObjectEnum>>();
+											int? craftingEnergy = 0;
+											int? craftingTime = 0;
+											// craftingResources -> craftingResourcesTemp
 
 											// Clothing
 											HumanManager.Human.Appearance? clothingAppearance = null;
@@ -234,42 +234,42 @@ public class ResourceManager : BaseManager {
 															}
 														}
 														break;
-													case ResourcePropertyEnum.Manufacturing:
-														foreach (KeyValuePair<string, object> manufacturingProperty in (List<KeyValuePair<string, object>>)resourceSubProperty.Value) {
-															switch ((ResourceManufacturingPropertyEnum)Enum.Parse(typeof(ResourceManufacturingPropertyEnum), manufacturingProperty.Key)) {
-																case ResourceManufacturingPropertyEnum.Objects:
-																	foreach (string objectSubGroupString in ((string)manufacturingProperty.Value).Split(';')) {
+													case ResourcePropertyEnum.Crafting:
+														foreach (KeyValuePair<string, object> craftingProperty in (List<KeyValuePair<string, object>>)resourceSubProperty.Value) {
+															switch ((ResourceCraftingPropertyEnum)Enum.Parse(typeof(ResourceCraftingPropertyEnum), craftingProperty.Key)) {
+																case ResourceCraftingPropertyEnum.Objects:
+																	foreach (string objectSubGroupString in ((string)craftingProperty.Value).Split(';')) {
 																		ObjectSubGroupEnum objectSubGroupEnum = (ObjectSubGroupEnum)Enum.Parse(typeof(ObjectSubGroupEnum), objectSubGroupString.Split(':')[0]);
-																		manufacturingObjects.Add(
+																		craftingObjects.Add(
 																			objectSubGroupEnum,
 																			null
 																		);
 																		if (objectSubGroupString.Split(':').Count() > 1) {
-																			manufacturingObjects[objectSubGroupEnum] = new List<ObjectEnum>();
+																			craftingObjects[objectSubGroupEnum] = new List<ObjectEnum>();
 																			foreach (string objectString in objectSubGroupString.Split(':')[1].Split(',')) {
-																				manufacturingObjects[objectSubGroupEnum].Add((ObjectEnum)Enum.Parse(typeof(ObjectEnum), objectString));
+																				craftingObjects[objectSubGroupEnum].Add((ObjectEnum)Enum.Parse(typeof(ObjectEnum), objectString));
 																			}
 																		}
 																	}
 																	break;
-																case ResourceManufacturingPropertyEnum.ManufacturingEnergy:
-																	manufacturingEnergy = int.Parse((string)manufacturingProperty.Value);
+																case ResourceCraftingPropertyEnum.CraftingEnergy:
+																	craftingEnergy = int.Parse((string)craftingProperty.Value);
 																	break;
-																case ResourceManufacturingPropertyEnum.ManufacturingTime:
-																	manufacturingTime = int.Parse((string)manufacturingProperty.Value);
+																case ResourceCraftingPropertyEnum.CraftingTime:
+																	craftingTime = int.Parse((string)craftingProperty.Value);
 																	break;
-																case ResourceManufacturingPropertyEnum.Resources:
-																	manufacturingResourcesTemp.Add(type.Value, new List<KeyValuePair<ResourceEnum, float>>());
-																	foreach (string resourceAmountString in ((string)manufacturingProperty.Value).Split(',')) {
+																case ResourceCraftingPropertyEnum.Resources:
+																	craftingResourcesTemp.Add(type.Value, new List<KeyValuePair<ResourceEnum, float>>());
+																	foreach (string resourceAmountString in ((string)craftingProperty.Value).Split(',')) {
 																		float amount = float.Parse(resourceAmountString.Split(':')[1]);
-																		manufacturingResourcesTemp[type.Value].Add(new KeyValuePair<ResourceEnum, float>(
+																		craftingResourcesTemp[type.Value].Add(new KeyValuePair<ResourceEnum, float>(
 																			(ResourceEnum)Enum.Parse(typeof(ResourceEnum), resourceAmountString.Split(':')[0]),
 																			amount
 																		));
 																	}
 																	break;
 																default:
-																	Debug.LogError("Unknown resource manufacturing property: " + manufacturingProperty.Key + " " + manufacturingProperty.Value);
+																	Debug.LogError("Unknown resource crafting property: " + craftingProperty.Key + " " + craftingProperty.Value);
 																	break;
 															}
 														}
@@ -321,9 +321,9 @@ public class ResourceManager : BaseManager {
 													volume.Value,
 													price.Value,
 													fuelEnergy.Value,
-													manufacturingObjects,
-													manufacturingEnergy.Value,
-													manufacturingTime.Value,
+													craftingObjects,
+													craftingEnergy.Value,
+													craftingTime.Value,
 													foodNutrition.Value
 												);
 												resources.Add(food);
@@ -349,9 +349,9 @@ public class ResourceManager : BaseManager {
 														volume.Value,
 														price.Value,
 														fuelEnergy.Value,
-														manufacturingObjects,
-														manufacturingEnergy.Value,
-														manufacturingTime.Value,
+														craftingObjects,
+														craftingEnergy.Value,
+														craftingTime.Value,
 														clothingPrefab,
 														colour
 													);
@@ -367,9 +367,9 @@ public class ResourceManager : BaseManager {
 													volume.Value,
 													price.Value,
 													fuelEnergy.Value,
-													manufacturingObjects,
-													manufacturingEnergy.Value,
-													manufacturingTime.Value
+													craftingObjects,
+													craftingEnergy.Value,
+													craftingTime.Value
 												);
 												resources.Add(resource);
 												this.resources.Add(type.Value, resource);
@@ -414,27 +414,27 @@ public class ResourceManager : BaseManager {
 			}
 		}
 
-		// Set Manufacturing Resources
-		foreach (KeyValuePair<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>> manufacturingResourceToResourceAmount in manufacturingResourcesTemp) {
+		// Set Crafting Resources
+		foreach (KeyValuePair<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>> craftingResourceToResourceAmount in craftingResourcesTemp) {
 			List<Resource> resourcesToApplyTo = new List<Resource>();
-			Resource manufacturableResource = GetResourceByEnum(manufacturingResourceToResourceAmount.Key);
-			if (manufacturableResource.classes.Contains(ResourceClassEnum.Clothing)) {
-				Clothing manufacturableClothing = (Clothing)manufacturableResource;
-				foreach (Resource resource in GetResourcesInClass(ResourceClassEnum.Clothing).Select(r => (Clothing)r).Where(c => c.prefab.clothingType == manufacturableClothing.prefab.clothingType)) {
+			Resource craftableResource = GetResourceByEnum(craftingResourceToResourceAmount.Key);
+			if (craftableResource.classes.Contains(ResourceClassEnum.Clothing)) {
+				Clothing craftableClothing = (Clothing)craftableResource;
+				foreach (Resource resource in GetResourcesInClass(ResourceClassEnum.Clothing).Select(r => (Clothing)r).Where(c => c.prefab.clothingType == craftableClothing.prefab.clothingType)) {
 					resourcesToApplyTo.Add(resource);
 				}
 			} else {
-				resourcesToApplyTo.Add(manufacturableResource);
+				resourcesToApplyTo.Add(craftableResource);
 			}
 			foreach (Resource resource in resourcesToApplyTo) {
-				foreach (KeyValuePair<ResourceEnum, float> resourceToAmount in manufacturingResourceToResourceAmount.Value) {
+				foreach (KeyValuePair<ResourceEnum, float> resourceToAmount in craftingResourceToResourceAmount.Value) {
 					float amount = resourceToAmount.Value;
 					if (amount < 1 && amount > 0) {
 						resource.amountCreated = Mathf.RoundToInt(1 / amount);
-						resource.manufacturingResources.Add(new ResourceAmount(GetResourceByEnum(resourceToAmount.Key), 1));
+						resource.craftingResources.Add(new ResourceAmount(GetResourceByEnum(resourceToAmount.Key), 1));
 					} else {
 						resource.amountCreated = 1;
-						resource.manufacturingResources.Add(new ResourceAmount(GetResourceByEnum(resourceToAmount.Key), Mathf.RoundToInt(resourceToAmount.Value)));
+						resource.craftingResources.Add(new ResourceAmount(GetResourceByEnum(resourceToAmount.Key), Mathf.RoundToInt(resourceToAmount.Value)));
 					}
 				}
 			}
@@ -503,11 +503,11 @@ public class ResourceManager : BaseManager {
 		// Fuel
 		public readonly int fuelEnergy;
 
-		// Manufacturing
-		public readonly Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> manufacturingObjects;
-		public readonly int manufacturingEnergy;
-		public readonly int manufacturingTime;
-		public readonly List<ResourceAmount> manufacturingResources = new List<ResourceAmount>(); // Filled in CreateResources() after all resources created
+		// Crafting
+		public readonly Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> craftingObjects;
+		public readonly int craftingEnergy;
+		public readonly int craftingTime;
+		public readonly List<ResourceAmount> craftingResources = new List<ResourceAmount>(); // Filled in CreateResources() after all resources created
 		public int amountCreated = 1; // Can't be readonly
 
 		// Desired Amount
@@ -532,9 +532,9 @@ public class ResourceManager : BaseManager {
 			int volume,
 			int price,
 			int fuelEnergy,
-			Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> manufacturingObjects,
-			int manufacturingEnergy,
-			int manufacturingTime
+			Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> craftingObjects,
+			int craftingEnergy,
+			int craftingTime
 		) {
 			this.type = type;
 			name = UIManager.SplitByCapitals(type.ToString());
@@ -553,10 +553,10 @@ public class ResourceManager : BaseManager {
 			// Fuel
 			this.fuelEnergy = fuelEnergy;
 
-			// Manufacturing
-			this.manufacturingObjects = manufacturingObjects;
-			this.manufacturingEnergy = manufacturingEnergy;
-			this.manufacturingTime = manufacturingTime;
+			// Crafting
+			this.craftingObjects = craftingObjects;
+			this.craftingEnergy = craftingEnergy;
+			this.craftingTime = craftingTime;
 		}
 
 		public int GetDesiredAmount() {
@@ -569,7 +569,7 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void UpdateDesiredAmountText() {
-			//if (GameManager.uiM.selectedManufacturingObject != null && GameManager.uiM.selectedManufacturingObject.createResource == this) {
+			//if (GameManager.uiM.selectedCraftingObject != null && GameManager.uiM.selectedCraftingObject.createResource == this) {
 			//	GameManager.uiM.selectedMTOPanel.obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>().text = desiredAmount.ToString();
 			//}
 			resourceListElement.desiredAmountInput.text = desiredAmount.ToString();
@@ -647,12 +647,12 @@ public class ResourceManager : BaseManager {
 			return availableAmount;
 		}
 
-		public bool CanBeManufacturedBy(ObjectPrefab prefab) {
-			if (manufacturingObjects.ContainsKey(prefab.subGroupType)) {
-				if (manufacturingObjects[prefab.subGroupType] == null) {
+		public bool CanBeCraftedBy(ObjectPrefab prefab) {
+			if (craftingObjects.ContainsKey(prefab.subGroupType)) {
+				if (craftingObjects[prefab.subGroupType] == null) {
 					return true;
 				} else {
-					if (manufacturingObjects[prefab.subGroupType].Contains(prefab.type)) {
+					if (craftingObjects[prefab.subGroupType].Contains(prefab.type)) {
 						return true;
 					}
 				}
@@ -673,17 +673,17 @@ public class ResourceManager : BaseManager {
 		return resources[resourceEnum];
 	}
 
-	public List<Resource> GetResourcesByManufacturingObject(ManufacturingObject manufacturingObject) {
+	public List<Resource> GetResourcesByCraftingObject(CraftingObject craftingObject) {
 		List<Resource> resources = new List<Resource>();
-		foreach (Resource resource in GetResourcesInClass(ResourceClassEnum.Manufacturable)) {
-			foreach (ObjectSubGroupEnum manufacturingObjectSubGroupEnum in resource.manufacturingObjects.Keys) {
-				if (manufacturingObject.prefab.subGroupType == manufacturingObjectSubGroupEnum) {
-					if (resource.manufacturingObjects[manufacturingObjectSubGroupEnum] == null) {
+		foreach (Resource resource in GetResourcesInClass(ResourceClassEnum.Craftable)) {
+			foreach (ObjectSubGroupEnum craftingObjectSubGroupEnum in resource.craftingObjects.Keys) {
+				if (craftingObject.prefab.subGroupType == craftingObjectSubGroupEnum) {
+					if (resource.craftingObjects[craftingObjectSubGroupEnum] == null) {
 						resources.Add(resource);
 						break;
 					} else {
-						foreach (ObjectEnum manufacturingObjectEnum in resource.manufacturingObjects[manufacturingObjectSubGroupEnum]) {
-							if (manufacturingObjectEnum == manufacturingObject.prefab.type) {
+						foreach (ObjectEnum craftingObjectEnum in resource.craftingObjects[craftingObjectSubGroupEnum]) {
+							if (craftingObjectEnum == craftingObject.prefab.type) {
 								resources.Add(resource);
 								break;
 							}
@@ -707,9 +707,9 @@ public class ResourceManager : BaseManager {
 			int volume,
 			int price,
 			int fuelEnergy,
-			Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> manufacturingObjects,
-			int manufacturingEnergy,
-			int manufacturingTime,
+			Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> craftingObjects,
+			int craftingEnergy,
+			int craftingTime,
 			int nutrition
 		) : base(
 			type,
@@ -719,9 +719,9 @@ public class ResourceManager : BaseManager {
 			volume,
 			price,
 			fuelEnergy,
-			manufacturingObjects,
-			manufacturingEnergy,
-			manufacturingTime
+			craftingObjects,
+			craftingEnergy,
+			craftingTime
 		) {
 			this.nutrition = nutrition;
 		}
@@ -785,9 +785,9 @@ public class ResourceManager : BaseManager {
 			int volume,
 			int price,
 			int fuelEnergy,
-			Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> manufacturingObjects,
-			int manufacturingEnergy,
-			int manufacturingTime,
+			Dictionary<ObjectSubGroupEnum, List<ObjectEnum>> craftingObjects,
+			int craftingEnergy,
+			int craftingTime,
 			ClothingPrefab prefab,
 			string colour
 		) : base(
@@ -798,9 +798,9 @@ public class ResourceManager : BaseManager {
 			volume,
 			price,
 			fuelEnergy,
-			manufacturingObjects,
-			manufacturingEnergy,
-			manufacturingTime
+			craftingObjects,
+			craftingEnergy,
+			craftingTime
 		) {
 			this.prefab = prefab;
 			this.colour = colour;
@@ -919,8 +919,8 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public JobManager.Job CreateResource(ManufacturableResourceInstance resource, ManufacturingObject manufacturingTileObject) {
-		JobManager.Job job = new JobManager.Job(manufacturingTileObject.tile, GetObjectPrefabByEnum(ObjectEnum.CreateResource), null, 0);
+	public JobManager.Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
+		JobManager.Job job = new JobManager.Job(craftingObject.tile, GetObjectPrefabByEnum(ObjectEnum.CreateResource), null, 0);
 		job.SetCreateResourceData(resource);
 		GameManager.jobM.CreateJob(job);
 		return job;
@@ -1321,7 +1321,7 @@ public class ResourceManager : BaseManager {
 		TradingPost,
 		SleepSpot,
 		LightSource,
-		ManufacturingObject,
+		CraftingObject,
 		Farm
 	}
 
@@ -1381,7 +1381,7 @@ public class ResourceManager : BaseManager {
 																	// Sleep Spot
 																	float? restComfortAmount = null;
 
-																	// Manufacturing Object
+																	// Crafting Object
 																	bool? usesFuel = null;
 
 																	// Farm
@@ -1581,7 +1581,7 @@ public class ResourceManager : BaseManager {
 																		}
 																	}
 
-																	if (instanceType != ObjectInstanceType.ManufacturingObject) {
+																	if (instanceType != ObjectInstanceType.CraftingObject) {
 																		if (!usesFuel.HasValue) {
 																			usesFuel = false;
 																		}
@@ -1724,7 +1724,7 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public ObjectPrefabSubGroup GetTileObjectPrefabSubGroupByEnum(ObjectSubGroupEnum objectSubGroupEnum) {
+	public ObjectPrefabSubGroup GetObjectPrefabSubGroupByEnum(ObjectSubGroupEnum objectSubGroupEnum) {
 		return objectPrefabSubGroups[objectSubGroupEnum];
 	}
 
@@ -1807,7 +1807,7 @@ public class ResourceManager : BaseManager {
 		// Sleep Spot
 		public readonly float restComfortAmount;
 
-		// Manufacturing Tile Object
+		// Crafting Object
 		public readonly bool usesFuel;
 
 		// Farm
@@ -1906,7 +1906,7 @@ public class ResourceManager : BaseManager {
 			// Sleep Spot
 			this.restComfortAmount = restComfortAmount;
 
-			// Manufacturing Object
+			// Crafting Object
 			this.usesFuel = usesFuel;
 
 			// Farm
@@ -2099,7 +2099,7 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public void RemoveTileObjectInstance(ObjectInstance instance) {
+	public void RemoveObjectInstance(ObjectInstance instance) {
 		switch (instance.prefab.instanceType) {
 			case ObjectInstanceType.Normal:
 				break;
@@ -2133,14 +2133,14 @@ public class ResourceManager : BaseManager {
 
 				lightSources.Remove(lightSource);
 				break;
-			case ObjectInstanceType.ManufacturingObject:
-				ManufacturingObject manufacturingTileObject = (ManufacturingObject)instance;
+			case ObjectInstanceType.CraftingObject:
+				CraftingObject craftingObject = (CraftingObject)instance;
 
-				if (GameManager.uiM.selectedManufacturingObject == manufacturingTileObject) {
-					GameManager.uiM.SetSelectedManufacturingObject(null);
+				if (GameManager.uiM.selectedCraftingObject == craftingObject) {
+					GameManager.uiM.SetSelectedCraftingObject(null);
 				}
 
-				manufacturingObjectInstances.Remove(manufacturingTileObject);
+				craftingObjectInstances.Remove(craftingObject);
 				break;
 			case ObjectInstanceType.Farm:
 				Farm farm = (Farm)instance;
@@ -2170,7 +2170,7 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public ObjectInstance CreateTileObjectInstance(ObjectPrefab prefab, Variation variation, TileManager.Tile tile, int rotationIndex, bool addToList) {
+	public ObjectInstance CreateObjectInstance(ObjectPrefab prefab, Variation variation, TileManager.Tile tile, int rotationIndex, bool addToList) {
 		ObjectInstance instance = null;
 		switch (prefab.instanceType) {
 			case ObjectInstanceType.Normal:
@@ -2192,9 +2192,9 @@ public class ResourceManager : BaseManager {
 				instance = new LightSource(prefab, variation, tile, rotationIndex);
 				lightSources.Add((LightSource)instance);
 				break;
-			case ObjectInstanceType.ManufacturingObject:
-				instance = new ManufacturingObject(prefab, variation, tile, rotationIndex);
-				manufacturingObjectInstances.Add((ManufacturingObject)instance);
+			case ObjectInstanceType.CraftingObject:
+				instance = new CraftingObject(prefab, variation, tile, rotationIndex);
+				craftingObjectInstances.Add((CraftingObject)instance);
 				break;
 			case ObjectInstanceType.Farm:
 				instance = new Farm(prefab, variation, tile);
@@ -2244,7 +2244,7 @@ public class ResourceManager : BaseManager {
 				TileManager.Tile additionalTile = zeroPointTile.map.GetTileFromPosition(zeroPointTile.obj.transform.position + (Vector3)multiTilePosition);
 				additionalTiles.Add(additionalTile);
 				if (additionalTile != zeroPointTile) {
-					additionalTile.SetTileObjectInstanceReference(this);
+					additionalTile.SetObjectInstanceReference(this);
 				}
 			}
 			if (additionalTiles.Count > 0 && !additionalTiles.Contains(tile)) {
@@ -2421,7 +2421,7 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public List<ManufacturingObject> manufacturingObjectInstances = new List<ManufacturingObject>();
+	public List<CraftingObject> craftingObjectInstances = new List<CraftingObject>();
 
 	public class Priority {
 
@@ -2476,7 +2476,7 @@ public class ResourceManager : BaseManager {
 		ContinuousRun
 	}
 
-	public class ManufacturableResourceInstance {
+	public class CraftableResourceInstance {
 
 		public Resource resource;
 
@@ -2486,18 +2486,18 @@ public class ResourceManager : BaseManager {
 		private int targetAmount;
 		private int remainingAmount;
 
-		public ManufacturingObject manufacturingObject;
+		public CraftingObject craftingObject;
 
 		public bool enableable = false;
 		public List<ResourceAmount> fuelAmounts = new List<ResourceAmount>();
 		public JobManager.Job job = null;
 
-		public ManufacturableResourceInstance(
+		public CraftableResourceInstance(
 			Resource resource,
 			int priority,
 			CreationMethod creationMethod,
 			int targetAmount,
-			ManufacturingObject manufacturingObject,
+			CraftingObject craftingObject,
 			int? remainingAmount = null
 		) {
 			this.resource = resource;
@@ -2508,7 +2508,7 @@ public class ResourceManager : BaseManager {
 			this.targetAmount = targetAmount;
 			this.remainingAmount = remainingAmount == null ? targetAmount : remainingAmount.Value;
 			
-			this.manufacturingObject = manufacturingObject;
+			this.craftingObject = craftingObject;
 		}
 
 		public void UpdateTargetAmount(int targetAmount) {
@@ -2525,12 +2525,12 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public class ManufacturingObject : ObjectInstance {
+	public class CraftingObject : ObjectInstance {
 
-		public List<ManufacturableResourceInstance> resources = new List<ManufacturableResourceInstance>();
+		public List<CraftableResourceInstance> resources = new List<CraftableResourceInstance>();
 		public List<PriorityResourceInstance> fuels = new List<PriorityResourceInstance>();
 
-		public ManufacturingObject(ObjectPrefab prefab, Variation variation, TileManager.Tile tile, int rotationIndex) : base(prefab, variation, tile, rotationIndex) {
+		public CraftingObject(ObjectPrefab prefab, Variation variation, TileManager.Tile tile, int rotationIndex) : base(prefab, variation, tile, rotationIndex) {
 
 		}
 
@@ -2538,7 +2538,7 @@ public class ResourceManager : BaseManager {
 			base.Update();
 
 			if (active) {
-				foreach (ManufacturableResourceInstance resource in resources) {
+				foreach (CraftableResourceInstance resource in resources) {
 
 					if (resource.job != null) {
 						continue;
@@ -2546,7 +2546,7 @@ public class ResourceManager : BaseManager {
 
 					resource.enableable = true;
 
-					foreach (ResourceAmount resourceAmount in resource.resource.manufacturingResources) {
+					foreach (ResourceAmount resourceAmount in resource.resource.craftingResources) {
 						if (resourceAmount.resource.GetAvailableAmount() < resourceAmount.amount) {
 							resource.enableable = false;
 							break;
@@ -2556,23 +2556,23 @@ public class ResourceManager : BaseManager {
 						continue;
 					}
 
-					if (resource.resource.manufacturingEnergy != 0) {
-						int remainingManufacturingEnergy = resource.resource.manufacturingEnergy;
+					if (resource.resource.craftingEnergy != 0) {
+						int remainingCraftingEnergy = resource.resource.craftingEnergy;
 						foreach (PriorityResourceInstance fuel in fuels.OrderBy(f => f.priority.Get())) {
-							if ((fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy) >= remainingManufacturingEnergy) {
-								ResourceAmount fuelResourceAmount = new ResourceAmount(fuel.resource, Mathf.CeilToInt(remainingManufacturingEnergy / (float)fuel.resource.fuelEnergy));
+							if ((fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy) >= remainingCraftingEnergy) {
+								ResourceAmount fuelResourceAmount = new ResourceAmount(fuel.resource, Mathf.CeilToInt(remainingCraftingEnergy / (float)fuel.resource.fuelEnergy));
 								resource.fuelAmounts.Add(fuelResourceAmount);
-								remainingManufacturingEnergy = 0;
+								remainingCraftingEnergy = 0;
 							} else if (fuel.resource.GetAvailableAmount() > 0) {
 								ResourceAmount fuelResourceAmount = new ResourceAmount(fuel.resource, fuel.resource.GetAvailableAmount());
 								resource.fuelAmounts.Add(fuelResourceAmount);
-								remainingManufacturingEnergy -= fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy;
+								remainingCraftingEnergy -= fuel.resource.GetAvailableAmount() * fuel.resource.fuelEnergy;
 							}
-							if (remainingManufacturingEnergy <= 0) {
+							if (remainingCraftingEnergy <= 0) {
 								break;
 							}
 						}
-						if (remainingManufacturingEnergy > 0) {
+						if (remainingCraftingEnergy > 0) {
 							resource.enableable = false;
 							resource.fuelAmounts.Clear();
 							continue;
@@ -2600,7 +2600,7 @@ public class ResourceManager : BaseManager {
 			base.SetActive(active);
 
 			if (!active) {
-				foreach (ManufacturableResourceInstance resource in resources) {
+				foreach (CraftableResourceInstance resource in resources) {
 					if (resource.job != null) {
 						GameManager.jobM.CancelJob(resource.job);
 						resource.job = null;
@@ -2609,10 +2609,10 @@ public class ResourceManager : BaseManager {
 			}
 		}
 
-		public ManufacturableResourceInstance ToggleResource(Resource resource, int priority) {
-			ManufacturableResourceInstance existingResource = resources.Find(r => r.resource == resource);
+		public CraftableResourceInstance ToggleResource(Resource resource, int priority) {
+			CraftableResourceInstance existingResource = resources.Find(r => r.resource == resource);
 			if (existingResource == null) {
-				existingResource = new ManufacturableResourceInstance(resource, priority, CreationMethod.MaintainStock, 0, this);
+				existingResource = new CraftableResourceInstance(resource, priority, CreationMethod.MaintainStock, 0, this);
 				resources.Add(existingResource);
 			} else {
 				resources.Remove(existingResource);
@@ -2632,7 +2632,7 @@ public class ResourceManager : BaseManager {
 				fuels.Add(existingFuel);
 			} else {
 				fuels.Remove(existingFuel);
-				foreach (ManufacturableResourceInstance resource in resources) {
+				foreach (CraftableResourceInstance resource in resources) {
 					if (resource.fuelAmounts.Find(ra => ra.resource == fuel) != null) {
 						if (resource.job != null) {
 							GameManager.jobM.CancelJob(resource.job);
@@ -2645,7 +2645,7 @@ public class ResourceManager : BaseManager {
 			return existingFuel;
 		}
 
-		public ManufacturableResourceInstance GetManufacturableResourceFromResource(Resource resource) {
+		public CraftableResourceInstance GetCraftableResourceFromResource(Resource resource) {
 			return resources.Find(r => r.resource == resource);
 		}
 
@@ -3078,12 +3078,12 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public static readonly Dictionary<ResourceEnum, ResourceEnum> farmSeedReturnResource = new Dictionary<ResourceEnum, ResourceEnum>() {
+	public static readonly Dictionary<ResourceEnum, ResourceEnum> farmSeedToReturnResource = new Dictionary<ResourceEnum, ResourceEnum>() {
 		{ ResourceEnum.WheatSeed, ResourceEnum.Wheat },
 		{ ResourceEnum.Potato, ResourceEnum.Potato },
 		{ ResourceEnum.CottonSeed, ResourceEnum.Cotton }
 	};
-	public static readonly Dictionary<ResourceEnum, ObjectEnum> farmSeedsTileObject = new Dictionary<ResourceEnum, ObjectEnum>() {
+	public static readonly Dictionary<ResourceEnum, ObjectEnum> farmSeedToObject = new Dictionary<ResourceEnum, ObjectEnum>() {
 		{ ResourceEnum.WheatSeed, ObjectEnum.WheatFarm },
 		{ ResourceEnum.Potato, ObjectEnum.PotatoFarm },
 		{ ResourceEnum.CottonSeed, ObjectEnum.CottonFarm }
@@ -3169,7 +3169,7 @@ public class ResourceManager : BaseManager {
 		return filteredLocationNames[UnityEngine.Random.Range(0, filteredLocationNames.Count)];
 	}
 
-	public int BitSumObjects(List<ObjectEnum> compareTileObjectTypes, List<TileManager.Tile> tileSurroundingTiles) {
+	public int BitSumObjects(List<ObjectEnum> compareObjectTypes, List<TileManager.Tile> tileSurroundingTiles) {
 		List<int> layers = new List<int>();
 		foreach (TileManager.Tile tile in tileSurroundingTiles) {
 			if (tile != null) {
@@ -3187,11 +3187,11 @@ public class ResourceManager : BaseManager {
 			List<int> layerSumTiles = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0 };
 			for (int i = 0; i < tileSurroundingTiles.Count; i++) {
 				if (tileSurroundingTiles[i] != null && tileSurroundingTiles[i].GetObjectInstanceAtLayer(layer) != null) {
-					if (compareTileObjectTypes.Contains(tileSurroundingTiles[i].GetObjectInstanceAtLayer(layer).prefab.type)) {
+					if (compareObjectTypes.Contains(tileSurroundingTiles[i].GetObjectInstanceAtLayer(layer).prefab.type)) {
 						bool ignoreTile = false;
-						if (compareTileObjectTypes.Contains(tileSurroundingTiles[i].GetObjectInstanceAtLayer(layer).prefab.type) && TileManager.Map.diagonalCheckMap.ContainsKey(i)) {
+						if (compareObjectTypes.Contains(tileSurroundingTiles[i].GetObjectInstanceAtLayer(layer).prefab.type) && TileManager.Map.diagonalCheckMap.ContainsKey(i)) {
 							List<TileManager.Tile> surroundingHorizontalTiles = new List<TileManager.Tile>() { tileSurroundingTiles[TileManager.Map.diagonalCheckMap[i][0]], tileSurroundingTiles[TileManager.Map.diagonalCheckMap[i][1]] };
-							List<TileManager.Tile> similarTiles = surroundingHorizontalTiles.Where(tile => tile != null && tile.GetObjectInstanceAtLayer(layer) != null && compareTileObjectTypes.Contains(tile.GetObjectInstanceAtLayer(layer).prefab.type)).ToList();
+							List<TileManager.Tile> similarTiles = surroundingHorizontalTiles.Where(tile => tile != null && tile.GetObjectInstanceAtLayer(layer) != null && compareObjectTypes.Contains(tile.GetObjectInstanceAtLayer(layer).prefab.type)).ToList();
 							if (similarTiles.Count < 2) {
 								ignoreTile = true;
 							}
@@ -3201,14 +3201,14 @@ public class ResourceManager : BaseManager {
 						}
 					}
 				} else {
-					if (tileSurroundingTiles.Find(tile => tile != null && tileSurroundingTiles.IndexOf(tile) <= 3 && tile.GetObjectInstanceAtLayer(layer) != null && !compareTileObjectTypes.Contains(tile.GetObjectInstanceAtLayer(layer).prefab.type)) == null) {
+					if (tileSurroundingTiles.Find(tile => tile != null && tileSurroundingTiles.IndexOf(tile) <= 3 && tile.GetObjectInstanceAtLayer(layer) != null && !compareObjectTypes.Contains(tile.GetObjectInstanceAtLayer(layer).prefab.type)) == null) {
 						layerSumTiles[i] = 1;
 					} else {
 						if (i <= 3) {
 							layerSumTiles[i] = 1;
 						} else {
 							List<TileManager.Tile> surroundingHorizontalTiles = new List<TileManager.Tile>() { tileSurroundingTiles[TileManager.Map.diagonalCheckMap[i][0]], tileSurroundingTiles[TileManager.Map.diagonalCheckMap[i][1]] };
-							if (surroundingHorizontalTiles.Find(tile => tile != null && tile.GetObjectInstanceAtLayer(layer) != null && !compareTileObjectTypes.Contains(tile.GetObjectInstanceAtLayer(layer).prefab.type)) == null) {
+							if (surroundingHorizontalTiles.Find(tile => tile != null && tile.GetObjectInstanceAtLayer(layer) != null && !compareObjectTypes.Contains(tile.GetObjectInstanceAtLayer(layer).prefab.type)) == null) {
 								layerSumTiles[i] = 1;
 							}
 						}
@@ -3221,7 +3221,7 @@ public class ResourceManager : BaseManager {
 		List<bool> sumTiles = new List<bool>() { false, false, false, false, false, false, false, false };
 
 		foreach (KeyValuePair<int, List<int>> layerSumTiles in layersSumTiles) {
-			foreach (ObjectEnum objectEnum in compareTileObjectTypes) {
+			foreach (ObjectEnum objectEnum in compareObjectTypes) {
 				ObjectPrefab objectPrefab = GetObjectPrefabByEnum(objectEnum);
 				if (objectPrefab.layer == layerSumTiles.Key) {
 					foreach (TileManager.Tile tile in tileSurroundingTiles) {
@@ -3253,19 +3253,19 @@ public class ResourceManager : BaseManager {
 		ObjectInstance objectInstance, 
 		bool includeDiagonalSurroundingTiles, 
 		bool customBitSumInputs, 
-		bool compareEquivalentTileObjects, 
-		List<ObjectEnum> customCompareTileObjectTypes
+		bool compareEquivalentObjects, 
+		List<ObjectEnum> customCompareObjectTypes
 	) {
 		List<TileManager.Tile> surroundingTilesToUse = includeDiagonalSurroundingTiles ? objectInstance.tile.surroundingTiles : objectInstance.tile.horizontalSurroundingTiles;
 
 		int sum = 0;
 		if (customBitSumInputs) {
 			sum = BitSumObjects(
-				customCompareTileObjectTypes,
+				customCompareObjectTypes,
 				surroundingTilesToUse
 			);
 		} else {
-			if (compareEquivalentTileObjects) {
+			if (compareEquivalentObjects) {
 				if (objectInstance.prefab.subGroupType == ObjectSubGroupEnum.Walls) {
 					sum = BitSumObjects(
 						new List<ObjectEnum>() { objectInstance.prefab.type },
@@ -3308,8 +3308,8 @@ public class ResourceManager : BaseManager {
 							objectInstance,
 							true, // includeDiagonalSurroundingTiles -- default: true
 							false, // customBitSumInput -- default: false
-							true, // compareEquivalentTileObjects -- default: false
-							null // customCompareTileObjectTypes -- default: null
+							true, // compareEquivalentObjects -- default: false
+							null // customCompareObjectTypes -- default: null
 						);
 					} else {
 						if (objectInstance.prefab.GetBitmaskSpritesForVariation(objectInstance.variation).Count > 0) {
