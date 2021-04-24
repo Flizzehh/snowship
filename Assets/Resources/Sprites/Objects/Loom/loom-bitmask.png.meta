@@ -62,8 +62,17 @@ TextureImporter:
   - first:
       213: 21300038
     second: loom-bitmask_3
+  - first:
+      213: -8620894480684847495
+    second: loom-bitmask_0
+  - first:
+      213: -2646524888460845883
+    second: loom-bitmask_1
+  - first:
+      213: -14462972354407055
+    second: loom-bitmask_2
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -83,6 +92,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -117,6 +127,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -148,8 +160,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ac47e4d9d693b914c9074591349316b3
-      internalID: 21300032
+      spriteID: 97e67a0352e6c5880800000000000000
+      internalID: -8620894480684847495
       vertices: []
       indices: 
       edges: []
@@ -158,7 +170,7 @@ TextureImporter:
       name: loom-bitmask_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 0
         width: 32
         height: 32
@@ -169,8 +181,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9a4cbd509ecfc474b98d2c6d212feac2
-      internalID: 21300034
+      spriteID: 5cc9f06c2a7a54bd0800000000000000
+      internalID: -2646524888460845883
       vertices: []
       indices: 
       edges: []
@@ -179,7 +191,7 @@ TextureImporter:
       name: loom-bitmask_2
       rect:
         serializedVersion: 2
-        x: 66
+        x: 64
         y: 0
         width: 32
         height: 32
@@ -190,8 +202,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0d27dd1df202704296a1220fe1f20da
-      internalID: 21300036
+      spriteID: 1755b66d00e9ccff0800000000000000
+      internalID: -14462972354407055
       vertices: []
       indices: 
       edges: []
@@ -200,7 +212,7 @@ TextureImporter:
       name: loom-bitmask_3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 96
         y: 0
         width: 32
         height: 32
@@ -211,7 +223,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7255c2563c3daa2419b83c1654cd27e0
+      spriteID: 64305410000000000800000000000000
       internalID: 21300038
       vertices: []
       indices: 
