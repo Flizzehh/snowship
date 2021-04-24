@@ -4591,12 +4591,15 @@ public class UIManager : BaseManager {
 			continuousRunButton = panel.transform.Find("CreationMethod-Panel/CreationMethodsList-Panel/ContinuousRun-Button");
 
 			singleRunButton.GetComponent<Button>().onClick.AddListener(delegate {
+				resource.ResetAmounts();
 				SetCreationMethod(ResourceManager.CreationMethod.SingleRun);
 			});
 			maintainStockButton.GetComponent<Button>().onClick.AddListener(delegate {
+				resource.ResetAmounts();
 				SetCreationMethod(ResourceManager.CreationMethod.MaintainStock);
 			});
 			continuousRunButton.GetComponent<Button>().onClick.AddListener(delegate {
+				resource.ResetAmounts();
 				SetCreationMethod(ResourceManager.CreationMethod.ContinuousRun);
 			});
 
@@ -4606,7 +4609,20 @@ public class UIManager : BaseManager {
 
 			createAmountInputField.onEndEdit.AddListener(delegate {
 				if (int.TryParse(createAmountInputField.text, out int targetAmount)) {
-					resource.UpdateTargetAmount(targetAmount);
+					switch (resource.creationMethod) {
+						case ResourceManager.CreationMethod.SingleRun:
+							resource.UpdateTargetAmount(targetAmount);
+							break;
+						case ResourceManager.CreationMethod.MaintainStock:
+							resource.UpdateTargetAmount(targetAmount);
+							break;
+						case ResourceManager.CreationMethod.ContinuousRun:
+							resource.SetTargetAmount(0);
+							break;
+					}
+					
+				} else {
+					resource.SetTargetAmount(0);
 				}
 			});
 
@@ -4630,19 +4646,25 @@ public class UIManager : BaseManager {
 
 			createAmountPanel.gameObject.SetActive(true);
 
-			if (resource.creationMethod == ResourceManager.CreationMethod.SingleRun) {
-				singleRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
-				createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Create Amount";
-			} else if (resource.creationMethod == ResourceManager.CreationMethod.MaintainStock) {
-				maintainStockButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
-				createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Maintain Amount";
-			} else if (resource.creationMethod == ResourceManager.CreationMethod.ContinuousRun) {
-				continuousRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
-				createAmountPanel.gameObject.SetActive(false);
+			switch (resource.creationMethod) {
+				case ResourceManager.CreationMethod.SingleRun:
+					singleRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+					createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Create Amount";
+					break;
+				case ResourceManager.CreationMethod.MaintainStock:
+					maintainStockButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+					createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Maintain Amount";
+					break;
+				case ResourceManager.CreationMethod.ContinuousRun:
+					continuousRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+					createAmountPanel.gameObject.SetActive(false);
+					break;
+				default:
+					Debug.LogError("Unknown creation method selected.");
+					break;
 			}
 
-			int targetAmount = resource.GetTargetAmount();
-			createAmountInputField.text = targetAmount > 0 ? targetAmount.ToString() : string.Empty;
+			createAmountInputField.text = resource.GetTargetAmount() > 0 ? resource.GetTargetAmount().ToString() : string.Empty;
 
 			// The following lines (including the redundant-looking disable/enable) are required to get the ScrollRect to 
 			// update its size when enabling or disabling the createAmountPanel.

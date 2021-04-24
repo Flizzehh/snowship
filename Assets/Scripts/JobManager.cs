@@ -403,6 +403,18 @@ public class JobManager : BaseManager {
 				colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
 			}
 			colonist.GetInventory().ChangeResourceAmount(job.createResource.resource, job.createResource.resource.amountCreated, false);
+
+			switch (job.createResource.creationMethod) {
+				case ResourceManager.CreationMethod.SingleRun:
+					job.createResource.SetRemainingAmount(job.createResource.GetRemainingAmount() - job.createResource.resource.amountCreated);
+					break;
+				case ResourceManager.CreationMethod.MaintainStock:
+					job.createResource.SetRemainingAmount(job.createResource.GetTargetAmount() - job.createResource.resource.GetAvailableAmount());
+					break;
+				case ResourceManager.CreationMethod.ContinuousRun:
+					job.createResource.SetRemainingAmount(0);
+					break;
+			}
 			job.createResource.job = null;
 		} },
 		{ JobEnum.PickupResources, delegate (ColonistManager.Colonist colonist, Job job) {

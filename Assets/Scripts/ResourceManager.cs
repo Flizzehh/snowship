@@ -2511,8 +2511,13 @@ public class ResourceManager : BaseManager {
 			this.craftingObject = craftingObject;
 		}
 
+		public void SetTargetAmount(int targetAmount) {
+			remainingAmount = targetAmount;
+			this.targetAmount = targetAmount;
+		}
+
 		public void UpdateTargetAmount(int targetAmount) {
-			remainingAmount += this.targetAmount - targetAmount;
+			remainingAmount += remainingAmount == 0 ? targetAmount : targetAmount - this.targetAmount;
 			this.targetAmount = targetAmount;
 		}
 
@@ -2522,6 +2527,15 @@ public class ResourceManager : BaseManager {
 
 		public int GetRemainingAmount() {
 			return remainingAmount;
+		}
+
+		public void SetRemainingAmount(int remainingAmount) {
+			this.remainingAmount = remainingAmount;
+		}
+
+		public void ResetAmounts() {
+			SetRemainingAmount(0);
+			SetTargetAmount(0);
 		}
 	}
 
@@ -2540,12 +2554,15 @@ public class ResourceManager : BaseManager {
 			if (active) {
 				foreach (CraftableResourceInstance resource in resources) {
 
+					// Not enableable if job already exists
 					if (resource.job != null) {
 						continue;
 					}
 
+					// Assume enableable is true by default
 					resource.enableable = true;
 
+					// Not enableable if don't have enough required resources
 					foreach (ResourceAmount resourceAmount in resource.resource.craftingResources) {
 						if (resourceAmount.resource.GetAvailableAmount() < resourceAmount.amount) {
 							resource.enableable = false;
@@ -2556,6 +2573,7 @@ public class ResourceManager : BaseManager {
 						continue;
 					}
 
+					// Not enableable if don't have enough fuel
 					if (resource.resource.craftingEnergy != 0) {
 						int remainingCraftingEnergy = resource.resource.craftingEnergy;
 						foreach (PriorityResourceInstance fuel in fuels.OrderBy(f => f.priority.Get())) {
@@ -2580,12 +2598,20 @@ public class ResourceManager : BaseManager {
 					}
 
 					if (resource.enableable) {
-						if (resource.creationMethod != CreationMethod.ContinuousRun) {
-							if (resource.GetTargetAmount() > resource.resource.GetAvailableAmount()) {
+						switch (resource.creationMethod) {
+							case CreationMethod.SingleRun:
+								if (resource.GetRemainingAmount() > 0) {
+									resource.job = GameManager.resourceM.CreateResource(resource, this);
+								}
+								break;
+							case CreationMethod.MaintainStock:
+								if (resource.GetTargetAmount() > resource.resource.GetAvailableAmount()) {
+									resource.job = GameManager.resourceM.CreateResource(resource, this);
+								}
+								break;
+							case CreationMethod.ContinuousRun:
 								resource.job = GameManager.resourceM.CreateResource(resource, this);
-							}
-						} else {
-							resource.job = GameManager.resourceM.CreateResource(resource, this);
+								break;
 						}
 					}
 
