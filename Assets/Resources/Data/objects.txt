@@ -621,7 +621,7 @@
 				<Object>
 					<Type>CreateResource
 					<Layer>0
-					<TimeToBuild>3
+					<TimeToBuild>0
 					<JobType>CreateResource
 					<AddToTileWhenBuilt>false
 				<Object>

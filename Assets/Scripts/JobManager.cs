@@ -88,6 +88,10 @@ public class JobManager : BaseManager {
 
 		public void SetCreateResourceData(ResourceManager.CraftableResourceInstance resource, bool addToResourcesToBuild = true) {
 			createResource = resource;
+
+			jobProgress += createResource.resource.craftingTime;
+			colonistBuildTime += createResource.resource.craftingTime;
+			
 			if (addToResourcesToBuild) {
 				resourcesToBuild.AddRange(createResource.resource.craftingResources);
 				if (resource.resource.craftingEnergy != 0) {

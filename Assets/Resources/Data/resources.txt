@@ -202,6 +202,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>GoldOre:1
+				<CraftingTime>10
 		<Resource>
 			<Type>Silver
 			<Classes>Craftable
@@ -212,6 +213,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>SilverOre:1
+				<CraftingTime>10
 		<Resource>
 			<Type>Bronze
 			<Classes>Craftable
@@ -222,6 +224,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>BronzeOre:1
+				<CraftingTime>10
 		<Resource>
 			<Type>Iron
 			<Classes>Craftable
@@ -232,6 +235,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>IronOre:1
+				<CraftingTime>10
 		<Resource>
 			<Type>Copper
 			<Classes>Craftable
@@ -242,6 +246,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>CopperOre:1
+				<CraftingTime>10
 <ResourceGroup>
 	<Type>Materials
 	<Resources>
@@ -256,6 +261,7 @@
 			<Crafting>
 				<Objects>Processing:SplittingBlock,SplittingLog
 				<Resources>Log:0.25
+				<CraftingTime>2
 		<Resource>
 			<Type>Firewood
 			<Classes>Craftable,Fuel
@@ -267,6 +273,7 @@
 			<Crafting>
 				<Objects>Processing:SplittingBlock,SplittingLog
 				<Resources>Wood:0.5
+				<CraftingTime>2
 		<Resource>
 			<Type>Charcoal
 			<Classes>Craftable,Fuel
@@ -279,6 +286,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>20
 				<Resources>Firewood:0.5
+				<CraftingTime>10
 		<Resource>
 			<Type>Mudbrick
 			<Classes>Craftable
@@ -288,6 +296,7 @@
 			<Crafting>
 				<Objects>Processing:BrickFormer;Furnaces
 				<Resources>Mud:0.1,Clay:0.1,Grass:0.1
+				<CraftingTime>10
 		<Resource>
 			<Type>Brick
 			<Classes>Craftable
@@ -298,6 +307,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>30
 				<Resources>Clay:2
+				<CraftingTime>10
 		<Resource>
 			<Type>Glass
 			<Classes>Craftable
@@ -308,6 +318,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>Sand:2
+				<CraftingTime>10
 		<Resource>
 			<Type>Cotton
 			<Weight>2
@@ -324,6 +335,7 @@
 			<Crafting>
 				<Objects>Processing:Gin
 				<Resources>Cotton:20
+				<CraftingTime>5
 <ResourceGroup>
 	<Type>Seeds
 	<Resources>
@@ -388,6 +400,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>50
 				<Resources>Potato:1
+				<CraftingTime>10
 		<Resource>
 			<Type>Blueberry
 			<Classes>Food
@@ -416,6 +429,7 @@
 				<Objects>Furnaces
 				<CraftingEnergy>20
 				<Resources>Apple:1
+				<CraftingTime>10
 <ResourceGroup>
 	<Type>Coins
 	<Resources>
@@ -428,6 +442,7 @@
 			<Crafting>
 				<Objects>Processing:Anvil
 				<Resources>Gold:0.1
+				<CraftingTime>2
 		<Resource>
 			<Type>SilverCoin
 			<Classes>Craftable
@@ -437,6 +452,7 @@
 			<Crafting>
 				<Objects>Processing:Anvil
 				<Resources>Silver:0.1
+				<CraftingTime>2
 		<Resource>
 			<Type>BronzeCoin
 			<Classes>Craftable
@@ -446,6 +462,7 @@
 			<Crafting>
 				<Objects>Processing:Anvil
 				<Resources>Bronze:0.1
+				<CraftingTime>2
 <ResourceGroup>
 	<Type>Clothing
 	<Resources>
@@ -458,6 +475,7 @@
 			<Crafting>
 				<Objects>Processing:Loom
 				<Resources>Cloth:5
+				<CraftingTime>20
 			<Clothing>
 				<Appearance>Top
 				<ClothingType>Sweater
@@ -473,6 +491,7 @@
 			<Crafting>
 				<Objects>Processing:Loom
 				<Resources>Cloth:2
+				<CraftingTime>15
 			<Clothing>
 				<Appearance>Top
 				<ClothingType>Shirt
@@ -488,6 +507,7 @@
 			<Crafting>
 				<Objects>Processing:Loom
 				<Resources>Cloth:10
+				<CraftingTime>20
 			<Clothing>
 				<Appearance>Backpack
 				<ClothingType>SmallBackpack
