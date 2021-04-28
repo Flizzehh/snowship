@@ -542,6 +542,12 @@ public class TileManager : BaseManager {
 				}
 				return false;
 			} },
+			{ ResourceManager.ResourceEnum.Coal, delegate (Tile tile) {
+				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
+					return true;
+				}
+				return false;
+			} },
 			{ ResourceManager.ResourceEnum.GoldOre, delegate (Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;

@@ -2,6 +2,13 @@
 	<Type>Stone
 	<Veins>
 		<Vein>
+			<ResourceType>Coal
+			<TileTypes>Stone:Coal
+			<NumVeinsByMapSize>50
+			<VeinDistance>20
+			<VeinSize>15
+			<VeinSizeRange>5
+		<Vein>
 			<ResourceType>GoldOre
 			<TileTypes>Stone:GoldOre
 			<NumVeinsByMapSize>50
