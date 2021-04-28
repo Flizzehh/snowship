@@ -1335,7 +1335,7 @@ public class UIManager : BaseManager {
 			pauseSaveButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
 		} catch (Exception e) {
 			pauseSaveButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
-			throw e;
+			throw e.InnerException != null ? e.InnerException : e;
 		}
 	}
 
