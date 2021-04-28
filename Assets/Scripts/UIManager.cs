@@ -2239,7 +2239,7 @@ public class UIManager : BaseManager {
 		}
 
 		public void Update() {
-			obj.transform.Find("Level").GetComponent<Text>().text = "Level " + skill.level + " (+" + Mathf.RoundToInt((skill.currentExperience / skill.nextLevelExperience) * 100f) + "%)";
+			obj.transform.Find("Level").GetComponent<Text>().text = skill.level + "." + Mathf.RoundToInt((skill.currentExperience / skill.nextLevelExperience) * 100f);
 			obj.transform.Find("Experience-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((skill.currentExperience / skill.nextLevelExperience) * 100f);
 
 			float highestLevel = 0;
