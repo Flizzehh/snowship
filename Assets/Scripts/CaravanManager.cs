@@ -127,7 +127,7 @@ public class CaravanManager : BaseManager {
 		GameManager.uiM.SetTradeMenu();
 	}
 
-	public class Caravan : ResourceManager.IInventory {
+	public class Caravan : ResourceManager.IInventory, SelectableManager.ISelectable {
 
 		public List<Trader> traders = new List<Trader>();
 		public int numTraders;
@@ -371,6 +371,14 @@ public class CaravanManager : BaseManager {
 		}
 		public ResourceManager.Inventory GetInventory() {
 			return inventory;
+		}
+
+		void SelectableManager.ISelectable.Select() {
+			
+		}
+
+		void SelectableManager.ISelectable.Deselect() {
+			
 		}
 	}
 

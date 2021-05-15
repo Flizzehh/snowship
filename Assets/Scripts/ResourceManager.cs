@@ -2230,7 +2230,7 @@ public class ResourceManager : BaseManager {
 		return instance;
 	}
 
-	public class ObjectInstance : UIManager.ISelectable {
+	public class ObjectInstance : SelectableManager.ISelectable {
 
 		public readonly TileManager.Tile tile; // The tile that this object covers that is closest to the zeroPointTile (usually they are the same tile)
 		public readonly List<TileManager.Tile> additionalTiles = new List<TileManager.Tile>();
@@ -2352,12 +2352,12 @@ public class ResourceManager : BaseManager {
 			obj.SetActive(visible);
 		}
 
-		public void Select() {
-			throw new NotImplementedException();
+		void SelectableManager.ISelectable.Select() {
+			
 		}
 
-		public void Deselect() {
-			throw new NotImplementedException();
+		void SelectableManager.ISelectable.Deselect() {
+			
 		}
 	}
 

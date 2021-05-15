@@ -6,7 +6,7 @@ public class LifeManager : BaseManager {
 
 	public List<Life> life = new List<Life>();
 
-	public class Life {
+	public class Life : SelectableManager.ISelectable {
 
 		public float health;
 
@@ -150,6 +150,14 @@ public class LifeManager : BaseManager {
 			this.visible = visible;
 
 			obj.SetActive(visible);
+		}
+
+		void SelectableManager.ISelectable.Select() {
+			
+		}
+
+		void SelectableManager.ISelectable.Deselect() {
+			
 		}
 	}
 }

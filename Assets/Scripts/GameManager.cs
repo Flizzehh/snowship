@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
 	public static readonly UIManager uiM = new UIManager();
 	public static readonly UniverseManager universeM = new UniverseManager();
 
+	public static readonly SelectableManager selectableManager = new SelectableManager();
+
 	public static readonly List<BaseManager> managers = new List<BaseManager>() {
 		timeM,
 		debugM,
@@ -40,6 +42,8 @@ public class GameManager : MonoBehaviour {
 
 		uiM,
 		cameraM,
+
+		selectableManager,
 	};
 
 	public void Awake() {
