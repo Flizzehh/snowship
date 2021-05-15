@@ -39,7 +39,10 @@ public class UIManager : BaseManager {
 		return new Regex("[^a-zA-Z0-9 -]").Replace(removeFromString, string.Empty);
 	}
 
-	public enum Colours { Clear, WhiteAlpha128, WhiteAlpha64, WhiteAlpha20, White, DarkRed, DarkGreen, LightRed, LightGreen, LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, DarkPurple };
+	public enum Colours { 
+		Clear, WhiteAlpha128, WhiteAlpha64, WhiteAlpha20, White, DarkRed, DarkGreen, LightRed, LightRed100, LightGreen, LightGreen100,
+		LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, LightPurple100, DarkPurple
+	};
 
 	private static readonly Dictionary<Colours, Color> colourMap = new Dictionary<Colours, Color>() {
 		{ Colours.Clear, new Color(255f, 255f, 255f, 0f) / 255f },
@@ -50,7 +53,9 @@ public class UIManager : BaseManager {
 		{ Colours.DarkRed, new Color(192f, 57f, 43f, 255f) / 255f },
 		{ Colours.DarkGreen, new Color(39f, 174f, 96f, 255f) / 255f },
 		{ Colours.LightRed, new Color(231f, 76f, 60f, 255f) / 255f },
+		{ Colours.LightRed100, new Color(231f, 76f, 60f, 100f) / 255f },
 		{ Colours.LightGreen, new Color(46f, 204f, 113f, 255f) / 255f },
+		{ Colours.LightGreen100, new Color(46f, 204f, 113f, 100f) / 255f },
 		{ Colours.LightGrey220, new Color(220f, 220f, 220f, 255f) / 255f },
 		{ Colours.LightGrey200, new Color(200f, 200f, 200f, 255f) / 255f },
 		{ Colours.LightGrey180, new Color(180f, 180f, 180f, 255f) / 255f },
@@ -63,6 +68,7 @@ public class UIManager : BaseManager {
 		{ Colours.DarkYellow, new Color(216f, 176f, 15f, 255f) / 255f },
 		{ Colours.LightYellow, new Color(241f, 196f, 15f, 255f) / 255f },
 		{ Colours.LightPurple, new Color(155f, 89f, 182f, 255f) / 255f },
+		{ Colours.LightPurple100, new Color(155f, 89f, 182f, 100f) / 255f },
 		{ Colours.DarkPurple, new Color(142f, 68f, 173f, 255f) / 255f }
 	};
 

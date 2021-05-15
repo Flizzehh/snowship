@@ -1442,7 +1442,7 @@ public class ColonistManager : BaseManager {
 
 		public override void SetName(string name) {
 			base.SetName(name);
-			SetNameColour(UIManager.GetColour(UIManager.Colours.LightGreen));
+			SetNameColour(UIManager.GetColour(UIManager.Colours.LightGreen100));
 		}
 
 		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {

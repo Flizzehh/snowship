@@ -132,7 +132,7 @@ public class HumanManager : BaseManager {
 			base.Update();
 
 			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.cameraM.cameraComponent.orthographicSize, 2, 10) * 0.001f;
-			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(UIManager.GetColour(UIManager.Colours.LightRed), UIManager.GetColour(UIManager.Colours.LightGreen), health);
+			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(UIManager.GetColour(UIManager.Colours.LightRed100), UIManager.GetColour(UIManager.Colours.LightGreen100), health);
 
 			SetMoveSprite();
 		}

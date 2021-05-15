@@ -391,7 +391,7 @@ public class CaravanManager : BaseManager {
 		public override void SetName(string name) {
 			base.SetName(name);
 
-			SetNameColour(UIManager.GetColour(UIManager.Colours.LightPurple));
+			SetNameColour(UIManager.GetColour(UIManager.Colours.LightPurple100));
 		}
 
 		public override void Update() {
