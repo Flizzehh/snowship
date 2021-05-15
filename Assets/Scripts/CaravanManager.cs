@@ -32,8 +32,8 @@ public class CaravanManager : BaseManager {
 	}
 
 	public int caravanTimer = 0; // The time since the last caravan visited
-	private static readonly int caravanTimeMin = TimeManager.dayLengthSeconds; // Caravans will only come once every caravanTimeMin in-game minutes
-	private static readonly int caravanTimeMax = TimeManager.dayLengthSeconds * 7; // Caravans will definitely come if the caravanTimer is greater than caravanTimeMax
+	private static readonly int caravanTimeMin = TimeManager.dayLengthSeconds * 7; // Caravans will only come once every caravanTimeMin in-game minutes
+	private static readonly int caravanTimeMax = TimeManager.dayLengthSeconds * 27; // Caravans will definitely come if the caravanTimer is greater than caravanTimeMax
 
 	public void UpdateCaravanTimer() {
 		if (!GameManager.timeM.GetPaused() && GameManager.timeM.minuteChanged) {
