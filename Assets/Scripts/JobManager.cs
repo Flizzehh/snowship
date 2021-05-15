@@ -492,11 +492,13 @@ public class JobManager : BaseManager {
 					}
 				}
 			}
-			colonist.SetJob(new ColonistJob(colonist, new Job(colonist.overTile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Eat), null, 0), null, null));
+			colonist.SetEatJob();
 		} },
 		{ JobEnum.Eat, delegate (ColonistManager.Colonist colonist, Job job) {
+			
 			List<ResourceManager.ResourceAmount> resourcesToEat = colonist.GetInventory().resources.Where(r => r.resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(r => ((ResourceManager.Food)r.resource).nutrition).ToList();
 			ColonistManager.NeedInstance foodNeed = colonist.needs.Find(need => need.prefab.type == ColonistManager.NeedEnum.Food);
+
 			float startingFoodNeedValue = foodNeed.GetValue();
 			foreach (ResourceManager.ResourceAmount ra in resourcesToEat) {
 				bool stopEating = false;
@@ -515,14 +517,31 @@ public class JobManager : BaseManager {
 					break;
 				}
 			}
+
 			float amountEaten = startingFoodNeedValue - foodNeed.GetValue();
 			if (amountEaten >= 15 && foodNeed.GetValue() <= -10) {
 				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Stuffed);
 			} else if (amountEaten >= 15) {
 				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Full);
 			}
+
 			if (foodNeed.GetValue() < 0) {
 				foodNeed.SetValue(0);
+			}
+
+			ResourceManager.ObjectInstance objectOnTile = colonist.overTile.GetObjectInstanceAtLayer(2);
+			if (objectOnTile != null && objectOnTile.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Chairs) {
+				if (objectOnTile.tile.surroundingTiles.Find(tile => {
+					ResourceManager.ObjectInstance tableNextToChair = tile.GetObjectInstanceAtLayer(2);
+					if (tableNextToChair != null) {
+						return tableNextToChair.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Tables;
+					}
+					return false;
+				}) == null) {
+					colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteWithoutTable);
+				}
+			} else {
+				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteOnFloor);
 			}
 		} },
 		{ JobEnum.Sleep, delegate (ColonistManager.Colonist colonist, Job job) {

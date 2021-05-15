@@ -378,7 +378,7 @@ public class ColonistManager : BaseManager {
 				}
 			}
 		} else {
-			need.colonist.SetJob(new JobManager.ColonistJob(need.colonist, new JobManager.Job(need.colonist.overTile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Eat), null, 0), null, null));
+			need.colonist.SetEatJob();
 			return true;
 		}
 		return false;
@@ -861,7 +861,7 @@ public class ColonistManager : BaseManager {
 	};
 	public enum MoodModifierEnum {
 		WitnessDeath,
-		Stuffed, Full, Hungry, Starving,
+		Stuffed, Full, Hungry, Starving, AteOnFloor, AteWithoutTable,
 		Dehydrated, Thirsty, Quenched,
 		Rested, Tired, Exhausted,
 		Overencumbered
@@ -1202,6 +1202,38 @@ public class ColonistManager : BaseManager {
 			job.SetColonist(this);
 			MoveToTile(job.tile, !job.tile.walkable);
 			GameManager.uiM.SetJobElements();
+		}
+
+		public void SetEatJob() {
+
+			// Find a chair (ideally next to a table) for the colonist to sit at to eat
+			List<ResourceManager.ObjectInstance> chairs = new List<ResourceManager.ObjectInstance>();
+			foreach (ResourceManager.ObjectPrefab chairPrefab in GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Chairs).prefabs) {
+				chairs.AddRange(GameManager.resourceM.GetObjectInstancesByPrefab(chairPrefab));
+			}
+			chairs.Select(chair => chair.tile.region == overTile.region);
+			chairs.OrderBy(chair => PathManager.RegionBlockDistance(overTile.regionBlock, chair.tile.regionBlock, true, true, false));
+			chairs.OrderByDescending(chair => chair.tile.surroundingTiles.Find(surroundingTile => {
+				ResourceManager.ObjectInstance tableNextToChair = surroundingTile.GetObjectInstanceAtLayer(2);
+				if (tableNextToChair != null) {
+						return tableNextToChair.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Tables;
+				}
+				return false;
+			}) != null);
+
+			SetJob(
+				new JobManager.ColonistJob(
+					this, 
+					new JobManager.Job(
+						chairs.Count > 0 ? chairs[0].tile : overTile,
+						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Eat), 
+						null, 
+						0
+					), 
+					null, 
+					null
+				)
+			);
 		}
 
 		public void StartJob() {

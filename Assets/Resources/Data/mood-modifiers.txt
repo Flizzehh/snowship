@@ -46,6 +46,14 @@
 		<Type>Starving
 		<EffectAmount>-20
 		<EffectLengthSeconds>UntilNot
+	<MoodModifier>
+		<Type>AteOnFloor
+		<EffectAmount>-10
+		<EffectLengthSeconds>720
+	<MoodModifier>
+		<Type>AteWithoutTable
+		<EffectAmount>-5
+		<EffectLengthSeconds>720
 <MoodModifierGroup>
 	Inventory
 	<MoodModifier>
