@@ -11,140 +11,140 @@
 	<Resources>
 		<Resource>
 			<Type>Dirt
-			<Weight>1220
-			<Volume>1000
+			<Weight>305
+			<Volume>250
 			<Price>1
 		<Resource>
 			<Type>Mud
-			<Weight>1840
-			<Volume>1000
+			<Weight>460
+			<Volume>250
 			<Price>1
 		<Resource>
 			<Type>Andesite
-			<Weight>2600
-			<Volume>1000
+			<Weight>650
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Basalt
-			<Weight>3000
-			<Volume>1000
+			<Weight>750
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Diorite
-			<Weight>2900
-			<Volume>1000
+			<Weight>725
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Granite
-			<Weight>2650
-			<Volume>1000
+			<Weight>663
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Kimberlite
-			<Weight>2550
-			<Volume>1000
+			<Weight>637
+			<Volume>250
 			<Price>50
 		<Resource>
 			<Type>Obsidian
-			<Weight>2475
-			<Volume>1000
+			<Weight>619
+			<Volume>250
 			<Price>35
 		<Resource>
 			<Type>Rhyolite
-			<Weight>2500
-			<Volume>1000
+			<Weight>625
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Chalk
-			<Weight>2500
-			<Volume>1000
+			<Weight>625
+			<Volume>250
 			<Price>4
 		<Resource>
 			<Type>Claystone
-			<Weight>2000
-			<Volume>1000
+			<Weight>500
+			<Volume>250
 			<Price>12
 		<Resource>
 			<Type>Coal
 			<Classes>Fuel
-			<Weight>1250
-			<Volume>1000
+			<Weight>313
+			<Volume>250
 			<Price>30
 			<Fuel>
 				<FuelEnergy>30
 		<Resource>
 			<Type>Flint
-			<Weight>2600
-			<Volume>1000
+			<Weight>650
+			<Volume>250
 			<Price>10
 		<Resource>
 			<Type>Lignite
 			<Classes>Fuel
-			<Weight>800
-			<Volume>1000
+			<Weight>200
+			<Volume>250
 			<Price>15
 			<Fuel>
 				<FuelEnergy>15
 		<Resource>
 			<Type>Limestone
-			<Weight>2560
-			<Volume>1000
+			<Weight>640
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Sandstone
-			<Weight>2500
-			<Volume>1000
+			<Weight>625
+			<Volume>250
 			<Price>2
 		<Resource>
 			<Type>Anthracite
 			<Classes>Fuel
-			<Weight>1600
-			<Volume>1000
+			<Weight>400
+			<Volume>250
 			<Price>45
 			<Fuel>
 				<FuelEnergy>45
 		<Resource>
 			<Type>Marble
-			<Weight>2550
-			<Volume>1000
+			<Weight>638
+			<Volume>250
 			<Price>3
 		<Resource>
 			<Type>Quartz
-			<Weight>2700
-			<Volume>1000
+			<Weight>675
+			<Volume>250
 			<Price>20
 		<Resource>
 			<Type>Slate
-			<Weight>2750
-			<Volume>1000
+			<Weight>688
+			<Volume>250
 			<Price>5
 		<Resource>
 			<Type>Clay
-			<Weight>1600
-			<Volume>1000
+			<Weight>400
+			<Volume>250
 			<Price>10
 		<Resource>
 			<Type>Log
 			<Classes>Fuel
-			<Weight>700
-			<Volume>1000
+			<Weight>200
+			<Volume>400
 			<Price>2
 			<Fuel>
 				<FuelEnergy>8
 		<Resource>
 			<Type>Snow
-			<Weight>200
-			<Volume>1000
+			<Weight>50
+			<Volume>250
 			<Price>1
 		<Resource>
 			<Type>Sand
-			<Weight>1555
-			<Volume>1000
+			<Weight>389
+			<Volume>250
 			<Price>1
 		<Resource>
 			<Type>Cactus
-			<Weight>430
-			<Volume>1000
+			<Weight>108
+			<Volume>250
 			<Price>4
 		<Resource>
 			<Type>Leaf
@@ -166,28 +166,28 @@
 	<Resources>
 		<Resource>
 			<Type>GoldOre
-			<Weight>19320
-			<Volume>1000
+			<Weight>4830
+			<Volume>250
 			<Price>150
 		<Resource>
 			<Type>SilverOre
-			<Weight>10500
-			<Volume>1000
+			<Weight>2625
+			<Volume>250
 			<Price>100
 		<Resource>
 			<Type>BronzeOre
-			<Weight>8730
-			<Volume>1000
+			<Weight>2183
+			<Volume>250
 			<Price>50
 		<Resource>
 			<Type>IronOre
-			<Weight>7870
-			<Volume>1000
+			<Weight>1968
+			<Volume>250
 			<Price>75
 		<Resource>
 			<Type>CopperOre
-			<Weight>8960
-			<Volume>1000
+			<Weight>2240
+			<Volume>250
 			<Price>125
 <ResourceGroup>
 	<Type>Metals
@@ -195,8 +195,8 @@
 		<Resource>
 			<Type>Gold
 			<Classes>Craftable
-			<Weight>14490
-			<Volume>500
+			<Weight>3623
+			<Volume>125
 			<Price>300
 			<Crafting>
 				<Objects>Furnaces
@@ -206,8 +206,8 @@
 		<Resource>
 			<Type>Silver
 			<Classes>Craftable
-			<Weight>7875
-			<Volume>500
+			<Weight>1969
+			<Volume>125
 			<Price>200
 			<Crafting>
 				<Objects>Furnaces
@@ -217,8 +217,8 @@
 		<Resource>
 			<Type>Bronze
 			<Classes>Craftable
-			<Weight>6550
-			<Volume>500
+			<Weight>1638
+			<Volume>125
 			<Price>100
 			<Crafting>
 				<Objects>Furnaces
@@ -228,8 +228,8 @@
 		<Resource>
 			<Type>Iron
 			<Classes>Craftable
-			<Weight>5900
-			<Volume>500
+			<Weight>1475
+			<Volume>125
 			<Price>150
 			<Crafting>
 				<Objects>Furnaces
@@ -239,8 +239,8 @@
 		<Resource>
 			<Type>Copper
 			<Classes>Craftable
-			<Weight>6720
-			<Volume>500
+			<Weight>1680
+			<Volume>125
 			<Price>250
 			<Crafting>
 				<Objects>Furnaces
@@ -253,8 +253,8 @@
 		<Resource>
 			<Type>Wood
 			<Classes>Craftable,Fuel
-			<Weight>175
-			<Volume>250
+			<Weight>50
+			<Volume>100
 			<Price>15
 			<Fuel>
 				<FuelEnergy>12
@@ -265,8 +265,8 @@
 		<Resource>
 			<Type>Firewood
 			<Classes>Craftable,Fuel
-			<Weight>88
-			<Volume>125
+			<Weight>25
+			<Volume>50
 			<Price>25
 			<Fuel>
 				<FuelEnergy>20
