@@ -84,12 +84,6 @@ public class UIManager : BaseManager {
 		return Regex.IsMatch(text, @"^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$");
 	}
 
-	public interface ISelectable {
-		void Select();
-
-		void Deselect();
-	}
-
 	public int screenWidth = 0;
 	public int screenHeight = 0;
 
