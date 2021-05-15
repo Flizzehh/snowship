@@ -398,9 +398,9 @@
 				<Nutrition>25
 			<Crafting>
 				<Objects>Furnaces
-				<CraftingEnergy>50
+				<CraftingEnergy>10
 				<Resources>Potato:1
-				<CraftingTime>10
+				<CraftingTime>15
 		<Resource>
 			<Type>Blueberry
 			<Classes>Food
@@ -427,9 +427,9 @@
 				<Nutrition>15
 			<Crafting>
 				<Objects>Furnaces
-				<CraftingEnergy>20
+				<CraftingEnergy>10
 				<Resources>Apple:1
-				<CraftingTime>10
+				<CraftingTime>15
 <ResourceGroup>
 	<Type>Coins
 	<Resources>
