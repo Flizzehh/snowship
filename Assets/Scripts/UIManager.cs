@@ -4083,9 +4083,6 @@ public class UIManager : BaseManager {
 		public ResourceManager.Resource resource;
 		public GameObject obj;
 
-		public InputField desiredAmountInput;
-		public Text desiredAmountText;
-
 		public bool filterActive = true; // True if the resources filter deems this element visible
 		public bool amountActive; // True if the total world amount is > 0
 
@@ -4097,21 +4094,6 @@ public class UIManager : BaseManager {
 			obj.transform.Find("Name").GetComponent<Text>().text = resource.name;
 
 			obj.transform.Find("Image").GetComponent<Image>().sprite = resource.image;
-
-			desiredAmountInput = obj.transform.Find("DesiredAmount-Input").GetComponent<InputField>();
-			desiredAmountText = desiredAmountInput.transform.Find("Text").GetComponent<Text>();
-			desiredAmountInput.onEndEdit.AddListener(delegate {
-				if (int.TryParse(desiredAmountInput.text, out int newDesiredAmount)) {
-					if (newDesiredAmount >= 0) {
-						resource.SetDesiredAmount(newDesiredAmount);
-						if (newDesiredAmount == 0) {
-							desiredAmountInput.text = String.Empty;
-						}
-					}
-				} else {
-					resource.SetDesiredAmount(0);
-				}
-			});
 
 			Update();
 		}
@@ -4127,23 +4109,14 @@ public class UIManager : BaseManager {
 			} else {
 				obj.transform.Find("Amount").GetComponent<Text>().text = resource.GetWorldTotalAmount().ToString();
 			}
-			if (resource.GetDesiredAmount() > 0) {
-				if (resource.GetDesiredAmount() > resource.GetAvailableAmount()) {
-					desiredAmountText.color = GetColour(Colours.LightRed);
-				} else if (resource.GetDesiredAmount() <= resource.GetAvailableAmount()) {
-					desiredAmountText.color = GetColour(Colours.LightGreen);
-				}
-			}
 
 			availableAmountPrev = resource.GetAvailableAmount();
 
 			if (availableAmountPrev != resource.GetAvailableAmount()) {
 				if (resource.GetAvailableAmount() > 0) {
 					obj.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
-					obj.transform.Find("DesiredAmount-Input").GetComponent<Image>().color = GetColour(Colours.LightGrey220);
 				} else {
 					obj.GetComponent<Image>().color = GetColour(Colours.Grey150);
-					obj.transform.Find("DesiredAmount-Input").GetComponent<Image>().color = GetColour(Colours.Grey150);
 				}
 			}
 		}

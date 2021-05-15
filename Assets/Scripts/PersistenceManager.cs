@@ -4113,7 +4113,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum ResourceProperty {
-		Resource, Type, DesiredAmount
+		Resource, Type
 	}
 
 	public void SaveResources(StreamWriter file) {
@@ -4121,7 +4121,6 @@ public class PersistenceManager : BaseManager {
 			file.WriteLine(CreateKeyValueString(ResourceProperty.Resource, string.Empty, 0));
 
 			file.WriteLine(CreateKeyValueString(ResourceProperty.Type, resource.type, 1));
-			file.WriteLine(CreateKeyValueString(ResourceProperty.DesiredAmount, resource.GetDesiredAmount(), 1));
 		}
 	}
 
@@ -4133,7 +4132,6 @@ public class PersistenceManager : BaseManager {
 				case ResourceProperty.Resource:
 
 					ResourceManager.Resource resource = null;
-					int desiredAmount = 0;
 
 					foreach (KeyValuePair<string, object> resourceProperty in (List<KeyValuePair<string, object>>)property.Value) {
 						ResourceProperty resourcePropertyKey = (ResourceProperty)Enum.Parse(typeof(ResourceProperty), resourceProperty.Key);
@@ -4141,16 +4139,11 @@ public class PersistenceManager : BaseManager {
 							case ResourceProperty.Type:
 								resource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)resourceProperty.Value));
 								break;
-							case ResourceProperty.DesiredAmount:
-								desiredAmount = int.Parse((string)resourceProperty.Value);
-								break;
 							default:
 								Debug.LogError("Unknown resource property: " + resourceProperty.Key + " " + resourceProperty.Value);
 								break;
 						}
 					}
-
-					resource.SetDesiredAmount(desiredAmount);
 
 					break;
 				default:

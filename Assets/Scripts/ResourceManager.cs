@@ -510,9 +510,6 @@ public class ResourceManager : BaseManager {
 		public readonly List<ResourceAmount> craftingResources = new List<ResourceAmount>(); // Filled in CreateResources() after all resources created
 		public int amountCreated = 1; // Can't be readonly
 
-		// Desired Amount
-		private int desiredAmount = 0;
-
 		// World Amounts
 		private int worldTotalAmount;
 		private int colonistsTotalAmount;
@@ -557,22 +554,6 @@ public class ResourceManager : BaseManager {
 			this.craftingObjects = craftingObjects;
 			this.craftingEnergy = craftingEnergy;
 			this.craftingTime = craftingTime;
-		}
-
-		public int GetDesiredAmount() {
-			return desiredAmount;
-		}
-	
-		public void SetDesiredAmount(int desiredAmount) {
-			this.desiredAmount = desiredAmount;
-			UpdateDesiredAmountText();
-		}
-
-		public void UpdateDesiredAmountText() {
-			//if (GameManager.uiM.selectedCraftingObject != null && GameManager.uiM.selectedCraftingObject.createResource == this) {
-			//	GameManager.uiM.selectedMTOPanel.obj.transform.Find("ResourceTargetAmount-Panel/TargetAmount-Input").GetComponent<InputField>().text = desiredAmount.ToString();
-			//}
-			resourceListElement.desiredAmountInput.text = desiredAmount.ToString();
 		}
 
 		public int GetWorldTotalAmount() {
