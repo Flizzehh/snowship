@@ -482,7 +482,7 @@
 					<JobType>HarvestFarm
 					<AddToTileWhenBuilt>false
 <Group>
-	<Type>Command
+	<Type>Terraform
 	<SubGroups>
 		<SubGroup>
 			<Type>Plants
@@ -495,50 +495,34 @@
 					<JobType>ChopPlant
 					<AddToTileWhenBuilt>false
 				<Object>
-					<Type>PlantTree
+					<Type>Plant
 					<Layer>0
-					<Plants>WideTree:None,ThinTree:None,PalmTree:None
-					<TimeToBuild>2
-					<CommonResources>TreeSeed:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,LivingTreeOrBushBiomes
+					<TimeToBuild>3
+					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,BiomeSupportsSelectedPlants
 					<JobType>PlantPlant
 					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>PlantBush
-					<Layer>0
-					<Plants>Bush:None
-					<TimeToBuild>2
-					<CommonResources>BushSeed:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,LivingTreeOrBushBiomes
-					<JobType>PlantPlant
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>PlantCactus
-					<Layer>0
-					<Plants>Cactus:None
-					<TimeToBuild>2
-					<CommonResources>CactusSeed:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,CactusBiomes
-					<JobType>PlantPlant
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>PlantAppleTree
-					<Layer>0
-					<Plants>WideTree:Apple
-					<TimeToBuild>2
-					<CommonResources>AppleSeed:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,LivingTreeOrBushBiomes
-					<JobType>PlantPlant
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>PlantBlueberryBush
-					<Layer>0
-					<Plants>Bush:Blueberry
-					<TimeToBuild>2
-					<CommonResources>Blueberry:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs,LivingTreeOrBushBiomes
-					<JobType>PlantPlant
-					<AddToTileWhenBuilt>false
+					<Variations>
+						<Variation>
+							<Name>Tree
+							<UniqueResources>TreeSeed:1
+							<Plants>WideTree:None,ThinTree:None,PalmTree:None
+						<Variation>
+							<Name>Bush
+							<UniqueResources>BushSeed:1
+							<Plants>Bush:None
+						<Variation>
+							<Name>Cactus
+							<UniqueResources>CactusSeed:1
+							<Plants>Cactus:None
+						<Variation>
+							<Name>Apple Tree
+							<UniqueResources>AppleSeed:1
+							<Plants>WideTree:Apple
+						<Variation>
+							<Name>Blueberry Bush
+							<UniqueResources>Blueberry:1
+							<Plants>Bush:Blueberry
+					<VariationNameOrder>ObjectVariation
 		<SubGroup>
 			<Type>Terrain
 			<Objects>
@@ -564,6 +548,9 @@
 					<SelectionModifiers>Fillable,OmitObjects,OmitPlants,OmitSameLayerJobs
 					<JobType>Fill
 					<AddToTileWhenBuilt>false
+<Group>
+	<Type>Command
+	<SubGroups>
 		<SubGroup>
 			<Type>Remove
 			<Objects>

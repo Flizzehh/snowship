@@ -330,12 +330,26 @@ public class JobManager : BaseManager {
 			foreach (ResourceManager.ResourceAmount ra in job.resourcesToBuild) {
 				colonist.GetInventory().ChangeResourceAmount(ra.resource, -ra.amount, false);
 			}
-			Dictionary<ResourceManager.PlantPrefab, int> plantChances = new Dictionary<ResourceManager.PlantPrefab, int>();
-			foreach (ResourceManager.PlantPrefab plantPrefab in job.prefab.plants.Keys) {
-				plantChances.Add(plantPrefab, UnityEngine.Random.Range(0, 100));
+			Dictionary<ResourceManager.PlantEnum, float> plantChances = job.tile.biome.plantChances
+				.Where(plantChance => job.variation.plants
+					.Select(plant => plant.Key.type)
+					.Contains(plantChance.Key))
+				.ToDictionary(p => p.Key, p => p.Value);
+			float totalPlantChanceWeight = plantChances.Sum(plantChance => plantChance.Value);
+			float randomRangeValue = UnityEngine.Random.Range(0, totalPlantChanceWeight);
+			float iterativeTotal = 0;
+			ResourceManager.PlantEnum chosenPlantEnum = plantChances.First().Key;
+			foreach (KeyValuePair<ResourceManager.PlantEnum, float> plantChanceKVP in plantChances) {
+				if (randomRangeValue >= iterativeTotal && randomRangeValue <= iterativeTotal + plantChanceKVP.Value) {
+					chosenPlantEnum = plantChanceKVP.Key;
+					break;
+				} else {
+					iterativeTotal += plantChanceKVP.Value;
+				}
 			}
-			ResourceManager.PlantPrefab chosenPlantPrefab = plantChances.OrderByDescending(kvp => kvp.Value).First().Key;
-			job.tile.SetPlant(false, new ResourceManager.Plant(chosenPlantPrefab, job.tile, true, false, job.prefab.plants[chosenPlantPrefab]));
+			ResourceManager.PlantPrefab chosenPlantPrefab = GameManager.resourceM.GetPlantPrefabByEnum(chosenPlantEnum);
+			Debug.Log(chosenPlantPrefab.name);
+			job.tile.SetPlant(false, new ResourceManager.Plant(chosenPlantPrefab, job.tile, true, false, job.variation.plants[chosenPlantPrefab]));
 			GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
 		} },
 		{ JobEnum.Mine, delegate (ColonistManager.Colonist colonist, Job job) {
@@ -643,57 +657,57 @@ public class JobManager : BaseManager {
 	public enum SelectionModifiersEnum {
 		Outline, Walkable, OmitWalkable, WalkableIncludingFences, Buildable, OmitBuildable, StoneTypes, OmitStoneTypes, AllWaterTypes, OmitAllWaterTypes, LiquidWaterTypes, OmitLiquidWaterTypes, OmitNonStoneAndWaterTypes,
 		Objects, OmitObjects, Floors, OmitFloors, Plants, OmitPlants, OmitSameLayerJobs, OmitSameLayerObjectInstances, Farms, OmitFarms,
-		ObjectsAtSameLayer, OmitNonCoastWater, OmitHoles, OmitPreviousDig, LivingTreeOrBushBiomes, CactusBiomes, OmitObjectInstancesOnAdditionalTiles, Fillable
+		ObjectsAtSameLayer, OmitNonCoastWater, OmitHoles, OmitPreviousDig, BiomeSupportsSelectedPlants, OmitObjectInstancesOnAdditionalTiles, Fillable
 	};
 
-	private static readonly Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, bool>> selectionModifierFunctions = new Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, bool>>() {
-		{ SelectionModifiersEnum.Walkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+	private static readonly Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, ResourceManager.Variation, bool>> selectionModifierFunctions = new Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, ResourceManager.Variation, bool>>() {
+		{ SelectionModifiersEnum.Walkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.walkable;
 		} },
-		{ SelectionModifiersEnum.WalkableIncludingFences, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.WalkableIncludingFences, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			ResourceManager.ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(2);
 			if (objectInstance != null && objectInstance.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Fences) {
 				return true;
 			}
 			return posTile.walkable;
 		} },
-		{ SelectionModifiersEnum.OmitWalkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitWalkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return !posTile.walkable;
 		} },
-		{ SelectionModifiersEnum.Buildable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.Buildable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.buildable;
 		} },
-		{ SelectionModifiersEnum.OmitBuildable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitBuildable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return !posTile.buildable;
 		} },
-		{ SelectionModifiersEnum.StoneTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.StoneTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Stone;
 		} },
-		{ SelectionModifiersEnum.OmitStoneTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitStoneTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Stone;
 		} },
-		{ SelectionModifiersEnum.AllWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.AllWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water;
 		} },
-		{ SelectionModifiersEnum.OmitAllWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitAllWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Water;
 		} },
-		{ SelectionModifiersEnum.LiquidWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.LiquidWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.classes[TileManager.TileType.ClassEnum.LiquidWater];
 		} },
-		{ SelectionModifiersEnum.OmitLiquidWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitLiquidWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return !posTile.tileType.classes[TileManager.TileType.ClassEnum.LiquidWater];
 		} },
-		{ SelectionModifiersEnum.OmitNonStoneAndWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitNonStoneAndWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Water && posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Stone;
 		} },
-		{ SelectionModifiersEnum.Plants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.Plants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.plant != null;
 		} },
-		{ SelectionModifiersEnum.OmitPlants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitPlants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.plant == null;
 		} },
-		{ SelectionModifiersEnum.OmitSameLayerJobs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitSameLayerJobs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			foreach (Job job in GameManager.jobM.jobs) {
 				if (job.prefab.layer == prefab.layer) {
 					if (job.tile == posTile) {
@@ -732,25 +746,25 @@ public class JobManager : BaseManager {
 			}
 			return true;
 		} },
-		{ SelectionModifiersEnum.OmitSameLayerObjectInstances, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitSameLayerObjectInstances, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return !posTile.objectInstances.ContainsKey(prefab.layer) || posTile.objectInstances[prefab.layer] == null;
 		} },
-		{ SelectionModifiersEnum.Farms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.Farms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.farm != null;
 		} },
-		{ SelectionModifiersEnum.OmitFarms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitFarms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.farm == null;
 		} },
 		{ SelectionModifiersEnum.ObjectsAtSameLayer, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
 			return posTile.GetObjectInstanceAtLayer(prefab.layer) != null;
 		} },
-		{ SelectionModifiersEnum.Objects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.Objects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.GetAllObjectInstances().Count > 0;
 		} },
-		{ SelectionModifiersEnum.OmitObjects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitObjects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.GetAllObjectInstances().Count <= 0;
 		} },
-		{ SelectionModifiersEnum.OmitNonCoastWater, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitNonCoastWater, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			if (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water) {
 				if (!(posTile.surroundingTiles.Find(t => t != null && t.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Water) != null)) {
 					return false;
@@ -758,39 +772,24 @@ public class JobManager : BaseManager {
 			}
 			return true;
 		} },
-		{ SelectionModifiersEnum.OmitHoles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitHoles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Hole;
 		} },
-		{ SelectionModifiersEnum.OmitPreviousDig, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitPreviousDig, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return !posTile.dugPreviously;
 		} },
-		{ SelectionModifiersEnum.LivingTreeOrBushBiomes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
-			foreach (ResourceManager.PlantEnum plantEnum in posTile.biome.plantChances.Keys) {
-				ResourceManager.PlantPrefab plantPrefab = GameManager.resourceM.GetPlantPrefabByEnum(plantEnum);
-				if (plantPrefab.living && plantPrefab.groupType == ResourceManager.PlantGroupEnum.Tree || plantPrefab.groupType == ResourceManager.PlantGroupEnum.Bush) {
-					return true;
-				}
-			}
-			return false;
+		{ SelectionModifiersEnum.BiomeSupportsSelectedPlants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+			return posTile.biome.plantChances.Keys.Intersect(variation.plants.Select(plant => plant.Key.type)).Any();
 		} },
-		{ SelectionModifiersEnum.CactusBiomes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
-			foreach (ResourceManager.PlantEnum plantEnum in posTile.biome.plantChances.Keys) {
-				ResourceManager.PlantPrefab plantPrefab = GameManager.resourceM.GetPlantPrefabByEnum(plantEnum);
-				if (plantPrefab.groupType == ResourceManager.PlantGroupEnum.Cactus) {
-					return true;
-				}
-			}
-			return false;
-		} },
-		{ SelectionModifiersEnum.OmitObjectInstancesOnAdditionalTiles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.OmitObjectInstancesOnAdditionalTiles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			ResourceManager.ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(prefab.layer);
 			if (objectInstance != null && objectInstance.tile != posTile) {
 				return false;
 			}
 			return true;
 		} },
-		{ SelectionModifiersEnum.Fillable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
-			return posTile.dugPreviously || (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Hole || (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water && selectionModifierFunctions[SelectionModifiersEnum.OmitNonCoastWater](tile, posTile, prefab)));
+		{ SelectionModifiersEnum.Fillable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+			return posTile.dugPreviously || (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Hole || (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water && selectionModifierFunctions[SelectionModifiersEnum.OmitNonCoastWater](tile, posTile, prefab, variation)));
 		} },
 	};
 
@@ -856,7 +855,7 @@ public class JobManager : BaseManager {
 										Vector2 actualMultiTilePosition = tile.obj.transform.position + (Vector3)multiTilePosition;
 										if (actualMultiTilePosition.x >= 0 && actualMultiTilePosition.x < GameManager.colonyM.colony.map.mapData.mapSize && actualMultiTilePosition.y >= 0 && actualMultiTilePosition.y < GameManager.colonyM.colony.map.mapData.mapSize) {
 											TileManager.Tile posTile = GameManager.colonyM.colony.map.GetTileFromPosition(actualMultiTilePosition);
-											addTile = selectionModifierFunctions[selectionModifier](tile, posTile, selectedPrefab.prefab);
+											addTile = selectionModifierFunctions[selectionModifier](tile, posTile, selectedPrefab.prefab, selectedPrefab.variation);
 											if (!addTile) {
 												break;
 											}
@@ -1033,7 +1032,7 @@ public class JobManager : BaseManager {
 						bool createJobAtTile = true;
 						foreach (SelectionModifiersEnum selectionModifier in selectedRemovePrefab.selectionModifiers) {
 							if (selectionModifier != SelectionModifiersEnum.Outline) {
-								createJobAtTile = selectionModifierFunctions[selectionModifier](objectInstance.tile, objectInstance.tile, selectedRemovePrefab);
+								createJobAtTile = selectionModifierFunctions[selectionModifier](objectInstance.tile, objectInstance.tile, selectedRemovePrefab, null);
 								if (!createJobAtTile) {
 									break;
 								}

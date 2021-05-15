@@ -1227,8 +1227,9 @@ public class ResourceManager : BaseManager {
 
 	public enum ObjectGroupEnum {
 		Structure, Furniture, Containers, Trading, Crafting,
-		Command,
 		Farm,
+		Terraform,
+		Command,
 		None,
 	}
 
@@ -1271,10 +1272,10 @@ public class ResourceManager : BaseManager {
 		GrowthTimeDays,
 		Seed,
 		HarvestResource,
-		Plants,
 		TimeToBuild,
 		CommonResources,
 		Variations,
+		VariationNameOrder,
 		SelectionModifiers,
 		JobType,
 		AddToTileWhenBuilt
@@ -1287,7 +1288,13 @@ public class ResourceManager : BaseManager {
 		WalkSpeed,
 		Integrity,
 		Flammability,
-		TimeToBuild
+		TimeToBuild,
+		Plants
+	}
+
+	public enum VariationNameOrderEnum {
+		VariationObject,
+		ObjectVariation
 	}
 
 	public enum ObjectEnum {
@@ -1304,15 +1311,14 @@ public class ResourceManager : BaseManager {
 		TradingPost,
 		Furnace,
 		Gin, Loom, SplittingBlock, SplittingLog, Anvil, BrickFormer,
-		ChopPlant, PlantPlant, PlantAppleTree, PlantBlueberryBush,
+		ChopPlant, Plant,
 		Mine, Dig, Fill,
 		RemoveFloor, RemoveObject, RemoveAll,
 		Cancel,
 		IncreasePriority, DecreasePriority,
 		WheatFarm, PotatoFarm, CottonFarm,
 		HarvestFarm,
-		CreateResource, PickupResources, TransferResources, CollectResources, EmptyInventory, Sleep, CollectWater, Drink, CollectFood, Eat, WearClothes,
-		PlantTree, PlantBush, PlantCactus
+		CreateResource, PickupResources, TransferResources, CollectResources, EmptyInventory, Sleep, CollectWater, Drink, CollectFood, Eat, WearClothes
 	}
 
 	public enum ObjectInstanceType {
@@ -1389,13 +1395,11 @@ public class ResourceManager : BaseManager {
 																	Resource seedResource = null;
 																	Resource harvestResource = null;
 
-																	// Plants
-																	Dictionary<PlantPrefab, Resource> plants = new Dictionary<PlantPrefab, Resource>();
-
 																	// Job
 																	int? timeToBuild = null;
 																	List<ResourceAmount> commonResources = new List<ResourceAmount>();
 																	List<Variation> variations = new List<Variation>();
+																	VariationNameOrderEnum variationNameOrder = VariationNameOrderEnum.VariationObject;
 																	List<JobManager.SelectionModifiersEnum> selectionModifiers = new List<JobManager.SelectionModifiersEnum>();
 																	JobManager.JobEnum? jobType = null;
 																	bool? addToTileWhenBuilt = true;
@@ -1472,15 +1476,6 @@ public class ResourceManager : BaseManager {
 																			case ObjectPropertyEnum.HarvestResource:
 																				harvestResource = GetResourceByString((string)objectSubProperty.Value);
 																				break;
-																			case ObjectPropertyEnum.Plants:
-																				foreach (string plantToHarvestResourceString in ((string)objectSubProperty.Value).Split(',')) {
-																					string harvestResourceString = plantToHarvestResourceString.Split(':')[1];
-																					plants.Add(
-																						GetPlantPrefabByString(plantToHarvestResourceString.Split(':')[0]), 
-																						harvestResourceString.Contains("None") ? null : GetResourceByString(harvestResourceString)
-																					);
-																				}
-																				break;
 																			case ObjectPropertyEnum.TimeToBuild:
 																				timeToBuild = int.Parse((string)objectSubProperty.Value);
 																				break;
@@ -1500,6 +1495,9 @@ public class ResourceManager : BaseManager {
 																							int? variationIntegrity = null;
 																							float? variationFlammability = null;
 																							int? variationTimeToBuild = null;
+
+																							// Plants
+																							Dictionary<PlantPrefab, Resource> variationPlants = new Dictionary<PlantPrefab, Resource>();
 
 																							foreach (KeyValuePair<string, object> variationProperty in (List<KeyValuePair<string, object>>)variationsProperty.Value) {
 																								switch ((VariationPropertyEnum)Enum.Parse(typeof(VariationPropertyEnum), variationProperty.Key)) {
@@ -1523,6 +1521,18 @@ public class ResourceManager : BaseManager {
 																									case VariationPropertyEnum.TimeToBuild:
 																										variationTimeToBuild = int.Parse((string)variationProperty.Value);
 																										break;
+																									case VariationPropertyEnum.Plants:
+																										foreach (string plantToHarvestResourceString in ((string)variationProperty.Value).Split(',')) {
+																											string harvestResourceString = plantToHarvestResourceString.Split(':')[1];
+																											variationPlants.Add(
+																												GetPlantPrefabByString(plantToHarvestResourceString.Split(':')[0]),
+																												harvestResourceString.Contains("None") ? null : GetResourceByString(harvestResourceString)
+																											);
+																										}
+																										break;
+																									default:
+																										Debug.LogError("Unknown variation property: " + variationProperty.Key + " " + variationProperty.Value);
+																										break;
 																								}
 																							}
 
@@ -1533,12 +1543,16 @@ public class ResourceManager : BaseManager {
 																								variationWalkSpeed ?? walkSpeed.Value,
 																								variationIntegrity ?? integrity.Value,
 																								variationFlammability ?? flammability.Value,
-																								variationTimeToBuild ?? timeToBuild.Value
+																								variationTimeToBuild ?? timeToBuild.Value,
+																								variationPlants
 																							));
 
 																							break;
 																					}
 																				}
+																				break;
+																			case ObjectPropertyEnum.VariationNameOrder:
+																				variationNameOrder = (VariationNameOrderEnum)Enum.Parse(typeof(VariationNameOrderEnum), (string)objectSubProperty.Value);
 																				break;
 																			case ObjectPropertyEnum.SelectionModifiers:
 																				foreach (string selectionModifierString in ((string)objectSubProperty.Value).Split(',')) {
@@ -1616,10 +1630,10 @@ public class ResourceManager : BaseManager {
 																		growthTimeDays.Value,
 																		seedResource,
 																		harvestResource,
-																		plants,
 																		timeToBuild.Value,
 																		commonResources,
 																		variations,
+																		variationNameOrder,
 																		selectionModifiers,
 																		jobType.Value,
 																		addToTileWhenBuilt.Value
@@ -1740,6 +1754,9 @@ public class ResourceManager : BaseManager {
 
 		public readonly string instanceName;
 
+		// Plants
+		public readonly Dictionary<PlantPrefab, Resource> plants;
+
 		public Variation(
 			ObjectPrefab prefab,
 			string name,
@@ -1747,7 +1764,8 @@ public class ResourceManager : BaseManager {
 			float walkSpeed,
 			int integrity,
 			float flammability,
-			int timeToBuild
+			int timeToBuild,
+			Dictionary<PlantPrefab, Resource> plants
 		) {
 			this.prefab = prefab;
 			this.name = name;
@@ -1756,13 +1774,14 @@ public class ResourceManager : BaseManager {
 			this.integrity = integrity;
 			this.flammability = flammability;
 			this.timeToBuild = timeToBuild;
+			this.plants = plants;
 		}
 
 		public static bool Equals(Variation v1, Variation v2) {
 			return ((v1 == null) && (v2 == null)) || (v1 == null || v2 == null) || (v1.name == v2.name);
 		}
 
-		public static readonly Variation nullVariation = new Variation(null, null, null, 0, 0, 0, 0);
+		public static readonly Variation nullVariation = new Variation(null, null, null, 0, 0, 0, 0, null);
 	}
 
 	public Dictionary<ObjectEnum, ObjectPrefab> objectPrefabs = new Dictionary<ObjectEnum, ObjectPrefab>();
@@ -1815,13 +1834,11 @@ public class ResourceManager : BaseManager {
 		public readonly Resource seedResource;
 		public readonly Resource harvestResource;
 
-		// Plants
-		public readonly Dictionary<PlantPrefab, Resource> plants;
-
 		// Job
 		public readonly int timeToBuild;
 		public readonly List<ResourceAmount> commonResources = new List<ResourceAmount>();
 		public readonly List<Variation> variations = new List<Variation>();
+		public readonly VariationNameOrderEnum variationNameOrder;
 		public readonly List<JobManager.SelectionModifiersEnum> selectionModifiers = new List<JobManager.SelectionModifiersEnum>();
 		public readonly JobManager.JobEnum jobType;
 		public readonly bool addToTileWhenBuilt;
@@ -1862,18 +1879,16 @@ public class ResourceManager : BaseManager {
 			int growthTimeDays,
 			Resource seedResource,
 			Resource harvestResource,
-			Dictionary<PlantPrefab, Resource> plants,
 			int timeToBuild,
 			List<ResourceAmount> commonResources,
 			List<Variation> variations,
+			VariationNameOrderEnum variationNameOrder,
 			List<JobManager.SelectionModifiersEnum> selectionModifiers,
 			JobManager.JobEnum jobType,
 			bool addToTileWhenBuilt
 		) {
 			this.type = type;
 			name = UIManager.SplitByCapitals(type.ToString());
-
-			this.variations = variations;
 
 			this.groupType = groupType;
 			this.subGroupType = subGroupType;
@@ -1914,12 +1929,11 @@ public class ResourceManager : BaseManager {
 			this.seedResource = seedResource;
 			this.harvestResource = harvestResource;
 
-			// Plants
-			this.plants = plants;
-
 			// Job
 			this.timeToBuild = timeToBuild;
 			this.commonResources = commonResources;
+			this.variations = variations;
+			this.variationNameOrder = variationNameOrder;
 			this.selectionModifiers = selectionModifiers;
 			this.jobType = jobType;
 			this.addToTileWhenBuilt = addToTileWhenBuilt;
@@ -1935,9 +1949,9 @@ public class ResourceManager : BaseManager {
 			} else {
 				foreach (Variation variation in variations) {
 					Dictionary<SpriteType, List<Sprite>> spriteGroups = new Dictionary<SpriteType, List<Sprite>> {
-						{ SpriteType.Base, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variation.name + " " + name).Replace(' ', '-') + "-base").ToList() },
-						{ SpriteType.Bitmask, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variation.name + " " + name).Replace(' ', '-') + "-bitmask").ToList() },
-						{ SpriteType.Active, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variation.name + " " + name).Replace(' ', '-') + "-active").ToList() }
+						{ SpriteType.Base, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variationNameOrder == VariationNameOrderEnum.VariationObject ? variation.name + " " + name : name + " " + variation.name).Replace(' ', '-') + "-base").ToList() },
+						{ SpriteType.Bitmask, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variationNameOrder == VariationNameOrderEnum.VariationObject ? variation.name + " " + name : name + " " + variation.name).Replace(' ', '-') + "-bitmask").ToList() },
+						{ SpriteType.Active, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variationNameOrder == VariationNameOrderEnum.VariationObject ? variation.name + " " + name : name + " " + variation.name).Replace(' ', '-') + "-active").ToList() }
 					};
 
 					sprites.Add(variation, spriteGroups);
@@ -2015,7 +2029,11 @@ public class ResourceManager : BaseManager {
 		public string GetInstanceNameFromVariation(Variation variation) {
 			return variation == null
 				? name
-				: variation.name + (string.IsNullOrEmpty(variation.name) ? string.Empty : " ") + name;
+				: (variation.prefab.variationNameOrder == VariationNameOrderEnum.ObjectVariation ? name : string.Empty)
+					+ (string.IsNullOrEmpty(variation.name) || variation.prefab.variationNameOrder == VariationNameOrderEnum.VariationObject ? string.Empty : " ")
+					+ variation.name
+					+ (string.IsNullOrEmpty(variation.name) || variation.prefab.variationNameOrder == VariationNameOrderEnum.ObjectVariation ? string.Empty : " ")
+					+ (variation.prefab.variationNameOrder == VariationNameOrderEnum.VariationObject ? name : string.Empty);
 		}
 
 		public Sprite GetBaseSpriteForVariation(Variation variation) {

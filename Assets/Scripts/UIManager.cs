@@ -1926,6 +1926,7 @@ public class UIManager : BaseManager {
 
 	private static readonly List<ResourceManager.ObjectGroupEnum> separateMenuGroups = new List<ResourceManager.ObjectGroupEnum>() {
 		ResourceManager.ObjectGroupEnum.Farm,
+		ResourceManager.ObjectGroupEnum.Terraform,
 		ResourceManager.ObjectGroupEnum.Command
 	};
 
@@ -3103,7 +3104,7 @@ public class UIManager : BaseManager {
 					jobInfoNameText.text = job.tile.tileType.name;
 					break;
 				case JobManager.JobEnum.PlantPlant:
-					jobInfoNameText.text = GameManager.resourceM.GetPlantGroupByEnum(job.prefab.plants.First().Key.groupType).name;
+					jobInfoNameText.text = GameManager.resourceM.GetPlantGroupByEnum(job.variation.plants.First().Key.groupType).name;
 					break;
 				case JobManager.JobEnum.ChopPlant:
 					jobInfoNameText.text = job.tile.plant.name;
