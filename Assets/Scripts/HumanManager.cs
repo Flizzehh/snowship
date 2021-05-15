@@ -177,7 +177,10 @@ public class HumanManager : BaseManager {
 
 		protected void Wander(TileManager.Tile stayNearTile, int stayNearTileDistance) {
 			if (wanderTimer <= 0) {
-				List<TileManager.Tile> validWanderTiles = overTile.surroundingTiles.Where(tile => tile != null && tile.walkable && tile.buildable && GameManager.humanM.humans.Find(human => human.overTile == tile) == null).ToList();
+				List<TileManager.Tile> validWanderTiles = overTile.surroundingTiles
+					.Where(tile => tile != null && tile.walkable && tile.buildable && GameManager.humanM.humans.Find(human => human.overTile == tile) == null)
+					.Where(tile => tile.GetObjectInstanceAtLayer(2) == null)
+					.ToList();
 				if (stayNearTile != null) {
 					validWanderTiles = validWanderTiles.Where(t => Vector2.Distance(t.obj.transform.position, stayNearTile.obj.transform.position) <= stayNearTileDistance).ToList();
 					if (Vector2.Distance(obj.transform.position, stayNearTile.obj.transform.position) > stayNearTileDistance) {
