@@ -163,7 +163,11 @@ public class JobManager : BaseManager {
 			return "Building a " + job.prefab.name + ".";
 		} },
 		{ JobEnum.Remove, delegate (Job job) {
-			return "Removing a " + job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name + ".";
+			if (job.prefab.type == ResourceManager.ObjectEnum.RemoveRoof) {
+				return "Removing a roof.";
+			} else {
+				return "Removing a " + job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name + ".";
+			}
 		} },
 		{ JobEnum.ChopPlant, delegate (Job job) {
 			return "Chopping down a " + job.tile.plant.prefab.name + ".";
@@ -238,61 +242,76 @@ public class JobManager : BaseManager {
 			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
 				colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
 			}
+			if (job.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Roofs) {
+				job.tile.SetRoof(true);
+			}
 		} },
 		{ JobEnum.Remove, delegate (ColonistManager.Colonist colonist, Job job) {
 			bool previousWalkability = job.tile.walkable;
 			ResourceManager.ObjectInstance instance = job.tile.GetObjectInstanceAtLayer(job.prefab.layer);
-			if (instance == null) {
-				Debug.LogError("Instance being removed at layer " + job.prefab.layer + " is null.");
-			}
-			foreach (ResourceManager.ResourceAmount resourceAmount in instance.prefab.commonResources) {
-				colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
-			}
-			if (instance.variation != null) {
-				foreach (ResourceManager.ResourceAmount resourceAmount in instance.variation.uniqueResources) {
+			if (instance != null) {
+				foreach (ResourceManager.ResourceAmount resourceAmount in instance.prefab.commonResources) {
 					colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
 				}
-			}
-			if (instance is ResourceManager.Farm farm) {
-				if (farm.growProgressSpriteIndex == 0) {
-					job.colonist.GetInventory().ChangeResourceAmount(farm.prefab.seedResource, 1, false);
+				if (instance.variation != null) {
+					foreach (ResourceManager.ResourceAmount resourceAmount in instance.variation.uniqueResources) {
+						colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+					}
 				}
-			} else if (instance is ResourceManager.Container container) {
-				List<ResourceManager.ResourceAmount> nonReservedResourcesToRemove = new List<ResourceManager.ResourceAmount>();
-				foreach (ResourceManager.ResourceAmount resourceAmount in container.GetInventory().resources) {
-					nonReservedResourcesToRemove.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
-					colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
-				}
-				foreach (ResourceManager.ResourceAmount resourceAmount in nonReservedResourcesToRemove) {
-					container.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
-				}
-				List<ResourceManager.ReservedResources> reservedResourcesToRemove = new List<ResourceManager.ReservedResources>();
-				foreach (ResourceManager.ReservedResources reservedResources in container.GetInventory().reservedResources) {
-					foreach (ResourceManager.ResourceAmount resourceAmount in reservedResources.resources) {
+				if (instance is ResourceManager.Farm farm) {
+					if (farm.growProgressSpriteIndex == 0) {
+						job.colonist.GetInventory().ChangeResourceAmount(farm.prefab.seedResource, 1, false);
+					}
+				} else if (instance is ResourceManager.Container container) {
+					List<ResourceManager.ResourceAmount> nonReservedResourcesToRemove = new List<ResourceManager.ResourceAmount>();
+					foreach (ResourceManager.ResourceAmount resourceAmount in container.GetInventory().resources) {
+						nonReservedResourcesToRemove.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
 						colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
 					}
-					reservedResourcesToRemove.Add(reservedResources);
-					if (reservedResources.human is ColonistManager.Colonist human) {
-						human.ReturnJob();
+					foreach (ResourceManager.ResourceAmount resourceAmount in nonReservedResourcesToRemove) {
+						container.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
+					}
+					List<ResourceManager.ReservedResources> reservedResourcesToRemove = new List<ResourceManager.ReservedResources>();
+					foreach (ResourceManager.ReservedResources reservedResources in container.GetInventory().reservedResources) {
+						foreach (ResourceManager.ResourceAmount resourceAmount in reservedResources.resources) {
+							colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+						}
+						reservedResourcesToRemove.Add(reservedResources);
+						if (reservedResources.human is ColonistManager.Colonist human) {
+							human.ReturnJob();
+						}
+					}
+					foreach (ResourceManager.ReservedResources reservedResourceToRemove in reservedResourcesToRemove) {
+						container.GetInventory().reservedResources.Remove(reservedResourceToRemove);
+					}
+					GameManager.uiM.SetSelectedColonistInformation(true);
+					GameManager.uiM.SetSelectedContainerInfo();
+					GameManager.uiM.UpdateSelectedTradingPostInfo();
+				} else if (instance is ResourceManager.CraftingObject craftingObject) {
+					foreach (Job removeJob in craftingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
+						GameManager.jobM.CancelJob(removeJob);
+					}
+				} else if (instance is ResourceManager.SleepSpot sleepSpot) {
+					if (sleepSpot.occupyingColonist != null) {
+						sleepSpot.occupyingColonist.ReturnJob();
 					}
 				}
-				foreach (ResourceManager.ReservedResources reservedResourceToRemove in reservedResourcesToRemove) {
-					container.GetInventory().reservedResources.Remove(reservedResourceToRemove);
-				}
-				GameManager.uiM.SetSelectedColonistInformation(true);
-				GameManager.uiM.SetSelectedContainerInfo();
-				GameManager.uiM.UpdateSelectedTradingPostInfo();
-			} else if (instance is ResourceManager.CraftingObject craftingObject) {
-				foreach (Job removeJob in craftingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
-					GameManager.jobM.CancelJob(removeJob);
-				}
-			} else if (instance is ResourceManager.SleepSpot sleepSpot) {
-				if (sleepSpot.occupyingColonist != null) {
-					sleepSpot.occupyingColonist.ReturnJob();
+				GameManager.resourceM.RemoveObjectInstance(instance);
+				job.tile.RemoveObjectAtLayer(instance.prefab.layer);
+			} else {
+				switch (job.prefab.type) {
+					case ResourceManager.ObjectEnum.RemoveRoof:
+						job.tile.SetRoof(false);
+						foreach (ResourceManager.ResourceAmount resourceAmount in GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Roof).commonResources) {
+							colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+						}
+						break;
+					default:
+						Debug.LogError("Object instance is null and no alternative removal type is known.");
+						break;
 				}
 			}
-			GameManager.resourceM.RemoveObjectInstance(instance);
-			job.tile.RemoveObjectAtLayer(instance.prefab.layer);
+
 			GameManager.resourceM.Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
 			if (job.tile.walkable && !previousWalkability) {
 				GameManager.colonyM.colony.map.RemoveTileBrightnessEffect(job.tile);
@@ -356,7 +375,7 @@ public class JobManager : BaseManager {
 			foreach (ResourceManager.ResourceRange resourceRange in job.tile.tileType.resourceRanges) {
 				colonist.GetInventory().ChangeResourceAmount(resourceRange.resource, UnityEngine.Random.Range(resourceRange.min, resourceRange.max + 1), false);
 			}
-			if (job.tile.roof) {
+			if (job.tile.HasRoof()) {
 				job.tile.SetTileType(TileManager.TileType.GetTileTypeByEnum(TileManager.TileType.TypeEnum.Dirt), false, true, true);
 			} else {
 				job.tile.SetTileType(job.tile.biome.tileTypes[TileManager.TileTypeGroup.TypeEnum.Ground], false, true, true);
@@ -656,7 +675,7 @@ public class JobManager : BaseManager {
 
 	public enum SelectionModifiersEnum {
 		Outline, Walkable, OmitWalkable, WalkableIncludingFences, Buildable, OmitBuildable, StoneTypes, OmitStoneTypes, AllWaterTypes, OmitAllWaterTypes, LiquidWaterTypes, OmitLiquidWaterTypes, OmitNonStoneAndWaterTypes,
-		Objects, OmitObjects, Floors, OmitFloors, Plants, OmitPlants, OmitSameLayerJobs, OmitSameLayerObjectInstances, Farms, OmitFarms,
+		Objects, OmitObjects, Floors, OmitFloors, Plants, OmitPlants, OmitSameLayerJobs, OmitSameLayerObjectInstances, Farms, OmitFarms, Roofs, OmitRoofs, CloseToSupport,
 		ObjectsAtSameLayer, OmitNonCoastWater, OmitHoles, OmitPreviousDig, BiomeSupportsSelectedPlants, OmitObjectInstancesOnAdditionalTiles, Fillable
 	};
 
@@ -755,7 +774,24 @@ public class JobManager : BaseManager {
 		{ SelectionModifiersEnum.OmitFarms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.farm == null;
 		} },
-		{ SelectionModifiersEnum.ObjectsAtSameLayer, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab) {
+		{ SelectionModifiersEnum.Roofs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+			return posTile.HasRoof();
+		} },
+		{ SelectionModifiersEnum.OmitRoofs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+			return !posTile.HasRoof();
+		} },
+		{ SelectionModifiersEnum.CloseToSupport, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+			for (int y = -5; y < 5; y++) {
+				for (int x = -5; x < 5; x++) {
+					TileManager.Tile supportTile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(posTile.position.x + x, posTile.position.y + y));
+					if (!supportTile.buildable && !supportTile.walkable) {
+						return true;
+					}
+				}
+			}
+			return false;
+		} },
+		{ SelectionModifiersEnum.ObjectsAtSameLayer, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
 			return posTile.GetObjectInstanceAtLayer(prefab.layer) != null;
 		} },
 		{ SelectionModifiersEnum.Objects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {

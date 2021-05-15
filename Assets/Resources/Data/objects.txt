@@ -2,6 +2,17 @@
 	<Type>Structure
 	<SubGroups>
 		<SubGroup>
+			<Type>Roofs
+			<Objects>
+				<Object>
+					<Type>Roof
+					<Layer>0
+					<TimeToBuild>10
+					<JobType>Build
+					<AddToTileWhenBuilt>false
+					<SelectionModifiers>OmitRoofs,Walkable,Buildable,CloseToSupport
+					<CommonResources>Wood:3
+		<SubGroup>
 			<Type>Walls
 			<Objects>
 				<Object>
@@ -555,15 +566,22 @@
 			<Type>Remove
 			<Objects>
 				<Object>
-					<Type>RemoveFloor
-					<Layer>1
+					<Type>RemoveRoof
+					<Layer>0
 					<TimeToBuild>3
-					<SelectionModifiers>ObjectsAtSameLayer,OmitSameLayerJobs
+					<SelectionModifiers>Roofs,OmitSameLayerJobs
 					<JobType>Remove
 					<AddToTileWhenBuilt>false
 				<Object>
 					<Type>RemoveObject
 					<Layer>2
+					<TimeToBuild>3
+					<SelectionModifiers>ObjectsAtSameLayer,OmitSameLayerJobs
+					<JobType>Remove
+					<AddToTileWhenBuilt>false
+				<Object>
+					<Type>RemoveFloor
+					<Layer>1
 					<TimeToBuild>3
 					<SelectionModifiers>ObjectsAtSameLayer,OmitSameLayerJobs
 					<JobType>Remove

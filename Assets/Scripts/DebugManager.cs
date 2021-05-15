@@ -1382,7 +1382,7 @@ public class DebugManager : BaseManager {
 			if (parameters.Count == 0) {
 				foreach (TileManager.Tile tile in GameManager.colonyM.colony.map.tiles) {
 					tile.SetVisible(true);
-					if (tile.roof) {
+					if (tile.HasRoof()) {
 						tile.sr.sprite = GameManager.resourceM.whiteSquareSprite;
 						tile.sr.color = Color.red;
 					}

@@ -1235,7 +1235,7 @@ public class PersistenceManager : BaseManager {
 			file.WriteLine(CreateKeyValueString(TileProperty.Temperature, tile.temperature, 1));
 			file.WriteLine(CreateKeyValueString(TileProperty.Precipitation, tile.GetPrecipitation(), 1));
 			file.WriteLine(CreateKeyValueString(TileProperty.Biome, tile.biome.type, 1));
-			file.WriteLine(CreateKeyValueString(TileProperty.Roof, tile.roof, 1));
+			file.WriteLine(CreateKeyValueString(TileProperty.Roof, tile.HasRoof(), 1));
 			file.WriteLine(CreateKeyValueString(TileProperty.Dug, tile.dugPreviously, 1));
 			file.WriteLine(CreateKeyValueString(TileProperty.Sprite, tile.sr.sprite.name, 1));
 
@@ -1428,8 +1428,8 @@ public class PersistenceManager : BaseManager {
 				tileDifferences.Add(TileProperty.Biome, tile.biome.type.ToString());
 			}
 
-			if (tile.roof != originalTile.tileRoof.Value) {
-				tileDifferences.Add(TileProperty.Roof, tile.roof.ToString());
+			if (tile.HasRoof() != originalTile.tileRoof.Value) {
+				tileDifferences.Add(TileProperty.Roof, tile.HasRoof().ToString());
 			}
 
 			if (tile.dugPreviously != originalTile.tileDug.Value) {
@@ -1528,7 +1528,7 @@ public class PersistenceManager : BaseManager {
 				tile.SetPrecipitation(modifiedTile != null && modifiedTile.tilePrecipitation.HasValue ? modifiedTile.tilePrecipitation.Value : originalTile.tilePrecipitation.Value);
 				tile.SetBiome(modifiedTile != null && modifiedTile.tileBiome != null ? modifiedTile.tileBiome : originalTile.tileBiome, false);
 				tile.SetTileType(modifiedTile != null && modifiedTile.tileType != null ? modifiedTile.tileType : originalTile.tileType, false, false, false);
-				tile.roof = modifiedTile != null && modifiedTile.tileRoof.HasValue ? modifiedTile.tileRoof.Value : originalTile.tileRoof.Value;
+				tile.SetRoof(modifiedTile != null && modifiedTile.tileRoof.HasValue ? modifiedTile.tileRoof.Value : originalTile.tileRoof.Value);
 				tile.dugPreviously = modifiedTile != null && modifiedTile.tileDug.HasValue ? modifiedTile.tileDug.Value : originalTile.tileDug.Value;
 
 				bool originalTileValidPlant = originalTile.plantPrefab != null;

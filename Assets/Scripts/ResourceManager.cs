@@ -1240,7 +1240,7 @@ public class ResourceManager : BaseManager {
 	}
 
 	public enum ObjectSubGroupEnum {
-		Walls, Fences, Doors, Floors, Foundations,
+		Roofs, Walls, Fences, Doors, Floors, Foundations,
 		Beds, Chairs, Tables, Lights,
 		Containers,
 		TradingPosts,
@@ -1298,6 +1298,7 @@ public class ResourceManager : BaseManager {
 	}
 
 	public enum ObjectEnum {
+		Roof,
 		Wall,
 		Fence,
 		WoodenDoor,
@@ -1313,7 +1314,7 @@ public class ResourceManager : BaseManager {
 		Gin, Loom, SplittingBlock, SplittingLog, Anvil, BrickFormer,
 		ChopPlant, Plant,
 		Mine, Dig, Fill,
-		RemoveFloor, RemoveObject, RemoveAll,
+		RemoveRoof, RemoveObject, RemoveFloor, RemoveAll,
 		Cancel,
 		IncreasePriority, DecreasePriority,
 		WheatFarm, PotatoFarm, CottonFarm,

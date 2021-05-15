@@ -720,7 +720,7 @@ public class TileManager : BaseManager {
 
 		public bool blocksLight = false;
 
-		public bool roof = false;
+		private bool roof = false;
 
 		public float brightness = 0;
 		public Dictionary<int, float> brightnessAtHour = new Dictionary<int, float>();
@@ -1094,6 +1094,14 @@ public class TileManager : BaseManager {
 				}
 			}
 			return allObjectInstances;
+		}
+
+		public bool HasRoof() {
+			return roof;
+		}
+
+		public void SetRoof(bool roof) {
+			this.roof = roof;
 		}
 
 		public void SetWalkSpeed() {
@@ -2529,11 +2537,7 @@ public class TileManager : BaseManager {
 		public void SetRoofs() {
 			float roofHeightMultiplier = 1.25f;
 			foreach (Tile tile in tiles) {
-				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone && tile.height >= mapData.terrainTypeHeights[TileTypeGroup.TypeEnum.Stone] * roofHeightMultiplier) {
-					tile.roof = true;
-				} else {
-					tile.roof = false;
-				}
+				tile.SetRoof(tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone && tile.height >= mapData.terrainTypeHeights[TileTypeGroup.TypeEnum.Stone] * roofHeightMultiplier);
 			}
 		}
 
@@ -2863,11 +2867,11 @@ public class TileManager : BaseManager {
 		}
 
 		public bool TileCanShadowTiles(Tile tile) {
-			return tile.surroundingTiles.Any(nTile => nTile != null && !nTile.blocksLight) && (tile.blocksLight || tile.roof);
+			return tile.surroundingTiles.Any(nTile => nTile != null && !nTile.blocksLight) && (tile.blocksLight || tile.HasRoof());
 		}
 
 		public bool TileCanBeShadowed(Tile tile) {
-			return !tile.blocksLight || (!tile.blocksLight && tile.roof);
+			return !tile.blocksLight || (!tile.blocksLight && tile.HasRoof());
 		}
 
 		public void RecalculateLighting(List<Tile> tilesToRecalculate, bool setBrightnessAtEnd, bool forceBrightnessUpdate = false) {

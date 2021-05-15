@@ -2095,7 +2095,7 @@ public class UIManager : BaseManager {
 				tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInformation-Temperature").GetComponent<Text>().text = Mathf.RoundToInt(mouseOverTile.temperature) + "°C";
 				tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInformation-Precipitation").GetComponent<Text>().text = Mathf.RoundToInt(mouseOverTile.GetPrecipitation() * 100f) + "%";
 
-				if (mouseOverTile.roof) {
+				if (mouseOverTile.HasRoof()) {
 					tileRoofElement.SetActive(true);
 					tileRoofElement.transform.Find("TileInfo-Label-Text").GetComponent<Text>().text = "Roof";
 					tileRoofElement.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
@@ -3119,7 +3119,11 @@ public class UIManager : BaseManager {
 					jobInfoNameText.text = job.createResource.resource.name;
 					break;
 				case JobManager.JobEnum.Remove:
-					jobInfoNameText.text = job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name;
+					if (job.prefab.type == ResourceManager.ObjectEnum.RemoveRoof) {
+						jobInfoNameText.text = "Roof";
+					} else {
+						jobInfoNameText.text = job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name;
+					}
 					break;
 				default:
 					jobInfoNameText.text = job.prefab.name;
