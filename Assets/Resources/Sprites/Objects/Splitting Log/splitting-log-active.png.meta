@@ -56,8 +56,32 @@ TextureImporter:
   - first:
       213: 21300034
     second: splitting-log-active_7
+  - first:
+      213: -7537760293347595020
+    second: splitting-log-active_0
+  - first:
+      213: 1856697222657485938
+    second: splitting-log-active_1
+  - first:
+      213: -3602790279234174454
+    second: splitting-log-active_2
+  - first:
+      213: 6247090098349870937
+    second: splitting-log-active_3
+  - first:
+      213: -6359405580079373022
+    second: splitting-log-active_4
+  - first:
+      213: -5315549139548584887
+    second: splitting-log-active_5
+  - first:
+      213: -2567582849606918686
+    second: splitting-log-active_6
+  - first:
+      213: 4335816323749881421
+    second: splitting-log-active_7
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -77,6 +101,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -87,7 +112,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -108,9 +133,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -143,8 +172,8 @@ TextureImporter:
       name: splitting-log-active_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 34
+        x: 0
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -154,8 +183,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43f28885abbfee346b694a7847170a2a
-      internalID: 21300020
+      spriteID: 4fce8f033fe746790800000000000000
+      internalID: -7537760293347595020
       vertices: []
       indices: 
       edges: []
@@ -164,8 +193,8 @@ TextureImporter:
       name: splitting-log-active_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 34
+        x: 32
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -175,8 +204,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4a14eb6833def544ebd588cdb962468c
-      internalID: 21300022
+      spriteID: 27c24fb694054c910800000000000000
+      internalID: 1856697222657485938
       vertices: []
       indices: 
       edges: []
@@ -185,8 +214,8 @@ TextureImporter:
       name: splitting-log-active_2
       rect:
         serializedVersion: 2
-        x: 67
-        y: 34
+        x: 64
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -196,8 +225,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b623606d4603a04ca5d46569d5c59cc
-      internalID: 21300024
+      spriteID: a0244065451500ec0800000000000000
+      internalID: -3602790279234174454
       vertices: []
       indices: 
       edges: []
@@ -206,8 +235,8 @@ TextureImporter:
       name: splitting-log-active_3
       rect:
         serializedVersion: 2
-        x: 100
-        y: 34
+        x: 96
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -217,8 +246,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b4c33137f15b59648a59dc9b3fd794f5
-      internalID: 21300026
+      spriteID: 95f0100985f12b650800000000000000
+      internalID: 6247090098349870937
       vertices: []
       indices: 
       edges: []
@@ -227,8 +256,8 @@ TextureImporter:
       name: splitting-log-active_4
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
+        x: 0
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -238,8 +267,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06471104ac9330c4cba9ef155acc8763
-      internalID: 21300028
+      spriteID: 2256bb8815adeb7a0800000000000000
+      internalID: -6359405580079373022
       vertices: []
       indices: 
       edges: []
@@ -248,8 +277,8 @@ TextureImporter:
       name: splitting-log-active_5
       rect:
         serializedVersion: 2
-        x: 34
-        y: 1
+        x: 32
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -259,8 +288,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f71a4bf2844c0c544acdd5aecdae6df2
-      internalID: 21300030
+      spriteID: 944c21778306b36b0800000000000000
+      internalID: -5315549139548584887
       vertices: []
       indices: 
       edges: []
@@ -269,8 +298,8 @@ TextureImporter:
       name: splitting-log-active_6
       rect:
         serializedVersion: 2
-        x: 67
-        y: 1
+        x: 64
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -280,8 +309,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1ee3790c726a63e4987df81120b5739c
-      internalID: 21300032
+      spriteID: 2ed5bcd700d1e5cd0800000000000000
+      internalID: -2567582849606918686
       vertices: []
       indices: 
       edges: []
@@ -290,8 +319,8 @@ TextureImporter:
       name: splitting-log-active_7
       rect:
         serializedVersion: 2
-        x: 100
-        y: 1
+        x: 96
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -301,8 +330,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 503b9568f52bdd94787811e11585993f
-      internalID: 21300034
+      spriteID: d46a37c69f9eb2c30800000000000000
+      internalID: 4335816323749881421
       vertices: []
       indices: 
       edges: []
