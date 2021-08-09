@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -78,6 +77,57 @@ public class UIManager : BaseManager {
 
 	public static Color ChangeAlpha(Color colour, float alpha) {
 		return new Color(colour.r, colour.g, colour.b, alpha);
+	}
+
+	public enum Gradients {
+		LightRedYellowGreen, LightGreenYellowRed, DarkRedYellowGreen, DarkGreenYellowRed
+	};
+
+	private static readonly Dictionary<Gradients, Gradient> gradientMap = new Dictionary<Gradients, Gradient>() {
+		{ Gradients.LightRedYellowGreen, new Func<Gradient>(() => {
+			Gradient gradient = new Gradient();
+			GradientColorKey[] colourKey = new GradientColorKey[3];
+			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
+			colourKey[0].color = GetColour(Colours.LightRed); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
+			colourKey[1].color = GetColour(Colours.LightYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
+			colourKey[2].color = GetColour(Colours.LightGreen); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
+			gradient.SetKeys(colourKey, alphaKey);
+			return gradient;
+		}).Invoke() },
+		{ Gradients.LightGreenYellowRed, new Func<Gradient>(() => {
+			Gradient gradient = new Gradient();
+			GradientColorKey[] colourKey = new GradientColorKey[3];
+			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
+			colourKey[0].color = GetColour(Colours.LightGreen); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
+			colourKey[1].color = GetColour(Colours.LightYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
+			colourKey[2].color = GetColour(Colours.LightRed); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
+			gradient.SetKeys(colourKey, alphaKey);
+			return gradient;
+		}).Invoke() },
+		{ Gradients.DarkRedYellowGreen, new Func<Gradient>(() => {
+			Gradient gradient = new Gradient();
+			GradientColorKey[] colourKey = new GradientColorKey[3];
+			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
+			colourKey[0].color = GetColour(Colours.DarkRed); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
+			colourKey[1].color = GetColour(Colours.DarkYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
+			colourKey[2].color = GetColour(Colours.DarkGreen); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
+			gradient.SetKeys(colourKey, alphaKey);
+			return gradient;
+		}).Invoke() },
+		{ Gradients.DarkGreenYellowRed, new Func<Gradient>(() => {
+			Gradient gradient = new Gradient();
+			GradientColorKey[] colourKey = new GradientColorKey[3];
+			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
+			colourKey[0].color = GetColour(Colours.DarkGreen); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
+			colourKey[1].color = GetColour(Colours.DarkYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
+			colourKey[2].color = GetColour(Colours.DarkRed); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
+			gradient.SetKeys(colourKey, alphaKey);
+			return gradient;
+		}).Invoke() }
+	};
+
+	public static Gradient GetGradient(Gradients gradientKey) {
+		return gradientMap[gradientKey];
 	}
 
 	public static bool IsAlphanumericWithSpaces(string text) {
