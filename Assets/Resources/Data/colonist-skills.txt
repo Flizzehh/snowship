@@ -1,15 +1,18 @@
 Building/
 	Build,0.1;
 	Remove,0.01`
-Mining/
-	Mine,0.1`
+Terraforming/
+	Mine,0.1;
+	Dig,0.1;
+	Fill,0.1`
 Farming/
 	PlantFarm,0.1;
 	HarvestFarm,0.1`
-Digging/
-	Dig,0.1`
 Forestry/
 	ChopPlant,0.1;
 	PlantPlant,0.1`
 Crafting/
-	CreateResource,0.1
+	CreateResource,0.1`
+Hauling/
+	TransferResources,0.1;
+	CollectResources,0.1

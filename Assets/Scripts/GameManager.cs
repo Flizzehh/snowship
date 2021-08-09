@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
 		humanM.CreateNames();
 		humanM.CreateHumanSprites();
 
-		colonistM.CreateColonistSkills();
+		colonistM.CreateColonistSkills(); // Skills must currently be ahead of professions to determine skill-profession relationship
 		colonistM.CreateColonistProfessions();
 		colonistM.CreateColonistNeeds();
 		colonistM.CreateMoodModifiers();

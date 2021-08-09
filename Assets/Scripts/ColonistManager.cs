@@ -33,6 +33,8 @@ public class ColonistManager : BaseManager {
 
 		public List<JobManager.JobEnum> jobs;
 
+		public SkillEnum relatedSkill;
+
 		public ProfessionPrefab(
 			ProfessionEnum type,
 			List<JobManager.JobEnum> jobs
@@ -41,6 +43,9 @@ public class ColonistManager : BaseManager {
 			name = UIManager.SplitByCapitals(type.ToString());
 
 			this.jobs = jobs;
+
+			relatedSkill = (SkillEnum)Enum.Parse(typeof(SkillEnum), Enum.GetNames(typeof(SkillEnum)).ToList().Find(skillEnumString => type.ToString() == skillEnumString));
+			GameManager.colonistM.GetSkillPrefabFromEnum(relatedSkill).relatedProfession = type;
 		}
 	}
 
@@ -94,6 +99,7 @@ public class ColonistManager : BaseManager {
 		public readonly ProfessionPrefab prefab;
 		public readonly Colonist colonist;
 
+		public static readonly int maxPriority = 9;
 		private int priority;
 
 		public ProfessionInstance(
@@ -111,12 +117,12 @@ public class ColonistManager : BaseManager {
 		}
 
 		public void SetPriority(int priority) {
-			if (priority > 9) {
+			if (priority > maxPriority) {
 				priority = 0;
 			}
 
 			if (priority < 0) {
-				priority = 9;
+				priority = maxPriority;
 			}
 
 			this.priority = priority;
@@ -133,7 +139,7 @@ public class ColonistManager : BaseManager {
 		}
 	}
 
-	public enum SkillEnum { Building, Mining, Digging, Farming, Forestry, Crafting };
+	public enum SkillEnum { Building, Terraforming, Farming, Forestry, Crafting, Hauling };
 
 	public class SkillPrefab {
 
@@ -141,6 +147,8 @@ public class ColonistManager : BaseManager {
 		public string name;
 
 		public readonly Dictionary<JobManager.JobEnum, float> affectedJobTypes = new Dictionary<JobManager.JobEnum, float>();
+
+		public ProfessionEnum relatedProfession;
 
 		public SkillPrefab(List<string> data) {
 			type = (SkillEnum)Enum.Parse(typeof(SkillEnum), data[0]);
@@ -155,6 +163,10 @@ public class ColonistManager : BaseManager {
 
 	public SkillPrefab GetSkillPrefabFromString(string skillTypeString) {
 		return skillPrefabs.Find(skillPrefab => skillPrefab.type == (SkillEnum)Enum.Parse(typeof(SkillEnum), skillTypeString));
+	}
+
+	public SkillPrefab GetSkillPrefabFromEnum(SkillEnum skillEnum) {
+		return skillPrefabs.Find(skillPrefab => skillPrefab.type == skillEnum);
 	}
 
 	public class SkillInstance {
@@ -210,6 +222,27 @@ public class ColonistManager : BaseManager {
 		foreach (SkillPrefab skillPrefab in skillPrefabs) {
 			skillPrefab.name = UIManager.SplitByCapitals(skillPrefab.name);
 		}
+	}
+
+	public ColonistManager.SkillInstance FindHighestSkillInstance(ColonistManager.SkillPrefab skill) {
+
+		ColonistManager.Colonist firstColonist = GameManager.colonistM.colonists.FirstOrDefault();
+		if (firstColonist == null) {
+			return null;
+		}
+		ColonistManager.SkillInstance highestSkillInstance = firstColonist.skills.Find(findSkill => findSkill.prefab == skill);
+		float highestSkillValue = highestSkillInstance.CalculateTotalSkillLevel();
+
+		foreach (ColonistManager.Colonist otherColonist in GameManager.colonistM.colonists.Skip(1)) {
+			ColonistManager.SkillInstance otherColonistSkillInstance = otherColonist.skills.Find(findSkill => findSkill.prefab == skill);
+			float otherColonistSkillValue = otherColonistSkillInstance.CalculateTotalSkillLevel();
+			if (otherColonistSkillValue > highestSkillValue) {
+				highestSkillValue = otherColonistSkillValue;
+				highestSkillInstance = otherColonistSkillInstance;
+			}
+		}
+
+		return highestSkillInstance;
 	}
 
 	public enum TraitEnum {

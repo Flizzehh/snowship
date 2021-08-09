@@ -2243,30 +2243,18 @@ public class UIManager : BaseManager {
 			obj.transform.Find("Level").GetComponent<Text>().text = skill.level + "." + Mathf.RoundToInt((skill.currentExperience / skill.nextLevelExperience) * 100f);
 			obj.transform.Find("Experience-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((skill.currentExperience / skill.nextLevelExperience) * 100f);
 
-			float highestLevel = 0;
-			float highestSkill = 0;
-			ColonistManager.Colonist highestSkillColonist = colonist;
-			foreach (ColonistManager.Colonist otherColonist in GameManager.colonistM.colonists) {
-				ColonistManager.SkillInstance foundSkill = otherColonist.skills.Find(findSkill => findSkill.prefab == skill.prefab);
-				float otherColonistSkill = foundSkill.level + (foundSkill.currentExperience / foundSkill.nextLevelExperience);
-				if (otherColonistSkill > highestSkill) {
-					highestSkill = otherColonistSkill;
-					highestSkillColonist = otherColonist;
-				}
-				if (foundSkill.level > highestLevel) {
-					highestLevel = foundSkill.level;
-				}
-			}
+			ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(skill.prefab);
 
-			obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((skill.level / (highestLevel > 0 ? highestLevel : 1)) * 100f);
+			if (highestSkillInstance != null) {
+				obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(((float)skill.level / (highestSkillInstance.level > 0 ? highestSkillInstance.level : 1)) * 100f);
 
-			float skillValue = skill.level + (skill.currentExperience / skill.nextLevelExperience);
-			if (highestSkillColonist == colonist || Mathf.Approximately(highestSkill, skillValue)) {
-				obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkYellow);
-				obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = GetColour(Colours.LightYellow);
-			} else {
-				obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkGreen);
-				obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = GetColour(Colours.LightGreen);
+				if (highestSkillInstance.colonist == colonist || Mathf.Approximately(highestSkillInstance.CalculateTotalSkillLevel(), skill.CalculateTotalSkillLevel())) {
+					obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkYellow);
+					obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = GetColour(Colours.LightYellow);
+				} else {
+					obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkGreen);
+					obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = GetColour(Colours.LightGreen);
+				}
 			}
 		}
 	}
@@ -3596,7 +3584,7 @@ public class UIManager : BaseManager {
 		}
 
 		public void AddButton(ColonistManager.ProfessionInstance professionInstance) {
-			GameObject buttonObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistProfessionPriority-Button"), obj.transform, false);
+			GameObject buttonObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/Priority-Button"), obj.transform, false);
 			Button button = buttonObj.GetComponent<Button>();
 
 			UpdateButton(button, professionInstance);
@@ -3624,8 +3612,23 @@ public class UIManager : BaseManager {
 			button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(
 				GetColour(Colours.DarkGreen),
 				GetColour(Colours.DarkRed),
-				(priority - 1f) / (9 - 1f)
+				(priority - 1f) / (ColonistManager.ProfessionInstance.maxPriority - 1f)
 			);
+
+			ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(GameManager.colonistM.GetSkillPrefabFromEnum(professionInstance.prefab.relatedSkill));
+
+			if (highestSkillInstance.colonist == professionInstance.colonist) {
+				button.GetComponent<Image>().color = GetColour(Colours.LightYellow);
+			} else {
+
+				ColonistManager.SkillInstance skillInstance = professionInstance.colonist.GetSkillFromEnum(professionInstance.prefab.relatedSkill);
+
+				button.GetComponent<Image>().color = Color.Lerp(
+					GetColour(Colours.DarkGrey50),
+					GetColour(Colours.DarkGreen),
+					skillInstance.CalculateTotalSkillLevel() / (highestSkillInstance.CalculateTotalSkillLevel() > 0 ? highestSkillInstance.CalculateTotalSkillLevel() : 1)
+				);
+			}
 		}
 
 		public void RemoveButton(ColonistManager.Colonist colonist) {
