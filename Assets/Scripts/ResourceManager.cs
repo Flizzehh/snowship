@@ -2085,7 +2085,6 @@ public class ResourceManager : BaseManager {
 		if (objectInstances.ContainsKey(prefab)) {
 			return objectInstances[prefab];
 		}
-		Debug.LogWarning("Tried accessing a tile object instance which isn't already in the list.");
 		return null;
 	}
 
