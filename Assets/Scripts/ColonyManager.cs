@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ColonyManager : BaseManager {
 
-	private static readonly List<int> mapSizes = new List<int>() { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };
+	private static readonly List<int> mapSizes = new List<int>() { 50, 100, 150, 200 };
 
 	public static int GetNumMapSizes() {
 		return mapSizes.Count;
