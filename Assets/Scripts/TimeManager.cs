@@ -54,7 +54,7 @@ public class TimeManager : BaseManager {
 			if (Input.GetKeyDown(KeyCode.Alpha2) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
 				timeModifier += 1;
 			}
-			timeModifier = Mathf.Clamp(timeModifier, 0, 3);
+			timeModifier = Mathf.Clamp(timeModifier, 0, 5);
 			if (timeModifier > 0 && paused) {
 				TogglePause();
 			}
