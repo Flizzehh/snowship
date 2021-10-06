@@ -1,4 +1,5 @@
 ﻿public class BaseManager {
+
 	public virtual void Awake() {
 
 	}

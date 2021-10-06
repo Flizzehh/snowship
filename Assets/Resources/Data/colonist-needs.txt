@@ -1,14 +1,15 @@
 <Need>
 	<Type>Rest
-	<BaseIncreaseRate>0.01
+	<BaseIncreaseRate>0.0167
+	<DecreaseRateMultiplier>3
 	<MinValueAction>true
-	<MinValue>10.08
+	<MinValue>14
 	<MaxValueAction>true
-	<MaxValue>28.8
+	<MaxValue>18
 	<CritValueAction>true
-	<CritValue>86.4
+	<CritValue>54
 	<CanDie>true
-	<HealthDecreaseRate>-0.01
+	<HealthDecreaseRate>-0.0167
 	<ClampValue>100
 	<Priority>0
 	<TraitsAffectingThisNeed>
@@ -16,6 +17,7 @@
 <Need>
 	<Type>Water
 	<BaseIncreaseRate>0.01
+	<DecreaseRateMultiplier>3
 	<MinValueAction>true
 	<MinValue>7.2
 	<MaxValueAction>true
@@ -31,6 +33,7 @@
 <Need>
 	<Type>Food
 	<BaseIncreaseRate>0.01
+	<DecreaseRateMultiplier>3
 	<MinValueAction>true
 	<MinValue>7.2
 	<MaxValueAction>true
@@ -46,6 +49,7 @@
 <Need>
 	<Type>Temperature
 	<BaseIncreaseRate>0.01
+	<DecreaseRateMultiplier>3
 	<MinValueAction>false
 	<MinValue>0
 	<MaxValueAction>false
@@ -61,6 +65,7 @@
 <Need>
 	<Type>Shelter
 	<BaseIncreaseRate>0.01
+	<DecreaseRateMultiplier>3
 	<MinValueAction>false
 	<MinValue>0
 	<MaxValueAction>false
@@ -76,6 +81,7 @@
 <Need>
 	<Type>Clothing
 	<BaseIncreaseRate>0.01
+	<DecreaseRateMultiplier>3
 	<MinValueAction>false
 	<MinValue>0
 	<MaxValueAction>false

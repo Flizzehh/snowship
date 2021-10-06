@@ -571,10 +571,10 @@ public class JobManager : BaseManager {
 					}
 					return false;
 				}) == null) {
-					colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteWithoutTable);
+					colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteWithoutATable);
 				}
 			} else {
-				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteOnFloor);
+				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteOnTheFloor);
 			}
 		} },
 		{ JobEnum.Sleep, delegate (ColonistManager.Colonist colonist, Job job) {
@@ -582,8 +582,12 @@ public class JobManager : BaseManager {
 			if (targetSleepSpot != null) {
 				targetSleepSpot.StopSleeping();
 				if (targetSleepSpot.prefab.restComfortAmount >= 10) {
+					colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.WellRested);
+				} else {
 					colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Rested);
 				}
+			} else {
+				colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Rested);
 			}
 			foreach (ResourceManager.SleepSpot sleepSpot in GameManager.resourceM.sleepSpots) {
 				if (sleepSpot.occupyingColonist == colonist) {

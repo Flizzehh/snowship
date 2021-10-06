@@ -7,6 +7,14 @@
 <MoodModifierGroup>
 	Rest
 	<MoodModifier>
+		<Type>WellRested
+		<EffectAmount>20
+		<EffectLengthSeconds>360
+	<MoodModifier>
+		<Type>Rested
+		<EffectAmount>10
+		<EffectLengthSeconds>180
+	<MoodModifier>
 		<Type>Tired
 		<EffectAmount>-10
 		<EffectLengthSeconds>UntilNot
@@ -47,11 +55,11 @@
 		<EffectAmount>-20
 		<EffectLengthSeconds>UntilNot
 	<MoodModifier>
-		<Type>AteOnFloor
+		<Type>AteOnTheFloor
 		<EffectAmount>-10
 		<EffectLengthSeconds>720
 	<MoodModifier>
-		<Type>AteWithoutTable
+		<Type>AteWithoutATable
 		<EffectAmount>-5
 		<EffectLengthSeconds>720
 <MoodModifierGroup>

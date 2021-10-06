@@ -300,39 +300,48 @@ public class ColonistManager : BaseManager {
 		{ JobManager.JobEnum.Eat, NeedEnum.Food }
 	};
 
-	public readonly Dictionary<NeedEnum, Func<NeedInstance, float>> needsValueSpecialIncreases = new Dictionary<NeedEnum, Func<NeedInstance, float>>();
-
-	public void InitializeNeedsValueSpecialIncreases() {
-		needsValueSpecialIncreases.Add(NeedEnum.Rest, delegate (NeedInstance need) {
+	public readonly Dictionary<NeedEnum, Func<NeedInstance, float>> needsValueSpecialIncreases = new Dictionary<NeedEnum, Func<NeedInstance, float>>() {
+		{ NeedEnum.Rest, delegate (NeedInstance need) {
 			float totalSpecialIncrease = 0;
-			if (!GameManager.timeM.isDay) {
-				totalSpecialIncrease += 0.05f;
+			MoodModifierInstance positiveRestMoodModifier = need.colonist.FindMoodModifierByGroupEnum(MoodModifierGroupEnum.Rest, 1).FirstOrDefault();
+			if (positiveRestMoodModifier != null) {
+				switch (positiveRestMoodModifier.prefab.type) {
+					case MoodModifierEnum.WellRested:
+						totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.8f);
+						break;
+					case MoodModifierEnum.Rested:
+						totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.6f);
+						break;
+				}
 			}
-			MoodModifierInstance moodModifier = need.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Rest);
-			if (moodModifier.prefab.type == MoodModifierEnum.Rested) {
-				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.8f);
+			if (!GameManager.timeM.isDay && positiveRestMoodModifier == null) {
+				totalSpecialIncrease += (need.prefab.baseIncreaseRate * 2f);
 			}
 			return totalSpecialIncrease;
-		});
-		needsValueSpecialIncreases.Add(NeedEnum.Water, delegate (NeedInstance need) {
+		} },
+		{ NeedEnum.Water, delegate (NeedInstance need) {
 			float totalSpecialIncrease = 0;
 			MoodModifierInstance moodModifier = need.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Water);
-			if (moodModifier.prefab.type == MoodModifierEnum.Quenched) {
-				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.5f);
+			if (moodModifier != null) {
+				if (moodModifier.prefab.type == MoodModifierEnum.Quenched) {
+					totalSpecialIncrease -= (need.prefab.baseIncreaseRate* 0.5f);
+				}
 			}
 			return totalSpecialIncrease;
-		});
-		needsValueSpecialIncreases.Add(NeedEnum.Food, delegate (NeedInstance need) {
+		} },
+		{ NeedEnum.Food, delegate (NeedInstance need) {
 			float totalSpecialIncrease = 0;
 			MoodModifierInstance moodModifier = need.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Food);
-			if (moodModifier.prefab.type == MoodModifierEnum.Stuffed) {
-				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.9f);
-			} else if (moodModifier.prefab.type == MoodModifierEnum.Full) {
-				totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.5f);
+			if (moodModifier != null) {
+				if (moodModifier.prefab.type == MoodModifierEnum.Stuffed) {
+					totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.9f);
+				} else if (moodModifier.prefab.type == MoodModifierEnum.Full) {
+					totalSpecialIncrease -= (need.prefab.baseIncreaseRate * 0.5f);
+				}
 			}
 			return totalSpecialIncrease;
-		});
-	}
+		} }
+	};
 
 	public void CalculateNeedValue(NeedInstance need) {
 		if (need.colonist.job != null && need.prefab.relatedJobs.Contains(need.colonist.job.prefab.jobType)) {
@@ -344,7 +353,7 @@ public class ColonistManager : BaseManager {
 				needIncreaseAmount *= need.prefab.traitsAffectingThisNeed[trait.prefab.type];
 			}
 		}
-		need.ChangeValue((needIncreaseAmount + (needsValueSpecialIncreases.ContainsKey(need.prefab.type) ? needsValueSpecialIncreases[need.prefab.type](need) : 0)) * GameManager.timeM.deltaTime);
+		need.ChangeValue(needIncreaseAmount + (needsValueSpecialIncreases.ContainsKey(need.prefab.type) ? needsValueSpecialIncreases[need.prefab.type](need) : 0));
 	}
 
 	static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceManager.ResourceAmount resourceAmount) {
@@ -632,6 +641,7 @@ public class ColonistManager : BaseManager {
 		public string name;
 
 		public float baseIncreaseRate;
+		public float decreaseRateMultiplier;
 
 		public bool minValueAction;
 		public float minValue;
@@ -656,6 +666,7 @@ public class ColonistManager : BaseManager {
 		public NeedPrefab(
 			NeedEnum type,
 			float baseIncreaseRate,
+			float decreaseRateMultiplier,
 			bool minValueAction,
 			float minValue,
 			bool maxValueAction,
@@ -673,6 +684,7 @@ public class ColonistManager : BaseManager {
 			name = UIManager.SplitByCapitals(type.ToString());
 
 			this.baseIncreaseRate = baseIncreaseRate;
+			this.decreaseRateMultiplier = decreaseRateMultiplier;
 
 			this.minValueAction = minValueAction;
 			this.minValue = minValue;
@@ -723,7 +735,7 @@ public class ColonistManager : BaseManager {
 		public void SetValue(float newValue) {
 			float oldValue = value;
 			value = newValue;
-			Mathf.Clamp(value, 0, prefab.clampValue);
+			value = Mathf.Clamp(value, 0, prefab.clampValue);
 			roundedValue = Mathf.RoundToInt((value / prefab.clampValue) * 100);
 			if (GameManager.humanM.selectedHuman == colonist && Mathf.RoundToInt((oldValue / prefab.clampValue) * 100) != roundedValue) {
 				GameManager.uiM.RemakeSelectedColonistNeeds();
@@ -745,6 +757,7 @@ public class ColonistManager : BaseManager {
 
 			NeedEnum type = NeedEnum.Rest;
 			float baseIncreaseRate = 0;
+			float decreaseRateMultiplier = 0;
 			bool minValueAction = false;
 			float minValue = 0;
 			bool maxValueAction = false;
@@ -771,6 +784,9 @@ public class ColonistManager : BaseManager {
 							break;
 						case "BaseIncreaseRate":
 							baseIncreaseRate = float.Parse(value);
+							break;
+						case "DecreaseRateMultiplier":
+							decreaseRateMultiplier = float.Parse(value);
 							break;
 						case "MinValueAction":
 							minValueAction = bool.Parse(value);
@@ -826,7 +842,7 @@ public class ColonistManager : BaseManager {
 				}
 			}
 
-			needPrefabs.Add(new NeedPrefab(type, baseIncreaseRate, minValueAction, minValue, maxValueAction, maxValue, critValueAction, critValue, canDie, healthDecreaseRate, clampValue, priority, traitsAffectingThisNeed, relatedJobs));
+			needPrefabs.Add(new NeedPrefab(type, baseIncreaseRate, decreaseRateMultiplier, minValueAction, minValue, maxValueAction, maxValue, critValueAction, critValue, canDie, healthDecreaseRate, clampValue, priority, traitsAffectingThisNeed, relatedJobs));
 		}
 	}
 
@@ -836,9 +852,9 @@ public class ColonistManager : BaseManager {
 		} },
 		{ MoodModifierGroupEnum.Rest, delegate (Colonist colonist) {
 			NeedInstance restNeed = colonist.needs.Find(ni => ni.prefab.type == NeedEnum.Rest);
-			if (restNeed.GetValue() >= restNeed.prefab.maxValue) {
+			if (restNeed.GetValue() >= restNeed.prefab.critValue) {
 				colonist.AddMoodModifier(MoodModifierEnum.Exhausted);
-			} else if (restNeed.GetValue() >= restNeed.prefab.minValue) {
+			} else if (restNeed.GetValue() >= restNeed.prefab.maxValue) {
 				colonist.AddMoodModifier(MoodModifierEnum.Tired);
 			} else {
 				colonist.RemoveMoodModifier(MoodModifierEnum.Exhausted);
@@ -847,9 +863,9 @@ public class ColonistManager : BaseManager {
 		} },
 		{ MoodModifierGroupEnum.Water, delegate (Colonist colonist) {
 			NeedInstance waterNeed = colonist.needs.Find(ni => ni.prefab.type == NeedEnum.Water);
-			if (waterNeed.GetValue() >= waterNeed.prefab.maxValue) {
+			if (waterNeed.GetValue() >= waterNeed.prefab.critValue) {
 				colonist.AddMoodModifier(MoodModifierEnum.Dehydrated);
-			} else if (waterNeed.GetValue() >= waterNeed.prefab.minValue) {
+			} else if (waterNeed.GetValue() >= waterNeed.prefab.maxValue) {
 				colonist.AddMoodModifier(MoodModifierEnum.Thirsty);
 			} else {
 				colonist.RemoveMoodModifier(MoodModifierEnum.Dehydrated);
@@ -858,9 +874,9 @@ public class ColonistManager : BaseManager {
 		} },
 		{ MoodModifierGroupEnum.Food, delegate (Colonist colonist) {
 			NeedInstance foodNeed = colonist.needs.Find(ni => ni.prefab.type == NeedEnum.Food);
-			if (foodNeed.GetValue() >= foodNeed.prefab.maxValue) {
+			if (foodNeed.GetValue() >= foodNeed.prefab.critValue) {
 				colonist.AddMoodModifier(MoodModifierEnum.Starving);
-			} else if (foodNeed.GetValue() >= foodNeed.prefab.minValue) {
+			} else if (foodNeed.GetValue() >= foodNeed.prefab.maxValue) {
 				colonist.AddMoodModifier(MoodModifierEnum.Hungry);
 			} else {
 				colonist.RemoveMoodModifier(MoodModifierEnum.Starving);
@@ -894,9 +910,9 @@ public class ColonistManager : BaseManager {
 	};
 	public enum MoodModifierEnum {
 		WitnessDeath,
-		Stuffed, Full, Hungry, Starving, AteOnFloor, AteWithoutTable,
+		Stuffed, Full, Hungry, Starving, AteOnTheFloor, AteWithoutATable,
 		Dehydrated, Thirsty, Quenched,
-		Rested, Tired, Exhausted,
+		WellRested, Rested, Tired, Exhausted,
 		Overencumbered
 	};
 
@@ -1082,9 +1098,11 @@ public class ColonistManager : BaseManager {
 				return;
 			}
 
-			UpdateNeeds();
-			UpdateMoodModifiers();
-			UpdateMood();
+			if (GameManager.timeM.minuteChanged) {
+				UpdateNeeds();
+				UpdateMoodModifiers();
+				UpdateMood();
+			}
 
 			if (overTileChanged) {
 				GameManager.jobM.UpdateColonistJobCosts(this);
@@ -1217,6 +1235,18 @@ public class ColonistManager : BaseManager {
 			effectiveMood = Mathf.Clamp(effectiveMood, 0, 100);
 		}
 
+		public List<MoodModifierInstance> FindMoodModifierByGroupEnum(MoodModifierGroupEnum moodModifierGroupEnum, int polarity) {
+			List<MoodModifierInstance> moodModifiersInGroup = moodModifiers.Where(moodModifier => moodModifier.prefab.group.type == moodModifierGroupEnum).ToList();
+			if (polarity != 0) {
+				moodModifiersInGroup = moodModifiersInGroup.Where(moodModifier => (moodModifier.prefab.effectAmount < 0) == (polarity < 0)).ToList();
+			}
+			return moodModifiersInGroup;
+		}
+
+		public MoodModifierInstance FindMoodModifierByEnum(MoodModifierEnum moodModifierEnum) {
+			return moodModifiers.Find(moodModifier => moodModifier.prefab.type == moodModifierEnum);
+		}
+
 		public void SetJob(JobManager.ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {
 			job = colonistJob.job;
 			job.resourcesColonistHas = colonistJob.resourcesColonistHas;
@@ -1242,7 +1272,10 @@ public class ColonistManager : BaseManager {
 			// Find a chair (ideally next to a table) for the colonist to sit at to eat
 			List<ResourceManager.ObjectInstance> chairs = new List<ResourceManager.ObjectInstance>();
 			foreach (ResourceManager.ObjectPrefab chairPrefab in GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Chairs).prefabs) {
-				chairs.AddRange(GameManager.resourceM.GetObjectInstancesByPrefab(chairPrefab));
+				List<ResourceManager.ObjectInstance> chairsFromPrefab = GameManager.resourceM.GetObjectInstancesByPrefab(chairPrefab);
+				if (chairsFromPrefab != null) {
+					chairs.AddRange(chairsFromPrefab);
+				}
 			}
 			chairs.Select(chair => chair.tile.region == overTile.region);
 			chairs.OrderBy(chair => PathManager.RegionBlockDistance(overTile.regionBlock, chair.tile.regionBlock, true, true, false));
@@ -1278,7 +1311,9 @@ public class ColonistManager : BaseManager {
 				job.jobProgress += needs.Find(need => need.prefab.type == NeedEnum.Food).GetValue();
 			}
 			if (job.prefab.jobType == JobManager.JobEnum.Sleep) {
-				job.jobProgress += 20f * (needs.Find(need => need.prefab.type == NeedEnum.Rest).GetValue());
+				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
+				job.jobProgress += ((restNeed.GetValue() / restNeed.prefab.baseIncreaseRate) / restNeed.prefab.decreaseRateMultiplier) / GameManager.timeM.permanentTimerMultiplier;
+				job.jobProgress += UnityEngine.Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
 			}
 
 			job.colonistBuildTime = job.jobProgress;
@@ -1303,10 +1338,9 @@ public class ColonistManager : BaseManager {
 					job = null;
 					return;
 				}
-			} else if (job.prefab.jobType == JobManager.JobEnum.Sleep) {
-				float currentRestValue = needs.Find(need => need.prefab.type == NeedEnum.Rest).GetValue();
-				float originalRestValue = currentRestValue / (job.jobProgress / job.colonistBuildTime);
-				needs.Find(need => need.prefab.type == NeedEnum.Rest).SetValue(originalRestValue * ((job.jobProgress - 1f * GameManager.timeM.deltaTime) / job.colonistBuildTime));
+			} else if (job.prefab.jobType == JobManager.JobEnum.Sleep && GameManager.timeM.minuteChanged) {
+				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
+				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier);
 			}
 
 			if (job.activeObject != null) {

@@ -14,8 +14,8 @@ public class TimeManager : BaseManager {
 
 	private bool paused;
 
-	private readonly int permanentDeltaTimeMultiplier = 2;
-	private readonly int permanentTimerMultiplier = 2;
+	public readonly int permanentDeltaTimeMultiplier = 2;
+	public readonly int permanentTimerMultiplier = 2;
 
 	private int pauseTimeModifier = 0;
 	private int timeModifier = 0;
