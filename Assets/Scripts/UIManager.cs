@@ -2669,6 +2669,8 @@ public class UIManager : BaseManager {
 			RemakeSelectedColonistSkills();
 			RemakeSelectedColonistInventory(selectedColonist);
 			RemakeSelectedColonistClothing(selectedColonist, sameColonistSelected);
+
+			UpdateSelectedColonistInformation();
 		} else {
 			selectedColonistInformationPanel.SetActive(false);
 
