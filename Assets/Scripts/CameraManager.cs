@@ -49,9 +49,9 @@ public class CameraManager : BaseManager {
 		if (GameManager.tileM.mapState == TileManager.MapState.Generated && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
 
 			// Position Logic
-			cameraGO.transform.Translate(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * currentZoom * Time.deltaTime);
+			cameraGO.transform.Translate(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * currentZoom * Time.deltaTime * GameManager.timeM.permanentDeltaTimeMultiplier);
 			if (Input.GetMouseButton(2)) {
-				cameraGO.transform.Translate(new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")) * currentZoom * Time.deltaTime);
+				cameraGO.transform.Translate(new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")) * currentZoom * Time.deltaTime * GameManager.timeM.permanentDeltaTimeMultiplier);
 			}
 			cameraGO.transform.position = new Vector2(Mathf.Clamp(cameraGO.transform.position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize), Mathf.Clamp(cameraGO.transform.position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize));
 
