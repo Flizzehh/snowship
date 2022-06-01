@@ -285,7 +285,7 @@ TextureImporter:
       213: 21300186
     second: snowice-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -305,6 +305,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -314,8 +316,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -336,9 +338,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1364,6 +1370,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      snowice-bitmask_22: 21300138
+      snowice-bitmask_6: 21300106
+      snowice-bitmask_20: 21300134
+      snowice-bitmask_13: 21300120
+      snowice-bitmask_14: 21300122
+      snowice-bitmask_39: 21300172
+      snowice-bitmask_27: 21300148
+      snowice-bitmask_40: 21300174
+      snowice-bitmask_12: 21300118
+      snowice-bitmask_41: 21300176
+      snowice-bitmask_11: 21300116
+      snowice-bitmask_36: 21300166
+      snowice-bitmask_4: 21300102
+      snowice-bitmask_1: 21300096
+      snowice-bitmask_44: 21300182
+      snowice-bitmask_18: 21300130
+      snowice-bitmask_32: 21300158
+      snowice-bitmask_35: 21300164
+      snowice-bitmask_10: 21300114
+      snowice-bitmask_0: 21300094
+      snowice-bitmask_19: 21300132
+      snowice-bitmask_9: 21300112
+      snowice-bitmask_42: 21300178
+      snowice-bitmask_7: 21300108
+      snowice-bitmask_38: 21300170
+      snowice-bitmask_8: 21300110
+      snowice-bitmask_2: 21300098
+      snowice-bitmask_21: 21300136
+      snowice-bitmask_33: 21300160
+      snowice-bitmask_31: 21300156
+      snowice-bitmask_17: 21300128
+      snowice-bitmask_23: 21300140
+      snowice-bitmask_37: 21300168
+      snowice-bitmask_15: 21300124
+      snowice-bitmask_45: 21300184
+      snowice-bitmask_46: 21300186
+      snowice-bitmask_34: 21300162
+      snowice-bitmask_24: 21300142
+      snowice-bitmask_26: 21300146
+      snowice-bitmask_3: 21300100
+      snowice-bitmask_43: 21300180
+      snowice-bitmask_30: 21300154
+      snowice-bitmask_25: 21300144
+      snowice-bitmask_5: 21300104
+      snowice-bitmask_16: 21300126
+      snowice-bitmask_29: 21300152
+      snowice-bitmask_28: 21300150
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

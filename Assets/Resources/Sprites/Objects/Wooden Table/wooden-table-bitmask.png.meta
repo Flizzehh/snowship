@@ -144,7 +144,7 @@ TextureImporter:
       213: 21300092
     second: stone-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -164,6 +164,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -173,8 +175,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -195,9 +197,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1223,6 +1229,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      stone-bitmask_31: 21300062
+      stone-bitmask_9: 21300018
+      stone-bitmask_17: 21300034
+      stone-bitmask_24: 21300048
+      stone-bitmask_33: 21300066
+      stone-bitmask_42: 21300084
+      stone-bitmask_12: 21300024
+      stone-bitmask_35: 21300070
+      stone-bitmask_27: 21300054
+      stone-bitmask_41: 21300082
+      stone-bitmask_46: 21300092
+      stone-bitmask_20: 21300040
+      stone-bitmask_34: 21300068
+      stone-bitmask_5: 21300010
+      stone-bitmask_1: 21300002
+      stone-bitmask_29: 21300058
+      stone-bitmask_13: 21300026
+      stone-bitmask_38: 21300076
+      stone-bitmask_16: 21300032
+      stone-bitmask_28: 21300056
+      stone-bitmask_32: 21300064
+      stone-bitmask_23: 21300046
+      stone-bitmask_21: 21300042
+      stone-bitmask_37: 21300074
+      stone-bitmask_10: 21300020
+      stone-bitmask_43: 21300086
+      stone-bitmask_26: 21300052
+      stone-bitmask_6: 21300012
+      stone-bitmask_15: 21300030
+      stone-bitmask_30: 21300060
+      stone-bitmask_2: 21300004
+      stone-bitmask_22: 21300044
+      stone-bitmask_19: 21300038
+      stone-bitmask_14: 21300028
+      stone-bitmask_36: 21300072
+      stone-bitmask_40: 21300080
+      stone-bitmask_4: 21300008
+      stone-bitmask_7: 21300014
+      stone-bitmask_18: 21300036
+      stone-bitmask_25: 21300050
+      stone-bitmask_3: 21300006
+      stone-bitmask_45: 21300090
+      stone-bitmask_11: 21300022
+      stone-bitmask_39: 21300078
+      stone-bitmask_8: 21300016
+      stone-bitmask_0: 21300000
+      stone-bitmask_44: 21300088
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

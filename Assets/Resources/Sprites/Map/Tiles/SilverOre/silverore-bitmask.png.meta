@@ -567,7 +567,7 @@ TextureImporter:
       213: 21300374
     second: silverore-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -587,6 +587,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -596,8 +598,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -618,9 +620,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1646,6 +1652,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      silverore-bitmask_8: 21300298
+      silverore-bitmask_42: 21300366
+      silverore-bitmask_18: 21300318
+      silverore-bitmask_33: 21300348
+      silverore-bitmask_6: 21300294
+      silverore-bitmask_9: 21300300
+      silverore-bitmask_15: 21300312
+      silverore-bitmask_5: 21300292
+      silverore-bitmask_22: 21300326
+      silverore-bitmask_7: 21300296
+      silverore-bitmask_20: 21300322
+      silverore-bitmask_4: 21300290
+      silverore-bitmask_35: 21300352
+      silverore-bitmask_40: 21300362
+      silverore-bitmask_44: 21300370
+      silverore-bitmask_39: 21300360
+      silverore-bitmask_16: 21300314
+      silverore-bitmask_41: 21300364
+      silverore-bitmask_36: 21300354
+      silverore-bitmask_19: 21300320
+      silverore-bitmask_17: 21300316
+      silverore-bitmask_26: 21300334
+      silverore-bitmask_23: 21300328
+      silverore-bitmask_38: 21300358
+      silverore-bitmask_43: 21300368
+      silverore-bitmask_45: 21300372
+      silverore-bitmask_30: 21300342
+      silverore-bitmask_3: 21300288
+      silverore-bitmask_25: 21300332
+      silverore-bitmask_2: 21300286
+      silverore-bitmask_29: 21300340
+      silverore-bitmask_21: 21300324
+      silverore-bitmask_46: 21300374
+      silverore-bitmask_11: 21300304
+      silverore-bitmask_24: 21300330
+      silverore-bitmask_32: 21300346
+      silverore-bitmask_34: 21300350
+      silverore-bitmask_28: 21300338
+      silverore-bitmask_27: 21300336
+      silverore-bitmask_37: 21300356
+      silverore-bitmask_13: 21300308
+      silverore-bitmask_0: 21300282
+      silverore-bitmask_1: 21300284
+      silverore-bitmask_14: 21300310
+      silverore-bitmask_31: 21300344
+      silverore-bitmask_10: 21300302
+      silverore-bitmask_12: 21300306
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

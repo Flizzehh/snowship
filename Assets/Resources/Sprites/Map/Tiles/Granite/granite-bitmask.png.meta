@@ -285,7 +285,7 @@ TextureImporter:
       213: 21300186
     second: granite-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -305,6 +305,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -314,8 +316,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -336,9 +338,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1364,6 +1370,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      granite-bitmask_21: 21300136
+      granite-bitmask_31: 21300156
+      granite-bitmask_0: 21300094
+      granite-bitmask_17: 21300128
+      granite-bitmask_8: 21300110
+      granite-bitmask_14: 21300122
+      granite-bitmask_9: 21300112
+      granite-bitmask_37: 21300168
+      granite-bitmask_19: 21300132
+      granite-bitmask_16: 21300126
+      granite-bitmask_6: 21300106
+      granite-bitmask_46: 21300186
+      granite-bitmask_20: 21300134
+      granite-bitmask_27: 21300148
+      granite-bitmask_39: 21300172
+      granite-bitmask_44: 21300182
+      granite-bitmask_43: 21300180
+      granite-bitmask_11: 21300116
+      granite-bitmask_36: 21300166
+      granite-bitmask_24: 21300142
+      granite-bitmask_34: 21300162
+      granite-bitmask_30: 21300154
+      granite-bitmask_3: 21300100
+      granite-bitmask_10: 21300114
+      granite-bitmask_35: 21300164
+      granite-bitmask_5: 21300104
+      granite-bitmask_7: 21300108
+      granite-bitmask_18: 21300130
+      granite-bitmask_28: 21300150
+      granite-bitmask_1: 21300096
+      granite-bitmask_22: 21300138
+      granite-bitmask_13: 21300120
+      granite-bitmask_29: 21300152
+      granite-bitmask_12: 21300118
+      granite-bitmask_25: 21300144
+      granite-bitmask_42: 21300178
+      granite-bitmask_4: 21300102
+      granite-bitmask_26: 21300146
+      granite-bitmask_40: 21300174
+      granite-bitmask_15: 21300124
+      granite-bitmask_45: 21300184
+      granite-bitmask_41: 21300176
+      granite-bitmask_38: 21300170
+      granite-bitmask_33: 21300160
+      granite-bitmask_2: 21300098
+      granite-bitmask_23: 21300140
+      granite-bitmask_32: 21300158
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -1194,7 +1194,7 @@ TextureImporter:
       213: 21300792
     second: dirtwater-river_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1214,6 +1214,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1223,8 +1225,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1245,9 +1247,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2273,6 +2279,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      dirtwater-river_12: 21300724
+      dirtwater-river_25: 21300750
+      dirtwater-river_18: 21300736
+      dirtwater-river_42: 21300784
+      dirtwater-river_33: 21300766
+      dirtwater-river_0: 21300700
+      dirtwater-river_30: 21300760
+      dirtwater-river_10: 21300720
+      dirtwater-river_4: 21300708
+      dirtwater-river_43: 21300786
+      dirtwater-river_2: 21300704
+      dirtwater-river_14: 21300728
+      dirtwater-river_8: 21300716
+      dirtwater-river_29: 21300758
+      dirtwater-river_45: 21300790
+      dirtwater-river_26: 21300752
+      dirtwater-river_34: 21300768
+      dirtwater-river_5: 21300710
+      dirtwater-river_38: 21300776
+      dirtwater-river_22: 21300744
+      dirtwater-river_11: 21300722
+      dirtwater-river_27: 21300754
+      dirtwater-river_6: 21300712
+      dirtwater-river_40: 21300780
+      dirtwater-river_36: 21300772
+      dirtwater-river_21: 21300742
+      dirtwater-river_24: 21300748
+      dirtwater-river_44: 21300788
+      dirtwater-river_20: 21300740
+      dirtwater-river_28: 21300756
+      dirtwater-river_19: 21300738
+      dirtwater-river_3: 21300706
+      dirtwater-river_7: 21300714
+      dirtwater-river_31: 21300762
+      dirtwater-river_46: 21300792
+      dirtwater-river_32: 21300764
+      dirtwater-river_37: 21300774
+      dirtwater-river_1: 21300702
+      dirtwater-river_16: 21300732
+      dirtwater-river_9: 21300718
+      dirtwater-river_17: 21300734
+      dirtwater-river_35: 21300770
+      dirtwater-river_39: 21300778
+      dirtwater-river_13: 21300726
+      dirtwater-river_15: 21300730
+      dirtwater-river_23: 21300746
+      dirtwater-river_41: 21300782
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

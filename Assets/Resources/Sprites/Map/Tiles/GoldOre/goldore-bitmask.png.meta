@@ -426,7 +426,7 @@ TextureImporter:
       213: 21300280
     second: goldore-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -446,6 +446,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -455,8 +457,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -477,9 +479,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1505,6 +1511,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      goldore-bitmask_13: 21300214
+      goldore-bitmask_29: 21300246
+      goldore-bitmask_9: 21300206
+      goldore-bitmask_45: 21300278
+      goldore-bitmask_33: 21300254
+      goldore-bitmask_38: 21300264
+      goldore-bitmask_34: 21300256
+      goldore-bitmask_26: 21300240
+      goldore-bitmask_3: 21300194
+      goldore-bitmask_31: 21300250
+      goldore-bitmask_42: 21300272
+      goldore-bitmask_32: 21300252
+      goldore-bitmask_14: 21300216
+      goldore-bitmask_21: 21300230
+      goldore-bitmask_37: 21300262
+      goldore-bitmask_6: 21300200
+      goldore-bitmask_41: 21300270
+      goldore-bitmask_46: 21300280
+      goldore-bitmask_23: 21300234
+      goldore-bitmask_35: 21300258
+      goldore-bitmask_17: 21300222
+      goldore-bitmask_15: 21300218
+      goldore-bitmask_0: 21300188
+      goldore-bitmask_4: 21300196
+      goldore-bitmask_28: 21300244
+      goldore-bitmask_18: 21300224
+      goldore-bitmask_24: 21300236
+      goldore-bitmask_20: 21300228
+      goldore-bitmask_27: 21300242
+      goldore-bitmask_39: 21300266
+      goldore-bitmask_12: 21300212
+      goldore-bitmask_11: 21300210
+      goldore-bitmask_30: 21300248
+      goldore-bitmask_19: 21300226
+      goldore-bitmask_40: 21300268
+      goldore-bitmask_1: 21300190
+      goldore-bitmask_7: 21300202
+      goldore-bitmask_5: 21300198
+      goldore-bitmask_16: 21300220
+      goldore-bitmask_25: 21300238
+      goldore-bitmask_2: 21300192
+      goldore-bitmask_22: 21300232
+      goldore-bitmask_8: 21300204
+      goldore-bitmask_43: 21300274
+      goldore-bitmask_10: 21300208
+      goldore-bitmask_36: 21300260
+      goldore-bitmask_44: 21300276
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

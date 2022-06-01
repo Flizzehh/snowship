@@ -99,7 +99,7 @@ TextureImporter:
       213: 21300062
     second: wall-brick_15
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -119,6 +119,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -129,7 +131,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -150,9 +152,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -515,6 +521,23 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      wall-brick_0: 21300032
+      wall-brick_4: 21300040
+      wall-brick_14: 21300060
+      wall-brick_1: 21300034
+      wall-brick_9: 21300050
+      wall-brick_11: 21300054
+      wall-brick_12: 21300056
+      wall-brick_15: 21300062
+      wall-brick_2: 21300036
+      wall-brick_5: 21300042
+      wall-brick_6: 21300044
+      wall-brick_7: 21300046
+      wall-brick_8: 21300048
+      wall-brick_13: 21300058
+      wall-brick_3: 21300038
+      wall-brick_10: 21300052
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

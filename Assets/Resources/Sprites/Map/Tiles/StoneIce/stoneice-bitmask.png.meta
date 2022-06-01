@@ -426,7 +426,7 @@ TextureImporter:
       213: 21300280
     second: stoneice-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -446,6 +446,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -455,8 +457,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -477,9 +479,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1505,6 +1511,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      stoneice-bitmask_28: 21300244
+      stoneice-bitmask_34: 21300256
+      stoneice-bitmask_13: 21300214
+      stoneice-bitmask_19: 21300226
+      stoneice-bitmask_5: 21300198
+      stoneice-bitmask_23: 21300234
+      stoneice-bitmask_33: 21300254
+      stoneice-bitmask_9: 21300206
+      stoneice-bitmask_20: 21300228
+      stoneice-bitmask_27: 21300242
+      stoneice-bitmask_1: 21300190
+      stoneice-bitmask_36: 21300260
+      stoneice-bitmask_39: 21300266
+      stoneice-bitmask_12: 21300212
+      stoneice-bitmask_46: 21300280
+      stoneice-bitmask_41: 21300270
+      stoneice-bitmask_43: 21300274
+      stoneice-bitmask_8: 21300204
+      stoneice-bitmask_7: 21300202
+      stoneice-bitmask_25: 21300238
+      stoneice-bitmask_42: 21300272
+      stoneice-bitmask_21: 21300230
+      stoneice-bitmask_31: 21300250
+      stoneice-bitmask_37: 21300262
+      stoneice-bitmask_3: 21300194
+      stoneice-bitmask_26: 21300240
+      stoneice-bitmask_11: 21300210
+      stoneice-bitmask_16: 21300220
+      stoneice-bitmask_24: 21300236
+      stoneice-bitmask_32: 21300252
+      stoneice-bitmask_45: 21300278
+      stoneice-bitmask_0: 21300188
+      stoneice-bitmask_18: 21300224
+      stoneice-bitmask_6: 21300200
+      stoneice-bitmask_15: 21300218
+      stoneice-bitmask_35: 21300258
+      stoneice-bitmask_14: 21300216
+      stoneice-bitmask_44: 21300276
+      stoneice-bitmask_2: 21300192
+      stoneice-bitmask_22: 21300232
+      stoneice-bitmask_29: 21300246
+      stoneice-bitmask_30: 21300248
+      stoneice-bitmask_40: 21300268
+      stoneice-bitmask_10: 21300208
+      stoneice-bitmask_17: 21300222
+      stoneice-bitmask_38: 21300264
+      stoneice-bitmask_4: 21300196
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

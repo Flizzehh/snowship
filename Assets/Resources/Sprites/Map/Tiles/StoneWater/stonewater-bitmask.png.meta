@@ -1053,7 +1053,7 @@ TextureImporter:
       213: 21300698
     second: stonewater-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1073,6 +1073,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1082,8 +1084,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1104,9 +1106,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2132,6 +2138,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      stonewater-bitmask_19: 21300644
+      stonewater-bitmask_0: 21300606
+      stonewater-bitmask_42: 21300690
+      stonewater-bitmask_30: 21300666
+      stonewater-bitmask_16: 21300638
+      stonewater-bitmask_34: 21300674
+      stonewater-bitmask_13: 21300632
+      stonewater-bitmask_35: 21300676
+      stonewater-bitmask_26: 21300658
+      stonewater-bitmask_20: 21300646
+      stonewater-bitmask_22: 21300650
+      stonewater-bitmask_5: 21300616
+      stonewater-bitmask_24: 21300654
+      stonewater-bitmask_41: 21300688
+      stonewater-bitmask_1: 21300608
+      stonewater-bitmask_2: 21300610
+      stonewater-bitmask_45: 21300696
+      stonewater-bitmask_4: 21300614
+      stonewater-bitmask_39: 21300684
+      stonewater-bitmask_25: 21300656
+      stonewater-bitmask_29: 21300664
+      stonewater-bitmask_21: 21300648
+      stonewater-bitmask_36: 21300678
+      stonewater-bitmask_18: 21300642
+      stonewater-bitmask_38: 21300682
+      stonewater-bitmask_3: 21300612
+      stonewater-bitmask_27: 21300660
+      stonewater-bitmask_28: 21300662
+      stonewater-bitmask_10: 21300626
+      stonewater-bitmask_31: 21300668
+      stonewater-bitmask_15: 21300636
+      stonewater-bitmask_40: 21300686
+      stonewater-bitmask_9: 21300624
+      stonewater-bitmask_44: 21300694
+      stonewater-bitmask_23: 21300652
+      stonewater-bitmask_7: 21300620
+      stonewater-bitmask_43: 21300692
+      stonewater-bitmask_8: 21300622
+      stonewater-bitmask_6: 21300618
+      stonewater-bitmask_33: 21300672
+      stonewater-bitmask_32: 21300670
+      stonewater-bitmask_12: 21300630
+      stonewater-bitmask_37: 21300680
+      stonewater-bitmask_46: 21300698
+      stonewater-bitmask_11: 21300628
+      stonewater-bitmask_17: 21300640
+      stonewater-bitmask_14: 21300634
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -1335,7 +1335,7 @@ TextureImporter:
       213: 21300886
     second: coldgrasswater-river_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1355,6 +1355,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1364,8 +1366,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1386,9 +1388,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2414,6 +2420,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      coldgrasswater-river_35: 21300864
+      coldgrasswater-river_18: 21300830
+      coldgrasswater-river_20: 21300834
+      coldgrasswater-river_23: 21300840
+      coldgrasswater-river_8: 21300810
+      coldgrasswater-river_9: 21300812
+      coldgrasswater-river_30: 21300854
+      coldgrasswater-river_16: 21300826
+      coldgrasswater-river_6: 21300806
+      coldgrasswater-river_28: 21300850
+      coldgrasswater-river_31: 21300856
+      coldgrasswater-river_43: 21300880
+      coldgrasswater-river_1: 21300796
+      coldgrasswater-river_21: 21300836
+      coldgrasswater-river_29: 21300852
+      coldgrasswater-river_14: 21300822
+      coldgrasswater-river_44: 21300882
+      coldgrasswater-river_37: 21300868
+      coldgrasswater-river_27: 21300848
+      coldgrasswater-river_4: 21300802
+      coldgrasswater-river_0: 21300794
+      coldgrasswater-river_26: 21300846
+      coldgrasswater-river_24: 21300842
+      coldgrasswater-river_25: 21300844
+      coldgrasswater-river_36: 21300866
+      coldgrasswater-river_19: 21300832
+      coldgrasswater-river_12: 21300818
+      coldgrasswater-river_39: 21300872
+      coldgrasswater-river_41: 21300876
+      coldgrasswater-river_7: 21300808
+      coldgrasswater-river_17: 21300828
+      coldgrasswater-river_38: 21300870
+      coldgrasswater-river_15: 21300824
+      coldgrasswater-river_3: 21300800
+      coldgrasswater-river_10: 21300814
+      coldgrasswater-river_33: 21300860
+      coldgrasswater-river_34: 21300862
+      coldgrasswater-river_45: 21300884
+      coldgrasswater-river_11: 21300816
+      coldgrasswater-river_22: 21300838
+      coldgrasswater-river_13: 21300820
+      coldgrasswater-river_32: 21300858
+      coldgrasswater-river_40: 21300874
+      coldgrasswater-river_46: 21300886
+      coldgrasswater-river_5: 21300804
+      coldgrasswater-river_2: 21300798
+      coldgrasswater-river_42: 21300878
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

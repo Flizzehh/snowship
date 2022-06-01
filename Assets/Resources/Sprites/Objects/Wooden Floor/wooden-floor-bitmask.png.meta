@@ -240,7 +240,7 @@ TextureImporter:
       213: 21300156
     second: wooden-floor-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -260,6 +260,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -270,7 +272,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -291,9 +293,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1319,6 +1325,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      wooden-floor-bitmask_4: 21300072
+      wooden-floor-bitmask_32: 21300128
+      wooden-floor-bitmask_28: 21300120
+      wooden-floor-bitmask_3: 21300070
+      wooden-floor-bitmask_25: 21300114
+      wooden-floor-bitmask_30: 21300124
+      wooden-floor-bitmask_0: 21300064
+      wooden-floor-bitmask_45: 21300154
+      wooden-floor-bitmask_2: 21300068
+      wooden-floor-bitmask_17: 21300098
+      wooden-floor-bitmask_34: 21300132
+      wooden-floor-bitmask_31: 21300126
+      wooden-floor-bitmask_27: 21300118
+      wooden-floor-bitmask_10: 21300084
+      wooden-floor-bitmask_18: 21300100
+      wooden-floor-bitmask_33: 21300130
+      wooden-floor-bitmask_42: 21300148
+      wooden-floor-bitmask_43: 21300150
+      wooden-floor-bitmask_40: 21300144
+      wooden-floor-bitmask_5: 21300074
+      wooden-floor-bitmask_16: 21300096
+      wooden-floor-bitmask_20: 21300104
+      wooden-floor-bitmask_46: 21300156
+      wooden-floor-bitmask_19: 21300102
+      wooden-floor-bitmask_23: 21300110
+      wooden-floor-bitmask_22: 21300108
+      wooden-floor-bitmask_44: 21300152
+      wooden-floor-bitmask_21: 21300106
+      wooden-floor-bitmask_9: 21300082
+      wooden-floor-bitmask_11: 21300086
+      wooden-floor-bitmask_13: 21300090
+      wooden-floor-bitmask_37: 21300138
+      wooden-floor-bitmask_35: 21300134
+      wooden-floor-bitmask_26: 21300116
+      wooden-floor-bitmask_8: 21300080
+      wooden-floor-bitmask_12: 21300088
+      wooden-floor-bitmask_15: 21300094
+      wooden-floor-bitmask_14: 21300092
+      wooden-floor-bitmask_6: 21300076
+      wooden-floor-bitmask_36: 21300136
+      wooden-floor-bitmask_7: 21300078
+      wooden-floor-bitmask_24: 21300112
+      wooden-floor-bitmask_38: 21300140
+      wooden-floor-bitmask_41: 21300146
+      wooden-floor-bitmask_39: 21300142
+      wooden-floor-bitmask_1: 21300066
+      wooden-floor-bitmask_29: 21300122
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

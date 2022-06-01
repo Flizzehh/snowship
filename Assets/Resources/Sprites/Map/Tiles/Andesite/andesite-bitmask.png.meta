@@ -426,7 +426,7 @@ TextureImporter:
       213: 21300280
     second: andesite-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -446,6 +446,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -455,8 +457,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -477,9 +479,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1505,6 +1511,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      andesite-bitmask_12: 21300212
+      andesite-bitmask_24: 21300236
+      andesite-bitmask_30: 21300248
+      andesite-bitmask_45: 21300278
+      andesite-bitmask_5: 21300198
+      andesite-bitmask_32: 21300252
+      andesite-bitmask_26: 21300240
+      andesite-bitmask_36: 21300260
+      andesite-bitmask_34: 21300256
+      andesite-bitmask_15: 21300218
+      andesite-bitmask_40: 21300268
+      andesite-bitmask_21: 21300230
+      andesite-bitmask_20: 21300228
+      andesite-bitmask_28: 21300244
+      andesite-bitmask_23: 21300234
+      andesite-bitmask_7: 21300202
+      andesite-bitmask_10: 21300208
+      andesite-bitmask_4: 21300196
+      andesite-bitmask_8: 21300204
+      andesite-bitmask_33: 21300254
+      andesite-bitmask_29: 21300246
+      andesite-bitmask_19: 21300226
+      andesite-bitmask_14: 21300216
+      andesite-bitmask_16: 21300220
+      andesite-bitmask_39: 21300266
+      andesite-bitmask_41: 21300270
+      andesite-bitmask_18: 21300224
+      andesite-bitmask_1: 21300190
+      andesite-bitmask_9: 21300206
+      andesite-bitmask_46: 21300280
+      andesite-bitmask_2: 21300192
+      andesite-bitmask_44: 21300276
+      andesite-bitmask_42: 21300272
+      andesite-bitmask_31: 21300250
+      andesite-bitmask_17: 21300222
+      andesite-bitmask_37: 21300262
+      andesite-bitmask_13: 21300214
+      andesite-bitmask_25: 21300238
+      andesite-bitmask_0: 21300188
+      andesite-bitmask_38: 21300264
+      andesite-bitmask_3: 21300194
+      andesite-bitmask_43: 21300274
+      andesite-bitmask_22: 21300232
+      andesite-bitmask_6: 21300200
+      andesite-bitmask_11: 21300210
+      andesite-bitmask_27: 21300242
+      andesite-bitmask_35: 21300258
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

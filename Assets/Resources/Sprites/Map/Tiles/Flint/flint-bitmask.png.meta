@@ -1272,7 +1272,7 @@ TextureImporter:
       213: 21300844
     second: flint-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1292,6 +1292,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1301,8 +1303,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1323,9 +1325,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2351,6 +2357,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      flint-bitmask_34: 21300820
+      flint-bitmask_38: 21300828
+      flint-bitmask_35: 21300822
+      flint-bitmask_28: 21300808
+      flint-bitmask_12: 21300776
+      flint-bitmask_19: 21300790
+      flint-bitmask_17: 21300786
+      flint-bitmask_33: 21300818
+      flint-bitmask_0: 21300752
+      flint-bitmask_8: 21300768
+      flint-bitmask_16: 21300784
+      flint-bitmask_1: 21300754
+      flint-bitmask_24: 21300800
+      flint-bitmask_3: 21300758
+      flint-bitmask_10: 21300772
+      flint-bitmask_39: 21300830
+      flint-bitmask_5: 21300762
+      flint-bitmask_11: 21300774
+      flint-bitmask_15: 21300782
+      flint-bitmask_37: 21300826
+      flint-bitmask_46: 21300844
+      flint-bitmask_7: 21300766
+      flint-bitmask_29: 21300810
+      flint-bitmask_20: 21300792
+      flint-bitmask_14: 21300780
+      flint-bitmask_4: 21300760
+      flint-bitmask_9: 21300770
+      flint-bitmask_22: 21300796
+      flint-bitmask_18: 21300788
+      flint-bitmask_31: 21300814
+      flint-bitmask_21: 21300794
+      flint-bitmask_40: 21300832
+      flint-bitmask_2: 21300756
+      flint-bitmask_42: 21300836
+      flint-bitmask_26: 21300804
+      flint-bitmask_44: 21300840
+      flint-bitmask_36: 21300824
+      flint-bitmask_23: 21300798
+      flint-bitmask_41: 21300834
+      flint-bitmask_30: 21300812
+      flint-bitmask_6: 21300764
+      flint-bitmask_13: 21300778
+      flint-bitmask_43: 21300838
+      flint-bitmask_25: 21300802
+      flint-bitmask_45: 21300842
+      flint-bitmask_32: 21300816
+      flint-bitmask_27: 21300806
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -426,7 +426,7 @@ TextureImporter:
       213: 21300280
     second: basalt-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -446,6 +446,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -455,8 +457,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -477,9 +479,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1505,6 +1511,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      basalt-bitmask_34: 21300256
+      basalt-bitmask_33: 21300254
+      basalt-bitmask_46: 21300280
+      basalt-bitmask_12: 21300212
+      basalt-bitmask_43: 21300274
+      basalt-bitmask_41: 21300270
+      basalt-bitmask_21: 21300230
+      basalt-bitmask_36: 21300260
+      basalt-bitmask_29: 21300246
+      basalt-bitmask_40: 21300268
+      basalt-bitmask_9: 21300206
+      basalt-bitmask_13: 21300214
+      basalt-bitmask_32: 21300252
+      basalt-bitmask_30: 21300248
+      basalt-bitmask_22: 21300232
+      basalt-bitmask_25: 21300238
+      basalt-bitmask_1: 21300190
+      basalt-bitmask_2: 21300192
+      basalt-bitmask_0: 21300188
+      basalt-bitmask_6: 21300200
+      basalt-bitmask_15: 21300218
+      basalt-bitmask_23: 21300234
+      basalt-bitmask_19: 21300226
+      basalt-bitmask_26: 21300240
+      basalt-bitmask_16: 21300220
+      basalt-bitmask_35: 21300258
+      basalt-bitmask_44: 21300276
+      basalt-bitmask_3: 21300194
+      basalt-bitmask_4: 21300196
+      basalt-bitmask_8: 21300204
+      basalt-bitmask_10: 21300208
+      basalt-bitmask_5: 21300198
+      basalt-bitmask_45: 21300278
+      basalt-bitmask_11: 21300210
+      basalt-bitmask_14: 21300216
+      basalt-bitmask_7: 21300202
+      basalt-bitmask_20: 21300228
+      basalt-bitmask_42: 21300272
+      basalt-bitmask_27: 21300242
+      basalt-bitmask_31: 21300250
+      basalt-bitmask_39: 21300266
+      basalt-bitmask_18: 21300224
+      basalt-bitmask_37: 21300262
+      basalt-bitmask_17: 21300222
+      basalt-bitmask_24: 21300236
+      basalt-bitmask_28: 21300244
+      basalt-bitmask_38: 21300264
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

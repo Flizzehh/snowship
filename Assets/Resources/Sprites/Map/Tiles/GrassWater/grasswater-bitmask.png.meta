@@ -912,7 +912,7 @@ TextureImporter:
       213: 21300604
     second: grasswater-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -932,6 +932,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -941,8 +943,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -963,9 +965,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1991,6 +1997,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      grasswater-bitmask_10: 21300532
+      grasswater-bitmask_29: 21300570
+      grasswater-bitmask_31: 21300574
+      grasswater-bitmask_9: 21300530
+      grasswater-bitmask_27: 21300566
+      grasswater-bitmask_26: 21300564
+      grasswater-bitmask_0: 21300512
+      grasswater-bitmask_20: 21300552
+      grasswater-bitmask_41: 21300594
+      grasswater-bitmask_2: 21300516
+      grasswater-bitmask_12: 21300536
+      grasswater-bitmask_15: 21300542
+      grasswater-bitmask_45: 21300602
+      grasswater-bitmask_24: 21300560
+      grasswater-bitmask_18: 21300548
+      grasswater-bitmask_33: 21300578
+      grasswater-bitmask_34: 21300580
+      grasswater-bitmask_44: 21300600
+      grasswater-bitmask_14: 21300540
+      grasswater-bitmask_6: 21300524
+      grasswater-bitmask_21: 21300554
+      grasswater-bitmask_36: 21300584
+      grasswater-bitmask_4: 21300520
+      grasswater-bitmask_37: 21300586
+      grasswater-bitmask_32: 21300576
+      grasswater-bitmask_13: 21300538
+      grasswater-bitmask_22: 21300556
+      grasswater-bitmask_42: 21300596
+      grasswater-bitmask_16: 21300544
+      grasswater-bitmask_11: 21300534
+      grasswater-bitmask_23: 21300558
+      grasswater-bitmask_39: 21300590
+      grasswater-bitmask_7: 21300526
+      grasswater-bitmask_38: 21300588
+      grasswater-bitmask_28: 21300568
+      grasswater-bitmask_19: 21300550
+      grasswater-bitmask_30: 21300572
+      grasswater-bitmask_8: 21300528
+      grasswater-bitmask_25: 21300562
+      grasswater-bitmask_1: 21300514
+      grasswater-bitmask_5: 21300522
+      grasswater-bitmask_43: 21300598
+      grasswater-bitmask_3: 21300518
+      grasswater-bitmask_46: 21300604
+      grasswater-bitmask_17: 21300546
+      grasswater-bitmask_35: 21300582
+      grasswater-bitmask_40: 21300592
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

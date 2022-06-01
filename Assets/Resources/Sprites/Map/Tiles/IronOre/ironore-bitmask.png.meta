@@ -849,7 +849,7 @@ TextureImporter:
       213: 21300562
     second: ironore-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -869,6 +869,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -878,8 +880,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -900,9 +902,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1928,6 +1934,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      ironore-bitmask_13: 21300496
+      ironore-bitmask_16: 21300502
+      ironore-bitmask_43: 21300556
+      ironore-bitmask_0: 21300470
+      ironore-bitmask_15: 21300500
+      ironore-bitmask_29: 21300528
+      ironore-bitmask_24: 21300518
+      ironore-bitmask_23: 21300516
+      ironore-bitmask_10: 21300490
+      ironore-bitmask_1: 21300472
+      ironore-bitmask_14: 21300498
+      ironore-bitmask_18: 21300506
+      ironore-bitmask_25: 21300520
+      ironore-bitmask_39: 21300548
+      ironore-bitmask_11: 21300492
+      ironore-bitmask_21: 21300512
+      ironore-bitmask_34: 21300538
+      ironore-bitmask_33: 21300536
+      ironore-bitmask_30: 21300530
+      ironore-bitmask_37: 21300544
+      ironore-bitmask_36: 21300542
+      ironore-bitmask_32: 21300534
+      ironore-bitmask_17: 21300504
+      ironore-bitmask_40: 21300550
+      ironore-bitmask_31: 21300532
+      ironore-bitmask_8: 21300486
+      ironore-bitmask_41: 21300552
+      ironore-bitmask_3: 21300476
+      ironore-bitmask_19: 21300508
+      ironore-bitmask_44: 21300558
+      ironore-bitmask_46: 21300562
+      ironore-bitmask_45: 21300560
+      ironore-bitmask_28: 21300526
+      ironore-bitmask_2: 21300474
+      ironore-bitmask_22: 21300514
+      ironore-bitmask_38: 21300546
+      ironore-bitmask_42: 21300554
+      ironore-bitmask_5: 21300480
+      ironore-bitmask_26: 21300522
+      ironore-bitmask_12: 21300494
+      ironore-bitmask_4: 21300478
+      ironore-bitmask_27: 21300524
+      ironore-bitmask_7: 21300484
+      ironore-bitmask_9: 21300488
+      ironore-bitmask_20: 21300510
+      ironore-bitmask_35: 21300540
+      ironore-bitmask_6: 21300482
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -1194,7 +1194,7 @@ TextureImporter:
       213: 21300792
     second: sandwater-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1214,6 +1214,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1223,8 +1225,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1245,9 +1247,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2273,6 +2279,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      sandwater-bitmask_22: 21300744
+      sandwater-bitmask_13: 21300726
+      sandwater-bitmask_29: 21300758
+      sandwater-bitmask_17: 21300734
+      sandwater-bitmask_9: 21300718
+      sandwater-bitmask_33: 21300766
+      sandwater-bitmask_37: 21300774
+      sandwater-bitmask_19: 21300738
+      sandwater-bitmask_0: 21300700
+      sandwater-bitmask_2: 21300704
+      sandwater-bitmask_3: 21300706
+      sandwater-bitmask_40: 21300780
+      sandwater-bitmask_35: 21300770
+      sandwater-bitmask_36: 21300772
+      sandwater-bitmask_23: 21300746
+      sandwater-bitmask_28: 21300756
+      sandwater-bitmask_41: 21300782
+      sandwater-bitmask_14: 21300728
+      sandwater-bitmask_45: 21300790
+      sandwater-bitmask_43: 21300786
+      sandwater-bitmask_25: 21300750
+      sandwater-bitmask_18: 21300736
+      sandwater-bitmask_39: 21300778
+      sandwater-bitmask_26: 21300752
+      sandwater-bitmask_7: 21300714
+      sandwater-bitmask_24: 21300748
+      sandwater-bitmask_12: 21300724
+      sandwater-bitmask_34: 21300768
+      sandwater-bitmask_46: 21300792
+      sandwater-bitmask_31: 21300762
+      sandwater-bitmask_5: 21300710
+      sandwater-bitmask_4: 21300708
+      sandwater-bitmask_20: 21300740
+      sandwater-bitmask_6: 21300712
+      sandwater-bitmask_11: 21300722
+      sandwater-bitmask_21: 21300742
+      sandwater-bitmask_15: 21300730
+      sandwater-bitmask_8: 21300716
+      sandwater-bitmask_10: 21300720
+      sandwater-bitmask_32: 21300764
+      sandwater-bitmask_38: 21300776
+      sandwater-bitmask_1: 21300702
+      sandwater-bitmask_44: 21300788
+      sandwater-bitmask_30: 21300760
+      sandwater-bitmask_42: 21300784
+      sandwater-bitmask_16: 21300732
+      sandwater-bitmask_27: 21300754
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -2,8 +2,8 @@
 
 ### Release ###
 
-* Steam (soon(tm))
 * [itch.io](https://rywh.itch.io/snowship)
+* Steam (soon(tm))
 
 ### What is Snowship ###
 

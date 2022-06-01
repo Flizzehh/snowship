@@ -1413,7 +1413,7 @@ TextureImporter:
       213: 21300938
     second: lignite-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1433,6 +1433,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1442,8 +1444,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1464,9 +1466,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2492,6 +2498,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      lignite-bitmask_45: 21300936
+      lignite-bitmask_28: 21300902
+      lignite-bitmask_21: 21300888
+      lignite-bitmask_11: 21300868
+      lignite-bitmask_15: 21300876
+      lignite-bitmask_44: 21300934
+      lignite-bitmask_9: 21300864
+      lignite-bitmask_19: 21300884
+      lignite-bitmask_25: 21300896
+      lignite-bitmask_37: 21300920
+      lignite-bitmask_2: 21300850
+      lignite-bitmask_8: 21300862
+      lignite-bitmask_5: 21300856
+      lignite-bitmask_41: 21300928
+      lignite-bitmask_36: 21300918
+      lignite-bitmask_38: 21300922
+      lignite-bitmask_34: 21300914
+      lignite-bitmask_12: 21300870
+      lignite-bitmask_43: 21300932
+      lignite-bitmask_42: 21300930
+      lignite-bitmask_39: 21300924
+      lignite-bitmask_1: 21300848
+      lignite-bitmask_22: 21300890
+      lignite-bitmask_16: 21300878
+      lignite-bitmask_6: 21300858
+      lignite-bitmask_35: 21300916
+      lignite-bitmask_33: 21300912
+      lignite-bitmask_31: 21300908
+      lignite-bitmask_29: 21300904
+      lignite-bitmask_27: 21300900
+      lignite-bitmask_0: 21300846
+      lignite-bitmask_26: 21300898
+      lignite-bitmask_14: 21300874
+      lignite-bitmask_10: 21300866
+      lignite-bitmask_4: 21300854
+      lignite-bitmask_17: 21300880
+      lignite-bitmask_18: 21300882
+      lignite-bitmask_30: 21300906
+      lignite-bitmask_46: 21300938
+      lignite-bitmask_3: 21300852
+      lignite-bitmask_32: 21300910
+      lignite-bitmask_40: 21300926
+      lignite-bitmask_23: 21300892
+      lignite-bitmask_24: 21300894
+      lignite-bitmask_13: 21300872
+      lignite-bitmask_20: 21300886
+      lignite-bitmask_7: 21300860
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

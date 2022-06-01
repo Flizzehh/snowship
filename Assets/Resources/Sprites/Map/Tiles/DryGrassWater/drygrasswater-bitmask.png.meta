@@ -1053,7 +1053,7 @@ TextureImporter:
       213: 21300698
     second: drygrasswater-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1073,6 +1073,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1082,8 +1084,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1104,9 +1106,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2132,6 +2138,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      drygrasswater-bitmask_36: 21300678
+      drygrasswater-bitmask_25: 21300656
+      drygrasswater-bitmask_14: 21300634
+      drygrasswater-bitmask_5: 21300616
+      drygrasswater-bitmask_20: 21300646
+      drygrasswater-bitmask_18: 21300642
+      drygrasswater-bitmask_30: 21300666
+      drygrasswater-bitmask_6: 21300618
+      drygrasswater-bitmask_34: 21300674
+      drygrasswater-bitmask_39: 21300684
+      drygrasswater-bitmask_32: 21300670
+      drygrasswater-bitmask_37: 21300680
+      drygrasswater-bitmask_9: 21300624
+      drygrasswater-bitmask_17: 21300640
+      drygrasswater-bitmask_28: 21300662
+      drygrasswater-bitmask_12: 21300630
+      drygrasswater-bitmask_0: 21300606
+      drygrasswater-bitmask_43: 21300692
+      drygrasswater-bitmask_22: 21300650
+      drygrasswater-bitmask_41: 21300688
+      drygrasswater-bitmask_10: 21300626
+      drygrasswater-bitmask_42: 21300690
+      drygrasswater-bitmask_19: 21300644
+      drygrasswater-bitmask_1: 21300608
+      drygrasswater-bitmask_38: 21300682
+      drygrasswater-bitmask_24: 21300654
+      drygrasswater-bitmask_26: 21300658
+      drygrasswater-bitmask_31: 21300668
+      drygrasswater-bitmask_13: 21300632
+      drygrasswater-bitmask_40: 21300686
+      drygrasswater-bitmask_33: 21300672
+      drygrasswater-bitmask_45: 21300696
+      drygrasswater-bitmask_27: 21300660
+      drygrasswater-bitmask_11: 21300628
+      drygrasswater-bitmask_15: 21300636
+      drygrasswater-bitmask_4: 21300614
+      drygrasswater-bitmask_44: 21300694
+      drygrasswater-bitmask_8: 21300622
+      drygrasswater-bitmask_7: 21300620
+      drygrasswater-bitmask_35: 21300676
+      drygrasswater-bitmask_21: 21300648
+      drygrasswater-bitmask_16: 21300638
+      drygrasswater-bitmask_46: 21300698
+      drygrasswater-bitmask_3: 21300612
+      drygrasswater-bitmask_29: 21300664
+      drygrasswater-bitmask_2: 21300610
+      drygrasswater-bitmask_23: 21300652
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

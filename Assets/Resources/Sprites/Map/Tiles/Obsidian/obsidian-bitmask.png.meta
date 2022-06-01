@@ -567,7 +567,7 @@ TextureImporter:
       213: 21300374
     second: obsidian-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -587,6 +587,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -596,8 +598,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -618,9 +620,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1646,6 +1652,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      obsidian-bitmask_26: 21300334
+      obsidian-bitmask_5: 21300292
+      obsidian-bitmask_42: 21300366
+      obsidian-bitmask_46: 21300374
+      obsidian-bitmask_29: 21300340
+      obsidian-bitmask_44: 21300370
+      obsidian-bitmask_7: 21300296
+      obsidian-bitmask_15: 21300312
+      obsidian-bitmask_8: 21300298
+      obsidian-bitmask_12: 21300306
+      obsidian-bitmask_13: 21300308
+      obsidian-bitmask_28: 21300338
+      obsidian-bitmask_14: 21300310
+      obsidian-bitmask_36: 21300354
+      obsidian-bitmask_31: 21300344
+      obsidian-bitmask_6: 21300294
+      obsidian-bitmask_0: 21300282
+      obsidian-bitmask_33: 21300348
+      obsidian-bitmask_32: 21300346
+      obsidian-bitmask_25: 21300332
+      obsidian-bitmask_34: 21300350
+      obsidian-bitmask_35: 21300352
+      obsidian-bitmask_37: 21300356
+      obsidian-bitmask_24: 21300330
+      obsidian-bitmask_20: 21300322
+      obsidian-bitmask_3: 21300288
+      obsidian-bitmask_16: 21300314
+      obsidian-bitmask_17: 21300316
+      obsidian-bitmask_4: 21300290
+      obsidian-bitmask_10: 21300302
+      obsidian-bitmask_41: 21300364
+      obsidian-bitmask_11: 21300304
+      obsidian-bitmask_1: 21300284
+      obsidian-bitmask_22: 21300326
+      obsidian-bitmask_30: 21300342
+      obsidian-bitmask_21: 21300324
+      obsidian-bitmask_38: 21300358
+      obsidian-bitmask_23: 21300328
+      obsidian-bitmask_40: 21300362
+      obsidian-bitmask_2: 21300286
+      obsidian-bitmask_9: 21300300
+      obsidian-bitmask_39: 21300360
+      obsidian-bitmask_43: 21300368
+      obsidian-bitmask_18: 21300318
+      obsidian-bitmask_45: 21300372
+      obsidian-bitmask_19: 21300320
+      obsidian-bitmask_27: 21300336
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

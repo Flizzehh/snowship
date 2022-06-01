@@ -1053,7 +1053,7 @@ TextureImporter:
       213: 21300698
     second: dirtwater-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1073,6 +1073,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1082,8 +1084,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1104,9 +1106,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2132,6 +2138,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      dirtwater-bitmask_12: 21300630
+      dirtwater-bitmask_4: 21300614
+      dirtwater-bitmask_1: 21300608
+      dirtwater-bitmask_13: 21300632
+      dirtwater-bitmask_28: 21300662
+      dirtwater-bitmask_16: 21300638
+      dirtwater-bitmask_33: 21300672
+      dirtwater-bitmask_46: 21300698
+      dirtwater-bitmask_38: 21300682
+      dirtwater-bitmask_20: 21300646
+      dirtwater-bitmask_3: 21300612
+      dirtwater-bitmask_19: 21300644
+      dirtwater-bitmask_27: 21300660
+      dirtwater-bitmask_23: 21300652
+      dirtwater-bitmask_2: 21300610
+      dirtwater-bitmask_39: 21300684
+      dirtwater-bitmask_32: 21300670
+      dirtwater-bitmask_35: 21300676
+      dirtwater-bitmask_37: 21300680
+      dirtwater-bitmask_41: 21300688
+      dirtwater-bitmask_43: 21300692
+      dirtwater-bitmask_21: 21300648
+      dirtwater-bitmask_10: 21300626
+      dirtwater-bitmask_0: 21300606
+      dirtwater-bitmask_29: 21300664
+      dirtwater-bitmask_34: 21300674
+      dirtwater-bitmask_44: 21300694
+      dirtwater-bitmask_22: 21300650
+      dirtwater-bitmask_18: 21300642
+      dirtwater-bitmask_9: 21300624
+      dirtwater-bitmask_30: 21300666
+      dirtwater-bitmask_11: 21300628
+      dirtwater-bitmask_14: 21300634
+      dirtwater-bitmask_31: 21300668
+      dirtwater-bitmask_5: 21300616
+      dirtwater-bitmask_42: 21300690
+      dirtwater-bitmask_6: 21300618
+      dirtwater-bitmask_24: 21300654
+      dirtwater-bitmask_15: 21300636
+      dirtwater-bitmask_40: 21300686
+      dirtwater-bitmask_25: 21300656
+      dirtwater-bitmask_8: 21300622
+      dirtwater-bitmask_17: 21300640
+      dirtwater-bitmask_45: 21300696
+      dirtwater-bitmask_7: 21300620
+      dirtwater-bitmask_26: 21300658
+      dirtwater-bitmask_36: 21300678
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -363,7 +363,7 @@ TextureImporter:
       213: 21300238
     second: clothes-top-1_29
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -383,6 +383,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -392,8 +394,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -414,9 +416,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -875,6 +881,27 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      clothes-top-1_5: 21300190
+      clothes-top-1_2: 21300184
+      clothes-top-1_19: 21300218
+      clothes-top-1_9: 21300198
+      clothes-top-1_6: 21300192
+      clothes-top-1_1: 21300182
+      clothes-top-1_16: 21300212
+      clothes-top-1_3: 21300186
+      clothes-top-1_10: 21300200
+      clothes-top-1_8: 21300196
+      clothes-top-1_13: 21300206
+      clothes-top-1_12: 21300204
+      clothes-top-1_11: 21300202
+      clothes-top-1_4: 21300188
+      clothes-top-1_17: 21300214
+      clothes-top-1_7: 21300194
+      clothes-top-1_14: 21300208
+      clothes-top-1_0: 21300180
+      clothes-top-1_15: 21300210
+      clothes-top-1_18: 21300216
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

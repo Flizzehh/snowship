@@ -708,7 +708,7 @@ TextureImporter:
       213: 21300468
     second: rhyolite-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -728,6 +728,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -737,8 +739,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -759,9 +761,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1787,6 +1793,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      rhyolite-bitmask_40: 21300456
+      rhyolite-bitmask_20: 21300416
+      rhyolite-bitmask_34: 21300444
+      rhyolite-bitmask_37: 21300450
+      rhyolite-bitmask_30: 21300436
+      rhyolite-bitmask_26: 21300428
+      rhyolite-bitmask_16: 21300408
+      rhyolite-bitmask_25: 21300426
+      rhyolite-bitmask_1: 21300378
+      rhyolite-bitmask_5: 21300386
+      rhyolite-bitmask_17: 21300410
+      rhyolite-bitmask_6: 21300388
+      rhyolite-bitmask_33: 21300442
+      rhyolite-bitmask_7: 21300390
+      rhyolite-bitmask_9: 21300394
+      rhyolite-bitmask_8: 21300392
+      rhyolite-bitmask_19: 21300414
+      rhyolite-bitmask_41: 21300458
+      rhyolite-bitmask_3: 21300382
+      rhyolite-bitmask_22: 21300420
+      rhyolite-bitmask_13: 21300402
+      rhyolite-bitmask_44: 21300464
+      rhyolite-bitmask_39: 21300454
+      rhyolite-bitmask_46: 21300468
+      rhyolite-bitmask_18: 21300412
+      rhyolite-bitmask_28: 21300432
+      rhyolite-bitmask_42: 21300460
+      rhyolite-bitmask_35: 21300446
+      rhyolite-bitmask_14: 21300404
+      rhyolite-bitmask_36: 21300448
+      rhyolite-bitmask_24: 21300424
+      rhyolite-bitmask_12: 21300400
+      rhyolite-bitmask_2: 21300380
+      rhyolite-bitmask_0: 21300376
+      rhyolite-bitmask_11: 21300398
+      rhyolite-bitmask_23: 21300422
+      rhyolite-bitmask_15: 21300406
+      rhyolite-bitmask_10: 21300396
+      rhyolite-bitmask_27: 21300430
+      rhyolite-bitmask_29: 21300434
+      rhyolite-bitmask_32: 21300440
+      rhyolite-bitmask_38: 21300452
+      rhyolite-bitmask_31: 21300438
+      rhyolite-bitmask_45: 21300466
+      rhyolite-bitmask_4: 21300384
+      rhyolite-bitmask_43: 21300462
+      rhyolite-bitmask_21: 21300418
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -48,6 +48,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -57,8 +58,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -79,6 +80,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -128,7 +131,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: dd80325ae606a0640800000000000000
-      internalID: 5046952360755267805
+      internalID: 9033357333953597428
       vertices: []
       indices: 
       edges: []
@@ -149,7 +152,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 547e21c968ed6b310800000000000000
-      internalID: 1420567402207438661
+      internalID: -3191176366118235395
       vertices: []
       indices: 
       edges: []
@@ -170,7 +173,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 9ff85d9207fb6a470800000000000000
-      internalID: 8405616242992713721
+      internalID: -8672564634983094824
       vertices: []
       indices: 
       edges: []
@@ -191,7 +194,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: b31ab25671197c580800000000000000
-      internalID: -8806911016632082117
+      internalID: -6230947492320879863
       vertices: []
       indices: 
       edges: []
@@ -206,6 +209,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      loom-active_0: 9033357333953597428
+      loom-active_2: -8672564634983094824
+      loom-active_1: -3191176366118235395
+      loom-active_3: -6230947492320879863
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

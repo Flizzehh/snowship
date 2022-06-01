@@ -1194,7 +1194,7 @@ TextureImporter:
       213: 21300792
     second: snowhole-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1214,6 +1214,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1223,8 +1225,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1245,9 +1247,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2273,6 +2279,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      snowhole-bitmask_26: 21300752
+      snowhole-bitmask_14: 21300728
+      snowhole-bitmask_41: 21300782
+      snowhole-bitmask_2: 21300704
+      snowhole-bitmask_35: 21300770
+      snowhole-bitmask_16: 21300732
+      snowhole-bitmask_38: 21300776
+      snowhole-bitmask_29: 21300758
+      snowhole-bitmask_39: 21300778
+      snowhole-bitmask_19: 21300738
+      snowhole-bitmask_40: 21300780
+      snowhole-bitmask_36: 21300772
+      snowhole-bitmask_45: 21300790
+      snowhole-bitmask_28: 21300756
+      snowhole-bitmask_24: 21300748
+      snowhole-bitmask_7: 21300714
+      snowhole-bitmask_15: 21300730
+      snowhole-bitmask_33: 21300766
+      snowhole-bitmask_37: 21300774
+      snowhole-bitmask_17: 21300734
+      snowhole-bitmask_4: 21300708
+      snowhole-bitmask_46: 21300792
+      snowhole-bitmask_20: 21300740
+      snowhole-bitmask_32: 21300764
+      snowhole-bitmask_30: 21300760
+      snowhole-bitmask_43: 21300786
+      snowhole-bitmask_25: 21300750
+      snowhole-bitmask_12: 21300724
+      snowhole-bitmask_13: 21300726
+      snowhole-bitmask_18: 21300736
+      snowhole-bitmask_21: 21300742
+      snowhole-bitmask_11: 21300722
+      snowhole-bitmask_0: 21300700
+      snowhole-bitmask_42: 21300784
+      snowhole-bitmask_44: 21300788
+      snowhole-bitmask_23: 21300746
+      snowhole-bitmask_8: 21300716
+      snowhole-bitmask_27: 21300754
+      snowhole-bitmask_22: 21300744
+      snowhole-bitmask_1: 21300702
+      snowhole-bitmask_31: 21300762
+      snowhole-bitmask_9: 21300718
+      snowhole-bitmask_6: 21300712
+      snowhole-bitmask_5: 21300710
+      snowhole-bitmask_10: 21300720
+      snowhole-bitmask_34: 21300768
+      snowhole-bitmask_3: 21300706
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

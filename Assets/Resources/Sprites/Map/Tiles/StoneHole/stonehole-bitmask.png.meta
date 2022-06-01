@@ -1194,7 +1194,7 @@ TextureImporter:
       213: 21300792
     second: stonehole-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1214,6 +1214,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1223,8 +1225,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1245,9 +1247,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2273,6 +2279,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      stonehole-bitmask_7: 21300714
+      stonehole-bitmask_27: 21300754
+      stonehole-bitmask_31: 21300762
+      stonehole-bitmask_36: 21300772
+      stonehole-bitmask_38: 21300776
+      stonehole-bitmask_39: 21300778
+      stonehole-bitmask_2: 21300704
+      stonehole-bitmask_45: 21300790
+      stonehole-bitmask_11: 21300722
+      stonehole-bitmask_24: 21300748
+      stonehole-bitmask_10: 21300720
+      stonehole-bitmask_33: 21300766
+      stonehole-bitmask_34: 21300768
+      stonehole-bitmask_19: 21300738
+      stonehole-bitmask_28: 21300756
+      stonehole-bitmask_1: 21300702
+      stonehole-bitmask_30: 21300760
+      stonehole-bitmask_41: 21300782
+      stonehole-bitmask_14: 21300728
+      stonehole-bitmask_35: 21300770
+      stonehole-bitmask_37: 21300774
+      stonehole-bitmask_18: 21300736
+      stonehole-bitmask_26: 21300752
+      stonehole-bitmask_43: 21300786
+      stonehole-bitmask_9: 21300718
+      stonehole-bitmask_17: 21300734
+      stonehole-bitmask_6: 21300712
+      stonehole-bitmask_21: 21300742
+      stonehole-bitmask_8: 21300716
+      stonehole-bitmask_13: 21300726
+      stonehole-bitmask_40: 21300780
+      stonehole-bitmask_12: 21300724
+      stonehole-bitmask_29: 21300758
+      stonehole-bitmask_3: 21300706
+      stonehole-bitmask_23: 21300746
+      stonehole-bitmask_25: 21300750
+      stonehole-bitmask_46: 21300792
+      stonehole-bitmask_4: 21300708
+      stonehole-bitmask_32: 21300764
+      stonehole-bitmask_15: 21300730
+      stonehole-bitmask_5: 21300710
+      stonehole-bitmask_20: 21300740
+      stonehole-bitmask_42: 21300784
+      stonehole-bitmask_44: 21300788
+      stonehole-bitmask_16: 21300732
+      stonehole-bitmask_22: 21300744
+      stonehole-bitmask_0: 21300700
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

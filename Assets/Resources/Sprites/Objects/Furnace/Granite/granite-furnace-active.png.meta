@@ -81,6 +81,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -91,7 +92,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -112,6 +113,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -149,7 +152,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: b7fc63b34c118cc20800000000000000
-      internalID: 3226848667515670395
+      internalID: 21300024
       vertices: []
       indices: 
       edges: []
@@ -170,7 +173,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: d7e71ff188d099bc0800000000000000
-      internalID: -3775971934270816643
+      internalID: 21300026
       vertices: []
       indices: 
       edges: []
@@ -191,7 +194,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0b357f2ee1ebde9c0800000000000000
-      internalID: -3896249062739455056
+      internalID: 21300028
       vertices: []
       indices: 
       edges: []
@@ -227,6 +230,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      granite-furnace-active_3: 21300030
+      granite-furnace-active_2: 21300028
+      granite-furnace-active_0: 21300024
+      granite-furnace-active_1: 21300026
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

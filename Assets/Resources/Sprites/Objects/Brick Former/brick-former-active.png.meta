@@ -93,6 +93,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -103,7 +104,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -124,6 +125,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -161,7 +164,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: d61b087bdd76ad290800000000000000
-      internalID: -7864859597285052051
+      internalID: 21300032
       vertices: []
       indices: 
       edges: []
@@ -182,7 +185,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: e82cd90c961a03180800000000000000
-      internalID: -9137626168359533938
+      internalID: 21300034
       vertices: []
       indices: 
       edges: []
@@ -203,7 +206,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 452c6aadce222da90800000000000000
-      internalID: -7290726446083423660
+      internalID: 21300036
       vertices: []
       indices: 
       edges: []
@@ -239,6 +242,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      brick-former-active_1: 21300034
+      brick-former-active_3: 21300038
+      brick-former-active_0: 21300032
+      brick-former-active_2: 21300036
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

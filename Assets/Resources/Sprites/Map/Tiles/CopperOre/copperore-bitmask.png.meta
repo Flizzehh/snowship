@@ -990,7 +990,7 @@ TextureImporter:
       213: 21300656
     second: copperore-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1010,6 +1010,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1019,8 +1021,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1041,9 +1043,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2069,6 +2075,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      copperore-bitmask_16: 21300596
+      copperore-bitmask_21: 21300606
+      copperore-bitmask_25: 21300614
+      copperore-bitmask_12: 21300588
+      copperore-bitmask_17: 21300598
+      copperore-bitmask_13: 21300590
+      copperore-bitmask_19: 21300602
+      copperore-bitmask_26: 21300616
+      copperore-bitmask_34: 21300632
+      copperore-bitmask_37: 21300638
+      copperore-bitmask_29: 21300622
+      copperore-bitmask_33: 21300630
+      copperore-bitmask_27: 21300618
+      copperore-bitmask_0: 21300564
+      copperore-bitmask_36: 21300636
+      copperore-bitmask_30: 21300624
+      copperore-bitmask_46: 21300656
+      copperore-bitmask_20: 21300604
+      copperore-bitmask_4: 21300572
+      copperore-bitmask_31: 21300626
+      copperore-bitmask_7: 21300578
+      copperore-bitmask_5: 21300574
+      copperore-bitmask_41: 21300646
+      copperore-bitmask_24: 21300612
+      copperore-bitmask_2: 21300568
+      copperore-bitmask_32: 21300628
+      copperore-bitmask_23: 21300610
+      copperore-bitmask_18: 21300600
+      copperore-bitmask_45: 21300654
+      copperore-bitmask_42: 21300648
+      copperore-bitmask_35: 21300634
+      copperore-bitmask_3: 21300570
+      copperore-bitmask_43: 21300650
+      copperore-bitmask_9: 21300582
+      copperore-bitmask_22: 21300608
+      copperore-bitmask_11: 21300586
+      copperore-bitmask_1: 21300566
+      copperore-bitmask_39: 21300642
+      copperore-bitmask_44: 21300652
+      copperore-bitmask_14: 21300592
+      copperore-bitmask_15: 21300594
+      copperore-bitmask_28: 21300620
+      copperore-bitmask_6: 21300576
+      copperore-bitmask_38: 21300640
+      copperore-bitmask_40: 21300644
+      copperore-bitmask_10: 21300584
+      copperore-bitmask_8: 21300580
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

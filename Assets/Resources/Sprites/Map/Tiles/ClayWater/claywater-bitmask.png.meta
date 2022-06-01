@@ -1335,7 +1335,7 @@ TextureImporter:
       213: 21300886
     second: claywater-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1355,6 +1355,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1364,8 +1366,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1386,9 +1388,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2414,6 +2420,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      claywater-bitmask_32: 21300858
+      claywater-bitmask_35: 21300864
+      claywater-bitmask_23: 21300840
+      claywater-bitmask_16: 21300826
+      claywater-bitmask_11: 21300816
+      claywater-bitmask_17: 21300828
+      claywater-bitmask_41: 21300876
+      claywater-bitmask_6: 21300806
+      claywater-bitmask_28: 21300850
+      claywater-bitmask_38: 21300870
+      claywater-bitmask_33: 21300860
+      claywater-bitmask_42: 21300878
+      claywater-bitmask_10: 21300814
+      claywater-bitmask_21: 21300836
+      claywater-bitmask_26: 21300846
+      claywater-bitmask_45: 21300884
+      claywater-bitmask_39: 21300872
+      claywater-bitmask_25: 21300844
+      claywater-bitmask_40: 21300874
+      claywater-bitmask_24: 21300842
+      claywater-bitmask_1: 21300796
+      claywater-bitmask_12: 21300818
+      claywater-bitmask_18: 21300830
+      claywater-bitmask_37: 21300868
+      claywater-bitmask_2: 21300798
+      claywater-bitmask_8: 21300810
+      claywater-bitmask_43: 21300880
+      claywater-bitmask_30: 21300854
+      claywater-bitmask_3: 21300800
+      claywater-bitmask_31: 21300856
+      claywater-bitmask_46: 21300886
+      claywater-bitmask_9: 21300812
+      claywater-bitmask_20: 21300834
+      claywater-bitmask_44: 21300882
+      claywater-bitmask_29: 21300852
+      claywater-bitmask_4: 21300802
+      claywater-bitmask_0: 21300794
+      claywater-bitmask_27: 21300848
+      claywater-bitmask_14: 21300822
+      claywater-bitmask_15: 21300824
+      claywater-bitmask_13: 21300820
+      claywater-bitmask_7: 21300808
+      claywater-bitmask_22: 21300838
+      claywater-bitmask_5: 21300804
+      claywater-bitmask_19: 21300832
+      claywater-bitmask_34: 21300862
+      claywater-bitmask_36: 21300866
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -2259,7 +2259,7 @@ TextureImporter:
       213: 21301502
     second: slate-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -2279,6 +2279,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -2288,8 +2290,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -2310,9 +2312,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -3338,6 +3344,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      slate-bitmask_41: 21301492
+      slate-bitmask_42: 21301494
+      slate-bitmask_4: 21301418
+      slate-bitmask_19: 21301448
+      slate-bitmask_32: 21301474
+      slate-bitmask_8: 21301426
+      slate-bitmask_46: 21301502
+      slate-bitmask_12: 21301434
+      slate-bitmask_25: 21301460
+      slate-bitmask_30: 21301470
+      slate-bitmask_0: 21301410
+      slate-bitmask_11: 21301432
+      slate-bitmask_22: 21301454
+      slate-bitmask_6: 21301422
+      slate-bitmask_15: 21301440
+      slate-bitmask_33: 21301476
+      slate-bitmask_17: 21301444
+      slate-bitmask_3: 21301416
+      slate-bitmask_37: 21301484
+      slate-bitmask_35: 21301480
+      slate-bitmask_40: 21301490
+      slate-bitmask_28: 21301466
+      slate-bitmask_21: 21301452
+      slate-bitmask_20: 21301450
+      slate-bitmask_34: 21301478
+      slate-bitmask_5: 21301420
+      slate-bitmask_23: 21301456
+      slate-bitmask_10: 21301430
+      slate-bitmask_31: 21301472
+      slate-bitmask_26: 21301462
+      slate-bitmask_39: 21301488
+      slate-bitmask_43: 21301496
+      slate-bitmask_18: 21301446
+      slate-bitmask_27: 21301464
+      slate-bitmask_1: 21301412
+      slate-bitmask_29: 21301468
+      slate-bitmask_9: 21301428
+      slate-bitmask_36: 21301482
+      slate-bitmask_13: 21301436
+      slate-bitmask_38: 21301486
+      slate-bitmask_44: 21301498
+      slate-bitmask_45: 21301500
+      slate-bitmask_16: 21301442
+      slate-bitmask_24: 21301458
+      slate-bitmask_14: 21301438
+      slate-bitmask_2: 21301414
+      slate-bitmask_7: 21301424
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

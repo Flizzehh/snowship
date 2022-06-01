@@ -426,7 +426,7 @@ TextureImporter:
       213: 21300280
     second: kimberlite-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -446,6 +446,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -455,8 +457,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -477,9 +479,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1505,6 +1511,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      kimberlite-bitmask_13: 21300214
+      kimberlite-bitmask_19: 21300226
+      kimberlite-bitmask_39: 21300266
+      kimberlite-bitmask_16: 21300220
+      kimberlite-bitmask_28: 21300244
+      kimberlite-bitmask_20: 21300228
+      kimberlite-bitmask_36: 21300260
+      kimberlite-bitmask_37: 21300262
+      kimberlite-bitmask_5: 21300198
+      kimberlite-bitmask_6: 21300200
+      kimberlite-bitmask_14: 21300216
+      kimberlite-bitmask_15: 21300218
+      kimberlite-bitmask_32: 21300252
+      kimberlite-bitmask_0: 21300188
+      kimberlite-bitmask_21: 21300230
+      kimberlite-bitmask_1: 21300190
+      kimberlite-bitmask_31: 21300250
+      kimberlite-bitmask_34: 21300256
+      kimberlite-bitmask_42: 21300272
+      kimberlite-bitmask_41: 21300270
+      kimberlite-bitmask_10: 21300208
+      kimberlite-bitmask_46: 21300280
+      kimberlite-bitmask_33: 21300254
+      kimberlite-bitmask_11: 21300210
+      kimberlite-bitmask_44: 21300276
+      kimberlite-bitmask_24: 21300236
+      kimberlite-bitmask_45: 21300278
+      kimberlite-bitmask_23: 21300234
+      kimberlite-bitmask_25: 21300238
+      kimberlite-bitmask_40: 21300268
+      kimberlite-bitmask_4: 21300196
+      kimberlite-bitmask_35: 21300258
+      kimberlite-bitmask_12: 21300212
+      kimberlite-bitmask_7: 21300202
+      kimberlite-bitmask_9: 21300206
+      kimberlite-bitmask_27: 21300242
+      kimberlite-bitmask_30: 21300248
+      kimberlite-bitmask_3: 21300194
+      kimberlite-bitmask_8: 21300204
+      kimberlite-bitmask_18: 21300224
+      kimberlite-bitmask_29: 21300246
+      kimberlite-bitmask_26: 21300240
+      kimberlite-bitmask_38: 21300264
+      kimberlite-bitmask_43: 21300274
+      kimberlite-bitmask_2: 21300192
+      kimberlite-bitmask_17: 21300222
+      kimberlite-bitmask_22: 21300232
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

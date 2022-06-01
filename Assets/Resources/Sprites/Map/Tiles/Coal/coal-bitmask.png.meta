@@ -1131,7 +1131,7 @@ TextureImporter:
       213: 21300750
     second: coal-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1151,6 +1151,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1160,8 +1162,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1182,9 +1184,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2210,6 +2216,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      coal-bitmask_20: 21300698
+      coal-bitmask_18: 21300694
+      coal-bitmask_9: 21300676
+      coal-bitmask_40: 21300738
+      coal-bitmask_2: 21300662
+      coal-bitmask_29: 21300716
+      coal-bitmask_22: 21300702
+      coal-bitmask_0: 21300658
+      coal-bitmask_8: 21300674
+      coal-bitmask_16: 21300690
+      coal-bitmask_5: 21300668
+      coal-bitmask_15: 21300688
+      coal-bitmask_42: 21300742
+      coal-bitmask_3: 21300664
+      coal-bitmask_12: 21300682
+      coal-bitmask_1: 21300660
+      coal-bitmask_36: 21300730
+      coal-bitmask_39: 21300736
+      coal-bitmask_23: 21300704
+      coal-bitmask_11: 21300680
+      coal-bitmask_25: 21300708
+      coal-bitmask_13: 21300684
+      coal-bitmask_35: 21300728
+      coal-bitmask_41: 21300740
+      coal-bitmask_28: 21300714
+      coal-bitmask_45: 21300748
+      coal-bitmask_33: 21300724
+      coal-bitmask_14: 21300686
+      coal-bitmask_32: 21300722
+      coal-bitmask_37: 21300732
+      coal-bitmask_46: 21300750
+      coal-bitmask_19: 21300696
+      coal-bitmask_30: 21300718
+      coal-bitmask_44: 21300746
+      coal-bitmask_6: 21300670
+      coal-bitmask_43: 21300744
+      coal-bitmask_24: 21300706
+      coal-bitmask_34: 21300726
+      coal-bitmask_31: 21300720
+      coal-bitmask_21: 21300700
+      coal-bitmask_27: 21300712
+      coal-bitmask_26: 21300710
+      coal-bitmask_38: 21300734
+      coal-bitmask_4: 21300666
+      coal-bitmask_7: 21300672
+      coal-bitmask_17: 21300692
+      coal-bitmask_10: 21300678
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -708,7 +708,7 @@ TextureImporter:
       213: 21300468
     second: bronzeore-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -728,6 +728,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -737,8 +739,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -759,9 +761,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1787,6 +1793,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      bronzeore-bitmask_3: 21300382
+      bronzeore-bitmask_6: 21300388
+      bronzeore-bitmask_41: 21300458
+      bronzeore-bitmask_35: 21300446
+      bronzeore-bitmask_20: 21300416
+      bronzeore-bitmask_34: 21300444
+      bronzeore-bitmask_37: 21300450
+      bronzeore-bitmask_42: 21300460
+      bronzeore-bitmask_1: 21300378
+      bronzeore-bitmask_7: 21300390
+      bronzeore-bitmask_15: 21300406
+      bronzeore-bitmask_33: 21300442
+      bronzeore-bitmask_12: 21300400
+      bronzeore-bitmask_32: 21300440
+      bronzeore-bitmask_46: 21300468
+      bronzeore-bitmask_24: 21300424
+      bronzeore-bitmask_31: 21300438
+      bronzeore-bitmask_14: 21300404
+      bronzeore-bitmask_18: 21300412
+      bronzeore-bitmask_45: 21300466
+      bronzeore-bitmask_28: 21300432
+      bronzeore-bitmask_36: 21300448
+      bronzeore-bitmask_39: 21300454
+      bronzeore-bitmask_43: 21300462
+      bronzeore-bitmask_44: 21300464
+      bronzeore-bitmask_38: 21300452
+      bronzeore-bitmask_0: 21300376
+      bronzeore-bitmask_17: 21300410
+      bronzeore-bitmask_40: 21300456
+      bronzeore-bitmask_23: 21300422
+      bronzeore-bitmask_19: 21300414
+      bronzeore-bitmask_29: 21300434
+      bronzeore-bitmask_25: 21300426
+      bronzeore-bitmask_22: 21300420
+      bronzeore-bitmask_8: 21300392
+      bronzeore-bitmask_9: 21300394
+      bronzeore-bitmask_30: 21300436
+      bronzeore-bitmask_5: 21300386
+      bronzeore-bitmask_10: 21300396
+      bronzeore-bitmask_2: 21300380
+      bronzeore-bitmask_16: 21300408
+      bronzeore-bitmask_26: 21300428
+      bronzeore-bitmask_27: 21300430
+      bronzeore-bitmask_21: 21300418
+      bronzeore-bitmask_13: 21300402
+      bronzeore-bitmask_11: 21300398
+      bronzeore-bitmask_4: 21300384
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

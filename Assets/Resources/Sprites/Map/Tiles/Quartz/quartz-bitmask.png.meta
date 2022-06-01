@@ -2118,7 +2118,7 @@ TextureImporter:
       213: 21301408
     second: quartz-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -2138,6 +2138,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -2147,8 +2149,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -2169,9 +2171,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -3197,6 +3203,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      quartz-bitmask_1: 21301318
+      quartz-bitmask_4: 21301324
+      quartz-bitmask_5: 21301326
+      quartz-bitmask_24: 21301364
+      quartz-bitmask_41: 21301398
+      quartz-bitmask_43: 21301402
+      quartz-bitmask_22: 21301360
+      quartz-bitmask_39: 21301394
+      quartz-bitmask_23: 21301362
+      quartz-bitmask_10: 21301336
+      quartz-bitmask_31: 21301378
+      quartz-bitmask_15: 21301346
+      quartz-bitmask_40: 21301396
+      quartz-bitmask_7: 21301330
+      quartz-bitmask_46: 21301408
+      quartz-bitmask_26: 21301368
+      quartz-bitmask_38: 21301392
+      quartz-bitmask_0: 21301316
+      quartz-bitmask_2: 21301320
+      quartz-bitmask_25: 21301366
+      quartz-bitmask_44: 21301404
+      quartz-bitmask_8: 21301332
+      quartz-bitmask_20: 21301356
+      quartz-bitmask_28: 21301372
+      quartz-bitmask_27: 21301370
+      quartz-bitmask_19: 21301354
+      quartz-bitmask_21: 21301358
+      quartz-bitmask_13: 21301342
+      quartz-bitmask_35: 21301386
+      quartz-bitmask_14: 21301344
+      quartz-bitmask_42: 21301400
+      quartz-bitmask_32: 21301380
+      quartz-bitmask_45: 21301406
+      quartz-bitmask_3: 21301322
+      quartz-bitmask_34: 21301384
+      quartz-bitmask_11: 21301338
+      quartz-bitmask_6: 21301328
+      quartz-bitmask_9: 21301334
+      quartz-bitmask_12: 21301340
+      quartz-bitmask_18: 21301352
+      quartz-bitmask_36: 21301388
+      quartz-bitmask_30: 21301376
+      quartz-bitmask_16: 21301348
+      quartz-bitmask_17: 21301350
+      quartz-bitmask_37: 21301390
+      quartz-bitmask_33: 21301382
+      quartz-bitmask_29: 21301374
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

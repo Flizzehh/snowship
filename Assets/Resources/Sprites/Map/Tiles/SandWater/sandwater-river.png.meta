@@ -1335,7 +1335,7 @@ TextureImporter:
       213: 21300886
     second: sandwater-river_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1355,6 +1355,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1364,8 +1366,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1386,9 +1388,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2414,6 +2420,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      sandwater-river_4: 21300802
+      sandwater-river_23: 21300840
+      sandwater-river_24: 21300842
+      sandwater-river_2: 21300798
+      sandwater-river_35: 21300864
+      sandwater-river_45: 21300884
+      sandwater-river_37: 21300868
+      sandwater-river_17: 21300828
+      sandwater-river_15: 21300824
+      sandwater-river_22: 21300838
+      sandwater-river_16: 21300826
+      sandwater-river_44: 21300882
+      sandwater-river_33: 21300860
+      sandwater-river_10: 21300814
+      sandwater-river_34: 21300862
+      sandwater-river_21: 21300836
+      sandwater-river_36: 21300866
+      sandwater-river_43: 21300880
+      sandwater-river_28: 21300850
+      sandwater-river_5: 21300804
+      sandwater-river_27: 21300848
+      sandwater-river_13: 21300820
+      sandwater-river_3: 21300800
+      sandwater-river_20: 21300834
+      sandwater-river_6: 21300806
+      sandwater-river_7: 21300808
+      sandwater-river_32: 21300858
+      sandwater-river_19: 21300832
+      sandwater-river_42: 21300878
+      sandwater-river_18: 21300830
+      sandwater-river_46: 21300886
+      sandwater-river_8: 21300810
+      sandwater-river_14: 21300822
+      sandwater-river_12: 21300818
+      sandwater-river_40: 21300874
+      sandwater-river_30: 21300854
+      sandwater-river_38: 21300870
+      sandwater-river_41: 21300876
+      sandwater-river_9: 21300812
+      sandwater-river_11: 21300816
+      sandwater-river_26: 21300846
+      sandwater-river_29: 21300852
+      sandwater-river_25: 21300844
+      sandwater-river_31: 21300856
+      sandwater-river_0: 21300794
+      sandwater-river_39: 21300872
+      sandwater-river_1: 21300796
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

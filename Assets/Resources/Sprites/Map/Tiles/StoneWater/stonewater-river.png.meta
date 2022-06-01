@@ -1194,7 +1194,7 @@ TextureImporter:
       213: 21300792
     second: stonewater-river_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1214,6 +1214,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1223,8 +1225,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1245,9 +1247,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2273,6 +2279,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      stonewater-river_46: 21300792
+      stonewater-river_41: 21300782
+      stonewater-river_14: 21300728
+      stonewater-river_9: 21300718
+      stonewater-river_24: 21300748
+      stonewater-river_12: 21300724
+      stonewater-river_27: 21300754
+      stonewater-river_18: 21300736
+      stonewater-river_10: 21300720
+      stonewater-river_5: 21300710
+      stonewater-river_15: 21300730
+      stonewater-river_43: 21300786
+      stonewater-river_38: 21300776
+      stonewater-river_17: 21300734
+      stonewater-river_6: 21300712
+      stonewater-river_37: 21300774
+      stonewater-river_29: 21300758
+      stonewater-river_36: 21300772
+      stonewater-river_33: 21300766
+      stonewater-river_0: 21300700
+      stonewater-river_20: 21300740
+      stonewater-river_21: 21300742
+      stonewater-river_28: 21300756
+      stonewater-river_2: 21300704
+      stonewater-river_40: 21300780
+      stonewater-river_42: 21300784
+      stonewater-river_35: 21300770
+      stonewater-river_31: 21300762
+      stonewater-river_4: 21300708
+      stonewater-river_7: 21300714
+      stonewater-river_25: 21300750
+      stonewater-river_3: 21300706
+      stonewater-river_16: 21300732
+      stonewater-river_26: 21300752
+      stonewater-river_30: 21300760
+      stonewater-river_13: 21300726
+      stonewater-river_8: 21300716
+      stonewater-river_11: 21300722
+      stonewater-river_34: 21300768
+      stonewater-river_45: 21300790
+      stonewater-river_22: 21300744
+      stonewater-river_39: 21300778
+      stonewater-river_23: 21300746
+      stonewater-river_32: 21300764
+      stonewater-river_44: 21300788
+      stonewater-river_1: 21300702
+      stonewater-river_19: 21300738
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

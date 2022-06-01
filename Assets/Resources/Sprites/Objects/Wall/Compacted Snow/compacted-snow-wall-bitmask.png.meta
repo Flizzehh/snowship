@@ -522,7 +522,7 @@ TextureImporter:
       213: 21300344
     second: compacted-snow-wall-bitmask_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -542,6 +542,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -552,7 +554,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 0
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -573,9 +575,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1601,6 +1607,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      compacted-snow-wall-bitmask_6: 21300264
+      compacted-snow-wall-bitmask_20: 21300292
+      compacted-snow-wall-bitmask_35: 21300322
+      compacted-snow-wall-bitmask_26: 21300304
+      compacted-snow-wall-bitmask_27: 21300306
+      compacted-snow-wall-bitmask_7: 21300266
+      compacted-snow-wall-bitmask_41: 21300334
+      compacted-snow-wall-bitmask_42: 21300336
+      compacted-snow-wall-bitmask_24: 21300300
+      compacted-snow-wall-bitmask_18: 21300288
+      compacted-snow-wall-bitmask_25: 21300302
+      compacted-snow-wall-bitmask_19: 21300290
+      compacted-snow-wall-bitmask_23: 21300298
+      compacted-snow-wall-bitmask_28: 21300308
+      compacted-snow-wall-bitmask_0: 21300252
+      compacted-snow-wall-bitmask_2: 21300256
+      compacted-snow-wall-bitmask_34: 21300320
+      compacted-snow-wall-bitmask_29: 21300310
+      compacted-snow-wall-bitmask_15: 21300282
+      compacted-snow-wall-bitmask_45: 21300342
+      compacted-snow-wall-bitmask_31: 21300314
+      compacted-snow-wall-bitmask_44: 21300340
+      compacted-snow-wall-bitmask_17: 21300286
+      compacted-snow-wall-bitmask_32: 21300316
+      compacted-snow-wall-bitmask_13: 21300278
+      compacted-snow-wall-bitmask_30: 21300312
+      compacted-snow-wall-bitmask_46: 21300344
+      compacted-snow-wall-bitmask_12: 21300276
+      compacted-snow-wall-bitmask_4: 21300260
+      compacted-snow-wall-bitmask_9: 21300270
+      compacted-snow-wall-bitmask_1: 21300254
+      compacted-snow-wall-bitmask_11: 21300274
+      compacted-snow-wall-bitmask_14: 21300280
+      compacted-snow-wall-bitmask_10: 21300272
+      compacted-snow-wall-bitmask_39: 21300330
+      compacted-snow-wall-bitmask_40: 21300332
+      compacted-snow-wall-bitmask_38: 21300328
+      compacted-snow-wall-bitmask_16: 21300284
+      compacted-snow-wall-bitmask_36: 21300324
+      compacted-snow-wall-bitmask_43: 21300338
+      compacted-snow-wall-bitmask_33: 21300318
+      compacted-snow-wall-bitmask_3: 21300258
+      compacted-snow-wall-bitmask_8: 21300268
+      compacted-snow-wall-bitmask_21: 21300294
+      compacted-snow-wall-bitmask_22: 21300296
+      compacted-snow-wall-bitmask_5: 21300262
+      compacted-snow-wall-bitmask_37: 21300326
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

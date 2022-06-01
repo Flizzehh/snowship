@@ -1053,7 +1053,7 @@ TextureImporter:
       213: 21300698
     second: grasswater-river_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1073,6 +1073,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1082,8 +1084,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1104,9 +1106,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2132,6 +2138,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      grasswater-river_34: 21300674
+      grasswater-river_41: 21300688
+      grasswater-river_11: 21300628
+      grasswater-river_10: 21300626
+      grasswater-river_14: 21300634
+      grasswater-river_15: 21300636
+      grasswater-river_5: 21300616
+      grasswater-river_33: 21300672
+      grasswater-river_35: 21300676
+      grasswater-river_0: 21300606
+      grasswater-river_8: 21300622
+      grasswater-river_28: 21300662
+      grasswater-river_9: 21300624
+      grasswater-river_12: 21300630
+      grasswater-river_2: 21300610
+      grasswater-river_30: 21300666
+      grasswater-river_40: 21300686
+      grasswater-river_1: 21300608
+      grasswater-river_27: 21300660
+      grasswater-river_22: 21300650
+      grasswater-river_31: 21300668
+      grasswater-river_4: 21300614
+      grasswater-river_24: 21300654
+      grasswater-river_46: 21300698
+      grasswater-river_29: 21300664
+      grasswater-river_7: 21300620
+      grasswater-river_43: 21300692
+      grasswater-river_21: 21300648
+      grasswater-river_25: 21300656
+      grasswater-river_36: 21300678
+      grasswater-river_32: 21300670
+      grasswater-river_26: 21300658
+      grasswater-river_45: 21300696
+      grasswater-river_16: 21300638
+      grasswater-river_19: 21300644
+      grasswater-river_23: 21300652
+      grasswater-river_3: 21300612
+      grasswater-river_38: 21300682
+      grasswater-river_39: 21300684
+      grasswater-river_6: 21300618
+      grasswater-river_18: 21300642
+      grasswater-river_44: 21300694
+      grasswater-river_13: 21300632
+      grasswater-river_17: 21300640
+      grasswater-river_20: 21300646
+      grasswater-river_37: 21300680
+      grasswater-river_42: 21300690
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

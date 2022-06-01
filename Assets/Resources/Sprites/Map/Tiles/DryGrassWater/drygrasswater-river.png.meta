@@ -1194,7 +1194,7 @@ TextureImporter:
       213: 21300792
     second: drygrasswater-river_46
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -1214,6 +1214,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1223,8 +1225,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -1245,9 +1247,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2273,6 +2279,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      drygrasswater-river_31: 21300762
+      drygrasswater-river_13: 21300726
+      drygrasswater-river_5: 21300710
+      drygrasswater-river_8: 21300716
+      drygrasswater-river_36: 21300772
+      drygrasswater-river_29: 21300758
+      drygrasswater-river_43: 21300786
+      drygrasswater-river_18: 21300736
+      drygrasswater-river_10: 21300720
+      drygrasswater-river_4: 21300708
+      drygrasswater-river_42: 21300784
+      drygrasswater-river_11: 21300722
+      drygrasswater-river_34: 21300768
+      drygrasswater-river_19: 21300738
+      drygrasswater-river_17: 21300734
+      drygrasswater-river_37: 21300774
+      drygrasswater-river_30: 21300760
+      drygrasswater-river_35: 21300770
+      drygrasswater-river_32: 21300764
+      drygrasswater-river_24: 21300748
+      drygrasswater-river_41: 21300782
+      drygrasswater-river_28: 21300756
+      drygrasswater-river_44: 21300788
+      drygrasswater-river_21: 21300742
+      drygrasswater-river_0: 21300700
+      drygrasswater-river_15: 21300730
+      drygrasswater-river_45: 21300790
+      drygrasswater-river_39: 21300778
+      drygrasswater-river_6: 21300712
+      drygrasswater-river_14: 21300728
+      drygrasswater-river_25: 21300750
+      drygrasswater-river_33: 21300766
+      drygrasswater-river_27: 21300754
+      drygrasswater-river_16: 21300732
+      drygrasswater-river_22: 21300744
+      drygrasswater-river_23: 21300746
+      drygrasswater-river_9: 21300718
+      drygrasswater-river_40: 21300780
+      drygrasswater-river_38: 21300776
+      drygrasswater-river_12: 21300724
+      drygrasswater-river_3: 21300706
+      drygrasswater-river_7: 21300714
+      drygrasswater-river_2: 21300704
+      drygrasswater-river_26: 21300752
+      drygrasswater-river_20: 21300740
+      drygrasswater-river_46: 21300792
+      drygrasswater-river_1: 21300702
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

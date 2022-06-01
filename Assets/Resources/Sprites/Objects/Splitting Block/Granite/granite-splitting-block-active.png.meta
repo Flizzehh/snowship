@@ -57,6 +57,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -66,8 +67,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -88,6 +89,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -242,7 +245,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: e8767b09041b279d0800000000000000
-      internalID: -2777963129270212722
+      internalID: 1319999722910686433
       vertices: []
       indices: 
       edges: []
@@ -263,7 +266,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1c8e4484369c94cd0800000000000000
-      internalID: -2573304283814106943
+      internalID: 2120269661155384453
       vertices: []
       indices: 
       edges: []
@@ -284,7 +287,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 58db134a5e90633f0800000000000000
-      internalID: -921538191843803771
+      internalID: -647157877038740776
       vertices: []
       indices: 
       edges: []
@@ -299,6 +302,15 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      granite-splitting-block-active_4: 1319999722910686433
+      granite-splitting-block-active_1: 5755592398908910427
+      granite-splitting-block-active_6: -647157877038740776
+      granite-splitting-block-active_7: 8549261110570618660
+      granite-splitting-block-active_3: 5786939141219631239
+      granite-splitting-block-active_0: -4929873758758174398
+      granite-splitting-block-active_2: 6374954707637821301
+      granite-splitting-block-active_5: 2120269661155384453
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
