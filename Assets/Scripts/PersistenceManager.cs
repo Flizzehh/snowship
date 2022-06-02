@@ -15,8 +15,8 @@ public class PersistenceManager : BaseManager {
 		this.startCoroutineReference = startCoroutineReference;
 	}
 
-	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2021.2");
-	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2021.2");
+	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2022.1");
+	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2022.1");
 
 	public SettingsState settingsState;
 
