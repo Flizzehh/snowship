@@ -131,7 +131,6 @@ public class LifeManager : BaseManager {
 			if (health > 1f) {
 				health = 1f;
 			} else if (health <= 0f) {
-				Die();
 				health = 0f;
 				dead = true;
 			}
