@@ -326,12 +326,15 @@ public class JobManager : BaseManager {
 		{ JobEnum.HarvestFarm, delegate (ColonistManager.Colonist colonist, Job job) {
 			if (job.tile.farm != null) {
 				colonist.GetInventory().ChangeResourceAmount(job.tile.farm.prefab.seedResource, UnityEngine.Random.Range(1, 3), false);
-				colonist.GetInventory().ChangeResourceAmount(job.tile.farm.prefab.harvestResource, UnityEngine.Random.Range(1, 6), false);
+				foreach (ResourceManager.ResourceRange harvestResourceRange in job.tile.farm.prefab.harvestResources) {
+					colonist.GetInventory().ChangeResourceAmount(harvestResourceRange.resource, UnityEngine.Random.Range(harvestResourceRange.min, harvestResourceRange.max), false);
+				}
 
 				GameManager.jobM.CreateJob(new Job(job.tile, job.tile.farm.prefab, job.tile.farm.variation, 0));
 
+				int layer = job.tile.farm.prefab.layer; // Required because RemoveObjectInstance sets job.tile.farm = null but must happen before RemoveObjectAtLayer
 				GameManager.resourceM.RemoveObjectInstance(job.tile.farm);
-				job.tile.RemoveObjectAtLayer(job.tile.farm.prefab.layer);
+				job.tile.RemoveObjectAtLayer(layer);
 			}
 			GameManager.resourceM.Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
 		} },

@@ -117,7 +117,7 @@ public class ResourceManager : BaseManager {
 	public enum ResourceEnum {
 		None,
 		Dirt, Mud, Andesite, Basalt, Diorite, Granite, Kimberlite, Obsidian, Rhyolite, Chalk, Claystone, Coal, Flint, Lignite, Limestone, Sandstone, Anthracite, Marble, Quartz, Slate,
-			Clay, Log, Snow, Sand, Cactus, Leaf, Grass, Sap,
+			Clay, Log, Snow, Sand, Cactus, Leaf, Grass, Sap, Straw,
 		GoldOre, SilverOre, BronzeOre, IronOre, CopperOre,
 		Gold, Silver, Bronze, Iron, Copper,
 		Wood, Firewood, Charcoal, Mudbrick, Brick, Glass, Cotton, Cloth,
@@ -1252,7 +1252,7 @@ public class ResourceManager : BaseManager {
 		UsesFuel,
 		GrowthTimeDays,
 		Seed,
-		HarvestResource,
+		HarvestResources,
 		TimeToBuild,
 		CommonResources,
 		Variations,
@@ -1375,7 +1375,7 @@ public class ResourceManager : BaseManager {
 																	// Farm
 																	int? growthTimeDays = null;
 																	Resource seedResource = null;
-																	Resource harvestResource = null;
+																	List<ResourceRange> harvestResources = new List<ResourceRange>();
 
 																	// Job
 																	int? timeToBuild = null;
@@ -1455,8 +1455,13 @@ public class ResourceManager : BaseManager {
 																			case ObjectPropertyEnum.Seed:
 																				seedResource = GetResourceByString((string)objectSubProperty.Value);
 																				break;
-																			case ObjectPropertyEnum.HarvestResource:
-																				harvestResource = GetResourceByString((string)objectSubProperty.Value);
+																			case ObjectPropertyEnum.HarvestResources:
+																				foreach (string resourceRangeString in ((string)objectSubProperty.Value).Split(',')) {
+																					Resource resource = GameManager.resourceM.GetResourceByString(resourceRangeString.Split(':')[0]);
+																					int min = int.Parse(resourceRangeString.Split(':')[1].Split('-')[0]);
+																					int max = int.Parse(resourceRangeString.Split(':')[1].Split('-')[1]);
+																					harvestResources.Add(new ResourceRange(resource, min, max));
+																				}
 																				break;
 																			case ObjectPropertyEnum.TimeToBuild:
 																				timeToBuild = int.Parse((string)objectSubProperty.Value);
@@ -1611,7 +1616,7 @@ public class ResourceManager : BaseManager {
 																		usesFuel.Value,
 																		growthTimeDays.Value,
 																		seedResource,
-																		harvestResource,
+																		harvestResources,
 																		timeToBuild.Value,
 																		commonResources,
 																		variations,

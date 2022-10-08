@@ -161,6 +161,11 @@
 			<Weight>1
 			<Volume>1
 			<Price>2
+		<Resource>
+			<Type>Straw
+			<Weight>1
+			<Volume>2
+			<Price>2
 <ResourceGroup>
 	<Type>Ores
 	<Resources>
@@ -295,7 +300,7 @@
 			<Price>15
 			<Crafting>
 				<Objects>Processing:BrickFormer;Furnaces
-				<Resources>Mud:0.1,Clay:0.1,Grass:0.1
+				<Resources>Mud:0.1,Clay:0.1,Straw:0.1
 				<CraftingTime>10
 		<Resource>
 			<Type>Brick

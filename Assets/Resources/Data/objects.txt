@@ -445,7 +445,7 @@
 					<Flammability>1
 					<GrowthTimeDays>4
 					<Seed>WheatSeed
-					<HarvestResource>Wheat
+					<HarvestResources>Wheat:2-6,Straw:4-6
 					<TimeToBuild>2
 					<CommonResources>WheatSeed:1
 					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
@@ -461,7 +461,7 @@
 					<Flammability>1
 					<GrowthTimeDays>2
 					<Seed>Potato
-					<HarvestResource>Potato
+					<HarvestResources>Potato:2-3
 					<TimeToBuild>2
 					<CommonResources>Potato:1
 					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
@@ -477,7 +477,7 @@
 					<Flammability>1
 					<GrowthTimeDays>4
 					<Seed>CottonSeed
-					<HarvestResource>Cotton
+					<HarvestResources>Cotton:4-8
 					<TimeToBuild>2
 					<CommonResources>CottonSeed:1
 					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
