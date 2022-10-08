@@ -120,7 +120,8 @@ public class DebugManager : BaseManager {
 		viewblockingfrom,       // viewblockingfrom							-- highlights all tiles that the selected tile blocks shadows from (tiles that have shadows that were cut short because this tile was in the way)
 		viewroofs,              // viewroofs								-- higlights all tiles with a roof above it
 		viewhidden,				// viewhidden								-- shows all tiles on the map, including ones that are hidden from the player's view
-		listjobs				// listjobs (colonist)						-- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument
+		listjobs,				// listjobs (colonist)						-- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument
+		growfarms,				// growfarms								-- instantly grow all farms on the map
 	};
 
 	private readonly Dictionary<Commands, string> commandHelpOutputs = new Dictionary<Commands, string>() {
@@ -176,7 +177,8 @@ public class DebugManager : BaseManager {
 		{Commands.viewblockingfrom,"viewblockingfrom -- highlights all tiles that the selected tile blocks shadows from (tiles that have shadows that were cut short because this tile was in the way)" },
 		{Commands.viewroofs,"viewroofs -- higlights all tiles with a roof above it" },
 		{Commands.viewhidden, "viewhidden -- shows all tiles on the map, including ones that are hidden from the player's view" },
-		{Commands.listjobs,"listjobs (colonist) -- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument" }
+		{Commands.listjobs,"listjobs (colonist) -- list all jobs and their costs for each colonist or for a specific colonist with the (colonist) argument" },
+		{Commands.growfarms,"growfarms -- instantly grow all farms on the map" },
 	};
 
 	public void ParseCommandInput() {
@@ -1409,7 +1411,20 @@ public class DebugManager : BaseManager {
 					}
 				}
 			} else if (parameters.Count == 1) {
-
+				OutputToConsole("ERROR: Not yet implemented.");
+			} else {
+				OutputToConsole("ERROR: Invalid number of parameters specified.");
+			}
+		});
+		commandFunctions.Add(Commands.growfarms, delegate (Commands selectedCommand, List<string> parameters) {
+			if (parameters.Count == 0) {
+				int numFarmsGrown = 0;
+				foreach (ResourceManager.Farm farm in GameManager.resourceM.farms) {
+					farm.growTimer = farm.prefab.growthTimeDays * TimeManager.dayLengthSeconds;
+					farm.Update();
+					numFarmsGrown += 1;
+				}
+				OutputToConsole($"{numFarmsGrown} farms have been grown.");
 			} else {
 				OutputToConsole("ERROR: Invalid number of parameters specified.");
 			}
