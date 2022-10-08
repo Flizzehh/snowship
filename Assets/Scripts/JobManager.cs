@@ -160,68 +160,68 @@ public class JobManager : BaseManager {
 
 	private static readonly Dictionary<JobEnum, Func<Job, string>> jobDescriptionFunctions = new Dictionary<JobEnum, Func<Job, string>>() {
 		{ JobEnum.Build, delegate (Job job) {
-			return "Building a " + job.prefab.name + ".";
+			return $"Building a {job.prefab.name}.";
 		} },
 		{ JobEnum.Remove, delegate (Job job) {
 			if (job.prefab.type == ResourceManager.ObjectEnum.RemoveRoof) {
-				return "Removing a roof.";
+				return $"Removing a roof.";
 			} else {
-				return "Removing a " + job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name + ".";
+				return $"Removing a {job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name}.";
 			}
 		} },
 		{ JobEnum.ChopPlant, delegate (Job job) {
-			return "Chopping down a " + job.tile.plant.prefab.name + ".";
+			return $"Chopping down a {job.tile.plant.prefab.name}.";
 		} },
 		{ JobEnum.PlantPlant, delegate (Job job) {
-			return "Planting a plant.";
+			return $"Planting a plant.";
 		} },
 		{ JobEnum.Mine, delegate (Job job) {
-			return "Mining " + job.tile.tileType.name + ".";
+			return $"Mining {job.tile.tileType.name}.";
 		} },
 		{ JobEnum.Dig, delegate (Job job) {
-			return "Digging " + string.Join(" and ", job.tile.tileType.resourceRanges.Select(rr => rr.resource.name).ToArray());
+			return $"Digging {string.Join(" and ", job.tile.tileType.resourceRanges.Select(rr => rr.resource.name).ToArray())}";
 		} },
 		{ JobEnum.Fill, delegate (Job job) {
-			return "Filling " + job.tile.tileType.groupType.ToString().ToLower() + ".";
+			return $"Filling {job.tile.tileType.groupType.ToString().ToLower()}.";
 		} },
 		{ JobEnum.PlantFarm, delegate (Job job) {
-			return "Planting a " + job.prefab.name + ".";
+			return $"Planting a {job.prefab.name}.";
 		} },
 		{ JobEnum.HarvestFarm, delegate (Job job) {
-			return "Harvesting a farm of " + job.tile.farm.name + ".";
+			return $"Harvesting a farm of {job.tile.farm.name}.";
 		} },
 		{ JobEnum.CreateResource, delegate (Job job) {
-			return "Creating " + job.createResource.resource.name + ".";
+			return $"Creating {job.createResource.resource.name}.";
 		} },
 		{ JobEnum.PickupResources, delegate (Job job) {
-			return "Picking up some resources.";
+			return $"Picking up some resources.";
 		} },
 		{ JobEnum.TransferResources, delegate (Job job) {
-			return "Transferring resources.";
+			return $"Transferring resources.";
 		} },
 		{ JobEnum.CollectResources, delegate (Job job) {
-			return "Collecting resources.";
+			return $"Collecting resources.";
 		} },
 		{ JobEnum.EmptyInventory, delegate (Job job) {
-			return "Emptying their inventory.";
+			return $"Emptying inventory.";
 		} },
 		{ JobEnum.CollectFood, delegate (Job job) {
-			return "Finding some food to eat.";
+			return $"Finding some food to eat.";
 		} },
 		{ JobEnum.Eat, delegate (Job job) {
-			return "Eating.";
+			return $"Eating.";
 		} },
 		{ JobEnum.CollectWater, delegate (Job job) {
-			return "Finding something to drink.";
+			return $"Finding something to drink.";
 		} },
 		{ JobEnum.Drink, delegate (Job job) {
-			return "Drinking.";
+			return $"Drinking.";
 		} },
 		{ JobEnum.Sleep, delegate (Job job) {
-			return "Sleeping.";
+			return $"Sleeping.";
 		} },
 		{ JobEnum.WearClothes, delegate (Job job) {
-			return "Wearing " + job.resourcesToBuild[0].resource.name + ".";
+			return $"Wearing {job.resourcesToBuild[0].resource.name}.";
 		} }
 	};
 
