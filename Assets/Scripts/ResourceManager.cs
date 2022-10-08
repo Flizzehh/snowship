@@ -1819,7 +1819,7 @@ public class ResourceManager : BaseManager {
 		// Farm
 		public readonly int growthTimeDays;
 		public readonly Resource seedResource;
-		public readonly Resource harvestResource;
+		public readonly List<ResourceRange> harvestResources;
 
 		// Job
 		public readonly int timeToBuild;
@@ -1865,7 +1865,7 @@ public class ResourceManager : BaseManager {
 			bool usesFuel,
 			int growthTimeDays,
 			Resource seedResource,
-			Resource harvestResource,
+			List<ResourceRange> harvestResources,
 			int timeToBuild,
 			List<ResourceAmount> commonResources,
 			List<Variation> variations,
@@ -1914,7 +1914,7 @@ public class ResourceManager : BaseManager {
 			// Farm
 			this.growthTimeDays = growthTimeDays;
 			this.seedResource = seedResource;
-			this.harvestResource = harvestResource;
+			this.harvestResources = harvestResources;
 
 			// Job
 			this.timeToBuild = timeToBuild;
@@ -1954,7 +1954,7 @@ public class ResourceManager : BaseManager {
 				}
 
 				if (jobType == JobManager.JobEnum.PlantFarm) {
-					spriteGroups[SpriteType.Base] = new List<Sprite>() { harvestResource.image };
+					spriteGroups[SpriteType.Base] = new List<Sprite>() { harvestResources[0].resource.image };
 				}
 
 				if (spriteGroups[SpriteType.Bitmask].Count == 0) {
@@ -3135,7 +3135,7 @@ public class ResourceManager : BaseManager {
 		private readonly float temperatureGrowthMultipler;
 
 		public Farm(ObjectPrefab prefab, Variation variation, TileManager.Tile tile) : base(prefab, variation, tile, 0) {
-			name = prefab.harvestResource.name + " Farm";
+			name = prefab.harvestResources[0].resource.name + " Farm";
 
 			growProgressSprites = prefab.GetBitmaskSpritesForVariation(variation);
 			maxSpriteIndex = growProgressSprites.Count - 1;
