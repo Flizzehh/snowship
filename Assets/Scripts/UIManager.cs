@@ -1632,7 +1632,7 @@ public class UIManager : BaseManager {
 
 	public void UpdateLoadingStateText(string primaryText, string secondaryText) {
 		if (loadingStateText.gameObject.activeSelf) {
-			loadingStateText.text = primaryText.ToUpper();
+			loadingStateText.text = primaryText;
 		}
 		if (subLoadingStateText.gameObject.activeSelf) {
 			subLoadingStateText.text = secondaryText.ToUpper();
