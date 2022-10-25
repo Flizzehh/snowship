@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Job;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -2798,14 +2799,14 @@ public class UIManager : BaseManager {
 
 			if (clothing == null) {
 				
-				List<JobManager.Job> checkJobs = new List<JobManager.Job>();
+				List<Job> checkJobs = new List<Job>();
 				checkJobs.AddRange(selectedColonist.backlog);
 				checkJobs.Add(selectedColonist.storedJob);
 				checkJobs.Add(selectedColonist.job);
 
-				foreach (JobManager.Job checkJob in checkJobs) {
-					if (checkJob != null && checkJob.prefab.type == ResourceManager.ObjectEnum.WearClothes) {
-						ResourceManager.Clothing clothingToWear = (ResourceManager.Clothing)checkJob.resourcesToBuild[0].resource;
+				foreach (Job checkJob in checkJobs) {
+					if (checkJob != null && checkJob.objectPrefab.type == ResourceManager.ObjectEnum.WearClothes) {
+						ResourceManager.Clothing clothingToWear = (ResourceManager.Clothing)checkJob.requiredResources[0].resource;
 						if (clothingToWear.prefab.appearance == appearanceToClothingKVP.Key) {
 							clothing = clothingToWear;
 							clothingTypeButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
@@ -2942,9 +2943,9 @@ public class UIManager : BaseManager {
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider").GetComponent<Slider>().value = selectedColonist.GetInventory().UsedVolume();
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider/Handle Slide Area/Handle/Text").GetComponent<Text>().text = Mathf.RoundToInt((selectedColonist.GetInventory().UsedVolume() / (float)selectedColonist.GetInventory().maxVolume) * 100).ToString();
 
-			selectedColonistInformationPanel.transform.Find("ColonistCurrentAction-Text").GetComponent<Text>().text = GameManager.jobM.GetJobDescription(selectedColonist.job);
+			selectedColonistInformationPanel.transform.Find("ColonistCurrentAction-Text").GetComponent<Text>().text = selectedColonist.GetCurrentActionString();
 			if (selectedColonist.storedJob != null) {
-				selectedColonistInformationPanel.transform.Find("ColonistStoredAction-Text").GetComponent<Text>().text = GameManager.jobM.GetJobDescription(selectedColonist.storedJob);
+				selectedColonistInformationPanel.transform.Find("ColonistStoredAction-Text").GetComponent<Text>().text = selectedColonist.GetStoredActionString();
 			} else {
 				selectedColonistInformationPanel.transform.Find("ColonistStoredAction-Text").GetComponent<Text>().text = string.Empty;
 			}
@@ -3119,12 +3120,12 @@ public class UIManager : BaseManager {
 	}
 
 	public class JobElement {
-		public JobManager.Job job;
+		public Job job;
 		public ColonistManager.Colonist colonist;
 		public GameObject obj;
 		public GameObject colonistObj;
 
-		public JobElement(JobManager.Job job, ColonistManager.Colonist colonist, Transform parent) {
+		public JobElement(Job job, ColonistManager.Colonist colonist, Transform parent) {
 			this.job = job;
 			this.colonist = colonist;
 
@@ -3132,44 +3133,15 @@ public class UIManager : BaseManager {
 			GameObject jobInfo = obj.transform.Find("Content/JobInfo").gameObject;
 			Text jobInfoNameText = jobInfo.transform.Find("Name").GetComponent<Text>();
 
-			if (job.prefab.type == ResourceManager.ObjectEnum.CreateResource) {
+			if (job.objectPrefab.type == ResourceManager.ObjectEnum.CreateResource) {
 				jobInfo.transform.Find("Image").GetComponent<Image>().sprite = job.createResource.resource.image;
 			} else {
-				jobInfo.transform.Find("Image").GetComponent<Image>().sprite = job.prefab.GetBaseSpriteForVariation(job.variation);
+				jobInfo.transform.Find("Image").GetComponent<Image>().sprite = job.objectPrefab.GetBaseSpriteForVariation(job.variation);
 			}
 
-			switch (job.prefab.jobType) {
-				case JobManager.JobEnum.Mine:
-				case JobManager.JobEnum.Dig:
-					jobInfoNameText.text = job.tile.tileType.name;
-					break;
-				case JobManager.JobEnum.PlantPlant:
-					jobInfoNameText.text = GameManager.resourceM.GetPlantGroupByEnum(job.variation.plants.First().Key.groupType).name;
-					break;
-				case JobManager.JobEnum.ChopPlant:
-					jobInfoNameText.text = job.tile.plant.name;
-					break;
-				case JobManager.JobEnum.PlantFarm:
-					jobInfoNameText.text = job.prefab.name;
-					break;
-				case JobManager.JobEnum.HarvestFarm:
-					jobInfoNameText.text = job.tile.farm.name;
-					break;
-				case JobManager.JobEnum.CreateResource:
-					jobInfoNameText.text = job.createResource.resource.name;
-					break;
-				case JobManager.JobEnum.Remove:
-					if (job.prefab.type == ResourceManager.ObjectEnum.RemoveRoof) {
-						jobInfoNameText.text = "Roof";
-					} else {
-						jobInfoNameText.text = job.tile.GetObjectInstanceAtLayer(job.prefab.layer).prefab.name;
-					}
-					break;
-				default:
-					jobInfoNameText.text = job.prefab.name;
-					break;
-			}
-			jobInfo.transform.Find("Type").GetComponent<Text>().text = SplitByCapitals(job.prefab.jobType.ToString());
+			jobInfoNameText.text = job.prefab.GetJobInfoNameText(job);
+
+			jobInfo.transform.Find("Type").GetComponent<Text>().text = SplitByCapitals(job.objectPrefab.jobType.ToString());
 			obj.GetComponent<Button>().onClick.AddListener(delegate {
 				GameManager.cameraM.SetCameraPosition(job.tile.obj.transform.position);
 			});
@@ -3189,11 +3161,11 @@ public class UIManager : BaseManager {
 				priorityText.text = string.Empty;
 			}
 
-			if (job.resourcesToBuild.Count > 0) {
+			if (job.requiredResources.Count > 0) {
 
 				obj.transform.Find("Content/RequiredResources-Panel").GetComponent<Image>().color = GetColour(Colours.WhiteAlpha64);
 
-				foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
+				foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
 					GameObject resourceAmountObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), obj.transform.Find("Content/RequiredResources-Panel"), false);
 
 					resourceAmountObj.GetComponent<Image>().color = GetColour(Colours.Clear);
@@ -3236,6 +3208,8 @@ public class UIManager : BaseManager {
 
 			job.jobUIElement = this;
 
+			obj.name = $"{job.prefab.name} {job.objectPrefab.name}";
+
 			Update();
 		}
 
@@ -3274,7 +3248,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void SetJobElements() {
-		if (GameManager.jobM.jobs.Count > 0 || GameManager.colonistM.colonists.Where(colonist => colonist.job != null).ToList().Count > 0) {
+		if (Job.jobs.Count > 0 || GameManager.colonistM.colonists.Where(colonist => colonist.job != null).ToList().Count > 0) {
 			RemoveJobElements();
 			List<ColonistManager.Colonist> orderedColonists = GameManager.colonistM.colonists.Where(colonist => colonist.job != null).ToList();
 			foreach (ColonistManager.Colonist jobColonist in orderedColonists.Where(colonist => colonist.job.started).OrderBy(colonist => colonist.job.jobProgress)) {
@@ -3283,10 +3257,10 @@ public class UIManager : BaseManager {
 			foreach (ColonistManager.Colonist jobColonist in orderedColonists.Where(colonist => !colonist.job.started).OrderBy(colonist => colonist.path.Count)) {
 				jobElements.Add(new JobElement(jobColonist.job, jobColonist, jobListPanel.transform));
 			}
-			foreach (JobManager.Job job in GameManager.jobM.jobs.Where(j => j.started).OrderBy(j => (j.jobProgress / j.colonistBuildTime))) {
+			foreach (Job job in Job.jobs.Where(j => j.started).OrderBy(j => (j.jobProgress / j.colonistBuildTime))) {
 				jobElements.Add(new JobElement(job, null, jobListPanel.transform));
 			}
-			foreach (JobManager.Job job in GameManager.jobM.jobs.Where(j => !j.started).OrderByDescending(j => j.priority)) {
+			foreach (Job job in Job.jobs.Where(j => !j.started).OrderByDescending(j => j.priority)) {
 				jobElements.Add(new JobElement(job, null, jobListPanel.transform));
 			}
 			jobsPanel.SetActive(true);
@@ -3514,7 +3488,8 @@ public class UIManager : BaseManager {
 			}
 
 			selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().onClick.AddListener(delegate {
-				JobManager.Job job = new JobManager.Job(
+				Job job = new Job(
+					JobPrefab.GetJobPrefabByName("TransferResources"),
 					selectedTradingPost.tile,
 					GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.TransferResources),
 					null,
@@ -3522,10 +3497,10 @@ public class UIManager : BaseManager {
 				);
 				foreach (ResourceTransferElement rte in tradingPostResourceTransferElements) {
 					if (rte.transferAmount > 0) {
-						job.resourcesToBuild.Add(new ResourceManager.ResourceAmount(rte.resource, rte.transferAmount));
+						job.requiredResources.Add(new ResourceManager.ResourceAmount(rte.resource, rte.transferAmount));
 					}
 				}
-				if (job.resourcesToBuild.Count > 0) {
+				if (job.requiredResources.Count > 0) {
 					GameManager.jobM.CreateJob(job);
 				}
 			});
@@ -3555,7 +3530,8 @@ public class UIManager : BaseManager {
 			}
 
 			selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().onClick.AddListener(delegate {
-				JobManager.Job job = new JobManager.Job(
+				Job job = new Job(
+					JobPrefab.GetJobPrefabByName("CollectResources"),
 					selectedTradingPost.tile,
 					GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectResources),
 					null,

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Job;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,13 +32,13 @@ public class ColonistManager : BaseManager {
 		public ProfessionEnum type;
 		public string name;
 
-		public List<JobManager.JobEnum> jobs;
+		public List<string> jobs;
 
 		public SkillEnum relatedSkill;
 
 		public ProfessionPrefab(
 			ProfessionEnum type,
-			List<JobManager.JobEnum> jobs
+			List<string> jobs
 		) {
 			this.type = type;
 			name = UIManager.SplitByCapitals(type.ToString());
@@ -62,7 +63,7 @@ public class ColonistManager : BaseManager {
 				case ProfessionPropertyEnum.Profession:
 
 					ProfessionEnum? type = null;
-					List<JobManager.JobEnum> jobs = new List<JobManager.JobEnum>();
+					List<string> jobs = new();
 
 					foreach (KeyValuePair<string, object> professionSubProperty in (List<KeyValuePair<string, object>>)professionProperty.Value) {
 						switch ((ProfessionPropertyEnum)Enum.Parse(typeof(ProfessionPropertyEnum), professionSubProperty.Key)) {
@@ -71,7 +72,7 @@ public class ColonistManager : BaseManager {
 								break;
 							case ProfessionPropertyEnum.Jobs:
 								foreach (string jobString in ((string)professionSubProperty.Value).Split(',')) {
-									jobs.Add((JobManager.JobEnum)Enum.Parse(typeof(JobManager.JobEnum), jobString));
+									jobs.Add(jobString);
 								}
 								break;
 							default:
@@ -127,7 +128,7 @@ public class ColonistManager : BaseManager {
 
 			this.priority = priority;
 
-			GameManager.jobM.UpdateSingleColonistJobs(colonist);
+			ColonistJob.UpdateSingleColonistJobs(colonist);
 		}
 
 		public void IncreasePriority() {
@@ -146,7 +147,7 @@ public class ColonistManager : BaseManager {
 		public SkillEnum type;
 		public string name;
 
-		public readonly Dictionary<JobManager.JobEnum, float> affectedJobTypes = new Dictionary<JobManager.JobEnum, float>();
+		public readonly Dictionary<string, float> affectedJobTypes = new Dictionary<string, float>();
 
 		public ProfessionEnum relatedProfession;
 
@@ -156,7 +157,7 @@ public class ColonistManager : BaseManager {
 
 			foreach (string affectedJobTypeString in data[1].Split(';')) {
 				List<string> affectedJobTypeData = affectedJobTypeString.Split(',').ToList();
-				affectedJobTypes.Add((JobManager.JobEnum)Enum.Parse(typeof(JobManager.JobEnum), affectedJobTypeData[0]), float.Parse(affectedJobTypeData[1]));
+				affectedJobTypes.Add(affectedJobTypeData[0], float.Parse(affectedJobTypeData[1]));
 			}
 		}
 	}
@@ -200,7 +201,7 @@ public class ColonistManager : BaseManager {
 				currentExperience -= nextLevelExperience;
 				nextLevelExperience = 100 + (10 * level);
 			}
-			GameManager.jobM.UpdateColonistJobCosts(colonist);
+			ColonistJob.UpdateColonistJobCosts(colonist);
 			if (GameManager.humanM.selectedHuman == colonist) {
 				GameManager.uiM.RemakeSelectedColonistSkills();
 			}
@@ -285,19 +286,12 @@ public class ColonistManager : BaseManager {
 	public enum NeedEnum { Rest, Water, Food, Temperature, Shelter, Clothing, Safety, Social, Esteem, Relaxation };
 
 	// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
-	private readonly List<JobManager.JobEnum> needRelatedJobs = new List<JobManager.JobEnum>() {
-		JobManager.JobEnum.CollectFood, JobManager.JobEnum.Eat,
-		JobManager.JobEnum.CollectWater, JobManager.JobEnum.Drink,
-		JobManager.JobEnum.Sleep
-	};
-
-	// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
-	private readonly Dictionary<JobManager.JobEnum, NeedEnum> jobToNeedMap = new Dictionary<JobManager.JobEnum, NeedEnum>() {
-		{ JobManager.JobEnum.Sleep, NeedEnum.Rest },
-		{ JobManager.JobEnum.CollectWater, NeedEnum.Water },
-		{ JobManager.JobEnum.Drink, NeedEnum.Water },
-		{ JobManager.JobEnum.CollectFood, NeedEnum.Food },
-		{ JobManager.JobEnum.Eat, NeedEnum.Food }
+	private readonly Dictionary<string, NeedEnum> jobToNeedMap = new() {
+		{ "Sleep", NeedEnum.Rest },
+		{ "CollectWater", NeedEnum.Water },
+		{ "Drink", NeedEnum.Water },
+		{ "CollectFood", NeedEnum.Food },
+		{ "Eat", NeedEnum.Food }
 	};
 
 	public readonly Dictionary<NeedEnum, Func<NeedInstance, float>> needsValueSpecialIncreases = new Dictionary<NeedEnum, Func<NeedInstance, float>>() {
@@ -344,7 +338,7 @@ public class ColonistManager : BaseManager {
 	};
 
 	public void CalculateNeedValue(NeedInstance need) {
-		if (need.colonist.job != null && need.prefab.relatedJobs.Contains(need.colonist.job.prefab.jobType)) {
+		if (need.colonist.job != null && need.prefab.relatedJobs.Contains(need.colonist.job.objectPrefab.jobType)) {
 			return;
 		}
 		float needIncreaseAmount = need.prefab.baseIncreaseRate;
@@ -410,8 +404,14 @@ public class ColonistManager : BaseManager {
 			if (closestFood.Key != null) {
 				if (closestFood.Key.parent is ResourceManager.Container container) {
 					container.GetInventory().ReserveResources(resourcesToReserve, need.colonist);
-					JobManager.Job job = new JobManager.Job(container.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectFood), null, 0);
-					need.colonist.SetJob(new JobManager.ColonistJob(need.colonist, job, null, null));
+					Job job = new Job(
+						JobPrefab.GetJobPrefabByName("CollectFood"),
+						container.tile,
+						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectFood),
+						null,
+						0
+					);
+					need.colonist.SetJob(new ColonistJob(need.colonist, job, null, null));
 					return true;
 				} else if (closestFood.Key.parent is HumanManager.Human) {
 					// TODO
@@ -474,12 +474,33 @@ public class ColonistManager : BaseManager {
 			if (validSleepSpots.Count > 0) {
 				ResourceManager.SleepSpot chosenSleepSpot = validSleepSpots.OrderByDescending(sleepSpot => sleepSpot.prefab.restComfortAmount / (PathManager.RegionBlockDistance(need.colonist.overTile.regionBlock, sleepSpot.tile.regionBlock, true, true, false) + 1)).ToList()[0];
 				chosenSleepSpot.StartSleeping(need.colonist);
-				need.colonist.SetJob(new JobManager.ColonistJob(need.colonist, new JobManager.Job(chosenSleepSpot.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Sleep), null, 0), null, null));
+				need.colonist.SetJob(new ColonistJob(
+					need.colonist,
+					new Job(
+						JobPrefab.GetJobPrefabByName("Sleep"),
+						chosenSleepSpot.tile,
+						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Sleep),
+						null,
+						0
+					),
+					null,
+					  null
+				));
 				return true;
 			}
 		}
 		if (sleepAnywhere) {
-			need.colonist.SetJob(new JobManager.ColonistJob(need.colonist, new JobManager.Job(need.colonist.overTile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Sleep), null, 0), null, null));
+			need.colonist.SetJob(new ColonistJob(
+				need.colonist,
+				new Job(
+					JobPrefab.GetJobPrefabByName("Sleep"),
+					need.colonist.overTile,
+					GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Sleep),
+					null,
+					0),
+				null,
+				null
+			));
 			return true;
 		}
 		return false;
@@ -487,7 +508,7 @@ public class ColonistManager : BaseManager {
 
 	public static readonly Dictionary<NeedEnum, Func<NeedInstance, bool>> needsValueFunctions = new Dictionary<NeedEnum, Func<NeedInstance, bool>>() {
 		{ NeedEnum.Food, delegate (NeedInstance need) {
-			if (need.colonist.job == null || !(need.colonist.job.prefab.jobType == JobManager.JobEnum.CollectFood || need.colonist.job.prefab.jobType == JobManager.JobEnum.Eat)) {
+			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectFood" || need.colonist.job.objectPrefab.jobType == "Eat")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate * GameManager.timeM.deltaTime);
 					if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // true, true
@@ -523,7 +544,7 @@ public class ColonistManager : BaseManager {
 		} },
 		{ NeedEnum.Water, delegate (NeedInstance need) {
 			need.SetValue(0); // Value set to 0 while need not being used
-			if (need.colonist.job == null || !(need.colonist.job.prefab.jobType == JobManager.JobEnum.CollectWater || need.colonist.job.prefab.jobType == JobManager.JobEnum.Drink)) {
+			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectWater" || need.colonist.job.objectPrefab.jobType == "Drink")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate * GameManager.timeM.deltaTime);
 					// TODO Find Water Here (Maximum Priority)
@@ -543,7 +564,7 @@ public class ColonistManager : BaseManager {
 			return false;
 		} },
 		{ NeedEnum.Rest, delegate (NeedInstance need) {
-			if (need.colonist.job == null || !(need.colonist.job.prefab.jobType == JobManager.JobEnum.Sleep)) {
+			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "Sleep")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate * GameManager.timeM.deltaTime);
 					if (GameManager.timeM.minuteChanged) {
@@ -659,9 +680,9 @@ public class ColonistManager : BaseManager {
 
 		public int priority;
 
-		public readonly Dictionary<TraitEnum, float> traitsAffectingThisNeed = new Dictionary<TraitEnum, float>();
+		public readonly Dictionary<TraitEnum, float> traitsAffectingThisNeed = new();
 
-		public readonly List<JobManager.JobEnum> relatedJobs = new List<JobManager.JobEnum>();
+		public readonly List<string> relatedJobs = new List<string>();
 
 		public NeedPrefab(
 			NeedEnum type,
@@ -678,7 +699,7 @@ public class ColonistManager : BaseManager {
 			int clampValue,
 			int priority,
 			Dictionary<TraitEnum, float> traitsAffectingThisNeed,
-			List<JobManager.JobEnum> relatedJobs
+			List<string> relatedJobs
 		) {
 			this.type = type;
 			name = UIManager.SplitByCapitals(type.ToString());
@@ -768,8 +789,8 @@ public class ColonistManager : BaseManager {
 			float healthDecreaseRate = 0;
 			int clampValue = 0;
 			int priority = 0;
-			Dictionary<TraitEnum, float> traitsAffectingThisNeed = new Dictionary<TraitEnum, float>();
-			List<JobManager.JobEnum> relatedJobs = new List<JobManager.JobEnum>();
+			Dictionary<TraitEnum, float> traitsAffectingThisNeed = new();
+			List<string> relatedJobs = new();
 
 			List<string> singleNeedDataLineStringList = singleNeedDataString.Split('\n').ToList();
 			foreach (string singleNeedDataLineString in singleNeedDataLineStringList.Skip(1)) {
@@ -830,7 +851,7 @@ public class ColonistManager : BaseManager {
 						case "RelatedJobs":
 							if (!string.IsNullOrEmpty(UIManager.RemoveNonAlphanumericChars(value))) {
 								foreach (string relatedJobString in value.Split(',')) {
-									JobManager.JobEnum jobTypeEnum = (JobManager.JobEnum)Enum.Parse(typeof(JobManager.JobEnum), relatedJobString);
+									string jobTypeEnum = relatedJobString;
 									relatedJobs.Add(jobTypeEnum);
 								}
 							}
@@ -1030,10 +1051,10 @@ public class ColonistManager : BaseManager {
 		public bool playerMoved;
 
 		// Job
-		public JobManager.Job job;
-		public JobManager.Job storedJob;
-		public JobManager.Job needJob;
-		public readonly List<JobManager.Job> backlog = new List<JobManager.Job>();
+		public Job job;
+		public Job storedJob;
+		public Job needJob;
+		public readonly List<Job> backlog = new();
 
 		// Professions
 		public readonly List<ProfessionInstance> professions = new List<ProfessionInstance>();
@@ -1105,7 +1126,7 @@ public class ColonistManager : BaseManager {
 			}
 
 			if (overTileChanged) {
-				GameManager.jobM.UpdateColonistJobCosts(this);
+				ColonistJob.UpdateColonistJobCosts(this);
 			}
 
 			if (job != null) {
@@ -1123,7 +1144,7 @@ public class ColonistManager : BaseManager {
 					int inventoryVolume = GetInventory().UsedVolume();
 					if (validEmptyInventoryContainers.Count > 0 
 							&& (((inventoryWeight >= GetInventory().maxWeight) || (inventoryVolume >= GetInventory().maxVolume)) 
-								|| ((inventoryWeight > 0 || inventoryVolume > 0) && GameManager.jobM.GetColonistJobsCountForColonist(this) <= 0))
+								|| ((inventoryWeight > 0 || inventoryVolume > 0) && ColonistJob.GetColonistJobsCountForColonist(this) <= 0))
 					) {
 						EmptyInventory(validEmptyInventoryContainers);
 					} else {
@@ -1148,7 +1169,7 @@ public class ColonistManager : BaseManager {
 			if (GameManager.humanM.selectedHuman == this) {
 				GameManager.humanM.SetSelectedHuman(null);
 			}
-			GameManager.jobM.UpdateAllColonistJobCosts();
+			ColonistJob.UpdateAllColonistJobCosts();
 		}
 
 		public List<ResourceManager.Container> FindValidContainersToEmptyInventory() {
@@ -1159,7 +1180,18 @@ public class ColonistManager : BaseManager {
 			if (GetInventory().UsedWeight() > 0 && GetInventory().UsedVolume() > 0 && validContainers.Count > 0) {
 				ReturnJob();
 				ResourceManager.Container closestContainer = validContainers.OrderBy(container => PathManager.RegionBlockDistance(container.tile.regionBlock, overTile.regionBlock, true, true, false)).ToList()[0];
-				SetJob(new JobManager.ColonistJob(this, new JobManager.Job(closestContainer.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.EmptyInventory), null, 0), null, null));
+				SetJob(new ColonistJob(
+					this,
+					new Job(
+						JobPrefab.GetJobPrefabByName("EmptyInventory"),
+						closestContainer.tile,
+						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.EmptyInventory),
+						null,
+						0
+					),
+					null,
+					null
+				));
 			}
 		}
 
@@ -1170,9 +1202,9 @@ public class ColonistManager : BaseManager {
 				if (need.colonist.job == null) {
 					checkNeed = true;
 				} else {
-					if (GameManager.colonistM.needRelatedJobs.Contains(need.colonist.job.prefab.jobType)) {
-						if (GameManager.colonistM.jobToNeedMap.ContainsKey(need.colonist.job.prefab.jobType)) {
-							if (need.prefab.priority < GameManager.colonistM.GetNeedPrefabFromEnum(GameManager.colonistM.jobToNeedMap[need.colonist.job.prefab.jobType]).priority) {
+					if (need.colonist.job.prefab.group.name == "Need") {
+						if (GameManager.colonistM.jobToNeedMap.ContainsKey(need.colonist.job.objectPrefab.jobType)) {
+							if (need.prefab.priority < GameManager.colonistM.GetNeedPrefabFromEnum(GameManager.colonistM.jobToNeedMap[need.colonist.job.objectPrefab.jobType]).priority) {
 								checkNeed = true;
 							}
 						} else {
@@ -1247,12 +1279,12 @@ public class ColonistManager : BaseManager {
 			return moodModifiers.Find(moodModifier => moodModifier.prefab.type == moodModifierEnum);
 		}
 
-		public void SetJob(JobManager.ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {
+		public void SetJob(ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {
 			job = colonistJob.job;
 			job.resourcesColonistHas = colonistJob.resourcesColonistHas;
 			job.containerPickups = colonistJob.containerPickups;
 			if (reserveResourcesInContainerPickups && (job.containerPickups != null && job.containerPickups.Count > 0)) {
-				foreach (JobManager.ContainerPickup containerPickup in job.containerPickups) {
+				foreach (ContainerPickup containerPickup in job.containerPickups) {
 					containerPickup.container.GetInventory().ReserveResources(containerPickup.resourcesToPickup, this);
 				}
 			}
@@ -1265,6 +1297,10 @@ public class ColonistManager : BaseManager {
 			job.SetColonist(this);
 			MoveToTile(job.tile, !job.tile.walkable);
 			GameManager.uiM.SetJobElements();
+
+			if (colonistJob.job.objectPrefab.type == ResourceManager.ObjectEnum.Sleep) {
+				Debug.Log($"{colonistJob.colonist.name} {GameManager.timeM.GetDateString()} {GameManager.timeM.GetTimeString()}");
+			}
 		}
 
 		public void SetEatJob() {
@@ -1288,9 +1324,10 @@ public class ColonistManager : BaseManager {
 			}) != null);
 
 			SetJob(
-				new JobManager.ColonistJob(
+				new ColonistJob(
 					this, 
-					new JobManager.Job(
+					new Job(
+						JobPrefab.GetJobPrefabByName("Eat"),
 						chairs.Count > 0 ? chairs[0].tile : overTile,
 						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Eat), 
 						null, 
@@ -1305,12 +1342,12 @@ public class ColonistManager : BaseManager {
 		public void StartJob() {
 			job.started = true;
 
-			job.jobProgress *= (1 + (1 - GetJobSkillMultiplier(job.prefab.jobType)));
+			job.jobProgress *= (1 + (1 - GetJobSkillMultiplier(job.objectPrefab.jobType)));
 
-			if (job.prefab.jobType == JobManager.JobEnum.Eat) {
+			if (job.prefab.name == "Eat") {
 				job.jobProgress += needs.Find(need => need.prefab.type == NeedEnum.Food).GetValue();
 			}
-			if (job.prefab.jobType == JobManager.JobEnum.Sleep) {
+			if (job.prefab.name == "Sleep") {
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
 				job.jobProgress += ((restNeed.GetValue() / restNeed.prefab.baseIncreaseRate) / restNeed.prefab.decreaseRateMultiplier) / GameManager.timeM.permanentTimerMultiplier;
 				job.jobProgress += UnityEngine.Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
@@ -1323,14 +1360,15 @@ public class ColonistManager : BaseManager {
 
 		public void WorkJob() {
 
-			if (job.prefab.jobType == JobManager.JobEnum.HarvestFarm && job.tile.farm == null) {
+			if (job.prefab.name == "HarvestFarm" && job.tile.farm == null) {
 				job.Remove();
 				job = null;
 				return;
 			} else if (
-				job.prefab.jobType == JobManager.JobEnum.EmptyInventory ||
-				job.prefab.jobType == JobManager.JobEnum.CollectFood ||
-				job.prefab.jobType == JobManager.JobEnum.PickupResources) {
+				job.prefab.name == "EmptyInventory" ||
+				job.prefab.name == "CollectFood" ||
+				job.prefab.name == "PickupResources"
+			) {
 
 				ResourceManager.Container containerOnTile = GameManager.resourceM.containers.Find(container => container.tile == job.tile);
 				if (containerOnTile == null) {
@@ -1338,7 +1376,7 @@ public class ColonistManager : BaseManager {
 					job = null;
 					return;
 				}
-			} else if (job.prefab.jobType == JobManager.JobEnum.Sleep && GameManager.timeM.minuteChanged) {
+			} else if (job.prefab.name == "Sleep" && GameManager.timeM.minuteChanged) {
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
 				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier);
 			}
@@ -1359,33 +1397,33 @@ public class ColonistManager : BaseManager {
 		}
 
 		public void FinishJob() {
-			JobManager.Job finishedJob = job;
+			Job finishedJob = job;
 			job = null;
 
 			MonoBehaviour.Destroy(finishedJob.jobPreview);
-			if (finishedJob.prefab.addToTileWhenBuilt) {
-				finishedJob.tile.SetObject(GameManager.resourceM.CreateObjectInstance(finishedJob.prefab, finishedJob.variation, finishedJob.tile, finishedJob.rotationIndex, true));
-				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.prefab.layer).obj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.prefab.layer).FinishCreation();
-				if (finishedJob.prefab.canRotate) {
-					finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.prefab.layer).obj.GetComponent<SpriteRenderer>().sprite = finishedJob.prefab.GetBitmaskSpritesForVariation(finishedJob.variation)[finishedJob.rotationIndex];
+			if (finishedJob.objectPrefab.addToTileWhenBuilt) {
+				finishedJob.tile.SetObject(GameManager.resourceM.CreateObjectInstance(finishedJob.objectPrefab, finishedJob.variation, finishedJob.tile, finishedJob.rotationIndex, true));
+				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.objectPrefab.layer).obj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.objectPrefab.layer).FinishCreation();
+				if (finishedJob.objectPrefab.canRotate) {
+					finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.objectPrefab.layer).obj.GetComponent<SpriteRenderer>().sprite = finishedJob.objectPrefab.GetBitmaskSpritesForVariation(finishedJob.variation)[finishedJob.rotationIndex];
 				}
 			}
 
-			SkillInstance skill = GetSkillFromJobType(finishedJob.prefab.jobType);
+			SkillInstance skill = GetSkillFromJobType(finishedJob.objectPrefab.jobType);
 			if (skill != null) {
-				skill.AddExperience(finishedJob.prefab.timeToBuild);
+				skill.AddExperience(finishedJob.objectPrefab.timeToBuild);
 			}
 
 			MoveToClosestWalkableTile(true);
 
-			JobManager.finishJobFunctions[finishedJob.prefab.jobType](this, finishedJob);
+			finishedJob.prefab.RunFinishJobActions(finishedJob, this);
 
 			if (finishedJob.activeObject != null) {
 				finishedJob.activeObject.SetActiveSprite(finishedJob, false);
 			}
 
-			GameManager.jobM.UpdateSingleColonistJobs(this);
+			ColonistJob.UpdateSingleColonistJobs(this);
 			GameManager.uiM.SetJobElements();
 			GameManager.uiM.UpdateSelectedColonistInformation();
 			GameManager.uiM.UpdateSelectedContainerInfo();
@@ -1402,11 +1440,11 @@ public class ColonistManager : BaseManager {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
 			if (storedJob != null) {
-				if (GameManager.colonistM.jobToNeedMap.ContainsKey(storedJob.prefab.jobType) || JobManager.nonReturnableJobs.Contains(storedJob.prefab.jobType)) {
+				if (GameManager.colonistM.jobToNeedMap.ContainsKey(storedJob.objectPrefab.jobType) || !storedJob.prefab.returnable) {
 					storedJob.Remove();
 					storedJob = null;
 					if (job != null) {
-						if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.prefab.jobType) || JobManager.nonReturnableJobs.Contains(job.prefab.jobType)) {
+						if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
 							job.Remove();
 						}
 						job = null;
@@ -1431,7 +1469,7 @@ public class ColonistManager : BaseManager {
 					job = null;
 				}
 			} else if (job != null) {
-				if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.prefab.jobType) || JobManager.nonReturnableJobs.Contains(job.prefab.jobType)) {
+				if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
 					job.Remove();
 					if (job.jobUIElement != null) {
 						job.jobUIElement.Remove();
@@ -1495,11 +1533,11 @@ public class ColonistManager : BaseManager {
 			return skills.Find(s => s.prefab.type == type);
 		}
 
-		public SkillInstance GetSkillFromJobType(JobManager.JobEnum jobType) {
+		public SkillInstance GetSkillFromJobType(string jobType) {
 			return skills.Find(s => s.prefab.affectedJobTypes.ContainsKey(jobType));
 		}
 
-		public float GetJobSkillMultiplier(JobManager.JobEnum jobType) {
+		public float GetJobSkillMultiplier(string jobType) {
 			SkillInstance skill = GetSkillFromJobType(jobType);
 			if (skill != null) {
 				return 1 * (-(1f / (((skill.prefab.affectedJobTypes[jobType]) * (skill.level)) + 1)) + 1);
@@ -1510,6 +1548,22 @@ public class ColonistManager : BaseManager {
 		public override void SetName(string name) {
 			base.SetName(name);
 			SetNameColour(UIManager.GetColour(UIManager.Colours.LightGreen100));
+		}
+
+		public override string GetCurrentActionString() {
+			if (job != null) {
+				return job.prefab.GetJobDescription(job);
+			} else {
+				return "Wandering around.";
+			}
+		}
+
+		public override string GetStoredActionString() {
+			if (storedJob != null) {
+				return storedJob.prefab.GetJobDescription(storedJob);
+			} else {
+				return string.Empty;
+			}
 		}
 
 		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
@@ -1534,16 +1588,17 @@ public class ColonistManager : BaseManager {
 					);
 
 					backlog.Add(
-						new JobManager.Job(
+						new Job(
+							JobPrefab.GetJobPrefabByName("WearClothes"),
 							container.tile,
 							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.WearClothes),
 							null,
 							0
 						) {
-							resourcesToBuild = new List<ResourceManager.ResourceAmount>() { clothingToPickup },
+							requiredResources = new List<ResourceManager.ResourceAmount>() { clothingToPickup },
 							resourcesColonistHas = new List<ResourceManager.ResourceAmount>(),
-							containerPickups = new List<JobManager.ContainerPickup>() {
-								new JobManager.ContainerPickup(
+							containerPickups = new List<ContainerPickup>() {
+								new ContainerPickup(
 									container,
 									new List<ResourceManager.ResourceAmount>() { clothingToPickup }
 								)

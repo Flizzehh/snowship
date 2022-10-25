@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Job;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -1406,8 +1407,8 @@ public class DebugManager : BaseManager {
 			if (parameters.Count == 0) {
 				foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
 					OutputToConsole(colonist.name);
-					foreach (JobManager.Job job in GameManager.jobM.GetSortedJobs(colonist)) {
-						OutputToConsole("\t" + job.prefab.jobType + " " + job.prefab.type + " " + GameManager.jobM.CalculateJobCost(colonist, job, null));
+					foreach (Job job in JobManager.GetSortedJobs(colonist)) {
+						OutputToConsole("\t" + job.objectPrefab.jobType + " " + job.objectPrefab.type + " " + JobManager.CalculateJobCost(colonist, job, null));
 					}
 				}
 			} else if (parameters.Count == 1) {
@@ -1420,7 +1421,7 @@ public class DebugManager : BaseManager {
 			if (parameters.Count == 0) {
 				int numFarmsGrown = 0;
 				foreach (ResourceManager.Farm farm in GameManager.resourceM.farms) {
-					farm.growTimer = farm.prefab.growthTimeDays * TimeManager.dayLengthSeconds;
+					farm.growTimer = farm.prefab.growthTimeDays * (TimeManager.dayLengthSeconds - 1);
 					farm.Update();
 					numFarmsGrown += 1;
 				}

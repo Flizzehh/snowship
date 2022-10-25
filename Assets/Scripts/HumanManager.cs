@@ -128,6 +128,14 @@ public class HumanManager : BaseManager {
 			nameCanvas.transform.Find("NameBackground-Image/NameColour-Image").GetComponent<Image>().color = nameColour;
 		}
 
+		public virtual string GetCurrentActionString() {
+			return "Doing human things.";
+		}
+
+		public virtual string GetStoredActionString() {
+			return string.Empty;
+		}
+
 		public override void Update() {
 			base.Update();
 

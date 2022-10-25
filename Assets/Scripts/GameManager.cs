@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Snowship.Job;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour {
 
 		resourceM.SetResourceReferences();
 		resourceM.SetGameObjectReferences();
+		resourceM.CreateJobPrefabs();
 		resourceM.CreateResources();
 		resourceM.CreatePlantPrefabs();
 		resourceM.CreateObjectPrefabs();

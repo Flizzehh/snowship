@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Job;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -2642,7 +2643,7 @@ public class PersistenceManager : BaseManager {
 			}
 			if (colonist.backlog.Count > 0) {
 				file.WriteLine(CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
-				foreach (JobManager.Job backlogJob in colonist.backlog) {
+				foreach (Job backlogJob in colonist.backlog) {
 					WriteJobLines(file, backlogJob, JobProperty.BacklogJob, 2);
 				}
 			}
@@ -3098,17 +3099,17 @@ public class PersistenceManager : BaseManager {
 			}
 
 			if (persistenceColonist.persistenceStoredJob != null) {
-				JobManager.Job storedJob = LoadJob(persistenceColonist.persistenceStoredJob);
+				Job storedJob = LoadJob(persistenceColonist.persistenceStoredJob);
 				colonist.storedJob = storedJob;
 			}
 
 			if (persistenceColonist.persistenceJob != null) {
-				JobManager.Job job = LoadJob(persistenceColonist.persistenceJob);
-				colonist.SetJob(new JobManager.ColonistJob(colonist, job, persistenceColonist.persistenceJob.resourcesColonistHas, job.containerPickups));
+				Job job = LoadJob(persistenceColonist.persistenceJob);
+				colonist.SetJob(new ColonistJob(colonist, job, persistenceColonist.persistenceJob.resourcesColonistHas, job.containerPickups));
 			}
 
 			foreach (PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
-				JobManager.Job backlogJob = LoadJob(persistenceBacklogJob);
+				Job backlogJob = LoadJob(persistenceBacklogJob);
 				colonist.backlog.Add(backlogJob);
 			}
 
@@ -3163,7 +3164,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public enum JobProperty {
-		Job, StoredJob, BacklogJob, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, ResourcesToBuild, ResourcesColonistHas, ContainerPickups, Plant, CreateResource, ActiveObject, TransferResources
+		Job, StoredJob, BacklogJob, Prefab, Type, Variation, Position, RotationIndex, Priority, Started, Progress, ColonistBuildTime, RequiredResources, ResourcesColonistHas, ContainerPickups, Plant, CreateResource, ActiveObject, TransferResources
 	}
 
 	public enum ContainerPickupProperty {
@@ -3171,15 +3172,16 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public void SaveJobs(StreamWriter file) {
-		foreach (JobManager.Job job in GameManager.jobM.jobs) {
+		foreach (Job job in Job.jobs) {
 			WriteJobLines(file, job, JobProperty.Job, 0);
 		}
 	}
 
-	private void WriteJobLines(StreamWriter file, JobManager.Job job, JobProperty jobType, int startLevel) {
+	private void WriteJobLines(StreamWriter file, Job job, JobProperty jobType, int startLevel) {
 		file.WriteLine(CreateKeyValueString(jobType, string.Empty, startLevel));
 
-		file.WriteLine(CreateKeyValueString(JobProperty.Type, job.prefab.type, startLevel + 1));
+		file.WriteLine(CreateKeyValueString(JobProperty.Prefab, job.prefab.name, startLevel + 1));
+		file.WriteLine(CreateKeyValueString(JobProperty.Type, job.objectPrefab.type, startLevel + 1));
 		file.WriteLine(CreateKeyValueString(JobProperty.Variation, job.variation == null ? "null" : job.variation.name, startLevel + 1));
 		file.WriteLine(CreateKeyValueString(JobProperty.Position, FormatVector2ToString(job.tile.obj.transform.position), startLevel + 1));
 		file.WriteLine(CreateKeyValueString(JobProperty.RotationIndex, job.rotationIndex, startLevel + 1));
@@ -3188,9 +3190,9 @@ public class PersistenceManager : BaseManager {
 		file.WriteLine(CreateKeyValueString(JobProperty.Progress, job.jobProgress, startLevel + 1));
 		file.WriteLine(CreateKeyValueString(JobProperty.ColonistBuildTime, job.colonistBuildTime, startLevel + 1));
 
-		if (job.resourcesToBuild != null && job.resourcesToBuild.Count > 0) {
-			file.WriteLine(CreateKeyValueString(JobProperty.ResourcesToBuild, string.Empty, startLevel + 1));
-			foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesToBuild) {
+		if (job.requiredResources != null && job.requiredResources.Count > 0) {
+			file.WriteLine(CreateKeyValueString(JobProperty.RequiredResources, string.Empty, startLevel + 1));
+			foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
 				WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 			}
 		}
@@ -3204,7 +3206,7 @@ public class PersistenceManager : BaseManager {
 
 		if (job.containerPickups != null && job.containerPickups.Count > 0) {
 			file.WriteLine(CreateKeyValueString(JobProperty.ContainerPickups, string.Empty, startLevel + 1));
-			foreach (JobManager.ContainerPickup containerPickup in job.containerPickups) {
+			foreach (ContainerPickup containerPickup in job.containerPickups) {
 				file.WriteLine(CreateKeyValueString(ContainerPickupProperty.ContainerPickup, string.Empty, startLevel + 2));
 
 				file.WriteLine(CreateKeyValueString(ContainerPickupProperty.Position, FormatVector2ToString(containerPickup.container.zeroPointTile.obj.transform.position), startLevel + 3));
@@ -3238,6 +3240,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public class PersistenceJob {
+		public string prefab;
 		public ResourceManager.ObjectEnum? type;
 		public string variation;
 		public Vector2? position;
@@ -3246,7 +3249,7 @@ public class PersistenceManager : BaseManager {
 		public bool? started;
 		public float? progress;
 		public float? colonistBuildTime;
-		public List<ResourceManager.ResourceAmount> resourcesToBuild;
+		public List<ResourceManager.ResourceAmount> requiredResources;
 		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
 		public List<PersistenceContainerPickup> containerPickups;
 		public ResourceManager.Resource createResource;
@@ -3254,6 +3257,7 @@ public class PersistenceManager : BaseManager {
 		public List<ResourceManager.ResourceAmount> transferResources;
 
 		public PersistenceJob(
+			string prefab,
 			ResourceManager.ObjectEnum? type,
 			string variation,
 			Vector2? position,
@@ -3262,13 +3266,14 @@ public class PersistenceManager : BaseManager {
 			bool? started,
 			float? progress,
 			float? colonistBuildTime,
-			List<ResourceManager.ResourceAmount> resourcesToBuild,
+			List<ResourceManager.ResourceAmount> requiredResources,
 			List<ResourceManager.ResourceAmount> resourcesColonistHas,
 			List<PersistenceContainerPickup> containerPickups,
 			ResourceManager.Resource createResource,
 			PersistenceObject activeObject,
 			List<ResourceManager.ResourceAmount> transferResources
 		) {
+			this.prefab = prefab;
 			this.type = type;
 			this.variation = variation;
 			this.position = position;
@@ -3277,7 +3282,7 @@ public class PersistenceManager : BaseManager {
 			this.started = started;
 			this.progress = progress;
 			this.colonistBuildTime = colonistBuildTime;
-			this.resourcesToBuild = resourcesToBuild;
+			this.requiredResources = requiredResources;
 			this.resourcesColonistHas = resourcesColonistHas;
 			this.containerPickups = containerPickups;
 			this.createResource = createResource;
@@ -3316,6 +3321,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public PersistenceJob LoadPersistenceJob(List<KeyValuePair<string, object>> properties) {
+		string prefab = null;
 		ResourceManager.ObjectEnum? type = null;
 		string variation = null;
 		Vector2? position = null;
@@ -3324,7 +3330,7 @@ public class PersistenceManager : BaseManager {
 		bool? started = null;
 		float? progress = null;
 		float? colonistBuildTime = null;
-		List<ResourceManager.ResourceAmount> resourcesToBuild = new List<ResourceManager.ResourceAmount>();
+		List<ResourceManager.ResourceAmount> requiredResources = new List<ResourceManager.ResourceAmount>();
 		List<ResourceManager.ResourceAmount> resourcesColonistHas = null;
 		List<PersistenceContainerPickup> containerPickups = null;
 		ResourceManager.Resource createResource = null;
@@ -3334,6 +3340,9 @@ public class PersistenceManager : BaseManager {
 		foreach (KeyValuePair<string, object> jobProperty in properties) {
 			JobProperty jobPropertyKey = (JobProperty)Enum.Parse(typeof(JobProperty), jobProperty.Key);
 			switch (jobPropertyKey) {
+				case JobProperty.Prefab:
+					prefab = UIManager.RemoveNonAlphanumericChars((string)jobProperty.Value);
+					break;
 				case JobProperty.Type:
 					type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)jobProperty.Value);
 					break;
@@ -3358,9 +3367,9 @@ public class PersistenceManager : BaseManager {
 				case JobProperty.ColonistBuildTime:
 					colonistBuildTime = float.Parse((string)jobProperty.Value);
 					break;
-				case JobProperty.ResourcesToBuild:
+				case JobProperty.RequiredResources:
 					foreach (KeyValuePair<string, object> resourceAmountProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
-						resourcesToBuild.Add(LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
+						requiredResources.Add(LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
 					}
 					break;
 				case JobProperty.ResourcesColonistHas:
@@ -3452,6 +3461,7 @@ public class PersistenceManager : BaseManager {
 		}
 
 		return new PersistenceJob(
+			prefab,
 			type,
 			variation,
 			position,
@@ -3460,7 +3470,7 @@ public class PersistenceManager : BaseManager {
 			started,
 			progress,
 			colonistBuildTime,
-			resourcesToBuild,
+			requiredResources,
 			resourcesColonistHas,
 			containerPickups,
 			createResource,
@@ -3475,19 +3485,20 @@ public class PersistenceManager : BaseManager {
 		}
 	}
 
-	public JobManager.Job LoadJob(PersistenceJob persistenceJob) {
-		List<JobManager.ContainerPickup> containerPickups = null;
+	public Job LoadJob(PersistenceJob persistenceJob) {
+		List<ContainerPickup> containerPickups = null;
 		if (persistenceJob.containerPickups != null) {
-			containerPickups = new List<JobManager.ContainerPickup>();
+			containerPickups = new List<ContainerPickup>();
 			foreach (PersistenceContainerPickup persistenceContainerPickup in persistenceJob.containerPickups) {
-				containerPickups.Add(new JobManager.ContainerPickup(
+				containerPickups.Add(new ContainerPickup(
 					GameManager.resourceM.containers.Find(c => c.zeroPointTile == GameManager.colonyM.colony.map.GetTileFromPosition(persistenceContainerPickup.containerPickupZeroPointTilePosition.Value)),
 					persistenceContainerPickup.containerPickupResourceAmounts
 				));
 			}
 		}
 
-		JobManager.Job job = new JobManager.Job(
+		Job job = new(
+			JobPrefab.GetJobPrefabByName(persistenceJob.prefab),
 			GameManager.colonyM.colony.map.GetTileFromPosition(persistenceJob.position.Value),
 			GameManager.resourceM.GetObjectPrefabByEnum(persistenceJob.type.Value),
 			GameManager.resourceM.GetObjectPrefabByEnum(persistenceJob.type.Value).GetVariationFromString(persistenceJob.variation),
@@ -3496,7 +3507,7 @@ public class PersistenceManager : BaseManager {
 			started = persistenceJob.started ?? false,
 			jobProgress = persistenceJob.progress ?? 0,
 			colonistBuildTime = persistenceJob.colonistBuildTime ?? 0,
-			resourcesToBuild = persistenceJob.resourcesToBuild,
+			requiredResources = persistenceJob.requiredResources,
 			resourcesColonistHas = persistenceJob.resourcesColonistHas,
 			containerPickups = containerPickups,
 			transferResources = persistenceJob.transferResources

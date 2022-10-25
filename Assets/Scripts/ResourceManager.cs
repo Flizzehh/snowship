@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Job;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -900,8 +901,14 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public JobManager.Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
-		JobManager.Job job = new JobManager.Job(craftingObject.tile, GetObjectPrefabByEnum(ObjectEnum.CreateResource), null, 0);
+	public Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
+		Job job = new Job(
+			JobPrefab.GetJobPrefabByName("CreateResource"),
+			craftingObject.tile,
+			GetObjectPrefabByEnum(ObjectEnum.CreateResource),
+			null,
+			0
+		);
 		job.SetCreateResourceData(resource);
 		GameManager.jobM.CreateJob(job);
 		return job;
@@ -1001,7 +1008,7 @@ public class ResourceManager : BaseManager {
 			GameManager.uiM.SetSelectedTraderMenu();
 			GameManager.uiM.SetSelectedContainerInfo();
 			GameManager.uiM.UpdateSelectedTradingPostInfo();
-			GameManager.jobM.UpdateColonistJobs();
+			ColonistJob.UpdateColonistJobs();
 
 			//return remainingAmount;
 			return highestOverflowAmount;
@@ -1200,6 +1207,93 @@ public class ResourceManager : BaseManager {
 		return returnResources;
 	}
 
+	public enum JobPrefabGroupPropertyEnum {
+		Group,
+		Name,
+		Returnable,
+		JobPrefabs
+	};
+
+	public enum JobPrefabPropertyEnum {
+		JobPrefab,
+		Name,
+		Returnable
+	}
+
+	public void CreateJobPrefabs() {
+		List<KeyValuePair<string, object>> jobPrefabGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/job-prefabs").text.Split('\n').ToList());
+		foreach (KeyValuePair<string, object> jobPrefabGroupProperty in jobPrefabGroupProperties) {
+			switch ((JobPrefabGroupPropertyEnum)Enum.Parse(typeof(JobPrefabGroupPropertyEnum), jobPrefabGroupProperty.Key)) {
+				case JobPrefabGroupPropertyEnum.Group:
+
+					string jobPrefabGroupName = null;
+					bool? returnableAsGroup = null;
+					List<JobPrefab> jobPrefabs = new();
+
+					foreach (KeyValuePair<string, object> jobPrefabGroupSubProperty in (List<KeyValuePair<string, object>>)jobPrefabGroupProperty.Value) {
+						switch ((JobPrefabGroupPropertyEnum)Enum.Parse(typeof(JobPrefabGroupPropertyEnum), jobPrefabGroupSubProperty.Key)) {
+							case JobPrefabGroupPropertyEnum.Name:
+								jobPrefabGroupName = (string)jobPrefabGroupSubProperty.Value;
+								break;
+							case JobPrefabGroupPropertyEnum.Returnable:
+								returnableAsGroup = bool.Parse((string)jobPrefabGroupSubProperty.Value);
+								break;
+							case JobPrefabGroupPropertyEnum.JobPrefabs:
+								foreach (KeyValuePair<string, object> jobPrefabProperty in (List<KeyValuePair<string, object>>)jobPrefabGroupSubProperty.Value) {
+									switch ((JobPrefabPropertyEnum)Enum.Parse(typeof(JobPrefabPropertyEnum), jobPrefabProperty.Key)) {
+										case JobPrefabPropertyEnum.JobPrefab:
+
+											string jobPrefabName = null;
+											bool? returnableIndividually = returnableAsGroup;
+
+											foreach (KeyValuePair<string, object> jobPrefabSubProperty in (List<KeyValuePair<string, object>>)jobPrefabProperty.Value) {
+												switch ((JobPrefabPropertyEnum)Enum.Parse(typeof(JobPrefabPropertyEnum), jobPrefabSubProperty.Key)) {
+													case JobPrefabPropertyEnum.Name:
+														jobPrefabName = (string)jobPrefabSubProperty.Value;
+														break;
+													case JobPrefabPropertyEnum.Returnable:
+														returnableIndividually = bool.Parse((string)jobPrefabSubProperty.Value);
+														break;
+													default:
+														Debug.LogError($"Unknown job prefab sub property: {jobPrefabSubProperty.Key} {jobPrefabSubProperty.Value}");
+														break;
+												}
+											}
+
+											JobPrefab jobPrefab = new(
+												jobPrefabName,
+												returnableIndividually.Value
+											);
+											jobPrefabs.Add(jobPrefab);
+											JobPrefab.jobPrefabs.Add(jobPrefabName, jobPrefab);
+
+											break;
+										default:
+											Debug.LogError($"Unknown job prefab property: {jobPrefabProperty.Key} {jobPrefabProperty.Value}");
+											break;
+									}
+								}
+								break;
+							default:
+								Debug.LogError($"Unknown job prefab group sub property: {jobPrefabGroupSubProperty.Key} {jobPrefabGroupSubProperty.Value}");
+								break;
+						}
+					}
+
+					JobPrefabGroup jobPrefabGroup = new(
+						jobPrefabGroupName,
+						jobPrefabs
+					);
+					JobPrefabGroup.jobPrefabGroups.Add(jobPrefabGroupName, jobPrefabGroup);
+
+					break;
+				default:
+					Debug.LogError($"Unknown job prefab group property: {jobPrefabGroupProperty.Key} {jobPrefabGroupProperty.Value}");
+					break;
+			}
+		}
+	}
+
 	public enum ObjectGroupPropertyEnum {
 		Group,
 		Type,
@@ -1383,7 +1477,7 @@ public class ResourceManager : BaseManager {
 																	List<Variation> variations = new List<Variation>();
 																	VariationNameOrderEnum variationNameOrder = VariationNameOrderEnum.VariationObject;
 																	List<JobManager.SelectionModifiersEnum> selectionModifiers = new List<JobManager.SelectionModifiersEnum>();
-																	JobManager.JobEnum? jobType = null;
+																	string jobType = null;
 																	bool? addToTileWhenBuilt = true;
 
 																	foreach (KeyValuePair<string, object> objectSubProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
@@ -1547,7 +1641,7 @@ public class ResourceManager : BaseManager {
 																				}
 																				break;
 																			case ObjectPropertyEnum.JobType:
-																				jobType = (JobManager.JobEnum)Enum.Parse(typeof(JobManager.JobEnum), (string)objectSubProperty.Value);
+																				jobType = (string)objectSubProperty.Value;
 																				break;
 																			case ObjectPropertyEnum.AddToTileWhenBuilt:
 																				addToTileWhenBuilt = bool.Parse((string)objectSubProperty.Value);
@@ -1622,7 +1716,7 @@ public class ResourceManager : BaseManager {
 																		variations,
 																		variationNameOrder,
 																		selectionModifiers,
-																		jobType.Value,
+																		jobType,
 																		addToTileWhenBuilt.Value
 																	);
 																	foreach (Variation variation in objectPrefab.variations) {
@@ -1827,7 +1921,7 @@ public class ResourceManager : BaseManager {
 		public readonly List<Variation> variations = new List<Variation>();
 		public readonly VariationNameOrderEnum variationNameOrder;
 		public readonly List<JobManager.SelectionModifiersEnum> selectionModifiers = new List<JobManager.SelectionModifiersEnum>();
-		public readonly JobManager.JobEnum jobType;
+		public readonly string jobType;
 		public readonly bool addToTileWhenBuilt;
 
 		// Sprites
@@ -1871,7 +1965,7 @@ public class ResourceManager : BaseManager {
 			List<Variation> variations,
 			VariationNameOrderEnum variationNameOrder,
 			List<JobManager.SelectionModifiersEnum> selectionModifiers,
-			JobManager.JobEnum jobType,
+			string jobType,
 			bool addToTileWhenBuilt
 		) {
 			this.type = type;
@@ -1953,7 +2047,7 @@ public class ResourceManager : BaseManager {
 					spriteGroups[SpriteType.Base].Add(spriteGroups[SpriteType.Bitmask][0]);
 				}
 
-				if (jobType == JobManager.JobEnum.PlantFarm) {
+				if (jobType == "PlantFarm") {
 					spriteGroups[SpriteType.Base] = new List<Sprite>() { harvestResources[0].resource.image };
 				}
 
@@ -2303,7 +2397,7 @@ public class ResourceManager : BaseManager {
 			sr.color = new Color(newColour.r, newColour.g, newColour.b, 1f);
 		}
 
-		public void SetActiveSprite(JobManager.Job job, bool jobActive) {
+		public void SetActiveSprite(Job job, bool jobActive) {
 			if (active && jobActive) {
 				if (prefab.GetActiveSpritesForVariation(variation).Count > 0) {
 					if (prefab.type == ObjectEnum.SplittingBlock) {
@@ -2464,7 +2558,7 @@ public class ResourceManager : BaseManager {
 	public class PriorityResourceInstance {
 		public Resource resource;
 
-		public readonly static int priorityMax = 9;
+		public static readonly int priorityMax = 9;
 		public Priority priority;
 
 		public PriorityResourceInstance(Resource resource, int priority) {
@@ -2494,7 +2588,7 @@ public class ResourceManager : BaseManager {
 
 		public bool enableable = false;
 		public List<ResourceAmount> fuelAmounts = new List<ResourceAmount>();
-		public JobManager.Job job = null;
+		public Job job = null;
 
 		public CraftableResourceInstance(
 			Resource resource,
@@ -3150,8 +3244,16 @@ public class ResourceManager : BaseManager {
 			base.Update();
 
 			if (growTimer >= prefab.growthTimeDays * TimeManager.dayLengthSeconds) {
-				if (!GameManager.jobM.JobOfTypeExistsAtTile(JobManager.JobEnum.HarvestFarm, tile)) {
-					GameManager.jobM.CreateJob(new JobManager.Job(tile, GameManager.resourceM.GetObjectPrefabByEnum(ObjectEnum.HarvestFarm), null, 0));
+				if (!GameManager.jobM.JobOfTypeExistsAtTile("HarvestFarm", tile)) {
+					GameManager.jobM.CreateJob(
+						new Job(
+							JobPrefab.GetJobPrefabByName("HarvestFarm"),
+							tile,
+							GameManager.resourceM.GetObjectPrefabByEnum(ObjectEnum.HarvestFarm),
+							  null,
+							   0
+						)
+					);
 				}
 			} else {
 				growTimer += CalculateGrowthRate();
@@ -3343,7 +3445,7 @@ public class ResourceManager : BaseManager {
 						);
 					} else {
 						if (objectInstance.prefab.GetBitmaskSpritesForVariation(objectInstance.variation).Count > 0) {
-							if (objectInstance.prefab.jobType != JobManager.JobEnum.PlantFarm) {
+							if (objectInstance.prefab.jobType != "PlantFarm") {
 								objectInstance.obj.GetComponent<SpriteRenderer>().sprite = objectInstance.prefab.GetBitmaskSpritesForVariation(objectInstance.variation)[objectInstance.rotationIndex];
 							}
 						} else {

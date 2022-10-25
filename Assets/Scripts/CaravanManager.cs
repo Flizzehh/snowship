@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Job;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -424,7 +425,8 @@ public class CaravanManager : BaseManager {
 					tradingPosts.RemoveAt(0);
 				}
 				if (tradingPosts.Count <= 0) {
-					JobManager.Job job = new JobManager.Job(
+					Job job = new Job(
+						JobPrefab.GetJobPrefabByName("CollectResources"),
 						tradingPost.tile,
 						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectResources),
 						null,
