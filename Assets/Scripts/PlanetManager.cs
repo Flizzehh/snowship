@@ -186,7 +186,6 @@ public class PlanetManager : BaseManager {
 			public Sprite sprite;
 
 			public float equatorOffset;
-			public float averageTemperature;
 			public bool isRiver;
 			public Dictionary<TileManager.TileTypeGroup.TypeEnum, float> terrainTypeHeights;
 			public List<int> surroundingPlanetTileHeightDirections = new List<int>();
@@ -202,7 +201,6 @@ public class PlanetManager : BaseManager {
 
 				// Setup PlanetTile-specific Information
 				equatorOffset = ((tile.position.y - (planet.mapData.mapSize / 2f)) * 2) / planet.mapData.mapSize;
-				averageTemperature = tile.temperature + planet.mapData.temperatureOffset;
 
 				River river = planet.RiversContainTile(tile, true).Value;
 				isRiver = river != null;

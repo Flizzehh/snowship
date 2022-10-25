@@ -905,7 +905,7 @@ public class UIManager : BaseManager {
 				GameManager.planetM.selectedPlanetTile.tile.position,
 				ParseSeed(mapSeedInputField.text),
 				ColonyManager.GetMapSizeByIndex(Mathf.FloorToInt(mapSizeSlider.value)),
-				GameManager.planetM.selectedPlanetTile.averageTemperature,
+				GameManager.planetM.selectedPlanetTile.tile.temperature,
 				GameManager.planetM.selectedPlanetTile.tile.GetPrecipitation(),
 				GameManager.planetM.selectedPlanetTile.terrainTypeHeights,
 				GameManager.planetM.selectedPlanetTile.surroundingPlanetTileHeightDirections,
