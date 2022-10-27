@@ -134,7 +134,11 @@ public class TimeManager : BaseManager {
 	}
 
 	public string GetDateString() {
-		return (day + "," + season + "," + year);
+		return ($"{day},{season},{year}");
+	}
+
+	public string GetTimeString() {
+		return ($"{day}:{hour}:{minute}");
 	}
 
 	public int GetMinute() {
