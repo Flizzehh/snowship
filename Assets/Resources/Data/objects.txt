@@ -429,70 +429,6 @@
 					<SelectionModifiers>Walkable,Buildable,OmitSameLayerObjectInstances,OmitPlants,OmitSameLayerJobs
 					<JobType>Build
 <Group>
-	<Type>Farm
-	<SubGroups>
-		<SubGroup>
-			<Type>PlantFarm
-			<Objects>
-				<Object>
-					<Type>WheatFarm
-					<InstanceType>Farm
-					<Layer>2
-					<Integrity>10
-					<WalkSpeed>0.3
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<GrowthTimeDays>4
-					<Seed>WheatSeed
-					<HarvestResources>Wheat:2-6,Straw:4-6
-					<TimeToBuild>2
-					<CommonResources>WheatSeed:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
-					<JobType>PlantFarm
-				<Object>
-					<Type>PotatoFarm
-					<InstanceType>Farm
-					<Layer>2
-					<Integrity>10
-					<WalkSpeed>0.3
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<GrowthTimeDays>2
-					<Seed>Potato
-					<HarvestResources>Potato:2-3
-					<TimeToBuild>2
-					<CommonResources>Potato:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
-					<JobType>PlantFarm
-				<Object>
-					<Type>CottonFarm
-					<InstanceType>Farm
-					<Layer>2
-					<Integrity>10
-					<WalkSpeed>0.3
-					<Walkable>true
-					<Buildable>true
-					<Flammability>1
-					<GrowthTimeDays>4
-					<Seed>CottonSeed
-					<HarvestResources>Cotton:4-8
-					<TimeToBuild>2
-					<CommonResources>CottonSeed:1
-					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
-					<JobType>PlantFarm
-		<SubGroup>
-			<Type>HarvestFarm
-			<Objects>
-				<Object>
-					<Type>HarvestFarm
-					<Layer>0
-					<TimeToBuild>2
-					<SelectionModifiers>Walkable,Buildable,Farms,OmitSameLayerJobs
-					<JobType>HarvestFarm
-					<AddToTileWhenBuilt>false
-<Group>
 	<Type>Terraform
 	<SubGroups>
 		<SubGroup>
@@ -616,6 +552,70 @@
 					<Layer>0
 					<TimeToBuild>0
 					<JobType>DecreasePriority
+					<AddToTileWhenBuilt>false
+<Group>
+	<Type>Farm
+	<SubGroups>
+		<SubGroup>
+			<Type>PlantFarm
+			<Objects>
+				<Object>
+					<Type>WheatFarm
+					<InstanceType>Farm
+					<Layer>2
+					<Integrity>10
+					<WalkSpeed>0.3
+					<Walkable>true
+					<Buildable>true
+					<Flammability>1
+					<GrowthTimeDays>4
+					<Seed>WheatSeed
+					<HarvestResources>Wheat:2-6,Straw:4-6
+					<TimeToBuild>2
+					<CommonResources>WheatSeed:1
+					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
+					<JobType>PlantFarm
+				<Object>
+					<Type>PotatoFarm
+					<InstanceType>Farm
+					<Layer>2
+					<Integrity>10
+					<WalkSpeed>0.3
+					<Walkable>true
+					<Buildable>true
+					<Flammability>1
+					<GrowthTimeDays>2
+					<Seed>Potato
+					<HarvestResources>Potato:2-3
+					<TimeToBuild>2
+					<CommonResources>Potato:1
+					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
+					<JobType>PlantFarm
+				<Object>
+					<Type>CottonFarm
+					<InstanceType>Farm
+					<Layer>2
+					<Integrity>10
+					<WalkSpeed>0.3
+					<Walkable>true
+					<Buildable>true
+					<Flammability>1
+					<GrowthTimeDays>4
+					<Seed>CottonSeed
+					<HarvestResources>Cotton:4-8
+					<TimeToBuild>2
+					<CommonResources>CottonSeed:1
+					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
+					<JobType>PlantFarm
+		<SubGroup>
+			<Type>HarvestFarm
+			<Objects>
+				<Object>
+					<Type>HarvestFarm
+					<Layer>0
+					<TimeToBuild>2
+					<SelectionModifiers>Walkable,Buildable,Farms,OmitSameLayerJobs
+					<JobType>HarvestFarm
 					<AddToTileWhenBuilt>false
 <Group>
 	<Type>None
