@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Time = Snowship.Time;
 
 public class UIManager : BaseManager {
 
@@ -3286,11 +3287,13 @@ public class UIManager : BaseManager {
 		LayoutRebuilder.ForceRebuildLayoutImmediate(gameUI.transform.Find("RightList-Panel/RightList-ScrollPanel/RightList-Panel").GetComponent<RectTransform>());
 	}
 
-	public void UpdateDateTimeInformation(int minute, int hour, string day, TimeManager.Season season, int year, bool isDay) {
+	public void UpdateDateTimeInformation() {
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Speed-Text").GetComponent<Text>().text = GameManager.timeM.GetTimeModifier() > 0 ? new string('>', GameManager.timeM.GetTimeModifier()) : "-";
-		dateTimeInformationPanel.transform.Find("DateTimeInformation-Time-Text").GetComponent<Text>().text = GameManager.timeM.Get12HourTime() + ":" + (minute < 10 ? ("0" + minute) : minute.ToString()) + " " + (hour < 12 || hour > 23 ? "AM" : "PM") + " - " + (isDay ? "Day" : "Night");
-		dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = day + " of " + season;
-		dateTimeInformationPanel.transform.Find("DateTimeInformation-Year-Text").GetComponent<Text>().text = "Year " + year;
+		//dateTimeInformationPanel.transform.Find("DateTimeInformation-Time-Text").GetComponent<Text>().text = GameManager.timeM.Get12HourTime() + ":" + (minute < 10 ? ("0" + minute) : minute.ToString()) + " " + (hour < 12 || hour > 23 ? "AM" : "PM") + " - " + (isDay ? "Day" : "Night");
+		dateTimeInformationPanel.transform.Find("DateTimeInformation-TimeDayNight-Panel/DateTimeInformation-Time-Panel/DateTimeInformation-Time-Text").GetComponent<Text>().text = $"{(Time.Time.Hour < 10 ? $"0{Time.Time.Hour}" : Time.Time.Hour)}:{(Time.Time.Minute < 10 ? $"0{Time.Time.Minute}" : Time.Time.Minute)}";
+		dateTimeInformationPanel.transform.Find("DateTimeInformation-TimeDayNight-Panel/DateTimeInformation-DayNight-Panel/DateTimeInformation-DayNight-Text").GetComponent<Text>().text = $"{GameManager.timeM.GetDayNightString()}";
+		dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = $"{GameManager.timeM.GetDayWithSuffix()} of {Time.Time.Season}";
+		dateTimeInformationPanel.transform.Find("DateTimeInformation-Year-Text").GetComponent<Text>().text = $"Year {(Time.Time.Year <= 9 ? $"0{Time.Time.Year}" : Time.Time.Year)}";
 	}
 
 	public class SelectionSizePanel {

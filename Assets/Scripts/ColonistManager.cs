@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Time;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -308,7 +309,7 @@ public class ColonistManager : BaseManager {
 						break;
 				}
 			}
-			if (!GameManager.timeM.isDay && positiveRestMoodModifier == null) {
+			if (!GameManager.timeM.IsDay && positiveRestMoodModifier == null) {
 				totalSpecialIncrease += (need.prefab.baseIncreaseRate * 2f);
 			}
 			return totalSpecialIncrease;
@@ -1349,7 +1350,7 @@ public class ColonistManager : BaseManager {
 			}
 			if (job.prefab.name == "Sleep") {
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
-				job.jobProgress += ((restNeed.GetValue() / restNeed.prefab.baseIncreaseRate) / restNeed.prefab.decreaseRateMultiplier) / GameManager.timeM.permanentTimerMultiplier;
+				job.jobProgress += ((restNeed.GetValue() / restNeed.prefab.baseIncreaseRate) / restNeed.prefab.decreaseRateMultiplier) / TimeManager.permanentTimerMultiplier;
 				job.jobProgress += UnityEngine.Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
 			}
 

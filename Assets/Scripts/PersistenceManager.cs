@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Time;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
+using Time = Snowship.Time;
 
 public class PersistenceManager : BaseManager {
 
@@ -4171,11 +4173,11 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public void SaveTime(StreamWriter file) {
-		file.WriteLine(CreateKeyValueString(TimeProperty.Minute, GameManager.timeM.GetMinute(), 0));
-		file.WriteLine(CreateKeyValueString(TimeProperty.Hour, GameManager.timeM.GetHour(), 0));
-		file.WriteLine(CreateKeyValueString(TimeProperty.Day, GameManager.timeM.GetDay(), 0));
-		file.WriteLine(CreateKeyValueString(TimeProperty.Season, GameManager.timeM.GetSeason(), 0));
-		file.WriteLine(CreateKeyValueString(TimeProperty.Year, GameManager.timeM.GetYear(), 0));
+		file.WriteLine(CreateKeyValueString(TimeProperty.Minute, Time.Time.Minute, 0));
+		file.WriteLine(CreateKeyValueString(TimeProperty.Hour, Time.Time.Hour, 0));
+		file.WriteLine(CreateKeyValueString(TimeProperty.Day, Time.Time.Day, 0));
+		file.WriteLine(CreateKeyValueString(TimeProperty.Season, Time.Time.Season, 0));
+		file.WriteLine(CreateKeyValueString(TimeProperty.Year, Time.Time.Year, 0));
 	}
 
 	public void LoadTime(string path) {
@@ -4184,19 +4186,19 @@ public class PersistenceManager : BaseManager {
 			object value = property.Value;
 			switch (key) {
 				case TimeProperty.Minute:
-					GameManager.timeM.SetMinute(int.Parse((string)value));
+					Time.Time.Minute = int.Parse((string)value);
 					break;
 				case TimeProperty.Hour:
-					GameManager.timeM.SetHour(int.Parse((string)value));
+					Time.Time.Hour = int.Parse((string)value);
 					break;
 				case TimeProperty.Day:
-					GameManager.timeM.SetDay(int.Parse((string)value));
+					Time.Time.Day = int.Parse((string)value);
 					break;
 				case TimeProperty.Season:
-					GameManager.timeM.SetSeason((TimeManager.Season)Enum.Parse(typeof(TimeManager.Season), (string)value));
+					Time.Time.Season = (Season)Enum.Parse(typeof(Season), (string)value);
 					break;
 				case TimeProperty.Year:
-					GameManager.timeM.SetYear(int.Parse((string)value));
+					Time.Time.Year = int.Parse((string)value);
 					break;
 				default:
 					Debug.LogError("Unknown time property: " + property.Key + " " + property.Value);

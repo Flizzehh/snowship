@@ -1,201 +1,155 @@
 ﻿using System;
 using UnityEngine;
 
-public class TimeManager : BaseManager {
+namespace Snowship.Time {
 
-	public static readonly int dayLengthSeconds = 1440; // Number of seconds in 1 in-game day
+	public class TimeManager : BaseManager {
 
-	public enum Season {
-		Spring,
-		Summer,
-		Autumn,
-		Winter
-	}
+		public static readonly int dayLengthSeconds = 1440; // Number of seconds in 1 in-game day
 
-	private bool paused;
+		public static readonly int permanentDeltaTimeMultiplier = 2;
+		public static readonly int permanentTimerMultiplier = 2;
 
-	public readonly int permanentDeltaTimeMultiplier = 2;
-	public readonly int permanentTimerMultiplier = 2;
+		public float deltaTime;
 
-	private int pauseTimeModifier = 0;
-	private int timeModifier = 0;
+		private float timer = 0;
 
-	public int GetTimeModifier() {
-		return timeModifier;
-	}
+		private bool paused;
+		private int pauseTimeModifier = 0;
+		private int timeModifier = 0;
 
-	public float deltaTime;
+		public bool IsDay { get; private set; }
 
-	private float timer = 0;
+		public bool minuteChanged;
 
-	private int minute = 0; // 0
-	private int hour = 8; // 8
-	private int day = 1; // 1
-	private Season season = Season.Spring; // Season.Spring
-	private int year = 1; // 1
+		public float tileBrightnessTime = 0;
 
-	public bool isDay;
-
-	public bool minuteChanged;
-
-	public float tileBrightnessTime = 0;
-
-	public override void Update() {
-		tileBrightnessTime = CalculateTileBrightnessTime();
-		if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
-			if (Input.GetKeyDown(KeyCode.Alpha1) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
-				if (timeModifier > 0) {
-					timeModifier -= 1;
-					if (timeModifier <= 0) {
-						timeModifier = 1;
+		public override void Update() {
+			tileBrightnessTime = CalculateTileBrightnessTime();
+			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
+				if (Input.GetKeyDown(KeyCode.Alpha1) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
+					if (timeModifier > 0) {
+						timeModifier -= 1;
+						if (timeModifier <= 0) {
+							timeModifier = 1;
+						}
 					}
 				}
-			}
-			if (Input.GetKeyDown(KeyCode.Alpha2) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
-				timeModifier += 1;
-			}
-			timeModifier = Mathf.Clamp(timeModifier, 0, 5);
-			if (timeModifier > 0 && paused) {
-				TogglePause();
-			}
-			pauseTimeModifier = Mathf.Clamp(pauseTimeModifier, 0, 5);
-			if (Input.GetKeyDown(KeyCode.Space) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
-				TogglePause();
-			}
-			deltaTime = Time.deltaTime * timeModifier * permanentDeltaTimeMultiplier;
-
-			timer += deltaTime * permanentTimerMultiplier;
-			minuteChanged = false;
-			if (timer >= 1) {
-				minute += 1;
-				timer = 0;
-				if (minute % 10 == 0) {
-					GameManager.colonyM.colony.map.SetTileBrightness(tileBrightnessTime, false);
+				if (Input.GetKeyDown(KeyCode.Alpha2) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
+					timeModifier += 1;
 				}
-				minuteChanged = true;
-				if (minute >= 60) {
-					hour += 1;
-					minute = 0;
-					if (hour >= 24) {
-						day += 1;
-						hour = 0;
-						if (day > 30) {
-							season += 1;
-							day = 1;
-							if (season > Season.Winter) {
-								year += 1;
-								season = Season.Spring;
+				timeModifier = Mathf.Clamp(timeModifier, 0, 5);
+				if (timeModifier > 0 && paused) {
+					TogglePause();
+				}
+				pauseTimeModifier = Mathf.Clamp(pauseTimeModifier, 0, 5);
+				if (Input.GetKeyDown(KeyCode.Space) && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
+					TogglePause();
+				}
+				deltaTime = UnityEngine.Time.deltaTime * timeModifier * permanentDeltaTimeMultiplier;
+
+				timer += deltaTime * permanentTimerMultiplier;
+				minuteChanged = false;
+				if (timer >= 1) {
+					Time.Minute += 1;
+					timer = 0;
+					if (Time.Minute % 10 == 0) {
+						GameManager.colonyM.colony.map.SetTileBrightness(tileBrightnessTime, false);
+					}
+					minuteChanged = true;
+					if (Time.Minute >= 60) {
+						Time.Hour += 1;
+						Time.Minute = 0;
+						if (Time.Hour >= 24) {
+							Time.Day += 1;
+							Time.Hour = 0;
+							if (Time.Day > 30) {
+								Time.Season += 1;
+								Time.Day = 1;
+								if (Time.Season > Season.Winter) {
+									Time.Year += 1;
+									Time.Season = Season.Spring;
+								}
 							}
 						}
 					}
 				}
+				IsDay = (Time.Hour >= 6 && Time.Hour <= 18);
+
+				GameManager.uiM.UpdateDateTimeInformation();
 			}
-			isDay = (hour >= 6 && hour <= 18);
-
-			GameManager.uiM.UpdateDateTimeInformation(minute, hour, GetDayWithSuffix(day), GetSeason(), year, isDay);
 		}
-	}
 
-	public void TogglePause() {
-		paused = !paused;
-		if (paused) {
-			pauseTimeModifier = timeModifier;
-			timeModifier = 0;
-		} else {
-			if (pauseTimeModifier == 0) {
-				timeModifier = 1;
+		public void TogglePause() {
+			paused = !paused;
+			if (paused) {
+				pauseTimeModifier = timeModifier;
+				timeModifier = 0;
 			} else {
-				timeModifier = pauseTimeModifier;
+				if (pauseTimeModifier == 0) {
+					timeModifier = 1;
+				} else {
+					timeModifier = pauseTimeModifier;
+				}
 			}
 		}
-	}
 
-	public void SetPaused(bool newPausedState) {
-		paused = !newPausedState;
-		TogglePause();
-	}
-
-	public bool GetPaused() {
-		return paused;
-	}
-
-	public int Get12HourTime() {
-		return Mathf.FloorToInt(1 + (12 - (1 - hour)) % 12);
-	}
-
-	private float CalculateTileBrightnessTime() {
-		return (float)Math.Round(hour + (minute / 60f), 2);
-	}
-
-	public void SetTime(float time) {
-		hour = Mathf.FloorToInt(time);
-		minute = Mathf.RoundToInt((time - hour) * 60);
-		Update();
-	}
-
-	public string GetDateString() {
-		return ($"{day},{season},{year}");
-	}
-
-	public string GetTimeString() {
-		return ($"{day}:{hour}:{minute}");
-	}
-
-	public int GetMinute() {
-		return minute;
-	}
-
-	public void SetMinute(int minute) {
-		this.minute = minute;
-	}
-
-	public int GetHour() {
-		return hour;
-	}
-
-	public void SetHour(int hour) {
-		this.hour = hour;
-	}
-
-	public int GetDay() {
-		return day;
-	}
-
-	public string GetDayWithSuffix(int day) {
-		if (day.ToString().Length > 0) {
-			int dayLastDigit = int.Parse(day.ToString()[day.ToString().Length - 1].ToString());
-			return day + (
-				dayLastDigit == 1 ? "st"
-				: dayLastDigit == 2 ? "nd"
-				: dayLastDigit == 3 ? "rd"
-				: "th"
-			);
-		} else {
-			return day.ToString();
+		public int GetTimeModifier() {
+			return timeModifier;
 		}
-	}
 
-	public void SetDay(int day) {
-		this.day = day;
-	}
+		public void SetPaused(bool newPausedState) {
+			paused = !newPausedState;
+			TogglePause();
+		}
 
-	public Season GetSeason() {
-		return season;
-	}
+		public bool GetPaused() {
+			return paused;
+		}
 
-	public void SetSeason(int season) {
-		this.season = (Season)season;
-	}
+		public int Get24HourTime() {
+			return Time.Hour;
+		}
 
-	public void SetSeason(Season season) {
-		this.season = season;
-	}
+		public int Get12HourTime() {
+			return Mathf.FloorToInt(1 + (12 - (1 - Time.Hour)) % 12);
+		}
 
-	public int GetYear() {
-		return year;
-	}
+		private float CalculateTileBrightnessTime() {
+			return (float)Math.Round(Time.Hour + (Time.Minute / 60f), 2);
+		}
 
-	public void SetYear(int year) {
-		this.year = year;
+		public void SetTime(float time) {
+			Time.Hour = Mathf.FloorToInt(time);
+			Time.Minute = Mathf.RoundToInt((time - Time.Hour) * 60);
+			Update();
+		}
+
+		public string GetDateString() {
+			return ($"{Time.Day},{Time.Season},{Time.Year}");
+		}
+
+		public string GetTimeString() {
+			return ($"{Time.Day}:{Time.Hour}:{Time.Minute}");
+		}
+
+		public string GetDayWithSuffix() {
+			int dayLastDigit = Time.Day % 10;
+			string daySuffix = "th";
+			if (Time.Day is not 11 and not 12 and not 13) {
+				if (dayLastDigit == 1) {
+					daySuffix = "st";
+				} else if (dayLastDigit == 2) {
+					daySuffix = "nd";
+				} else if (dayLastDigit == 3) {
+					daySuffix = "rd";
+				}
+			}
+			return $"{Time.Day}{daySuffix}";
+		}
+
+		public string GetDayNightString() {
+			return IsDay ? "Day" : "Night";
+		}
 	}
 }

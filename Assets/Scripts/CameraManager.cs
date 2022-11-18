@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Time;
+using System;
 using UnityEngine;
 
 public class CameraManager : BaseManager {
@@ -49,15 +50,15 @@ public class CameraManager : BaseManager {
 		if (GameManager.tileM.mapState == TileManager.MapState.Generated && !GameManager.uiM.pauseMenu.activeSelf && !GameManager.uiM.playerTyping) {
 
 			// Position Logic
-			cameraGO.transform.Translate(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * currentZoom * Time.deltaTime * GameManager.timeM.permanentDeltaTimeMultiplier);
+			cameraGO.transform.Translate(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * currentZoom * UnityEngine.Time.deltaTime * TimeManager.permanentDeltaTimeMultiplier);
 			if (Input.GetMouseButton(2)) {
-				cameraGO.transform.Translate(new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")) * currentZoom * Time.deltaTime * GameManager.timeM.permanentDeltaTimeMultiplier);
+				cameraGO.transform.Translate(new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")) * currentZoom * UnityEngine.Time.deltaTime * TimeManager.permanentDeltaTimeMultiplier);
 			}
 			cameraGO.transform.position = new Vector2(Mathf.Clamp(cameraGO.transform.position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize), Mathf.Clamp(cameraGO.transform.position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize));
 
 			// Zoom Logic
 			if (!Mathf.Approximately(currentZoom, targetZoom)) {
-				zoomTimer += 1 * Time.deltaTime;
+				zoomTimer += 1 * UnityEngine.Time.deltaTime;
 				zoomTimer = Mathf.Clamp(zoomTimer, 0, 1);
 			} else {
 				zoomTimer = 0;
@@ -67,7 +68,7 @@ public class CameraManager : BaseManager {
 
 			if (!GameManager.uiM.IsPointerOverUI()) {
 				//cameraComponent.orthographicSize -= Mathf.Clamp(Input.GetAxis("Mouse ScrollWheel") + (Input.GetAxis("KeyboardZoom") / 10f), -1f, 1f) * cameraComponent.orthographicSize * Time.deltaTime * 100;
-				targetZoom -= Mathf.Clamp(Input.GetAxis("Mouse ScrollWheel") + (Input.GetAxis("KeyboardZoom") / 10f), -1f, 1f) * currentZoom * Time.deltaTime * 100;
+				targetZoom -= Mathf.Clamp(Input.GetAxis("Mouse ScrollWheel") + (Input.GetAxis("KeyboardZoom") / 10f), -1f, 1f) * currentZoom * UnityEngine.Time.deltaTime * 100;
 
 				float zoomDifference = targetZoom - currentZoom;
 				float maxZoomDifference = Mathf.Clamp(currentZoom / 3f, minZoom, maxZoom);
