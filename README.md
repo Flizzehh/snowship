@@ -1,3 +1,5 @@
+![Snowship](./Assets/Resources/UI/Images/SnowshipBannerGitHub.png)
+
 # README #
 
 ### Release ###
