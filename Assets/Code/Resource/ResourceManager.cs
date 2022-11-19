@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Selectable;
 using Snowship.Time;
 using System;
 using System.Collections.Generic;
@@ -2310,7 +2311,7 @@ public class ResourceManager : BaseManager {
 		return instance;
 	}
 
-	public class ObjectInstance : SelectableManager.ISelectable {
+	public class ObjectInstance : ISelectable {
 
 		public readonly TileManager.Tile tile; // The tile that this object covers that is closest to the zeroPointTile (usually they are the same tile)
 		public readonly List<TileManager.Tile> additionalTiles = new List<TileManager.Tile>();
@@ -2432,11 +2433,11 @@ public class ResourceManager : BaseManager {
 			obj.SetActive(visible);
 		}
 
-		void SelectableManager.ISelectable.Select() {
+		void ISelectable.Select() {
 			
 		}
 
-		void SelectableManager.ISelectable.Deselect() {
+		void ISelectable.Deselect() {
 			
 		}
 	}

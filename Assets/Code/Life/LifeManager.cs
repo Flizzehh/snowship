@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Selectable;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class LifeManager : BaseManager {
 
 	public List<Life> life = new List<Life>();
 
-	public class Life : SelectableManager.ISelectable {
+	public class Life : ISelectable {
 
 		public float health;
 
@@ -154,11 +155,11 @@ public class LifeManager : BaseManager {
 			obj.SetActive(visible);
 		}
 
-		void SelectableManager.ISelectable.Select() {
+		void ISelectable.Select() {
 			
 		}
 
-		void SelectableManager.ISelectable.Deselect() {
+		void ISelectable.Deselect() {
 			
 		}
 	}

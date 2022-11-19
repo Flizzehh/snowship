@@ -1,5 +1,6 @@
 ﻿using Snowship.Job;
 using Snowship.Profession;
+using Snowship.Selectable;
 using Snowship.Time;
 using System.Collections.Generic;
 using UnityEngine;

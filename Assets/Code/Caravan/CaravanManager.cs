@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Selectable;
 using Snowship.Time;
 using System;
 using System.Collections.Generic;
@@ -129,7 +130,7 @@ public class CaravanManager : BaseManager {
 		GameManager.uiM.SetTradeMenu();
 	}
 
-	public class Caravan : ResourceManager.IInventory, SelectableManager.ISelectable {
+	public class Caravan : ResourceManager.IInventory, ISelectable {
 
 		public List<Trader> traders = new List<Trader>();
 		public int numTraders;
@@ -375,11 +376,11 @@ public class CaravanManager : BaseManager {
 			return inventory;
 		}
 
-		void SelectableManager.ISelectable.Select() {
+		void ISelectable.Select() {
 			
 		}
 
-		void SelectableManager.ISelectable.Deselect() {
+		void ISelectable.Deselect() {
 			
 		}
 	}
