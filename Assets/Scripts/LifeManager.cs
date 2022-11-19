@@ -70,6 +70,7 @@ public class LifeManager : BaseManager {
 		public List<TileManager.Tile> path = new List<TileManager.Tile>();
 		public float moveSpeedMultiplier = 1f;
 		public Vector2 previousPosition;
+		private float moveSpeedRampingMultiplier;
 
 		public bool MoveToTile(TileManager.Tile tile, bool allowEndTileNonWalkable) {
 			if (tile != null) {
@@ -89,7 +90,8 @@ public class LifeManager : BaseManager {
 					moveTimer = 0;
 					path.RemoveAt(0);
 				} else {
-					moveTimer += 2 * GameManager.timeM.deltaTime * overTile.walkSpeed * moveSpeedMultiplier;
+					moveSpeedRampingMultiplier = Mathf.Clamp01(moveSpeedRampingMultiplier + GameManager.timeM.deltaTime);
+					moveTimer += 2 * GameManager.timeM.deltaTime * overTile.walkSpeed * moveSpeedMultiplier * moveSpeedRampingMultiplier;
 				}
 			} else {
 				path.Clear();
@@ -97,6 +99,7 @@ public class LifeManager : BaseManager {
 					path.Add(overTile);
 					moveTimer = 0;
 				}
+				moveSpeedRampingMultiplier = 0;
 				return true;
 			}
 			return false;
