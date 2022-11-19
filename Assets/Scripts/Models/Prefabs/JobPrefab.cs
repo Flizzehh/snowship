@@ -330,17 +330,17 @@ namespace Snowship.Job {
 								if (farm.growProgressSpriteIndex == 0) {
 									job.colonist.GetInventory().ChangeResourceAmount(farm.prefab.seedResource, 1, false);
 								}
-							} else if (instance is ResourceManager.Container container) {
+							} else if (instance is ResourceManager.IInventory inventory) {
 								List<ResourceManager.ResourceAmount> nonReservedResourcesToRemove = new List<ResourceManager.ResourceAmount>();
-								foreach (ResourceManager.ResourceAmount resourceAmount in container.GetInventory().resources) {
+								foreach (ResourceManager.ResourceAmount resourceAmount in inventory.GetInventory().resources) {
 									nonReservedResourcesToRemove.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
 									colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
 								}
 								foreach (ResourceManager.ResourceAmount resourceAmount in nonReservedResourcesToRemove) {
-									container.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
+									inventory.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
 								}
 								List<ResourceManager.ReservedResources> reservedResourcesToRemove = new List<ResourceManager.ReservedResources>();
-								foreach (ResourceManager.ReservedResources reservedResources in container.GetInventory().reservedResources) {
+								foreach (ResourceManager.ReservedResources reservedResources in inventory.GetInventory().reservedResources) {
 									foreach (ResourceManager.ResourceAmount resourceAmount in reservedResources.resources) {
 										colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
 									}
@@ -350,7 +350,7 @@ namespace Snowship.Job {
 									}
 								}
 								foreach (ResourceManager.ReservedResources reservedResourceToRemove in reservedResourcesToRemove) {
-									container.GetInventory().reservedResources.Remove(reservedResourceToRemove);
+									inventory.GetInventory().reservedResources.Remove(reservedResourceToRemove);
 								}
 								GameManager.uiM.SetSelectedColonistInformation(true);
 								GameManager.uiM.SetSelectedContainerInfo();
