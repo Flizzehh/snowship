@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Snowship.Job {
+
 	public class Job {
 
 		public static readonly List<Job> jobs = new List<Job>();

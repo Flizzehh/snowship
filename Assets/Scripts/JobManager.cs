@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowship.Profession;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -632,7 +633,7 @@ namespace Snowship.Job {
 					|| (job.tile.region != colonist.overTile.region && job.tile.horizontalSurroundingTiles.Find(nTile => nTile != null && nTile.region == colonist.overTile.region) != null))
 				.Where(job =>
 					// Job is not associated with ANY professions
-					GameManager.colonistM.professionPrefabs.Find(p => p.jobs.Contains(job.prefab.name)) == null
+					ProfessionPrefab.professionPrefabs.Find(p => p.jobs.Contains(job.prefab.name)) == null
 					// OR Remove jobs that the colonist either CAN'T do, or WON'T do due to the player disabling it for them (i.e. priority == 0)
 					|| colonist.professions.Find(p => p.prefab.jobs.Contains(job.objectPrefab.jobType) && p.GetPriority() != 0) != null)
 				.OrderBy(job => colonist.professions.Find(p => p.prefab.jobs.Contains(job.objectPrefab.jobType)).GetPriority())

@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Profession;
 using Snowship.Time;
 using System;
 using System.Collections;
@@ -2651,7 +2652,7 @@ public class PersistenceManager : BaseManager {
 			}
 
 			file.WriteLine(CreateKeyValueString(ColonistProperty.Professions, string.Empty, 1));
-			foreach (ColonistManager.ProfessionInstance profession in colonist.professions) {
+			foreach (Profession profession in colonist.professions) {
 				file.WriteLine(CreateKeyValueString(ProfessionProperty.Profession, string.Empty, 2));
 
 				file.WriteLine(CreateKeyValueString(ProfessionProperty.Name, profession.prefab.type, 3));
@@ -2749,11 +2750,11 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public class PersistenceProfession {
-		public ColonistManager.ProfessionEnum? type;
+		public string type;
 		public int? priority;
 
 		public PersistenceProfession(
-			ColonistManager.ProfessionEnum? type,
+			string type,
 			int? priority
 		) {
 			this.type = type;
@@ -2870,13 +2871,13 @@ public class PersistenceManager : BaseManager {
 									switch ((ProfessionProperty)Enum.Parse(typeof(ProfessionProperty), professionProperty.Key)) {
 										case ProfessionProperty.Profession:
 
-											ColonistManager.ProfessionEnum? professionType = null;
+											string professionType = null;
 											int? professionPriority = null;
 
 											foreach (KeyValuePair<string, object> professionSubProperty in (List<KeyValuePair<string, object>>)professionProperty.Value) {
 												switch ((ProfessionProperty)Enum.Parse(typeof(ProfessionProperty), professionSubProperty.Key)) {
 													case ProfessionProperty.Name:
-														professionType = (ColonistManager.ProfessionEnum)Enum.Parse(typeof(ColonistManager.ProfessionEnum), (string)professionSubProperty.Value);
+														professionType = (string)professionSubProperty.Value;
 														break;
 													case ProfessionProperty.Priority:
 														professionPriority = int.Parse((string)professionSubProperty.Value);
@@ -3120,7 +3121,7 @@ public class PersistenceManager : BaseManager {
 			}
 
 			foreach (PersistenceProfession persistenceProfession in persistenceColonist.persistenceProfessions) {
-				ColonistManager.ProfessionInstance profession = colonist.GetProfessionFromEnum(persistenceProfession.type.Value);
+				Profession profession = colonist.GetProfessionFromType(persistenceProfession.type);
 				profession.SetPriority(persistenceProfession.priority.Value);
 			}
 

@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Profession;
 using Snowship.Time;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,7 +70,7 @@ public class GameManager : MonoBehaviour {
 		humanM.CreateHumanSprites();
 
 		colonistM.CreateColonistSkills(); // Skills must currently be ahead of professions to determine skill-profession relationship
-		colonistM.CreateColonistProfessions();
+		ProfessionPrefab.CreateProfessionPrefabs();
 		colonistM.CreateColonistNeeds();
 		colonistM.CreateMoodModifiers();
 

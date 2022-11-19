@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Profession;
 using Snowship.Time;
 using System;
 using System.Collections.Generic;
@@ -24,123 +25,6 @@ public class ColonistManager : BaseManager {
 		}
 	}
 
-	public enum ProfessionEnum { Building, Terraforming, Farming, Forestry, Crafting, Hauling };
-
-	public readonly List<ProfessionPrefab> professionPrefabs = new List<ProfessionPrefab>();
-
-	public class ProfessionPrefab {
-
-		public ProfessionEnum type;
-		public string name;
-
-		public List<string> jobs;
-
-		public SkillEnum relatedSkill;
-
-		public ProfessionPrefab(
-			ProfessionEnum type,
-			List<string> jobs
-		) {
-			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
-
-			this.jobs = jobs;
-
-			relatedSkill = (SkillEnum)Enum.Parse(typeof(SkillEnum), Enum.GetNames(typeof(SkillEnum)).ToList().Find(skillEnumString => type.ToString() == skillEnumString));
-			GameManager.colonistM.GetSkillPrefabFromEnum(relatedSkill).relatedProfession = type;
-		}
-	}
-
-	public ProfessionPrefab GetProfessionFromEnum(ProfessionEnum type) {
-		return professionPrefabs.Find(profession => profession.type == type);
-	}
-
-	public enum ProfessionPropertyEnum { Profession, Type, Jobs }
-
-	public void CreateColonistProfessions() {
-		List<KeyValuePair<string, object>> professionProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/colonist-professions").text.Split('\n').ToList());
-		foreach (KeyValuePair<string, object> professionProperty in professionProperties) {
-			switch ((ProfessionPropertyEnum)Enum.Parse(typeof(ProfessionPropertyEnum), professionProperty.Key)) {
-				case ProfessionPropertyEnum.Profession:
-
-					ProfessionEnum? type = null;
-					List<string> jobs = new();
-
-					foreach (KeyValuePair<string, object> professionSubProperty in (List<KeyValuePair<string, object>>)professionProperty.Value) {
-						switch ((ProfessionPropertyEnum)Enum.Parse(typeof(ProfessionPropertyEnum), professionSubProperty.Key)) {
-							case ProfessionPropertyEnum.Type:
-								type = (ProfessionEnum)Enum.Parse(typeof(ProfessionEnum), (string)professionSubProperty.Value);
-								break;
-							case ProfessionPropertyEnum.Jobs:
-								foreach (string jobString in ((string)professionSubProperty.Value).Split(',')) {
-									jobs.Add(jobString);
-								}
-								break;
-							default:
-								Debug.LogError("Unknown profession sub property: " + professionSubProperty.Key + " " + professionSubProperty.Value);
-								break;
-						}
-
-					}
-
-					ProfessionPrefab profession = new ProfessionPrefab(
-						type.Value,
-						jobs
-					);
-					professionPrefabs.Add(profession);
-
-					break;
-				default:
-					Debug.LogError("Unknown profession property: " + professionProperty.Key + " " + professionProperty.Value);
-					break;
-			}
-		}
-	}
-
-	public class ProfessionInstance {
-		public readonly ProfessionPrefab prefab;
-		public readonly Colonist colonist;
-
-		public static readonly int maxPriority = 9;
-		private int priority;
-
-		public ProfessionInstance(
-			ProfessionPrefab prefab,
-			Colonist colonist,
-			int priority
-		) {
-			this.prefab = prefab;
-			this.colonist = colonist;
-			this.priority = priority;
-		}
-
-		public int GetPriority() {
-			return priority;
-		}
-
-		public void SetPriority(int priority) {
-			if (priority > maxPriority) {
-				priority = 0;
-			}
-
-			if (priority < 0) {
-				priority = maxPriority;
-			}
-
-			this.priority = priority;
-
-			ColonistJob.UpdateSingleColonistJobs(colonist);
-		}
-
-		public void IncreasePriority() {
-			SetPriority(priority + 1);
-		}
-
-		public void DecreasePriority() {
-			SetPriority(priority - 1);
-		}
-	}
-
 	public enum SkillEnum { Building, Terraforming, Farming, Forestry, Crafting, Hauling };
 
 	public class SkillPrefab {
@@ -150,7 +34,7 @@ public class ColonistManager : BaseManager {
 
 		public readonly Dictionary<string, float> affectedJobTypes = new Dictionary<string, float>();
 
-		public ProfessionEnum relatedProfession;
+		public string relatedProfession;
 
 		public SkillPrefab(List<string> data) {
 			type = (SkillEnum)Enum.Parse(typeof(SkillEnum), data[0]);
@@ -1058,7 +942,7 @@ public class ColonistManager : BaseManager {
 		public readonly List<Job> backlog = new();
 
 		// Professions
-		public readonly List<ProfessionInstance> professions = new List<ProfessionInstance>();
+		public readonly List<Profession> professions = new List<Profession>();
 
 		// Skills
 		public readonly List<SkillInstance> skills = new List<SkillInstance>();
@@ -1078,11 +962,11 @@ public class ColonistManager : BaseManager {
 		public Colonist(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);
 
-			foreach (ProfessionPrefab professionPrefab in GameManager.colonistM.professionPrefabs) {
-				professions.Add(new ProfessionInstance(
+			foreach (ProfessionPrefab professionPrefab in ProfessionPrefab.professionPrefabs) {
+				professions.Add(new Profession(
 						professionPrefab, 
 						this, 
-						Mathf.RoundToInt(GameManager.colonistM.professionPrefabs.Count / 2f)
+						Mathf.RoundToInt(ProfessionPrefab.professionPrefabs.Count / 2f)
 				));
 			}
 
@@ -1526,7 +1410,7 @@ public class ColonistManager : BaseManager {
 			}
 		}
 
-		public ProfessionInstance GetProfessionFromEnum(ProfessionEnum type) {
+		public Profession GetProfessionFromType(string type) {
 			return professions.Find(p => p.prefab.type == type);
 		}
 

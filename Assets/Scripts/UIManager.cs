@@ -1,4 +1,5 @@
 ﻿using Snowship.Job;
+using Snowship.Profession;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -3597,12 +3598,12 @@ public class UIManager : BaseManager {
 	public readonly List<GameObject> colonistProfessionsRowBackgrounds = new List<GameObject>();
 
 	public class ProfessionColumn {
-		public ColonistManager.ProfessionPrefab professionPrefab;
+		public ProfessionPrefab professionPrefab;
 		public GameObject obj;
 
 		public Dictionary<ColonistManager.Colonist, Button> colonistToPriorityButtons = new Dictionary<ColonistManager.Colonist, Button>();
 
-		public ProfessionColumn(ColonistManager.ProfessionPrefab professionPrefab, Transform parent, int index) {
+		public ProfessionColumn(ProfessionPrefab professionPrefab, Transform parent, int index) {
 			this.professionPrefab = professionPrefab;
 
 			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ProfessionColumn-Panel"), parent, false);
@@ -3613,45 +3614,45 @@ public class UIManager : BaseManager {
 			}
 		}
 
-		public void AddButton(ColonistManager.ProfessionInstance professionInstance) {
+		public void AddButton(Profession profession) {
 			GameObject buttonObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/Priority-Button"), obj.transform, false);
 			Button button = buttonObj.GetComponent<Button>();
 
-			UpdateButton(button, professionInstance);
+			UpdateButton(button, profession);
 
 			button.GetComponent<HandleClickScript>().Initialize(
 				delegate {
-					professionInstance.DecreasePriority();
-					UpdateButton(button, professionInstance);
+					profession.DecreasePriority();
+					UpdateButton(button, profession);
 				},
 				null,
 				delegate {
-					professionInstance.IncreasePriority();
-					UpdateButton(button, professionInstance);
+					profession.IncreasePriority();
+					UpdateButton(button, profession);
 				}
 			);
 
-			colonistToPriorityButtons.Add(professionInstance.colonist, button);
+			colonistToPriorityButtons.Add(profession.colonist, button);
 		}
 
-		public void UpdateButton(Button button, ColonistManager.ProfessionInstance professionInstance) {
-			int priority = professionInstance.GetPriority();
+		public void UpdateButton(Button button, Profession profession) {
+			int priority = profession.GetPriority();
 
 			button.transform.Find("Text").GetComponent<Text>().text = priority == 0 ? string.Empty : priority.ToString();
 
 			button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(
 				GetColour(Colours.DarkGreen),
 				GetColour(Colours.DarkRed),
-				(priority - 1f) / (ColonistManager.ProfessionInstance.maxPriority - 1f)
+				(priority - 1f) / (ProfessionPrefab.maxPriority - 1f)
 			);
 
-			ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(GameManager.colonistM.GetSkillPrefabFromEnum(professionInstance.prefab.relatedSkill));
+			ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(GameManager.colonistM.GetSkillPrefabFromEnum(profession.prefab.relatedSkill));
 
-			if (highestSkillInstance.colonist == professionInstance.colonist) {
+			if (highestSkillInstance.colonist == profession.colonist) {
 				button.GetComponent<Image>().color = GetColour(Colours.LightYellow);
 			} else {
 
-				ColonistManager.SkillInstance skillInstance = professionInstance.colonist.GetSkillFromEnum(professionInstance.prefab.relatedSkill);
+				ColonistManager.SkillInstance skillInstance = profession.colonist.GetSkillFromEnum(profession.prefab.relatedSkill);
 
 				button.GetComponent<Image>().color = Color.Lerp(
 					GetColour(Colours.DarkGrey50),
@@ -3692,7 +3693,7 @@ public class UIManager : BaseManager {
 	public void CreateProfessionsMenu() {
 
 		int index = 0;
-		foreach (ColonistManager.ProfessionPrefab profession in GameManager.colonistM.professionPrefabs) {
+		foreach (ProfessionPrefab profession in ProfessionPrefab.professionPrefabs) {
 			professionColumns.Add(new ProfessionColumn(profession, professionsMenu.transform.Find("ProfessionsColumns-Panel"), index));
 			index++;
 		}
@@ -3727,8 +3728,8 @@ public class UIManager : BaseManager {
 				false
 			));
 
-			foreach (ColonistManager.ProfessionInstance professionInstance in colonist.professions) {
-				professionColumns.Find(pc => pc.professionPrefab == professionInstance.prefab).AddButton(professionInstance);
+			foreach (Profession profession in colonist.professions) {
+				professionColumns.Find(pc => pc.professionPrefab == profession.prefab).AddButton(profession);
 			}
 		}
 	}
