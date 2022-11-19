@@ -115,6 +115,10 @@ namespace Snowship.Time {
 			return Mathf.FloorToInt(1 + (12 - (1 - Time.Hour)) % 12);
 		}
 
+		public string Get12HourTimeString() {
+			return $"{Get12HourTime()}:{(Time.Minute < 10 ? ($"0{Time.Minute}") : Time.Minute)} {(Time.Hour < 12 || Time.Hour > 23 ? "AM" : "PM")}";
+		}
+
 		private float CalculateTileBrightnessTime() {
 			return (float)Math.Round(Time.Hour + (Time.Minute / 60f), 2);
 		}
@@ -149,7 +153,15 @@ namespace Snowship.Time {
 		}
 
 		public string GetDayNightString() {
-			return IsDay ? "Day" : "Night";
+			if (Time.Hour is >= 5 and < 7) {
+				return "Dawn";
+			} else if (Time.Hour is >= 7 and < 17) {
+				return "Day";
+			} else if (Time.Hour is >= 17 and < 19) {
+				return "Dusk";
+			} else {
+				return "Night";
+			}
 		}
 	}
 }

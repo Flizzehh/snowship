@@ -3289,7 +3289,6 @@ public class UIManager : BaseManager {
 
 	public void UpdateDateTimeInformation() {
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Speed-Text").GetComponent<Text>().text = GameManager.timeM.GetTimeModifier() > 0 ? new string('>', GameManager.timeM.GetTimeModifier()) : "-";
-		//dateTimeInformationPanel.transform.Find("DateTimeInformation-Time-Text").GetComponent<Text>().text = GameManager.timeM.Get12HourTime() + ":" + (minute < 10 ? ("0" + minute) : minute.ToString()) + " " + (hour < 12 || hour > 23 ? "AM" : "PM") + " - " + (isDay ? "Day" : "Night");
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-TimeDayNight-Panel/DateTimeInformation-Time-Panel/DateTimeInformation-Time-Text").GetComponent<Text>().text = $"{(Time.Time.Hour < 10 ? $"0{Time.Time.Hour}" : Time.Time.Hour)}:{(Time.Time.Minute < 10 ? $"0{Time.Time.Minute}" : Time.Time.Minute)}";
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-TimeDayNight-Panel/DateTimeInformation-DayNight-Panel/DateTimeInformation-DayNight-Text").GetComponent<Text>().text = $"{GameManager.timeM.GetDayNightString()}";
 		dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = $"{GameManager.timeM.GetDayWithSuffix()} of {Time.Time.Season}";
