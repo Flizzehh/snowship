@@ -4,6 +4,7 @@ using Snowship.Selectable;
 using Snowship.NTime;
 using System.Collections.Generic;
 using Snowship.NCamera;
+using Snowship.NCaravan;
 using Snowship.NColonist;
 using UnityEngine;
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Snowship.NCaravan;
 using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -3051,13 +3052,13 @@ public class UIManager : BaseManager {
 
 	public class CaravanElement {
 
-		public CaravanManager.Caravan caravan;
+		public Caravan caravan;
 		public GameObject obj;
 
 		private readonly Text affiliatedColonyNameText;
 		private readonly Text resourceGroupNameText;
 
-		public CaravanElement(CaravanManager.Caravan caravan, Transform transform) {
+		public CaravanElement(Caravan caravan, Transform transform) {
 			this.caravan = caravan;
 
 			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/CaravanElement-Panel"), transform, false);
@@ -3106,7 +3107,7 @@ public class UIManager : BaseManager {
 			RemoveCaravanElements();
 			caravansPanel.SetActive(true);
 			if (caravansPanel.activeSelf) {
-				foreach (CaravanManager.Caravan caravan in GameManager.caravanM.caravans.Where(c => c.traders[0].overTile.IsVisibleToAColonist()).OrderByDescending(c => c.confirmedResourcesToTrade.Count > 0)) {
+				foreach (Caravan caravan in GameManager.caravanM.caravans.Where(c => c.traders[0].overTile.IsVisibleToAColonist()).OrderByDescending(c => c.confirmedResourcesToTrade.Count > 0)) {
 					caravanElements.Add(new CaravanElement(caravan, caravansPanel.transform.Find("CaravanList-Panel")));
 				}
 			}
@@ -3756,8 +3757,8 @@ public class UIManager : BaseManager {
 	}
 
 	public void SetSelectedTraderMenu() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is CaravanManager.Trader selectedTrader) {
-			CaravanManager.Caravan caravan = selectedTrader.caravan;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
+			Caravan caravan = selectedTrader.caravan;
 
 			selectedTraderMenu.SetActive(true);
 
@@ -3776,7 +3777,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void UpdateSelectedTraderMenu() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is CaravanManager.Trader selectedTrader) {
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
 
 			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedTrader.health * 100);
 			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedTrader.health);
@@ -3802,7 +3803,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void SetTradeMenu() {
-		CaravanManager.Caravan caravan = GameManager.caravanM.selectedCaravan;
+		Caravan caravan = GameManager.caravanM.selectedCaravan;
 		if (caravan != null) {
 
 			SetTradeMenuActive(true);
@@ -3825,7 +3826,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private void RemakeTradeResourceElements(CaravanManager.Caravan caravan) {
+	private void RemakeTradeResourceElements(Caravan caravan) {
 		foreach (TradeResourceElement tradeResourceElement in tradeResourceElements) {
 			MonoBehaviour.Destroy(tradeResourceElement.obj);
 		}
@@ -3835,7 +3836,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	private void RemakeConfirmedTradeResourceElements(CaravanManager.Caravan caravan) {
+	private void RemakeConfirmedTradeResourceElements(Caravan caravan) {
 		foreach (ConfirmedTradeResourceElement confirmedTradeResourceElement in confirmedTradeResourceElements) {
 			MonoBehaviour.Destroy(confirmedTradeResourceElement.obj);
 		}
@@ -3866,7 +3867,12 @@ public class UIManager : BaseManager {
 						tradeResourceElement.tradeResourceAmount.SetColonyAmount(resourceAmount.amount);
 						tradeResourceElement.ValidateTradeAmountInputField();
 					} else {
-						tradeResourceElements.Add(new TradeResourceElement(new ResourceManager.TradeResourceAmount(resourceAmount.resource, 0, GameManager.caravanM.selectedCaravan), tradeMenu.transform.Find("TradeResources-Panel/TradeResources-ScrollPanel/TradeResourcesList-Panel")));
+						tradeResourceElements.Add(new TradeResourceElement(new ResourceManager.TradeResourceAmount(
+							resourceAmount.resource,
+							0,
+							GameManager.caravanM.selectedCaravan),
+							tradeMenu.transform.Find("TradeResources-Panel/TradeResources-ScrollPanel/TradeResourcesList-Panel")
+						));
 					}
 				}
 				foreach (TradeResourceElement tradeResourceElement in tradeResourceElements) {
@@ -3931,7 +3937,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void ConfirmTrade() {
-		CaravanManager.Caravan caravan = GameManager.caravanM.selectedCaravan;
+		Caravan caravan = GameManager.caravanM.selectedCaravan;
 
 		if (caravan != null) {
 			caravan.ConfirmTrade();

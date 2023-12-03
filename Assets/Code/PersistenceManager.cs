@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Snowship.NCaravan;
 using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
@@ -1189,7 +1190,7 @@ public class PersistenceManager : BaseManager {
 
 			for (int i = 0; i < persistenceCaravans.Count; i++) {
 				PersistenceCaravan persistenceCaravan = persistenceCaravans[i];
-				CaravanManager.Caravan caravan = GameManager.caravanM.caravans[i];
+				Caravan caravan = GameManager.caravanM.caravans[i];
 
 				foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceCaravan.persistenceInventory.reservedResources) {
 					foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
@@ -1200,7 +1201,7 @@ public class PersistenceManager : BaseManager {
 
 				for (int t = 0; t < caravan.traders.Count; t++) {
 					PersistenceTrader persistenceTrader = persistenceCaravan.persistenceTraders[t];
-					CaravanManager.Trader trader = caravan.traders[t];
+					Trader trader = caravan.traders[t];
 
 					foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceTrader.persistenceHuman.persistenceInventory.reservedResources) {
 						foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
@@ -2118,7 +2119,7 @@ public class PersistenceManager : BaseManager {
 
 		file.WriteLine(CreateKeyValueString(CaravanProperty.CaravanTimer, GameManager.caravanM.caravanTimer, 0));
 
-		foreach (CaravanManager.Caravan caravan in GameManager.caravanM.caravans) {
+		foreach (Caravan caravan in GameManager.caravanM.caravans) {
 			file.WriteLine(CreateKeyValueString(CaravanProperty.Caravan, string.Empty, 0));
 
 			file.WriteLine(CreateKeyValueString(CaravanProperty.Type, caravan.caravanType, 1));
@@ -2169,7 +2170,7 @@ public class PersistenceManager : BaseManager {
 			}
 
 			file.WriteLine(CreateKeyValueString(CaravanProperty.Traders, string.Empty, 1));
-			foreach (CaravanManager.Trader trader in caravan.traders) {
+			foreach (Trader trader in caravan.traders) {
 				file.WriteLine(CreateKeyValueString(TraderProperty.Trader, string.Empty, 2));
 
 				WriteLifeLines(file, trader, 3);
@@ -2188,8 +2189,8 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public class PersistenceCaravan {
-		public CaravanManager.CaravanTypeEnum? type;
-		public CaravanManager.Location location;
+		public CaravanType? type;
+		public Location location;
 		public Vector2? targetTilePosition;
 		public ResourceManager.ResourceGroup resourceGroup;
 		public int? leaveTimer;
@@ -2200,8 +2201,8 @@ public class PersistenceManager : BaseManager {
 		public List<PersistenceTrader> persistenceTraders;
 
 		public PersistenceCaravan(
-			CaravanManager.CaravanTypeEnum? type,
-			CaravanManager.Location location,
+			CaravanType? type,
+			Location location,
 			Vector2? targetTilePosition,
 			ResourceManager.ResourceGroup resourceGroup,
 			int? leaveTimer,
@@ -2291,8 +2292,8 @@ public class PersistenceManager : BaseManager {
 
 					List<KeyValuePair<string, object>> caravanProperties = (List<KeyValuePair<string, object>>)property.Value;
 
-					CaravanManager.CaravanTypeEnum? type = null;
-					CaravanManager.Location location = null;
+					CaravanType? type = null;
+					Location location = null;
 					Vector2? targetTilePosition = null;
 					ResourceManager.ResourceGroup resourceGroup = null;
 					int? leaveTimer = null;
@@ -2305,14 +2306,14 @@ public class PersistenceManager : BaseManager {
 					foreach (KeyValuePair<string, object> caravanProperty in caravanProperties) {
 						switch ((CaravanProperty)Enum.Parse(typeof(CaravanProperty), caravanProperty.Key)) {
 							case CaravanProperty.Type:
-								type = (CaravanManager.CaravanTypeEnum)Enum.Parse(typeof(CaravanManager.CaravanTypeEnum), (string)caravanProperty.Value);
+								type = (CaravanType)Enum.Parse(typeof(CaravanType), (string)caravanProperty.Value);
 								break;
 							case CaravanProperty.Location:
 
 								string locationName = null;
-								CaravanManager.Location.Wealth? locationWealth = null;
-								CaravanManager.Location.ResourceRichness? locationResourceRichness = null;
-								CaravanManager.Location.CitySize? locationCitySize = null;
+								Location.Wealth? locationWealth = null;
+								Location.ResourceRichness? locationResourceRichness = null;
+								Location.CitySize? locationCitySize = null;
 								TileManager.Biome.TypeEnum? locationBiomeType = null;
 
 								foreach (KeyValuePair<string, object> locationProperty in (List<KeyValuePair<string, object>>)caravanProperty.Value) {
@@ -2321,13 +2322,13 @@ public class PersistenceManager : BaseManager {
 											locationName = (string)locationProperty.Value;
 											break;
 										case LocationProperty.Wealth:
-											locationWealth = (CaravanManager.Location.Wealth)Enum.Parse(typeof(CaravanManager.Location.Wealth), (string)locationProperty.Value);
+											locationWealth = (Location.Wealth)Enum.Parse(typeof(Location.Wealth), (string)locationProperty.Value);
 											break;
 										case LocationProperty.ResourceRichness:
-											locationResourceRichness = (CaravanManager.Location.ResourceRichness)Enum.Parse(typeof(CaravanManager.Location.ResourceRichness), (string)locationProperty.Value);
+											locationResourceRichness = (Location.ResourceRichness)Enum.Parse(typeof(Location.ResourceRichness), (string)locationProperty.Value);
 											break;
 										case LocationProperty.CitySize:
-											locationCitySize = (CaravanManager.Location.CitySize)Enum.Parse(typeof(CaravanManager.Location.CitySize), (string)locationProperty.Value);
+											locationCitySize = (Location.CitySize)Enum.Parse(typeof(Location.CitySize), (string)locationProperty.Value);
 											break;
 										case LocationProperty.BiomeType:
 											locationBiomeType = (TileManager.Biome.TypeEnum)Enum.Parse(typeof(TileManager.Biome.TypeEnum), (string)locationProperty.Value);
@@ -2338,7 +2339,7 @@ public class PersistenceManager : BaseManager {
 									}
 								}
 
-								location = new CaravanManager.Location(
+								location = new Location(
 									locationName,
 									locationWealth.Value,
 									locationResourceRichness.Value,
@@ -2519,7 +2520,7 @@ public class PersistenceManager : BaseManager {
 
 	public void ApplyLoadedCaravans(List<PersistenceCaravan> persistenceCaravans) {
 		foreach (PersistenceCaravan persistenceCaravan in persistenceCaravans) {
-			CaravanManager.Caravan caravan = new CaravanManager.Caravan() {
+			Caravan caravan = new Caravan() {
 				numTraders = persistenceCaravan.persistenceTraders.Count,
 				caravanType = persistenceCaravan.type.Value,
 				location = persistenceCaravan.location,
@@ -2558,7 +2559,7 @@ public class PersistenceManager : BaseManager {
 			}
 
 			foreach (PersistenceTrader persistenceTrader in persistenceCaravan.persistenceTraders) {
-				CaravanManager.Trader trader = new CaravanManager.Trader(
+				Trader trader = new Trader(
 					GameManager.colonyM.colony.map.GetTileFromPosition(persistenceTrader.persistenceLife.position.Value),
 					persistenceTrader.persistenceLife.health.Value,
 					caravan

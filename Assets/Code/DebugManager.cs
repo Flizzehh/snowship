@@ -3,6 +3,7 @@ using Snowship.NTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCaravan;
 using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
@@ -309,9 +310,9 @@ public class DebugManager : BaseManager {
 			if (parameters.Count == 3) {
 				int numberToSpawn = 1;
 				if (int.TryParse(parameters[0], out numberToSpawn)) {
-					CaravanManager.CaravanTypeEnum caravanType = CaravanManager.CaravanTypeEnum.Foot;
+					CaravanType caravanType = CaravanType.Foot;
 					try {
-						caravanType = (CaravanManager.CaravanTypeEnum)Enum.Parse(typeof(CaravanManager.CaravanTypeEnum), parameters[1]);
+						caravanType = (CaravanType)Enum.Parse(typeof(CaravanType), parameters[1]);
 					} catch (ArgumentException) {
 						OutputToConsole("ERROR: Unknown caravan type: " + parameters[1] + ".");
 						return;

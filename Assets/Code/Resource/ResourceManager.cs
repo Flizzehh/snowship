@@ -4,6 +4,7 @@ using Snowship.NTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCaravan;
 using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
@@ -851,9 +852,9 @@ public class ResourceManager : BaseManager {
 
 		public int caravanResourcePrice;
 
-		public CaravanManager.Caravan caravan;
+		public Caravan caravan;
 
-		public TradeResourceAmount(Resource resource, int caravanAmount, CaravanManager.Caravan caravan) {
+		public TradeResourceAmount(Resource resource, int caravanAmount, Caravan caravan) {
 			this.resource = resource;
 
 			this.caravanAmount = caravanAmount;
