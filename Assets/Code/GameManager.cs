@@ -3,6 +3,7 @@ using Snowship.NProfession;
 using Snowship.Selectable;
 using Snowship.NTime;
 using System.Collections.Generic;
+using Snowship.NCamera;
 using Snowship.NColonist;
 using UnityEngine;
 
