@@ -1,9 +1,7 @@
-﻿using Snowship.Job;
-using System.Collections;
-using UnityEngine;
-using static ColonistManager;
+﻿using Snowship.NColonist;
+using Snowship.NJob;
 
-namespace Snowship.Profession {
+namespace Snowship.NProfession {
 
 	public class Profession {
 		public readonly ProfessionPrefab prefab;

@@ -1,16 +1,15 @@
-using Snowship.Job;
-using Snowship.Profession;
-using Snowship.Time;
-using static ColonistManager;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NJob;
+using Snowship.NProfession;
+using Snowship.NTime;
 using UnityEngine;
+using static Snowship.NColonist.ColonistManager;
 
-namespace Snowship.Colonist {
+namespace Snowship.NColonist {
 	public class Colonist : HumanManager.Human {
 
 		public static readonly List<Colonist> colonists = new List<Colonist>();
-		private static readonly List<Colonist> deadColonists = new List<Colonist>();
 
 		public bool playerMoved;
 
@@ -21,7 +20,7 @@ namespace Snowship.Colonist {
 		public readonly List<Job> backlog = new();
 
 		// Professions
-		public readonly List<Profession> professions = new List<Profession>();
+		public readonly List<NProfession.Profession> professions = new List<NProfession.Profession>();
 
 		// Skills
 		public readonly List<SkillInstance> skills = new List<SkillInstance>();
@@ -42,7 +41,7 @@ namespace Snowship.Colonist {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);
 
 			foreach (ProfessionPrefab professionPrefab in ProfessionPrefab.professionPrefabs) {
-				professions.Add(new Profession(
+				professions.Add(new NProfession.Profession(
 						professionPrefab,
 						this,
 						Mathf.RoundToInt(ProfessionPrefab.professionPrefabs.Count / 2f)
@@ -66,7 +65,7 @@ namespace Snowship.Colonist {
 			}
 			needs = needs.OrderBy(need => need.prefab.priority).ToList();
 
-			GameManager.colonistM.colonists.Add(this);
+			Colonist.colonists.Add(this);
 		}
 
 		public override void Update() {
@@ -115,7 +114,7 @@ namespace Snowship.Colonist {
 						Wander(null, 0);
 					}
 				} else {
-					wanderTimer = UnityEngine.Random.Range(10f, 20f);
+					wanderTimer = Random.Range(10f, 20f);
 				}
 			}
 		}
@@ -124,7 +123,7 @@ namespace Snowship.Colonist {
 			base.Die();
 
 			ReturnJob();
-			GameManager.colonistM.colonists.Remove(this);
+			colonists.Remove(this);
 			GameManager.uiM.SetColonistElements();
 			GameManager.uiM.SetJobElements();
 			foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
@@ -314,7 +313,7 @@ namespace Snowship.Colonist {
 			if (job.prefab.name == "Sleep") {
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
 				job.jobProgress += ((restNeed.GetValue() / restNeed.prefab.baseIncreaseRate) / restNeed.prefab.decreaseRateMultiplier) / TimeManager.permanentTimerMultiplier;
-				job.jobProgress += UnityEngine.Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
+				job.jobProgress += Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
 			}
 
 			job.colonistBuildTime = job.jobProgress;
@@ -328,7 +327,9 @@ namespace Snowship.Colonist {
 				job.Remove();
 				job = null;
 				return;
-			} else if (
+			}
+
+			if (
 				job.prefab.name == "EmptyInventory" ||
 				job.prefab.name == "CollectFood" ||
 				job.prefab.name == "PickupResources"
@@ -456,7 +457,7 @@ namespace Snowship.Colonist {
 			if (!careIfOvertileIsWalkable || !overTile.walkable) {
 				List<TileManager.Tile> walkableSurroundingTiles = overTile.surroundingTiles.Where(tile => tile != null && tile.walkable).ToList();
 				if (walkableSurroundingTiles.Count > 0) {
-					MoveToTile(walkableSurroundingTiles[UnityEngine.Random.Range(0, walkableSurroundingTiles.Count)], false);
+					MoveToTile(walkableSurroundingTiles[Random.Range(0, walkableSurroundingTiles.Count)], false);
 				} else {
 					walkableSurroundingTiles.Clear();
 					List<TileManager.Tile> potentialWalkableSurroundingTiles = new List<TileManager.Tile>();
@@ -517,17 +518,17 @@ namespace Snowship.Colonist {
 		public override string GetCurrentActionString() {
 			if (job != null) {
 				return job.prefab.GetJobDescription(job);
-			} else {
-				return "Wandering around.";
 			}
+
+			return "Wandering around.";
 		}
 
 		public override string GetStoredActionString() {
 			if (storedJob != null) {
 				return storedJob.prefab.GetJobDescription(storedJob);
-			} else {
-				return string.Empty;
 			}
+
+			return string.Empty;
 		}
 
 		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
@@ -545,7 +546,7 @@ namespace Snowship.Colonist {
 					ResourceManager.ResourceAmount clothingToPickup = new ResourceManager.ResourceAmount(clothing, 1);
 
 					container.GetInventory().ReserveResources(
-						new List<ResourceManager.ResourceAmount>() {
+						new List<ResourceManager.ResourceAmount> {
 							clothingToPickup
 						},
 						this
@@ -559,12 +560,12 @@ namespace Snowship.Colonist {
 							null,
 							0
 						) {
-							requiredResources = new List<ResourceManager.ResourceAmount>() { clothingToPickup },
+							requiredResources = new List<ResourceManager.ResourceAmount> { clothingToPickup },
 							resourcesColonistHas = new List<ResourceManager.ResourceAmount>(),
-							containerPickups = new List<ContainerPickup>() {
+							containerPickups = new List<ContainerPickup> {
 								new ContainerPickup(
 									container,
-									new List<ResourceManager.ResourceAmount>() { clothingToPickup }
+									new List<ResourceManager.ResourceAmount> { clothingToPickup }
 								)
 							}
 						}

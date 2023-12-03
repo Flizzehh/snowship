@@ -1,4 +1,4 @@
-namespace Snowship.Time {
+namespace Snowship.NTime {
 	public enum Season {
 		Spring,
 		Summer,

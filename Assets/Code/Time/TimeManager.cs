@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Snowship.Time {
+namespace Snowship.NTime {
 
 	public class TimeManager : BaseManager {
 

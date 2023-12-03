@@ -1,9 +1,10 @@
-﻿using Snowship.Job;
+﻿using Snowship.NJob;
 using Snowship.Selectable;
-using Snowship.Time;
+using Snowship.NTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -1078,7 +1079,7 @@ public class ResourceManager : BaseManager {
 		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, ResourceAmount resourceAmount, bool limitToMaxAmount) {
 			Resource resource = resourceAmount.resource;
 			int amount = resourceAmount.amount;
-			
+
 			fromInventory.ChangeResourceAmount(resource, -amount, false);
 			int remainingAmount = toInventory.ChangeResourceAmount(resource, amount, limitToMaxAmount);
 			if (remainingAmount > 0) {
@@ -1089,9 +1090,9 @@ public class ResourceManager : BaseManager {
 		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, List<ResourceAmount> resourceAmounts, bool limitToMaxAmount) {
 			foreach (ResourceAmount resourceAmount in resourceAmounts.ToList()) {
 				TransferResourcesBetweenInventories(
-					fromInventory, 
-					toInventory, 
-					resourceAmount, 
+					fromInventory,
+					toInventory,
+					resourceAmount,
 					limitToMaxAmount
 				);
 			}
@@ -1116,7 +1117,7 @@ public class ResourceManager : BaseManager {
 			resource.SetAvailableAmount(0);
 		}
 
-		foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+		foreach (Colonist colonist in Colonist.colonists) {
 			foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources) {
 				resourceAmount.resource.AddToWorldTotalAmount(resourceAmount.amount);
 				resourceAmount.resource.AddToColonistsTotalAmount(resourceAmount.amount);
@@ -1155,7 +1156,7 @@ public class ResourceManager : BaseManager {
 	public List<ResourceAmount> GetFilteredResources(bool colonistInventory, bool colonistReserved, bool containerInventory, bool containerReserved) {
 		List<ResourceAmount> returnResources = new List<ResourceAmount>();
 		if (colonistInventory || colonistReserved) {
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonistInventory) {
 					foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources) {
 						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.resource == resourceAmount.resource);
@@ -2319,7 +2320,7 @@ public class ResourceManager : BaseManager {
 
 		public readonly ObjectPrefab prefab;
 		public readonly Variation variation;
-		
+
 		public readonly GameObject obj;
 		public readonly SpriteRenderer sr;
 
@@ -2434,11 +2435,11 @@ public class ResourceManager : BaseManager {
 		}
 
 		void ISelectable.Select() {
-			
+
 		}
 
 		void ISelectable.Deselect() {
-			
+
 		}
 	}
 
@@ -2506,13 +2507,13 @@ public class ResourceManager : BaseManager {
 
 	public class SleepSpot : ObjectInstance {
 
-		public ColonistManager.Colonist occupyingColonist;
+		public Colonist occupyingColonist;
 
 		public SleepSpot(ObjectPrefab prefab, Variation variation, TileManager.Tile tile, int rotationIndex) : base(prefab, variation, tile, rotationIndex) {
 
 		}
 
-		public void StartSleeping(ColonistManager.Colonist colonist) {
+		public void StartSleeping(Colonist colonist) {
 			occupyingColonist = colonist;
 		}
 
@@ -2544,7 +2545,7 @@ public class ResourceManager : BaseManager {
 			}
 
 			this.priority = priority;
-			
+
 			return this.priority;
 		}
 
@@ -2565,7 +2566,7 @@ public class ResourceManager : BaseManager {
 
 		public PriorityResourceInstance(Resource resource, int priority) {
 			this.resource = resource;
-			
+
 			this.priority = new Priority(priority);
 		}
 	}
@@ -2601,13 +2602,13 @@ public class ResourceManager : BaseManager {
 			int? remainingAmount = null
 		) {
 			this.resource = resource;
-			
+
 			this.priority = new Priority(priority);
-			
+
 			this.creationMethod = creationMethod;
 			this.targetAmount = targetAmount;
 			this.remainingAmount = remainingAmount == null ? targetAmount : remainingAmount.Value;
-			
+
 			this.craftingObject = craftingObject;
 		}
 
@@ -3299,7 +3300,7 @@ public class ResourceManager : BaseManager {
 			&&	(GameManager.colonyM.colony == null || ln != GameManager.colonyM.colony.name)
 			&&	GameManager.caravanM.caravans.Find(c => c.location.name == ln) == null
 		).ToList();
-		
+
 		return filteredLocationNames[UnityEngine.Random.Range(0, filteredLocationNames.Count)];
 	}
 
@@ -3384,10 +3385,10 @@ public class ResourceManager : BaseManager {
 	}
 
 	private void BitmaskObjects(
-		ObjectInstance objectInstance, 
-		bool includeDiagonalSurroundingTiles, 
-		bool customBitSumInputs, 
-		bool compareEquivalentObjects, 
+		ObjectInstance objectInstance,
+		bool includeDiagonalSurroundingTiles,
+		bool customBitSumInputs,
+		bool compareEquivalentObjects,
 		List<ObjectEnum> customCompareObjectTypes
 	) {
 		List<TileManager.Tile> surroundingTilesToUse = includeDiagonalSurroundingTiles ? objectInstance.tile.surroundingTiles : objectInstance.tile.horizontalSurroundingTiles;

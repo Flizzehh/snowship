@@ -1,15 +1,16 @@
-﻿using Snowship.Job;
-using Snowship.Profession;
-using Snowship.Time;
+﻿using Snowship.NJob;
+using Snowship.NProfession;
+using Snowship.NTime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
-using Time = Snowship.Time;
+using Time = Snowship.NTime;
 
 public class PersistenceManager : BaseManager {
 
@@ -1178,7 +1179,7 @@ public class PersistenceManager : BaseManager {
 					case ResourceManager.ObjectInstanceType.SleepSpot:
 						ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)objectInstance;
 						if (persistenceObject.occupyingColonistName != null) {
-							sleepSpot.occupyingColonist = GameManager.colonistM.colonists.Find(c => c.name == persistenceObject.occupyingColonistName);
+							sleepSpot.occupyingColonist = Colonist.colonists.Find(c => c.name == persistenceObject.occupyingColonistName);
 						}
 						break;
 				}
@@ -1386,7 +1387,7 @@ public class PersistenceManager : BaseManager {
 					}
 
 					persistenceTiles.Add(new PersistenceTile(
-						tileIndex, tileHeight, tileType, tileTemperature, tilePrecipitation, tileBiome, tileRoof, tileDug, tileSpriteName, 
+						tileIndex, tileHeight, tileType, tileTemperature, tilePrecipitation, tileBiome, tileRoof, tileDug, tileSpriteName,
 						plantPrefab, plantSpriteName, plantSmall, plantGrowthProgress, plantHarvestResource, plantIntegrity
 					));
 					break;
@@ -2338,10 +2339,10 @@ public class PersistenceManager : BaseManager {
 								}
 
 								location = new CaravanManager.Location(
-									locationName, 
-									locationWealth.Value, 
-									locationResourceRichness.Value, 
-									locationCitySize.Value, 
+									locationName,
+									locationWealth.Value,
+									locationResourceRichness.Value,
+									locationCitySize.Value,
 									locationBiomeType.Value
 								);
 								break;
@@ -2391,9 +2392,9 @@ public class PersistenceManager : BaseManager {
 											}
 
 											persistenceResourcesToTrade.Add(new PersistenceTradeResourceAmount(
-												resourceToTradeType, 
-												resourceToTradeCaravanAmount, 
-												resourceToTradeTradeAmount, 
+												resourceToTradeType,
+												resourceToTradeCaravanAmount,
+												resourceToTradeTradeAmount,
 												resourceToTradeCaravanPrice
 											));
 											break;
@@ -2475,7 +2476,7 @@ public class PersistenceManager : BaseManager {
 											}
 
 											persistenceTraders.Add(new PersistenceTrader(
-												persistenceLife, 
+												persistenceLife,
 												persistenceHuman,
 												traderLeaveTile,
 												traderTradingPosts
@@ -2629,7 +2630,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public void SaveColonists(StreamWriter file) {
-		foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+		foreach (Colonist colonist in Colonist.colonists) {
 			file.WriteLine(CreateKeyValueString(ColonistProperty.Colonist, string.Empty, 0));
 
 			WriteLifeLines(file, colonist, 1);
@@ -2930,9 +2931,9 @@ public class PersistenceManager : BaseManager {
 											}
 
 											persistenceSkills.Add(new PersistenceSkill(
-												skillType, 
-												skillLevel, 
-												skillNextLevelExperience, 
+												skillType,
+												skillLevel,
+												skillNextLevelExperience,
 												skillCurrentExperience
 											));
 											break;
@@ -2993,7 +2994,7 @@ public class PersistenceManager : BaseManager {
 											}
 
 											persistenceNeeds.Add(new PersistenceNeed(
-												needType, 
+												needType,
 												needValue
 											));
 											break;
@@ -3073,7 +3074,7 @@ public class PersistenceManager : BaseManager {
 
 	public void ApplyLoadedColonists(List<PersistenceColonist> persistenceColonists) {
 		foreach (PersistenceColonist persistenceColonist in persistenceColonists) {
-			ColonistManager.Colonist colonist = new ColonistManager.Colonist(
+			Colonist colonist = new Colonist(
 				GameManager.colonyM.colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.position.Value),
 				persistenceColonist.persistenceLife.health.Value
 			) {
@@ -3153,7 +3154,7 @@ public class PersistenceManager : BaseManager {
 
 		for (int i = 0; i < persistenceColonists.Count; i++) {
 			PersistenceColonist persistenceColonist = persistenceColonists[i];
-			ColonistManager.Colonist colonist = GameManager.colonistM.colonists[i];
+			Colonist colonist = Colonist.colonists[i];
 
 			foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceColonist.persistenceHuman.persistenceInventory.reservedResources) {
 				foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
@@ -3518,7 +3519,7 @@ public class PersistenceManager : BaseManager {
 		if (persistenceJob.priority.HasValue) {
 			job.ChangePriority(persistenceJob.priority.Value);
 		}
-		
+
 		if (persistenceJob.createResource != null) {
 			ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)job.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeObject.type);
 			ResourceManager.CraftableResourceInstance craftableResourceInstance = craftingObject.resources.Find(r => r.resource == persistenceJob.createResource);
@@ -3584,7 +3585,7 @@ public class PersistenceManager : BaseManager {
 								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.CreationMethod, resource.creationMethod, 4));
 								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.TargetAmount, resource.GetTargetAmount(), 4));
 								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.RemainingAmount, resource.GetRemainingAmount(), 4));
-								
+
 								file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Enableable, resource.enableable, 4));
 								if (resource.fuelAmounts.Count > 0) {
 									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.FuelAmounts, string.Empty, 4));

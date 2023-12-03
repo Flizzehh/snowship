@@ -1,11 +1,12 @@
-﻿using Snowship.Profession;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColonist;
+using Snowship.NProfession;
 using UnityEngine;
-using static Snowship.Job.JobManager;
+using static Snowship.NJob.JobManager;
 
-namespace Snowship.Job {
+namespace Snowship.NJob {
 
 	public class JobManager : BaseManager {
 
@@ -154,7 +155,7 @@ namespace Snowship.Job {
 					}
 				}
 			}
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonist.job != null && colonist.job.objectPrefab.layer == prefab.layer) {
 					if (colonist.job.tile == posTile) {
 						return false;
@@ -166,7 +167,7 @@ namespace Snowship.Job {
 					}
 				}
 			}
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonist.storedJob != null && colonist.storedJob.objectPrefab.layer == prefab.layer) {
 					if (colonist.storedJob.tile == posTile) {
 						return false;
@@ -374,7 +375,7 @@ namespace Snowship.Job {
 			}
 			removeJobs.Clear();
 
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				if (!((colonist.job != null && selectionArea.Contains(colonist.job.tile)) || (colonist.storedJob != null && selectionArea.Contains(colonist.storedJob.tile)))) {
 					continue;
 				}
@@ -413,7 +414,7 @@ namespace Snowship.Job {
 		}
 
 		public void CancelJob(Job job) {
-			ColonistManager.Colonist colonist = GameManager.colonistM.colonists.Find(c => c.job == job || c.storedJob == job);
+			Colonist colonist = Colonist.colonists.Find(c => c.job == job || c.storedJob == job);
 			if (colonist != null) {
 				if (job.containerPickups != null) {
 					foreach (ContainerPickup containerPickup in job.containerPickups) {
@@ -453,7 +454,7 @@ namespace Snowship.Job {
 					job.ChangePriority(amount);
 				}
 			}
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonist.job != null) {
 					if (selectionArea.Contains(colonist.job.tile)) {
 						colonist.job.ChangePriority(amount);
@@ -527,7 +528,7 @@ namespace Snowship.Job {
 			changedJobList = true;
 		}
 
-		public List<ContainerPickup> CalculateColonistPickupContainers(ColonistManager.Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToPickup) {
+		public List<ContainerPickup> CalculateColonistPickupContainers(Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToPickup) {
 			List<ContainerPickup> containersToPickupFrom = new List<ContainerPickup>();
 			List<ResourceManager.Container> sortedContainersByDistance = GameManager.resourceM.GetContainersInRegion(colonist.overTile.region).OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).ToList();
 			if (sortedContainersByDistance.Count > 0) {
@@ -565,7 +566,7 @@ namespace Snowship.Job {
 			}
 		}
 
-		public KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>> CalculateColonistResourcesToPickup(ColonistManager.Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToFind) {
+		public KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>> CalculateColonistResourcesToPickup(Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToFind) {
 			bool colonistHasAllResources = true;
 			List<ResourceManager.ResourceAmount> resourcesColonistHas = new List<ResourceManager.ResourceAmount>();
 			List<ResourceManager.ResourceAmount> resourcesToPickup = new List<ResourceManager.ResourceAmount>();
@@ -590,7 +591,7 @@ namespace Snowship.Job {
 			return new KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>>(colonistHasAllResources, new List<List<ResourceManager.ResourceAmount>>() { (resourcesToPickup.Count > 0 ? resourcesToPickup : null), (resourcesColonistHas.Count > 0 ? resourcesColonistHas : null) });
 		}
 
-		public static float CalculateJobCost(ColonistManager.Colonist colonist, Job job, List<ContainerPickup> containerPickups) {
+		public static float CalculateJobCost(Colonist colonist, Job job, List<ContainerPickup> containerPickups) {
 			/* The cost of a job is determined using:
 					- the amount of resources the colonist has
 						- sometimes the amount of resources containers have
@@ -624,7 +625,7 @@ namespace Snowship.Job {
 			return cost;
 		}
 
-		public static List<Job> GetSortedJobs(ColonistManager.Colonist colonist) {
+		public static List<Job> GetSortedJobs(Colonist colonist) {
 			return Job.jobs
 				.Where(job =>
 					// Colonist is in the same region as the job
@@ -643,9 +644,9 @@ namespace Snowship.Job {
 
 		public void GiveJobsToColonists() {
 			bool gaveJob = false;
-			Dictionary<ColonistManager.Colonist, ColonistJob> jobsGiven = new Dictionary<ColonistManager.Colonist, ColonistJob>();
+			Dictionary<Colonist, ColonistJob> jobsGiven = new Dictionary<Colonist, ColonistJob>();
 
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonist.job == null && !colonist.playerMoved && colonist.backlog.Count > 0) {
 					ColonistJob backlogJob = new ColonistJob(colonist, colonist.backlog[0], colonist.backlog[0].resourcesColonistHas, colonist.backlog[0].containerPickups);
 					gaveJob = true;
@@ -654,15 +655,15 @@ namespace Snowship.Job {
 				}
 			}
 
-			foreach (KeyValuePair<ColonistManager.Colonist, List<ColonistJob>> colonistKVP in ColonistJob.colonistJobs) {
-				ColonistManager.Colonist colonist = colonistKVP.Key;
+			foreach (KeyValuePair<Colonist, List<ColonistJob>> colonistKVP in ColonistJob.colonistJobs) {
+				Colonist colonist = colonistKVP.Key;
 				List<ColonistJob> colonistJobsList = colonistKVP.Value;
 				if (colonist.job == null && !colonist.playerMoved && !jobsGiven.ContainsKey(colonist)) {
 					for (int i = 0; i < colonistJobsList.Count; i++) {
 						ColonistJob colonistJob = colonistJobsList[i];
 						bool bestColonistForJob = true;
-						foreach (KeyValuePair<ColonistManager.Colonist, List<ColonistJob>> otherColonistKVP in ColonistJob.colonistJobs) {
-							ColonistManager.Colonist otherColonist = otherColonistKVP.Key;
+						foreach (KeyValuePair<Colonist, List<ColonistJob>> otherColonistKVP in ColonistJob.colonistJobs) {
+							Colonist otherColonist = otherColonistKVP.Key;
 							if (colonist != otherColonist && otherColonist.job == null) {
 								ColonistJob otherColonistJob = otherColonistKVP.Value.Find(job => job.job == colonistJob.job);
 								if (otherColonistJob != null && otherColonistJob.cost < colonistJob.cost) {
@@ -675,7 +676,7 @@ namespace Snowship.Job {
 							gaveJob = true;
 							jobsGiven.Add(colonist, colonistJob);
 							Job.jobs.Remove(colonistJob.job);
-							foreach (KeyValuePair<ColonistManager.Colonist, List<ColonistJob>> removeKVP in ColonistJob.colonistJobs) {
+							foreach (KeyValuePair<Colonist, List<ColonistJob>> removeKVP in ColonistJob.colonistJobs) {
 								ColonistJob jobToRemove = removeKVP.Value.Find(cJob => cJob.job == colonistJob.job);
 								if (jobToRemove != null) {
 									removeKVP.Value.Remove(jobToRemove);
@@ -687,7 +688,7 @@ namespace Snowship.Job {
 					}
 				}
 			}
-			foreach (KeyValuePair<ColonistManager.Colonist, ColonistJob> jobGiven in jobsGiven) {
+			foreach (KeyValuePair<Colonist, ColonistJob> jobGiven in jobsGiven) {
 				jobGiven.Key.SetJob(jobGiven.Value);
 			}
 			if (gaveJob) {
@@ -700,10 +701,10 @@ namespace Snowship.Job {
 			if (Job.jobs.Find(job => job.prefab.name == jobType && job.tile == tile) != null) {
 				return true;
 			}
-			if (GameManager.colonistM.colonists.Find(colonist => colonist.job != null && colonist.job.objectPrefab.jobType == jobType && colonist.job.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.job != null && colonist.job.objectPrefab.jobType == jobType && colonist.job.tile == tile) != null) {
 				return true;
 			}
-			if (GameManager.colonistM.colonists.Find(colonist => colonist.storedJob != null && colonist.storedJob.objectPrefab.jobType == jobType && colonist.storedJob.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.storedJob != null && colonist.storedJob.objectPrefab.jobType == jobType && colonist.storedJob.tile == tile) != null) {
 				return true;
 			}
 			return false;
@@ -713,10 +714,10 @@ namespace Snowship.Job {
 			if (Job.jobs.Find(job => job.objectPrefab.type == prefabType && job.tile == tile) != null) {
 				return true;
 			}
-			if (GameManager.colonistM.colonists.Find(colonist => colonist.job != null && colonist.job.objectPrefab.type == prefabType && colonist.job.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.job != null && colonist.job.objectPrefab.type == prefabType && colonist.job.tile == tile) != null) {
 				return true;
 			}
-			if (GameManager.colonistM.colonists.Find(colonist => colonist.storedJob != null && colonist.storedJob.objectPrefab.type == prefabType && colonist.storedJob.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.storedJob != null && colonist.storedJob.objectPrefab.type == prefabType && colonist.storedJob.tile == tile) != null) {
 				return true;
 			}
 			return false;
@@ -725,9 +726,9 @@ namespace Snowship.Job {
 
 	public class ColonistJob {
 
-		public static readonly Dictionary<ColonistManager.Colonist, List<ColonistJob>> colonistJobs = new();
+		public static readonly Dictionary<Colonist, List<ColonistJob>> colonistJobs = new();
 
-		public ColonistManager.Colonist colonist;
+		public Colonist colonist;
 		public Job job;
 
 		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
@@ -735,7 +736,7 @@ namespace Snowship.Job {
 
 		public float cost;
 
-		public ColonistJob(ColonistManager.Colonist colonist, Job job, List<ResourceManager.ResourceAmount> resourcesColonistHas, List<ContainerPickup> containerPickups) {
+		public ColonistJob(Colonist colonist, Job job, List<ResourceManager.ResourceAmount> resourcesColonistHas, List<ContainerPickup> containerPickups) {
 			this.colonist = colonist;
 			this.job = job;
 			this.resourcesColonistHas = resourcesColonistHas;
@@ -759,7 +760,7 @@ namespace Snowship.Job {
 			}
 		}
 
-		public static void UpdateColonistJobCosts(ColonistManager.Colonist colonist) {
+		public static void UpdateColonistJobCosts(Colonist colonist) {
 			if (colonistJobs.ContainsKey(colonist)) {
 				foreach (ColonistJob colonistJob in colonistJobs[colonist]) {
 					colonistJob.CalculateCost();
@@ -768,12 +769,12 @@ namespace Snowship.Job {
 		}
 
 		public static void UpdateAllColonistJobCosts() {
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				UpdateColonistJobCosts(colonist);
 			}
 		}
 
-		public static void UpdateSingleColonistJobs(ColonistManager.Colonist colonist) {
+		public static void UpdateSingleColonistJobs(Colonist colonist) {
 
 			List<Job> sortedJobs = GetSortedJobs(colonist);
 
@@ -820,13 +821,13 @@ namespace Snowship.Job {
 
 		public static void UpdateColonistJobs() {
 			colonistJobs.Clear();
-			List<ColonistManager.Colonist> availableColonists = GameManager.colonistM.colonists.Where(colonist => colonist.job == null && colonist.overTile.walkable).ToList();
-			foreach (ColonistManager.Colonist colonist in availableColonists) {
+			List<Colonist> availableColonists = Colonist.colonists.Where(colonist => colonist.job == null && colonist.overTile.walkable).ToList();
+			foreach (Colonist colonist in availableColonists) {
 				UpdateSingleColonistJobs(colonist);
 			}
 		}
 
-		public static int GetColonistJobsCountForColonist(ColonistManager.Colonist colonist) {
+		public static int GetColonistJobsCountForColonist(Colonist colonist) {
 			if (colonistJobs.ContainsKey(colonist)) {
 				return colonistJobs[colonist].Count;
 			}

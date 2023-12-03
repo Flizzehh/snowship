@@ -1,14 +1,15 @@
-﻿using Snowship.Job;
-using Snowship.Profession;
+﻿using Snowship.NJob;
+using Snowship.NProfession;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Time = Snowship.Time;
+using Time = Snowship.NTime;
 
 public class UIManager : BaseManager {
 
@@ -41,7 +42,7 @@ public class UIManager : BaseManager {
 		return new Regex("[^a-zA-Z0-9 -]").Replace(removeFromString, string.Empty);
 	}
 
-	public enum Colours { 
+	public enum Colours {
 		Clear, WhiteAlpha128, WhiteAlpha64, WhiteAlpha20, White, DarkRed, DarkGreen, LightRed, LightRed100, LightGreen, LightGreen100,
 		LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, LightPurple100, DarkPurple
 	};
@@ -2276,11 +2277,11 @@ public class UIManager : BaseManager {
 	}
 
 	public class SkillElement {
-		public ColonistManager.Colonist colonist;
+		public Colonist colonist;
 		public ColonistManager.SkillInstance skill;
 		public GameObject obj;
 
-		public SkillElement(ColonistManager.Colonist colonist, ColonistManager.SkillInstance skill, Transform parent) {
+		public SkillElement(Colonist colonist, ColonistManager.SkillInstance skill, Transform parent) {
 			this.colonist = colonist;
 			this.skill = skill;
 
@@ -2657,8 +2658,8 @@ public class UIManager : BaseManager {
 	private readonly List<ReservedResourcesColonistElement> selectedColonistReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
 
 	public void SetSelectedColonistInformation(bool sameColonistSelected) {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
-			ColonistManager.Colonist selectedColonist = (ColonistManager.Colonist)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist) {
+			Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 
 			selectedColonistInformationPanel.SetActive(true);
 
@@ -2726,7 +2727,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void RemakeSelectedColonistNeeds() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist selectedColonist) {
 			foreach (NeedElement needElement in selectedColonistNeedElements) {
 				MonoBehaviour.Destroy(needElement.obj);
 			}
@@ -2739,7 +2740,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void RemakeSelectedColonistMoodModifiers() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist selectedColonist) {
 			foreach (MoodModifierElement moodModifierElement in selectedColonistMoodModifierElements) {
 				MonoBehaviour.Destroy(moodModifierElement.obj);
 			}
@@ -2751,7 +2752,7 @@ public class UIManager : BaseManager {
 	}
 
 	public void RemakeSelectedColonistSkills() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist selectedColonist) {
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist selectedColonist) {
 			foreach (SkillElement skillElement in selectedColonistSkillElements) {
 				MonoBehaviour.Destroy(skillElement.obj);
 			}
@@ -2763,7 +2764,7 @@ public class UIManager : BaseManager {
 		}
 	}
 
-	public void RemakeSelectedColonistInventory(ColonistManager.Colonist selectedColonist) {
+	public void RemakeSelectedColonistInventory(Colonist selectedColonist) {
 		foreach (ReservedResourcesColonistElement reservedResourcesColonistElement in selectedColonistReservedResourcesColonistElements) {
 			foreach (InventoryElement reservedResourceElement in reservedResourcesColonistElement.reservedResourceElements) {
 				MonoBehaviour.Destroy(reservedResourceElement.obj);
@@ -2788,7 +2789,7 @@ public class UIManager : BaseManager {
 		emptyInventoryButton.onClick.AddListener(delegate { selectedColonist.EmptyInventory(selectedColonist.FindValidContainersToEmptyInventory()); });
 	}
 
-	public void RemakeSelectedColonistClothing(ColonistManager.Colonist selectedColonist, bool selectionPanelKeepState) {
+	public void RemakeSelectedColonistClothing(Colonist selectedColonist, bool selectionPanelKeepState) {
 		selectedColonistClothingPanel.transform.Find("ColonistBody-Image").GetComponent<Image>().sprite = selectedColonist.moveSprites[0];
 
 		foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in selectedColonist.clothes) {
@@ -2800,7 +2801,7 @@ public class UIManager : BaseManager {
 			clothingTypeButton.GetComponent<Image>().color = GetColour(Colours.LightGrey180);
 
 			if (clothing == null) {
-				
+
 				List<Job> checkJobs = new List<Job>();
 				checkJobs.AddRange(selectedColonist.backlog);
 				checkJobs.Add(selectedColonist.storedJob);
@@ -2853,7 +2854,7 @@ public class UIManager : BaseManager {
 		takenClothingElements.Clear();
 	}
 
-	public void SetSelectedColonistClothingSelectionPanel(bool active, HumanManager.Human.Appearance clothingType, ColonistManager.Colonist selectedColonist) {
+	public void SetSelectedColonistClothingSelectionPanel(bool active, HumanManager.Human.Appearance clothingType, Colonist selectedColonist) {
 		SetSelectedColonistClothingSelectionPanelActive(active);
 
 		Button disrobeButton = selectedColonistClothingSelectionPanel.transform.Find("Disrobe-Button").GetComponent<Button>();
@@ -2922,8 +2923,8 @@ public class UIManager : BaseManager {
 	private readonly List<MoodModifierElement> removeHME = new List<MoodModifierElement>();
 
 	public void UpdateSelectedColonistInformation() {
-		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
-			ColonistManager.Colonist selectedColonist = (ColonistManager.Colonist)GameManager.humanM.selectedHuman;
+		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist) {
+			Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.health * 100);
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedColonist.health);
@@ -2998,10 +2999,10 @@ public class UIManager : BaseManager {
 
 	public class ColonistElement {
 
-		public ColonistManager.Colonist colonist;
+		public Colonist colonist;
 		public GameObject obj;
 
-		public ColonistElement(ColonistManager.Colonist colonist, Transform transform) {
+		public ColonistElement(Colonist colonist, Transform transform) {
 			this.colonist = colonist;
 
 			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistInfoElement-Panel"), transform, false);
@@ -3036,7 +3037,7 @@ public class UIManager : BaseManager {
 	public void SetColonistElements() {
 		RemoveColonistElements();
 		if (colonistsPanel.activeSelf) {
-			foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				colonistElements.Add(new ColonistElement(colonist, colonistsPanel.transform.Find("ColonistList-Panel")));
 			}
 		}
@@ -3123,11 +3124,11 @@ public class UIManager : BaseManager {
 
 	public class JobElement {
 		public Job job;
-		public ColonistManager.Colonist colonist;
+		public Colonist colonist;
 		public GameObject obj;
 		public GameObject colonistObj;
 
-		public JobElement(Job job, ColonistManager.Colonist colonist, Transform parent) {
+		public JobElement(Job job, Colonist colonist, Transform parent) {
 			this.job = job;
 			this.colonist = colonist;
 
@@ -3250,13 +3251,13 @@ public class UIManager : BaseManager {
 	}
 
 	public void SetJobElements() {
-		if (Job.jobs.Count > 0 || GameManager.colonistM.colonists.Where(colonist => colonist.job != null).ToList().Count > 0) {
+		if (Job.jobs.Count > 0 || Colonist.colonists.Where(colonist => colonist.job != null).ToList().Count > 0) {
 			RemoveJobElements();
-			List<ColonistManager.Colonist> orderedColonists = GameManager.colonistM.colonists.Where(colonist => colonist.job != null).ToList();
-			foreach (ColonistManager.Colonist jobColonist in orderedColonists.Where(colonist => colonist.job.started).OrderBy(colonist => colonist.job.jobProgress)) {
+			List<Colonist> orderedColonists = Colonist.colonists.Where(colonist => colonist.job != null).ToList();
+			foreach (Colonist jobColonist in orderedColonists.Where(colonist => colonist.job.started).OrderBy(colonist => colonist.job.jobProgress)) {
 				jobElements.Add(new JobElement(jobColonist.job, jobColonist, jobListPanel.transform));
 			}
-			foreach (ColonistManager.Colonist jobColonist in orderedColonists.Where(colonist => !colonist.job.started).OrderBy(colonist => colonist.path.Count)) {
+			foreach (Colonist jobColonist in orderedColonists.Where(colonist => !colonist.job.started).OrderBy(colonist => colonist.path.Count)) {
 				jobElements.Add(new JobElement(jobColonist.job, jobColonist, jobListPanel.transform));
 			}
 			foreach (Job job in Job.jobs.Where(j => j.started).OrderBy(j => (j.jobProgress / j.colonistBuildTime))) {
@@ -3601,7 +3602,7 @@ public class UIManager : BaseManager {
 		public ProfessionPrefab professionPrefab;
 		public GameObject obj;
 
-		public Dictionary<ColonistManager.Colonist, Button> colonistToPriorityButtons = new Dictionary<ColonistManager.Colonist, Button>();
+		public Dictionary<Colonist, Button> colonistToPriorityButtons = new Dictionary<Colonist, Button>();
 
 		public ProfessionColumn(ProfessionPrefab professionPrefab, Transform parent, int index) {
 			this.professionPrefab = professionPrefab;
@@ -3662,7 +3663,7 @@ public class UIManager : BaseManager {
 			}
 		}
 
-		public void RemoveButton(ColonistManager.Colonist colonist) {
+		public void RemoveButton(Colonist colonist) {
 			if (colonistToPriorityButtons.ContainsKey(colonist)) {
 				MonoBehaviour.Destroy(colonistToPriorityButtons[colonist].gameObject);
 			}
@@ -3671,10 +3672,10 @@ public class UIManager : BaseManager {
 	}
 
 	public class ColonistProfessionsRow {
-		public ColonistManager.Colonist colonist;
+		public Colonist colonist;
 		public GameObject obj;
 
-		public ColonistProfessionsRow(ColonistManager.Colonist colonist, Transform parent) {
+		public ColonistProfessionsRow(Colonist colonist, Transform parent) {
 			this.colonist = colonist;
 
 			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistProfessionsRow-Panel"), parent, false);
@@ -3719,7 +3720,7 @@ public class UIManager : BaseManager {
 
 		// Creation
 
-		foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+		foreach (Colonist colonist in Colonist.colonists) {
 			colonistProfessionsRows.Add(new ColonistProfessionsRow(colonist, professionsMenu.transform.Find("ColonistsColumn-Panel")));
 
 			colonistProfessionsRowBackgrounds.Add(MonoBehaviour.Instantiate(
@@ -3736,13 +3737,13 @@ public class UIManager : BaseManager {
 
 	public void UpdateProfessionsMenu() {
 
-		foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+		foreach (Colonist colonist in Colonist.colonists) {
 			if (colonistProfessionsRows.Find(cpr => cpr.colonist == colonist) == null) {
 				SetProfessionsMenu();
 			}
 		}
 		foreach (ColonistProfessionsRow colonistProfessionsRow in colonistProfessionsRows) {
-			if (GameManager.colonistM.colonists.Find(c => c == colonistProfessionsRow.colonist) == null) {
+			if (Colonist.colonists.Find(c => c == colonistProfessionsRow.colonist) == null) {
 				SetProfessionsMenu();
 			}
 		}
@@ -4365,7 +4366,7 @@ public class UIManager : BaseManager {
 				} else if (type == Type.Fuel) {
 					craftingObject.ToggleFuel(resource, 1);
 				}
-				
+
 				Update();
 
 				if (type == Type.Resource) {
@@ -4467,7 +4468,7 @@ public class UIManager : BaseManager {
 			parent,
 			craftingObject
 		) {
-			
+
 		}
 
 		public override void Update() {
@@ -4539,13 +4540,13 @@ public class UIManager : BaseManager {
 			parent,
 			craftingObject
 		) {
-			
+
 		}
 
 		public override void Update() {
 			base.Update();
 
-			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color = 
+			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color =
 				craftingObject.GetFuelFromFuelResource(resource) != null
 					? (resource.GetAvailableAmount() > 0
 						? GetColour(Colours.LightGreen)
@@ -4632,7 +4633,7 @@ public class UIManager : BaseManager {
 							resource.SetTargetAmount(0);
 							break;
 					}
-					
+
 				} else {
 					resource.SetTargetAmount(0);
 				}
@@ -4678,7 +4679,7 @@ public class UIManager : BaseManager {
 
 			createAmountInputField.text = resource.GetTargetAmount() > 0 ? resource.GetTargetAmount().ToString() : string.Empty;
 
-			// The following lines (including the redundant-looking disable/enable) are required to get the ScrollRect to 
+			// The following lines (including the redundant-looking disable/enable) are required to get the ScrollRect to
 			// update its size when enabling or disabling the createAmountPanel.
 			Canvas.ForceUpdateCanvases();
 			panel.GetComponent<VerticalLayoutGroup>().enabled = false;

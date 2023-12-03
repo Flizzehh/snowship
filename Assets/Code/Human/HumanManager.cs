@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -221,7 +222,7 @@ public class HumanManager : BaseManager {
 			Human newSelectedHuman = humans.Find(human => Vector2.Distance(human.obj.transform.position, mousePosition) < 0.5f);
 			if (newSelectedHuman != null) {
 				SetSelectedHuman(newSelectedHuman);
-			} else if (selectedHuman != null && selectedHuman is ColonistManager.Colonist colonist) {
+			} else if (selectedHuman != null && selectedHuman is Colonist colonist) {
 				colonist.PlayerMoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition));
 			}
 		}

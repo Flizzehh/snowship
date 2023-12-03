@@ -1,8 +1,9 @@
-﻿using Snowship.Job;
-using Snowship.Profession;
+﻿using Snowship.NJob;
+using Snowship.NProfession;
 using Snowship.Selectable;
-using Snowship.Time;
+using Snowship.NTime;
 using System.Collections.Generic;
+using Snowship.NColonist;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {

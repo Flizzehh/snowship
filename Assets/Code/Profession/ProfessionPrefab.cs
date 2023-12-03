@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColonist;
 using UnityEngine;
 
-namespace Snowship.Profession {
+namespace Snowship.NProfession {
 
 	public class ProfessionPrefab {
 
@@ -39,7 +40,7 @@ namespace Snowship.Profession {
 			if (professionPrefabs.Count > 0) {
 				Debug.LogError("Calling CreateProfessionPrefabs when professionPrefabs list already contains elements.");
 			}
-			
+
 			List<KeyValuePair<string, object>> professionProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/colonist-professions").text.Split('\n').ToList());
 
 			foreach (KeyValuePair<string, object> professionProperty in professionProperties) {

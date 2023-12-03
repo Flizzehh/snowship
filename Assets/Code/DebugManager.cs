@@ -1,8 +1,9 @@
-﻿using Snowship.Job;
-using Snowship.Time;
+﻿using Snowship.NJob;
+using Snowship.NTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColonist;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,7 +70,7 @@ public class DebugManager : BaseManager {
 		clear,                  // clear									-- clear the console
 		selecthuman,            // selecthuman <name>						-- sets the selected human to the first human named <name>
 		spawncolonists,         // spawncolonists <numToSpawn>				-- spawns <numToSpawn> colonists to join the colony
-		spawncaravans,          // spawncaravans <numToSpawn> <caravanType> <maxNumTraders> 
+		spawncaravans,          // spawncaravans <numToSpawn> <caravanType> <maxNumTraders>
 								//											-- spawns <numToSpawn> caravans of the <caravanType> type with a maximum number of <maxNumTraders> traders
 		sethealth,              // sethealth <amount>						-- sets the health of the selected colonist to <amount>
 		setneed,                // setneed <name> <amount>					-- sets the need named <name> on the selected colonist to <amount>
@@ -290,12 +291,12 @@ public class DebugManager : BaseManager {
 			if (parameters.Count == 1) {
 				int numberToSpawn = 1;
 				if (int.TryParse(parameters[0], out numberToSpawn)) {
-					int oldNumColonists = GameManager.colonistM.colonists.Count;
+					int oldNumColonists = Colonist.colonists.Count;
 					GameManager.colonistM.SpawnColonists(numberToSpawn);
-					if (oldNumColonists + numberToSpawn == GameManager.colonistM.colonists.Count) {
+					if (oldNumColonists + numberToSpawn == Colonist.colonists.Count) {
 						OutputToConsole("SUCCESS: Spawned " + numberToSpawn + " colonists.");
 					} else {
-						OutputToConsole("ERROR: Unable to spawn colonists. Spawned " + (GameManager.colonistM.colonists.Count - oldNumColonists) + " colonists.");
+						OutputToConsole("ERROR: Unable to spawn colonists. Spawned " + (Colonist.colonists.Count - oldNumColonists) + " colonists.");
 					}
 				} else {
 					OutputToConsole("ERROR: Invalid number of colonists.");
@@ -366,8 +367,8 @@ public class DebugManager : BaseManager {
 				ColonistManager.NeedPrefab needPrefab = GameManager.colonistM.needPrefabs.Find(need => need.name == parameters[0]);
 				if (needPrefab != null) {
 					if (GameManager.humanM.selectedHuman != null) {
-						if (GameManager.humanM.selectedHuman is ColonistManager.Colonist) {
-							ColonistManager.Colonist selectedColonist = (ColonistManager.Colonist)GameManager.humanM.selectedHuman;
+						if (GameManager.humanM.selectedHuman is Colonist) {
+							Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 							ColonistManager.NeedInstance needInstance = selectedColonist.needs.Find(need => need.prefab == needPrefab);
 							if (needInstance != null) {
 								float newNeedValue = 0;
@@ -434,7 +435,7 @@ public class DebugManager : BaseManager {
 					} else {
 						int amount = 0;
 						if (int.TryParse(parameters[1], out amount)) {
-							foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+							foreach (Colonist colonist in Colonist.colonists) {
 								colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
 							}
 							foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
@@ -456,7 +457,7 @@ public class DebugManager : BaseManager {
 						if (resource != null) {
 							int amount = 0;
 							if (int.TryParse(parameters[1], out amount)) {
-								foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+								foreach (Colonist colonist in Colonist.colonists) {
 									colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
 								}
 							} else {
@@ -477,7 +478,7 @@ public class DebugManager : BaseManager {
 						if (resource != null) {
 							int amount = 0;
 							if (int.TryParse(parameters[1], out amount)) {
-								foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+								foreach (Colonist colonist in Colonist.colonists) {
 									colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
 								}
 							} else {
@@ -1406,7 +1407,7 @@ public class DebugManager : BaseManager {
 		});
 		commandFunctions.Add(Commands.listjobs, delegate (Commands selectedCommand, List<string> parameters) {
 			if (parameters.Count == 0) {
-				foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+				foreach (Colonist colonist in Colonist.colonists) {
 					OutputToConsole(colonist.name);
 					foreach (Job job in JobManager.GetSortedJobs(colonist)) {
 						OutputToConsole("\t" + job.objectPrefab.jobType + " " + job.objectPrefab.type + " " + JobManager.CalculateJobCost(colonist, job, null));

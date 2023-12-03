@@ -1,6 +1,6 @@
-﻿using Snowship.Job;
+﻿using Snowship.NJob;
 using Snowship.Selectable;
-using Snowship.Time;
+using Snowship.NTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ public class CaravanManager : BaseManager {
 
 	public override void Update() {
 		UpdateCaravanTimer();
-		
+
 		foreach (Caravan caravan in caravans) {
 			if (!caravan.Update()) {
 				removeCaravans.Add(caravan);
@@ -377,11 +377,11 @@ public class CaravanManager : BaseManager {
 		}
 
 		void ISelectable.Select() {
-			
+
 		}
 
 		void ISelectable.Deselect() {
-			
+
 		}
 	}
 
@@ -512,10 +512,10 @@ public class CaravanManager : BaseManager {
 		public TileManager.Biome.TypeEnum biomeType;
 
 		public Location(
-			string name, 
-			Wealth wealth, 
-			ResourceRichness resourceRichness, 
-			CitySize citySize, 
+			string name,
+			Wealth wealth,
+			ResourceRichness resourceRichness,
+			CitySize citySize,
 			TileManager.Biome.TypeEnum biomeType
 		) {
 			this.name = name;

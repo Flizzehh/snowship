@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Snowship.NColonist;
 using UnityEngine;
 
-namespace Snowship.Job {
+namespace Snowship.NJob {
 
 	public class Job {
 
@@ -12,7 +13,7 @@ namespace Snowship.Job {
 		public TileManager.Tile tile;
 		public ResourceManager.ObjectPrefab objectPrefab;
 		public ResourceManager.Variation variation;
-		public ColonistManager.Colonist colonist;
+		public Colonist colonist;
 
 		public int rotationIndex;
 
@@ -94,7 +95,7 @@ namespace Snowship.Job {
 			jobPreview.GetComponent<SpriteRenderer>().sprite = resource.resource.image;
 		}
 
-		public void SetColonist(ColonistManager.Colonist colonist) {
+		public void SetColonist(Colonist colonist) {
 			this.colonist = colonist;
 			if (prefab.name != "PickupResources" && containerPickups != null && containerPickups.Count > 0) {
 				colonist.storedJob = this;

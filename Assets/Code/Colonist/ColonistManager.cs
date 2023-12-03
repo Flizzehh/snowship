@@ -1,16 +1,24 @@
-﻿using Snowship.Job;
-using Snowship.Profession;
-using Snowship.Time;
+﻿using Snowship.NProfession;
+using Snowship.NTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NJob;
 using UnityEngine;
 
-namespace Snowship.Colonist {
+namespace Snowship.NColonist {
+
 	public class ColonistManager : BaseManager {
 
+		private readonly List<Colonist> deadColonists = new List<Colonist>();
+
 		public override void Update() {
-			foreach (Colonist colonist in colonists) {
+			UpdateColonists();
+			UpdateColonistJobs();
+		}
+
+		private void UpdateColonists() {
+			foreach (Colonist colonist in Colonist.colonists) {
 				colonist.Update();
 				if (colonist.dead) {
 					deadColonists.Add(colonist);
@@ -20,7 +28,9 @@ namespace Snowship.Colonist {
 				deadColonist.Die();
 			}
 			deadColonists.Clear();
+		}
 
+		private void UpdateColonistJobs() {
 			if (!GameManager.timeM.GetPaused()) {
 				GameManager.jobM.GiveJobsToColonists();
 			}
@@ -111,17 +121,17 @@ namespace Snowship.Colonist {
 			}
 		}
 
-		public ColonistManager.SkillInstance FindHighestSkillInstance(ColonistManager.SkillPrefab skill) {
+		public SkillInstance FindHighestSkillInstance(SkillPrefab skill) {
 
-			ColonistManager.Colonist firstColonist = GameManager.colonistM.colonists.FirstOrDefault();
+			Colonist firstColonist = Colonist.colonists.FirstOrDefault();
 			if (firstColonist == null) {
 				return null;
 			}
-			ColonistManager.SkillInstance highestSkillInstance = firstColonist.skills.Find(findSkill => findSkill.prefab == skill);
+			SkillInstance highestSkillInstance = firstColonist.skills.Find(findSkill => findSkill.prefab == skill);
 			float highestSkillValue = highestSkillInstance.CalculateTotalSkillLevel();
 
-			foreach (ColonistManager.Colonist otherColonist in GameManager.colonistM.colonists.Skip(1)) {
-				ColonistManager.SkillInstance otherColonistSkillInstance = otherColonist.skills.Find(findSkill => findSkill.prefab == skill);
+			foreach (Colonist otherColonist in Colonist.colonists.Skip(1)) {
+				SkillInstance otherColonistSkillInstance = otherColonist.skills.Find(findSkill => findSkill.prefab == skill);
 				float otherColonistSkillValue = otherColonistSkillInstance.CalculateTotalSkillLevel();
 				if (otherColonistSkillValue > highestSkillValue) {
 					highestSkillValue = otherColonistSkillValue;
@@ -172,7 +182,7 @@ namespace Snowship.Colonist {
 		public enum NeedEnum { Rest, Water, Food, Temperature, Shelter, Clothing, Safety, Social, Esteem, Relaxation };
 
 		// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
-		private readonly Dictionary<string, NeedEnum> jobToNeedMap = new() {
+		public readonly Dictionary<string, NeedEnum> jobToNeedMap = new() {
 		{ "Sleep", NeedEnum.Rest },
 		{ "CollectWater", NeedEnum.Water },
 		{ "Drink", NeedEnum.Water },
@@ -236,7 +246,7 @@ namespace Snowship.Colonist {
 			need.ChangeValue(needIncreaseAmount + (needsValueSpecialIncreases.ContainsKey(need.prefab.type) ? needsValueSpecialIncreases[need.prefab.type](need) : 0));
 		}
 
-		static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceManager.ResourceAmount resourceAmount) {
+		public static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceManager.ResourceAmount resourceAmount) {
 
 			List<ResourceManager.Container> containersWithResourceAmount = new List<ResourceManager.Container>();
 
@@ -338,7 +348,7 @@ namespace Snowship.Colonist {
 
 				if (includeOtherColonists) {
 					int amountOnOtherColonists = 0;
-					foreach (Colonist otherColonist in colonists) {
+					foreach (Colonist otherColonist in Colonist.colonists) {
 						if (colonist != otherColonist) {
 							int amountOnOtherColonist = 0;
 							foreach (ResourceManager.ResourceAmount resourceAmount in otherColonist.GetInventory().resources.Where(ra => ra.resource.groupType == resourceGroup)) {
@@ -934,28 +944,28 @@ namespace Snowship.Colonist {
 			SpawnColonists(amount);
 
 			Vector2 averageColonistPosition = new Vector2(0, 0);
-			foreach (Colonist colonist in colonists) {
+			foreach (Colonist colonist in Colonist.colonists) {
 				averageColonistPosition = new Vector2(averageColonistPosition.x + colonist.obj.transform.position.x, averageColonistPosition.y + colonist.obj.transform.position.y);
 			}
-			averageColonistPosition /= colonists.Count;
+			averageColonistPosition /= Colonist.colonists.Count;
 			GameManager.cameraM.SetCameraPosition(averageColonistPosition);
 
 			// TEMPORARY COLONIST TESTING STUFF
-			colonists[UnityEngine.Random.Range(0, colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.WheatSeed), UnityEngine.Random.Range(5, 11), false);
-			colonists[UnityEngine.Random.Range(0, colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.Potato), UnityEngine.Random.Range(5, 11), false);
-			colonists[UnityEngine.Random.Range(0, colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.CottonSeed), UnityEngine.Random.Range(5, 11), false);
+			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.WheatSeed), UnityEngine.Random.Range(5, 11), false);
+			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.Potato), UnityEngine.Random.Range(5, 11), false);
+			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.CottonSeed), UnityEngine.Random.Range(5, 11), false);
 		}
 
 		public void SpawnColonists(int amount) {
 			if (amount > 0) {
 				int mapSize = GameManager.colonyM.colony.map.mapData.mapSize;
 				for (int i = 0; i < amount; i++) {
-					List<TileManager.Tile> walkableTilesByDistanceToCentre = GameManager.colonyM.colony.map.tiles.Where(o => o.walkable && o.buildable && colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f))/*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
+					List<TileManager.Tile> walkableTilesByDistanceToCentre = GameManager.colonyM.colony.map.tiles.Where(o => o.walkable && o.buildable && Colonist.colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f))/*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
 					if (walkableTilesByDistanceToCentre.Count <= 0) {
 						foreach (TileManager.Tile tile in GameManager.colonyM.colony.map.tiles.Where(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f)) <= 4f)) {
 							tile.SetTileType(tile.biome.tileTypes[TileManager.TileTypeGroup.TypeEnum.Ground], true, true, true);
 						}
-						walkableTilesByDistanceToCentre = GameManager.colonyM.colony.map.tiles.Where(o => o.walkable && colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f))/*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
+						walkableTilesByDistanceToCentre = GameManager.colonyM.colony.map.tiles.Where(o => o.walkable && Colonist.colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f))/*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
 					}
 
 					List<TileManager.Tile> validSpawnTiles = new List<TileManager.Tile>();

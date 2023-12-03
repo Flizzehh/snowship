@@ -1,9 +1,10 @@
-﻿using Snowship.Time;
+﻿using Snowship.NTime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Snowship.NColonist;
 using UnityEngine;
 
 public class TileManager : BaseManager {
@@ -1006,7 +1007,7 @@ public class TileManager : BaseManager {
 			foreach (KeyValuePair<int, ResourceManager.ObjectInstance> layerToObjectInstance in objectInstances) {
 				if (layerToObjectInstance.Value != null) {
 
-					// Object Instances are iterated from lowest layer to highest layer (sorted in AddObjectInstaceToLayer), 
+					// Object Instances are iterated from lowest layer to highest layer (sorted in AddObjectInstaceToLayer),
 					// therefore, the highest layer is the buildable value that should be applied
 					buildable = layerToObjectInstance.Value.prefab.buildable;
 
@@ -1170,7 +1171,7 @@ public class TileManager : BaseManager {
 
 		public bool IsVisibleToAColonist() {
 			if (walkable) {
-				foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+				foreach (Colonist colonist in Colonist.colonists) {
 					if (colonist.overTile.walkable) {
 						if (colonist.overTile.region == region) {
 							return true;
@@ -1202,7 +1203,7 @@ public class TileManager : BaseManager {
 							continue;
 						}
 					}
-					foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+					foreach (Colonist colonist in Colonist.colonists) {
 						if (colonist.overTile.region == surroundingTile.region) {
 							return true;
 						}
@@ -1634,7 +1635,7 @@ public class TileManager : BaseManager {
 
 			public bool IsVisibleToAColonist() {
 				if (tileType.walkable) {
-					foreach (ColonistManager.Colonist colonist in GameManager.colonistM.colonists) {
+					foreach (Colonist colonist in Colonist.colonists) {
 						if (colonist.overTile.region == this) {
 							return true;
 						}
@@ -2685,8 +2686,8 @@ public class TileManager : BaseManager {
 						bool ignoreTile = false;
 						if (diagonalCheckMap.ContainsKey(i)) {
 							List<Tile> surroundingHorizontalTiles = new List<Tile>() { tilesToSum[diagonalCheckMap[i][0]], tilesToSum[diagonalCheckMap[i][1]] };
-							List<Tile> similarTiles = surroundingHorizontalTiles.Where(tile => 
-								tile != null 
+							List<Tile> similarTiles = surroundingHorizontalTiles.Where(tile =>
+								tile != null
 								&& (compareTileTypes.Contains(tile.tileType.type)
 									/*|| compareObjectTypes.Intersect(tile.objectInstances.Values.Select(obj => obj.prefab.type)).ToList().Count > 0*/)
 							).ToList();
@@ -2730,7 +2731,7 @@ public class TileManager : BaseManager {
 					sum = BitSum(TileTypeGroup.GetTileTypeGroupByEnum(TileTypeGroup.TypeEnum.Stone).tileTypes.Select(tt => tt.type).ToList(), null, surroundingTilesToUse, includeMapEdge);
 					// Not-fully-working implementation of walls and stone connecting
 					//sum += GameManager.resourceM.BitSumObjects(
-					//	GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Walls).prefabs.Select(prefab => prefab.type).ToList(), 
+					//	GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Walls).prefabs.Select(prefab => prefab.type).ToList(),
 					//	surroundingTilesToUse
 					//);
 				} else if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Hole) {
