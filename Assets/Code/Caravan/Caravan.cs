@@ -40,12 +40,17 @@ namespace Snowship.NCaravan {
 			inventory = new ResourceManager.Inventory(this, int.MaxValue, int.MaxValue);
 		}
 
-		public Caravan(int numTraders, CaravanType caravanType, List<TileManager.Tile> spawnTiles, TileManager.Tile targetTile) {
+		public Caravan(
+			int numTraders,
+			CaravanType caravanType,
+			List<TileManager.Tile> spawnTiles,
+			TileManager.Tile targetTile
+		) {
 			this.numTraders = numTraders;
 			this.caravanType = caravanType;
 			this.targetTile = targetTile;
 
-			location = GameManager.caravanM.CreateLocation();
+			location = Location.GenerateLocation();
 
 			for (int i = 0; i < numTraders && spawnTiles.Count > 0; i++) {
 				TileManager.Tile spawnTile = spawnTiles[UnityEngine.Random.Range(0, spawnTiles.Count)];
@@ -66,7 +71,7 @@ namespace Snowship.NCaravan {
 			}
 		}
 
-		public void SpawnTrader(TileManager.Tile spawnTile) {
+		private void SpawnTrader(TileManager.Tile spawnTile) {
 			Trader trader = new Trader(spawnTile, 1f, this);
 			traders.Add(trader);
 
