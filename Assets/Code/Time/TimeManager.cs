@@ -24,6 +24,10 @@ namespace Snowship.NTime {
 
 		public float tileBrightnessTime = 0;
 
+		// Events
+
+		public event Action OnTimeChanged;
+
 		public override void Update() {
 			tileBrightnessTime = CalculateTileBrightnessTime();
 			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
@@ -76,6 +80,10 @@ namespace Snowship.NTime {
 				}
 				IsDay = (Time.Hour >= 6 && Time.Hour <= 18);
 
+				if (minuteChanged)
+				{
+					OnTimeChanged?.Invoke();
+				}
 				GameManager.uiM.UpdateDateTimeInformation();
 			}
 		}

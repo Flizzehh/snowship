@@ -3,9 +3,9 @@ using Snowship.NProfession;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -20,127 +20,13 @@ public class UIManager : BaseManager {
 		this.startCoroutineReference = startCoroutineReference;
 	}
 
-	public static readonly string gameVersionString = "Snowship " + PersistenceManager.gameVersion.Value;
-	public static readonly string disclaimerText = "Snowship by Ryan White - rywh.itch.io/snowship\n<size=20>" + gameVersionString + "</size>";
+	private static readonly string gameVersionString = "Snowship " + PersistenceManager.gameVersion.Value;
+	private static readonly string disclaimerText = "Snowship by Ryan White - rywh.itch.io/snowship\n<size=20>" + gameVersionString + "</size>";
 
 	public bool playerTyping = false;
 
-	public static string SplitByCapitals(string combinedString) {
-		var r = new Regex(
-			@"(?<=[A-Z])(?=[A-Z][a-z]) | (?<=[^A-Z])(?=[A-Z]) | (?<=[A-Za-z])(?=[^A-Za-z])",
-			RegexOptions.IgnorePatternWhitespace);
-		return r.Replace(combinedString, " ");
-	}
-
-	public static Color HexToColor(string hexString) {
-		int r = int.Parse("" + hexString[0] + hexString[1], System.Globalization.NumberStyles.HexNumber);
-		int g = int.Parse("" + hexString[2] + hexString[3], System.Globalization.NumberStyles.HexNumber);
-		int b = int.Parse("" + hexString[4] + hexString[5], System.Globalization.NumberStyles.HexNumber);
-		return new Color(r, g, b, 255f) / 255f;
-	}
-
-	public static string RemoveNonAlphanumericChars(string removeFromString) {
-		return new Regex("[^a-zA-Z0-9 -]").Replace(removeFromString, string.Empty);
-	}
-
-	public enum Colours {
-		Clear, WhiteAlpha128, WhiteAlpha64, WhiteAlpha20, White, DarkRed, DarkGreen, LightRed, LightRed100, LightGreen, LightGreen100,
-		LightGrey220, LightGrey200, LightGrey180, Grey150, Grey120, DarkGrey50, LightBlue, LightOrange, DarkOrange, DarkYellow, LightYellow, LightPurple, LightPurple100, DarkPurple
-	};
-
-	private static readonly Dictionary<Colours, Color> colourMap = new Dictionary<Colours, Color>() {
-		{ Colours.Clear, new Color(255f, 255f, 255f, 0f) / 255f },
-		{ Colours.WhiteAlpha128, new Color(255f, 255f, 255f, 128f) / 255f },
-		{ Colours.WhiteAlpha64, new Color(255f, 255f, 255f, 64f) / 255f },
-		{ Colours.WhiteAlpha20, new Color(255f, 255f, 255f, 20f) / 255f },
-		{ Colours.White, new Color(255f, 255f, 255f, 255f) / 255f },
-		{ Colours.DarkRed, new Color(192f, 57f, 43f, 255f) / 255f },
-		{ Colours.DarkGreen, new Color(39f, 174f, 96f, 255f) / 255f },
-		{ Colours.LightRed, new Color(231f, 76f, 60f, 255f) / 255f },
-		{ Colours.LightRed100, new Color(231f, 76f, 60f, 100f) / 255f },
-		{ Colours.LightGreen, new Color(46f, 204f, 113f, 255f) / 255f },
-		{ Colours.LightGreen100, new Color(46f, 204f, 113f, 100f) / 255f },
-		{ Colours.LightGrey220, new Color(220f, 220f, 220f, 255f) / 255f },
-		{ Colours.LightGrey200, new Color(200f, 200f, 200f, 255f) / 255f },
-		{ Colours.LightGrey180, new Color(180f, 180f, 180f, 255f) / 255f },
-		{ Colours.Grey150, new Color(150f, 150f, 150f, 255f) / 255f },
-		{ Colours.Grey120, new Color(120f, 120f, 120f, 255f) / 255f },
-		{ Colours.DarkGrey50, new Color(50f, 50f, 50f, 255f) / 255f },
-		{ Colours.LightBlue, new Color(52f, 152f, 219f, 255f) / 255f },
-		{ Colours.LightOrange, new Color(230f, 126f, 34f, 255f) / 255f },
-		{ Colours.DarkOrange, new Color(211f, 84f, 0f, 255f) / 255f },
-		{ Colours.DarkYellow, new Color(216f, 176f, 15f, 255f) / 255f },
-		{ Colours.LightYellow, new Color(241f, 196f, 15f, 255f) / 255f },
-		{ Colours.LightPurple, new Color(155f, 89f, 182f, 255f) / 255f },
-		{ Colours.LightPurple100, new Color(155f, 89f, 182f, 100f) / 255f },
-		{ Colours.DarkPurple, new Color(142f, 68f, 173f, 255f) / 255f }
-	};
-
-	public static Color GetColour(Colours colourKey) {
-		return colourMap[colourKey];
-	}
-
-	public static Color ChangeAlpha(Color colour, float alpha) {
-		return new Color(colour.r, colour.g, colour.b, alpha);
-	}
-
-	public enum Gradients {
-		LightRedYellowGreen, LightGreenYellowRed, DarkRedYellowGreen, DarkGreenYellowRed
-	};
-
-	private static readonly Dictionary<Gradients, Gradient> gradientMap = new Dictionary<Gradients, Gradient>() {
-		{ Gradients.LightRedYellowGreen, new Func<Gradient>(() => {
-			Gradient gradient = new Gradient();
-			GradientColorKey[] colourKey = new GradientColorKey[3];
-			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
-			colourKey[0].color = GetColour(Colours.LightRed); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
-			colourKey[1].color = GetColour(Colours.LightYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
-			colourKey[2].color = GetColour(Colours.LightGreen); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
-			gradient.SetKeys(colourKey, alphaKey);
-			return gradient;
-		}).Invoke() },
-		{ Gradients.LightGreenYellowRed, new Func<Gradient>(() => {
-			Gradient gradient = new Gradient();
-			GradientColorKey[] colourKey = new GradientColorKey[3];
-			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
-			colourKey[0].color = GetColour(Colours.LightGreen); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
-			colourKey[1].color = GetColour(Colours.LightYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
-			colourKey[2].color = GetColour(Colours.LightRed); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
-			gradient.SetKeys(colourKey, alphaKey);
-			return gradient;
-		}).Invoke() },
-		{ Gradients.DarkRedYellowGreen, new Func<Gradient>(() => {
-			Gradient gradient = new Gradient();
-			GradientColorKey[] colourKey = new GradientColorKey[3];
-			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
-			colourKey[0].color = GetColour(Colours.DarkRed); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
-			colourKey[1].color = GetColour(Colours.DarkYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
-			colourKey[2].color = GetColour(Colours.DarkGreen); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
-			gradient.SetKeys(colourKey, alphaKey);
-			return gradient;
-		}).Invoke() },
-		{ Gradients.DarkGreenYellowRed, new Func<Gradient>(() => {
-			Gradient gradient = new Gradient();
-			GradientColorKey[] colourKey = new GradientColorKey[3];
-			GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
-			colourKey[0].color = GetColour(Colours.DarkGreen); colourKey[0].time = 0.0f; alphaKey[0].alpha = 1.0f; alphaKey[0].time = 0.0f;
-			colourKey[1].color = GetColour(Colours.DarkYellow); colourKey[1].time = 0.5f; alphaKey[1].alpha = 1.0f; alphaKey[1].time = 0.0f;
-			colourKey[2].color = GetColour(Colours.DarkRed); colourKey[2].time = 1.0f; alphaKey[2].alpha = 1.0f; alphaKey[2].time = 0.0f;
-			gradient.SetKeys(colourKey, alphaKey);
-			return gradient;
-		}).Invoke() }
-	};
-
-	public static Gradient GetGradient(Gradients gradientKey) {
-		return gradientMap[gradientKey];
-	}
-
-	public static bool IsAlphanumericWithSpaces(string text) {
-		return Regex.IsMatch(text, @"^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$");
-	}
-
-	public int screenWidth = 0;
-	public int screenHeight = 0;
+	private int screenWidth = 0;
+	private int screenHeight = 0;
 
 	public GameObject canvas;
 
@@ -206,7 +92,7 @@ public class UIManager : BaseManager {
 		SetLoadingScreenActive(false);
 	}
 
-	public GameObject mainMenu;
+	private GameObject mainMenu;
 	private GameObject mainMenuBackground;
 	private GameObject mainMenuButtonsPanel;
 	private GameObject snowshipLogo;
@@ -290,24 +176,24 @@ public class UIManager : BaseManager {
 			string saveVersion = persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.SaveVersion];
 			string gameVersion = persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.GameVersion];
 
-			string saveVersionColour = ColorUtility.ToHtmlStringRGB(GetColour(Colours.DarkGrey50));
-			string gameVersionColour = ColorUtility.ToHtmlStringRGB(GetColour(Colours.DarkGrey50));
+			string saveVersionColour = ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50));
+			string gameVersionColour = ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50));
 
 			if (saveVersion == PersistenceManager.saveVersion.Value) {
 				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiM.SetSelectedUniverseElement(this); });
 				if (gameVersion != PersistenceManager.gameVersion.Value) {
-					obj.GetComponent<Image>().color = GetColour(Colours.DarkYellow);
-					gameVersionColour = ColorUtility.ToHtmlStringRGB((GetColour(Colours.DarkRed) + GetColour(Colours.DarkGrey50)) / 2f);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkYellow);
+					gameVersionColour = ColorUtility.ToHtmlStringRGB((ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed) + ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50)) / 2f);
 				}
 			} else {
-				obj.GetComponent<Image>().color = GetColour(Colours.DarkRed);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed);
 				obj.GetComponent<Button>().interactable = false;
 
 				if (saveVersion != PersistenceManager.saveVersion.Value) {
-					saveVersionColour = ColorUtility.ToHtmlStringRGB((GetColour(Colours.DarkRed) + GetColour(Colours.DarkGrey50)) / 2f);
+					saveVersionColour = ColorUtility.ToHtmlStringRGB((ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed) + ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50)) / 2f);
 				}
 				if (gameVersion != PersistenceManager.gameVersion.Value) {
-					gameVersionColour = ColorUtility.ToHtmlStringRGB((GetColour(Colours.DarkRed) + GetColour(Colours.DarkGrey50)) / 2f);
+					gameVersionColour = ColorUtility.ToHtmlStringRGB((ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed) + ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50)) / 2f);
 				}
 			}
 
@@ -419,7 +305,7 @@ public class UIManager : BaseManager {
 			SetCreatePlanetActive(true);
 		});
 		saveUniverseButton.interactable = false;
-		saveUniverseButton.transform.Find("Image").GetComponent<Image>().color = GetColour(Colours.Grey120);
+		saveUniverseButton.transform.Find("Image").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.Grey120);
 
 		universeNameInputField.onValueChanged.AddListener(delegate {
 			ValidateUniverseName(universeNameInputField, saveUniverseButton);
@@ -430,9 +316,9 @@ public class UIManager : BaseManager {
 	}
 
 	private void ValidateUniverseName(InputField universeNameInputField, Button saveUniverseButton) {
-		bool validUniverseName = !string.IsNullOrEmpty(universeNameInputField.text) && IsAlphanumericWithSpaces(universeNameInputField.text);
+		bool validUniverseName = !string.IsNullOrEmpty(universeNameInputField.text) && StringUtilities.IsAlphanumericWithSpaces(universeNameInputField.text);
 		saveUniverseButton.interactable = validUniverseName;
-		saveUniverseButton.transform.Find("Image").GetComponent<Image>().color = validUniverseName ? GetColour(Colours.LightGrey220) : GetColour(Colours.Grey120);
+		saveUniverseButton.transform.Find("Image").GetComponent<Image>().color = validUniverseName ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220) : ColourUtilities.GetColour(ColourUtilities.Colours.Grey120);
 	}
 
 	private void SetCreateUniverseActive(bool active) {
@@ -652,9 +538,9 @@ public class UIManager : BaseManager {
 		});
 
 		planetNameInputField.onValueChanged.AddListener(delegate {
-			bool validPlanetName = IsAlphanumericWithSpaces(planetNameInputField.text);
+			bool validPlanetName = StringUtilities.IsAlphanumericWithSpaces(planetNameInputField.text);
 			savePlanetButton.interactable = validPlanetName;
-			savePlanetButton.transform.Find("Image").GetComponent<Image>().color = validPlanetName ? GetColour(Colours.LightGrey220) : GetColour(Colours.Grey120);
+			savePlanetButton.transform.Find("Image").GetComponent<Image>().color = validPlanetName ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220) : ColourUtilities.GetColour(ColourUtilities.Colours.Grey120);
 		});
 	}
 
@@ -992,7 +878,7 @@ public class UIManager : BaseManager {
 			} else {
 				obj.transform.Find("SaveData-Panel/Saved-Text").GetComponent<Text>().text = "Error while reading save.";
 				obj.transform.Find("SaveData-Panel/SavedDateTime-Text").GetComponent<Text>().text = string.Empty;
-				obj.GetComponent<Image>().color = GetColour(Colours.LightRed);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 			}
 		}
 
@@ -1121,11 +1007,11 @@ public class UIManager : BaseManager {
 	public void SetSaveColonyButtonInteractable() {
 		bool selectedPlanetTileNotNull = GameManager.planetM.selectedPlanetTile != null;
 
-		bool validColonyName = IsAlphanumericWithSpaces(colonyNameInputField.text);
+		bool validColonyName = StringUtilities.IsAlphanumericWithSpaces(colonyNameInputField.text);
 
 		bool interactable = selectedPlanetTileNotNull && validColonyName;
 		saveColonyButton.interactable = interactable;
-		saveColonyButton.transform.Find("Image").GetComponent<Image>().color = interactable ? GetColour(Colours.LightGrey220) : GetColour(Colours.Grey120);
+		saveColonyButton.transform.Find("Image").GetComponent<Image>().color = interactable ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220) : ColourUtilities.GetColour(ColourUtilities.Colours.Grey120);
 	}
 
 	private void DisplaySelectedPlanetTileInfo(PlanetManager.Planet.PlanetTile selectedPlanetTile, PlanetPreviewState planetPreviewState) {
@@ -1387,9 +1273,9 @@ public class UIManager : BaseManager {
 	public void SaveClicked() {
 		try {
 			GameManager.persistenceM.CreateSave(GameManager.colonyM.colony);
-			pauseSaveButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+			pauseSaveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 		} catch (Exception e) {
-			pauseSaveButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
+			pauseSaveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 			throw e.InnerException != null ? e.InnerException : e;
 		}
 	}
@@ -1865,8 +1751,8 @@ public class UIManager : BaseManager {
 
 			variationsIndicator.GetComponent<Image>().color =
 				requiredResourcesMet && anyVariationResourcesMet
-					? GetColour(Colours.LightGreen)
-					: GetColour(Colours.LightRed);
+					? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen)
+					: ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 		}
 	}
 
@@ -1889,7 +1775,7 @@ public class UIManager : BaseManager {
 
 			int availableAmount = resourceAmount.resource.GetAvailableAmount();
 
-			obj.GetComponent<Image>().color = availableAmount >= resourceAmount.amount ? GetColour(Colours.LightGreen) : GetColour(Colours.LightRed);
+			obj.GetComponent<Image>().color = availableAmount >= resourceAmount.amount ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen) : ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 
 			obj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = availableAmount + " / " + resourceAmount.amount;
 		}
@@ -2153,7 +2039,7 @@ public class UIManager : BaseManager {
 				if (mouseOverTile.HasRoof()) {
 					tileRoofElement.SetActive(true);
 					tileRoofElement.transform.Find("TileInfo-Label-Text").GetComponent<Text>().text = "Roof";
-					tileRoofElement.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+					tileRoofElement.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 				}
 
 				if (mouseOverTile.tileType.resourceRanges.Count > 0) {
@@ -2172,7 +2058,7 @@ public class UIManager : BaseManager {
 						tileResourceElement.SetActive(true);
 						tileResourceElement.transform.Find("TileInfo-ResourceData-Value").GetComponent<Text>().text = resourceRange.resource.name;
 						tileResourceElement.transform.Find("TileInfo-ResourceData-Image").GetComponent<Image>().sprite = resourceRange.resource.image;
-						tileResourceElement.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+						tileResourceElement.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 					}
 				}
 
@@ -2202,14 +2088,14 @@ public class UIManager : BaseManager {
 						integritySlider.maxValue = mouseOverTile.plant.prefab.integrity;
 						integritySlider.value = mouseOverTile.plant.integrity;
 						integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(
-							GetColour(Colours.LightRed),
-							GetColour(Colours.LightGreen),
+							ColourUtilities.GetColour(ColourUtilities.Colours.LightRed),
+							ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen),
 							mouseOverTile.plant.integrity / mouseOverTile.plant.prefab.integrity
 						);
 					} else {
 						integritySlider.maxValue = 1;
 						integritySlider.value = 1;
-						integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+						integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 					}
 				}
 
@@ -2244,15 +2130,15 @@ public class UIManager : BaseManager {
 							integritySlider.maxValue = objectInstance.prefab.integrity;
 							integritySlider.value = objectInstance.integrity;
 							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(
-								GetColour(Colours.LightRed),
-								GetColour(Colours.LightGreen),
+								ColourUtilities.GetColour(ColourUtilities.Colours.LightRed),
+								ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen),
 								objectInstance.integrity / objectInstance.prefab.integrity
 							);
 						} else {
 							integritySlider.minValue = 0;
 							integritySlider.maxValue = 1;
 							integritySlider.value = 1;
-							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 						}
 
 						objectDataObject.SetActive(true);
@@ -2304,11 +2190,11 @@ public class UIManager : BaseManager {
 				obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(((float)skill.level / (highestSkillInstance.level > 0 ? highestSkillInstance.level : 1)) * 100f);
 
 				if (highestSkillInstance.colonist == colonist || Mathf.Approximately(highestSkillInstance.CalculateTotalSkillLevel(), skill.CalculateTotalSkillLevel())) {
-					obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkYellow);
-					obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = GetColour(Colours.LightYellow);
+					obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkYellow);
+					obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow);
 				} else {
-					obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkGreen);
-					obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = GetColour(Colours.LightGreen);
+					obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen);
+					obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 				}
 			}
 		}
@@ -2447,7 +2333,7 @@ public class UIManager : BaseManager {
 
 		public void ValidateTradeAmountInputField() {
 			Text text = tradeAmountInputField.transform.Find("Text").GetComponent<Text>();
-			text.color = GetColour(Colours.DarkGrey50);
+			text.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
 			int tradeAmount = 0;
 			if (tradeAmountInputField.text == "-" || int.TryParse(tradeAmountInputField.text, out tradeAmount)) {
 				if (tradeAmountInputField.text == "-") {
@@ -2471,11 +2357,11 @@ public class UIManager : BaseManager {
 			}
 			if (!string.IsNullOrEmpty(tradeAmountInputField.text)) {
 				if (tradeAmount > 0) {
-					text.color = GetColour(Colours.LightGreen);
+					text.color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 				} else if (tradeAmount < 0) {
-					text.color = GetColour(Colours.LightRed);
+					text.color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 				} else {
-					text.color = GetColour(Colours.DarkGrey50);
+					text.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
 				}
 			}
 		}
@@ -2522,9 +2408,9 @@ public class UIManager : BaseManager {
 			obj.transform.Find("CollectedVsRemainingAmounts-Text").GetComponent<Text>().text = Mathf.Abs(confirmedTradeResourceAmount.tradeAmount - confirmedTradeResourceAmount.amountRemaining) + " / " + Mathf.Abs(confirmedTradeResourceAmount.tradeAmount);
 
 			if (confirmedTradeResourceAmount.amountRemaining == 0) {
-				obj.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 			} else {
-				obj.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 			}
 		}
 	}
@@ -2590,8 +2476,8 @@ public class UIManager : BaseManager {
 			obj.transform.Find("NeedValue-Text").GetComponent<Text>().text = needInstance.GetRoundedValue() + "%";
 
 			obj.transform.Find("Need-Slider").GetComponent<Slider>().value = needInstance.GetValue();
-			obj.transform.Find("Need-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkGreen), GetColour(Colours.DarkRed), (needInstance.GetValue() / needInstance.prefab.clampValue));
-			obj.transform.Find("Need-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightGreen), GetColour(Colours.LightRed), (needInstance.GetValue() / needInstance.prefab.clampValue));
+			obj.transform.Find("Need-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), (needInstance.GetValue() / needInstance.prefab.clampValue));
+			obj.transform.Find("Need-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), (needInstance.GetValue() / needInstance.prefab.clampValue));
 		}
 	}
 
@@ -2607,11 +2493,11 @@ public class UIManager : BaseManager {
 
 			obj.transform.Find("MoodModifierName-Text").GetComponent<Text>().text = moodModifierInstance.prefab.name;
 			if (moodModifierInstance.prefab.effectAmount > 0) {
-				obj.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 			} else if (moodModifierInstance.prefab.effectAmount < 0) {
-				obj.GetComponent<Image>().color = GetColour(Colours.LightRed);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 			} else {
-				obj.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
 			}
 
 			Update();
@@ -2799,7 +2685,7 @@ public class UIManager : BaseManager {
 
 			Button clothingTypeButton = selectedColonistClothingPanel.transform.Find("ClothingButtons-List/" + appearanceToClothingKVP.Key + "-Button").GetComponent<Button>();
 
-			clothingTypeButton.GetComponent<Image>().color = GetColour(Colours.LightGrey180);
+			clothingTypeButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey180);
 
 			if (clothing == null) {
 
@@ -2813,7 +2699,7 @@ public class UIManager : BaseManager {
 						ResourceManager.Clothing clothingToWear = (ResourceManager.Clothing)checkJob.requiredResources[0].resource;
 						if (clothingToWear.prefab.appearance == appearanceToClothingKVP.Key) {
 							clothing = clothingToWear;
-							clothingTypeButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+							clothingTypeButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
 						}
 					}
 				}
@@ -2928,13 +2814,13 @@ public class UIManager : BaseManager {
 			Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.health * 100);
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedColonist.health);
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.health);
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), selectedColonist.health);
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedColonist.health);
 			//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealthValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.health * 100) + "%";
 
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.effectiveMood);
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedColonist.effectiveMood / 100f);
-			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.effectiveMood / 100f);
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), selectedColonist.effectiveMood / 100f);
+			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedColonist.effectiveMood / 100f);
 			//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMoodValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveMood) + "%";
 
 			selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().minValue = 0;
@@ -2960,18 +2846,18 @@ public class UIManager : BaseManager {
 			Text moodModifierAmountText = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button/MoodModifiersAmount-Text").GetComponent<Text>();
 			if (moodModifiersSum > 0) {
 				moodModifierAmountText.text = "+" + moodModifiersSum + "%";
-				moodModifierAmountText.color = GetColour(Colours.LightGreen);
+				moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 			} else if (moodModifiersSum < 0) {
 				moodModifierAmountText.text = moodModifiersSum + "%";
-				moodModifierAmountText.color = GetColour(Colours.LightRed);
+				moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 			} else {
 				moodModifierAmountText.text = moodModifiersSum + "%";
-				moodModifierAmountText.color = GetColour(Colours.DarkGrey50);
+				moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
 			}
 			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button").GetComponent<RectTransform>().sizeDelta = new Vector2(moodModifierButtonSizeMap[moodLength], 20);
 			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<RectTransform>().offsetMax = new Vector2(moodModifierValueHorizontalPositionMap[moodLength], 0);
 			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveMood) + "%";
-			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedColonist.effectiveMood / 100f);
+			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedColonist.effectiveMood / 100f);
 
 			foreach (SkillElement skillElement in selectedColonistSkillElements) {
 				skillElement.Update();
@@ -3018,7 +2904,7 @@ public class UIManager : BaseManager {
 		}
 
 		public void Update() {
-			obj.GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), colonist.health);
+			obj.GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), colonist.health);
 		}
 
 		public void DestroyObject() {
@@ -3079,9 +2965,9 @@ public class UIManager : BaseManager {
 		}
 
 		public void Update() {
-			obj.GetComponent<Image>().color = caravan.confirmedResourcesToTrade.Count > 0 ? GetColour(Colours.LightYellow) : GetColour(Colours.LightPurple);
+			obj.GetComponent<Image>().color = caravan.confirmedResourcesToTrade.Count > 0 ? ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow) : ColourUtilities.GetColour(ColourUtilities.Colours.LightPurple);
 
-			Color textColour = caravan.confirmedResourcesToTrade.Count > 0 ? GetColour(Colours.DarkGrey50) : GetColour(Colours.LightGrey220);
+			Color textColour = caravan.confirmedResourcesToTrade.Count > 0 ? ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50) : ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
 			affiliatedColonyNameText.color = textColour;
 			resourceGroupNameText.color = textColour;
 
@@ -3145,7 +3031,7 @@ public class UIManager : BaseManager {
 
 			jobInfoNameText.text = job.prefab.GetJobInfoNameText(job);
 
-			jobInfo.transform.Find("Type").GetComponent<Text>().text = SplitByCapitals(job.objectPrefab.jobType.ToString());
+			jobInfo.transform.Find("Type").GetComponent<Text>().text = StringUtilities.SplitByCapitals(job.objectPrefab.jobType.ToString());
 			obj.GetComponent<Button>().onClick.AddListener(delegate {
 				GameManager.cameraM.SetCameraPosition(job.tile.obj.transform.position);
 			});
@@ -3157,9 +3043,9 @@ public class UIManager : BaseManager {
 			if (hasPriority) {
 				priorityText.text = job.priority.ToString();
 				if (job.priority > 0) {
-					priorityText.color = GetColour(Colours.DarkYellow);
+					priorityText.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkYellow);
 				} else if (job.priority < 0) {
-					priorityText.color = GetColour(Colours.DarkRed);
+					priorityText.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed);
 				}
 			} else {
 				priorityText.text = string.Empty;
@@ -3167,12 +3053,12 @@ public class UIManager : BaseManager {
 
 			if (job.requiredResources.Count > 0) {
 
-				obj.transform.Find("Content/RequiredResources-Panel").GetComponent<Image>().color = GetColour(Colours.WhiteAlpha64);
+				obj.transform.Find("Content/RequiredResources-Panel").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha64);
 
 				foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
 					GameObject resourceAmountObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), obj.transform.Find("Content/RequiredResources-Panel"), false);
 
-					resourceAmountObj.GetComponent<Image>().color = GetColour(Colours.Clear);
+					resourceAmountObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.Clear);
 
 					resourceAmountObj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
 					resourceAmountObj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
@@ -3186,28 +3072,28 @@ public class UIManager : BaseManager {
 				colonistObj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
 				colonistObj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
 				colonistObj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
-				colonistObj.GetComponent<Image>().color = GetColour(Colours.WhiteAlpha64);
+				colonistObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha64);
 
 				colonistObj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<LayoutElement>().minWidth - 6, colonistObj.GetComponent<RectTransform>().sizeDelta.y);
 				obj.transform.Find("Content").GetComponent<VerticalLayoutGroup>().padding.bottom = 3;
 
 				if (job.started) {
-					obj.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 
 					obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().minValue = 0;
 					obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().maxValue = job.colonistBuildTime;
-					obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkGreen);
+					obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen);
 				} else {
-					obj.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
 
 					obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().minValue = 0;
 					obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().maxValue = colonist.startPathLength;
-					obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkOrange);
+					obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkOrange);
 				}
 			} else {
 				obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().minValue = 0;
 				obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().maxValue = job.colonistBuildTime;
-				obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = GetColour(Colours.DarkGreen);
+				obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen);
 			}
 
 			job.jobUIElement = this;
@@ -3219,7 +3105,7 @@ public class UIManager : BaseManager {
 
 		public void Update() {
 			if (colonist != null) {
-				//colonistObj.GetComponent<Image>().color = Color.Lerp(ChangeAlpha(GetColour(Colours.LightRed), 150f / 255f), ChangeAlpha(GetColour(Colours.LightGreen), 150f / 255f), colonist.health);
+				//colonistObj.GetComponent<Image>().color = Color.Lerp(ChangeAlpha(ColourUtilities.GetColour(Colours.LightRed), 150f / 255f), ChangeAlpha(ColourUtilities.GetColour(Colours.LightGreen), 150f / 255f), colonist.health);
 			}
 			if (colonist != null && !job.started && colonist.startPathLength > 0 && colonist.path.Count > 0) {
 				obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().value = (1 - (colonist.path.Count / (float)colonist.startPathLength)) * colonist.startPathLength;//Mathf.Lerp((1 - (colonist.path.Count / (float)colonist.startPathLength)) * colonist.startPathLength, (1 - ((colonist.path.Count - 1) / (float)colonist.startPathLength)) * colonist.startPathLength, (1 - Vector2.Distance(colonist.obj.transform.position, colonist.path[0].obj.transform.position)) + 0.5f);
@@ -3410,7 +3296,7 @@ public class UIManager : BaseManager {
 			}
 			foreach (ResourceManager.ResourceAmount ra in selectedContainer.GetInventory().resources.OrderByDescending(ra => ra.amount)) {
 				InventoryElement inventoryElement = new InventoryElement(ra, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel"));
-				inventoryElement.obj.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+				inventoryElement.obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 				containerInventoryElements.Add(inventoryElement);
 			}
 		} else {
@@ -3643,22 +3529,22 @@ public class UIManager : BaseManager {
 			button.transform.Find("Text").GetComponent<Text>().text = priority == 0 ? string.Empty : priority.ToString();
 
 			button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(
-				GetColour(Colours.DarkGreen),
-				GetColour(Colours.DarkRed),
+				ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen),
+				ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed),
 				(priority - 1f) / (ProfessionPrefab.maxPriority - 1f)
 			);
 
 			ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(GameManager.colonistM.GetSkillPrefabFromEnum(profession.prefab.relatedSkill));
 
 			if (highestSkillInstance.colonist == profession.colonist) {
-				button.GetComponent<Image>().color = GetColour(Colours.LightYellow);
+				button.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow);
 			} else {
 
 				ColonistManager.SkillInstance skillInstance = profession.colonist.GetSkillFromEnum(profession.prefab.relatedSkill);
 
 				button.GetComponent<Image>().color = Color.Lerp(
-					GetColour(Colours.DarkGrey50),
-					GetColour(Colours.DarkGreen),
+					ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50),
+					ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen),
 					skillInstance.CalculateTotalSkillLevel() / (highestSkillInstance.CalculateTotalSkillLevel() > 0 ? highestSkillInstance.CalculateTotalSkillLevel() : 1)
 				);
 			}
@@ -3780,8 +3666,8 @@ public class UIManager : BaseManager {
 		if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
 
 			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedTrader.health * 100);
-			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.DarkRed), GetColour(Colours.DarkGreen), selectedTrader.health);
-			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(GetColour(Colours.LightRed), GetColour(Colours.LightGreen), selectedTrader.health);
+			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), selectedTrader.health);
+			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedTrader.health);
 			selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealthValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedTrader.health * 100) + "%";
 		}
 	}
@@ -4155,9 +4041,9 @@ public class UIManager : BaseManager {
 
 			if (availableAmountPrev != resource.GetAvailableAmount()) {
 				if (resource.GetAvailableAmount() > 0) {
-					obj.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
 				} else {
-					obj.GetComponent<Image>().color = GetColour(Colours.Grey150);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.Grey150);
 				}
 			}
 		}
@@ -4321,16 +4207,16 @@ public class UIManager : BaseManager {
 		if (selectedCraftingObject.active) {
 			selectedCraftingObjectPanelActiveButtonText.text = "Enabled";
 			if (selectedCraftingObject.resources.Any(resource => resource.enableable)) {
-				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightGreen);
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
 			} else {
-				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
 			}
 		} else {
 			selectedCraftingObjectPanelActiveButtonText.text = "Disabled";
 			if (selectedCraftingObject.resources.Any(resource => resource.enableable)) {
-				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightOrange);
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
 			} else {
-				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = GetColour(Colours.LightRed);
+				selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 			}
 		}
 	}
@@ -4413,16 +4299,16 @@ public class UIManager : BaseManager {
 
 			panel.transform.Find("Details-Panel/AvailableAmount-Text").GetComponent<Text>().color =
 				resource.GetAvailableAmount() > 0
-					? GetColour(Colours.DarkGreen)
-					: GetColour(Colours.DarkRed);
+					? ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen)
+					: ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed);
 		}
 
 		public void UpdatePriorityButtonText(int priority) {
 			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().text = priority > 0 ? priority.ToString() : string.Empty;
 
 			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().color = Color.Lerp(
-				GetColour(Colours.DarkGreen),
-				GetColour(Colours.DarkRed),
+				ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen),
+				ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed),
 				(priority - 1f) / (ResourceManager.PriorityResourceInstance.priorityMax - 1f)
 			);
 		}
@@ -4483,9 +4369,9 @@ public class UIManager : BaseManager {
 			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color =
 				craftingObject.GetCraftableResourceFromResource(resource) != null
 					? (resource.GetAvailableAmount() > 0
-						? GetColour(Colours.LightGreen)
-						: GetColour(Colours.LightOrange))
-					: GetColour(Colours.Clear);
+						? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen)
+						: ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange))
+					: ColourUtilities.GetColour(ColourUtilities.Colours.Clear);
 		}
 
 		public override void ChangePriority(int amount) {
@@ -4555,9 +4441,9 @@ public class UIManager : BaseManager {
 			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color =
 				craftingObject.GetFuelFromFuelResource(resource) != null
 					? (resource.GetAvailableAmount() > 0
-						? GetColour(Colours.LightGreen)
-						: GetColour(Colours.LightOrange))
-					: GetColour(Colours.Clear);
+						? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen)
+						: ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange))
+					: ColourUtilities.GetColour(ColourUtilities.Colours.Clear);
 		}
 
 		public override void ChangePriority(int amount) {
@@ -4659,23 +4545,23 @@ public class UIManager : BaseManager {
 
 			resource.creationMethod = creationMethod;
 
-			singleRunButton.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
-			maintainStockButton.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
-			continuousRunButton.GetComponent<Image>().color = GetColour(Colours.LightGrey220);
+			singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
+			maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
+			continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
 
 			createAmountPanel.gameObject.SetActive(true);
 
 			switch (resource.creationMethod) {
 				case ResourceManager.CreationMethod.SingleRun:
-					singleRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+					singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
 					createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Create Amount";
 					break;
 				case ResourceManager.CreationMethod.MaintainStock:
-					maintainStockButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+					maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
 					createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Maintain Amount";
 					break;
 				case ResourceManager.CreationMethod.ContinuousRun:
-					continuousRunButton.GetComponent<Image>().color = GetColour(Colours.DarkGrey50);
+					continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
 					createAmountPanel.gameObject.SetActive(false);
 					break;
 				default:
@@ -4698,7 +4584,7 @@ public class UIManager : BaseManager {
 
 		pauseMenu.SetActive(active);
 
-		pauseSaveButton.GetComponent<Image>().color = GetColour(Colours.LightGrey200);
+		pauseSaveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
 
 		GameManager.timeM.SetPaused(pauseMenu.activeSelf);
 	}

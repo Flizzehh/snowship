@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Snowship.NColonist;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NJob {
@@ -61,7 +62,7 @@ namespace Snowship.NJob {
 				jPSR.sprite = objectPrefab.GetBitmaskSpritesForVariation(variation)[rotationIndex];
 			}
 			jPSR.sortingOrder = 5 + objectPrefab.layer; // Job Preview Sprite
-			jPSR.color = UIManager.GetColour(UIManager.Colours.WhiteAlpha128);
+			jPSR.color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha128);
 
 			jobProgress = objectPrefab.timeToBuild;
 			colonistBuildTime = objectPrefab.timeToBuild;
@@ -122,9 +123,9 @@ namespace Snowship.NJob {
 				priorityIndicator.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(@"UI/priorityIndicator");
 				priorityIndicator.GetComponent<SpriteRenderer>().sortingOrder = jobPreview.GetComponent<SpriteRenderer>().sortingOrder + 1; // Priority Indicator Sprite
 				if (priority == 1) {
-					priorityIndicator.GetComponent<SpriteRenderer>().color = UIManager.GetColour(UIManager.Colours.LightYellow);
+					priorityIndicator.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow);
 				} else if (priority == -1) {
-					priorityIndicator.GetComponent<SpriteRenderer>().color = UIManager.GetColour(UIManager.Colours.LightRed);
+					priorityIndicator.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
 				}
 			}
 			if (priority == 0) {

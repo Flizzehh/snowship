@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NProfession;
+using Snowship.NUtilities;
 using UnityEngine;
 using static Snowship.NJob.JobManager;
 
@@ -13,7 +14,7 @@ namespace Snowship.NJob {
 		public override void Awake() {
 			selectedPrefabPreview = GameObject.Find("SelectedPrefabPreview");
 			selectedPrefabPreview.GetComponent<SpriteRenderer>().sortingOrder = 50;
-			selectedPrefabPreview.GetComponent<SpriteRenderer>().color = UIManager.GetColour(UIManager.Colours.WhiteAlpha128);
+			selectedPrefabPreview.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha128);
 		}
 
 		private bool changedJobList = false;
@@ -334,7 +335,7 @@ namespace Snowship.NJob {
 										? selectedPrefab.prefab.GetBitmaskSpritesForVariation(selectedPrefab.variation)[rotationIndex]
 										: selectedPrefab.prefab.GetBaseSpriteForVariation(selectedPrefab.variation);
 									sISR.sortingOrder = 20; // Selection Indicator Sprite
-									sISR.color = UIManager.GetColour(UIManager.Colours.WhiteAlpha64);
+									sISR.color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha64);
 									selectionIndicators.Add(selectionIndicator);
 								}
 							}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NProfession {
@@ -24,7 +25,7 @@ namespace Snowship.NProfession {
 			List<string> jobs
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.jobs = jobs;
 

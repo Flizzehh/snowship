@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Snowship.NJob;
+using Snowship.NUtilities;
 
 namespace Snowship.NCaravan {
 	public class Trader : HumanManager.Human {
@@ -19,7 +20,7 @@ namespace Snowship.NCaravan {
 		public override void SetName(string name) {
 			base.SetName(name);
 
-			SetNameColour(UIManager.GetColour(UIManager.Colours.LightPurple100));
+			SetNameColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightPurple100));
 		}
 
 		public override void Update() {

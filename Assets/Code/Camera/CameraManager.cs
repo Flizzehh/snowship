@@ -59,10 +59,12 @@ namespace Snowship.NCamera {
 				cameraGO.transform.Translate(new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")) * cameraSpeedMultiplier);
 			}
 
-			cameraGO.transform.position = new Vector2(
-				Mathf.Clamp(cameraGO.transform.position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize),
-				Mathf.Clamp(cameraGO.transform.position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize)
+			var position = cameraGO.transform.position;
+			position = new Vector2(
+				Mathf.Clamp(position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize),
+				Mathf.Clamp(position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize)
 			);
+			cameraGO.transform.position = position;
 		}
 
 		private void UpdateCameraZoom() {

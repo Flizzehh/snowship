@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -302,7 +303,7 @@ public class ResourceManager : BaseManager {
 																	break;
 																case ResourceClothingPropertyEnum.Colours:
 																	foreach (string colourString in ((string)clothingProperty.Value).Split(',')) {
-																		clothingColours.Add(UIManager.RemoveNonAlphanumericChars(colourString));
+																		clothingColours.Add(StringUtilities.RemoveNonAlphanumericChars(colourString));
 																	}
 																	break;
 																default:
@@ -469,7 +470,7 @@ public class ResourceManager : BaseManager {
 			List<Resource> resources
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.resources = resources;
 		}
@@ -539,7 +540,7 @@ public class ResourceManager : BaseManager {
 			int craftingTime
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.groupType = groupType;
 
@@ -791,7 +792,7 @@ public class ResourceManager : BaseManager {
 			this.prefab = prefab;
 			this.colour = colour;
 
-			name = UIManager.SplitByCapitals(colour + prefab.clothingType);
+			name = StringUtilities.SplitByCapitals(colour + prefab.clothingType);
 
 			for (int i = 0; i < 4; i++) {
 				moveSprites.Add(prefab.moveSprites[i][prefab.colours.IndexOf(colour)]);
@@ -1539,7 +1540,7 @@ public class ResourceManager : BaseManager {
 																				maxLightDistance = int.Parse((string)objectSubProperty.Value);
 																				break;
 																			case ObjectPropertyEnum.LightColour:
-																				lightColour = UIManager.HexToColor((string)objectSubProperty.Value);
+																				lightColour = ColourUtilities.HexToColor((string)objectSubProperty.Value);
 																				break;
 																			case ObjectPropertyEnum.RestComfortAmount:
 																				restComfortAmount = float.Parse((string)objectSubProperty.Value);
@@ -1587,7 +1588,7 @@ public class ResourceManager : BaseManager {
 																							foreach (KeyValuePair<string, object> variationProperty in (List<KeyValuePair<string, object>>)variationsProperty.Value) {
 																								switch ((VariationPropertyEnum)Enum.Parse(typeof(VariationPropertyEnum), variationProperty.Key)) {
 																									case VariationPropertyEnum.Name:
-																										variationName = UIManager.RemoveNonAlphanumericChars((string)variationProperty.Value);
+																										variationName = StringUtilities.RemoveNonAlphanumericChars((string)variationProperty.Value);
 																										break;
 																									case VariationPropertyEnum.UniqueResources:
 																										foreach (string resourceAmountString in ((string)variationProperty.Value).Split(',')) {
@@ -1787,7 +1788,7 @@ public class ResourceManager : BaseManager {
 
 		public ObjectPrefabGroup(ObjectGroupEnum type, List<ObjectPrefabSubGroup> subGroups) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.subGroups = subGroups;
 		}
@@ -1816,7 +1817,7 @@ public class ResourceManager : BaseManager {
 
 		public ObjectPrefabSubGroup(ObjectSubGroupEnum type, ObjectGroupEnum groupType, List<ObjectPrefab> prefabs) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.groupType = groupType;
 			this.prefabs = prefabs;
@@ -1973,7 +1974,7 @@ public class ResourceManager : BaseManager {
 			bool addToTileWhenBuilt
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.groupType = groupType;
 			this.subGroupType = subGroupType;
@@ -2997,7 +2998,7 @@ public class ResourceManager : BaseManager {
 			List<PlantPrefab> prefabs
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.prefabs = prefabs;
 		}
@@ -3039,7 +3040,7 @@ public class ResourceManager : BaseManager {
 			List<ResourceRange> harvestResources
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.groupType = groupType;
 
@@ -3291,7 +3292,7 @@ public class ResourceManager : BaseManager {
 	public List<string> locationNames = new List<string>();
 
 	public void LoadLocationNames() {
-		locationNames = Resources.Load<TextAsset>(@"Data/names-locations").text.Split('\n').Select(s => UIManager.RemoveNonAlphanumericChars(s)).ToList();
+		locationNames = Resources.Load<TextAsset>(@"Data/names-locations").text.Split('\n').Select(s => StringUtilities.RemoveNonAlphanumericChars(s)).ToList();
 	}
 
 	public string GetRandomLocationName() {

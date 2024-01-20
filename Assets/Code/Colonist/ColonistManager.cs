@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NColonist {
@@ -117,7 +118,7 @@ namespace Snowship.NColonist {
 				skillPrefabs.Add(new SkillPrefab(stringSkillData));
 			}
 			foreach (SkillPrefab skillPrefab in skillPrefabs) {
-				skillPrefab.name = UIManager.SplitByCapitals(skillPrefab.name);
+				skillPrefab.name = StringUtilities.SplitByCapitals(skillPrefab.name);
 			}
 		}
 
@@ -598,7 +599,7 @@ namespace Snowship.NColonist {
 				List<string> relatedJobs
 			) {
 				this.type = type;
-				name = UIManager.SplitByCapitals(type.ToString());
+				name = StringUtilities.SplitByCapitals(type.ToString());
 
 				this.baseIncreaseRate = baseIncreaseRate;
 				this.decreaseRateMultiplier = decreaseRateMultiplier;
@@ -736,7 +737,7 @@ namespace Snowship.NColonist {
 								priority = int.Parse(value);
 								break;
 							case "TraitsAffectingThisNeed":
-								if (!string.IsNullOrEmpty(UIManager.RemoveNonAlphanumericChars(value))) {
+								if (!string.IsNullOrEmpty(StringUtilities.RemoveNonAlphanumericChars(value))) {
 									foreach (string traitsAffectingThisNeedString in value.Split(',')) {
 										TraitEnum traitEnum = (TraitEnum)Enum.Parse(typeof(TraitEnum), traitsAffectingThisNeedString.Split(':')[0]);
 										float multiplier = float.Parse(traitsAffectingThisNeedString.Split(':')[1]);
@@ -745,7 +746,7 @@ namespace Snowship.NColonist {
 								}
 								break;
 							case "RelatedJobs":
-								if (!string.IsNullOrEmpty(UIManager.RemoveNonAlphanumericChars(value))) {
+								if (!string.IsNullOrEmpty(StringUtilities.RemoveNonAlphanumericChars(value))) {
 									foreach (string relatedJobString in value.Split(',')) {
 										string jobTypeEnum = relatedJobString;
 										relatedJobs.Add(jobTypeEnum);
@@ -845,7 +846,7 @@ namespace Snowship.NColonist {
 				List<string> stringMoodModifiers = stringMoodModifierGroup.Split(new string[] { "<MoodModifier>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
 				type = (MoodModifierGroupEnum)Enum.Parse(typeof(MoodModifierGroupEnum), stringMoodModifiers[0]);
-				name = UIManager.SplitByCapitals(type.ToString());
+				name = StringUtilities.SplitByCapitals(type.ToString());
 
 				foreach (string stringMoodModifier in stringMoodModifiers.Skip(1)) {
 					prefabs.Add(new MoodModifierPrefab(stringMoodModifier, this));
@@ -886,13 +887,13 @@ namespace Snowship.NColonist {
 						switch (label) {
 							case "Type":
 								type = (MoodModifierEnum)Enum.Parse(typeof(MoodModifierEnum), value);
-								name = UIManager.SplitByCapitals(type.ToString());
+								name = StringUtilities.SplitByCapitals(type.ToString());
 								break;
 							case "EffectAmount":
 								effectAmount = int.Parse(value);
 								break;
 							case "EffectLengthSeconds":
-								infinite = UIManager.RemoveNonAlphanumericChars(value) == "UntilNot";
+								infinite = StringUtilities.RemoveNonAlphanumericChars(value) == "UntilNot";
 								if (infinite) {
 									effectLengthSeconds = int.MaxValue;
 								} else {

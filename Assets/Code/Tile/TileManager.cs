@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Snowship.NColonist;
+using Snowship.NUtilities;
 using UnityEngine;
 
 public class TileManager : BaseManager {
@@ -42,7 +43,7 @@ public class TileManager : BaseManager {
 
 		public TileTypeGroup(TypeEnum type, TileType.TypeEnum defaultTileType, List<TileType> tileTypes) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.defaultTileType = defaultTileType;
 
@@ -114,7 +115,7 @@ public class TileManager : BaseManager {
 			this.groupType = groupType;
 
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.classes = classes;
 
@@ -311,7 +312,7 @@ public class TileManager : BaseManager {
 			Color colour
 		) {
 			this.type = type;
-			name = UIManager.SplitByCapitals(type.ToString());
+			name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.tileTypes = tileTypes;
 
@@ -424,7 +425,7 @@ public class TileManager : BaseManager {
 									}
 									break;
 								case PropertyEnum.Colour:
-									colour = UIManager.HexToColor((string)biomeSubProperty.Value);
+									colour = ColourUtilities.HexToColor((string)biomeSubProperty.Value);
 									break;
 								default:
 									Debug.LogError("Unknown biome sub property: " + biomeSubProperty.Key + " " + biomeSubProperty.Value);

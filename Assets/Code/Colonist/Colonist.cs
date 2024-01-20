@@ -3,6 +3,7 @@ using System.Linq;
 using Snowship.NJob;
 using Snowship.NProfession;
 using Snowship.NTime;
+using Snowship.NUtilities;
 using UnityEngine;
 using static Snowship.NColonist.ColonistManager;
 
@@ -512,7 +513,7 @@ namespace Snowship.NColonist {
 
 		public override void SetName(string name) {
 			base.SetName(name);
-			SetNameColour(UIManager.GetColour(UIManager.Colours.LightGreen100));
+			SetNameColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen100));
 		}
 
 		public override string GetCurrentActionString() {
