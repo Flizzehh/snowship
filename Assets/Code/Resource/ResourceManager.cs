@@ -855,6 +855,9 @@ public class ResourceManager : BaseManager {
 
 		public Caravan caravan;
 
+		public event Action OnCaravanAmountUpdated;
+		public event Action OnColonyAmountUpdated;
+
 		public TradeResourceAmount(Resource resource, int caravanAmount, Caravan caravan) {
 			this.resource = resource;
 
@@ -870,15 +873,28 @@ public class ResourceManager : BaseManager {
 		}
 
 		private void UpdateCaravanAmount() {
-			caravanAmount = 0;
+
 			ResourceAmount caravanResourceAmount = caravan.GetInventory().resources.Find(ra => ra.resource == resource);
-			if (caravanResourceAmount != null) {
-				caravanAmount = caravanResourceAmount.amount;
+			if (caravanResourceAmount == null) {
+				OnCaravanAmountUpdated?.Invoke();
+				return;
 			}
+
+			if (caravanAmount == caravanResourceAmount.amount) {
+				return;
+			}
+
+			caravanAmount = caravanResourceAmount.amount;
+			OnCaravanAmountUpdated?.Invoke();
 		}
 
 		public void SetColonyAmount(int colonyAmount) {
+			if (this.colonyAmount == colonyAmount) {
+				return;
+			}
+
 			this.colonyAmount = colonyAmount;
+			OnColonyAmountUpdated?.Invoke();
 		}
 
 		public int GetTradeAmount() {

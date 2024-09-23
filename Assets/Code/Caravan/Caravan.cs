@@ -23,16 +23,16 @@ namespace Snowship.NCaravan {
 
 		public ResourceManager.ResourceGroup resourceGroup;
 
-		public int leaveTimer = 0;
+		public int leaveTimer;
 		public static readonly int leaveTimerMax = TimeManager.dayLengthSeconds * 2;
-		public bool leaving = false;
+		public bool leaving;
 
-		private static readonly int minDistinctResources = 1;
-		private static readonly float minDistinctResourceChance = 0.5f;
-		private static readonly float minAvailableAmountModifier = 0.1f;
-		private static readonly float maxAvailableAmountModifier = 0.5f;
-		private static readonly int minMinimumCaravanAmount = 5;
-		private static readonly int maxMinimumCaravanAmount = 15;
+		private const int MinDistinctResources = 1;
+		private const float MinDistinctResourceChance = 0.5f;
+		private const float MinAvailableAmountModifier = 0.1f;
+		private const float MaxAvailableAmountModifier = 0.5f;
+		private const int MinMinimumCaravanAmount = 5;
+		private const int MaxMinimumCaravanAmount = 15;
 
 		private readonly List<Trader> removeTraders = new List<Trader>();
 
@@ -53,7 +53,7 @@ namespace Snowship.NCaravan {
 			location = Location.GenerateLocation();
 
 			for (int i = 0; i < numTraders && spawnTiles.Count > 0; i++) {
-				TileManager.Tile spawnTile = spawnTiles[UnityEngine.Random.Range(0, spawnTiles.Count)];
+				TileManager.Tile spawnTile = spawnTiles[Random.Range(0, spawnTiles.Count)];
 				SpawnTrader(spawnTile);
 				spawnTiles.Remove(spawnTile);
 			}
@@ -61,11 +61,11 @@ namespace Snowship.NCaravan {
 			inventory = new ResourceManager.Inventory(this, int.MaxValue, int.MaxValue);
 
 			resourceGroup = GameManager.resourceM.GetRandomResourceGroup();
-			foreach (ResourceManager.Resource resource in resourceGroup.resources.OrderBy(r => UnityEngine.Random.Range(0f, 1f))) { // Randomize resource group list
-				int resourceGroupResourceCount = Mathf.Clamp(resourceGroup.resources.Count, minDistinctResources + 1, int.MaxValue); // Ensure minimum count of (minimumDistinctResources + 1)
-				if (UnityEngine.Random.Range(0f, 1f) < Mathf.Clamp(((resourceGroupResourceCount - inventory.resources.Count) - minDistinctResources) / (float)(resourceGroupResourceCount - minDistinctResources), minDistinctResourceChance, 1f)) { // Decrease chance of additional distinct resources on caravan as distinct resources on caravan increase
+			foreach (ResourceManager.Resource resource in resourceGroup.resources.OrderBy(r => Random.Range(0f, 1f))) { // Randomize resource group list
+				int resourceGroupResourceCount = Mathf.Clamp(resourceGroup.resources.Count, MinDistinctResources + 1, int.MaxValue); // Ensure minimum count of (minimumDistinctResources + 1)
+				if (Random.Range(0f, 1f) < Mathf.Clamp(((resourceGroupResourceCount - inventory.resources.Count) - MinDistinctResources) / (float)(resourceGroupResourceCount - MinDistinctResources), MinDistinctResourceChance, 1f)) { // Decrease chance of additional distinct resources on caravan as distinct resources on caravan increase
 					int resourceAvailableAmount = resource.GetAvailableAmount();
-					int caravanAmount = Mathf.RoundToInt(Mathf.Clamp(UnityEngine.Random.Range(resourceAvailableAmount * minAvailableAmountModifier, resourceAvailableAmount * maxAvailableAmountModifier), UnityEngine.Random.Range(minMinimumCaravanAmount, maxMinimumCaravanAmount), int.MaxValue)); // Ensure a minimum number of the resource on the caravan
+					int caravanAmount = Mathf.RoundToInt(Mathf.Clamp(Random.Range(resourceAvailableAmount * MinAvailableAmountModifier, resourceAvailableAmount * MaxAvailableAmountModifier), Random.Range(MinMinimumCaravanAmount, MaxMinimumCaravanAmount), int.MaxValue)); // Ensure a minimum number of the resource on the caravan
 					inventory.ChangeResourceAmount(resource, caravanAmount, false);
 				}
 			}
@@ -75,7 +75,7 @@ namespace Snowship.NCaravan {
 			Trader trader = new Trader(spawnTile, 1f, this);
 			traders.Add(trader);
 
-			List<TileManager.Tile> targetTiles = new List<TileManager.Tile>() { targetTile };
+			List<TileManager.Tile> targetTiles = new List<TileManager.Tile> { targetTile };
 			targetTiles.AddRange(targetTile.horizontalSurroundingTiles.Where(t => t != null && t.walkable && t.buildable));
 
 			List<TileManager.Tile> additionalTargetTiles = new List<TileManager.Tile>();
@@ -85,7 +85,7 @@ namespace Snowship.NCaravan {
 
 			targetTiles.AddRange(additionalTargetTiles);
 
-			trader.MoveToTile(targetTiles[UnityEngine.Random.Range(0, targetTiles.Count)], false);
+			trader.MoveToTile(targetTiles[Random.Range(0, targetTiles.Count)], false);
 		}
 
 		public List<ResourceManager.TradeResourceAmount> GenerateTradeResourceAmounts() {
@@ -250,7 +250,7 @@ namespace Snowship.NCaravan {
 						foreach (Trader trader in traders) {
 							List<TileManager.Tile> validLeaveTiles = GameManager.colonyM.colony.map.edgeTiles.Where(t => t.region == trader.overTile.region).ToList();
 							if (validLeaveTiles.Count > 0) {
-								trader.leaveTile = validLeaveTiles[UnityEngine.Random.Range(0, validLeaveTiles.Count)];
+								trader.leaveTile = validLeaveTiles[Random.Range(0, validLeaveTiles.Count)];
 								trader.MoveToTile(trader.leaveTile, false);
 							}
 							else {

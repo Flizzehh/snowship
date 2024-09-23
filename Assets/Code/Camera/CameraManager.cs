@@ -4,8 +4,8 @@ using UnityEngine;
 namespace Snowship.NCamera {
 	public class CameraManager : BaseManager {
 
-		private const int MIN_ZOOM = 1;
-		private const int MAX_ZOOM = 20;
+		private const int MinZoom = 1;
+		private const int MaxZoom = 20;
 
 		public GameObject cameraGO;
 		public Camera cameraComponent;
@@ -79,8 +79,8 @@ namespace Snowship.NCamera {
 
 			currentZoom = Mathf.Clamp(
 				Mathf.Lerp(currentZoom, targetZoom, zoomTimer),
-				MIN_ZOOM,
-				MAX_ZOOM * (GameManager.debugM.debugMode ? 25 : 1)
+				MinZoom,
+				MaxZoom * (GameManager.debugM.debugMode ? 25 : 1)
 			);
 
 			if (!GameManager.uiM.IsPointerOverUI()) {
@@ -94,7 +94,7 @@ namespace Snowship.NCamera {
 				) * currentZoom * UnityEngine.Time.deltaTime * 100;
 
 				float zoomDifference = targetZoom - currentZoom;
-				float maxZoomDifference = Mathf.Clamp(currentZoom / 3f, MIN_ZOOM, MAX_ZOOM);
+				float maxZoomDifference = Mathf.Clamp(currentZoom / 3f, MinZoom, MaxZoom);
 				if (Mathf.Abs(zoomDifference) >= maxZoomDifference) {
 					if (zoomDifference >= 0) {
 						targetZoom = currentZoom + maxZoomDifference;
@@ -106,8 +106,8 @@ namespace Snowship.NCamera {
 
 				targetZoom = Mathf.Clamp(
 					targetZoom,
-					MIN_ZOOM,
-					MAX_ZOOM * (GameManager.debugM.debugMode ? 25 : 1)
+					MinZoom,
+					MaxZoom * (GameManager.debugM.debugMode ? 25 : 1)
 				);
 			}
 

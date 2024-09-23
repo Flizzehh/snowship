@@ -1,0 +1,47 @@
+﻿using System.Collections.Generic;
+
+namespace Snowship.NPlanet {
+	public class Planet : TileManager.Map {
+
+		public string directory;
+		public string lastSaveDateTime;
+		public string lastSaveTimeChunk;
+
+		public string name;
+		public List<PlanetTile> planetTiles;
+
+		public string regenerationCode;
+
+		public Planet(string name, TileManager.MapData mapData) : base(mapData) {
+
+			this.name = name;
+
+			planetTiles = new List<PlanetTile>();
+			foreach (TileManager.Tile tile in tiles) {
+				planetTiles.Add(new PlanetTile(this, tile));
+			}
+
+			regenerationCode = string.Format(
+				"{0}{1}{2}{3}{4}{5}",
+				mapData.mapSeed.ToString().PadLeft(20, '0'),
+				mapData.mapSize.ToString().PadLeft(3, '0'),
+				mapData.planetDistance.ToString().PadLeft(2, '0'),
+				mapData.temperatureRange.ToString().PadLeft(3, '0'),
+				mapData.randomOffsets ? "1" : "0",
+				mapData.primaryWindDirection.ToString().PadLeft(2, '0')
+			);
+
+			lastSaveDateTime = PersistenceManager.GenerateSaveDateTimeString();
+			lastSaveTimeChunk = PersistenceManager.GenerateDateTimeString();
+		}
+
+		public void SetDirectory(string directory) {
+			this.directory = directory;
+		}
+
+		public void SetLastSaveDateTime(string lastSaveDateTime, string lastSaveTimeChunk) {
+			this.lastSaveDateTime = lastSaveDateTime;
+			this.lastSaveTimeChunk = lastSaveTimeChunk;
+		}
+	}
+}

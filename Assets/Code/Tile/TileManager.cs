@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Snowship.NColonist;
+using Snowship.NColony;
+using Snowship.NPlanet;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -1330,7 +1332,7 @@ public class TileManager : BaseManager {
 		startCoroutineReference.StartCoroutine(PostInitializeMap(mapInitializeType));
 	}
 
-	private IEnumerator InitializeMap(ColonyManager.Colony colony) {
+	private IEnumerator InitializeMap(Colony colony) {
 		GameManager.cameraM.SetCameraPosition(new Vector2(colony.mapData.mapSize / 2f, colony.mapData.mapSize / 2f));
 		GameManager.cameraM.SetCameraZoom(20);
 

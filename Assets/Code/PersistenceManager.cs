@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NColony;
+using Snowship.NPlanet;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 using Time = Snowship.NTime;
@@ -21,8 +24,8 @@ public class PersistenceManager : BaseManager {
 		this.startCoroutineReference = startCoroutineReference;
 	}
 
-	public static readonly KeyValuePair<int, string> gameVersion = new KeyValuePair<int, string>(3, "2022.1");
-	public static readonly KeyValuePair<int, string> saveVersion = new KeyValuePair<int, string>(3, "2022.1");
+	public readonly (int increment, string text) gameVersion = (3, "2024.1");
+	private readonly (int increment, string text) saveVersion = (3, "2024.1");
 
 	public SettingsState settingsState;
 
@@ -434,7 +437,7 @@ public class PersistenceManager : BaseManager {
 		universeFile.Close();
 	}
 
-	public void CreatePlanet(PlanetManager.Planet planet) {
+	public void CreatePlanet(Planet planet) {
 		if (planet == null) {
 			Debug.LogError("Planet to be saved is null.");
 			return;
@@ -465,7 +468,7 @@ public class PersistenceManager : BaseManager {
 		Directory.CreateDirectory(coloniesDirectoryPath);
 	}
 
-	public void UpdatePlanetSave(PlanetManager.Planet planet) {
+	public void UpdatePlanetSave(Planet planet) {
 		if (planet == null) {
 			Debug.LogError("Planet to be saved is null.");
 			return;
@@ -496,7 +499,7 @@ public class PersistenceManager : BaseManager {
 
 	}
 
-	public void CreateColony(ColonyManager.Colony colony) {
+	public void CreateColony(Colony colony) {
 		if (colony == null) {
 			Debug.LogError("Colony to be saved is null.");
 			return;
@@ -535,7 +538,7 @@ public class PersistenceManager : BaseManager {
 		Directory.CreateDirectory(savesDirectoryPath);
 	}
 
-	public void UpdateColonySave(ColonyManager.Colony colony) {
+	public void UpdateColonySave(Colony colony) {
 		if (colony == null) {
 			Debug.LogError("Colony to be saved is null.");
 			return;
@@ -562,7 +565,7 @@ public class PersistenceManager : BaseManager {
 		colonyFile.Close();
 	}
 
-	public void CreateSave(ColonyManager.Colony colony) {
+	public void CreateSave(Colony colony) {
 		string savesDirectoryPath = colony.directory + "/Saves";
 		string dateTimeString = GenerateDateTimeString();
 		string saveDirectoryPath = savesDirectoryPath + "/Save-" + dateTimeString;
@@ -748,7 +751,7 @@ public class PersistenceManager : BaseManager {
 		LastSaveDateTime, LastSaveTimeChunk, Name, Seed, Size, SunDistance, TempRange, RandomOffsets, WindDirection
 	}
 
-	public void SavePlanet(StreamWriter file, PlanetManager.Planet planet) {
+	public void SavePlanet(StreamWriter file, Planet planet) {
 		file.WriteLine(CreateKeyValueString(PlanetProperty.LastSaveDateTime, planet.lastSaveDateTime, 0));
 		file.WriteLine(CreateKeyValueString(PlanetProperty.LastSaveTimeChunk, planet.lastSaveTimeChunk, 0));
 
@@ -834,8 +837,8 @@ public class PersistenceManager : BaseManager {
 		return persistencePlanet;
 	}
 
-	public PlanetManager.Planet ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
-		PlanetManager.Planet planet = GameManager.planetM.CreatePlanet(
+	public Planet ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
+		Planet planet = GameManager.planetM.CreatePlanet(
 			persistencePlanet.name,
 			persistencePlanet.seed,
 			persistencePlanet.size,
@@ -853,7 +856,7 @@ public class PersistenceManager : BaseManager {
 		LastSaveDateTime, LastSaveTimeChunk, Name, PlanetPosition, Seed, Size, AverageTemperature, AveragePrecipitation, TerrainTypeHeights, SurroundingPlanetTileHeights, OnRiver, SurroundingPlanetTileRivers
 	}
 
-	public void SaveColony(StreamWriter file, ColonyManager.Colony colony) {
+	public void SaveColony(StreamWriter file, Colony colony) {
 		file.WriteLine(CreateKeyValueString(ColonyProperty.LastSaveDateTime, colony.lastSaveDateTime, 0));
 		file.WriteLine(CreateKeyValueString(ColonyProperty.LastSaveTimeChunk, colony.lastSaveTimeChunk, 0));
 
@@ -982,8 +985,8 @@ public class PersistenceManager : BaseManager {
 		return persistenceColony;
 	}
 
-	public ColonyManager.Colony ApplyLoadedColony(PersistenceColony persistenceColony) {
-		ColonyManager.Colony colony = GameManager.colonyM.CreateColony(
+	public Colony ApplyLoadedColony(PersistenceColony persistenceColony) {
+		Colony colony = GameManager.colonyM.CreateColony(
 			persistenceColony.name,
 			persistenceColony.planetPosition,
 			persistenceColony.seed,
@@ -2311,9 +2314,9 @@ public class PersistenceManager : BaseManager {
 							case CaravanProperty.Location:
 
 								string locationName = null;
-								Location.Wealth? locationWealth = null;
-								Location.ResourceRichness? locationResourceRichness = null;
-								Location.CitySize? locationCitySize = null;
+								string locationWealth = null;
+								string locationResourceRichness = null;
+								string locationCitySize = null;
 								TileManager.Biome.TypeEnum? locationBiomeType = null;
 
 								foreach (KeyValuePair<string, object> locationProperty in (List<KeyValuePair<string, object>>)caravanProperty.Value) {
@@ -2322,13 +2325,13 @@ public class PersistenceManager : BaseManager {
 											locationName = (string)locationProperty.Value;
 											break;
 										case LocationProperty.Wealth:
-											locationWealth = (Location.Wealth)Enum.Parse(typeof(Location.Wealth), (string)locationProperty.Value);
+											locationWealth = (string)locationProperty.Value;
 											break;
 										case LocationProperty.ResourceRichness:
-											locationResourceRichness = (Location.ResourceRichness)Enum.Parse(typeof(Location.ResourceRichness), (string)locationProperty.Value);
+											locationResourceRichness = (string)locationProperty.Value;
 											break;
 										case LocationProperty.CitySize:
-											locationCitySize = (Location.CitySize)Enum.Parse(typeof(Location.CitySize), (string)locationProperty.Value);
+											locationCitySize = (string)locationProperty.Value;
 											break;
 										case LocationProperty.BiomeType:
 											locationBiomeType = (TileManager.Biome.TypeEnum)Enum.Parse(typeof(TileManager.Biome.TypeEnum), (string)locationProperty.Value);
@@ -2341,9 +2344,9 @@ public class PersistenceManager : BaseManager {
 
 								location = new Location(
 									locationName,
-									locationWealth.Value,
-									locationResourceRichness.Value,
-									locationCitySize.Value,
+									locationWealth,
+									locationResourceRichness,
+									locationCitySize,
 									locationBiomeType.Value
 								);
 								break;
@@ -3346,13 +3349,13 @@ public class PersistenceManager : BaseManager {
 			JobProperty jobPropertyKey = (JobProperty)Enum.Parse(typeof(JobProperty), jobProperty.Key);
 			switch (jobPropertyKey) {
 				case JobProperty.Prefab:
-					prefab = UIManager.RemoveNonAlphanumericChars((string)jobProperty.Value);
+					prefab = StringUtilities.RemoveNonAlphanumericChars((string)jobProperty.Value);
 					break;
 				case JobProperty.Type:
 					type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)jobProperty.Value);
 					break;
 				case JobProperty.Variation:
-					variation = UIManager.RemoveNonAlphanumericChars((string)jobProperty.Value);
+					variation = StringUtilities.RemoveNonAlphanumericChars((string)jobProperty.Value);
 					break;
 				case JobProperty.Position:
 					position = new Vector2(float.Parse(((string)jobProperty.Value).Split(',')[0]), float.Parse(((string)jobProperty.Value).Split(',')[1]));
@@ -3735,7 +3738,7 @@ public class PersistenceManager : BaseManager {
 								type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)objectProperty.Value);
 								break;
 							case ObjectProperty.Variation:
-								variation = UIManager.RemoveNonAlphanumericChars((string)objectProperty.Value);
+								variation = StringUtilities.RemoveNonAlphanumericChars((string)objectProperty.Value);
 								break;
 							case ObjectProperty.Position:
 								zeroPointTilePosition = new Vector2(float.Parse(((string)objectProperty.Value).Split(',')[0]), float.Parse(((string)objectProperty.Value).Split(',')[1]));

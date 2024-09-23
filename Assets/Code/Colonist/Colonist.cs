@@ -21,7 +21,7 @@ namespace Snowship.NColonist {
 		public readonly List<Job> backlog = new();
 
 		// Professions
-		public readonly List<NProfession.Profession> professions = new List<NProfession.Profession>();
+		public readonly List<Profession> professions = new List<Profession>();
 
 		// Skills
 		public readonly List<SkillInstance> skills = new List<SkillInstance>();
@@ -42,7 +42,7 @@ namespace Snowship.NColonist {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);
 
 			foreach (ProfessionPrefab professionPrefab in ProfessionPrefab.professionPrefabs) {
-				professions.Add(new NProfession.Profession(
+				professions.Add(new Profession(
 						professionPrefab,
 						this,
 						Mathf.RoundToInt(ProfessionPrefab.professionPrefabs.Count / 2f)
@@ -66,7 +66,7 @@ namespace Snowship.NColonist {
 			}
 			needs = needs.OrderBy(need => need.prefab.priority).ToList();
 
-			Colonist.colonists.Add(this);
+			colonists.Add(this);
 		}
 
 		public override void Update() {

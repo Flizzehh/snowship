@@ -17,5 +17,23 @@ namespace Snowship.NUtilities {
 		public static bool IsAlphanumericWithSpaces(string text) {
 			return Regex.IsMatch(text, @"^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$");
 		}
+
+		public static int ParseSeed(string seedString) {
+			if (string.IsNullOrEmpty(seedString)) {
+				seedString = UnityEngine.Random.Range(int.MinValue, int.MaxValue).ToString();
+			}
+
+			if (int.TryParse(seedString, out int seed)) {
+				return seed;
+			}
+
+			int seedCharacterIndex = 1;
+			foreach (char seedCharacter in seedString) {
+				seed += seedCharacter * seedCharacterIndex;
+				seedCharacterIndex += 1;
+			}
+
+			return seed;
+		}
 	}
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class LifeManager : BaseManager {
 
@@ -145,7 +146,7 @@ public class LifeManager : BaseManager {
 		}
 
 		public virtual void Remove() {
-			MonoBehaviour.Destroy(obj);
+			Object.Destroy(obj);
 			GameManager.lifeM.life.Remove(this);
 		}
 
@@ -156,11 +157,11 @@ public class LifeManager : BaseManager {
 		}
 
 		void ISelectable.Select() {
-			
+
 		}
 
 		void ISelectable.Deselect() {
-			
+
 		}
 	}
 }

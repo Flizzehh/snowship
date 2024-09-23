@@ -6,9 +6,14 @@ using System.Collections.Generic;
 using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NColony;
+using Snowship.NPlanet;
+using Snowship.NUI;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+
+	[SerializeField] private Transform uiParent;
 
 	public static readonly CameraManager cameraM = new CameraManager();
 	public static readonly CaravanManager caravanM = new CaravanManager();
@@ -54,9 +59,16 @@ public class GameManager : MonoBehaviour {
 	};
 
 	public void Awake() {
+
+		// Initializations
+
+		uiM.Initialize(uiParent);
+
+		// Awakes
+
 		tileM.SetStartCoroutineReference(this);
 		persistenceM.SetStartCoroutineReference(this);
-		uiM.SetStartCoroutineReference(this);
+		//uiM.SetStartCoroutineReference(this);
 
 		resourceM.SetResourceReferences();
 		resourceM.SetGameObjectReferences();
@@ -82,7 +94,7 @@ public class GameManager : MonoBehaviour {
 			manager.Awake();
 		}
 
-		uiM.SetupUI();
+		//uiM.SetupUI();
 
 		persistenceM.CreateSettingsState();
 	}
