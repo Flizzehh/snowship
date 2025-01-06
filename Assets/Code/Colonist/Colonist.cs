@@ -125,8 +125,8 @@ namespace Snowship.NColonist {
 
 			ReturnJob();
 			colonists.Remove(this);
-			GameManager.uiM.SetColonistElements();
-			GameManager.uiM.SetJobElements();
+			GameManager.uiMOld.SetColonistElements();
+			GameManager.uiMOld.SetJobElements();
 			foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
@@ -209,14 +209,14 @@ namespace Snowship.NColonist {
 			}
 			moodModifiers.Add(moodModifier);
 			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.uiM.RemakeSelectedColonistMoodModifiers();
+				GameManager.uiMOld.RemakeSelectedColonistMoodModifiers();
 			}
 		}
 
 		public void RemoveMoodModifier(MoodModifierEnum moodModifierEnum) {
 			moodModifiers.Remove(moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.type == moodModifierEnum));
 			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.uiM.RemakeSelectedColonistMoodModifiers();
+				GameManager.uiMOld.RemakeSelectedColonistMoodModifiers();
 			}
 		}
 
@@ -260,7 +260,7 @@ namespace Snowship.NColonist {
 			}
 			job.SetColonist(this);
 			MoveToTile(job.tile, !job.tile.walkable);
-			GameManager.uiM.SetJobElements();
+			GameManager.uiMOld.SetJobElements();
 
 			if (colonistJob.job.objectPrefab.type == ResourceManager.ObjectEnum.Sleep) {
 				Debug.Log($"{colonistJob.colonist.name} {GameManager.timeM.GetDateString()} {GameManager.timeM.GetTimeString()}");
@@ -319,7 +319,7 @@ namespace Snowship.NColonist {
 
 			job.colonistBuildTime = job.jobProgress;
 
-			GameManager.uiM.SetJobElements();
+			GameManager.uiMOld.SetJobElements();
 		}
 
 		public void WorkJob() {
@@ -390,11 +390,11 @@ namespace Snowship.NColonist {
 			}
 
 			ColonistJob.UpdateSingleColonistJobs(this);
-			GameManager.uiM.SetJobElements();
-			GameManager.uiM.UpdateSelectedColonistInformation();
-			GameManager.uiM.UpdateSelectedContainerInfo();
-			GameManager.uiM.UpdateSelectedTradingPostInfo();
-			GameManager.uiM.UpdateTileInformation();
+			GameManager.uiMOld.SetJobElements();
+			GameManager.uiMOld.UpdateSelectedColonistInformation();
+			GameManager.uiMOld.UpdateSelectedContainerInfo();
+			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+			GameManager.uiMOld.UpdateTileInformation();
 
 			if (storedJob != null) {
 				Update();
@@ -513,7 +513,7 @@ namespace Snowship.NColonist {
 
 		public override void SetName(string name) {
 			base.SetName(name);
-			SetNameColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen100));
+			SetNameColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen100));
 		}
 
 		public override string GetCurrentActionString() {

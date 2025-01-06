@@ -92,8 +92,8 @@ namespace Snowship.NUI.Menu.CreateColony {
 		public void SetSaveColonyButtonInteractable(bool interactable) {
 			createColonyButton.interactable = interactable;
 			createColonyButtonImage.color = interactable
-				? ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220)
-				: ColourUtilities.GetColour(ColourUtilities.Colours.Grey120);
+				? ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220)
+				: ColourUtilities.GetColour(ColourUtilities.EColour.Grey120);
 		}
 
 

@@ -100,7 +100,7 @@ namespace Snowship.NColonist {
 				}
 				ColonistJob.UpdateColonistJobCosts(colonist);
 				if (GameManager.humanM.selectedHuman == colonist) {
-					GameManager.uiM.RemakeSelectedColonistSkills();
+					GameManager.uiMOld.RemakeSelectedColonistSkills();
 				}
 			}
 
@@ -656,7 +656,7 @@ namespace Snowship.NColonist {
 				value = Mathf.Clamp(value, 0, prefab.clampValue);
 				roundedValue = Mathf.RoundToInt((value / prefab.clampValue) * 100);
 				if (GameManager.humanM.selectedHuman == colonist && Mathf.RoundToInt((oldValue / prefab.clampValue) * 100) != roundedValue) {
-					GameManager.uiM.RemakeSelectedColonistNeeds();
+					GameManager.uiMOld.RemakeSelectedColonistNeeds();
 				}
 			}
 
@@ -1000,7 +1000,7 @@ namespace Snowship.NColonist {
 					new Colonist(colonistSpawnTile, 1);
 				}
 
-				GameManager.uiM.SetColonistElements();
+				GameManager.uiMOld.SetColonistElements();
 				GameManager.colonyM.colony.map.Bitmasking(GameManager.colonyM.colony.map.tiles, true, true);
 				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
 			}

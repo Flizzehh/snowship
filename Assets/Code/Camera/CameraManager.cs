@@ -1,4 +1,5 @@
-﻿using Snowship.NTime;
+﻿using Snowship.NState;
+using Snowship.NTime;
 using UnityEngine;
 
 namespace Snowship.NCamera {
@@ -41,7 +42,7 @@ namespace Snowship.NCamera {
 		}
 
 		public override void Update() {
-			if (GameManager.tileM.mapState != TileManager.MapState.Generated || GameManager.uiM.pauseMenu.activeSelf || GameManager.uiM.playerTyping) {
+			if (GameManager.tileM.mapState != TileManager.MapState.Generated || GameManager.stateM.State == EState.Paused || GameManager.uiMOld.playerTyping) {
 				return;
 			}
 
@@ -83,7 +84,7 @@ namespace Snowship.NCamera {
 				MaxZoom * (GameManager.debugM.debugMode ? 25 : 1)
 			);
 
-			if (!GameManager.uiM.IsPointerOverUI()) {
+			if (!GameManager.uiMOld.IsPointerOverUI()) {
 
 				//cameraComponent.orthographicSize -= Mathf.Clamp(Input.GetAxis("Mouse ScrollWheel") + (Input.GetAxis("KeyboardZoom") / 10f), -1f, 1f) * cameraComponent.orthographicSize * Time.deltaTime * 100;
 

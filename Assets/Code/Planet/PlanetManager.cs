@@ -92,7 +92,7 @@ namespace Snowship.NPlanet {
 			public readonly Vector2 planetTilePosition = Vector2.zero;
 		}
 
-		public int CalculatePlanetTemperature(float distance) {
+		public static int CalculatePlanetTemperature(float distance) {
 
 			const float starMass = 1; // 1 (lower = colder)
 			const float albedo = 29; // 29 (higher = colder)

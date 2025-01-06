@@ -7,7 +7,9 @@ using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NInput;
 using Snowship.NPlanet;
+using Snowship.NState;
 using Snowship.NUI;
 using UnityEngine;
 
@@ -21,19 +23,24 @@ public class GameManager : MonoBehaviour {
 	public static readonly ColonyManager colonyM = new ColonyManager();
 	public static readonly DebugManager debugM = new DebugManager();
 	public static readonly HumanManager humanM = new HumanManager();
+	public static readonly InputManager inputM = new InputManager();
 	public static readonly JobManager jobM = new JobManager();
 	public static readonly LifeManager lifeM = new LifeManager();
 	public static readonly PersistenceManager persistenceM = new PersistenceManager();
 	public static readonly PlanetManager planetM = new PlanetManager();
 	public static readonly ResourceManager resourceM = new ResourceManager();
+	public static readonly StateManager stateM = new StateManager();
 	public static readonly TileManager tileM = new TileManager();
 	public static readonly TimeManager timeM = new TimeManager();
 	public static readonly UIManager uiM = new UIManager();
+	public static readonly UIManagerOld uiMOld = new UIManagerOld();
 	public static readonly UniverseManager universeM = new UniverseManager();
 
 	public static readonly SelectableManager selectableManager = new SelectableManager();
 
 	public static readonly List<BaseManager> managers = new List<BaseManager>() {
+		stateM,
+
 		timeM,
 		debugM,
 
@@ -53,9 +60,11 @@ public class GameManager : MonoBehaviour {
 		persistenceM,
 
 		uiM,
+		uiMOld,
 		cameraM,
 
 		selectableManager,
+		inputM
 	};
 
 	public void Awake() {
@@ -68,7 +77,7 @@ public class GameManager : MonoBehaviour {
 
 		tileM.SetStartCoroutineReference(this);
 		persistenceM.SetStartCoroutineReference(this);
-		//uiM.SetStartCoroutineReference(this);
+		uiMOld.SetStartCoroutineReference(this);
 
 		resourceM.SetResourceReferences();
 		resourceM.SetGameObjectReferences();
@@ -94,7 +103,7 @@ public class GameManager : MonoBehaviour {
 			manager.Awake();
 		}
 
-		//uiM.SetupUI();
+		uiMOld.SetupUI();
 
 		persistenceM.CreateSettingsState();
 	}

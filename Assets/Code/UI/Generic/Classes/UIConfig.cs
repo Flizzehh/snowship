@@ -24,7 +24,8 @@ namespace Snowship.NUI.Generic {
 		}
 
 		private async UniTask<GameObject> GetViewPrefab() {
-			return await Addressables.LoadAssetAsync<GameObject>(AddressableKey());
+			Debug.Log(AddressableKey());
+			return await Addressables.LoadAssetAsync<GameObject>($"UI/{AddressableKey()}");
 		}
 
 		// ReSharper disable once MemberCanBeMadeStatic.Local

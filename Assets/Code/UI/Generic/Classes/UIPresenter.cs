@@ -9,6 +9,10 @@
 
 		public abstract void OnCreate();
 
-		public abstract void OnClose();
+		public virtual void OnClose() {
+			View.OnClose();
+		}
+
+		public void Close() => OnClose();
 	}
 }

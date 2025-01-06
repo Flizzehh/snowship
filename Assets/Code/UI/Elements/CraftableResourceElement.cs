@@ -26,9 +26,9 @@ namespace Snowship.NUI.Menu.LoadSave {
 			panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color =
 				craftingObject.GetCraftableResourceFromResource(resource) != null
 					? (resource.GetAvailableAmount() > 0
-						? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen)
-						: ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange))
-					: ColourUtilities.GetColour(ColourUtilities.Colours.Clear);
+						? ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen)
+						: ColourUtilities.GetColour(ColourUtilities.EColour.LightOrange))
+					: ColourUtilities.GetColour(ColourUtilities.EColour.Clear);
 		}
 
 		public override void ChangePriority(int amount) {

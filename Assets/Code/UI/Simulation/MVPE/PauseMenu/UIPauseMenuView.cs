@@ -28,7 +28,11 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		public override void OnClose() {
-
+			continueButton.onClick.RemoveListener(() => OnContinueButtonClicked?.Invoke());
+			saveButton.onClick.RemoveListener(() => OnSaveButtonClicked?.Invoke());
+			settingsButton.onClick.RemoveListener(() => OnSettingsButtonClicked?.Invoke());
+			exitToMenuButton.onClick.RemoveListener(() => OnExitToMenuButtonClicked?.Invoke());
+			exitToDesktopButton.onClick.RemoveListener(() => OnExitToDesktopButtonClicked?.Invoke());
 		}
 
 		public void SetSaveButtonImageColour(Color color) {

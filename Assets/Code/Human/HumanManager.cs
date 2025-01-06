@@ -143,8 +143,8 @@ public class HumanManager : BaseManager {
 
 			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.cameraM.cameraComponent.orthographicSize, 2, 10) * 0.001f;
 			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(
-				ColourUtilities.GetColour(ColourUtilities.Colours.LightRed100),
-				ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen100),
+				ColourUtilities.GetColour(ColourUtilities.EColour.LightRed100),
+				ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen100),
 				health
 			);
 
@@ -168,7 +168,7 @@ public class HumanManager : BaseManager {
 
 				SetColour(overTile.sr.color);
 
-				GameManager.uiM.SetSelectedColonistInformation(true);
+				GameManager.uiMOld.SetSelectedColonistInformation(true);
 			}
 		}
 
@@ -222,7 +222,7 @@ public class HumanManager : BaseManager {
 	}
 
 	private void SetSelectedHumanFromClick() {
-		if (Input.GetMouseButtonDown(0) && !GameManager.uiM.IsPointerOverUI()) {
+		if (Input.GetMouseButtonDown(0) && !GameManager.uiMOld.IsPointerOverUI()) {
 			Vector2 mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
 			Human newSelectedHuman = humans.Find(human => Vector2.Distance(human.obj.transform.position, mousePosition) < 0.5f);
 			if (newSelectedHuman != null) {
@@ -241,9 +241,9 @@ public class HumanManager : BaseManager {
 
 		SetSelectedHumanIndicator();
 
-		GameManager.uiM.SetSelectedColonistInformation(false);
-		GameManager.uiM.SetSelectedTraderMenu();
-		GameManager.uiM.SetRightListPanelSize();
+		GameManager.uiMOld.SetSelectedColonistInformation(false);
+		GameManager.uiMOld.SetSelectedTraderMenu();
+		GameManager.uiMOld.SetRightListPanelSize();
 	}
 
 	private GameObject selectedHumanIndicator;

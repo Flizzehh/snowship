@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NUI.Simulation.TradeMenu;
 using UnityEngine;
 
 namespace Snowship.NCaravan {
@@ -33,7 +34,7 @@ namespace Snowship.NCaravan {
 
 				caravans.Remove(caravan);
 
-				GameManager.uiM.SetCaravanElements();
+				GameManager.uiMOld.SetCaravanElements();
 			}
 
 			removeCaravans.Clear();
@@ -139,13 +140,13 @@ namespace Snowship.NCaravan {
 		public void AddCaravan(Caravan caravan) {
 			caravans.Add(caravan);
 
-			GameManager.uiM.SetCaravanElements();
+			GameManager.uiMOld.SetCaravanElements();
 		}
 
 		public void SetSelectedCaravan(Caravan selectedCaravan) {
 			this.selectedCaravan = selectedCaravan;
 
-			GameManager.uiM.SetTradeMenu();
+			GameManager.uiM.OpenViewAsync<UITradeMenu>(null);
 		}
 	}
 }

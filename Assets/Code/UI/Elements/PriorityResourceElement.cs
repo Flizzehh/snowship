@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Snowship.NUI.Menu.LoadSave {
-	internal abstract class PriorityResourceElement : UIElement {
+	internal abstract class PriorityResourceElement {
 
 		public enum Type {
 			Resource,
@@ -81,16 +81,16 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 			panel.transform.Find("Details-Panel/AvailableAmount-Text").GetComponent<Text>().color =
 				resource.GetAvailableAmount() > 0
-					? ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen)
-					: ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed);
+					? ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen)
+					: ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed);
 		}
 
 		public void UpdatePriorityButtonText(int priority) {
 			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().text = priority > 0 ? priority.ToString() : string.Empty;
 
 			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().color = Color.Lerp(
-				ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen),
-				ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed),
+				ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen),
+				ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed),
 				(priority - 1f) / (ResourceManager.PriorityResourceInstance.priorityMax - 1f)
 			);
 		}

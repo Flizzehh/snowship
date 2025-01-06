@@ -14,16 +14,16 @@ namespace Snowship.NUI.Menu.LoadSave {
 			this.save = save;
 
 			if (save.loadable) {
-				component.OnLoadSaveElementComponentButtonClicked += OnLoadSaveElementComponentButtonClicked;
-				component.SetSaveDateTimeText(save.saveDateTime);
+				Component.OnLoadSaveElementComponentButtonClicked += OnLoadSaveElementComponentButtonClicked;
+				Component.SetSaveDateTimeText(save.saveDateTime);
 				if (save.image != null) {
-					component.SetSaveImage(save.image);
+					Component.SetSaveImage(save.image);
 				}
 			} else {
-				component.SetSaveText("Error while reading save.");
-				component.SetSaveDateTimeText(string.Empty);
-				component.SetSaveElementBackgroundColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed));
-				component.SetElementButtonInteractable(false);
+				Component.SetSaveText("Error while reading save.");
+				Component.SetSaveDateTimeText(string.Empty);
+				Component.SetSaveElementBackgroundColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed));
+				Component.SetElementButtonInteractable(false);
 			}
 		}
 

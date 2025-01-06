@@ -10,7 +10,6 @@ namespace Snowship.NUI.Menu.MainMenu {
 
 		[Header("General")]
 
-		[SerializeField] private GameObject mainMenu;
 		[SerializeField] private Text disclaimerText;
 
 		[Header("Buttons")]
@@ -68,6 +67,11 @@ namespace Snowship.NUI.Menu.MainMenu {
 			disclaimerText.text = text;
 		}
 
+		public void DisableContinueButton() {
+			continueButton.interactable = false;
+			continuePreviewImage.gameObject.SetActive(false);
+		}
+
 		public void SetupContinueButton(bool interactable, Sprite previewImage) {
 			continueButton.interactable = interactable;
 			continueButton.GetComponent<HoverToggleScript>().Initialize(continuePreviewImage.gameObject, false, null);
@@ -76,25 +80,8 @@ namespace Snowship.NUI.Menu.MainMenu {
 
 		public void SetBackground(Sprite backgroundImage) {
 			mainMenuBackgroundImage.sprite = backgroundImage;
+			darkBackground.SetActive(false);
 		}
-
-		/*private void SetMainMenuBackground(bool randomBackgroundImage, Resolution screenResolution) {
-
-			float targetNewSize = Mathf.Max(screenResolution.width, screenResolution.height);
-
-			Vector2 menuBackgroundSize = mainMenuBackgroundImage.sprite.rect.size;
-			float menuBackgroundTargetSize = Mathf.Max(menuBackgroundSize.x, menuBackgroundSize.y);
-			float menuBackgroundRatio = menuBackgroundTargetSize / targetNewSize;
-			Vector2 newMenuBackgroundSize = menuBackgroundSize / menuBackgroundRatio;
-			mainMenuBackgroundRectTransform.sizeDelta = newMenuBackgroundSize * 1.5f;
-			originalBackgroundPosition = mainMenuBackgroundRectTransform.position;
-
-			Vector2 logoSize = snowshipLogo.sprite.rect.size;
-			float logoTargetSize = Mathf.Max(logoSize.x, logoSize.y);
-			float logoRatio = logoTargetSize / targetNewSize;
-			Vector2 newLogoSize = logoSize / logoRatio;
-			snowshipLogoRectTransform.sizeDelta = newLogoSize * 1.05f;
-		}*/
 
 		private void UpdateMainMenuBackground() {
 			mainMenuBackgroundRectTransform.anchoredPosition = originalBackgroundPosition

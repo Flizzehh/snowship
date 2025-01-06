@@ -353,9 +353,9 @@ namespace Snowship.NJob {
 								foreach (ResourceManager.ReservedResources reservedResourceToRemove in reservedResourcesToRemove) {
 									inventory.GetInventory().reservedResources.Remove(reservedResourceToRemove);
 								}
-								GameManager.uiM.SetSelectedColonistInformation(true);
-								GameManager.uiM.SetSelectedContainerInfo();
-								GameManager.uiM.UpdateSelectedTradingPostInfo();
+								GameManager.uiMOld.SetSelectedColonistInformation(true);
+								GameManager.uiMOld.SetSelectedContainerInfo();
+								GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 							} else if (instance is ResourceManager.CraftingObject craftingObject) {
 								foreach (Job removeJob in craftingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
 									GameManager.jobM.CancelJob(removeJob);

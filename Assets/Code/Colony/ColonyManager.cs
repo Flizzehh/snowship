@@ -29,7 +29,7 @@ namespace Snowship.NColony {
 				GameManager.persistenceM.CreateColony(colony);
 				GameManager.persistenceM.CreateSave(colony);
 
-				GameManager.uiM.SetLoadingScreenActive(false);
+				GameManager.uiMOld.SetLoadingScreenActive(false);
 			}
 		}
 

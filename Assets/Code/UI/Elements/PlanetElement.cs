@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Snowship.NUI.Menu.LoadSave {
-	internal class PlanetElement : UIElement<> {
+	internal class PlanetElement {
 		public PersistenceManager.PersistencePlanet persistencePlanet;
 
 		public GameObject obj;
@@ -26,7 +26,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 			obj.transform.Find("LastSaveData-Panel/LastSavedDateTime-Text").GetComponent<Text>().text = persistencePlanet.lastSaveDateTime;
 
 			obj.GetComponent<Button>().onClick.AddListener(delegate {
-				GameManager.uiM.SetSelectedPlanetElement(this);
+				// TODO GameManager.uiMOld.SetSelectedPlanetElement(this);
 			});
 		}
 

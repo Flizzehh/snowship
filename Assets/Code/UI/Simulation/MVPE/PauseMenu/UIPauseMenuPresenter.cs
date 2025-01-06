@@ -36,10 +36,9 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		private void OnSaveButtonClicked() {
 			try {
 				GameManager.persistenceM.CreateSave(GameManager.colonyM.colony);
-				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen));
-			}
-			catch (Exception e) {
-				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed));
+				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen));
+			} catch (Exception e) {
+				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed));
 				throw e.InnerException ?? e;
 			}
 		}

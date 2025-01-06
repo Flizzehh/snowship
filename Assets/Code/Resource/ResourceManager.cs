@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NUI;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,8 @@ public class ResourceManager : BaseManager {
 	public GameObject colonyObj;
 	public GameObject tileImage;
 	public GameObject objectDataPanel;
+
+	public event Action OnResourceTotalsUpdated;
 
 	public void SetResourceReferences() {
 		tilePrefab = Resources.Load<GameObject>(@"Prefabs/Tile");
@@ -516,7 +519,7 @@ public class ResourceManager : BaseManager {
 		public readonly List<ResourceAmount> craftingResources = new List<ResourceAmount>(); // Filled in CreateResources() after all resources created
 		public int amountCreated = 1; // Can't be readonly
 
-		// World Amounts
+		// World Amounts TODO Make into `public int WorldTotalAmount { get; private set; }`
 		private int worldTotalAmount;
 		private int colonistsTotalAmount;
 		private int containerTotalAmount;
@@ -525,7 +528,14 @@ public class ResourceManager : BaseManager {
 		private int availableAmount;
 
 		// UI
-		public UIManager.ResourceElement resourceListElement; // TODO REMOVE THIS (replace with a UIManager Dictionary<ResourceEnum, ResourceElement> and access like that
+		public UIManagerOld.ResourceElement resourceListElement; // TODO REMOVE THIS (replace with a UIManager Dictionary<ResourceEnum, ResourceElement> and access like that
+
+		public event Action<int> OnWorldTotalAmountChanged;
+		public event Action<int> OnColonistsTotalAmountChanged;
+		public event Action<int> OnContainerTotalAmountChanged;
+		public event Action<int> OnUnreservedContainerTotalAmountChanged;
+		public event Action<int> OnUnreservedTradingPostTotalAmountChanged;
+		public event Action<int> OnAvailableAmountChanged;
 
 		public Resource(
 			ResourceEnum type,
@@ -567,7 +577,12 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void SetWorldTotalAmount(int worldTotalAmount) {
+			if (this.worldTotalAmount == worldTotalAmount) {
+				return;
+			}
+
 			this.worldTotalAmount = worldTotalAmount;
+			OnWorldTotalAmountChanged?.Invoke(worldTotalAmount);
 		}
 
 		public void AddToWorldTotalAmount(int amount) {
@@ -579,7 +594,12 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void SetColonistsTotalAmount(int colonistsTotalAmount) {
+			if (this.colonistsTotalAmount == colonistsTotalAmount) {
+				return;
+			}
+
 			this.colonistsTotalAmount = colonistsTotalAmount;
+			OnColonistsTotalAmountChanged?.Invoke(colonistsTotalAmount);
 		}
 
 		public void AddToColonistsTotalAmount(int amount) {
@@ -591,7 +611,12 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void SetContainerTotalAmount(int containerTotalAmount) {
+			if (this.containerTotalAmount == containerTotalAmount) {
+				return;
+			}
+
 			this.containerTotalAmount = containerTotalAmount;
+			OnContainerTotalAmountChanged?.Invoke(containerTotalAmount);
 		}
 
 		public void AddToContainerTotalAmount(int amount) {
@@ -603,7 +628,12 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void SetUnreservedContainerTotalAmount(int unreservedContainerTotalAmount) {
+			if (this.unreservedContainerTotalAmount == unreservedContainerTotalAmount) {
+				return;
+			}
+
 			this.unreservedContainerTotalAmount = unreservedContainerTotalAmount;
+			OnUnreservedContainerTotalAmountChanged?.Invoke(unreservedContainerTotalAmount);
 		}
 
 		public void AddToUnreservedContainerTotalAmount(int amount) {
@@ -615,7 +645,12 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void SetUnreservedTradingPostTotalAmount(int unreservedTradingPostTotalAmount) {
+			if (this.unreservedTradingPostTotalAmount == unreservedTradingPostTotalAmount) {
+				return;
+			}
+
 			this.unreservedTradingPostTotalAmount = unreservedTradingPostTotalAmount;
+			OnUnreservedTradingPostTotalAmountChanged?.Invoke(unreservedTradingPostTotalAmount);
 		}
 
 		public void AddToUnreservedTradingPostTotalAmount(int amount) {
@@ -623,7 +658,12 @@ public class ResourceManager : BaseManager {
 		}
 
 		public void SetAvailableAmount(int availableAmount) {
+			if (this.availableAmount == availableAmount) {
+				return;
+			}
+
 			this.availableAmount = availableAmount;
+			OnAvailableAmountChanged?.Invoke(availableAmount);
 		}
 
 		public void CalculateAvailableAmount() {
@@ -842,86 +882,6 @@ public class ResourceManager : BaseManager {
 		}
 	}
 
-	public class TradeResourceAmount {
-		public Resource resource;
-
-		public int caravanAmount;
-		public int colonyAmount;
-
-		private int oldTradeAmount = 0;
-		private int tradeAmount;
-
-		public int caravanResourcePrice;
-
-		public Caravan caravan;
-
-		public event Action OnCaravanAmountUpdated;
-		public event Action OnColonyAmountUpdated;
-
-		public TradeResourceAmount(Resource resource, int caravanAmount, Caravan caravan) {
-			this.resource = resource;
-
-			this.caravanAmount = caravanAmount;
-
-			caravanResourcePrice = caravan.DeterminePriceForResource(resource);
-
-			this.caravan = caravan;
-		}
-
-		public void Update() {
-			UpdateCaravanAmount();
-		}
-
-		private void UpdateCaravanAmount() {
-
-			ResourceAmount caravanResourceAmount = caravan.GetInventory().resources.Find(ra => ra.resource == resource);
-			if (caravanResourceAmount == null) {
-				OnCaravanAmountUpdated?.Invoke();
-				return;
-			}
-
-			if (caravanAmount == caravanResourceAmount.amount) {
-				return;
-			}
-
-			caravanAmount = caravanResourceAmount.amount;
-			OnCaravanAmountUpdated?.Invoke();
-		}
-
-		public void SetColonyAmount(int colonyAmount) {
-			if (this.colonyAmount == colonyAmount) {
-				return;
-			}
-
-			this.colonyAmount = colonyAmount;
-			OnColonyAmountUpdated?.Invoke();
-		}
-
-		public int GetTradeAmount() {
-			return tradeAmount;
-		}
-
-		public void SetTradeAmount(int tradeAmount) {
-			oldTradeAmount = this.tradeAmount;
-			this.tradeAmount = tradeAmount;
-			if (oldTradeAmount != this.tradeAmount) {
-				caravan.SetSelectedResource(this);
-			}
-		}
-	}
-
-	public class ConfirmedTradeResourceAmount {
-		public Resource resource;
-		public int tradeAmount;
-		public int amountRemaining;
-
-		public ConfirmedTradeResourceAmount(Resource resource, int tradeAmount) {
-			this.resource = resource;
-			this.tradeAmount = tradeAmount;
-			amountRemaining = tradeAmount;
-		}
-	}
-
 	public Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
 		Job job = new Job(
 			JobPrefab.GetJobPrefabByName("CreateResource"),
@@ -1025,10 +985,10 @@ public class ResourceManager : BaseManager {
 			}
 
 			GameManager.resourceM.CalculateResourceTotals();
-			GameManager.uiM.SetSelectedColonistInformation(true);
-			GameManager.uiM.SetSelectedTraderMenu();
-			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.UpdateSelectedTradingPostInfo();
+			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			GameManager.uiMOld.SetSelectedTraderMenu();
+			GameManager.uiMOld.SetSelectedContainerInfo();
+			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			ColonistJob.UpdateColonistJobs();
 
 			//return remainingAmount;
@@ -1050,10 +1010,10 @@ public class ResourceManager : BaseManager {
 				}
 				reservedResources.Add(new ReservedResources(resourcesToReserve, humanReservingResources));
 			}
-			GameManager.uiM.SetSelectedColonistInformation(true);
-			GameManager.uiM.SetSelectedTraderMenu();
-			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.UpdateSelectedTradingPostInfo();
+			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			GameManager.uiMOld.SetSelectedTraderMenu();
+			GameManager.uiMOld.SetSelectedContainerInfo();
+			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			return allResourcesFound;
 		}
 
@@ -1067,10 +1027,10 @@ public class ResourceManager : BaseManager {
 			foreach (ReservedResources rr in reservedResourcesByHuman) {
 				reservedResources.Remove(rr);
 			}
-			GameManager.uiM.SetSelectedColonistInformation(true);
-			GameManager.uiM.SetSelectedTraderMenu();
-			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.UpdateSelectedTradingPostInfo();
+			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			GameManager.uiMOld.SetSelectedTraderMenu();
+			GameManager.uiMOld.SetSelectedContainerInfo();
+			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			return reservedResourcesByHuman;
 		}
 
@@ -1088,10 +1048,10 @@ public class ResourceManager : BaseManager {
 				reservedResources.Remove(rrRemove);
 			}
 			reservedResourcesToRemove.Clear();
-			GameManager.uiM.SetSelectedColonistInformation(true);
-			GameManager.uiM.SetSelectedTraderMenu();
-			GameManager.uiM.SetSelectedContainerInfo();
-			GameManager.uiM.UpdateSelectedTradingPostInfo();
+			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			GameManager.uiMOld.SetSelectedTraderMenu();
+			GameManager.uiMOld.SetSelectedContainerInfo();
+			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 		}
 
 		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, ResourceAmount resourceAmount, bool limitToMaxAmount) {
@@ -1169,6 +1129,8 @@ public class ResourceManager : BaseManager {
 		foreach (Resource resource in GetResources()) {
 			resource.CalculateAvailableAmount();
 		}
+
+		OnResourceTotalsUpdated?.Invoke();
 	}
 
 	public List<ResourceAmount> GetFilteredResources(bool colonistInventory, bool colonistReserved, bool containerInventory, bool containerReserved) {
@@ -2211,10 +2173,10 @@ public class ResourceManager : BaseManager {
 	public void AddObjectInstance(ObjectInstance objectInstance) {
 		if (objectInstances.ContainsKey(objectInstance.prefab)) {
 			objectInstances[objectInstance.prefab].Add(objectInstance);
-			GameManager.uiM.ChangeObjectPrefabElements(UIManager.ChangeTypeEnum.Update, objectInstance.prefab);
+			GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, objectInstance.prefab);
 		} else {
 			objectInstances.Add(objectInstance.prefab, new List<ObjectInstance>() { objectInstance });
-			GameManager.uiM.ChangeObjectPrefabElements(UIManager.ChangeTypeEnum.Add, objectInstance.prefab);
+			GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Add, objectInstance.prefab);
 		}
 	}
 
@@ -2225,8 +2187,8 @@ public class ResourceManager : BaseManager {
 			case ObjectInstanceType.Container:
 				Container container = (Container)instance;
 
-				if (GameManager.uiM.selectedContainer == container) {
-					GameManager.uiM.SetSelectedContainer(null);
+				if (GameManager.uiMOld.selectedContainer == container) {
+					GameManager.uiMOld.SetSelectedContainer(null);
 				}
 
 				containers.Remove(container);
@@ -2234,8 +2196,8 @@ public class ResourceManager : BaseManager {
 			case ObjectInstanceType.TradingPost:
 				TradingPost tradingPost = (TradingPost)instance;
 
-				if (GameManager.uiM.selectedTradingPost == tradingPost) {
-					GameManager.uiM.SetSelectedTradingPost(null);
+				if (GameManager.uiMOld.selectedTradingPost == tradingPost) {
+					GameManager.uiMOld.SetSelectedTradingPost(null);
 				}
 
 				tradingPosts.Remove(tradingPost);
@@ -2255,8 +2217,8 @@ public class ResourceManager : BaseManager {
 			case ObjectInstanceType.CraftingObject:
 				CraftingObject craftingObject = (CraftingObject)instance;
 
-				if (GameManager.uiM.selectedCraftingObject == craftingObject) {
-					GameManager.uiM.SetSelectedCraftingObject(null);
+				if (GameManager.uiMOld.selectedCraftingObject == craftingObject) {
+					GameManager.uiMOld.SetSelectedCraftingObject(null);
 				}
 
 				craftingObjectInstances.Remove(craftingObject);
@@ -2277,7 +2239,7 @@ public class ResourceManager : BaseManager {
 		if (objectInstances.ContainsKey(instance.prefab)) {
 			objectInstances[instance.prefab].Remove(instance);
 
-			GameManager.uiM.ChangeObjectPrefabElements(UIManager.ChangeTypeEnum.Update, instance.prefab);
+			GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, instance.prefab);
 		} else {
 			Debug.LogWarning("Tried removing a tile object instance which isn't in the list");
 		}
@@ -2285,7 +2247,7 @@ public class ResourceManager : BaseManager {
 		if (objectInstances[instance.prefab].Count <= 0) {
 			objectInstances.Remove(instance.prefab);
 
-			GameManager.uiM.ChangeObjectPrefabElements(UIManager.ChangeTypeEnum.Remove, instance.prefab);
+			GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Remove, instance.prefab);
 		}
 	}
 

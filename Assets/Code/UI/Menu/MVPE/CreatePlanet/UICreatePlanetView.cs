@@ -8,37 +8,47 @@ using UnityEngine.UI;
 namespace Snowship.NUI.Menu.CreatePlanet {
 	public class UICreatePlanetView : UIView {
 
+		[Header("General")]
 		[SerializeField] private GridLayoutGroup planetViewGridLayoutGroup;
 
 		[SerializeField] private Button backButton;
-
-		[SerializeField] private InputField planetNameInputField;
-		[SerializeField] private InputField planetSeedInputField;
-
-		[SerializeField] private Slider planetSizeSlider;
-		[SerializeField] private Text planetSizeText;
-
-		[SerializeField] private Slider planetDistanceSlider;
-		[SerializeField] private Text planetDistanceText;
-
-		[SerializeField] private Slider temperatureRangeSlider;
-		[SerializeField] private Text temperatureRangeText;
-
-		[SerializeField] private Toggle randomOffsetsToggle;
-
-		[SerializeField] private Slider windDirectionSlider;
-		[SerializeField] private Text windDirectionText;
-
-		[SerializeField] private GameObject planetTileInfoPanel;
-		[SerializeField] private Image planetTileSpriteImage;
-		[SerializeField] private Text planetTileBiomeText;
-		[SerializeField] private Text planetTilePositionText;
 
 		[SerializeField] private Button refreshPlanetButton;
 		[SerializeField] private Button randomizePlanetButton;
 
 		[SerializeField] private Button createPlanetButton;
 		[SerializeField] private Image createPlanetButtonImage;
+
+		[Header("Selected Planet Tile Info")]
+		[SerializeField] private GameObject planetTileInfoPanel;
+		[SerializeField] private Image planetTileSpriteImage;
+		[SerializeField] private Text planetTileBiomeText;
+		[SerializeField] private Text planetTilePositionText;
+
+		[Header("Planet Properties")]
+		[Header("Name")]
+		[SerializeField] private InputField planetNameInputField;
+		[Header("Seed")]
+		[SerializeField] private InputField planetSeedInputField;
+
+		[Header("Size")]
+		[SerializeField] private Slider planetSizeSlider;
+		[SerializeField] private Text planetSizeText;
+
+		[Header("Distance")]
+		[SerializeField] private Slider planetDistanceSlider;
+		[SerializeField] private Text planetDistanceText;
+
+		[Header("Temperature Range")]
+		[SerializeField] private Slider temperatureRangeSlider;
+		[SerializeField] private Text temperatureRangeText;
+
+		[Header("Random Offsets")]
+		[SerializeField] private Toggle randomOffsetsToggle;
+
+		[Header("Wind Direction")]
+		[SerializeField] private Slider windDirectionSlider;
+		[SerializeField] private Text windDirectionText;
 
 		public event Action OnBackButtonClicked;
 
@@ -150,8 +160,8 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		public void SetCreatePlanetButtonInteractable(bool interactable) {
 			createPlanetButton.interactable = interactable;
 			createPlanetButtonImage.color = interactable
-				? ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220)
-				: ColourUtilities.GetColour(ColourUtilities.Colours.Grey120);
+				? ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220)
+				: ColourUtilities.GetColour(ColourUtilities.EColour.Grey120);
 		}
 	}
 }

@@ -23,14 +23,17 @@ namespace Snowship.NUI.Menu.MainMenu {
 			View.OnSettingsButtonClicked += OnSettingsButtonClicked;
 			View.OnExitButtonClicked += OnExitButtonClicked;
 
+			View.SetDisclaimerText($"Snowship by Ryan White - rywh.itch.io/snowship\n<size=20>{PersistenceManager.gameVersion.text}</size>");
+
 			PersistenceManager.LastSaveProperties lastSaveProperties = GameManager.persistenceM.GetLastSaveProperties();
-
-			View.SetDisclaimerText($"Snowship by Ryan White - rywh.itch.io/snowship\n<size=20>{GameManager.persistenceM.gameVersion.Item2}</size>");
-
-			View.SetupContinueButton(
-				GameManager.persistenceM.IsLastSaveUniverseLoadable(),
-				GameManager.persistenceM.LoadSaveImageFromSaveDirectoryPath(lastSaveProperties.lastSaveSavePath)
-			);
+			if (lastSaveProperties != null) {
+				View.SetupContinueButton(
+					GameManager.persistenceM.IsLastSaveUniverseLoadable(),
+					GameManager.persistenceM.LoadSaveImageFromSaveDirectoryPath(lastSaveProperties.lastSaveSavePath)
+				);
+			} else {
+				View.DisableContinueButton();
+			}
 
 			List<Sprite> backgroundImages = Resources.LoadAll<Sprite>(@"UI/Backgrounds/SingleMap").ToList();
 			View.SetBackground(backgroundImages[Random.Range(0, backgroundImages.Count)]);

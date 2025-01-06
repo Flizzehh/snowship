@@ -11,6 +11,7 @@ using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPlanet;
+using Snowship.NResource.Models;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +25,8 @@ public class PersistenceManager : BaseManager {
 		this.startCoroutineReference = startCoroutineReference;
 	}
 
-	public readonly (int increment, string text) gameVersion = (3, "2024.1");
-	private readonly (int increment, string text) saveVersion = (3, "2024.1");
+	public static readonly (int increment, string text) gameVersion = (3, "2024.1");
+	public static readonly (int increment, string text) saveVersion = (3, "2024.1");
 
 	public SettingsState settingsState;
 
@@ -83,9 +84,9 @@ public class PersistenceManager : BaseManager {
 		public void ApplySettings() {
 			Screen.SetResolution(resolutionWidth, resolutionHeight, fullscreen, refreshRate);
 
-			GameManager.uiM.canvas.GetComponent<CanvasScaler>().uiScaleMode = scaleMode;
+			GameManager.uiMOld.canvas.GetComponent<CanvasScaler>().uiScaleMode = scaleMode;
 
-			GameManager.uiM.SetMainMenuBackground(false);
+			// GameManager.uiMOld.SetMainMenuBackground(false);
 		}
 
 		public void LoadSetting(Setting setting, string value) {
@@ -647,8 +648,8 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public void SaveConfiguration(StreamWriter file) {
-		file.WriteLine(CreateKeyValueString(ConfigurationProperty.GameVersion, gameVersion.Value, 0));
-		file.WriteLine(CreateKeyValueString(ConfigurationProperty.SaveVersion, saveVersion.Value, 0));
+		file.WriteLine(CreateKeyValueString(ConfigurationProperty.GameVersion, gameVersion.text, 0));
+		file.WriteLine(CreateKeyValueString(ConfigurationProperty.SaveVersion, saveVersion.text, 0));
 	}
 
 	public Dictionary<ConfigurationProperty, string> LoadConfiguration(string path) {
@@ -838,7 +839,7 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public Planet ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
-		Planet planet = GameManager.planetM.CreatePlanet(
+		Planet planet = GameManager.planetM.CreatePlanet(new CreatePlanetData(
 			persistencePlanet.name,
 			persistencePlanet.seed,
 			persistencePlanet.size,
@@ -846,7 +847,7 @@ public class PersistenceManager : BaseManager {
 			persistencePlanet.temperatureRange,
 			persistencePlanet.randomOffsets,
 			persistencePlanet.windDirection
-		);
+		));
 		planet.SetLastSaveDateTime(persistencePlanet.lastSaveDateTime, persistencePlanet.lastSaveTimeChunk);
 		planet.SetDirectory(Directory.GetParent(persistencePlanet.path).FullName);
 		return planet;
@@ -986,18 +987,12 @@ public class PersistenceManager : BaseManager {
 	}
 
 	public Colony ApplyLoadedColony(PersistenceColony persistenceColony) {
-		Colony colony = GameManager.colonyM.CreateColony(
+		Colony colony = GameManager.colonyM.CreateColony(new CreateColonyData(
 			persistenceColony.name,
-			persistenceColony.planetPosition,
 			persistenceColony.seed,
 			persistenceColony.size,
-			persistenceColony.averageTemperature,
-			persistenceColony.averagePrecipitation,
-			persistenceColony.terrainTypeHeights,
-			persistenceColony.surroundingPlanetTileHeights,
-			persistenceColony.onRiver,
-			persistenceColony.surroundingPlanetTileRivers
-		);
+			GameManager.planetM.selectedPlanetTile
+		));
 		colony.SetLastSaveDateTime(persistenceColony.lastSaveDateTime, persistenceColony.lastSaveTimeChunk);
 		colony.SetDirectory(Directory.GetParent(persistenceColony.path).FullName);
 
@@ -1095,11 +1090,11 @@ public class PersistenceManager : BaseManager {
 		if (persistenceSave != null) {
 			GameManager.tileM.mapState = TileManager.MapState.Generating;
 
-			GameManager.uiM.SetMainMenuActive(false);
-			GameManager.uiM.SetLoadingScreenActive(true);
-			GameManager.uiM.SetGameUIActive(false);
+			// GameManager.uiMOld.SetMainMenuActive(false);
+			GameManager.uiMOld.SetLoadingScreenActive(true);
+			GameManager.uiMOld.SetGameUIActive(false);
 
-			GameManager.uiM.UpdateLoadingStateText("Loading Colony", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Colony", string.Empty); yield return null;
 			GameManager.colonyM.LoadColony(GameManager.colonyM.colony, false);
 
 			string saveDirectoryPath = Directory.GetParent(persistenceSave.path).FullName;
@@ -1107,57 +1102,57 @@ public class PersistenceManager : BaseManager {
 			GameManager.timeM.SetPaused(true);
 
 			loadingState = LoadingState.LoadingCamera;
-			GameManager.uiM.UpdateLoadingStateText("Loading Camera", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Camera", string.Empty); yield return null;
 			LoadCamera(saveDirectoryPath + "/camera.snowship");
 			while (loadingState != LoadingState.LoadedCamera) { yield return null; }
 
 			loadingState = LoadingState.LoadingTime;
-			GameManager.uiM.UpdateLoadingStateText("Loading Time", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Time", string.Empty); yield return null;
 			LoadTime(saveDirectoryPath + "/time.snowship");
 			while (loadingState != LoadingState.LoadedTime) { yield return null; }
 
 			loadingState = LoadingState.LoadingResources;
-			GameManager.uiM.UpdateLoadingStateText("Loading Resources", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Resources", string.Empty); yield return null;
 			LoadResources(saveDirectoryPath + "/resources.snowship");
 			while (loadingState != LoadingState.LoadedResources) { yield return null; }
 
 			loadingState = LoadingState.LoadingMap;
-			GameManager.uiM.UpdateLoadingStateText("Loading Original Map", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Original Map", string.Empty); yield return null;
 			GameManager.colonyM.colony.map = new TileManager.Map() { mapData = GameManager.colonyM.colony.mapData };
 			TileManager.Map map = GameManager.colonyM.colony.map;
 
 			List<PersistenceTile> originalTiles = LoadTiles(GameManager.colonyM.colony.directory + "/Map/tiles.snowship");
 			List<PersistenceRiver> originalRivers = LoadRivers(GameManager.colonyM.colony.directory + "/Map/rivers.snowship");
 
-			GameManager.uiM.UpdateLoadingStateText("Loading Modified Map", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Modified Map", string.Empty); yield return null;
 			List<PersistenceTile> modifiedTiles = LoadTiles(saveDirectoryPath + "/tiles.snowship");
 			List<PersistenceRiver> modifiedRivers = LoadRivers(saveDirectoryPath + "/rivers.snowship");
 
-			GameManager.uiM.UpdateLoadingStateText("Applying Changes to Map", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Applying Changes to Map", string.Empty); yield return null;
 			ApplyLoadedTiles(originalTiles, modifiedTiles, map);
 			ApplyLoadedRivers(originalRivers, modifiedRivers, map);
 			while (loadingState != LoadingState.LoadedMap) { yield return null; }
 
 			loadingState = LoadingState.LoadingObjects;
-			GameManager.uiM.UpdateLoadingStateText("Loading Object Data", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Object Data", string.Empty); yield return null;
 			List<PersistenceObject> persistenceObjects = LoadObjects(saveDirectoryPath + "/objects.snowship");
 			ApplyLoadedObjects(persistenceObjects);
 			while (loadingState != LoadingState.LoadedObjects) { yield return null; }
 
 			loadingState = LoadingState.LoadingCaravans;
-			GameManager.uiM.UpdateLoadingStateText("Loading Caravan Data", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Caravan Data", string.Empty); yield return null;
 			List<PersistenceCaravan> persistenceCaravans = LoadCaravans(saveDirectoryPath + "/caravans.snowship");
 			ApplyLoadedCaravans(persistenceCaravans);
 			while (loadingState != LoadingState.LoadedCaravans) { yield return null; }
 
 			loadingState = LoadingState.LoadingJobs;
-			GameManager.uiM.UpdateLoadingStateText("Loading Job Data", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Job Data", string.Empty); yield return null;
 			List<PersistenceJob> persistenceJobs = LoadJobs(saveDirectoryPath + "/jobs.snowship");
 			ApplyLoadedJobs(persistenceJobs);
 			while (loadingState != LoadingState.LoadedJobs) { yield return null; }
 
 			loadingState = LoadingState.LoadingColonists;
-			GameManager.uiM.UpdateLoadingStateText("Loading Colonist Data", string.Empty); yield return null;
+			GameManager.uiMOld.UpdateLoadingStateText("Loading Colonist Data", string.Empty); yield return null;
 			List<PersistenceColonist> persistenceColonists = LoadColonists(saveDirectoryPath + "/colonists.snowship");
 			ApplyLoadedColonists(persistenceColonists);
 			while (loadingState != LoadingState.LoadedColonists) { yield return null; }
@@ -1220,8 +1215,8 @@ public class PersistenceManager : BaseManager {
 
 			loadingState = LoadingState.FinishedLoading;
 			GameManager.tileM.mapState = TileManager.MapState.Generated;
-			GameManager.uiM.SetGameUIActive(true);
-			GameManager.uiM.SetLoadingScreenActive(false);
+			GameManager.uiMOld.SetGameUIActive(true);
+			GameManager.uiMOld.SetLoadingScreenActive(false);
 		} else {
 			Debug.LogError("Unable to load a save without a save being selected.");
 		}
@@ -2143,10 +2138,10 @@ public class PersistenceManager : BaseManager {
 
 			WriteInventoryLines(file, caravan.GetInventory(), 1);
 
-			List<ResourceManager.TradeResourceAmount> tradeResourceAmounts = caravan.GenerateTradeResourceAmounts();
+			List<TradeResourceAmount> tradeResourceAmounts = caravan.GenerateTradeResourceAmounts();
 			if (tradeResourceAmounts.Count > 0) {
 				file.WriteLine(CreateKeyValueString(CaravanProperty.ResourcesToTrade, string.Empty, 1));
-				foreach (ResourceManager.TradeResourceAmount tra in caravan.GenerateTradeResourceAmounts()) {
+				foreach (TradeResourceAmount tra in caravan.GenerateTradeResourceAmounts()) {
 					file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.TradeResourceAmount, string.Empty, 2));
 
 					file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.Type, tra.resource.type, 3));
@@ -2161,7 +2156,7 @@ public class PersistenceManager : BaseManager {
 
 			if (caravan.confirmedResourcesToTrade.Count > 0) {
 				file.WriteLine(CreateKeyValueString(CaravanProperty.ConfirmedResourcesToTrade, string.Empty, 1));
-				foreach (ResourceManager.ConfirmedTradeResourceAmount ctra in caravan.confirmedResourcesToTrade) {
+				foreach (ConfirmedTradeResourceAmount ctra in caravan.confirmedResourcesToTrade) {
 					file.WriteLine(CreateKeyValueString(ConfirmedTradeResourceAmountProperty.ConfirmedTradeResourceAmount, string.Empty, 2));
 
 					file.WriteLine(CreateKeyValueString(ConfirmedTradeResourceAmountProperty.Type, ctra.resource.type, 3));
@@ -2540,9 +2535,10 @@ public class PersistenceManager : BaseManager {
 			}
 
 			foreach (PersistenceTradeResourceAmount persistenceTradeResourceAmount in persistenceCaravan.persistenceResourcesToTrade) {
-				ResourceManager.TradeResourceAmount tradeResourceAmount = new ResourceManager.TradeResourceAmount(
+				TradeResourceAmount tradeResourceAmount = new TradeResourceAmount(
 					GameManager.resourceM.GetResourceByEnum(persistenceTradeResourceAmount.type.Value),
 					persistenceTradeResourceAmount.caravanAmount.Value,
+					0,
 					caravan
 				) {
 					caravanResourcePrice = persistenceTradeResourceAmount.caravanPrice.Value
@@ -2552,7 +2548,7 @@ public class PersistenceManager : BaseManager {
 
 			foreach (PersistenceConfirmedTradeResourceAmount persistenceConfirmedTradeResourceAmount in persistenceCaravan.persistenceConfirmedResourcesToTrade) {
 				caravan.confirmedResourcesToTrade.Add(
-					new ResourceManager.ConfirmedTradeResourceAmount(
+					new ConfirmedTradeResourceAmount(
 						GameManager.resourceM.GetResourceByEnum(persistenceConfirmedTradeResourceAmount.type.Value),
 						persistenceConfirmedTradeResourceAmount.tradeAmount.Value
 					) {
@@ -3168,7 +3164,7 @@ public class PersistenceManager : BaseManager {
 			}
 		}
 
-		GameManager.uiM.SetColonistElements();
+		GameManager.uiMOld.SetColonistElements();
 	}
 
 	public enum JobProperty {
@@ -4287,7 +4283,7 @@ public class PersistenceManager : BaseManager {
 			return false;
 		}
 
-		bool saveVersionValid = persistenceUniverse.configurationProperties[ConfigurationProperty.SaveVersion] == saveVersion.Value;
+		bool saveVersionValid = persistenceUniverse.configurationProperties[ConfigurationProperty.SaveVersion] == saveVersion.text;
 		return saveVersionValid;
 	}
 

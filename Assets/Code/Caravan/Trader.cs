@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Snowship.NJob;
+using Snowship.NResource.Models;
 using Snowship.NUtilities;
 
 namespace Snowship.NCaravan {
@@ -20,7 +21,7 @@ namespace Snowship.NCaravan {
 		public override void SetName(string name) {
 			base.SetName(name);
 
-			SetNameColour(ColourUtilities.GetColour(ColourUtilities.Colours.LightPurple100));
+			SetNameColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightPurple100));
 		}
 
 		public override void Update() {
@@ -37,7 +38,7 @@ namespace Snowship.NCaravan {
 						foreach (ResourceManager.ResourceAmount ra in rr.resources) {
 							caravan.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
 
-							ResourceManager.ConfirmedTradeResourceAmount confirmedTradeResourceAmount = caravan.confirmedResourcesToTrade.Find(crtt => crtt.resource == ra.resource);
+							ConfirmedTradeResourceAmount confirmedTradeResourceAmount = caravan.confirmedResourcesToTrade.Find(crtt => crtt.resource == ra.resource);
 							if (confirmedTradeResourceAmount != null) {
 								confirmedTradeResourceAmount.amountRemaining += ra.amount;
 							}
@@ -57,7 +58,7 @@ namespace Snowship.NCaravan {
 					) {
 						transferResources = new List<ResourceManager.ResourceAmount>()
 					};
-					foreach (ResourceManager.ConfirmedTradeResourceAmount confirmedTradeResourceAmount in caravan.confirmedResourcesToTrade) {
+					foreach (ConfirmedTradeResourceAmount confirmedTradeResourceAmount in caravan.confirmedResourcesToTrade) {
 						if (confirmedTradeResourceAmount.tradeAmount > 0) {
 							tradingPost.GetInventory().ChangeResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount, false);
 							confirmedTradeResourceAmount.amountRemaining = 0;

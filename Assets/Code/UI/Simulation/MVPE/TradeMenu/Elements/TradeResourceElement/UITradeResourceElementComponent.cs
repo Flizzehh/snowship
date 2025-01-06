@@ -1,5 +1,7 @@
 ﻿using System;
+using Snowship.NResource.Models;
 using Snowship.NUI.Generic;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -83,12 +85,16 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 			colonyResourcePrice.text = resourcePrice;
 		}
 
-		public void SetCaravanAmount(string caravanAmount) {
-			caravanAmountText.text = caravanAmount;
+		public void SetCaravanAmount(int caravanAmount) {
+			caravanAmountText.text = caravanAmount == 0 ? string.Empty : caravanAmount.ToString();
 		}
 
-		public void SetColonyAmount(string colonyAmount) {
-			colonyAmountText.text = colonyAmount;
+		public void SetColonyAmount(int colonyAmount) {
+			colonyAmountText.text = colonyAmount == 0 ? string.Empty : colonyAmount.ToString();
+		}
+
+		public void SetClearButtonInteractable(bool interactable) {
+			clearButton.interactable = interactable;
 		}
 	}
 }

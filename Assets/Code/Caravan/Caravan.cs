@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NResource.Models;
 using Snowship.NTime;
 using Snowship.Selectable;
 using UnityEngine;
@@ -15,9 +16,9 @@ namespace Snowship.NCaravan {
 
 		private readonly ResourceManager.Inventory inventory;
 
-		public List<ResourceManager.TradeResourceAmount> resourcesToTrade = new List<ResourceManager.TradeResourceAmount>();
+		public List<TradeResourceAmount> resourcesToTrade = new List<TradeResourceAmount>();
 
-		public List<ResourceManager.ConfirmedTradeResourceAmount> confirmedResourcesToTrade = new List<ResourceManager.ConfirmedTradeResourceAmount>();
+		public List<ConfirmedTradeResourceAmount> confirmedResourcesToTrade = new List<ConfirmedTradeResourceAmount>();
 
 		public TileManager.Tile targetTile;
 
@@ -76,11 +77,11 @@ namespace Snowship.NCaravan {
 			traders.Add(trader);
 
 			List<TileManager.Tile> targetTiles = new List<TileManager.Tile> { targetTile };
-			targetTiles.AddRange(targetTile.horizontalSurroundingTiles.Where(t => t != null && t.walkable && t.buildable));
+			targetTiles.AddRange(targetTile.horizontalSurroundingTiles.Where(t => t is { walkable: true, buildable: true }));
 
 			List<TileManager.Tile> additionalTargetTiles = new List<TileManager.Tile>();
 			foreach (TileManager.Tile tt in targetTiles) {
-				additionalTargetTiles.AddRange(tt.horizontalSurroundingTiles.Where(t => t != null && t.walkable && t.buildable && !additionalTargetTiles.Contains(t)));
+				additionalTargetTiles.AddRange(tt.horizontalSurroundingTiles.Where(t => t is { walkable: true, buildable: true } && !additionalTargetTiles.Contains(t)));
 			}
 
 			targetTiles.AddRange(additionalTargetTiles);
@@ -88,18 +89,17 @@ namespace Snowship.NCaravan {
 			trader.MoveToTile(targetTiles[Random.Range(0, targetTiles.Count)], false);
 		}
 
-		public List<ResourceManager.TradeResourceAmount> GenerateTradeResourceAmounts() {
-			List<ResourceManager.TradeResourceAmount> tradeResourceAmounts = new List<ResourceManager.TradeResourceAmount>();
+		public List<TradeResourceAmount> GenerateTradeResourceAmounts() {
+			List<TradeResourceAmount> tradeResourceAmounts = new List<TradeResourceAmount>();
 			tradeResourceAmounts.AddRange(resourcesToTrade);
 
 			List<ResourceManager.ResourceAmount> caravanResourceAmounts = inventory.resources;
 
 			foreach (ResourceManager.ResourceAmount resourceAmount in caravanResourceAmounts) {
-				ResourceManager.TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.resource);
+				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.resource);
 				if (existingTradeResourceAmount == null) {
-					tradeResourceAmounts.Add(new ResourceManager.TradeResourceAmount(resourceAmount.resource, resourceAmount.amount, this));
-				}
-				else {
+					tradeResourceAmounts.Add(new TradeResourceAmount(resourceAmount.resource, resourceAmount.amount, 0, this));
+				} else {
 					existingTradeResourceAmount.Update();
 				}
 			}
@@ -110,11 +110,10 @@ namespace Snowship.NCaravan {
 			}
 
 			foreach (ResourceManager.ResourceAmount resourceAmount in colonyResourceAmounts) {
-				ResourceManager.TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.resource);
+				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.resource);
 				if (existingTradeResourceAmount == null) {
-					tradeResourceAmounts.Add(new ResourceManager.TradeResourceAmount(resourceAmount.resource, 0, this));
-				}
-				else {
+					tradeResourceAmounts.Add(new TradeResourceAmount(resourceAmount.resource, 0, resourceAmount.amount, this));
+				} else {
 					existingTradeResourceAmount.Update();
 				}
 			}
@@ -132,16 +131,14 @@ namespace Snowship.NCaravan {
 			return resource.price;
 		}
 
-		public void SetSelectedResource(ResourceManager.TradeResourceAmount tradeResourceAmount) {
-			ResourceManager.TradeResourceAmount existingTradeResourceAmount = resourcesToTrade.Find(tra => tra.resource == tradeResourceAmount.resource);
+		public void SetSelectedResource(TradeResourceAmount tradeResourceAmount) {
+			TradeResourceAmount existingTradeResourceAmount = resourcesToTrade.Find(tra => tra.resource == tradeResourceAmount.resource);
 			if (existingTradeResourceAmount == null) {
 				resourcesToTrade.Add(tradeResourceAmount);
-			}
-			else {
+			} else {
 				if (existingTradeResourceAmount.GetTradeAmount() == 0) {
 					resourcesToTrade.Remove(tradeResourceAmount);
-				}
-				else {
+				} else {
 					existingTradeResourceAmount.SetTradeAmount(tradeResourceAmount.GetTradeAmount());
 				}
 			}
@@ -156,25 +153,24 @@ namespace Snowship.NCaravan {
 				}
 			}
 
-			foreach (ResourceManager.TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
-				ResourceManager.ConfirmedTradeResourceAmount existingConfirmedTradeResourceAmount = confirmedResourcesToTrade.Find(crtt => crtt.resource == tradeResourceAmount.resource);
+			foreach (TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
+				ConfirmedTradeResourceAmount existingConfirmedTradeResourceAmount = confirmedResourcesToTrade.Find(crtt => crtt.resource == tradeResourceAmount.resource);
 				if (existingConfirmedTradeResourceAmount != null) {
 					existingConfirmedTradeResourceAmount.tradeAmount += tradeResourceAmount.GetTradeAmount();
 					existingConfirmedTradeResourceAmount.amountRemaining += tradeResourceAmount.GetTradeAmount();
-				}
-				else {
-					confirmedResourcesToTrade.Add(new ResourceManager.ConfirmedTradeResourceAmount(tradeResourceAmount.resource, tradeResourceAmount.GetTradeAmount()));
+				} else {
+					confirmedResourcesToTrade.Add(new ConfirmedTradeResourceAmount(tradeResourceAmount.resource, tradeResourceAmount.GetTradeAmount()));
 				}
 			}
 
 			List<ResourceManager.ResourceAmount> resourcesToReserve = new List<ResourceManager.ResourceAmount>();
-			foreach (ResourceManager.TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
+			foreach (TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
 				if (tradeResourceAmount.GetTradeAmount() < 0) {
 					resourcesToReserve.Add(new ResourceManager.ResourceAmount(tradeResourceAmount.resource, Mathf.Abs(tradeResourceAmount.GetTradeAmount())));
 				}
 			}
 
-			foreach (ResourceManager.TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
+			foreach (TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
 				if (tradeResourceAmount.GetTradeAmount() > 0) {
 					inventory.ChangeResourceAmount(tradeResourceAmount.resource, -tradeResourceAmount.GetTradeAmount(), false);
 				}

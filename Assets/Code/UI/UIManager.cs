@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.MainMenu;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Snowship.NUI {
 			OpenViewAsync<UIMainMenu>(null);
 		}
 
-		public async void OpenViewAsync<TUIConfig>(IUIPresenter parent) where TUIConfig : IUIConfig, new() {
+		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent) where TUIConfig : IUIConfig, new() {
 
 			IUIConfig config = new TUIConfig();
 			(IUIView view, IUIPresenter presenter) ui = await config.Open(uiParent);
@@ -29,6 +30,8 @@ namespace Snowship.NUI {
 			if (parent == null) {
 				parentGroups.Add(group);
 			}
+
+			return ui.presenter;
 		}
 
 		private IUIGroup FindGroup(IUIPresenter presenter) {

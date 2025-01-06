@@ -13,12 +13,12 @@ namespace Snowship.NUI.Menu.LoadColony {
 		public UILoadColonyElement(PersistenceManager.PersistenceColony colony, Transform parent) : base(parent) {
 			this.colony = colony;
 
-			component.OnLoadColonyElementComponentButtonClicked += OnLoadColonyElementComponentButtonClicked;
+			Component.OnLoadColonyElementComponentButtonClicked += OnLoadColonyElementComponentButtonClicked;
 
-			component.SetColonyNameText(colony.name);
-			component.SetLastSaveDateTimeText(colony.lastSaveDateTime);
+			Component.SetColonyNameText(colony.name);
+			Component.SetLastSaveDateTimeText(colony.lastSaveDateTime);
 			if (colony.lastSaveImage != null) {
-				component.SetLastSaveImage(colony.lastSaveImage);
+				Component.SetLastSaveImage(colony.lastSaveImage);
 			}
 		}
 

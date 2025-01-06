@@ -14,7 +14,7 @@ namespace Snowship.NJob {
 		public override void Awake() {
 			selectedPrefabPreview = GameObject.Find("SelectedPrefabPreview");
 			selectedPrefabPreview.GetComponent<SpriteRenderer>().sortingOrder = 50;
-			selectedPrefabPreview.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha128);
+			selectedPrefabPreview.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha128);
 		}
 
 		private bool changedJobList = false;
@@ -23,7 +23,7 @@ namespace Snowship.NJob {
 		public override void Update() {
 			if (changedJobList) {
 				ColonistJob.UpdateColonistJobs();
-				GameManager.uiM.SetJobElements();
+				GameManager.uiMOld.SetJobElements();
 				changedJobList = false;
 			}
 			GetJobSelectionArea();
@@ -66,7 +66,7 @@ namespace Snowship.NJob {
 						if (selectedPrefab.prefab.canRotate) {
 							selectedPrefabPreview.GetComponent<SpriteRenderer>().sprite = selectedPrefab.prefab.GetBitmaskSpritesForVariation(selectedPrefab.variation)[rotationIndex];
 						}
-						GameManager.uiM.GetSelectionSizePanel().SetActive(false);
+						GameManager.uiMOld.GetSelectionSizePanel().SetActive(false);
 					}
 					SelectedPrefabPreview();
 					if (Input.GetKeyDown(KeyCode.R)) {
@@ -82,11 +82,11 @@ namespace Snowship.NJob {
 					if (selectedPrefabPreview.activeSelf) {
 						selectedPrefabPreview.SetActive(false);
 					}
-					GameManager.uiM.GetSelectionSizePanel().SetActive(true);
+					GameManager.uiMOld.GetSelectionSizePanel().SetActive(true);
 				}
 			} else {
 				selectedPrefabPreview.SetActive(false);
-				GameManager.uiM.GetSelectionSizePanel().SetActive(false);
+				GameManager.uiMOld.GetSelectionSizePanel().SetActive(false);
 			}
 		}
 
@@ -268,7 +268,7 @@ namespace Snowship.NJob {
 
 			if (selectedPrefab != null) {
 				Vector2 mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
-				if (Input.GetMouseButtonDown(0) && !GameManager.uiM.IsPointerOverUI()) {
+				if (Input.GetMouseButtonDown(0) && !GameManager.uiMOld.IsPointerOverUI()) {
 					firstTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
 				}
 				if (firstTile != null) {
@@ -335,13 +335,13 @@ namespace Snowship.NJob {
 										? selectedPrefab.prefab.GetBitmaskSpritesForVariation(selectedPrefab.variation)[rotationIndex]
 										: selectedPrefab.prefab.GetBaseSpriteForVariation(selectedPrefab.variation);
 									sISR.sortingOrder = 20; // Selection Indicator Sprite
-									sISR.color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha64);
+									sISR.color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha64);
 									selectionIndicators.Add(selectionIndicator);
 								}
 							}
 						}
 
-						GameManager.uiM.GetSelectionSizePanel().Update(smallerX - maxX, smallerY - maxY, selectionArea.Count);
+						GameManager.uiMOld.GetSelectionSizePanel().Update(smallerX - maxX, smallerY - maxY, selectionArea.Count);
 
 						if (Input.GetMouseButtonUp(0)) {
 							if (selectedPrefab.prefab.jobType == "Cancel") {
@@ -411,7 +411,7 @@ namespace Snowship.NJob {
 			}
 
 			ColonistJob.UpdateColonistJobs();
-			GameManager.uiM.SetJobElements();
+			GameManager.uiMOld.SetJobElements();
 		}
 
 		public void CancelJob(Job job) {
@@ -446,7 +446,7 @@ namespace Snowship.NJob {
 			Job.jobs.Remove(job);
 
 			ColonistJob.UpdateColonistJobs();
-			GameManager.uiM.SetJobElements();
+			GameManager.uiMOld.SetJobElements();
 		}
 
 		public void ChangeJobPriorityInSelectionArea(List<TileManager.Tile> selectionArea, int amount) {
@@ -469,7 +469,7 @@ namespace Snowship.NJob {
 			}
 			ColonistJob.UpdateColonistJobs();
 			ColonistJob.UpdateAllColonistJobCosts();
-			GameManager.uiM.SetJobElements();
+			GameManager.uiMOld.SetJobElements();
 		}
 
 		private static readonly Dictionary<int, ResourceManager.ObjectEnum> removeLayerMap = new Dictionary<int, ResourceManager.ObjectEnum>() {
@@ -693,7 +693,7 @@ namespace Snowship.NJob {
 				jobGiven.Key.SetJob(jobGiven.Value);
 			}
 			if (gaveJob) {
-				GameManager.uiM.SetJobElements();
+				GameManager.uiMOld.SetJobElements();
 				ColonistJob.UpdateColonistJobs();
 			}
 		}

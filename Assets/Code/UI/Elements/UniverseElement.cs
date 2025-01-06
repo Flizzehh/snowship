@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Snowship.NUI.Menu.LoadSave {
-	internal class UniverseElement : UIElement {
+	internal class UniverseElement {
 
 		public static event Action<UniverseElement> OnUniverseElementClicked;
 
@@ -30,35 +30,35 @@ namespace Snowship.NUI.Menu.LoadSave {
 				persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.GameVersion];
 
 			string saveVersionColour =
-				ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50));
+				ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50));
 			string gameVersionColour =
-				ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50));
+				ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50));
 
-			if (saveVersion == PersistenceManager.saveVersion.Value) {
+			if (saveVersion == PersistenceManager.saveVersion.text) {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					OnUniverseElementClicked?.Invoke(this);
 				});
-				if (gameVersion != PersistenceManager.gameVersion.Value) {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkYellow);
+				if (gameVersion != PersistenceManager.gameVersion.text) {
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkYellow);
 					gameVersionColour = ColorUtility.ToHtmlStringRGB(
-						(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed) +
-						ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50)) / 2f);
+						(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed) +
+						ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50)) / 2f);
 				}
 			}
 			else {
-				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed);
+				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed);
 				obj.GetComponent<Button>().interactable = false;
 
-				if (saveVersion != PersistenceManager.saveVersion.Value) {
+				if (saveVersion != PersistenceManager.saveVersion.text) {
 					saveVersionColour = ColorUtility.ToHtmlStringRGB(
-						(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed) +
-						ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50)) / 2f);
+						(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed) +
+						ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50)) / 2f);
 				}
 
-				if (gameVersion != PersistenceManager.gameVersion.Value) {
+				if (gameVersion != PersistenceManager.gameVersion.text) {
 					gameVersionColour = ColorUtility.ToHtmlStringRGB(
-						(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed) +
-						ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50)) / 2f);
+						(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed) +
+						ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50)) / 2f);
 				}
 			}
 

@@ -24,7 +24,7 @@ namespace Snowship.NUI {
 			this.startCoroutineReference = startCoroutineReference;
 		}
 
-		public readonly string gameVersionString = $"Snowship {GameManager.persistenceM.gameVersion.text}";
+		public readonly string gameVersionString = $"Snowship {PersistenceManager.gameVersion.text}";
 
 		public bool playerTyping = false;
 
@@ -85,7 +85,7 @@ namespace Snowship.NUI {
 			SetSelectedTradingPostInfo();
 			SetSelectedCraftingObjectPanel();
 
-			SetTradeMenu();
+			// TODO SetTradeMenu();
 
 			SetCaravanElements();
 			SetJobElements();
@@ -305,9 +305,9 @@ namespace Snowship.NUI {
 			selectedColonistClothingTabButtonLinkPanel = selectedColonistClothingTabButton.transform.Find("Link-Panel").gameObject;
 
 			selectedTraderMenu = gameUI.transform.Find("SelectedTraderMenu-Panel").gameObject;
-			tradeMenu = gameUI.transform.Find("TradeMenu-Panel").gameObject;
-			tradeMenu.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate { SetTradeMenuActive(false); });
-			tradeMenu.transform.Find("ConfirmTrade-Button").GetComponent<Button>().onClick.AddListener(delegate { ConfirmTrade(); });
+			// tradeMenu = gameUI.transform.Find("TradeMenu-Panel").gameObject;
+			// tradeMenu.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate { SetTradeMenuActive(false); });
+			// tradeMenu.transform.Find("ConfirmTrade-Button").GetComponent<Button>().onClick.AddListener(delegate { ConfirmTrade(); });
 
 			dateTimeInformationPanel = gameUI.transform.Find("DateTimeInformation-Panel").gameObject;
 
@@ -389,7 +389,7 @@ namespace Snowship.NUI {
 
 				UpdateSelectedColonistInformation();
 				UpdateSelectedTraderMenu();
-				UpdateTradeMenu();
+				// UpdateTradeMenu();
 
 				UpdateColonistElements();
 				UpdateCaravanElements();
@@ -776,7 +776,7 @@ namespace Snowship.NUI {
 					anyVariationResourcesMet = true;
 				}
 
-				variationsIndicator.GetComponent<Image>().color = requiredResourcesMet && anyVariationResourcesMet ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen) : ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
+				variationsIndicator.GetComponent<Image>().color = requiredResourcesMet && anyVariationResourcesMet ? ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen) : ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
 			}
 		}
 
@@ -798,7 +798,7 @@ namespace Snowship.NUI {
 			public void Update() {
 				int availableAmount = resourceAmount.resource.GetAvailableAmount();
 
-				obj.GetComponent<Image>().color = availableAmount >= resourceAmount.amount ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen) : ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
+				obj.GetComponent<Image>().color = availableAmount >= resourceAmount.amount ? ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen) : ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
 
 				obj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = availableAmount + " / " + resourceAmount.amount;
 			}
@@ -1013,7 +1013,7 @@ namespace Snowship.NUI {
 					if (mouseOverTile.HasRoof()) {
 						tileRoofElement.SetActive(true);
 						tileRoofElement.transform.Find("TileInfo-Label-Text").GetComponent<Text>().text = "Roof";
-						tileRoofElement.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
+						tileRoofElement.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 					}
 
 					if (mouseOverTile.tileType.resourceRanges.Count > 0) {
@@ -1028,7 +1028,7 @@ namespace Snowship.NUI {
 							tileResourceElement.SetActive(true);
 							tileResourceElement.transform.Find("TileInfo-ResourceData-Value").GetComponent<Text>().text = resourceRange.resource.name;
 							tileResourceElement.transform.Find("TileInfo-ResourceData-Image").GetComponent<Image>().sprite = resourceRange.resource.image;
-							tileResourceElement.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
+							tileResourceElement.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 						}
 					}
 
@@ -1056,11 +1056,11 @@ namespace Snowship.NUI {
 						if (mouseOverTile.plant.prefab.integrity > 0) {
 							integritySlider.maxValue = mouseOverTile.plant.prefab.integrity;
 							integritySlider.value = mouseOverTile.plant.integrity;
-							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), mouseOverTile.plant.integrity / mouseOverTile.plant.prefab.integrity);
+							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), mouseOverTile.plant.integrity / mouseOverTile.plant.prefab.integrity);
 						} else {
 							integritySlider.maxValue = 1;
 							integritySlider.value = 1;
-							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
+							integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 						}
 					}
 
@@ -1094,12 +1094,12 @@ namespace Snowship.NUI {
 								integritySlider.minValue = 0;
 								integritySlider.maxValue = objectInstance.prefab.integrity;
 								integritySlider.value = objectInstance.integrity;
-								integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), objectInstance.integrity / objectInstance.prefab.integrity);
+								integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), objectInstance.integrity / objectInstance.prefab.integrity);
 							} else {
 								integritySlider.minValue = 0;
 								integritySlider.maxValue = 1;
 								integritySlider.value = 1;
-								integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
+								integritySlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 							}
 
 							objectDataObject.SetActive(true);
@@ -1151,11 +1151,11 @@ namespace Snowship.NUI {
 					obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((float)skill.level / (highestSkillInstance.level > 0 ? highestSkillInstance.level : 1) * 100f);
 
 					if (highestSkillInstance.colonist == colonist || Mathf.Approximately(highestSkillInstance.CalculateTotalSkillLevel(), skill.CalculateTotalSkillLevel())) {
-						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkYellow);
-						obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow);
+						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkYellow);
+						obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightYellow);
 					} else {
-						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen);
-						obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
+						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen);
+						obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
 					}
 				}
 			}
@@ -1246,12 +1246,6 @@ namespace Snowship.NUI {
 			}
 		}
 
-		public class TradeResourceElement {
-
-		}
-
-
-
 		public class ReservedResourcesColonistElement {
 			public ResourceManager.ReservedResources reservedResources;
 			public List<InventoryElement> reservedResourceElements = new List<InventoryElement>();
@@ -1313,8 +1307,8 @@ namespace Snowship.NUI {
 				obj.transform.Find("NeedValue-Text").GetComponent<Text>().text = needInstance.GetRoundedValue() + "%";
 
 				obj.transform.Find("Need-Slider").GetComponent<Slider>().value = needInstance.GetValue();
-				obj.transform.Find("Need-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), needInstance.GetValue() / needInstance.prefab.clampValue);
-				obj.transform.Find("Need-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), needInstance.GetValue() / needInstance.prefab.clampValue);
+				obj.transform.Find("Need-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), needInstance.GetValue() / needInstance.prefab.clampValue);
+				obj.transform.Find("Need-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), needInstance.GetValue() / needInstance.prefab.clampValue);
 			}
 		}
 
@@ -1329,11 +1323,11 @@ namespace Snowship.NUI {
 
 				obj.transform.Find("MoodModifierName-Text").GetComponent<Text>().text = moodModifierInstance.prefab.name;
 				if (moodModifierInstance.prefab.effectAmount > 0) {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
 				} else if (moodModifierInstance.prefab.effectAmount < 0) {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
 				} else {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
+					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
 				}
 
 				Update();
@@ -1541,7 +1535,7 @@ namespace Snowship.NUI {
 
 				Button clothingTypeButton = selectedColonistClothingPanel.transform.Find("ClothingButtons-List/" + appearanceToClothingKVP.Key + "-Button").GetComponent<Button>();
 
-				clothingTypeButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey180);
+				clothingTypeButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey180);
 
 				if (clothing == null) {
 					List<Job> checkJobs = new List<Job>();
@@ -1554,7 +1548,7 @@ namespace Snowship.NUI {
 							ResourceManager.Clothing clothingToWear = (ResourceManager.Clothing)checkJob.requiredResources[0].resource;
 							if (clothingToWear.prefab.appearance == appearanceToClothingKVP.Key) {
 								clothing = clothingToWear;
-								clothingTypeButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
+								clothingTypeButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightOrange);
 							}
 						}
 					}
@@ -1650,8 +1644,8 @@ namespace Snowship.NUI {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					human.ChangeClothing(clothing.prefab.appearance, clothing);
 
-					/*GameManager.uiM.SetSelectedColonistClothingSelectionPanelActive(false);
-					GameManager.uiM.SetSelectedColonistInformation(true);*/
+					/*GameManager.uiMOld.SetSelectedColonistClothingSelectionPanelActive(false);
+					GameManager.uiMOld.SetSelectedColonistInformation(true);*/
 				});
 			}
 		}
@@ -1671,13 +1665,13 @@ namespace Snowship.NUI {
 				Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.health * 100);
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), selectedColonist.health);
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedColonist.health);
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), selectedColonist.health);
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), selectedColonist.health);
 				//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealthValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.health * 100) + "%";
 
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.effectiveMood);
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), selectedColonist.effectiveMood / 100f);
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedColonist.effectiveMood / 100f);
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), selectedColonist.effectiveMood / 100f);
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), selectedColonist.effectiveMood / 100f);
 				//selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMoodValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveMood) + "%";
 
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().minValue = 0;
@@ -1703,19 +1697,19 @@ namespace Snowship.NUI {
 				Text moodModifierAmountText = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button/MoodModifiersAmount-Text").GetComponent<Text>();
 				if (moodModifiersSum > 0) {
 					moodModifierAmountText.text = "+" + moodModifiersSum + "%";
-					moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
+					moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
 				} else if (moodModifiersSum < 0) {
 					moodModifierAmountText.text = moodModifiersSum + "%";
-					moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
+					moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
 				} else {
 					moodModifierAmountText.text = moodModifiersSum + "%";
-					moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
+					moodModifierAmountText.color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 				}
 
 				selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button").GetComponent<RectTransform>().sizeDelta = new Vector2(moodModifierButtonSizeMap[moodLength], 20);
 				selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<RectTransform>().offsetMax = new Vector2(moodModifierValueHorizontalPositionMap[moodLength], 0);
 				selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.effectiveMood) + "%";
-				selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedColonist.effectiveMood / 100f);
+				selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodValue-Text").GetComponent<Text>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), selectedColonist.effectiveMood / 100f);
 
 				foreach (SkillElement skillElement in selectedColonistSkillElements) {
 					skillElement.Update();
@@ -1766,7 +1760,7 @@ namespace Snowship.NUI {
 			}
 
 			public void Update() {
-				obj.GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), colonist.health);
+				obj.GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), colonist.health);
 			}
 
 			public void DestroyObject() {
@@ -1827,9 +1821,9 @@ namespace Snowship.NUI {
 			}
 
 			public void Update() {
-				obj.GetComponent<Image>().color = caravan.confirmedResourcesToTrade.Count > 0 ? ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow) : ColourUtilities.GetColour(ColourUtilities.Colours.LightPurple);
+				obj.GetComponent<Image>().color = caravan.confirmedResourcesToTrade.Count > 0 ? ColourUtilities.GetColour(ColourUtilities.EColour.LightYellow) : ColourUtilities.GetColour(ColourUtilities.EColour.LightPurple);
 
-				Color textColour = caravan.confirmedResourcesToTrade.Count > 0 ? ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50) : ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
+				Color textColour = caravan.confirmedResourcesToTrade.Count > 0 ? ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50) : ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
 				affiliatedColonyNameText.color = textColour;
 				resourceGroupNameText.color = textColour;
 
@@ -1904,21 +1898,21 @@ namespace Snowship.NUI {
 				if (hasPriority) {
 					priorityText.text = job.priority.ToString();
 					if (job.priority > 0) {
-						priorityText.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkYellow);
+						priorityText.color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkYellow);
 					} else if (job.priority < 0) {
-						priorityText.color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed);
+						priorityText.color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed);
 					}
 				} else {
 					priorityText.text = string.Empty;
 				}
 
 				if (job.requiredResources.Count > 0) {
-					obj.transform.Find("Content/RequiredResources-Panel").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha64);
+					obj.transform.Find("Content/RequiredResources-Panel").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha64);
 
 					foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
 						GameObject resourceAmountObj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), obj.transform.Find("Content/RequiredResources-Panel"), false);
 
-						resourceAmountObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.Clear);
+						resourceAmountObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.Clear);
 
 						resourceAmountObj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
 						resourceAmountObj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
@@ -1931,28 +1925,28 @@ namespace Snowship.NUI {
 					colonistObj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
 					colonistObj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
 					colonistObj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
-					colonistObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.WhiteAlpha64);
+					colonistObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha64);
 
 					colonistObj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<LayoutElement>().minWidth - 6, colonistObj.GetComponent<RectTransform>().sizeDelta.y);
 					obj.transform.Find("Content").GetComponent<VerticalLayoutGroup>().padding.bottom = 3;
 
 					if (job.started) {
-						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
+						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
 
 						obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().minValue = 0;
 						obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().maxValue = job.colonistBuildTime;
-						obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen);
+						obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen);
 					} else {
-						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
+						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightOrange);
 
 						obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().minValue = 0;
 						obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().maxValue = colonist.startPathLength;
-						obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkOrange);
+						obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkOrange);
 					}
 				} else {
 					obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().minValue = 0;
 					obj.transform.Find("JobProgress-Slider").GetComponent<Slider>().maxValue = job.colonistBuildTime;
-					obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen);
+					obj.transform.Find("JobProgress-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen);
 				}
 
 				job.jobUIElement = this;
@@ -1981,7 +1975,7 @@ namespace Snowship.NUI {
 			}
 
 			public void Remove() {
-				GameManager.uiM.jobElements.Remove(this);
+				GameManager.uiMOld.jobElements.Remove(this);
 				job.jobUIElement = null;
 				DestroyObjects();
 			}
@@ -2162,7 +2156,7 @@ namespace Snowship.NUI {
 
 				foreach (ResourceManager.ResourceAmount ra in selectedContainer.GetInventory().resources.OrderByDescending(ra => ra.amount)) {
 					InventoryElement inventoryElement = new InventoryElement(ra, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel"));
-					inventoryElement.obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
+					inventoryElement.obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 					containerInventoryElements.Add(inventoryElement);
 				}
 			} else {
@@ -2374,16 +2368,16 @@ namespace Snowship.NUI {
 
 				button.transform.Find("Text").GetComponent<Text>().text = priority == 0 ? string.Empty : priority.ToString();
 
-				button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), (priority - 1f) / (ProfessionPrefab.maxPriority - 1f));
+				button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), (priority - 1f) / (ProfessionPrefab.maxPriority - 1f));
 
 				ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(GameManager.colonistM.GetSkillPrefabFromEnum(profession.prefab.relatedSkill));
 
 				if (highestSkillInstance.colonist == profession.colonist) {
-					button.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightYellow);
+					button.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightYellow);
 				} else {
 					ColonistManager.SkillInstance skillInstance = profession.colonist.GetSkillFromEnum(profession.prefab.relatedSkill);
 
-					button.GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), skillInstance.CalculateTotalSkillLevel() / (highestSkillInstance.CalculateTotalSkillLevel() > 0 ? highestSkillInstance.CalculateTotalSkillLevel() : 1));
+					button.GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), skillInstance.CalculateTotalSkillLevel() / (highestSkillInstance.CalculateTotalSkillLevel() > 0 ? highestSkillInstance.CalculateTotalSkillLevel() : 1));
 				}
 			}
 
@@ -2500,8 +2494,8 @@ namespace Snowship.NUI {
 		public void UpdateSelectedTraderMenu() {
 			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
 				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedTrader.health * 100);
-				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.DarkRed), ColourUtilities.GetColour(ColourUtilities.Colours.DarkGreen), selectedTrader.health);
-				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.Colours.LightRed), ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen), selectedTrader.health);
+				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), selectedTrader.health);
+				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), selectedTrader.health);
 				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealthValue-Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedTrader.health * 100) + "%";
 			}
 		}
@@ -2526,8 +2520,8 @@ namespace Snowship.NUI {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					objectInstancesList.SetActive(!objectInstancesList.activeSelf);
 					if (objectInstancesList.activeSelf) {
-						objectInstancesList.transform.SetParent(GameManager.uiM.canvas.transform);
-						foreach (ObjectPrefabElement objectPrefabElement in GameManager.uiM.objectPrefabElements) {
+						objectInstancesList.transform.SetParent(GameManager.uiMOld.canvas.transform);
+						foreach (ObjectPrefabElement objectPrefabElement in GameManager.uiMOld.objectPrefabElements) {
 							if (objectPrefabElement != this) {
 								objectPrefabElement.objectInstancesList.SetActive(false);
 							}
@@ -2593,17 +2587,17 @@ namespace Snowship.NUI {
 
 				ResourceManager.Container container = GameManager.resourceM.containers.Find(findContainer => findContainer == instance);
 				if (container != null) {
-					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiM.SetSelectedContainer(container); });
+					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedContainer(container); });
 				}
 
 				ResourceManager.TradingPost tradingPost = GameManager.resourceM.tradingPosts.Find(tp => tp == instance);
 				if (tradingPost != null) {
-					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiM.SetSelectedTradingPost(tradingPost); });
+					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedTradingPost(tradingPost); });
 				}
 
 				ResourceManager.CraftingObject mto = GameManager.resourceM.craftingObjectInstances.Find(findMTO => findMTO == instance);
 				if (mto != null) {
-					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiM.SetSelectedCraftingObject(mto); });
+					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedCraftingObject(mto); });
 				}
 			}
 		}
@@ -2719,9 +2713,9 @@ namespace Snowship.NUI {
 
 				if (availableAmountPrev != resource.GetAvailableAmount()) {
 					if (resource.GetAvailableAmount() > 0) {
-						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
+						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
 					} else {
-						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.Grey150);
+						obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.Grey150);
 					}
 				}
 			}
@@ -2891,16 +2885,16 @@ namespace Snowship.NUI {
 			if (selectedCraftingObject.active) {
 				selectedCraftingObjectPanelActiveButtonText.text = "Enabled";
 				if (selectedCraftingObject.resources.Any(resource => resource.enableable)) {
-					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen);
+					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
 				} else {
-					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
+					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightOrange);
 				}
 			} else {
 				selectedCraftingObjectPanelActiveButtonText.text = "Disabled";
 				if (selectedCraftingObject.resources.Any(resource => resource.enableable)) {
-					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange);
+					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightOrange);
 				} else {
-					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightRed);
+					selectedCraftingObjectPanelActiveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
 				}
 			}
 		}
@@ -2952,7 +2946,7 @@ namespace Snowship.NUI {
 			public override void Update() {
 				base.Update();
 
-				panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color = craftingObject.GetFuelFromFuelResource(resource) != null ? resource.GetAvailableAmount() > 0 ? ColourUtilities.GetColour(ColourUtilities.Colours.LightGreen) : ColourUtilities.GetColour(ColourUtilities.Colours.LightOrange) : ColourUtilities.GetColour(ColourUtilities.Colours.Clear);
+				panel.transform.Find("ActiveIndicator-Panel").GetComponent<Image>().color = craftingObject.GetFuelFromFuelResource(resource) != null ? resource.GetAvailableAmount() > 0 ? ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen) : ColourUtilities.GetColour(ColourUtilities.EColour.LightOrange) : ColourUtilities.GetColour(ColourUtilities.EColour.Clear);
 			}
 
 			public override void ChangePriority(int amount) {
@@ -3052,23 +3046,23 @@ namespace Snowship.NUI {
 			public void SetCreationMethod(ResourceManager.CreationMethod creationMethod) {
 				resource.creationMethod = creationMethod;
 
-				singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
-				maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
-				continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey220);
+				singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
+				maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
+				continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
 
 				createAmountPanel.gameObject.SetActive(true);
 
 				switch (resource.creationMethod) {
 					case ResourceManager.CreationMethod.SingleRun:
-						singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
+						singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 						createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Create Amount";
 						break;
 					case ResourceManager.CreationMethod.MaintainStock:
-						maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
+						maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 						createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Maintain Amount";
 						break;
 					case ResourceManager.CreationMethod.ContinuousRun:
-						continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.DarkGrey50);
+						continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 						createAmountPanel.gameObject.SetActive(false);
 						break;
 					default:
@@ -3089,16 +3083,16 @@ namespace Snowship.NUI {
 		public void SetPauseMenuActive(bool active) {
 			SetSettingsMenuActive(false);
 
-			pauseMenu.SetActive(active);
+			// pauseMenu.SetActive(active);
 
-			pauseSaveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.Colours.LightGrey200);
+			// pauseSaveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 
-			GameManager.timeM.SetPaused(pauseMenu.activeSelf);
+			// GameManager.timeM.SetPaused(pauseMenu.activeSelf);
 		}
 
 		public void TogglePauseMenuButtons(bool state) {
-			pauseMenuButtons.SetActive(state);
-			pauseLabel.SetActive(pauseMenuButtons.activeSelf);
+			// pauseMenuButtons.SetActive(state);
+			// pauseLabel.SetActive(pauseMenuButtons.activeSelf);
 		}
 
 		public enum UIScaleMode {
@@ -3107,45 +3101,45 @@ namespace Snowship.NUI {
 		};
 
 		public void SetSettingsMenuActive(bool active) {
-			settingsPanel.SetActive(active);
-
-			ToggleMainMenuButtons(settingsPanel);
-			TogglePauseMenuButtons(!settingsPanel.activeSelf);
-			if (settingsPanel.activeSelf) {
-				GameObject resolutionSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/ResolutionSettings-Panel").gameObject;
-				Slider resolutionSlider = resolutionSettingsPanel.transform.Find("Resolution-Slider").GetComponent<Slider>();
-				resolutionSlider.minValue = 0;
-				resolutionSlider.maxValue = Screen.resolutions.Length - 1;
-				resolutionSlider.onValueChanged.AddListener(delegate {
-					Resolution r = Screen.resolutions[Mathf.RoundToInt(resolutionSlider.value)];
-					GameManager.persistenceM.settingsState.resolution = r;
-					GameManager.persistenceM.settingsState.resolutionWidth = r.width;
-					GameManager.persistenceM.settingsState.resolutionHeight = r.height;
-					GameManager.persistenceM.settingsState.refreshRate = r.refreshRate;
-					resolutionSettingsPanel.transform.Find("ResolutionValue-Text").GetComponent<Text>().text = GameManager.persistenceM.settingsState.resolutionWidth + " × " + GameManager.persistenceM.settingsState.resolutionHeight + " @ " + r.refreshRate + "hz";
-				});
-				resolutionSlider.value = Screen.resolutions.ToList().IndexOf(GameManager.persistenceM.settingsState.resolution);
-
-				GameObject fullscreenSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/FullscreenSettings-Panel").gameObject;
-				Toggle fullscreenToggle = fullscreenSettingsPanel.transform.Find("Fullscreen-Toggle").GetComponent<Toggle>();
-				fullscreenToggle.onValueChanged.AddListener(delegate { GameManager.persistenceM.settingsState.fullscreen = fullscreenToggle.isOn; });
-				fullscreenToggle.isOn = GameManager.persistenceM.settingsState.fullscreen;
-
-				GameObject UIScaleModeSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/UIScaleModeSettings-Panel").gameObject;
-				Toggle UIScaleModeToggle = UIScaleModeSettingsPanel.transform.Find("UIScaleMode-Toggle").GetComponent<Toggle>();
-				UIScaleModeToggle.onValueChanged.AddListener(delegate {
-					if (UIScaleModeToggle.isOn) {
-						GameManager.persistenceM.settingsState.scaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-					} else {
-						GameManager.persistenceM.settingsState.scaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-					}
-				});
-				if (GameManager.persistenceM.settingsState.scaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize) {
-					UIScaleModeToggle.isOn = true;
-				} else if (GameManager.persistenceM.settingsState.scaleMode == CanvasScaler.ScaleMode.ConstantPixelSize) {
-					UIScaleModeToggle.isOn = false;
-				}
-			}
+			// settingsPanel.SetActive(active);
+			//
+			// ToggleMainMenuButtons(settingsPanel);
+			// TogglePauseMenuButtons(!settingsPanel.activeSelf);
+			// if (settingsPanel.activeSelf) {
+			// 	GameObject resolutionSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/ResolutionSettings-Panel").gameObject;
+			// 	Slider resolutionSlider = resolutionSettingsPanel.transform.Find("Resolution-Slider").GetComponent<Slider>();
+			// 	resolutionSlider.minValue = 0;
+			// 	resolutionSlider.maxValue = Screen.resolutions.Length - 1;
+			// 	resolutionSlider.onValueChanged.AddListener(delegate {
+			// 		Resolution r = Screen.resolutions[Mathf.RoundToInt(resolutionSlider.value)];
+			// 		GameManager.persistenceM.settingsState.resolution = r;
+			// 		GameManager.persistenceM.settingsState.resolutionWidth = r.width;
+			// 		GameManager.persistenceM.settingsState.resolutionHeight = r.height;
+			// 		GameManager.persistenceM.settingsState.refreshRate = r.refreshRate;
+			// 		resolutionSettingsPanel.transform.Find("ResolutionValue-Text").GetComponent<Text>().text = GameManager.persistenceM.settingsState.resolutionWidth + " × " + GameManager.persistenceM.settingsState.resolutionHeight + " @ " + r.refreshRate + "hz";
+			// 	});
+			// 	resolutionSlider.value = Screen.resolutions.ToList().IndexOf(GameManager.persistenceM.settingsState.resolution);
+			//
+			// 	GameObject fullscreenSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/FullscreenSettings-Panel").gameObject;
+			// 	Toggle fullscreenToggle = fullscreenSettingsPanel.transform.Find("Fullscreen-Toggle").GetComponent<Toggle>();
+			// 	fullscreenToggle.onValueChanged.AddListener(delegate { GameManager.persistenceM.settingsState.fullscreen = fullscreenToggle.isOn; });
+			// 	fullscreenToggle.isOn = GameManager.persistenceM.settingsState.fullscreen;
+			//
+			// 	GameObject UIScaleModeSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/UIScaleModeSettings-Panel").gameObject;
+			// 	Toggle UIScaleModeToggle = UIScaleModeSettingsPanel.transform.Find("UIScaleMode-Toggle").GetComponent<Toggle>();
+			// 	UIScaleModeToggle.onValueChanged.AddListener(delegate {
+			// 		if (UIScaleModeToggle.isOn) {
+			// 			GameManager.persistenceM.settingsState.scaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+			// 		} else {
+			// 			GameManager.persistenceM.settingsState.scaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+			// 		}
+			// 	});
+			// 	if (GameManager.persistenceM.settingsState.scaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize) {
+			// 		UIScaleModeToggle.isOn = true;
+			// 	} else if (GameManager.persistenceM.settingsState.scaleMode == CanvasScaler.ScaleMode.ConstantPixelSize) {
+			// 		UIScaleModeToggle.isOn = false;
+			// 	}
+			// }
 		}
 
 		public Resolution GetResolutionByDimensions(int width, int height, int refreshRate) {
