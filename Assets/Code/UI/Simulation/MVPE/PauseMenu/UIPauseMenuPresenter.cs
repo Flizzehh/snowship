@@ -44,7 +44,7 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		private void OnSettingsButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UISettings>(this);
+			_ = GameManager.uiM.OpenViewAsync<UISettings>(this, false);
 		}
 
 		private void OnExitToMenuButtonClicked() {

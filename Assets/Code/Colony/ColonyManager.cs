@@ -44,7 +44,6 @@ namespace Snowship.NColony {
 					false,
 					0,
 					0,
-					false,
 					createColonyData.planetTile.tile.temperature,
 					createColonyData.planetTile.tile.GetPrecipitation(),
 					createColonyData.planetTile.terrainTypeHeights,

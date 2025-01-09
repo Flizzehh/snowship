@@ -17,6 +17,7 @@ namespace Snowship.NUI.Generic {
 			GameObject viewPrefab = await GetViewPrefab();
 			GameObject viewGameObject = Object.Instantiate(viewPrefab, parent, false);
 			TView viewComponent = viewGameObject.GetComponent<TView>();
+			viewComponent.Instance = viewGameObject;
 
 			TPresenter presenter = CreatePresenter(viewComponent);
 

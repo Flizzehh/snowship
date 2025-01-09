@@ -39,7 +39,7 @@ namespace Snowship.NCaravan {
 
 			removeCaravans.Clear();
 
-			if (Input.GetMouseButtonDown(1)) {
+			if (selectedCaravan != null && Input.GetMouseButtonDown(1)) {
 				SetSelectedCaravan(null);
 			}
 		}
@@ -146,7 +146,7 @@ namespace Snowship.NCaravan {
 		public void SetSelectedCaravan(Caravan selectedCaravan) {
 			this.selectedCaravan = selectedCaravan;
 
-			GameManager.uiM.OpenViewAsync<UITradeMenu>(null);
+			_ = GameManager.uiM.OpenViewAsync<UITradeMenu>(null, true);
 		}
 	}
 }

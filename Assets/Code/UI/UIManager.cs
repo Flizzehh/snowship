@@ -13,19 +13,23 @@ namespace Snowship.NUI {
 		public void Initialize(Transform uiParent) {
 			this.uiParent = uiParent;
 
-			OpenViewAsync<UIMainMenu>(null);
+			_ = OpenViewAsync<UIMainMenu>();
 		}
 
-		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent) where TUIConfig : IUIConfig, new() {
+		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent = null, bool showParent = true) where TUIConfig : IUIConfig, new() {
 
 			IUIConfig config = new TUIConfig();
 			(IUIView view, IUIPresenter presenter) ui = await config.Open(uiParent);
 
+			IUIGroup parentGroup = FindGroup(parent);
+
 			UIGroup<IUIView, IUIPresenter> group = new UIGroup<IUIView, IUIPresenter>(
 				ui.view,
 				ui.presenter,
-				FindGroup(parent)
+				parentGroup
 			);
+
+			parentGroup?.SetViewActive(showParent);
 
 			if (parent == null) {
 				parentGroups.Add(group);
@@ -55,6 +59,13 @@ namespace Snowship.NUI {
 				parentGroups.Remove(group);
 			}
 			group.Close();
+		}
+
+		public void GoBack<TP>(TP presenter) where TP : IUIPresenter {
+			IUIGroup group = FindGroup(presenter);
+			IUIGroup parent = group.GetParent();
+			parent?.SetViewActive(true);
+			CloseView(presenter);
 		}
 	}
 }

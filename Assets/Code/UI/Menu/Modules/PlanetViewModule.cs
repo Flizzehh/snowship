@@ -10,6 +10,7 @@ namespace Snowship.NUI.Modules {
 
 		private readonly GridLayoutGroup planetGrid;
 		private readonly RectTransform planetGridRectTransform;
+		private readonly GameObject planetTilePrefab;
 
 		private Planet currentPlanet;
 		private readonly List<GameObject> planetTileGameObjects = new List<GameObject>();
@@ -17,8 +18,9 @@ namespace Snowship.NUI.Modules {
 		public event Action<PlanetTile> OnPlanetTileClicked;
 		public event Action<PersistenceManager.PersistenceColony> OnColonyTileClicked;
 
-		public PlanetViewModule(GridLayoutGroup planetGrid) {
+		public PlanetViewModule(GridLayoutGroup planetGrid, GameObject planetTilePrefab) {
 			this.planetGrid = planetGrid;
+			this.planetTilePrefab = planetTilePrefab;
 			planetGridRectTransform = planetGrid.GetComponent<RectTransform>();
 		}
 
@@ -40,7 +42,7 @@ namespace Snowship.NUI.Modules {
 				DestroyPlanet();
 			}
 
-			planetGrid.cellSize = planetGridRectTransform.sizeDelta / planet.mapData.mapSize;
+			planetGrid.cellSize = planetGridRectTransform.rect.size / planet.mapData.mapSize;
 			planetGrid.constraintCount = planet.mapData.mapSize;
 
 			for (int i = 0; i < planet.planetTiles.Count; i++) {
@@ -48,13 +50,13 @@ namespace Snowship.NUI.Modules {
 
 				GameObject planetTileGameObject;
 				if (instantiateNewPlanetTiles) {
-					planetTileGameObject = Object.Instantiate(GameManager.resourceM.planetTilePrefab, planetGridRectTransform, false);
+					planetTileGameObject = Object.Instantiate(planetTilePrefab, planetGridRectTransform, false);
 					planetTileGameObject.name = $"PlanetTile {planetTile.tile.position}";
 					planetTileGameObject.GetComponent<Button>().onClick.AddListener(() => OnPlanetTileClicked?.Invoke(planetTile));
 				} else {
 					planetTileGameObject = planetTileGameObjects[i];
-					planetTileGameObject.GetComponent<Image>().sprite = planetTile.sprite;
 				}
+				planetTileGameObject.GetComponent<Image>().sprite = planetTile.sprite;
 
 				PersistenceManager.PersistenceColony colony = persistenceColonies?.Find(colony => colony.planetPosition == planetTile.tile.position);
 				if (colony != null) {

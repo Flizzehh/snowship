@@ -761,7 +761,6 @@ public class PersistenceManager : BaseManager {
 		file.WriteLine(CreateKeyValueString(PlanetProperty.Size, planet.mapData.mapSize, 0));
 		file.WriteLine(CreateKeyValueString(PlanetProperty.SunDistance, planet.mapData.planetDistance, 0));
 		file.WriteLine(CreateKeyValueString(PlanetProperty.TempRange, planet.mapData.temperatureRange, 0));
-		file.WriteLine(CreateKeyValueString(PlanetProperty.RandomOffsets, planet.mapData.randomOffsets, 0));
 		file.WriteLine(CreateKeyValueString(PlanetProperty.WindDirection, planet.mapData.primaryWindDirection, 0));
 	}
 
@@ -845,7 +844,6 @@ public class PersistenceManager : BaseManager {
 			persistencePlanet.size,
 			persistencePlanet.sunDistance,
 			persistencePlanet.temperatureRange,
-			persistencePlanet.randomOffsets,
 			persistencePlanet.windDirection
 		));
 		planet.SetLastSaveDateTime(persistencePlanet.lastSaveDateTime, persistencePlanet.lastSaveTimeChunk);

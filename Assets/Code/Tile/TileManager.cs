@@ -1254,7 +1254,6 @@ public class TileManager : BaseManager {
 		public int temperatureRange;
 		public float planetDistance;
 		public float temperatureOffset;
-		public bool randomOffsets;
 		public float averageTemperature;
 		public float averagePrecipitation;
 		public Dictionary<TileTypeGroup.TypeEnum, float> terrainTypeHeights;
@@ -1277,7 +1276,6 @@ public class TileManager : BaseManager {
 			bool planetTemperature,
 			int temperatureRange,
 			float planetDistance,
-			bool randomOffsets,
 			float averageTemperature,
 			float averagePrecipitation,
 			Dictionary<TileTypeGroup.TypeEnum, float> terrainTypeHeights,
@@ -1297,8 +1295,7 @@ public class TileManager : BaseManager {
 			this.planetTemperature = planetTemperature;
 			this.temperatureRange = temperatureRange;
 			this.planetDistance = planetDistance;
-			this.temperatureOffset = PlanetManager.CalculatePlanetTemperature(planetDistance);
-			this.randomOffsets = randomOffsets;
+			temperatureOffset = CreatePlanetData.CalculatePlanetTemperature(planetDistance);
 			this.averageTemperature = averageTemperature;
 			this.averagePrecipitation = averagePrecipitation;
 			this.terrainTypeHeights = terrainTypeHeights;
@@ -2270,14 +2267,14 @@ public class TileManager : BaseManager {
 			return new KeyValuePair<Tile, River>(null, null);
 		}
 
-		public float TemperatureFromMapLatitude(float yPos, float temperatureRange, float temperatureOffset, int mapSize, bool randomOffset) {
-			return ((-2 * Mathf.Abs((yPos - (mapSize / 2f)) / ((mapSize / 100f) / (temperatureRange / 50f)))) + temperatureRange) + temperatureOffset + (randomOffset ? UnityEngine.Random.Range(-50f, 50f) : 0);
+		public float TemperatureFromMapLatitude(float yPos, float temperatureRange, float temperatureOffset, int mapSize) {
+			return ((-2 * Mathf.Abs((yPos - (mapSize / 2f)) / ((mapSize / 100f) / (temperatureRange / 50f)))) + temperatureRange) + temperatureOffset + (UnityEngine.Random.Range(-50f, 50f));
 		}
 
 		public void CalculateTemperature() {
 			foreach (Tile tile in tiles) {
 				if (mapData.planetTemperature) {
-					tile.temperature = TemperatureFromMapLatitude(tile.position.y, mapData.temperatureRange, mapData.temperatureOffset, mapData.mapSize, mapData.randomOffsets);
+					tile.temperature = TemperatureFromMapLatitude(tile.position.y, mapData.temperatureRange, mapData.temperatureOffset, mapData.mapSize);
 				} else {
 					tile.temperature = mapData.averageTemperature;
 				}

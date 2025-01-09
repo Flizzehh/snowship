@@ -6,9 +6,9 @@ using UnityEngine.UI;
 namespace Snowship.NUI.Menu.MainMenu {
 	public class UIMainMenuView : UIView {
 
-		private const float MovementMultiplier = 25f;
-
 		[Header("General")]
+
+		[SerializeField] private GameObject contentParent;
 
 		[SerializeField] private Text disclaimerText;
 
@@ -28,13 +28,14 @@ namespace Snowship.NUI.Menu.MainMenu {
 		[SerializeField] private Image mainMenuBackgroundImage;
 		[SerializeField] private RectTransform mainMenuBackgroundRectTransform;
 
+		[SerializeField] private float movementMultiplier = 25f;
+
 		[SerializeField] private Image snowshipLogo;
 		[SerializeField] private RectTransform snowshipLogoRectTransform;
 
 		[SerializeField] private GameObject darkBackground;
 
 		private Vector2 originalBackgroundPosition;
-
 		private Resolution screenResolution;
 
 		public event Action OnNewButtonClicked;
@@ -49,18 +50,21 @@ namespace Snowship.NUI.Menu.MainMenu {
 			loadButton.onClick.AddListener(() => OnLoadButtonClicked?.Invoke());
 			settingsButton.onClick.AddListener(() => OnSettingsButtonClicked?.Invoke());
 			exitButton.onClick.AddListener(() => OnExitButtonClicked?.Invoke());
+
+			originalBackgroundPosition = mainMenuBackgroundImage.rectTransform.pivot;
+			screenResolution = Screen.currentResolution;
 		}
 
-		public void Initialize(Resolution screenResolution) {
-			this.screenResolution = screenResolution;
+		public override void SetActive(bool active) {
+			contentParent.SetActive(active);
+			darkBackground.SetActive(!active);
 		}
 
-		public void Update() {
-			UpdateMainMenuBackground();
-		}
+		/*public void Update() {
+			UpdateMainMenuBackground(); // TODO Fix because this doesn't work with the Aspect Ratio Fitter component, maybe try Pivot but it uses a 0 - 1 range
+		}*/
 
 		public override void OnClose() {
-
 		}
 
 		public void SetDisclaimerText(string text) {
@@ -83,15 +87,15 @@ namespace Snowship.NUI.Menu.MainMenu {
 			darkBackground.SetActive(false);
 		}
 
-		private void UpdateMainMenuBackground() {
+		/*private void UpdateMainMenuBackground() {
 			mainMenuBackgroundRectTransform.anchoredPosition = originalBackgroundPosition
 				+ new Vector2(
-					-Input.mousePosition.x / (screenResolution.width / MovementMultiplier),
-					-Input.mousePosition.y / (screenResolution.height / MovementMultiplier))
+					-Input.mousePosition.x / (screenResolution.width / movementMultiplier),
+					-Input.mousePosition.y / (screenResolution.height / movementMultiplier))
 				+ new Vector2(
 					screenResolution.width,
 					screenResolution.height
-				) / MovementMultiplier / 2;
-		}
+				) / movementMultiplier / 2f;
+		}*/
 	}
 }

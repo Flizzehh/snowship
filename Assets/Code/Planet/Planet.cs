@@ -22,12 +22,11 @@ namespace Snowship.NPlanet {
 			}
 
 			regenerationCode = string.Format(
-				"{0}{1}{2}{3}{4}{5}",
+				"{0}{1}{2}{3}{4}",
 				mapData.mapSeed.ToString().PadLeft(20, '0'),
 				mapData.mapSize.ToString().PadLeft(3, '0'),
 				mapData.planetDistance.ToString().PadLeft(2, '0'),
 				mapData.temperatureRange.ToString().PadLeft(3, '0'),
-				mapData.randomOffsets ? "1" : "0",
 				mapData.primaryWindDirection.ToString().PadLeft(2, '0')
 			);
 

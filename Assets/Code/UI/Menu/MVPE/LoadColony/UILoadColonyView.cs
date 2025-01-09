@@ -11,8 +11,12 @@ namespace Snowship.NUI.Menu.LoadSave {
 		[SerializeField] private Button createColonyButton;
 
 		[SerializeField] private GridLayoutGroup planetViewGridLayoutGroup;
+		public GridLayoutGroup PlanetViewGridLayoutGroup => planetViewGridLayoutGroup;
+		[SerializeField] private GameObject planetTilePrefab;
+		public GameObject PlanetTilePrefab => planetTilePrefab;
 
 		[SerializeField] private Transform colonyElementsParent;
+		public Transform ColonyElementsParent => colonyElementsParent;
 
 		[SerializeField] private Button loadColonyButton;
 		[SerializeField] private Text loadColonyButtonText;
@@ -29,14 +33,6 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 		public override void OnClose() {
 
-		}
-
-		public GridLayoutGroup GetPlanetViewGridLayoutGroup() {
-			return planetViewGridLayoutGroup;
-		}
-
-		public Transform GetColonyElementsParentTransform() {
-			return colonyElementsParent;
 		}
 
 		public void SetLoadColonyButtonInteractable(bool interactable, string buttonText) {

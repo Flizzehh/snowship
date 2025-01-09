@@ -11,12 +11,13 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 	public class UICreatePlanetPresenter : UIPresenter<UICreatePlanetView> {
 
 		private PlanetViewModule planetViewModule;
-		private CreatePlanetData createPlanetData;
+		private readonly CreatePlanetData createPlanetData = new CreatePlanetData();
 
 		public UICreatePlanetPresenter(UICreatePlanetView view) : base(view) {
 		}
 
 		public override void OnCreate() {
+
 			View.OnBackButtonClicked += OnBackButtonClicked;
 
 			View.OnPlanetNameChanged += OnPlanetNameChanged;
@@ -25,7 +26,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			View.OnPlanetSizeSliderChanged += OnPlanetSizeSliderChanged;
 			View.OnPlanetDistanceSliderChanged += OnPlanetDistanceSliderChanged;
 			View.OnTemperatureRangeSliderChanged += OnTemperatureRangeSliderChanged;
-			View.OnRandomOffsetsValueChanged += OnRandomOffsetsValueChanged;
 			View.OnWindDirectionSliderChanged += OnWindDirectionSliderChanged;
 
 			View.OnRefreshPlanetButtonClicked += OnRefreshPlanetButtonClicked;
@@ -37,10 +37,12 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			SetPlanetSizeSlider();
 			SetPlanetDistanceSlider();
 			SetTemperatureRangeSlider();
-			SetRandomOffsetsToggle();
 			SetWindDirectionSlider();
 
 			CreatePlanetViewModule();
+			CreatePlanetPreview();
+
+			Debug.Log(createPlanetData.ToString());
 		}
 
 		public override void OnClose() {
@@ -53,7 +55,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			View.OnPlanetSizeSliderChanged -= OnPlanetSizeSliderChanged;
 			View.OnPlanetDistanceSliderChanged -= OnPlanetDistanceSliderChanged;
 			View.OnTemperatureRangeSliderChanged -= OnTemperatureRangeSliderChanged;
-			View.OnRandomOffsetsValueChanged -= OnRandomOffsetsValueChanged;
 			View.OnWindDirectionSliderChanged -= OnWindDirectionSliderChanged;
 
 			View.OnRefreshPlanetButtonClicked -= OnRefreshPlanetButtonClicked;
@@ -64,12 +65,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void CreatePlanetViewModule() {
-			planetViewModule = new PlanetViewModule(View.GetPlanetViewGridLayoutGroup());
-			planetViewModule.DisplayPlanet(
-				GameManager.planetM.planet,
-				GameManager.persistenceM.GetPersistenceColonies(),
-				true
-			);
+			planetViewModule = new PlanetViewModule(View.PlanetViewGridLayoutGroup, View.PlanetTilePrefab);
 
 			planetViewModule.OnPlanetTileClicked += OnPlanetTileClicked;
 			planetViewModule.OnColonyTileClicked += OnColonyTileClicked;
@@ -83,55 +79,49 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void SetPlanetNameInputField() {
-			View.SetPlanetNameInputField($"{GameManager.planetM.GetRandomPlanetName()}");
+			View.SetPlanetNameInputField($"{createPlanetData.Name}");
 		}
 
 		private void SetPlanetSeedInputField() {
-			View.SetPlanetSeedInputField($"{GameManager.planetM.GetRandomPlanetSeed()}");
+			View.SetPlanetSeedInputField($"{createPlanetData.Seed}");
 		}
 
 		private void SetPlanetSizeSlider() {
 			const int planetSizeSliderMin = 0;
-			int planetSizeSliderMax = GameManager.planetM.GetNumPlanetSizes() - 1;
+			int planetSizeSliderMax = CreatePlanetData.GetNumPlanetSizes() - 1;
 			View.SetPlanetSizeSlider(
 				planetSizeSliderMin,
 				planetSizeSliderMax,
-				Mathf.FloorToInt((planetSizeSliderMin + planetSizeSliderMax) / 2f) + 2 // 60
+				createPlanetData.SizeIndex
 			);
+
 		}
 
 		private void SetPlanetDistanceSlider() {
-			int planetDistanceSliderMin = GameManager.planetM.GetMinPlanetDistance();
-			int planetDistanceSliderMax = GameManager.planetM.GetMaxPlanetDistance();
 			View.SetPlanetDistanceSlider(
-				planetDistanceSliderMin,
-				planetDistanceSliderMax,
-				Mathf.FloorToInt((planetDistanceSliderMin + planetDistanceSliderMax) / 2f) // 1 AU
+				CreatePlanetData.PlanetDistanceIndexRange.Min,
+				CreatePlanetData.PlanetDistanceIndexRange.Max,
+				createPlanetData.DistanceIndex
 			);
+
 		}
 
 		private void SetTemperatureRangeSlider() {
-			const int temperatureRangeSliderMin = 0;
-			const int temperatureRangeSliderMax = 10;
 			View.SetTemperatureRangeSlider(
-				temperatureRangeSliderMin,
-				temperatureRangeSliderMax,
-				Mathf.FloorToInt((temperatureRangeSliderMin + temperatureRangeSliderMax) / 2f) + 2 // 70°C
+				CreatePlanetData.PlanetTemperatureIndexRange.Min,
+				CreatePlanetData.PlanetTemperatureIndexRange.Max,
+				createPlanetData.TemperatureRangeIndex
 			);
-		}
 
-		private void SetRandomOffsetsToggle() {
-			View.SetRandomOffsetsToggle(true);
 		}
 
 		private void SetWindDirectionSlider() {
-			const int windDirectionSliderMin = 0;
-			int windDirectionSliderMax = GameManager.planetM.GetNumWindDirections() - 1;
 			View.SetWindDirectionSlider(
-				windDirectionSliderMin,
-				windDirectionSliderMax,
-				Random.Range(windDirectionSliderMin, windDirectionSliderMax)
+				CreatePlanetData.PlanetWindDirectionIndexRange.Min,
+				CreatePlanetData.PlanetWindDirectionIndexRange.Max - 1,
+				createPlanetData.WindDirectionIndex
 			);
+
 		}
 
 		private bool IsPlanetNameValid(string planetName) {
@@ -143,47 +133,43 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void OnBackButtonClicked() {
-			GameManager.uiM.CloseView(this);
+			GameManager.uiM.GoBack(this);
 		}
 
 		private void OnPlanetNameChanged(string planetName) {
 			bool validPlanetName = IsPlanetNameValid(planetName);
 			SetCreatePlanetButtonInteractable(validPlanetName);
 			if (validPlanetName) {
-				createPlanetData.name = planetName;
+				createPlanetData.Name = planetName;
 			}
 		}
 
 		private void OnPlanetSeedChanged(string planetSeed) {
-			createPlanetData.seed = StringUtilities.ParseSeed(planetSeed);
+			createPlanetData.Seed = StringUtilities.ParseSeed(planetSeed);
 		}
 
 		private void OnPlanetSizeSliderChanged(float sliderValue) {
-			createPlanetData.size = GameManager.planetM.GetPlanetSizeByIndex(Mathf.FloorToInt(sliderValue));
-			View.SetPlanetSizeText($"{createPlanetData.size}");
+			createPlanetData.SetSize(Mathf.FloorToInt(sliderValue));
+			View.SetPlanetSizeText($"{createPlanetData.Size}");
 		}
 
 		private void OnPlanetDistanceSliderChanged(float sliderValue) {
-			createPlanetData.distance = GameManager.planetM.GetPlanetDistanceByIndex(Mathf.FloorToInt(sliderValue));
-			View.SetPlanetDistanceText($"{createPlanetData.distance} AU");
+			createPlanetData.SetDistance(Mathf.FloorToInt(sliderValue));
+			View.SetPlanetDistanceText($"{createPlanetData.Distance} AU");
 		}
 
 		private void OnTemperatureRangeSliderChanged(float sliderValue) {
-			createPlanetData.temperatureRange = GameManager.planetM.GetTemperatureRangeByIndex(Mathf.FloorToInt(sliderValue));
-			View.SetTemperatureRangeText($"{createPlanetData.temperatureRange}°C");
-		}
-
-		private void OnRandomOffsetsValueChanged(bool toggleValue) {
-			createPlanetData.randomOffsets = toggleValue;
+			createPlanetData.SetTemperatureRange(Mathf.FloorToInt(sliderValue));
+			View.SetTemperatureRangeText($"{createPlanetData.TemperatureRange}°C");
 		}
 
 		private void OnWindDirectionSliderChanged(float sliderValue) {
-			int sliderValueInt = Mathf.FloorToInt(sliderValue);
-			createPlanetData.windDirection = GameManager.planetM.GetWindCircularDirectionByIndex(sliderValueInt);
-			View.SetWindDirectionText($"{GameManager.planetM.GetWindCardinalDirectionByIndex(sliderValueInt)}");
+			createPlanetData.SetWindDirection(Mathf.FloorToInt(sliderValue));
+			View.SetWindDirectionText($"{CreatePlanetData.GetWindCardinalDirectionByIndex(createPlanetData.WindDirectionIndex)}");
 		}
 
 		private void OnRefreshPlanetButtonClicked() {
+			Debug.Log(createPlanetData.ToString());
 			CreatePlanetPreview();
 		}
 
@@ -206,7 +192,11 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		private void CreatePlanetPreview() {
 			Planet planet = GameManager.planetM.CreatePlanet(createPlanetData);
-			planetViewModule.DisplayPlanet(planet, null, false);
+			planetViewModule.DisplayPlanet(
+				planet,
+				GameManager.persistenceM.GetPersistenceColonies(),
+				true
+			);
 		}
 
 		private void RandomizePlanetSettings() {

@@ -6,21 +6,20 @@ namespace Snowship.NUI.Generic {
 		where TView : IUIView
 		where TPresenter : IUIPresenter
 	{
-		private readonly GameObject viewGameObject;
-		private readonly TView viewInstance;
+		private readonly TView view;
 		private readonly TPresenter presenter;
 
 		private readonly IUIGroup parent;
 		private readonly List<IUIGroup> children = new List<IUIGroup>();
 
 		public UIGroup() {
-			viewInstance = default(TView);
+			view = default(TView);
 			presenter = default(TPresenter);
 			parent = null;
 		}
 
-		public UIGroup(TView viewInstance, TPresenter presenter, IUIGroup parent) {
-			this.viewInstance = viewInstance;
+		public UIGroup(TView view, TPresenter presenter, IUIGroup parent) {
+			this.view = view;
 			this.presenter = presenter;
 
 			this.parent = parent;
@@ -31,12 +30,16 @@ namespace Snowship.NUI.Generic {
 		private void OnConstructed() {
 			parent?.AddChild(this);
 
-			viewInstance.OnOpen();
+			view.OnOpen();
 			presenter.OnCreate();
 		}
 
 		public IUIView GetView() {
-			return viewInstance;
+			return view;
+		}
+
+		public void SetViewActive(bool active) {
+			view.SetActive(active);
 		}
 
 		public IUIPresenter GetPresenter() {
@@ -61,9 +64,9 @@ namespace Snowship.NUI.Generic {
 				break;
 			}
 
-			viewInstance.OnClose();
+			view.OnClose();
 
-			Object.Destroy(viewGameObject);
+			Object.Destroy(view.Instance);
 
 			parent.RemoveChild(this);
 		}
@@ -95,7 +98,7 @@ namespace Snowship.NUI.Generic {
 				return null;
 			}
 
-			if (viewInstance.Equals(viewToFind)) {
+			if (view.Equals(viewToFind)) {
 				return this;
 			}
 

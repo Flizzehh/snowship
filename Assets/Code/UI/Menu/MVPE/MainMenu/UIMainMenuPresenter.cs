@@ -37,8 +37,6 @@ namespace Snowship.NUI.Menu.MainMenu {
 
 			List<Sprite> backgroundImages = Resources.LoadAll<Sprite>(@"UI/Backgrounds/SingleMap").ToList();
 			View.SetBackground(backgroundImages[Random.Range(0, backgroundImages.Count)]);
-
-			View.Initialize(Screen.currentResolution);
 		}
 
 		public override void OnClose() {
@@ -50,7 +48,7 @@ namespace Snowship.NUI.Menu.MainMenu {
 		}
 
 		private void OnNewButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UICreatePlanet>(this);
+			_ = GameManager.uiM.OpenViewAsync<UICreatePlanet>(this, false);
 		}
 
 		private void OnContinueButtonClicked() {
@@ -58,11 +56,11 @@ namespace Snowship.NUI.Menu.MainMenu {
 		}
 
 		private void OnLoadButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UILoadColony>(this);
+			_ = GameManager.uiM.OpenViewAsync<UILoadColony>(this, false);
 		}
 
 		private void OnSettingsButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UISettings>(this);
+			_ = GameManager.uiM.OpenViewAsync<UISettings>(this, false);
 		}
 
 		private void OnExitButtonClicked() {

@@ -49,7 +49,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 		}
 
 		private void CreatePlanetViewModule() {
-			planetViewModule = new PlanetViewModule(View.GetPlanetViewGridLayoutGroup());
+			planetViewModule = new PlanetViewModule(View.PlanetViewGridLayoutGroup, View.PlanetTilePrefab);
 			planetViewModule.DisplayPlanet(
 				GameManager.planetM.planet,
 				GameManager.persistenceM.GetPersistenceColonies(),

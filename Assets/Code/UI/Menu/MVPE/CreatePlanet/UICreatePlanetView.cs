@@ -10,6 +10,9 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		[Header("General")]
 		[SerializeField] private GridLayoutGroup planetViewGridLayoutGroup;
+		public GridLayoutGroup PlanetViewGridLayoutGroup => planetViewGridLayoutGroup;
+		[SerializeField] private GameObject planetTilePrefab;
+		public GameObject PlanetTilePrefab => planetTilePrefab;
 
 		[SerializeField] private Button backButton;
 
@@ -43,9 +46,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		[SerializeField] private Slider temperatureRangeSlider;
 		[SerializeField] private Text temperatureRangeText;
 
-		[Header("Random Offsets")]
-		[SerializeField] private Toggle randomOffsetsToggle;
-
 		[Header("Wind Direction")]
 		[SerializeField] private Slider windDirectionSlider;
 		[SerializeField] private Text windDirectionText;
@@ -58,7 +58,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		public event Action<float> OnPlanetSizeSliderChanged;
 		public event Action<float> OnPlanetDistanceSliderChanged;
 		public event Action<float> OnTemperatureRangeSliderChanged;
-		public event Action<bool> OnRandomOffsetsValueChanged;
 		public event Action<float> OnWindDirectionSliderChanged;
 
 		public event Action OnRefreshPlanetButtonClicked;
@@ -74,28 +73,26 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			planetSizeSlider.onValueChanged.AddListener(sliderValue => OnPlanetSizeSliderChanged?.Invoke(sliderValue));
 			planetDistanceSlider.onValueChanged.AddListener(sliderValue => OnPlanetDistanceSliderChanged?.Invoke(sliderValue));
 			temperatureRangeSlider.onValueChanged.AddListener(sliderValue => OnTemperatureRangeSliderChanged?.Invoke(sliderValue));
-			randomOffsetsToggle.onValueChanged.AddListener(toggleValue => OnRandomOffsetsValueChanged?.Invoke(toggleValue));
 			windDirectionSlider.onValueChanged.AddListener(sliderValue => OnWindDirectionSliderChanged?.Invoke(sliderValue));
 
 			refreshPlanetButton.onClick.AddListener(() => OnRefreshPlanetButtonClicked?.Invoke());
 			randomizePlanetButton.onClick.AddListener(() => OnRandomizePlanetButtonClicked?.Invoke());
 			createPlanetButton.onClick.AddListener(() => OnCreatePlanetButtonClicked?.Invoke());
+
+			planetTileInfoPanel.SetActive(false);
+			planetTilePositionText.gameObject.SetActive(false);
 		}
 
 		public override void OnClose() {
 
 		}
 
-		public GridLayoutGroup GetPlanetViewGridLayoutGroup() {
-			return planetViewGridLayoutGroup;
-		}
-
 		public void SetPlanetNameInputField(string text) {
-			planetNameInputField.text = text;
+			planetNameInputField.SetTextWithoutNotify(text);
 		}
 
 		public void SetPlanetSeedInputField(string text) {
-			planetSeedInputField.text = text;
+			planetSeedInputField.SetTextWithoutNotify(text);
 		}
 
 		public void SetPlanetSizeSlider(int minValue, int maxValue, int initialValue) {
@@ -108,7 +105,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			planetSizeText.text = text;
 		}
 
-		public void SetPlanetDistanceSlider(int minValue, int maxValue, int initialValue) {
+		public void SetPlanetDistanceSlider(int minValue, int maxValue, float initialValue) {
 			planetDistanceSlider.minValue = minValue;
 			planetDistanceSlider.maxValue = maxValue;
 			planetDistanceSlider.value = initialValue;
@@ -126,10 +123,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		public void SetTemperatureRangeText(string text) {
 			temperatureRangeText.text = text;
-		}
-
-		public void SetRandomOffsetsToggle(bool isOn) {
-			randomOffsetsToggle.isOn = isOn;
 		}
 
 		public void SetWindDirectionSlider(int minValue, int maxValue, int initialValue) {

@@ -11,6 +11,9 @@ namespace Snowship.NUI.Menu.CreateColony {
 		[SerializeField] private Button backButton;
 
 		[SerializeField] private GridLayoutGroup planetViewGridLayoutGroup;
+		public GridLayoutGroup PlanetViewGridLayoutGroup => planetViewGridLayoutGroup;
+		[SerializeField] private GameObject planetTilePrefab;
+		public GameObject PlanetTilePrefab => planetTilePrefab;
 
 		[SerializeField] private InputField colonyNameInputField;
 		[SerializeField] private Button randomizeColonyNameButton;
@@ -51,10 +54,6 @@ namespace Snowship.NUI.Menu.CreateColony {
 
 		public override void OnClose() {
 
-		}
-
-		public GridLayoutGroup GetPlanetViewGridLayoutGroup() {
-			return planetViewGridLayoutGroup;
 		}
 
 		public void SetMapSeedInputField(string text) {
