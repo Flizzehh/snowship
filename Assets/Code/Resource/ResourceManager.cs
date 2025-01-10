@@ -10,6 +10,7 @@ using Snowship.NUI;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ResourceManager : BaseManager {
 
@@ -3275,13 +3276,13 @@ public class ResourceManager : BaseManager {
 
 	public string GetRandomLocationName() {
 		List<string> filteredLocationNames = locationNames.Where(ln =>
-				(GameManager.universeM.universe == null || ln != GameManager.universeM.universe.name)
-			&&	(GameManager.planetM.planet == null || ln != GameManager.planetM.planet.name)
-			&&	(GameManager.colonyM.colony == null || ln != GameManager.colonyM.colony.name)
-			&&	GameManager.caravanM.caravans.Find(c => c.location.name == ln) == null
+			(GameManager.universeM.universe == null || ln != GameManager.universeM.universe.name)
+			&& (GameManager.planetM.planet == null || ln != GameManager.planetM.planet.name)
+			&& (GameManager.colonyM.colony == null || ln != GameManager.colonyM.colony.name)
+			&& GameManager.caravanM.caravans.Find(c => c.location.name == ln) == null
 		).ToList();
 
-		return filteredLocationNames[UnityEngine.Random.Range(0, filteredLocationNames.Count)];
+		return filteredLocationNames[Random.Range(0, filteredLocationNames.Count)];
 	}
 
 	public int BitSumObjects(List<ObjectEnum> compareObjectTypes, List<TileManager.Tile> tileSurroundingTiles) {

@@ -4,20 +4,6 @@ using UnityEngine;
 namespace Snowship.NColony {
 	public class ColonyManager : BaseManager {
 
-		private static readonly List<int> mapSizes = new List<int>() { 50, 100, 150, 200 };
-
-		public static int GetNumMapSizes() {
-			return mapSizes.Count;
-		}
-
-		public static int GetMapSizeByIndex(int index) {
-			return mapSizes[index];
-		}
-
-		public static string GetRandomColonyName() {
-			return GameManager.resourceM.GetRandomLocationName();
-		}
-
 		public void SetupNewColony(Colony colony, bool initialized) {
 			if (!initialized) {
 				this.colony = colony;
@@ -35,24 +21,24 @@ namespace Snowship.NColony {
 
 		public Colony CreateColony(CreateColonyData createColonyData) {
 			Colony colony = new Colony(
-				createColonyData.name,
+				createColonyData.Name,
 				new TileManager.MapData(
 					GameManager.planetM.planet.mapData,
-					createColonyData.seed,
-					createColonyData.size,
+					createColonyData.Seed,
+					createColonyData.Size,
 					true,
 					false,
 					0,
 					0,
-					createColonyData.planetTile.tile.temperature,
-					createColonyData.planetTile.tile.GetPrecipitation(),
-					createColonyData.planetTile.terrainTypeHeights,
-					createColonyData.planetTile.surroundingPlanetTileHeightDirections,
-					createColonyData.planetTile.isRiver,
-					createColonyData.planetTile.surroundingPlanetTileRivers,
+					createColonyData.PlanetTile.tile.temperature,
+					createColonyData.PlanetTile.tile.GetPrecipitation(),
+					createColonyData.PlanetTile.terrainTypeHeights,
+					createColonyData.PlanetTile.surroundingPlanetTileHeightDirections,
+					createColonyData.PlanetTile.isRiver,
+					createColonyData.PlanetTile.surroundingPlanetTileRivers,
 					false,
 					GameManager.planetM.planet.primaryWindDirection,
-					createColonyData.planetTile.tile.position
+					createColonyData.PlanetTile.tile.position
 				)
 			);
 			return colony;

@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NColony;
 using Snowship.NPlanet;
+using Snowship.NState;
 using Snowship.NUI.Generic;
 using Snowship.NUI.Modules;
 using Snowship.NUtilities;
@@ -12,7 +13,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 	public class UICreateColonyPresenter : UIPresenter<UICreateColonyView> {
 
 		private PlanetViewModule planetViewModule;
-		private CreateColonyData createColonyData;
+		private readonly CreateColonyData createColonyData = new CreateColonyData();
 
 		public UICreateColonyPresenter(UICreateColonyView view) : base(view) {
 		}
@@ -27,12 +28,14 @@ namespace Snowship.NUI.Menu.CreateColony {
 
 			View.OnCreateColonyButtonClicked += OnCreateColonyButtonClicked;
 
-			SetColonyName();
-			SetMapSeed();
+			SetColonyNameInputField();
+			SetMapSeedInputField();
 			SetMapSizeSlider();
-			SetCreateColonyButtonInteractable(CanCreateColony());
+			SetCreateColonyButtonInteractable();
 
 			CreatePlanetViewModule();
+			CreatePlanetPreview();
+			View.SetPlanetTileData(null, false);
 		}
 
 		public override void OnClose() {
@@ -67,77 +70,73 @@ namespace Snowship.NUI.Menu.CreateColony {
 			planetViewModule.DestroyPlanet();
 		}
 
-		private void SetColonyName() {
-			OnColonyNameChanged(ColonyManager.GetRandomColonyName());
-			View.SetColonyNameInputField(createColonyData.name);
+		private void CreatePlanetPreview() {
+			Planet planet = GameManager.planetM.planet;
+			planetViewModule.DisplayPlanet(
+				planet,
+				GameManager.persistenceM.GetPersistenceColonies(),
+				true
+			);
 		}
 
-		private void SetMapSeed() {
-			OnMapSeedChanged($"{TileManager.Map.GetRandomMapSeed()}");
-			View.SetMapSeedInputField($"{createColonyData.seed}");
+		private void SetColonyNameInputField() {
+			View.SetColonyNameInputField($"{createColonyData.Name}");
+		}
+
+		private void SetMapSeedInputField() {
+			View.SetMapSeedInputField($"{createColonyData.Seed}");
 		}
 
 		private void SetMapSizeSlider() {
-			View.SetupMapSizeSlider(0, ColonyManager.GetNumMapSizes() - 1, 1);
-			OnMapSizeSliderChanged(1);
+			View.SetupMapSizeSlider(
+				CreateColonyData.MapSizeIndexRange.Min,
+				CreateColonyData.MapSizeIndexRange.Max,
+				createColonyData.SizeIndex
+			);
 		}
 
-		private bool IsColonyNameValid(string colonyName) {
-			return StringUtilities.IsAlphanumericWithSpaces(colonyName);
-		}
-
-		private bool IsPlanetTileValid(PlanetTile planetTile) {
-			return planetTile != null;
-		}
-
-		private bool CanCreateColony() {
-			return IsColonyNameValid(createColonyData.name) && IsPlanetTileValid(createColonyData.planetTile);
-		}
-
-		private void SetCreateColonyButtonInteractable(bool interactable) {
-			View.SetSaveColonyButtonInteractable(interactable);
+		private void SetCreateColonyButtonInteractable() {
+			View.SetSaveColonyButtonInteractable(createColonyData.CanCreateColony());
 		}
 
 		private void OnBackButtonClicked() {
-			GameManager.uiM.CloseView(this);
+			GameManager.uiM.GoBack(this);
 		}
 
 		private void OnColonyNameChanged(string colonyName) {
-			bool colonyNameValid = IsColonyNameValid(colonyName);
-			createColonyData.name = colonyNameValid ? colonyName : string.Empty;
-			SetCreateColonyButtonInteractable(CanCreateColony());
+			bool validColonyName = createColonyData.SetName(colonyName);
+			if (!validColonyName) {
+				View.SetColonyNameInputField(string.Empty);
+			}
+			SetCreateColonyButtonInteractable();
 		}
 
 		private void OnRandomizeColonyNameButtonClicked() {
-			View.SetColonyNameInputField(ColonyManager.GetRandomColonyName());
-		}
-
-		private void OnMapSizeSliderChanged(float sliderValue) {
-			createColonyData.size = ColonyManager.GetMapSizeByIndex(Mathf.FloorToInt(sliderValue));
-			View.SetMapSizeText($"{createColonyData.size}");
+			View.SetColonyNameInputField(CreateColonyData.GenerateRandomColonyName());
 		}
 
 		private void OnMapSeedChanged(string mapSeed) {
-			createColonyData.seed = StringUtilities.ParseSeed(mapSeed);
+			createColonyData.Seed = StringUtilities.ParseSeed(mapSeed);
+		}
+
+		private void OnMapSizeSliderChanged(float sliderValue) {
+			createColonyData.SetSize(Mathf.FloorToInt(sliderValue));
+			View.SetMapSizeText($"{createColonyData.Size}²");
+		}
+
+		private void OnPlanetTileClicked(PlanetTile planetTile) {
+			bool planetTileValid = createColonyData.SetPlanetTile(planetTile);
+			SetCreateColonyButtonInteractable();
+			View.SetPlanetTileData(planetTile, planetTileValid);
 		}
 
 		private void OnCreateColonyButtonClicked() {
 			Colony colony = GameManager.colonyM.CreateColony(createColonyData);
 
-			// TODO This should all be handled in the ColonyManager itself
+			// TODO This should be handled in the ColonyManager itself
 			GameManager.colonyM.SetupNewColony(colony, false);
-		}
 
-		private void OnPlanetTileClicked(PlanetTile planetTile) {
-			createColonyData.planetTile = planetTile;
-
-			SetCreateColonyButtonInteractable(CanCreateColony());
-
-			bool planetTileValid = IsPlanetTileValid(planetTile);
-			View.SetPlanetTileState(planetTileValid);
-			if (planetTileValid) {
-				View.SetPlanetTileData(planetTile);
-			}
+			_ = GameManager.stateM.TransitionToState(EState.LoadToSimulation);
 		}
 
 		private void OnColonyTileClicked(PersistenceManager.PersistenceColony persistenceColony) {

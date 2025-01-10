@@ -22,12 +22,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		[SerializeField] private Button createPlanetButton;
 		[SerializeField] private Image createPlanetButtonImage;
 
-		[Header("Selected Planet Tile Info")]
-		[SerializeField] private GameObject planetTileInfoPanel;
-		[SerializeField] private Image planetTileSpriteImage;
-		[SerializeField] private Text planetTileBiomeText;
-		[SerializeField] private Text planetTilePositionText;
-
 		[Header("Planet Properties")]
 		[Header("Name")]
 		[SerializeField] private InputField planetNameInputField;
@@ -49,6 +43,12 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		[Header("Wind Direction")]
 		[SerializeField] private Slider windDirectionSlider;
 		[SerializeField] private Text windDirectionText;
+
+		[Header("Selected Planet Tile Info")]
+		[SerializeField] private GameObject planetTileInfoPanel;
+		[SerializeField] private Image planetTileSpriteImage;
+		[SerializeField] private Text planetTileBiomeText;
+		[SerializeField] private Text planetTilePositionText;
 
 		public event Action OnBackButtonClicked;
 

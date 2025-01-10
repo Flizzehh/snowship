@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NPlanet;
 using Snowship.NUI.Generic;
+using Snowship.NUI.Menu.CreateColony;
 using Snowship.NUI.Modules;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -87,14 +88,11 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void SetPlanetSizeSlider() {
-			const int planetSizeSliderMin = 0;
-			int planetSizeSliderMax = CreatePlanetData.GetNumPlanetSizes() - 1;
 			View.SetPlanetSizeSlider(
-				planetSizeSliderMin,
-				planetSizeSliderMax,
+				0,
+				CreatePlanetData.GetNumPlanetSizes() - 1,
 				createPlanetData.SizeIndex
 			);
-
 		}
 
 		private void SetPlanetDistanceSlider() {
@@ -103,7 +101,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 				CreatePlanetData.PlanetDistanceIndexRange.Max,
 				createPlanetData.DistanceIndex
 			);
-
 		}
 
 		private void SetTemperatureRangeSlider() {
@@ -112,7 +109,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 				CreatePlanetData.PlanetTemperatureIndexRange.Max,
 				createPlanetData.TemperatureRangeIndex
 			);
-
 		}
 
 		private void SetWindDirectionSlider() {
@@ -121,11 +117,6 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 				CreatePlanetData.PlanetWindDirectionIndexRange.Max - 1,
 				createPlanetData.WindDirectionIndex
 			);
-
-		}
-
-		private bool IsPlanetNameValid(string planetName) {
-			return StringUtilities.IsAlphanumericWithSpaces(planetName);
 		}
 
 		private void SetCreatePlanetButtonInteractable(bool interactable) {
@@ -137,11 +128,8 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void OnPlanetNameChanged(string planetName) {
-			bool validPlanetName = IsPlanetNameValid(planetName);
+			bool validPlanetName = createPlanetData.SetName(planetName);
 			SetCreatePlanetButtonInteractable(validPlanetName);
-			if (validPlanetName) {
-				createPlanetData.Name = planetName;
-			}
 		}
 
 		private void OnPlanetSeedChanged(string planetSeed) {
@@ -179,6 +167,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		private void OnCreatePlanetButtonClicked() {
 			GameManager.persistenceM.CreatePlanet(GameManager.planetM.planet);
+			_ = GameManager.uiM.OpenViewAsync<UICreateColony>(this, false);
 		}
 
 		private void OnPlanetTileClicked(PlanetTile planetTile) {

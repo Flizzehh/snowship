@@ -3982,11 +3982,7 @@ MonoBehaviour:
   refreshPlanetButton: {fileID: 7248061385797138521}
   randomizePlanetButton: {fileID: 8918149236648092933}
   createPlanetButton: {fileID: 4253371977022602407}
-  createPlanetButtonImage: {fileID: 3759467617739107680}
-  planetTileInfoPanel: {fileID: 7659322518989721242}
-  planetTileSpriteImage: {fileID: 3805866504346542945}
-  planetTileBiomeText: {fileID: 160503466765497794}
-  planetTilePositionText: {fileID: 4988036797724594711}
+  createPlanetButtonImage: {fileID: 2144715578684394747}
   planetNameInputField: {fileID: 5330551400567615516}
   planetSeedInputField: {fileID: 4360173840903117373}
   planetSizeSlider: {fileID: 6420073141917159299}
@@ -3997,6 +3993,10 @@ MonoBehaviour:
   temperatureRangeText: {fileID: 1682317445575347589}
   windDirectionSlider: {fileID: 960540962759067659}
   windDirectionText: {fileID: 6947856851894919527}
+  planetTileInfoPanel: {fileID: 7659322518989721242}
+  planetTileSpriteImage: {fileID: 3805866504346542945}
+  planetTileBiomeText: {fileID: 160503466765497794}
+  planetTilePositionText: {fileID: 4988036797724594711}
 --- !u!1 &5687694690507810915
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,5 +6,6 @@ namespace Snowship.NUI.Generic {
 		public void OnClose();
 		public void SetActive(bool active);
 		public GameObject Instance { get; set; }
+		public bool IsActive { get; }
 	}
 }

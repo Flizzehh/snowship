@@ -1,6 +1,7 @@
 ﻿namespace Snowship.NUI.Generic {
 	public interface IUIGroup {
 		public IUIView GetView();
+		bool IsActive { get; }
 		void SetViewActive(bool active);
 		public IUIPresenter GetPresenter();
 		public IUIGroup GetParent();

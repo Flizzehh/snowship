@@ -1,43 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace Snowship.NState {
-	public class StateManager : BaseManager {
+	public partial class StateManager : BaseManager {
 
-		private State state = states[EState.Boot];
-		public EState State => state.type;
+		private State state;
+
+		public EState State => state.Type;
 
 		public bool StateChangeLocked { get; private set; }
 
 		public event Action<(EState previousState, EState newState)> OnStateChanged;
 
-		private static readonly Dictionary<EState, State> states = new() {
-			{ EState.Boot, new State(EState.Boot, new List<EState> { EState.MainMenu }) },
-			{ EState.MainMenu, new State(EState.MainMenu, new List<EState> { EState.LoadToSimulation, EState.QuitToDesktop }) },
-			{ EState.LoadToSimulation, new State(EState.LoadToSimulation, new List<EState> { EState.Simulation }) },
-			{ EState.Simulation, new State(EState.Simulation, new List<EState> { EState.Paused, EState.Saving, EState.QuitToMenu, EState.QuitToDesktop }) },
-			{ EState.Paused, new State(EState.Paused, new List<EState> { EState.Simulation }) },
-			{ EState.Saving, new State(EState.Saving, new List<EState> { EState.Paused, EState.Simulation }) },
-			{ EState.QuitToMenu, new State(EState.QuitToMenu, new List<EState> { EState.MainMenu }) },
-			{ EState.QuitToDesktop, new State(EState.QuitToDesktop, null) }
-		};
+		public override void Awake() {
+			_ = TransitionToState(EState.Boot);
+			_ = TransitionToState(EState.MainMenu);
+		}
 
-		public void TransitionToState(EState newState) {
+		public async UniTask TransitionToState(EState newState, ETransitionUIAction transitionUIAction = ETransitionUIAction.Close) {
 			if (StateChangeLocked) {
 				return;
 			}
 
-			if (state.type == newState) {
+			state ??= states[newState];
+
+			if (state.Type == newState) {
 				return;
 			}
 
-			if (!state.validNextStates.Contains(newState)) {
+			if (!state.ValidNextStates.Contains(newState)) {
 				return;
 			}
 
-			EState previousState = state.type;
+			EState previousState = state.Type;
 			state = states[newState];
-			OnStateChanged?.Invoke((previousState, state.type));
+
+			switch (transitionUIAction) {
+				case ETransitionUIAction.Nothing:
+					break;
+				case ETransitionUIAction.Hide:
+					GameManager.uiM.ToggleAllViews();
+					break;
+				case ETransitionUIAction.Close:
+					GameManager.uiM.CloseAllViews();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(transitionUIAction), transitionUIAction, null);
+			}
+
+			foreach (Func<UniTask> action in state.ActionsOnOpen) {
+				await action();
+			}
+
+			OnStateChanged?.Invoke((previousState, state.Type));
 		}
 
 		public void LockStateChange() {

@@ -7,6 +7,7 @@ using System.Threading;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPlanet;
+using Snowship.NState;
 using Snowship.NUI.Menu.MainMenu;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -1475,6 +1476,8 @@ public class TileManager : BaseManager {
 
 			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Finalizing", string.Empty); yield return null; }
 			created = true;
+
+			GameManager.stateM.TransitionToState(EState.Simulation);
 		}
 
 		void CreateTiles() {

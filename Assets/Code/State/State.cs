@@ -1,13 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 namespace Snowship.NState {
 	public class State {
-		public readonly EState type;
-		public readonly List<EState> validNextStates;
+		public readonly EState Type;
+		public readonly List<EState> ValidNextStates;
+		public readonly List<Func<UniTask>> ActionsOnOpen;
 
-		public State(EState type, List<EState> validNextStates) {
-			this.type = type;
-			this.validNextStates = validNextStates;
+		public State(
+			EState type,
+			List<EState> validNextStates,
+			List<Func<UniTask>> actionsOnOpen
+		) {
+			Type = type;
+			ValidNextStates = validNextStates;
+			ActionsOnOpen = actionsOnOpen;
 		}
 	}
 }

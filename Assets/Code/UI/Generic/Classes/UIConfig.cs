@@ -31,9 +31,7 @@ namespace Snowship.NUI.Generic {
 
 		// ReSharper disable once MemberCanBeMadeStatic.Local
 		private TPresenter CreatePresenter(TView view) {
-			return (TPresenter)Activator.CreateInstance(typeof(TPresenter), new object[] {
-				view
-			});
+			return (TPresenter)Activator.CreateInstance(typeof(TPresenter), view);
 		}
 	}
 }

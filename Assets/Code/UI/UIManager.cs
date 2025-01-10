@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Snowship.NUI.Generic;
-using Snowship.NUI.Menu.MainMenu;
 using UnityEngine;
 
 namespace Snowship.NUI {
 	public class UIManager : BaseManager {
+
 		private Transform uiParent;
 
-		private List<IUIGroup> parentGroups = new List<IUIGroup>();
+		private readonly List<IUIGroup> parentGroups = new List<IUIGroup>();
 
 		public void Initialize(Transform uiParent) {
 			this.uiParent = uiParent;
-
-			_ = OpenViewAsync<UIMainMenu>();
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent = null, bool showParent = true) where TUIConfig : IUIConfig, new() {
@@ -36,6 +34,20 @@ namespace Snowship.NUI {
 			}
 
 			return ui.presenter;
+		}
+
+		public async UniTask<IUIPresenter> SwitchViewsAsync<TUIPresenterToClose, TUIConfigToOpen>(TUIPresenterToClose presenter, bool showParent = true)
+			where TUIPresenterToClose : IUIPresenter
+			where TUIConfigToOpen : IUIConfig, new()
+		{
+			IUIGroup closeGroup = FindGroup(presenter);
+			if (closeGroup == null) {
+				return null;
+			}
+
+			IUIPresenter parentPresenter = closeGroup.GetParent().GetPresenter();
+			closeGroup.Close();
+			return await OpenViewAsync<TUIConfigToOpen>(parentPresenter, showParent);
 		}
 
 		private IUIGroup FindGroup(IUIPresenter presenter) {
@@ -66,6 +78,19 @@ namespace Snowship.NUI {
 			IUIGroup parent = group.GetParent();
 			parent?.SetViewActive(true);
 			CloseView(presenter);
+		}
+
+		public void ToggleAllViews() {
+			foreach (IUIGroup group in parentGroups) {
+				group.SetViewActive(!group.IsActive);
+			}
+		}
+
+		public void CloseAllViews() {
+			foreach (IUIGroup group in parentGroups) {
+				group.Close();
+			}
+			parentGroups.Clear();
 		}
 	}
 }

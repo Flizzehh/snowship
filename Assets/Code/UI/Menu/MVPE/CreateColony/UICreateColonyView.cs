@@ -8,6 +8,7 @@ using UnityEngine.UI;
 namespace Snowship.NUI.Menu.CreateColony {
 	public class UICreateColonyView : UIView {
 
+		[Header("General")]
 		[SerializeField] private Button backButton;
 
 		[SerializeField] private GridLayoutGroup planetViewGridLayoutGroup;
@@ -15,12 +16,14 @@ namespace Snowship.NUI.Menu.CreateColony {
 		[SerializeField] private GameObject planetTilePrefab;
 		public GameObject PlanetTilePrefab => planetTilePrefab;
 
+		[Header("Colony Properties")]
 		[SerializeField] private InputField colonyNameInputField;
 		[SerializeField] private Button randomizeColonyNameButton;
 		[SerializeField] private InputField mapSeedInputField;
 		[SerializeField] private Slider mapSizeSlider;
 		[SerializeField] private Text mapSizeText;
 
+		[Header("Selected Planet Tile Info")]
 		[SerializeField] private GameObject selectedPlanetTileInfoPanel;
 		[SerializeField] private Image selectedPlanetTileSpriteImage;
 		[SerializeField] private Text biomeText;
@@ -56,8 +59,12 @@ namespace Snowship.NUI.Menu.CreateColony {
 
 		}
 
+		public void SetColonyNameInputField(string text) {
+			colonyNameInputField.SetTextWithoutNotify(text);
+		}
+
 		public void SetMapSeedInputField(string text) {
-			mapSeedInputField.text = text;
+			mapSeedInputField.SetTextWithoutNotify(text);
 		}
 
 		public void SetupMapSizeSlider(int minValue, int maxValue, int initialValue) {
@@ -66,20 +73,19 @@ namespace Snowship.NUI.Menu.CreateColony {
 			mapSizeSlider.value = initialValue;
 		}
 
-		public void SetColonyNameInputField(string text) {
-			colonyNameInputField.text = text;
-		}
-
 		public void SetMapSizeText(string text) {
 			mapSizeText.text = text;
 		}
 
-		public void SetPlanetTileState(bool planetTileValid) {
+		public void SetPlanetTileData(PlanetTile planetTile, bool planetTileValid) {
+
 			selectedPlanetTileInfoPanel.SetActive(planetTileValid);
 			positionText.gameObject.SetActive(planetTileValid);
-		}
 
-		public void SetPlanetTileData(PlanetTile planetTile) {
+			if (!planetTileValid) {
+				return;
+			}
+
 			selectedPlanetTileSpriteImage.sprite = planetTile.sprite;
 			biomeText.text = planetTile.tile.biome.name;
 			averageTemperatureText.text = $"{Mathf.RoundToInt(planetTile.tile.temperature)}°C";

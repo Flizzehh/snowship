@@ -12,6 +12,8 @@ namespace Snowship.NUI.Generic {
 		private readonly IUIGroup parent;
 		private readonly List<IUIGroup> children = new List<IUIGroup>();
 
+		public bool IsActive => view.IsActive;
+
 		public UIGroup() {
 			view = default(TView);
 			presenter = default(TPresenter);
@@ -68,7 +70,9 @@ namespace Snowship.NUI.Generic {
 
 			Object.Destroy(view.Instance);
 
-			parent.RemoveChild(this);
+			if (parent != null) {
+				parent.RemoveChild(this);
+			}
 		}
 
 		public IUIGroup FindGroup(IUIPresenter presenterToFind) {

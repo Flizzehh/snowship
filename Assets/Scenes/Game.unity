@@ -11069,22 +11069,27 @@ PrefabInstance:
     - target: {fileID: 994138945229471765, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 994138945229471765, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3345207199885382996, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
       propertyPath: m_Name
       value: TradeMenu-Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 3345207199885382996, guid: 7ac3d03e808ecc646998d855e891736a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3786941383719658371, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3786941383719658371, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
@@ -11109,12 +11114,12 @@ PrefabInstance:
     - target: {fileID: 4426292478657888054, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4426292478657888054, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5192108317460922412, guid: 7ac3d03e808ecc646998d855e891736a,
         type: 3}

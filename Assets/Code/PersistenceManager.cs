@@ -445,8 +445,7 @@ public class PersistenceManager : BaseManager {
 		}
 
 		if (GameManager.universeM.universe == null) {
-			Debug.LogError("Universe to save the planet to is null.");
-			return;
+			GameManager.universeM.CreateUniverse(UniverseManager.GetRandomUniverseName());
 		}
 
 		if (string.IsNullOrEmpty(GameManager.universeM.universe.directory)) {

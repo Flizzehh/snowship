@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using Range = Snowship.NUtilities.Range;
-
-namespace Snowship.NPlanet {
+﻿namespace Snowship.NPlanet {
 	public class PlanetManager : BaseManager {
 
 		public Planet planet;

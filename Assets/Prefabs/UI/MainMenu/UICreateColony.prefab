@@ -1908,8 +1908,9 @@ GameObject:
   - component: {fileID: 1560882479405897920}
   - component: {fileID: 5290030801411011327}
   - component: {fileID: 3458405138917227649}
+  - component: {fileID: 4123295362847431307}
   m_Layer: 5
-  m_Name: CreateColony-Panel
+  m_Name: UICreateColony
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1979,6 +1980,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4123295362847431307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3402445456642567945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6d63407824c4d47a3e4e8160b1117b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backButton: {fileID: 5172536091686818944}
+  planetViewGridLayoutGroup: {fileID: 3733072072106492810}
+  planetTilePrefab: {fileID: 1261917027465152, guid: 4482a382a8a20b145a01d26b87611050,
+    type: 3}
+  colonyNameInputField: {fileID: 5102601882415758255}
+  randomizeColonyNameButton: {fileID: 7735097542289711830}
+  mapSeedInputField: {fileID: 4727583056301236761}
+  mapSizeSlider: {fileID: 1659891411427758744}
+  mapSizeText: {fileID: 4390394102429793582}
+  selectedPlanetTileInfoPanel: {fileID: 5374786234048950905}
+  selectedPlanetTileSpriteImage: {fileID: 2134962213616843722}
+  biomeText: {fileID: 954279204075218117}
+  averageTemperatureText: {fileID: 5723351991427812224}
+  averagePrecipitationText: {fileID: 572117587382492045}
+  altitudeText: {fileID: 6802450153530172988}
+  positionText: {fileID: 535844921459609775}
+  createColonyButton: {fileID: 4020950968816070747}
+  createColonyButtonImage: {fileID: 7605067841514066623}
 --- !u!1 &3596590568685767267
 GameObject:
   m_ObjectHideFlags: 0
