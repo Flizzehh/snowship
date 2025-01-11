@@ -7,11 +7,11 @@ namespace Snowship.NUI.Menu.LoadColony {
 
 	public class UILoadColonyElement : UIElement<UILoadColonyElementComponent> {
 
-		private readonly PersistenceManager.PersistenceColony colony;
+		private readonly PersistenceColony colony;
 
-		public event Action<PersistenceManager.PersistenceColony> OnLoadColonyElementClicked;
+		public event Action<PersistenceColony> OnLoadColonyElementClicked;
 
-		public UILoadColonyElement(PersistenceManager.PersistenceColony colony, Transform parent) : base(parent) {
+		public UILoadColonyElement(PersistenceColony colony, Transform parent) : base(parent) {
 			this.colony = colony;
 
 			Component.OnLoadColonyElementComponentButtonClicked += OnLoadColonyElementComponentButtonClicked;

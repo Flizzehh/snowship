@@ -2,7 +2,7 @@
 using Cysharp.Threading.Tasks;
 
 namespace Snowship.NState {
-	public partial class StateManager : BaseManager {
+	public partial class StateManager : IManager {
 
 		private State state;
 
@@ -12,7 +12,7 @@ namespace Snowship.NState {
 
 		public event Action<(EState previousState, EState newState)> OnStateChanged;
 
-		public override void Awake() {
+		public void Awake() {
 			_ = TransitionToState(EState.Boot);
 			_ = TransitionToState(EState.MainMenu);
 		}

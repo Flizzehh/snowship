@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace Snowship.NColonist {
 
-	public class ColonistManager : BaseManager {
+	public class ColonistManager : IManager {
 
 		private readonly List<Colonist> deadColonists = new List<Colonist>();
 
-		public override void Update() {
+		public void Update() {
 			UpdateColonists();
 			UpdateColonistJobs();
 		}

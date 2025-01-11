@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class LifeManager : BaseManager {
+public class LifeManager : IManager {
 
 	public List<Life> life = new List<Life>();
 

@@ -7,13 +7,13 @@ using Object = UnityEngine.Object;
 
 namespace Snowship.NUI.Menu.LoadSave {
 	internal class PlanetElement {
-		public PersistenceManager.PersistencePlanet persistencePlanet;
+		public PersistencePlanet persistencePlanet;
 
 		public GameObject obj;
 
 		public event Action OnPlanetElementClicked;
 
-		public PlanetElement(PersistenceManager.PersistencePlanet persistencePlanet, Transform parent) {
+		public PlanetElement(PersistencePlanet persistencePlanet, Transform parent) {
 			this.persistencePlanet = persistencePlanet;
 
 			obj = Object.Instantiate(

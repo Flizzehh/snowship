@@ -43,7 +43,7 @@ namespace Snowship.NProfession {
 				Debug.LogError("Calling CreateProfessionPrefabs when professionPrefabs list already contains elements.");
 			}
 
-			List<KeyValuePair<string, object>> professionProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/colonist-professions").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> professionProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/colonist-professions").text.Split('\n').ToList());
 
 			foreach (KeyValuePair<string, object> professionProperty in professionProperties) {
 				switch (professionProperty.Key) {

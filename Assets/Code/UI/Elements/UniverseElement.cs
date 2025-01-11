@@ -9,26 +9,26 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 		public static event Action<UniverseElement> OnUniverseElementClicked;
 
-		public PersistenceManager.PersistenceUniverse persistenceUniverse;
+		public PersistenceUniverse persistenceUniverse;
 
 		public GameObject obj;
 
-		public UniverseElement(PersistenceManager.PersistenceUniverse persistenceUniverse, Transform parent) {
+		public UniverseElement(PersistenceUniverse persistenceUniverse, Transform parent) {
 			this.persistenceUniverse = persistenceUniverse;
 
 			obj = MonoBehaviour.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/UniverseElement-Panel"),
 				parent, false);
 
 			obj.transform.Find("UniverseName-Text").GetComponent<Text>().text =
-				persistenceUniverse.universeProperties[PersistenceManager.UniverseProperty.Name];
+				persistenceUniverse.universeProperties[PUniverse.UniverseProperty.Name];
 
 			obj.transform.Find("LastSaveData-Panel/LastSavedDateTime-Text").GetComponent<Text>().text =
-				persistenceUniverse.universeProperties[PersistenceManager.UniverseProperty.LastSaveDateTime];
+				persistenceUniverse.universeProperties[PUniverse.UniverseProperty.LastSaveDateTime];
 
 			string saveVersion =
-				persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.SaveVersion];
+				persistenceUniverse.configurationProperties[PUniverse.ConfigurationProperty.SaveVersion];
 			string gameVersion =
-				persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.GameVersion];
+				persistenceUniverse.configurationProperties[PUniverse.ConfigurationProperty.GameVersion];
 
 			string saveVersionColour =
 				ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50));
@@ -67,11 +67,11 @@ namespace Snowship.NUI.Menu.LoadSave {
 				"{0}{1}{2}{3} {4}{5}{6}{7}",
 				"<color=#" + gameVersionColour + ">",
 				"G",
-				persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.GameVersion],
+				persistenceUniverse.configurationProperties[PUniverse.ConfigurationProperty.GameVersion],
 				"</color>",
 				"<color=#" + saveVersionColour + ">",
 				"S",
-				persistenceUniverse.configurationProperties[PersistenceManager.ConfigurationProperty.SaveVersion],
+				persistenceUniverse.configurationProperties[PUniverse.ConfigurationProperty.SaveVersion],
 				"</color>"
 			);
 		}

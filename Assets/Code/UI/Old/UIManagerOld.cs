@@ -16,7 +16,7 @@ using Object = UnityEngine.Object;
 using Time = Snowship.NTime;
 
 namespace Snowship.NUI {
-	public class UIManagerOld : BaseManager {
+	public class UIManagerOld : IManager {
 		// Old Code
 
 		private GameManager startCoroutineReference;
@@ -361,7 +361,7 @@ namespace Snowship.NUI {
 			selectedCraftingObjectPanelActiveButtonText = selectedCraftingObjectPanelActiveButton.transform.Find("ActiveValue-Text").GetComponent<Text>();
 		}
 
-		public override void Update() {
+		public void Update() {
 			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
 				mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
 				TileManager.Tile newMouseOverTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);

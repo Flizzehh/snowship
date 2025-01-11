@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class ShipManager : BaseManager {
+public class ShipManager : IManager {
 
 	public class Ship {
 		

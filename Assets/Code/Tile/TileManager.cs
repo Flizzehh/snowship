@@ -3,17 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
-using Snowship.NUI.Menu.MainMenu;
 using Snowship.NUtilities;
 using UnityEngine;
 
-public class TileManager : BaseManager {
+public class TileManager : IManager {
 
 	private GameManager startCoroutineReference;
 
@@ -144,7 +142,7 @@ public class TileManager : BaseManager {
 		}
 
 		public static void InitializeTileTypes() {
-			List<KeyValuePair<string, object>> tileTypeGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/tile-types").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> tileTypeGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/tile-types").text.Split('\n').ToList());
 			foreach (KeyValuePair<string, object> tileTypeGroupProperty in tileTypeGroupProperties) {
 				switch ((TileTypeGroup.PropertyEnum)Enum.Parse(typeof(TileTypeGroup.PropertyEnum), tileTypeGroupProperty.Key)) {
 					case TileTypeGroup.PropertyEnum.TileTypeGroup:
@@ -329,7 +327,7 @@ public class TileManager : BaseManager {
 		}
 
 		public static void InitializeBiomes() {
-			List<KeyValuePair<string, object>> biomeProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/biomes").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> biomeProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/biomes").text.Split('\n').ToList());
 			foreach (KeyValuePair<string, object> biomeProperty in biomeProperties) {
 				switch ((PropertyEnum)Enum.Parse(typeof(PropertyEnum), biomeProperty.Key)) {
 					case PropertyEnum.Biome:
@@ -595,7 +593,7 @@ public class TileManager : BaseManager {
 		};
 
 		public static void InitializeResourceVeins() {
-			List<KeyValuePair<string, object>> resourceVeinGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resource-veins").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> resourceVeinGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resource-veins").text.Split('\n').ToList());
 			foreach (KeyValuePair<string, object> resourceVeinGroupProperty in resourceVeinGroupProperties) {
 				switch ((GroupPropertyEnum)Enum.Parse(typeof(GroupPropertyEnum), resourceVeinGroupProperty.Key)) {
 					case GroupPropertyEnum.VeinGroup:
@@ -1240,7 +1238,7 @@ public class TileManager : BaseManager {
 
 	public MapState mapState = MapState.Nothing;
 
-	public override void Update() {
+	public void Update() {
 		if (mapState == MapState.Generated) {
 			GameManager.colonyM.colony.map.DetermineVisibleRegionBlocks();
 		}

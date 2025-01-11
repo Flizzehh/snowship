@@ -6,7 +6,7 @@ using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HumanManager : BaseManager {
+public class HumanManager : IManager {
 
 	private readonly List<string> maleNames = new List<string>();
 	private readonly List<string> femaleNames = new List<string>();
@@ -31,7 +31,7 @@ public class HumanManager : BaseManager {
 
 	public Human selectedHuman;
 
-	public override void Update() {
+	public void Update() {
 		if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
 			SetSelectedHumanFromClick();
 		}

@@ -1,5 +1,5 @@
 ﻿namespace Snowship.NPlanet {
-	public class PlanetManager : BaseManager {
+	public class PlanetManager : IManager {
 
 		public Planet planet;
 		public PlanetTile selectedPlanetTile;

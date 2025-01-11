@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class ResourceManager : BaseManager {
+public class ResourceManager : IManager {
 
 	public GameObject tilePrefab;
 	public GameObject objectPrefab;
@@ -55,7 +55,7 @@ public class ResourceManager : BaseManager {
 		jobParent = GameObject.Find("JobParent");
 	}
 
-	public override void Update() {
+	public void Update() {
 		CalculateResourceTotals();
 
 		GrowPlants();
@@ -157,7 +157,7 @@ public class ResourceManager : BaseManager {
 
 		Dictionary<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>> craftingResourcesTemp = new Dictionary<ResourceEnum, List<KeyValuePair<ResourceEnum, float>>>();
 
-		List<KeyValuePair<string, object>> resourceGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resources").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> resourceGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resources").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> resourceGroupProperty in resourceGroupProperties) {
 			switch ((ResourceGroupPropertyEnum)Enum.Parse(typeof(ResourceGroupPropertyEnum), resourceGroupProperty.Key)) {
 				case ResourceGroupPropertyEnum.ResourceGroup:
@@ -1206,7 +1206,7 @@ public class ResourceManager : BaseManager {
 	}
 
 	public void CreateJobPrefabs() {
-		List<KeyValuePair<string, object>> jobPrefabGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/job-prefabs").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> jobPrefabGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/job-prefabs").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> jobPrefabGroupProperty in jobPrefabGroupProperties) {
 			switch ((JobPrefabGroupPropertyEnum)Enum.Parse(typeof(JobPrefabGroupPropertyEnum), jobPrefabGroupProperty.Key)) {
 				case JobPrefabGroupPropertyEnum.Group:
@@ -1393,7 +1393,7 @@ public class ResourceManager : BaseManager {
 	}
 
 	public void CreateObjectPrefabs() {
-		List<KeyValuePair<string, object>> objectGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/objects").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> objectGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/objects").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> objectGroupProperty in objectGroupProperties) {
 			switch ((ObjectGroupPropertyEnum)Enum.Parse(typeof(ObjectGroupPropertyEnum), objectGroupProperty.Key)) {
 				case ObjectGroupPropertyEnum.Group:
@@ -2863,7 +2863,7 @@ public class ResourceManager : BaseManager {
 	};
 
 	public void CreatePlantPrefabs() {
-		List<KeyValuePair<string, object>> plantGroupProperties = PersistenceManager.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/plants").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> plantGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/plants").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> plantGroupProperty in plantGroupProperties) {
 			switch ((PlantGroupPropertyEnum)Enum.Parse(typeof(PlantGroupPropertyEnum), plantGroupProperty.Key)) {
 				case PlantGroupPropertyEnum.PlantGroup:

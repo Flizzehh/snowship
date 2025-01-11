@@ -9,9 +9,9 @@ using static Snowship.NJob.JobManager;
 
 namespace Snowship.NJob {
 
-	public class JobManager : BaseManager {
+	public class JobManager : IManager {
 
-		public override void Awake() {
+		public void Awake() {
 			selectedPrefabPreview = GameObject.Find("SelectedPrefabPreview");
 			selectedPrefabPreview.GetComponent<SpriteRenderer>().sortingOrder = 50;
 			selectedPrefabPreview.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha128);
@@ -20,7 +20,7 @@ namespace Snowship.NJob {
 		private bool changedJobList = false;
 		private int rotationIndex = 0;
 
-		public override void Update() {
+		public void Update() {
 			if (changedJobList) {
 				ColonistJob.UpdateColonistJobs();
 				GameManager.uiMOld.SetJobElements();

@@ -4,7 +4,7 @@ using Snowship.NUI.Generic;
 using UnityEngine;
 
 namespace Snowship.NUI {
-	public class UIManager : BaseManager {
+	public class UIManager : IManager {
 
 		private Transform uiParent;
 

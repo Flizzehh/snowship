@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using Snowship.NPersistence;
 using UnityEngine;
 
 namespace Snowship.NColony {
-	public class ColonyManager : BaseManager {
+	public class ColonyManager : IManager {
+
+		private readonly PColony pColony = new PColony();
 
 		public void SetupNewColony(Colony colony, bool initialized) {
 			if (!initialized) {
@@ -12,7 +15,7 @@ namespace Snowship.NColony {
 			} else {
 				GameManager.colonistM.SpawnStartColonists(3);
 
-				GameManager.persistenceM.CreateColony(colony);
+				pColony.CreateColony(colony);
 				GameManager.persistenceM.CreateSave(colony);
 
 				GameManager.uiMOld.SetLoadingScreenActive(false);

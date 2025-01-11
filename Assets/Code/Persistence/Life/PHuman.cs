@@ -1,0 +1,113 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+
+namespace Snowship.NPersistence {
+	public class PHuman : PersistenceHandler {
+
+		private readonly PInventory pInventory = new PInventory();
+
+		public enum HumanProperty {
+			Human,
+			Name,
+			SkinIndex,
+			HairIndex,
+			Clothes,
+			Inventory
+		}
+
+		public void WriteHumanLines(StreamWriter file, HumanManager.Human human, int startLevel) {
+			file.WriteLine(CreateKeyValueString(HumanProperty.Human, string.Empty, startLevel));
+
+			file.WriteLine(CreateKeyValueString(HumanProperty.Name, human.name, startLevel + 1));
+			file.WriteLine(CreateKeyValueString(HumanProperty.SkinIndex, human.bodyIndices[HumanManager.Human.Appearance.Skin], startLevel + 1));
+			file.WriteLine(CreateKeyValueString(HumanProperty.HairIndex, human.bodyIndices[HumanManager.Human.Appearance.Hair], startLevel + 1));
+
+			if (human.clothes.Any(kvp => kvp.Value != null)) {
+				file.WriteLine(CreateKeyValueString(HumanProperty.Clothes, string.Empty, startLevel + 1));
+				foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothing in human.clothes) {
+					if (appearanceToClothing.Value != null) {
+						file.WriteLine(CreateKeyValueString(appearanceToClothing.Key, appearanceToClothing.Value.prefab.clothingType + ":" + appearanceToClothing.Value.colour, startLevel + 2));
+					}
+				}
+			}
+
+			pInventory.WriteInventoryLines(file, human.GetInventory(), startLevel + 1);
+		}
+
+		public class PersistenceHuman {
+			public string name;
+			public int? skinIndex;
+			public int? hairIndex;
+			public Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing> clothes;
+			public PInventory.PersistenceInventory persistenceInventory;
+
+			public PersistenceHuman(string name, int? skinIndex, int? hairIndex, Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing> clothes, PInventory.PersistenceInventory persistenceInventory) {
+				this.name = name;
+				this.skinIndex = skinIndex;
+				this.hairIndex = hairIndex;
+				this.clothes = clothes;
+				this.persistenceInventory = persistenceInventory;
+			}
+		}
+
+		public List<PersistenceHuman> LoadHumans(string path) {
+			List<PersistenceHuman> persistenceHumans = new List<PersistenceHuman>();
+
+			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			foreach (KeyValuePair<string, object> property in properties) {
+				switch ((HumanProperty)Enum.Parse(typeof(HumanProperty), property.Key)) {
+					case HumanProperty.Human:
+						persistenceHumans.Add(LoadPersistenceHuman((List<KeyValuePair<string, object>>)property.Value));
+						break;
+					default:
+						Debug.LogError("Unknown human property: " + property.Key + " " + property.Value);
+						break;
+				}
+			}
+
+			return persistenceHumans;
+		}
+
+		public PersistenceHuman LoadPersistenceHuman(List<KeyValuePair<string, object>> properties) {
+			string name = null;
+			int? skinIndex = null;
+			int? hairIndex = null;
+			Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing> clothes = new Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing>();
+			PInventory.PersistenceInventory persistenceInventory = null;
+
+			foreach (KeyValuePair<string, object> humanProperty in properties) {
+				switch ((HumanProperty)Enum.Parse(typeof(HumanProperty), humanProperty.Key)) {
+					case HumanProperty.Name:
+						name = (string)humanProperty.Value;
+						break;
+					case HumanProperty.SkinIndex:
+						skinIndex = int.Parse((string)humanProperty.Value);
+						break;
+					case HumanProperty.HairIndex:
+						hairIndex = int.Parse((string)humanProperty.Value);
+						break;
+					case HumanProperty.Clothes:
+						foreach (KeyValuePair<string, object> clothingProperty in (List<KeyValuePair<string, object>>)humanProperty.Value) {
+							HumanManager.Human.Appearance clothingPropertyKey = (HumanManager.Human.Appearance)Enum.Parse(typeof(HumanManager.Human.Appearance), clothingProperty.Key);
+							ResourceManager.ClothingEnum clothingType = (ResourceManager.ClothingEnum)Enum.Parse(typeof(ResourceManager.ClothingEnum), ((string)clothingProperty.Value).Split(':')[0]);
+							string colour = ((string)clothingProperty.Value).Split(':')[1];
+							clothes.Add(clothingPropertyKey, GameManager.resourceM.GetClothesByAppearance(clothingPropertyKey).Find(c => c.prefab.clothingType == clothingType && c.colour == colour));
+						}
+						break;
+					case HumanProperty.Inventory:
+						persistenceInventory = pInventory.LoadPersistenceInventory((List<KeyValuePair<string, object>>)humanProperty.Value);
+						break;
+					default:
+						Debug.LogError("Unknown human property: " + humanProperty.Key + " " + humanProperty.Value);
+						break;
+				}
+			}
+
+			return new PersistenceHuman(name, skinIndex, hairIndex, clothes, persistenceInventory);
+		}
+
+	}
+}

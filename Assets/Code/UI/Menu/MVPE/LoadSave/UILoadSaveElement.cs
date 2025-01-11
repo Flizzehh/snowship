@@ -1,5 +1,6 @@
 ﻿using System;
 using Snowship.NPersistence;
+using Snowship.NPersistence.Save;
 using Snowship.NUI.Generic;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -7,11 +8,11 @@ using UnityEngine;
 namespace Snowship.NUI.Menu.LoadSave {
 	internal class UILoadSaveElement : UIElement<UILoadSaveElementComponent> {
 
-		private readonly PersistenceManager.PersistenceSave save;
+		private readonly PSave.PersistenceSave save;
 
-		public event Action<PersistenceManager.PersistenceSave> OnLoadSaveElementClicked;
+		public event Action<PSave.PersistenceSave> OnLoadSaveElementClicked;
 
-		public UILoadSaveElement(PersistenceManager.PersistenceSave save, Transform parent) : base(parent) {
+		public UILoadSaveElement(PSave.PersistenceSave save, Transform parent) : base(parent) {
 			this.save = save;
 
 			if (save.loadable) {

@@ -3,7 +3,7 @@ using Snowship.NTime;
 using UnityEngine;
 
 namespace Snowship.NCamera {
-	public class CameraManager : BaseManager {
+	public class CameraManager : IManager {
 
 		private const int MinZoom = 1;
 		private const int MaxZoom = 20;
@@ -17,7 +17,7 @@ namespace Snowship.NCamera {
 
 		private float cameraSpeedMultiplier;
 
-		public override void Awake() {
+		public void Awake() {
 			cameraGO = GameObject.Find("Camera");
 			cameraComponent = cameraGO.GetComponent<Camera>();
 		}
@@ -41,7 +41,7 @@ namespace Snowship.NCamera {
 			targetZoom = newZoom;
 		}
 
-		public override void Update() {
+		public void Update() {
 			if (GameManager.tileM.mapState != TileManager.MapState.Generated || GameManager.stateM.State == EState.Paused || GameManager.uiMOld.playerTyping) {
 				return;
 			}

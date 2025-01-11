@@ -14,7 +14,8 @@ namespace Snowship.NUI.Presenters {
 	public class UILoadColonyPresenter : UIPresenter<UILoadColonyView> {
 
 		private PlanetViewModule planetViewModule;
-		private PersistenceManager.PersistenceColony selectedColony;
+		private PersistenceColony selectedColony;
+		private readonly PColony pColony = new PColony();
 
 		public UILoadColonyPresenter(UILoadColonyView view) : base(view) {
 		}
@@ -59,20 +60,20 @@ namespace Snowship.NUI.Presenters {
 			_ = GameManager.uiM.OpenViewAsync<UICreateColony>(this, false);
 		}
 
-		private void OnColonyElementClicked(PersistenceManager.PersistenceColony colony) {
+		private void OnColonyElementClicked(PersistenceColony colony) {
 			SelectColony(colony);
 		}
 
 		private void OnLoadColonyButtonClicked() {
-			GameManager.persistenceM.ApplyLoadedColony(selectedColony);
+			pColony.ApplyLoadedColony(selectedColony);
 		}
 
 		private void CreateColonyElements() {
-			List<PersistenceManager.PersistenceColony> colonies = GameManager.persistenceM.GetPersistenceColonies();
+			List<PersistenceColony> colonies = pColony.GetPersistenceColonies();
 
 			planetViewModule.DisplayPlanet(GameManager.planetM.planet, colonies, true);
 
-			foreach (PersistenceManager.PersistenceColony colony in colonies) {
+			foreach (PersistenceColony colony in colonies) {
 				UILoadColonyElement loadColonyElement = new UILoadColonyElement(colony, View.ColonyElementsParent);
 				loadColonyElement.OnLoadColonyElementClicked += OnColonyElementClicked;
 			}
@@ -82,11 +83,11 @@ namespace Snowship.NUI.Presenters {
 			// Do nothing
 		}
 
-		private void OnColonyTileClicked(PersistenceManager.PersistenceColony colony) {
+		private void OnColonyTileClicked(PersistenceColony colony) {
 			SelectColony(colony);
 		}
 
-		private void SelectColony(PersistenceManager.PersistenceColony colony) {
+		private void SelectColony(PersistenceColony colony) {
 			selectedColony = colony;
 
 			bool colonyValid = selectedColony != null;

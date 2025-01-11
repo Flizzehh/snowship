@@ -9,7 +9,7 @@ using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DebugManager : BaseManager {
+public class DebugManager : IManager {
 
 	private GameObject debugPanel;
 	private GameObject debugInputObj;
@@ -18,7 +18,7 @@ public class DebugManager : BaseManager {
 	private GameObject debugConsole;
 	private GameObject debugConsoleList;
 
-	public override void Awake() {
+	public void Awake() {
 		debugPanel = GameObject.Find("Debug-Panel");
 
 		debugInputObj = debugPanel.transform.Find("DebugCommand-Input").gameObject;
@@ -38,7 +38,7 @@ public class DebugManager : BaseManager {
 
 	public bool debugMode;
 
-	public override void Update() {
+	public void Update() {
 		if (GameManager.tileM.mapState == TileManager.MapState.Generated && (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.BackQuote))) {
 			debugMode = !debugMode;
 			ToggleDebugUI();

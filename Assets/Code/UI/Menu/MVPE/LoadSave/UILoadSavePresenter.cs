@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NPersistence;
+using Snowship.NPersistence.Save;
 using Snowship.NUI.Generic;
 
 namespace Snowship.NUI.Menu.LoadSave {
@@ -7,7 +8,8 @@ namespace Snowship.NUI.Menu.LoadSave {
 	[UsedImplicitly]
 	public class UILoadSavePresenter : UIPresenter<UILoadSaveView> {
 
-		private PersistenceManager.PersistenceSave selectedSave;
+		private PSave.PersistenceSave selectedSave;
+		private readonly PSave pSave = new PSave();
 
 		public UILoadSavePresenter(UILoadSaveView view) : base(view) {
 		}
@@ -25,7 +27,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 		}
 
 		private void CreateSaveElements() {
-			foreach (PersistenceManager.PersistenceSave save in GameManager.persistenceM.GetPersistenceSaves()) {
+			foreach (PSave.PersistenceSave save in pSave.GetPersistenceSaves()) {
 				UILoadSaveElement loadSaveElement = new UILoadSaveElement(save, View.GetSaveElementsParentTransform());
 				loadSaveElement.OnLoadSaveElementClicked += OnSaveElementClicked;
 			}
@@ -39,7 +41,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 			GameManager.persistenceM.ApplyLoadedSave(selectedSave);
 		}
 
-		private void OnSaveElementClicked(PersistenceManager.PersistenceSave save) {
+		private void OnSaveElementClicked(PSave.PersistenceSave save) {
 			selectedSave = save;
 
 			bool saveValid = selectedSave != null;

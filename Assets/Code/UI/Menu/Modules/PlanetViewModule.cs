@@ -17,7 +17,7 @@ namespace Snowship.NUI.Modules {
 		private readonly List<GameObject> planetTileGameObjects = new List<GameObject>();
 
 		public event Action<PlanetTile> OnPlanetTileClicked;
-		public event Action<PersistenceManager.PersistenceColony> OnColonyTileClicked;
+		public event Action<PersistenceColony> OnColonyTileClicked;
 
 		public PlanetViewModule(GridLayoutGroup planetGrid, GameObject planetTilePrefab) {
 			this.planetGrid = planetGrid;
@@ -35,7 +35,7 @@ namespace Snowship.NUI.Modules {
 
 		public void DisplayPlanet(
 			Planet planet,
-			List<PersistenceManager.PersistenceColony> persistenceColonies,
+			List<PersistenceColony> persistenceColonies,
 			bool destroyCurrentPlanet
 		) {
 			bool instantiateNewPlanetTiles = destroyCurrentPlanet || planetTileGameObjects.Count == 0 || currentPlanet.mapData.mapSize != planet.mapData.mapSize;
@@ -59,7 +59,7 @@ namespace Snowship.NUI.Modules {
 				}
 				planetTileGameObject.GetComponent<Image>().sprite = planetTile.sprite;
 
-				PersistenceManager.PersistenceColony colony = persistenceColonies?.Find(colony => colony.planetPosition == planetTile.tile.position);
+				PersistenceColony colony = persistenceColonies?.Find(colony => colony.planetPosition == planetTile.tile.position);
 				if (colony != null) {
 					GameObject colonyObj = Object.Instantiate(GameManager.resourceM.colonyObj, planetTileGameObject.transform, false);
 					colonyObj.name = $"Colony {colony.name}";

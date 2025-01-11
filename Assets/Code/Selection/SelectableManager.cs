@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Snowship.Selectable {
 
-	public class SelectableManager : BaseManager {
+	public class SelectableManager : IManager {
 
 		public static readonly List<ISelectable> selected = new();
 
@@ -21,7 +21,7 @@ namespace Snowship.Selectable {
 			Debug.Log("Deselected " + selectable.ToString());
 		}
 
-		public override void Update() {
+		public void Update() {
 			if (Input.GetMouseButtonUp(0)) {
 
 			}

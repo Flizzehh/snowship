@@ -14,6 +14,8 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		private PlanetViewModule planetViewModule;
 		private readonly CreatePlanetData createPlanetData = new CreatePlanetData();
+		private readonly PPlanet pPlanet = new PPlanet();
+		private readonly PColony pColony = new PColony();
 
 		public UICreatePlanetPresenter(UICreatePlanetView view) : base(view) {
 		}
@@ -167,7 +169,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void OnCreatePlanetButtonClicked() {
-			GameManager.persistenceM.CreatePlanet(GameManager.planetM.planet);
+			pPlanet.CreatePlanet(GameManager.planetM.planet);
 			_ = GameManager.uiM.OpenViewAsync<UICreateColony>(this, false);
 		}
 
@@ -176,7 +178,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			View.SetPlanetTileData(planetTile);
 		}
 
-		private void OnColonyTileClicked(PersistenceManager.PersistenceColony persistenceColony) {
+		private void OnColonyTileClicked(PersistenceColony persistenceColony) {
 			Debug.LogError("Clicked loaded colony on new planet, this should not be possible!");
 		}
 
@@ -184,7 +186,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			Planet planet = GameManager.planetM.CreatePlanet(createPlanetData);
 			planetViewModule.DisplayPlanet(
 				planet,
-				GameManager.persistenceM.GetPersistenceColonies(),
+				pColony.GetPersistenceColonies(),
 				true
 			);
 		}

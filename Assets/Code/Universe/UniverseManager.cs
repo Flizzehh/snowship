@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using Snowship.NPersistence;
 using UnityEngine;
 
-public class UniverseManager : BaseManager {
+public class UniverseManager : IManager {
+
+	public Universe universe = null;
+
+	private readonly PUniverse pUniverse = new PUniverse();
 
 	public static string GetRandomUniverseName() {
 		//return GameManager.resourceM.GetRandomLocationName();
 		return "Universe " + System.DateTime.Today.ToString("ddMMyyyy");
 	}
 
-	public Universe universe = null;
-
 	public Universe CreateUniverse(string name) {
 		Universe universe = new Universe(name);
 
 		this.universe = universe;
 
-		GameManager.persistenceM.CreateUniverse(universe);
+		pUniverse.CreateUniverse(universe);
 
 		return universe;
 	}
@@ -35,8 +37,8 @@ public class UniverseManager : BaseManager {
 		public Universe(string name) {
 			this.name = name;
 
-			lastSaveDateTime = PersistenceManager.GenerateSaveDateTimeString();
-			lastSaveTimeChunk = PersistenceManager.GenerateDateTimeString();
+			lastSaveDateTime = PersistenceHandler.GenerateSaveDateTimeString();
+			lastSaveTimeChunk = PersistenceHandler.GenerateDateTimeString();
 		}
 
 		public void SetDirectory(string directory) {

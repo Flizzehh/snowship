@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Snowship.NCaravan {
 
-	public class CaravanManager : BaseManager {
+	public class CaravanManager : IManager {
 
 		public List<Caravan> caravans = new List<Caravan>();
 		private readonly List<Caravan> removeCaravans = new List<Caravan>();
@@ -18,7 +18,7 @@ namespace Snowship.NCaravan {
 
 		public Caravan selectedCaravan;
 
-		public override void Update() {
+		public void Update() {
 			UpdateCaravanTimer();
 
 			foreach (Caravan caravan in caravans) {

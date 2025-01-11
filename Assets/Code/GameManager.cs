@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
 
 	public static readonly SelectableManager selectableManager = new SelectableManager();
 
-	public static readonly List<BaseManager> managers = new List<BaseManager>() {
+	public static readonly List<IManager> managers = new List<IManager>() {
 		stateM,
 
 		timeM,
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour {
 		colonistM.CreateColonistNeeds();
 		colonistM.CreateMoodModifiers();
 
-		foreach (BaseManager manager in managers) {
+		foreach (IManager manager in managers) {
 			manager.Awake();
 		}
 
@@ -110,13 +110,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Start() {
-		foreach (BaseManager manager in managers) {
+		foreach (IManager manager in managers) {
 			manager.Start();
 		}
 	}
 
 	public void Update() {
-		foreach (BaseManager manager in managers) {
+		foreach (IManager manager in managers) {
 			manager.Update();
 		}
 	}

@@ -13,6 +13,8 @@ namespace Snowship.NUI.Menu.MainMenu {
 	[UsedImplicitly]
 	public class UIMainMenuPresenter : UIPresenter<UIMainMenuView> {
 
+		private readonly PLastSave pLastSave = new PLastSave();
+
 		public UIMainMenuPresenter(UIMainMenuView view) : base(view) {
 		}
 
@@ -26,11 +28,11 @@ namespace Snowship.NUI.Menu.MainMenu {
 
 			View.SetDisclaimerText($"Lumi Games (Snowship {PersistenceManager.gameVersion.text})");
 
-			PersistenceManager.LastSaveProperties lastSaveProperties = GameManager.persistenceM.GetLastSaveProperties();
+			PLastSave.LastSaveProperties lastSaveProperties = pLastSave.GetLastSaveProperties();
 			if (lastSaveProperties != null) {
 				View.SetupContinueButton(
-					GameManager.persistenceM.IsLastSaveUniverseLoadable(),
-					GameManager.persistenceM.LoadSaveImageFromSaveDirectoryPath(lastSaveProperties.lastSaveSavePath)
+					pLastSave.IsLastSaveUniverseLoadable(),
+					pLastSave.LoadSaveImageFromSaveDirectoryPath(lastSaveProperties.lastSaveSavePath)
 				);
 			} else {
 				View.DisableContinueButton();

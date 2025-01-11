@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Snowship.NTime {
 
-	public class TimeManager : BaseManager {
+	public class TimeManager : IManager {
 
 		public static readonly int dayLengthSeconds = 1440; // Number of seconds in 1 in-game day
 
@@ -29,7 +29,7 @@ namespace Snowship.NTime {
 
 		public event Action OnTimeChanged;
 
-		public override void Update() {
+		public void Update() {
 			tileBrightnessTime = CalculateTileBrightnessTime();
 			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
 				if (Input.GetKeyDown(KeyCode.Alpha1) && GameManager.stateM.State != EState.Paused && !GameManager.uiMOld.playerTyping) {

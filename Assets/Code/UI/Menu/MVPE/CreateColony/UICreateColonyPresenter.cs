@@ -15,6 +15,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 
 		private PlanetViewModule planetViewModule;
 		private readonly CreateColonyData createColonyData = new CreateColonyData();
+		private readonly PColony pColony = new PColony();
 
 		public UICreateColonyPresenter(UICreateColonyView view) : base(view) {
 		}
@@ -56,7 +57,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 			planetViewModule = new PlanetViewModule(View.PlanetViewGridLayoutGroup, View.PlanetTilePrefab);
 			planetViewModule.DisplayPlanet(
 				GameManager.planetM.planet,
-				GameManager.persistenceM.GetPersistenceColonies(),
+				pColony.GetPersistenceColonies(),
 				true
 			);
 
@@ -75,7 +76,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 			Planet planet = GameManager.planetM.planet;
 			planetViewModule.DisplayPlanet(
 				planet,
-				GameManager.persistenceM.GetPersistenceColonies(),
+				pColony.GetPersistenceColonies(),
 				true
 			);
 		}
@@ -140,7 +141,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 			_ = GameManager.stateM.TransitionToState(EState.LoadToSimulation);
 		}
 
-		private void OnColonyTileClicked(PersistenceManager.PersistenceColony persistenceColony) {
+		private void OnColonyTileClicked(PersistenceColony persistenceColony) {
 			// TODO Popup asking to load colony?
 		}
 	}
