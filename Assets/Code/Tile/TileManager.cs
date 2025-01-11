@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
 using Snowship.NUI.Menu.MainMenu;

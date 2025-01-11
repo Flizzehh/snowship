@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NColony;
+using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
 using Snowship.NUI.Generic;

@@ -1,4 +1,6 @@
-﻿namespace Snowship.NColony {
+﻿using Snowship.NPersistence;
+
+namespace Snowship.NColony {
 	public class Colony {
 		public string directory;
 		public string lastSaveDateTime;

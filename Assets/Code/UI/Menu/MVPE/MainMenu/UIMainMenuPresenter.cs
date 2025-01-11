@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Snowship.NPersistence;
 using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.CreatePlanet;
 using Snowship.NUI.Menu.LoadColony;
@@ -23,7 +24,7 @@ namespace Snowship.NUI.Menu.MainMenu {
 			View.OnSettingsButtonClicked += OnSettingsButtonClicked;
 			View.OnExitButtonClicked += OnExitButtonClicked;
 
-			View.SetDisclaimerText($"Snowship by Ryan White - rywh.itch.io/snowship\n<size=20>{PersistenceManager.gameVersion.text}</size>");
+			View.SetDisclaimerText($"Lumi Games (Snowship {PersistenceManager.gameVersion.text})");
 
 			PersistenceManager.LastSaveProperties lastSaveProperties = GameManager.persistenceM.GetLastSaveProperties();
 			if (lastSaveProperties != null) {

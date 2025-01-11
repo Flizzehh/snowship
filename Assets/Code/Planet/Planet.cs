@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Snowship.NPersistence;
 
 namespace Snowship.NPlanet {
 	public class Planet : TileManager.Map {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NPersistence;
 using Snowship.NUI;
 using Snowship.NUtilities;
 using UnityEngine;

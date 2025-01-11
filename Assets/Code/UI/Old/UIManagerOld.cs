@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NPersistence;
 using Snowship.NUI.Menu.LoadSave;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -3140,11 +3141,6 @@ namespace Snowship.NUI {
 			// 		UIScaleModeToggle.isOn = false;
 			// 	}
 			// }
-		}
-
-		public Resolution GetResolutionByDimensions(int width, int height, int refreshRate) {
-			List<Resolution> resolutions = Screen.resolutions.ToList();
-			return resolutions.Find(resolution => resolution.width == width && resolution.height == height && resolution.refreshRate == refreshRate);
 		}
 
 		public void ExitToMenu() {

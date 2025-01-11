@@ -8,6 +8,7 @@ using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NInput;
+using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
 using Snowship.NUI;
@@ -105,7 +106,7 @@ public class GameManager : MonoBehaviour {
 
 		uiMOld.SetupUI();
 
-		persistenceM.CreateSettingsState();
+		persistenceM.PSettings.CreateSettingsState();
 	}
 
 	public void Start() {

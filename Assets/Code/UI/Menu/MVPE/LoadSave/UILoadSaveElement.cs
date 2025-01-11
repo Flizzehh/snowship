@@ -1,4 +1,5 @@
 ﻿using System;
+using Snowship.NPersistence;
 using Snowship.NUI.Generic;
 using Snowship.NUtilities;
 using UnityEngine;

@@ -40,7 +40,5 @@
 
 			return planet;
 		}
-
-
 	}
 }

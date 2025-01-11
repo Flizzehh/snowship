@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Snowship.NPersistence;
 using UnityEngine;
 
 public class UniverseManager : BaseManager {

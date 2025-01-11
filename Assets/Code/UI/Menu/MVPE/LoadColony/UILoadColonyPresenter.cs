@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.CreateColony;
