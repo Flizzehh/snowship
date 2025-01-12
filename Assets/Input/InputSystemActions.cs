@@ -44,6 +44,15 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""9af90e1d-fc2c-45dd-93f3-973ab849ec96"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -134,6 +143,17 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""action"": ""ZoomCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40067e51-5ec4-4d02-a31b-de37a7c53f06"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -163,7 +183,7 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""c0fa6058-b6e3-4a14-9e3f-02739c838506"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -677,6 +697,7 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         m_Simulation = asset.FindActionMap("Simulation", throwIfNotFound: true);
         m_Simulation_MoveCamera = m_Simulation.FindAction("MoveCamera", throwIfNotFound: true);
         m_Simulation_ZoomCamera = m_Simulation.FindAction("ZoomCamera", throwIfNotFound: true);
+        m_Simulation_Escape = m_Simulation.FindAction("Escape", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -758,12 +779,14 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
     private List<ISimulationActions> m_SimulationActionsCallbackInterfaces = new List<ISimulationActions>();
     private readonly InputAction m_Simulation_MoveCamera;
     private readonly InputAction m_Simulation_ZoomCamera;
+    private readonly InputAction m_Simulation_Escape;
     public struct SimulationActions
     {
         private @InputSystemActions m_Wrapper;
         public SimulationActions(@InputSystemActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveCamera => m_Wrapper.m_Simulation_MoveCamera;
         public InputAction @ZoomCamera => m_Wrapper.m_Simulation_ZoomCamera;
+        public InputAction @Escape => m_Wrapper.m_Simulation_Escape;
         public InputActionMap Get() { return m_Wrapper.m_Simulation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -779,6 +802,9 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
             @ZoomCamera.started += instance.OnZoomCamera;
             @ZoomCamera.performed += instance.OnZoomCamera;
             @ZoomCamera.canceled += instance.OnZoomCamera;
+            @Escape.started += instance.OnEscape;
+            @Escape.performed += instance.OnEscape;
+            @Escape.canceled += instance.OnEscape;
         }
 
         private void UnregisterCallbacks(ISimulationActions instance)
@@ -789,6 +815,9 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
             @ZoomCamera.started -= instance.OnZoomCamera;
             @ZoomCamera.performed -= instance.OnZoomCamera;
             @ZoomCamera.canceled -= instance.OnZoomCamera;
+            @Escape.started -= instance.OnEscape;
+            @Escape.performed -= instance.OnEscape;
+            @Escape.canceled -= instance.OnEscape;
         }
 
         public void RemoveCallbacks(ISimulationActions instance)
@@ -937,6 +966,7 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
     {
         void OnMoveCamera(InputAction.CallbackContext context);
         void OnZoomCamera(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

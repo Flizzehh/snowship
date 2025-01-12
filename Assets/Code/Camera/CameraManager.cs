@@ -10,7 +10,7 @@ namespace Snowship.NCamera {
 
 	public partial class CameraManager : IManager {
 
-		private InputSystemActions inputSystemActions;
+
 		private EventSystem eventSystem;
 
 		public GameObject cameraGO;
@@ -31,19 +31,19 @@ namespace Snowship.NCamera {
 
 		public void Awake() {
 
-			inputSystemActions = new InputSystemActions();
 			eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
 			cameraGO = GameObject.Find("Camera");
 			camera = cameraGO.GetComponent<Camera>();
 			cameraTransform = cameraGO.transform;
 
-			EnableInputSystem();
-
 			OnCameraPositionChanged?.Invoke(cameraTransform.position);
 			OnCameraZoomChanged?.Invoke(camera.orthographicSize);
 
 			GameManager.stateM.OnStateChanged += OnStateChanged;
+
+			GameManager.inputM.OnInputSystemEnabled += OnInputSystemEnabled;
+			GameManager.inputM.OnInputSystemDisabled += OnInputSystemDisabled;
 		}
 		private void OnStateChanged((EState previousState, EState newState) states) {
 			if (states is not { previousState: EState.MainMenu, newState: EState.LoadToSimulation }) {
@@ -62,9 +62,10 @@ namespace Snowship.NCamera {
 		}
 
 		public void OnClose() {
-			DisableInputSystem();
-
 			GameManager.stateM.OnStateChanged -= OnStateChanged;
+
+			GameManager.inputM.OnInputSystemEnabled -= OnInputSystemEnabled;
+			GameManager.inputM.OnInputSystemDisabled -= OnInputSystemDisabled;
 		}
 
 		public Vector2 GetCameraPosition() {
@@ -118,6 +119,7 @@ namespace Snowship.NCamera {
 				.AsUniTask();
 		}
 
+		// TODO Might not be needed anymore, can maybe use to determine which regions are in view?
 		public RectInt CalculateCameraWorldRect() {
 			Vector2Int bottomLeftCorner = Vector2Int.FloorToInt(camera.ViewportToWorldPoint(new Vector3(0, 0, 0)));
 			Vector2Int topRightCorner = Vector2Int.CeilToInt(camera.ViewportToWorldPoint(new Vector3(1, 1, 1)));
