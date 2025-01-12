@@ -32,7 +32,7 @@ namespace Snowship.NTime {
 		public void Update() {
 			tileBrightnessTime = CalculateTileBrightnessTime();
 			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
-				if (Input.GetKeyDown(KeyCode.Alpha1) && GameManager.stateM.State != EState.Paused && !GameManager.uiMOld.playerTyping) {
+				if (Input.GetKeyDown(KeyCode.Alpha1) && GameManager.stateM.State != EState.PauseMenu && !GameManager.uiMOld.playerTyping) {
 					if (timeModifier > 0) {
 						timeModifier -= 1;
 						if (timeModifier <= 0) {
@@ -40,7 +40,7 @@ namespace Snowship.NTime {
 						}
 					}
 				}
-				if (Input.GetKeyDown(KeyCode.Alpha2) && GameManager.stateM.State != EState.Paused && !GameManager.uiMOld.playerTyping) {
+				if (Input.GetKeyDown(KeyCode.Alpha2) && GameManager.stateM.State != EState.PauseMenu && !GameManager.uiMOld.playerTyping) {
 					timeModifier += 1;
 				}
 				timeModifier = Mathf.Clamp(timeModifier, 0, 5);
@@ -48,7 +48,7 @@ namespace Snowship.NTime {
 					TogglePause();
 				}
 				pauseTimeModifier = Mathf.Clamp(pauseTimeModifier, 0, 5);
-				if (Input.GetKeyDown(KeyCode.Space) && GameManager.stateM.State != EState.Paused && !GameManager.uiMOld.playerTyping) {
+				if (Input.GetKeyDown(KeyCode.Space) && GameManager.stateM.State != EState.PauseMenu && !GameManager.uiMOld.playerTyping) {
 					TogglePause();
 				}
 				deltaTime = UnityEngine.Time.deltaTime * timeModifier * permanentDeltaTimeMultiplier;

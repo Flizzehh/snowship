@@ -3,9 +3,9 @@
 		Boot, // -> MainMenu
 		MainMenu, // -> LoadToSimulation, QuitToDesktop
 		LoadToSimulation, // -> Simulation
-		Simulation, // -> Paused, Saving, QuitToMenu, QuitToDesktop
-		Paused, // -> Simulation
-		Saving, // -> Paused, Simulation
+		Simulation, // -> PauseMenu, Saving, QuitToMenu, QuitToDesktop
+		PauseMenu, // -> Simulation
+		Saving, // -> PauseMenu, Simulation
 		QuitToMenu, // -> MainMenu
 		QuitToDesktop // -> ...
 	}

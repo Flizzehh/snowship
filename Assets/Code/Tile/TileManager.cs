@@ -1334,8 +1334,7 @@ public class TileManager : IManager {
 	}
 
 	private IEnumerator InitializeMap(Colony colony) {
-		GameManager.cameraM.SetCameraPosition(new Vector2(colony.mapData.mapSize / 2f, colony.mapData.mapSize / 2f));
-		GameManager.cameraM.SetCameraZoom(20);
+
 
 		colony.map = CreateMap(colony.mapData);
 
@@ -1476,7 +1475,9 @@ public class TileManager : IManager {
 			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Finalizing", string.Empty); yield return null; }
 			created = true;
 
-			GameManager.stateM.TransitionToState(EState.Simulation);
+			if (mapData.actualMap) {
+				GameManager.stateM.TransitionToState(EState.Simulation);
+			}
 		}
 
 		void CreateTiles() {
@@ -2808,11 +2809,11 @@ public class TileManager : IManager {
 
 		public void DetermineVisibleRegionBlocks() {
 			RegionBlock newCentreRegionBlock = GetTileFromPosition(GameManager.cameraM.cameraGO.transform.position).squareRegionBlock;
-			if (newCentreRegionBlock != centreRegionBlock || Mathf.RoundToInt(GameManager.cameraM.cameraComponent.orthographicSize) != lastOrthographicSize) {
+			if (newCentreRegionBlock != centreRegionBlock || Mathf.RoundToInt(GameManager.cameraM.camera.orthographicSize) != lastOrthographicSize) {
 				visibleRegionBlocks.Clear();
-				lastOrthographicSize = Mathf.RoundToInt(GameManager.cameraM.cameraComponent.orthographicSize);
+				lastOrthographicSize = Mathf.RoundToInt(GameManager.cameraM.camera.orthographicSize);
 				centreRegionBlock = newCentreRegionBlock;
-				float maxVisibleRegionBlockDistance = GameManager.cameraM.cameraComponent.orthographicSize * ((float)Screen.width / Screen.height);
+				float maxVisibleRegionBlockDistance = GameManager.cameraM.camera.orthographicSize * ((float)Screen.width / Screen.height);
 				List<RegionBlock> frontier = new List<RegionBlock>() { centreRegionBlock };
 				List<RegionBlock> checkedBlocks = new List<RegionBlock>() { centreRegionBlock };
 				while (frontier.Count > 0) {
@@ -2851,7 +2852,7 @@ public class TileManager : IManager {
 			foreach (LifeManager.Life life in GameManager.lifeM.life) {
 				life.SetColour(life.overTile.sr.color);
 			}
-			GameManager.cameraM.cameraComponent.backgroundColor = newColour * 0.5f;
+			GameManager.cameraM.camera.backgroundColor = newColour * 0.5f;
 		}
 
 		private readonly Dictionary<int, Vector2> shadowDirectionAtHour = new Dictionary<int, Vector2>();

@@ -141,7 +141,7 @@ public class HumanManager : IManager {
 		public override void Update() {
 			base.Update();
 
-			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.cameraM.cameraComponent.orthographicSize, 2, 10) * 0.001f;
+			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.cameraM.camera.orthographicSize, 2, 10) * 0.001f;
 			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightRed100),
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen100),
@@ -223,7 +223,7 @@ public class HumanManager : IManager {
 
 	private void SetSelectedHumanFromClick() {
 		if (Input.GetMouseButtonDown(0) && !GameManager.uiMOld.IsPointerOverUI()) {
-			Vector2 mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
+			Vector2 mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
 			Human newSelectedHuman = humans.Find(human => Vector2.Distance(human.obj.transform.position, mousePosition) < 0.5f);
 			if (newSelectedHuman != null) {
 				SetSelectedHuman(newSelectedHuman);

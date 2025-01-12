@@ -363,7 +363,7 @@ namespace Snowship.NUI {
 
 		public void Update() {
 			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
-				mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
+				mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
 				TileManager.Tile newMouseOverTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
 				if (newMouseOverTile != mouseOverTile) {
 					mouseOverTile = newMouseOverTile;
@@ -1110,7 +1110,7 @@ namespace Snowship.NUI {
 					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel").GetComponent<RectTransform>().sizeDelta = new Vector2(140, 100);
 				} else {
 					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().sprite = GameManager.resourceM.whiteSquareSprite;
-					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().color = GameManager.cameraM.cameraComponent.backgroundColor;
+					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().color = GameManager.cameraM.camera.backgroundColor;
 
 					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInformation-Type").GetComponent<Text>().text = "Undiscovered";
 
@@ -2077,7 +2077,7 @@ namespace Snowship.NUI {
 				countValue.text = (xSizeFloored * ySizeFloored).ToString();
 				selectedValue.text = selectionAreaCount.ToString();
 
-				canvas.transform.localScale = Vector2.one * 0.005f * 0.5f * GameManager.cameraM.cameraComponent.orthographicSize;
+				canvas.transform.localScale = Vector2.one * (0.005f * 0.5f * GameManager.cameraM.camera.orthographicSize);
 				canvas.transform.position = new Vector2(mousePosition.x + (canvas.GetComponent<RectTransform>().sizeDelta.x / 2f + 10) * canvas.transform.localScale.x, mousePosition.y + (canvas.GetComponent<RectTransform>().sizeDelta.y / 2f + 10) * canvas.transform.localScale.y);
 			}
 		}

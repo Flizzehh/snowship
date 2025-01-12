@@ -52,7 +52,7 @@ namespace Snowship.NJob {
 
 		private GameObject selectedPrefabPreview;
 		public void SelectedPrefabPreview() {
-			Vector2 mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
+			Vector2 mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
 			TileManager.Tile tile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
 			selectedPrefabPreview.transform.position = tile.obj.transform.position + (Vector3)selectedPrefab.prefab.anchorPositionOffset[rotationIndex];
 		}
@@ -267,7 +267,7 @@ namespace Snowship.NJob {
 			selectionIndicators.Clear();
 
 			if (selectedPrefab != null) {
-				Vector2 mousePosition = GameManager.cameraM.cameraComponent.ScreenToWorldPoint(Input.mousePosition);
+				Vector2 mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
 				if (Input.GetMouseButtonDown(0) && !GameManager.uiMOld.IsPointerOverUI()) {
 					firstTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
 				}

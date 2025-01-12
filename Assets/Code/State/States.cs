@@ -32,21 +32,21 @@ namespace Snowship.NState {
 			}, {
 				EState.Simulation, new State(
 					EState.Simulation,
-					new List<EState> { EState.Paused, EState.Saving, EState.QuitToMenu, EState.QuitToDesktop },
+					new List<EState> { EState.PauseMenu, EState.Saving, EState.QuitToMenu, EState.QuitToDesktop },
 					new List<Func<UniTask>> {
 						//async () => await GameManager.uiM.OpenViewAsync<UISimulation>()
 					}
 				)
 			}, {
-				EState.Paused, new State(
-					EState.Paused,
+				EState.PauseMenu, new State(
+					EState.PauseMenu,
 					new List<EState> { EState.Simulation },
 					new List<Func<UniTask>> { async () => await GameManager.uiM.OpenViewAsync<UIPauseMenu>() }
 				)
 			}, {
 				EState.Saving, new State(
 					EState.Saving,
-					new List<EState> { EState.Paused, EState.Simulation },
+					new List<EState> { EState.PauseMenu, EState.Simulation },
 					null
 				)
 			}, {

@@ -1,25 +1,70 @@
-﻿using Snowship.NState;
-using Snowship.NTime;
+﻿using System;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Snowship.NState;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Time = UnityEngine.Time;
 
 namespace Snowship.NCamera {
-	public class CameraManager : IManager {
 
-		private const int MinZoom = 1;
-		private const int MaxZoom = 20;
+	public partial class CameraManager : IManager {
+
+		private InputSystemActions inputSystemActions;
+		private EventSystem eventSystem;
 
 		public GameObject cameraGO;
-		public Camera cameraComponent;
+		public Camera camera;
+		private Transform cameraTransform;
 
-		private float currentZoom;
-		private float targetZoom;
-		private float zoomTimer;
+		private const float CameraMoveSpeedMultiplier = 1.25f;
+		public event Action<Vector2> OnCameraPositionChanged;
 
-		private float cameraSpeedMultiplier;
+		private const float CameraZoomSpeedMultiplier = 2.5f;
+		private const float CameraZoomSpeedDampener = 5;
+		private const int ZoomMin = 3;
+		private const int ZoomMax = 20;
+		private const float ZoomTweenDuration = 0.3f;
+
+		private UniTask zoomTaskHandle;
+		public event Action<float> OnCameraZoomChanged;
 
 		public void Awake() {
+
+			inputSystemActions = new InputSystemActions();
+			eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
 			cameraGO = GameObject.Find("Camera");
-			cameraComponent = cameraGO.GetComponent<Camera>();
+			camera = cameraGO.GetComponent<Camera>();
+			cameraTransform = cameraGO.transform;
+
+			EnableInputSystem();
+
+			OnCameraPositionChanged?.Invoke(cameraTransform.position);
+			OnCameraZoomChanged?.Invoke(camera.orthographicSize);
+
+			GameManager.stateM.OnStateChanged += OnStateChanged;
+		}
+		private void OnStateChanged((EState previousState, EState newState) states) {
+			if (states is not { previousState: EState.MainMenu, newState: EState.LoadToSimulation }) {
+				return;
+			}
+
+			int mapSize = GameManager.colonyM.colony.mapData.mapSize;
+			SetCameraPosition(Vector2.one * mapSize / 2f);
+			SetCameraZoom(5);
+		}
+
+		public void Update() {
+			if (!Mathf.Approximately(moveVector.magnitude, 0)) {
+				MoveCamera();
+			}
+		}
+
+		public void OnClose() {
+			DisableInputSystem();
+
+			GameManager.stateM.OnStateChanged -= OnStateChanged;
 		}
 
 		public Vector2 GetCameraPosition() {
@@ -30,89 +75,65 @@ namespace Snowship.NCamera {
 			cameraGO.transform.position = position;
 		}
 
-		public float GetCameraZoom() {
-			return currentZoom;
+		public void SetCameraZoom(float zoom) {
+			camera.orthographicSize = zoom;
 		}
 
-		public void SetCameraZoom(float newZoom) {
-			cameraComponent.orthographicSize = newZoom;
+		private void MoveCamera() {
 
-			currentZoom = newZoom;
-			targetZoom = newZoom;
-		}
-
-		public void Update() {
-			if (GameManager.tileM.mapState != TileManager.MapState.Generated || GameManager.stateM.State == EState.Paused || GameManager.uiMOld.playerTyping) {
+			if (GameManager.stateM.State != EState.Simulation) {
 				return;
 			}
 
-			UpdateCameraPosition();
-			UpdateCameraZoom();
+			cameraTransform.Translate(moveVector * (CameraMoveSpeedMultiplier * camera.orthographicSize * Time.deltaTime));
+			cameraTransform.position = new Vector2(
+				Mathf.Clamp(cameraTransform.position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize),
+				Mathf.Clamp(cameraTransform.position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize)
+			);
+			OnCameraPositionChanged?.Invoke(cameraTransform.position);
 		}
 
-		private void UpdateCameraPosition() {
+		private void ZoomCamera() {
 
-			cameraSpeedMultiplier = currentZoom * UnityEngine.Time.deltaTime * TimeManager.permanentDeltaTimeMultiplier;
-
-			cameraGO.transform.Translate(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * cameraSpeedMultiplier);
-
-			if (Input.GetMouseButton(2)) {
-				cameraGO.transform.Translate(new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y")) * cameraSpeedMultiplier);
+			if (GameManager.stateM.State != EState.Simulation) {
+				return;
+			}
+			if (Mathf.Approximately(zoomAxis, 0)) {
+				return;
 			}
 
-			var position = cameraGO.transform.position;
-			position = new Vector2(
-				Mathf.Clamp(position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize),
-				Mathf.Clamp(position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize)
-			);
-			cameraGO.transform.position = position;
+			float currentZoom = camera.orthographicSize;
+			float newZoom = currentZoom + (zoomAxis * CameraZoomSpeedMultiplier) * (camera.orthographicSize / CameraZoomSpeedDampener);
+			newZoom = Mathf.Clamp(newZoom, ZoomMin, ZoomMax);
+
+			if (!zoomTaskHandle.GetAwaiter().IsCompleted) {
+				zoomTaskHandle.Forget();
+			}
+
+			zoomTaskHandle = camera.DOOrthoSize(newZoom, ZoomTweenDuration)
+				.SetEase(Ease.OutCubic)
+				.Play()
+				.OnComplete(() => OnCameraZoomChanged?.Invoke(newZoom))
+				.AsyncWaitForCompletion()
+				.AsUniTask();
 		}
 
-		private void UpdateCameraZoom() {
+		public RectInt CalculateCameraWorldRect() {
+			Vector2Int bottomLeftCorner = Vector2Int.FloorToInt(camera.ViewportToWorldPoint(new Vector3(0, 0, 0)));
+			Vector2Int topRightCorner = Vector2Int.CeilToInt(camera.ViewportToWorldPoint(new Vector3(1, 1, 1)));
 
-			if (Mathf.Approximately(currentZoom, targetZoom)) {
-				zoomTimer = 0;
-			}
-			else {
-				zoomTimer += 1 * UnityEngine.Time.deltaTime;
-				zoomTimer = Mathf.Clamp(zoomTimer, 0, 1);
-			}
+			int xMin = bottomLeftCorner.x;
+			int yMin = bottomLeftCorner.y;
 
-			currentZoom = Mathf.Clamp(
-				Mathf.Lerp(currentZoom, targetZoom, zoomTimer),
-				MinZoom,
-				MaxZoom * (GameManager.debugM.debugMode ? 25 : 1)
+			int width = topRightCorner.x - bottomLeftCorner.x;
+			int height = topRightCorner.y - bottomLeftCorner.y;
+
+			return new RectInt(
+				xMin,
+				yMin,
+				width,
+				height
 			);
-
-			if (!GameManager.uiMOld.IsPointerOverUI()) {
-
-				//cameraComponent.orthographicSize -= Mathf.Clamp(Input.GetAxis("Mouse ScrollWheel") + (Input.GetAxis("KeyboardZoom") / 10f), -1f, 1f) * cameraComponent.orthographicSize * Time.deltaTime * 100;
-
-				targetZoom -= Mathf.Clamp(
-					Input.GetAxis("Mouse ScrollWheel") + (Input.GetAxis("KeyboardZoom") / 10f),
-					-1f,
-					1f
-				) * currentZoom * UnityEngine.Time.deltaTime * 100;
-
-				float zoomDifference = targetZoom - currentZoom;
-				float maxZoomDifference = Mathf.Clamp(currentZoom / 3f, MinZoom, MaxZoom);
-				if (Mathf.Abs(zoomDifference) >= maxZoomDifference) {
-					if (zoomDifference >= 0) {
-						targetZoom = currentZoom + maxZoomDifference;
-					}
-					else {
-						targetZoom = currentZoom - maxZoomDifference;
-					}
-				}
-
-				targetZoom = Mathf.Clamp(
-					targetZoom,
-					MinZoom,
-					MaxZoom * (GameManager.debugM.debugMode ? 25 : 1)
-				);
-			}
-
-			cameraComponent.orthographicSize = currentZoom;
 		}
 	}
 }

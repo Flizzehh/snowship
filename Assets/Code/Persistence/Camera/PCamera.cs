@@ -16,7 +16,7 @@ namespace Snowship.NPersistence {
 			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "camera.snowship");
 
 			file.WriteLine(CreateKeyValueString(CameraProperty.Position, FormatVector2ToString(GameManager.cameraM.GetCameraPosition()), 0));
-			file.WriteLine(CreateKeyValueString(CameraProperty.Zoom, GameManager.cameraM.GetCameraZoom(), 0));
+			file.WriteLine(CreateKeyValueString(CameraProperty.Zoom, GameManager.cameraM.camera.orthographicSize, 0));
 
 			file.Close();
 		}

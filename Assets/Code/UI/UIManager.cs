@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Cysharp.Threading.Tasks;
 using Snowship.NUI.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Snowship.NUI {
 
 		private readonly List<IUIGroup> parentGroups = new List<IUIGroup>();
 
+		[SuppressMessage("ReSharper", "ParameterHidesMember")]
 		public void Initialize(Transform uiParent) {
 			this.uiParent = uiParent;
 		}
