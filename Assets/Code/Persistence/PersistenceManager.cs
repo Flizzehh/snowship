@@ -1,30 +1,18 @@
-﻿using Snowship.NJob;
-using Snowship.NProfession;
-using Snowship.NTime;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence.Save;
-using Snowship.NPlanet;
-using Snowship.NResource.Models;
 using Snowship.NState;
-using Snowship.NUtilities;
 using UnityEngine;
-using Time = Snowship.NTime;
 
 namespace Snowship.NPersistence {
 	public class PersistenceManager : IManager {
-
-		private GameManager startCoroutineReference;
-
-		public void SetStartCoroutineReference(GameManager startCoroutineReference) {
-			this.startCoroutineReference = startCoroutineReference;
-		}
 
 		public static readonly (int increment, string text) gameVersion = (3, "2025.1");
 		public static readonly (int increment, string text) saveVersion = (3, "2025.1");
@@ -58,7 +46,7 @@ namespace Snowship.NPersistence {
 
 		// Game Saving
 
-		public void CreateSave(Colony colony) {
+		public async UniTask CreateSave(Colony colony) {
 			string savesDirectoryPath = colony.directory + "/Saves";
 			string dateTimeString = PersistenceHandler.GenerateDateTimeString();
 			string saveDirectoryPath = savesDirectoryPath + "/Save-" + dateTimeString;
@@ -91,7 +79,7 @@ namespace Snowship.NPersistence {
 
 				PSave.SaveSave(saveDirectoryPath, lastSaveDateTime);
 
-				startCoroutineReference.StartCoroutine(persistenceHandler.CreateScreenshot(saveDirectoryPath + "/screenshot-" + dateTimeString));
+				await persistenceHandler.CreateScreenshot(saveDirectoryPath + "/screenshot-" + dateTimeString);
 
 				PLastSave.UpdateLastSave(
 					new PLastSave.LastSaveProperties(
@@ -297,7 +285,7 @@ namespace Snowship.NPersistence {
 			}
 		}
 
-		public void ContinueFromMostRecentSave() {
+		public async UniTask ContinueFromMostRecentSave() {
 
 			PLastSave.LastSaveProperties lastSaveProperties = PLastSave.GetLastSaveProperties();
 
@@ -311,18 +299,18 @@ namespace Snowship.NPersistence {
 			PUniverse.ApplyLoadedUniverse(persistenceUniverse);
 
 			PersistencePlanet persistencePlanet = PPlanet.GetPersistencePlanets().Find(pp => string.Equals(Path.GetFullPath(pp.path), Path.GetFullPath(lastSaveProperties.lastSavePlanetPath + "/planet.snowship"), StringComparison.OrdinalIgnoreCase));
-			PPlanet.ApplyLoadedPlanet(persistencePlanet);
+			await PPlanet.ApplyLoadedPlanet(persistencePlanet);
 
 			PersistenceColony persistenceColony = PColony.GetPersistenceColonies().Find(pc => string.Equals(Path.GetFullPath(pc.path), Path.GetFullPath(lastSaveProperties.lastSaveColonyPath + "/colony.snowship"), StringComparison.OrdinalIgnoreCase));
 			GameManager.planetM.SetSelectedPlanetTile(GameManager.planetM.planet.planetTiles.Find(pt => pt.tile.position == persistenceColony.planetPosition));
 			PColony.ApplyLoadedColony(persistenceColony);
 
-			_ = GameManager.stateM.TransitionToState(EState.LoadToSimulation);
+			await GameManager.stateM.TransitionToState(EState.LoadToSimulation);
 
 			PSave.PersistenceSave persistenceSave = PSave.GetPersistenceSaves().Find(ps => string.Equals(Path.GetFullPath(ps.path), Path.GetFullPath(lastSaveProperties.lastSaveSavePath + "/save.snowship"), StringComparison.OrdinalIgnoreCase));
-			startCoroutineReference.StartCoroutine(GameManager.persistenceM.ApplyLoadedSave(persistenceSave));
+			await GameManager.persistenceM.ApplyLoadedSave(persistenceSave);
 
-			_ = GameManager.stateM.TransitionToState(EState.Simulation);
+			await GameManager.stateM.TransitionToState(EState.Simulation);
 		}
 	}
 }

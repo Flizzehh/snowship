@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
@@ -57,7 +58,7 @@ namespace Snowship.NUI.Presenters {
 		}
 
 		private void OnCreateColonyButtonClicked() {
-			_ = GameManager.uiM.OpenViewAsync<UICreateColony>(this, false);
+			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UICreateColony>(this, false));
 		}
 
 		private void OnColonyElementClicked(PersistenceColony colony) {

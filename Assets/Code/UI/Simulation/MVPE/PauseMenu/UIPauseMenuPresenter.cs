@@ -1,8 +1,11 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
+using Snowship.NState;
 using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.Settings;
 using Snowship.NUtilities;
+using UnityEngine.InputSystem;
 
 namespace Snowship.NUI.Menu.PauseMenu {
 
@@ -19,6 +22,9 @@ namespace Snowship.NUI.Menu.PauseMenu {
 			View.OnSettingsButtonClicked += OnSettingsButtonClicked;
 			View.OnExitToMenuButtonClicked += OnExitToMenuButtonClicked;
 			View.OnExitToDesktopButtonClicked += OnExitToDesktopButtonClicked;
+
+			OnInputSystemEnabled(GameManager.inputM.InputSystemActions);
+			GameManager.inputM.OnInputSystemDisabled += OnInputSystemDisabled;
 		}
 
 		public override void OnClose() {
@@ -27,15 +33,29 @@ namespace Snowship.NUI.Menu.PauseMenu {
 			View.OnSettingsButtonClicked -= OnSettingsButtonClicked;
 			View.OnExitToMenuButtonClicked -= OnExitToMenuButtonClicked;
 			View.OnExitToDesktopButtonClicked -= OnExitToDesktopButtonClicked;
+
+			GameManager.inputM.OnInputSystemDisabled -= OnInputSystemDisabled;
 		}
 
 		private void OnContinueButtonClicked() {
-			GameManager.uiM.CloseView(this);
+			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close));
+		}
+
+		private void OnInputSystemEnabled(InputSystemActions actions) {
+			actions.Simulation.Escape.performed += OnEscapePerformed;
+		}
+
+		private void OnInputSystemDisabled(InputSystemActions actions) {
+			actions.Simulation.Escape.performed -= OnEscapePerformed;
+		}
+
+		private void OnEscapePerformed(InputAction.CallbackContext callbackContext) {
+			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close));
 		}
 
 		private void OnSaveButtonClicked() {
 			try {
-				GameManager.persistenceM.CreateSave(GameManager.colonyM.colony);
+				UniTask.WhenAll(GameManager.persistenceM.CreateSave(GameManager.colonyM.colony));
 				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen));
 			} catch (Exception e) {
 				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed));
@@ -44,7 +64,7 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		private void OnSettingsButtonClicked() {
-			_ = GameManager.uiM.OpenViewAsync<UISettings>(this, false);
+			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UISettings>(this, false));
 		}
 
 		private void OnExitToMenuButtonClicked() {

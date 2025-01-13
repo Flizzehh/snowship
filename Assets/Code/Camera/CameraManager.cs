@@ -42,7 +42,7 @@ namespace Snowship.NCamera {
 
 			GameManager.stateM.OnStateChanged += OnStateChanged;
 
-			GameManager.inputM.OnInputSystemEnabled += OnInputSystemEnabled;
+			OnInputSystemEnabled(GameManager.inputM.InputSystemActions);
 			GameManager.inputM.OnInputSystemDisabled += OnInputSystemDisabled;
 		}
 		private void OnStateChanged((EState previousState, EState newState) states) {

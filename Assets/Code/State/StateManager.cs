@@ -13,8 +13,8 @@ namespace Snowship.NState {
 		public event Action<(EState previousState, EState newState)> OnStateChanged;
 
 		public void Awake() {
-			_ = TransitionToState(EState.Boot);
-			_ = TransitionToState(EState.MainMenu);
+			UniTask.WhenAll(TransitionToState(EState.Boot));
+			UniTask.WhenAll(TransitionToState(EState.MainMenu));
 		}
 
 		public async UniTask TransitionToState(EState newState, ETransitionUIAction transitionUIAction = ETransitionUIAction.Close) {

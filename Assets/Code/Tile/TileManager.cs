@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence;
@@ -12,12 +13,6 @@ using Snowship.NUtilities;
 using UnityEngine;
 
 public class TileManager : IManager {
-
-	private GameManager startCoroutineReference;
-
-	public void SetStartCoroutineReference(GameManager startCoroutineReference) {
-		this.startCoroutineReference = startCoroutineReference;
-	}
 
 	public class TileTypeGroup {
 
@@ -1315,35 +1310,28 @@ public class TileManager : IManager {
 	}
 
 	public enum MapInitializeType {
-		NewMap, LoadMap
+		NewMap,
+		LoadMap
 	}
 
-	public void Initialize(Colony colony, MapInitializeType mapInitializeType) {
-
-		// TODO GameManager.uiM.CloseView<UIMainMenuPresenter>();
-
-		//GameManager.uiMOld.SetMainMenuActive(false);
+	public async UniTask Initialize(Colony colony, MapInitializeType mapInitializeType) {
 
 		GameManager.uiMOld.SetLoadingScreenActive(true);
 		GameManager.uiMOld.SetGameUIActive(false);
 
 		mapState = MapState.Generating;
 
-		startCoroutineReference.StartCoroutine(InitializeMap(colony));
-		startCoroutineReference.StartCoroutine(PostInitializeMap(mapInitializeType));
+		InitializeMap(colony);
+		await PostInitializeMap(mapInitializeType);
 	}
 
-	private IEnumerator InitializeMap(Colony colony) {
-
-
+	private void InitializeMap(Colony colony) {
 		colony.map = CreateMap(colony.mapData);
-
-		yield return null;
 	}
 
-	private IEnumerator PostInitializeMap(MapInitializeType mapInitializeType) {
+	private async UniTask PostInitializeMap(MapInitializeType mapInitializeType) {
 		while (!GameManager.colonyM.colony.map.created) {
-			yield return null;
+			await UniTask.NextFrame();
 		}
 
 		GameManager.tileM.mapState = MapState.Generated;
@@ -1361,6 +1349,8 @@ public class TileManager : IManager {
 
 	public Map CreateMap(MapData mapData) {
 		return new Map(mapData);
+		//await map.CreateMap();
+		//return map;
 	}
 
 	public class Map {
@@ -1374,7 +1364,7 @@ public class TileManager : IManager {
 
 			DetermineShadowDirectionsAtHour(mapData.equatorOffset);
 
-			GameManager.tileM.startCoroutineReference.StartCoroutine(CreateMap());
+			UniTask.WhenAll(CreateMap());
 		}
 
 		public Map() {
@@ -1386,54 +1376,97 @@ public class TileManager : IManager {
 		public List<Tile> edgeTiles = new List<Tile>();
 		public Dictionary<int, List<Tile>> sortedEdgeTiles = new Dictionary<int, List<Tile>>();
 
-		public IEnumerator CreateMap() {
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Map", "Creating Tiles"); yield return null; }
+		public async UniTask CreateMap() {
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Map", "Creating Tiles");
+				await UniTask.NextFrame();
+			}
 			CreateTiles();
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Map", "Validating"); yield return null; Bitmasking(tiles, false, false); }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Map", "Validating");
+				await UniTask.NextFrame();
+				Bitmasking(tiles, false, false);
+			}
 
 			if (mapData.preventEdgeTouching) {
 				PreventEdgeTouching();
 			}
 
 			if (mapData.actualMap) {
-				GameManager.uiMOld.UpdateLoadingStateText("Map", "Determining Map Edges"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Map", "Determining Map Edges");
+				await UniTask.NextFrame();
 				SetMapEdgeTiles();
-				GameManager.uiMOld.UpdateLoadingStateText("Map", "Determining Sorted Map Edges"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Map", "Determining Sorted Map Edges");
+				await UniTask.NextFrame();
 				SetSortedMapEdgeTiles();
-				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Merging Terrain with Planet"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Merging Terrain with Planet");
+				await UniTask.NextFrame();
 				SmoothHeightWithSurroundingPlanetTiles();
-				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Validating"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Validating");
+				await UniTask.NextFrame();
 				Bitmasking(tiles, false, false);
 			}
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Determining Regions by Tile Type"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Determining Regions by Tile Type");
+				await UniTask.NextFrame();
+			}
 			SetTileRegions(true, false);
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Reducing Terrain Noise"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Reducing Terrain Noise");
+				await UniTask.NextFrame();
+			}
 			ReduceNoise();
 
 			if (mapData.actualMap) {
-				GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Determining Large River Paths"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Determining Large River Paths");
+				await UniTask.NextFrame();
 				CreateLargeRivers();
-				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Determining Regions by Walkability"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Determining Regions by Walkability");
+				await UniTask.NextFrame();
 				SetTileRegions(false, false);
-				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Reducing Terrain Noise"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Reducing Terrain Noise");
+				await UniTask.NextFrame();
 				ReduceNoise();
 			}
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Determining Regions by Walkability"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Determining Regions by Walkability");
+				await UniTask.NextFrame();
+			}
 			SetTileRegions(false, true);
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Validating"); yield return null; Bitmasking(tiles, false, false); }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Terrain", "Validating");
+				await UniTask.NextFrame();
+				Bitmasking(tiles, false, false);
+			}
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Determining Drainage Basins"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Determining Drainage Basins");
+				await UniTask.NextFrame();
+			}
 			DetermineDrainageBasins();
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Determining River Paths"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Determining River Paths");
+				await UniTask.NextFrame();
+			}
 			CreateRivers();
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Validating"); yield return null; Bitmasking(tiles, false, false); }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Rivers", "Validating");
+				await UniTask.NextFrame();
+				Bitmasking(tiles, false, false);
+			}
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Calculating Temperature"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Calculating Temperature");
+				await UniTask.NextFrame();
+			}
 			CalculateTemperature();
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Calculating Precipitation"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Calculating Precipitation");
+				await UniTask.NextFrame();
+			}
 			CalculatePrecipitation();
 			mapData.primaryWindDirection = primaryWindDirection;
 
@@ -1445,38 +1478,60 @@ public class TileManager : IManager {
 			}
 			*/
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Setting Biomes"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Setting Biomes");
+				await UniTask.NextFrame();
+			}
 			SetBiomes(mapData.actualMap);
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Validating"); yield return null; Bitmasking(tiles, false, false); }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Biomes", "Validating");
+				await UniTask.NextFrame();
+				Bitmasking(tiles, false, false);
+			}
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Region Blocks", "Determining Region Blocks"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Region Blocks", "Determining Region Blocks");
+				await UniTask.NextFrame();
+			}
 			CreateRegionBlocks();
 
 			if (mapData.actualMap) {
-				GameManager.uiMOld.UpdateLoadingStateText("Roofs", "Determining Roofs"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Roofs", "Determining Roofs");
+				await UniTask.NextFrame();
 				SetRoofs();
 
-				GameManager.uiMOld.UpdateLoadingStateText("Resources", "Creating Resource Veins"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Resources", "Creating Resource Veins");
+				await UniTask.NextFrame();
 				SetResourceVeins();
-				GameManager.uiMOld.UpdateLoadingStateText("Resources", "Validating"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Resources", "Validating");
+				await UniTask.NextFrame();
 				Bitmasking(tiles, false, false);
 
-				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Calculating Shadows"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Calculating Shadows");
+				await UniTask.NextFrame();
 				RecalculateLighting(tiles, false);
-				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Determining Visible Region Blocks"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Determining Visible Region Blocks");
+				await UniTask.NextFrame();
 				DetermineVisibleRegionBlocks();
-				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Applying Shadows"); yield return null;
+				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Applying Shadows");
+				await UniTask.NextFrame();
 				SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
 			}
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Validating"); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Lighting", "Validating");
+				await UniTask.NextFrame();
+			}
 			Bitmasking(tiles, false, false);
 
-			if (mapData.actualMap) { GameManager.uiMOld.UpdateLoadingStateText("Finalizing", string.Empty); yield return null; }
+			if (mapData.actualMap) {
+				GameManager.uiMOld.UpdateLoadingStateText("Finalizing", string.Empty);
+				await UniTask.NextFrame();
+			}
 			created = true;
 
 			if (mapData.actualMap) {
-				GameManager.stateM.TransitionToState(EState.Simulation);
+				await GameManager.stateM.TransitionToState(EState.Simulation);
 			}
 		}
 

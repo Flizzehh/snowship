@@ -19,24 +19,13 @@ namespace Snowship.NUI {
 	public class UIManagerOld : IManager {
 		// Old Code
 
-		private GameManager startCoroutineReference;
-
-		public void SetStartCoroutineReference(GameManager startCoroutineReference) {
-			this.startCoroutineReference = startCoroutineReference;
-		}
-
 		public readonly string gameVersionString = $"Snowship {PersistenceManager.gameVersion.text}";
 
 		public bool playerTyping = false;
 
-		private int screenWidth = 0;
-		private int screenHeight = 0;
-
 		public GameObject canvas;
 
 		public void SetupUI() {
-			screenWidth = Screen.width;
-			screenHeight = Screen.height;
 
 			canvas = GameObject.Find("Canvas");
 

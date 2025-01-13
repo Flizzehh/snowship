@@ -1,4 +1,6 @@
-﻿namespace Snowship.NPlanet {
+﻿using Cysharp.Threading.Tasks;
+
+namespace Snowship.NPlanet {
 	public class PlanetManager : IManager {
 
 		public Planet planet;
@@ -13,7 +15,7 @@
 			selectedPlanetTile = planetTile;
 		}
 
-		public Planet CreatePlanet(CreatePlanetData createPlanetData) {
+		public async UniTask<Planet> CreatePlanet(CreatePlanetData createPlanetData) {
 			Planet planet = new Planet(
 				createPlanetData.Name,
 				new TileManager.MapData(

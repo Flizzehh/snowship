@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -115,10 +116,10 @@ namespace Snowship.NPersistence {
 			);
 		}
 
-		public IEnumerator CreateScreenshot(string fileName) {
+		public async UniTask CreateScreenshot(string fileName) {
 			GameObject canvas = GameObject.Find("Canvas");
 			canvas.SetActive(false);
-			yield return new WaitForEndOfFrame();
+			await UniTask.WaitForEndOfFrame();
 			ScreenCapture.CaptureScreenshot(fileName + ".png");
 			canvas.SetActive(true);
 		}

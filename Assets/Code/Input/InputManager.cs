@@ -4,6 +4,10 @@ namespace Snowship.NInput {
 	public class InputManager : IManager {
 
 		private InputSystemActions inputSystemActions;
+		public InputSystemActions InputSystemActions {
+			get => inputSystemActions ??= new InputSystemActions();
+			private set => inputSystemActions = value;
+		}
 
 		public event Action<InputSystemActions> OnInputSystemEnabled;
 		public event Action<InputSystemActions> OnInputSystemDisabled;

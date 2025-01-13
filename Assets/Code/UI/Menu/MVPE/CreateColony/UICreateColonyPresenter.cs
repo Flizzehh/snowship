@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Snowship.NColony;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
@@ -138,7 +139,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 			// TODO This should be handled in the ColonyManager itself
 			GameManager.colonyM.SetupNewColony(colony, false);
 
-			_ = GameManager.stateM.TransitionToState(EState.LoadToSimulation);
+			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.LoadToSimulation));
 		}
 
 		private void OnColonyTileClicked(PersistenceColony persistenceColony) {

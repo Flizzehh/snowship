@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Snowship.NPersistence;
 using UnityEngine;
 
@@ -11,12 +12,12 @@ namespace Snowship.NColony {
 			if (!initialized) {
 				this.colony = colony;
 
-				GameManager.tileM.Initialize(colony, TileManager.MapInitializeType.NewMap);
+				UniTask.WhenAll(GameManager.tileM.Initialize(colony, TileManager.MapInitializeType.NewMap));
 			} else {
 				GameManager.colonistM.SpawnStartColonists(3);
 
 				pColony.CreateColony(colony);
-				GameManager.persistenceM.CreateSave(colony);
+				UniTask.WhenAll(GameManager.persistenceM.CreateSave(colony));
 
 				GameManager.uiMOld.SetLoadingScreenActive(false);
 			}

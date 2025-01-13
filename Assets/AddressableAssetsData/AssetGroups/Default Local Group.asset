@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: bd301d844f272e2409e42eb949b92b5b
   m_SerializeEntries:
+  - m_GUID: 13440c2087776ad48b8d3e8b929a53b2
+    m_Address: UI/UIPauseMenu
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c952355c3e8bce49a4e749d587812b1
     m_Address: UI/UICreatePlanet
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9dd8381cd844f7e4991e97dbbce532e2
+    m_Address: UI/UISimulation
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

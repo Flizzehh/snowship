@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NPersistence;
 using Snowship.NUI.Generic;
@@ -51,19 +52,19 @@ namespace Snowship.NUI.Menu.MainMenu {
 		}
 
 		private void OnNewButtonClicked() {
-			_ = GameManager.uiM.OpenViewAsync<UICreatePlanet>(this, false);
+			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UICreatePlanet>(this, false));
 		}
 
 		private void OnContinueButtonClicked() {
-			GameManager.persistenceM.ContinueFromMostRecentSave();
+			UniTask.WhenAll(GameManager.persistenceM.ContinueFromMostRecentSave());
 		}
 
 		private void OnLoadButtonClicked() {
-			_ = GameManager.uiM.OpenViewAsync<UILoadColony>(this, false);
+			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UILoadColony>(this, false));
 		}
 
 		private void OnSettingsButtonClicked() {
-			_ = GameManager.uiM.OpenViewAsync<UISettings>(this, false);
+			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UISettings>(this, false));
 		}
 
 		private void OnExitButtonClicked() {

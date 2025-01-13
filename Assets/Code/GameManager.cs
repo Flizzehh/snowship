@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour {
 	public static readonly PersistenceManager persistenceM = new PersistenceManager();
 	public static readonly PlanetManager planetM = new PlanetManager();
 	public static readonly ResourceManager resourceM = new ResourceManager();
+	public static readonly SelectableManager selectableManager = new SelectableManager();
 	public static readonly StateManager stateM = new StateManager();
 	public static readonly TileManager tileM = new TileManager();
 	public static readonly TimeManager timeM = new TimeManager();
@@ -37,10 +38,9 @@ public class GameManager : MonoBehaviour {
 	public static readonly UIManagerOld uiMOld = new UIManagerOld();
 	public static readonly UniverseManager universeM = new UniverseManager();
 
-	public static readonly SelectableManager selectableManager = new SelectableManager();
-
-	public static readonly List<IManager> managers = new List<IManager>() {
+	private static readonly List<IManager> managers = new List<IManager>() {
 		stateM,
+		inputM,
 
 		timeM,
 		debugM,
@@ -64,8 +64,7 @@ public class GameManager : MonoBehaviour {
 		uiMOld,
 		cameraM,
 
-		selectableManager,
-		inputM
+		selectableManager
 	};
 
 	public void Awake() {
@@ -75,10 +74,6 @@ public class GameManager : MonoBehaviour {
 		uiM.Initialize(uiParent);
 
 		// Awakes
-
-		tileM.SetStartCoroutineReference(this);
-		persistenceM.SetStartCoroutineReference(this);
-		uiMOld.SetStartCoroutineReference(this);
 
 		resourceM.SetResourceReferences();
 		resourceM.SetGameObjectReferences();

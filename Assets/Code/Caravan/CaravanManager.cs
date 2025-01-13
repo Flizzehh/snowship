@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Snowship.NUI.Simulation.TradeMenu;
 using UnityEngine;
 
@@ -146,7 +147,7 @@ namespace Snowship.NCaravan {
 		public void SetSelectedCaravan(Caravan selectedCaravan) {
 			this.selectedCaravan = selectedCaravan;
 
-			_ = GameManager.uiM.OpenViewAsync<UITradeMenu>(null, true);
+			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UITradeMenu>(null, true));
 		}
 	}
 }

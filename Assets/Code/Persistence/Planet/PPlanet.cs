@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Snowship.NPlanet;
 using UnityEngine;
 
@@ -86,8 +87,8 @@ namespace Snowship.NPersistence {
 			return persistencePlanet;
 		}
 
-		public Planet ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
-			Planet planet = GameManager.planetM.CreatePlanet(
+		public async UniTask<Planet> ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
+			Planet planet = await GameManager.planetM.CreatePlanet(
 				new CreatePlanetData(
 					persistencePlanet.name,
 					persistencePlanet.seed,
