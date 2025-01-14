@@ -72,7 +72,6 @@ namespace Snowship.NPersistence {
 
 					for (int i = Screen.resolutions.Length - 1; i >= 0; i--) {
 						Resolution resolution = Screen.resolutions[i];
-						Debug.Log(resolution.ToString());
 
 						if (resolution.width != width) {
 							continue;

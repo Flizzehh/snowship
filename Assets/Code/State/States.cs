@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Snowship.NUI.LoadingScreen;
 using Snowship.NUI.Menu.MainMenu;
 using Snowship.NUI.Menu.PauseMenu;
 using Snowship.NUI.Simulation.SimulationUI;
@@ -29,7 +30,7 @@ namespace Snowship.NState {
 					EState.LoadToSimulation,
 					new List<EState> { EState.Simulation },
 					new List<Func<UniTask>> {
-						//async () => await GameManager.uiM.OpenViewAsync<UILoadingScreen>()
+						async () => await GameManager.uiM.OpenViewAsync<UILoadingScreen>()
 					}
 				)
 			}, {

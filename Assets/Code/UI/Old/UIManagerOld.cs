@@ -39,8 +39,6 @@ namespace Snowship.NUI {
 			// SetupCreateColonyUI();
 			// SetupLoadSaveUI();
 
-			SetupLoadingScreen();
-
 			SetupGameUI();
 
 			//SetupPauseMenu();
@@ -81,7 +79,6 @@ namespace Snowship.NUI {
 			SetJobElements();
 
 			SetGameUIActive(false);
-			SetLoadingScreenActive(false);
 		}
 
 		/*
@@ -164,15 +161,6 @@ namespace Snowship.NUI {
 			}
 		}
 		*/
-
-		private Text loadingStateText;
-		private Text subLoadingStateText;
-
-		private void SetupLoadingScreen() {
-			loadingStateText = canvas.transform.Find("LoadingScreen/LoadingState-Text").GetComponent<Text>();
-			subLoadingStateText = canvas.transform.Find("LoadingScreen/SubLoadingState-Text").GetComponent<Text>();
-			SetLoadingScreenActive(false);
-		}
 
 		private GameObject gameUI;
 
@@ -560,25 +548,6 @@ namespace Snowship.NUI {
 
 			selectedCraftingObject = newSelectedCraftingObject;
 			SetSelectedCraftingObjectPanel();
-		}
-
-
-		private void ExitToDesktop() {
-			Application.Quit();
-		}
-
-		public void UpdateLoadingStateText(string primaryText, string secondaryText) {
-			if (loadingStateText.gameObject.activeSelf) {
-				loadingStateText.text = primaryText;
-			}
-
-			if (subLoadingStateText.gameObject.activeSelf) {
-				subLoadingStateText.text = secondaryText.ToUpper();
-			}
-		}
-
-		public void SetLoadingScreenActive(bool active) {
-			loadingStateText.transform.parent.gameObject.SetActive(active);
 		}
 
 		public void SetGameUIActive(bool state) {

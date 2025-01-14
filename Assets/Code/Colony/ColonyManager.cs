@@ -18,8 +18,6 @@ namespace Snowship.NColony {
 
 				pColony.CreateColony(colony);
 				UniTask.WhenAll(GameManager.persistenceM.CreateSave(colony));
-
-				GameManager.uiMOld.SetLoadingScreenActive(false);
 			}
 		}
 
