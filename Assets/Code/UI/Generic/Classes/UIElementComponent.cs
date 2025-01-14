@@ -11,7 +11,7 @@ namespace Snowship.NUI.Generic {
 			OnClose();
 		}
 
-		protected abstract void OnCreate();
+		public abstract void OnCreate();
 		public abstract void OnClose();
 		public void Close() => OnClose();
 	}

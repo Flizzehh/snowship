@@ -112,7 +112,7 @@ RectTransform:
   m_Father: {fileID: 7917557905355792681}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -165,13 +165,14 @@ GameObject:
   - component: {fileID: 4147302846424218491}
   - component: {fileID: 9059134365055276418}
   - component: {fileID: 7029596563199481021}
+  - component: {fileID: -211975730716509863}
   m_Layer: 5
-  m_Name: Debug-Panel
+  m_Name: UIDebugConsole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4147302846424218491
 RectTransform:
   m_ObjectHideFlags: 0
@@ -232,6 +233,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-211975730716509863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782434914658355987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a93a30d2ec334762b8f6cc8269ae5c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugInputField: {fileID: 5304503914133889688}
+  debugConsoleScrollRect: {fileID: 1752407223425816997}
+  debugConsoleVerticalLayoutGroup: {fileID: 2231488326276913251}
+  debugConsoleRect: {fileID: 6195614085111898641}
 --- !u!1 &2886565323118749974
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,7 +880,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 15, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &628136917726309948
 CanvasRenderer:

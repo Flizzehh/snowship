@@ -13,24 +13,15 @@ namespace Snowship.NUI.Simulation.SimulationUI {
 		}
 
 		public override void OnCreate() {
-			OnInputSystemEnabled(GameManager.inputM.InputSystemActions);
-			GameManager.inputM.OnInputSystemDisabled += OnInputSystemDisabled;
+			GameManager.inputM.InputSystemActions.Simulation.Escape.performed += OnEscapePerformed;
 		}
 
-		private void OnInputSystemEnabled(InputSystemActions actions) {
-			actions.Simulation.Escape.performed += OnEscapePerformed;
-		}
-
-		private void OnInputSystemDisabled(InputSystemActions actions) {
-			actions.Simulation.Escape.performed -= OnEscapePerformed;
+		public override void OnClose() {
+			GameManager.inputM.InputSystemActions.Simulation.Escape.performed -= OnEscapePerformed;
 		}
 
 		private void OnEscapePerformed(InputAction.CallbackContext callbackContext) {
 			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.PauseMenu, ETransitionUIAction.Hide));
-		}
-
-		public override void OnClose() {
-
 		}
 
 	}

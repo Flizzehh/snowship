@@ -8,12 +8,14 @@ namespace Snowship.NUI.Generic {
 		protected readonly TComponent Component;
 
 		protected UIElement(Transform parent) {
-			string addressableKey = GetType().Name;
+			string addressableKey = $"UI/Element/{GetType().Name}";
 			GameObject addressablePrefab = Addressables.LoadAssetAsync<GameObject>(addressableKey).WaitForCompletion();
 			Component = Object.Instantiate(addressablePrefab, parent, false).GetComponent<TComponent>();
+			Component.OnCreate();
 		}
 
-		public virtual void OnClose() {
+		public void OnClose() {
+			Component.OnClose();
 			Object.Destroy(Component);
 		}
 

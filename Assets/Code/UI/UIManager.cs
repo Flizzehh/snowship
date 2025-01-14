@@ -23,7 +23,8 @@ namespace Snowship.NUI {
 
 			IUIGroup parentGroup = FindGroup(parent);
 
-			UIGroup<IUIView, IUIPresenter> group = new UIGroup<IUIView, IUIPresenter>(
+			UIGroup<IUIConfig, IUIView, IUIPresenter> group = new UIGroup<IUIConfig, IUIView, IUIPresenter>(
+				config,
 				ui.view,
 				ui.presenter,
 				parentGroup
@@ -47,7 +48,7 @@ namespace Snowship.NUI {
 				return null;
 			}
 
-			IUIPresenter parentPresenter = closeGroup.GetParent().GetPresenter();
+			IUIPresenter parentPresenter = closeGroup.Parent.Presenter;
 			closeGroup.Close();
 			return await OpenViewAsync<TUIConfigToOpen>(parentPresenter, showParent);
 		}
@@ -62,7 +63,21 @@ namespace Snowship.NUI {
 				if (foundGroup == null) {
 					continue;
 				}
-				if (foundGroup.GetPresenter().Equals(presenter)) {
+				if (foundGroup.Presenter.Equals(presenter)) {
+					return foundGroup;
+				}
+			}
+
+			return null;
+		}
+
+		private IUIGroup FindGroup<TConfigToFind>() where TConfigToFind : IUIConfig {
+			foreach (IUIGroup group in parentGroups) {
+				IUIGroup foundGroup = group.FindGroup<TConfigToFind>();
+				if (foundGroup == null) {
+					continue;
+				}
+				if (foundGroup.Config.GetType() == typeof(TConfigToFind)) {
 					return foundGroup;
 				}
 			}
@@ -72,7 +87,15 @@ namespace Snowship.NUI {
 
 		public void CloseView<TP>(TP presenter) where TP : IUIPresenter {
 			IUIGroup group = FindGroup(presenter);
-			if (group.GetParent() == null) {
+			if (group.Parent == null) {
+				parentGroups.Remove(group);
+			}
+			group.Close();
+		}
+
+		public void CloseView<TC>() where TC : IUIConfig {
+			IUIGroup group = FindGroup<TC>();
+			if (group.Parent == null) {
 				parentGroups.Remove(group);
 			}
 			group.Close();
@@ -80,7 +103,7 @@ namespace Snowship.NUI {
 
 		public void GoBack<TP>(TP presenter) where TP : IUIPresenter {
 			IUIGroup group = FindGroup(presenter);
-			IUIGroup parent = group.GetParent();
+			IUIGroup parent = group.Parent;
 			parent?.SetViewActive(true);
 			CloseView(presenter);
 		}

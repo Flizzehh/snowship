@@ -5,6 +5,7 @@ using Snowship.NState;
 using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.Settings;
 using Snowship.NUtilities;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Snowship.NUI.Menu.PauseMenu {
@@ -23,8 +24,7 @@ namespace Snowship.NUI.Menu.PauseMenu {
 			View.OnExitToMenuButtonClicked += OnExitToMenuButtonClicked;
 			View.OnExitToDesktopButtonClicked += OnExitToDesktopButtonClicked;
 
-			OnInputSystemEnabled(GameManager.inputM.InputSystemActions);
-			GameManager.inputM.OnInputSystemDisabled += OnInputSystemDisabled;
+			GameManager.inputM.InputSystemActions.Simulation.Escape.performed += OnEscapePerformed;
 		}
 
 		public override void OnClose() {
@@ -34,19 +34,11 @@ namespace Snowship.NUI.Menu.PauseMenu {
 			View.OnExitToMenuButtonClicked -= OnExitToMenuButtonClicked;
 			View.OnExitToDesktopButtonClicked -= OnExitToDesktopButtonClicked;
 
-			GameManager.inputM.OnInputSystemDisabled -= OnInputSystemDisabled;
+			GameManager.inputM.InputSystemActions.Simulation.Escape.performed -= OnEscapePerformed;
 		}
 
 		private void OnContinueButtonClicked() {
 			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close));
-		}
-
-		private void OnInputSystemEnabled(InputSystemActions actions) {
-			actions.Simulation.Escape.performed += OnEscapePerformed;
-		}
-
-		private void OnInputSystemDisabled(InputSystemActions actions) {
-			actions.Simulation.Escape.performed -= OnEscapePerformed;
 		}
 
 		private void OnEscapePerformed(InputAction.CallbackContext callbackContext) {
@@ -68,11 +60,11 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		private void OnExitToMenuButtonClicked() {
-
+			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.MainMenu, ETransitionUIAction.Close));
 		}
 
 		private void OnExitToDesktopButtonClicked() {
-
+			Application.Quit();
 		}
 	}
 }

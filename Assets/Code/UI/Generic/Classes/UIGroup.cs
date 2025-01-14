@@ -2,25 +2,27 @@
 using UnityEngine;
 
 namespace Snowship.NUI.Generic {
-	public class UIGroup<TView, TPresenter> : IUIGroup
+	public class UIGroup<TConfig, TView, TPresenter> : IUIGroup
+		where TConfig : IUIConfig
 		where TView : IUIView
-		where TPresenter : IUIPresenter
-	{
+		where TPresenter : IUIPresenter {
+
+		private readonly TConfig config;
 		private readonly TView view;
 		private readonly TPresenter presenter;
 
 		private readonly IUIGroup parent;
 		private readonly List<IUIGroup> children = new List<IUIGroup>();
 
+		public IUIView View => view;
+		public IUIPresenter Presenter => presenter;
+		public IUIConfig Config => config;
+		public IUIGroup Parent => parent;
+
 		public bool IsActive => view.IsActive;
 
-		public UIGroup() {
-			view = default(TView);
-			presenter = default(TPresenter);
-			parent = null;
-		}
-
-		public UIGroup(TView view, TPresenter presenter, IUIGroup parent) {
+		public UIGroup(TConfig config, TView view, TPresenter presenter, IUIGroup parent) {
+			this.config = config;
 			this.view = view;
 			this.presenter = presenter;
 
@@ -36,20 +38,8 @@ namespace Snowship.NUI.Generic {
 			presenter.OnCreate();
 		}
 
-		public IUIView GetView() {
-			return view;
-		}
-
 		public void SetViewActive(bool active) {
 			view.SetActive(active);
-		}
-
-		public IUIPresenter GetPresenter() {
-			return presenter;
-		}
-
-		public IUIGroup GetParent() {
-			return parent;
 		}
 
 		public void AddChild(IUIGroup child) {
@@ -66,13 +56,13 @@ namespace Snowship.NUI.Generic {
 				break;
 			}
 
+			config.OnClose();
+			presenter.OnClose();
 			view.OnClose();
 
 			Object.Destroy(view.Instance);
 
-			if (parent != null) {
-				parent.RemoveChild(this);
-			}
+			parent?.RemoveChild(this);
 		}
 
 		public IUIGroup FindGroup(IUIPresenter presenterToFind) {
@@ -85,10 +75,9 @@ namespace Snowship.NUI.Generic {
 				return this;
 			}
 
-			// ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 			foreach (IUIGroup child in children) {
 				IUIGroup foundGroup = child.FindGroup(presenterToFind);
-				if (foundGroup.GetPresenter().Equals(presenterToFind)) {
+				if (foundGroup.Presenter.Equals(presenterToFind)) {
 					return foundGroup;
 				}
 			}
@@ -106,15 +95,30 @@ namespace Snowship.NUI.Generic {
 				return this;
 			}
 
-			// ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 			foreach (IUIGroup child in children) {
 				IUIGroup foundGroup = child.FindGroup(viewToFind);
-				if (foundGroup.GetView().Equals(viewToFind)) {
+				if (foundGroup.View.Equals(viewToFind)) {
 					return foundGroup;
 				}
 			}
 
 			return null;
 		}
+		public IUIGroup FindGroup<TConfigToFind>() where TConfigToFind : IUIConfig {
+
+			if (Config.GetType() == typeof(TConfigToFind)) {
+				return this;
+			}
+
+			foreach (IUIGroup child in children) {
+				IUIGroup foundGroup = child.FindGroup<TConfigToFind>();
+				if (foundGroup.Config.GetType() == typeof(TConfigToFind)) {
+					return foundGroup;
+				}
+			}
+
+			return null;
+		}
+
 	}
 }

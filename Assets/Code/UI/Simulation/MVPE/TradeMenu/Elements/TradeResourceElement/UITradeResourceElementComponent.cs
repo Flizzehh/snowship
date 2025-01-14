@@ -1,7 +1,5 @@
 ﻿using System;
-using Snowship.NResource.Models;
 using Snowship.NUI.Generic;
-using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -36,7 +34,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 		public event Action<bool> OnBuyIncreaseButtonClicked;
 		public event Action<bool> OnSellIncreaseButtonClicked;
 
-		protected override void OnCreate() {
+		public override void OnCreate() {
 			tradeAmountInputField.onEndEdit.AddListener(amountString => OnTradeAmountChanged?.Invoke(amountString));
 			clearButton.onClick.AddListener(() => OnClearButtonClicked?.Invoke());
 

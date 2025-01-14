@@ -53,6 +53,42 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DebugMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""4b0b2ec9-e7e6-4b46-b863-aca218eea96b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f25e377-c204-4d02-9e68-7149b840e2ec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Time/SpeedUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""3dd38a75-c671-4adb-bcf5-7b794cc82684"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Time/SlowDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""09561a29-6a22-4598-8efe-e924d463eaba"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +188,50 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC"",
                     ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1f09f6f-c424-429f-8347-e80284c77bb7"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""DebugMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7907c017-319a-4022-8774-bb80c754f170"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""023222e9-f02c-4887-8c9b-a213805d9cac"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""Time/SpeedUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc62fbd2-5d24-4181-bf0d-e21dc5acab64"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""Time/SlowDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -698,6 +778,10 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         m_Simulation_MoveCamera = m_Simulation.FindAction("MoveCamera", throwIfNotFound: true);
         m_Simulation_ZoomCamera = m_Simulation.FindAction("ZoomCamera", throwIfNotFound: true);
         m_Simulation_Escape = m_Simulation.FindAction("Escape", throwIfNotFound: true);
+        m_Simulation_DebugMenu = m_Simulation.FindAction("DebugMenu", throwIfNotFound: true);
+        m_Simulation_Pause = m_Simulation.FindAction("Pause", throwIfNotFound: true);
+        m_Simulation_TimeSpeedUp = m_Simulation.FindAction("Time/SpeedUp", throwIfNotFound: true);
+        m_Simulation_TimeSlowDown = m_Simulation.FindAction("Time/SlowDown", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -780,6 +864,10 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Simulation_MoveCamera;
     private readonly InputAction m_Simulation_ZoomCamera;
     private readonly InputAction m_Simulation_Escape;
+    private readonly InputAction m_Simulation_DebugMenu;
+    private readonly InputAction m_Simulation_Pause;
+    private readonly InputAction m_Simulation_TimeSpeedUp;
+    private readonly InputAction m_Simulation_TimeSlowDown;
     public struct SimulationActions
     {
         private @InputSystemActions m_Wrapper;
@@ -787,6 +875,10 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         public InputAction @MoveCamera => m_Wrapper.m_Simulation_MoveCamera;
         public InputAction @ZoomCamera => m_Wrapper.m_Simulation_ZoomCamera;
         public InputAction @Escape => m_Wrapper.m_Simulation_Escape;
+        public InputAction @DebugMenu => m_Wrapper.m_Simulation_DebugMenu;
+        public InputAction @Pause => m_Wrapper.m_Simulation_Pause;
+        public InputAction @TimeSpeedUp => m_Wrapper.m_Simulation_TimeSpeedUp;
+        public InputAction @TimeSlowDown => m_Wrapper.m_Simulation_TimeSlowDown;
         public InputActionMap Get() { return m_Wrapper.m_Simulation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -805,6 +897,18 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
             @Escape.started += instance.OnEscape;
             @Escape.performed += instance.OnEscape;
             @Escape.canceled += instance.OnEscape;
+            @DebugMenu.started += instance.OnDebugMenu;
+            @DebugMenu.performed += instance.OnDebugMenu;
+            @DebugMenu.canceled += instance.OnDebugMenu;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @TimeSpeedUp.started += instance.OnTimeSpeedUp;
+            @TimeSpeedUp.performed += instance.OnTimeSpeedUp;
+            @TimeSpeedUp.canceled += instance.OnTimeSpeedUp;
+            @TimeSlowDown.started += instance.OnTimeSlowDown;
+            @TimeSlowDown.performed += instance.OnTimeSlowDown;
+            @TimeSlowDown.canceled += instance.OnTimeSlowDown;
         }
 
         private void UnregisterCallbacks(ISimulationActions instance)
@@ -818,6 +922,18 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
             @Escape.started -= instance.OnEscape;
             @Escape.performed -= instance.OnEscape;
             @Escape.canceled -= instance.OnEscape;
+            @DebugMenu.started -= instance.OnDebugMenu;
+            @DebugMenu.performed -= instance.OnDebugMenu;
+            @DebugMenu.canceled -= instance.OnDebugMenu;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @TimeSpeedUp.started -= instance.OnTimeSpeedUp;
+            @TimeSpeedUp.performed -= instance.OnTimeSpeedUp;
+            @TimeSpeedUp.canceled -= instance.OnTimeSpeedUp;
+            @TimeSlowDown.started -= instance.OnTimeSlowDown;
+            @TimeSlowDown.performed -= instance.OnTimeSlowDown;
+            @TimeSlowDown.canceled -= instance.OnTimeSlowDown;
         }
 
         public void RemoveCallbacks(ISimulationActions instance)
@@ -967,6 +1083,10 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         void OnMoveCamera(InputAction.CallbackContext context);
         void OnZoomCamera(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
+        void OnDebugMenu(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnTimeSpeedUp(InputAction.CallbackContext context);
+        void OnTimeSlowDown(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

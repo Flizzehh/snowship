@@ -25,8 +25,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5724e56e6d8f4aa4795584190e6f8866
+    m_Address: UI/Element/UIDebugConsoleOutputTextbox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9dd8381cd844f7e4991e97dbbce532e2
     m_Address: UI/UISimulation
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1fa6b616b868c344b6746511c9e471b
+    m_Address: UI/UIDebugConsole
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

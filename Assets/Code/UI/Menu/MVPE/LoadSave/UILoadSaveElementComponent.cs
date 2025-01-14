@@ -14,7 +14,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 		public event Action OnLoadSaveElementComponentButtonClicked;
 
-		protected override void OnCreate() {
+		public override void OnCreate() {
 			elementButton.onClick.AddListener(() => OnLoadSaveElementComponentButtonClicked?.Invoke());
 		}
 

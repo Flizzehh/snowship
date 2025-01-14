@@ -2,13 +2,16 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 namespace Snowship.NUI.Generic {
 	public class UIConfig<TView, TPresenter> : IUIConfig
 		where TView : IUIView
-		where TPresenter : IUIPresenter
-	{
+		where TPresenter : IUIPresenter {
+
+		private AsyncOperationHandle<GameObject> viewPrefabOperationHandle;
+
 		protected virtual string AddressableKey() {
 			return GetType().Name;
 		}
@@ -26,7 +29,12 @@ namespace Snowship.NUI.Generic {
 
 		private async UniTask<GameObject> GetViewPrefab() {
 			Debug.Log(AddressableKey());
-			return await Addressables.LoadAssetAsync<GameObject>($"UI/{AddressableKey()}");
+			viewPrefabOperationHandle = Addressables.LoadAssetAsync<GameObject>($"UI/{AddressableKey()}");
+			return await viewPrefabOperationHandle;
+		}
+
+		public void OnClose() {
+			Addressables.Release(viewPrefabOperationHandle);
 		}
 
 		// ReSharper disable once MemberCanBeMadeStatic.Local

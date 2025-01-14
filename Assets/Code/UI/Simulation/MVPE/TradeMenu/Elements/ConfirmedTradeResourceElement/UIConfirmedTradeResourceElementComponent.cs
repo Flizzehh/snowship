@@ -11,7 +11,7 @@ public class UIConfirmedTradeResourceElementComponent : UIElementComponent {
 	[SerializeField] private Text resourceNameText;
 	[SerializeField] private Text collectedVsRemainingAmountText;
 
-	protected override void OnCreate() {
+	public override void OnCreate() {
 	}
 
 	public override void OnClose() {

@@ -13,7 +13,7 @@ namespace Snowship.NUI.Menu.LoadColony {
 
 		public event Action OnLoadColonyElementComponentButtonClicked;
 
-		protected override void OnCreate() {
+		public override void OnCreate() {
 			elementButton.onClick.AddListener(() => OnLoadColonyElementComponentButtonClicked?.Invoke());
 		}
 

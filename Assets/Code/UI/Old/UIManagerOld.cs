@@ -499,9 +499,9 @@ namespace Snowship.NUI {
 				return true;
 			}*/
 
-			if (GameManager.debugM.debugInput.isFocused) {
+			/*if (GameManager.debugM.debugInput.isFocused) {
 				return true;
-			}
+			}*/
 
 			if (clothesSearchInputField.isFocused) {
 				return true;

@@ -1,6 +1,7 @@
 ﻿using Snowship.NState;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Snowship.NCamera {
 	public partial class CameraManager {
@@ -26,7 +27,9 @@ namespace Snowship.NCamera {
 
 		private void OnMoveCameraPerformed(InputAction.CallbackContext callbackContext) {
 
-			// TODO Need to disable moving when player is typing
+			if (eventSystem.currentSelectedGameObject && eventSystem.currentSelectedGameObject.GetComponent<InputField>()) {
+				return;
+			}
 
 			if (GameManager.stateM.State != EState.Simulation) {
 				return;

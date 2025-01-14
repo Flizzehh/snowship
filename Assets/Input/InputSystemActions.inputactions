@@ -31,6 +31,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "DebugMenu",
+                    "type": "Button",
+                    "id": "4b0b2ec9-e7e6-4b46-b863-aca218eea96b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "9f25e377-c204-4d02-9e68-7149b840e2ec",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Time/SpeedUp",
+                    "type": "Button",
+                    "id": "3dd38a75-c671-4adb-bcf5-7b794cc82684",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Time/SlowDown",
+                    "type": "Button",
+                    "id": "09561a29-6a22-4598-8efe-e924d463eaba",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -130,6 +166,50 @@
                     "processors": "",
                     "groups": ";PC",
                     "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1f09f6f-c424-429f-8347-e80284c77bb7",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC",
+                    "action": "DebugMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7907c017-319a-4022-8774-bb80c754f170",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "023222e9-f02c-4887-8c9b-a213805d9cac",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC",
+                    "action": "Time/SpeedUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc62fbd2-5d24-4181-bf0d-e21dc5acab64",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC",
+                    "action": "Time/SlowDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
