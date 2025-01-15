@@ -951,7 +951,7 @@ namespace Snowship.NColonist {
 			averageColonistPosition /= Colonist.colonists.Count;
 			GameManager.cameraM.SetCameraPosition(averageColonistPosition);
 
-			// TEMPORARY COLONIST TESTING STUFF
+			// TODO TEMPORARY COLONIST TESTING STUFF
 			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.WheatSeed), UnityEngine.Random.Range(5, 11), false);
 			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.Potato), UnityEngine.Random.Range(5, 11), false);
 			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.CottonSeed), UnityEngine.Random.Range(5, 11), false);

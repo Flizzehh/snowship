@@ -51,9 +51,9 @@ namespace Snowship.NUI {
 			// SetCreateColonyActive(false);
 			// SetLoadSaveActive(false);
 
-			SetSettingsMenuActive(false);
+			//SetSettingsMenuActive(false);
 
-			SetPauseMenuActive(false);
+			//SetPauseMenuActive(false);
 
 			InitializeTileInformation();
 			InitializeSelectedContainerIndicator();

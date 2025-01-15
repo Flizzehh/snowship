@@ -1,5 +1,6 @@
 ﻿using System;
 using Snowship.NUI.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +14,7 @@ namespace Snowship.NUI.Menu.Settings {
 
 		[Header("Resolution")]
 		[SerializeField] private Slider resolutionSlider;
-		[SerializeField] private Text resolutionText;
+		[SerializeField] private TMP_Text resolutionText;
 
 		[Header("Fullscreen")]
 		[SerializeField] private Toggle fullscreenToggle;
