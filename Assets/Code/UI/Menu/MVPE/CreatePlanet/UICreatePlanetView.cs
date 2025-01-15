@@ -2,6 +2,7 @@
 using Snowship.NPlanet;
 using Snowship.NUI.Generic;
 using Snowship.NUtilities;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,31 +25,31 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		[Header("Planet Properties")]
 		[Header("Name")]
-		[SerializeField] private InputField planetNameInputField;
+		[SerializeField] private TMP_InputField planetNameInputField;
 		[Header("Seed")]
-		[SerializeField] private InputField planetSeedInputField;
+		[SerializeField] private TMP_InputField planetSeedInputField;
 
 		[Header("Size")]
 		[SerializeField] private Slider planetSizeSlider;
-		[SerializeField] private Text planetSizeText;
+		[SerializeField] private TMP_Text planetSizeText;
 
 		[Header("Distance")]
 		[SerializeField] private Slider planetDistanceSlider;
-		[SerializeField] private Text planetDistanceText;
+		[SerializeField] private TMP_Text planetDistanceText;
 
 		[Header("Temperature Range")]
 		[SerializeField] private Slider temperatureRangeSlider;
-		[SerializeField] private Text temperatureRangeText;
+		[SerializeField] private TMP_Text temperatureRangeText;
 
 		[Header("Wind Direction")]
 		[SerializeField] private Slider windDirectionSlider;
-		[SerializeField] private Text windDirectionText;
+		[SerializeField] private TMP_Text windDirectionText;
 
 		[Header("Selected Planet Tile Info")]
 		[SerializeField] private GameObject planetTileInfoPanel;
 		[SerializeField] private Image planetTileSpriteImage;
-		[SerializeField] private Text planetTileBiomeText;
-		[SerializeField] private Text planetTilePositionText;
+		[SerializeField] private TMP_Text planetTileBiomeText;
+		[SerializeField] private TMP_Text planetTilePositionText;
 
 		public event Action OnBackButtonClicked;
 
