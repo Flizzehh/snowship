@@ -116,8 +116,8 @@ namespace Snowship.NPersistence {
 		// Configuration
 
 		public void SaveConfiguration(StreamWriter file) {
-			file.WriteLine(CreateKeyValueString(ConfigurationProperty.GameVersion, PersistenceManager.gameVersion.text, 0));
-			file.WriteLine(CreateKeyValueString(ConfigurationProperty.SaveVersion, PersistenceManager.saveVersion.text, 0));
+			file.WriteLine(CreateKeyValueString(ConfigurationProperty.GameVersion, PersistenceManager.GameVersion.text, 0));
+			file.WriteLine(CreateKeyValueString(ConfigurationProperty.SaveVersion, PersistenceManager.SaveVersion.text, 0));
 		}
 
 		public Dictionary<ConfigurationProperty, string> LoadConfiguration(string path) {
@@ -151,7 +151,7 @@ namespace Snowship.NPersistence {
 				return false;
 			}
 
-			bool saveVersionValid = persistenceUniverse.configurationProperties[ConfigurationProperty.SaveVersion] == PersistenceManager.saveVersion.text;
+			bool saveVersionValid = persistenceUniverse.configurationProperties[ConfigurationProperty.SaveVersion] == PersistenceManager.SaveVersion.text;
 			return saveVersionValid;
 		}
 	}

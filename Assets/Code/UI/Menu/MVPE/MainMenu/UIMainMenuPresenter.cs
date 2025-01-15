@@ -27,7 +27,7 @@ namespace Snowship.NUI.Menu.MainMenu {
 			View.OnSettingsButtonClicked += OnSettingsButtonClicked;
 			View.OnExitButtonClicked += OnExitButtonClicked;
 
-			View.SetDisclaimerText($"Lumi Games (Snowship {PersistenceManager.gameVersion.text})");
+			View.SetDisclaimerText($"Lumi Games (Snowship {PersistenceManager.GameVersion.text})");
 
 			PLastSave.LastSaveProperties lastSaveProperties = pLastSave.GetLastSaveProperties();
 			if (lastSaveProperties != null) {

@@ -1,7 +1,7 @@
 ﻿using Snowship.NState;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Snowship.NCamera {
 	public partial class CameraManager {
@@ -27,7 +27,7 @@ namespace Snowship.NCamera {
 
 		private void OnMoveCameraPerformed(InputAction.CallbackContext callbackContext) {
 
-			if (eventSystem.currentSelectedGameObject && eventSystem.currentSelectedGameObject.GetComponent<InputField>()) {
+			if (eventSystem.currentSelectedGameObject && eventSystem.currentSelectedGameObject.GetComponent<TMP_InputField>()) {
 				return;
 			}
 

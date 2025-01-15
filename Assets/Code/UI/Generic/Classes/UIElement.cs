@@ -15,8 +15,8 @@ namespace Snowship.NUI.Generic {
 		}
 
 		public void OnClose() {
-			Component.OnClose();
-			Object.Destroy(Component);
+			Component.Close();
+			Object.Destroy(Component.gameObject);
 		}
 
 		public void Close() => OnClose();

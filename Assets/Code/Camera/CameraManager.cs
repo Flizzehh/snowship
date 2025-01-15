@@ -82,10 +82,6 @@ namespace Snowship.NCamera {
 
 		private void MoveCamera() {
 
-			if (GameManager.stateM.State != EState.Simulation) {
-				return;
-			}
-
 			cameraTransform.Translate(moveVector * (CameraMoveSpeedMultiplier * camera.orthographicSize * Time.deltaTime));
 			cameraTransform.position = new Vector2(
 				Mathf.Clamp(cameraTransform.position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize),
@@ -96,9 +92,6 @@ namespace Snowship.NCamera {
 
 		private void ZoomCamera() {
 
-			if (GameManager.stateM.State != EState.Simulation) {
-				return;
-			}
 			if (Mathf.Approximately(zoomAxis, 0)) {
 				return;
 			}

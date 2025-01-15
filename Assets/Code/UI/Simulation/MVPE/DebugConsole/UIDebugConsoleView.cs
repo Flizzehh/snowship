@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Snowship.NUI.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Snowship.NUI.Simulation.DebugConsole {
 	public class UIDebugConsoleView : UIView {
 
-		[SerializeField] private InputField debugInputField;
+		[SerializeField] private TMP_InputField debugInputField;
 		[SerializeField] private ScrollRect debugConsoleScrollRect;
 		[SerializeField] private VerticalLayoutGroup debugConsoleVerticalLayoutGroup;
 		[SerializeField] private RectTransform debugConsoleRect;
@@ -59,7 +60,7 @@ namespace Snowship.NUI.Simulation.DebugConsole {
 			}
 			outputTextboxes.Clear();
 
-			debugConsoleRect.anchoredPosition = new Vector2(10, 0);
+			//debugConsoleRect.anchoredPosition = new Vector2(10, 0);
 			debugConsoleScrollRect.verticalScrollbar.value = 0;
 		}
 	}

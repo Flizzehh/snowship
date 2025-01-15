@@ -19,7 +19,7 @@ namespace Snowship.NUI {
 	public class UIManagerOld : IManager {
 		// Old Code
 
-		public readonly string gameVersionString = $"Snowship {PersistenceManager.gameVersion.text}";
+		public readonly string gameVersionString = $"Snowship {PersistenceManager.GameVersion.text}";
 
 		public bool playerTyping = false;
 
@@ -551,7 +551,7 @@ namespace Snowship.NUI {
 		}
 
 		public void SetGameUIActive(bool state) {
-			gameUI.SetActive(state);
+			//gameUI.SetActive(state);
 		}
 
 		private class MenuButton {

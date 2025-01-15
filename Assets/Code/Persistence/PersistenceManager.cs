@@ -15,8 +15,8 @@ using UnityEngine;
 namespace Snowship.NPersistence {
 	public class PersistenceManager : IManager {
 
-		public static readonly (int increment, string text) gameVersion = (3, "2025.1");
-		public static readonly (int increment, string text) saveVersion = (3, "2025.1");
+		public static readonly (int increment, string text) GameVersion = (3, "2025.1");
+		public static readonly (int increment, string text) SaveVersion = (3, "2025.1");
 
 		private readonly PersistenceHandler persistenceHandler = new PersistenceHandler();
 

@@ -1,4 +1,5 @@
 ﻿using Snowship.NUI.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace Snowship.NUI.Simulation.DebugConsole {
 		[SerializeField] private int textBoxSizePerLine = 17;
 
 		[Header("Components")]
-		[SerializeField] private Text text;
+		[SerializeField] private TMP_Text text;
 		[SerializeField] private LayoutElement layoutElement;
 		[SerializeField] private RectTransform rectTransform;
 

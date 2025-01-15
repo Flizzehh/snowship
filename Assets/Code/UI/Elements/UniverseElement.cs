@@ -35,11 +35,11 @@ namespace Snowship.NUI.Menu.LoadSave {
 			string gameVersionColour =
 				ColorUtility.ToHtmlStringRGB(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50));
 
-			if (saveVersion == PersistenceManager.saveVersion.text) {
+			if (saveVersion == PersistenceManager.SaveVersion.text) {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					OnUniverseElementClicked?.Invoke(this);
 				});
-				if (gameVersion != PersistenceManager.gameVersion.text) {
+				if (gameVersion != PersistenceManager.GameVersion.text) {
 					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkYellow);
 					gameVersionColour = ColorUtility.ToHtmlStringRGB(
 						(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed) +
@@ -50,13 +50,13 @@ namespace Snowship.NUI.Menu.LoadSave {
 				obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed);
 				obj.GetComponent<Button>().interactable = false;
 
-				if (saveVersion != PersistenceManager.saveVersion.text) {
+				if (saveVersion != PersistenceManager.SaveVersion.text) {
 					saveVersionColour = ColorUtility.ToHtmlStringRGB(
 						(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed) +
 						ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50)) / 2f);
 				}
 
-				if (gameVersion != PersistenceManager.gameVersion.text) {
+				if (gameVersion != PersistenceManager.GameVersion.text) {
 					gameVersionColour = ColorUtility.ToHtmlStringRGB(
 						(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed) +
 						ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50)) / 2f);
