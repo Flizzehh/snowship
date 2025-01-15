@@ -2,6 +2,7 @@
 using Snowship.NPlanet;
 using Snowship.NUI.Generic;
 using Snowship.NUtilities;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,20 +18,20 @@ namespace Snowship.NUI.Menu.CreateColony {
 		public GameObject PlanetTilePrefab => planetTilePrefab;
 
 		[Header("Colony Properties")]
-		[SerializeField] private InputField colonyNameInputField;
+		[SerializeField] private TMP_InputField colonyNameInputField;
 		[SerializeField] private Button randomizeColonyNameButton;
-		[SerializeField] private InputField mapSeedInputField;
+		[SerializeField] private TMP_InputField mapSeedInputField;
 		[SerializeField] private Slider mapSizeSlider;
-		[SerializeField] private Text mapSizeText;
+		[SerializeField] private TMP_Text mapSizeText;
 
 		[Header("Selected Planet Tile Info")]
 		[SerializeField] private GameObject selectedPlanetTileInfoPanel;
 		[SerializeField] private Image selectedPlanetTileSpriteImage;
-		[SerializeField] private Text biomeText;
-		[SerializeField] private Text averageTemperatureText;
-		[SerializeField] private Text averagePrecipitationText;
-		[SerializeField] private Text altitudeText;
-		[SerializeField] private Text positionText;
+		[SerializeField] private TMP_Text biomeText;
+		[SerializeField] private TMP_Text averageTemperatureText;
+		[SerializeField] private TMP_Text averagePrecipitationText;
+		[SerializeField] private TMP_Text altitudeText;
+		[SerializeField] private TMP_Text positionText;
 
 		[SerializeField] private Button createColonyButton;
 		[SerializeField] private Image createColonyButtonImage;
