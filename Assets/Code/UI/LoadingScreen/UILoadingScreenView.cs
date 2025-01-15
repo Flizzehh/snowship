@@ -1,13 +1,12 @@
-﻿using System;
-using Snowship.NUI.Generic;
+﻿using Snowship.NUI.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Snowship.NUI.LoadingScreen {
 	public class UILoadingScreenView : UIView {
 
-		[SerializeField] private Text loadingStateText;
-		[SerializeField] private Text loadingSubStateText;
+		[SerializeField] private TMP_Text loadingStateText;
+		[SerializeField] private TMP_Text loadingSubStateText;
 
 		public override void OnOpen() {
 
