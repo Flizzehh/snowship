@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Snowship.NResource.Models;
 using Snowship.NTime;
 using Snowship.Selectable;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NCaravan {
-	public class Caravan : ResourceManager.IInventory, ISelectable {
+	public class Caravan : ResourceManager.IInventory, ISelectable, IDisposable {
 
 		public List<Trader> traders = new List<Trader>();
 		public int numTraders;
@@ -25,7 +27,7 @@ namespace Snowship.NCaravan {
 		public ResourceManager.ResourceGroup resourceGroup;
 
 		public int leaveTimer;
-		public static readonly int leaveTimerMax = TimeManager.dayLengthSeconds * 2;
+		public const int leaveTimerMax = SimulationDateTime.DayLengthSeconds * 2;
 		public bool leaving;
 
 		private const int MinDistinctResources = 1;
@@ -70,6 +72,12 @@ namespace Snowship.NCaravan {
 					inventory.ChangeResourceAmount(resource, caravanAmount, false);
 				}
 			}
+
+			GameManager.timeM.OnTimeChanged += UpdateCaravanLeaveState;
+		}
+
+		public void Dispose() {
+			GameManager.timeM.OnTimeChanged -= UpdateCaravanLeaveState;
 		}
 
 		private void SpawnTrader(TileManager.Tile spawnTile) {
@@ -237,31 +245,31 @@ namespace Snowship.NCaravan {
 
 			removeTraders.Clear();
 
-			if (!GameManager.timeM.GetPaused() && GameManager.timeM.minuteChanged) {
-				if (!leaving && confirmedResourcesToTrade.Count <= 0) {
-					if (leaveTimer >= leaveTimerMax) {
-						leaving = true;
-						leaveTimer = 0;
+			return traders.Count > 0;
+		}
 
-						foreach (Trader trader in traders) {
-							List<TileManager.Tile> validLeaveTiles = GameManager.colonyM.colony.map.edgeTiles.Where(t => t.region == trader.overTile.region).ToList();
-							if (validLeaveTiles.Count > 0) {
-								trader.leaveTile = validLeaveTiles[Random.Range(0, validLeaveTiles.Count)];
-								trader.MoveToTile(trader.leaveTile, false);
-							}
-							else {
-								trader.leaveTile = trader.overTile;
-								trader.Remove();
-							}
-						}
-					}
-					else {
-						leaveTimer += 1;
-					}
-				}
+		private void UpdateCaravanLeaveState(SimulationDateTime _) {
+			if (leaving || confirmedResourcesToTrade.Count > 0) {
+				return;
 			}
 
-			return traders.Count > 0;
+			if (leaveTimer >= leaveTimerMax) {
+				leaving = true;
+				leaveTimer = 0;
+
+				foreach (Trader trader in traders) {
+					List<TileManager.Tile> validLeaveTiles = GameManager.colonyM.colony.map.edgeTiles.Where(t => t.region == trader.overTile.region).ToList();
+					if (validLeaveTiles.Count > 0) {
+						trader.leaveTile = validLeaveTiles[Random.Range(0, validLeaveTiles.Count)];
+						trader.MoveToTile(trader.leaveTile, false);
+					} else {
+						trader.leaveTile = trader.overTile;
+						trader.Remove();
+					}
+				}
+			} else {
+				leaveTimer += 1;
+			}
 		}
 
 		public ResourceManager.Inventory GetInventory() {

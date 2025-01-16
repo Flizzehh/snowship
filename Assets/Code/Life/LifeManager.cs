@@ -92,8 +92,8 @@ public class LifeManager : IManager {
 					moveTimer = 0;
 					path.RemoveAt(0);
 				} else {
-					moveSpeedRampingMultiplier = Mathf.Clamp01(moveSpeedRampingMultiplier + GameManager.timeM.deltaTime);
-					moveTimer += 2 * GameManager.timeM.deltaTime * overTile.walkSpeed * moveSpeedMultiplier * moveSpeedRampingMultiplier;
+					moveSpeedRampingMultiplier = Mathf.Clamp01(moveSpeedRampingMultiplier + GameManager.timeM.Time.DeltaTime);
+					moveTimer += 2 * GameManager.timeM.Time.DeltaTime * overTile.walkSpeed * moveSpeedMultiplier * moveSpeedRampingMultiplier;
 				}
 			} else {
 				path.Clear();

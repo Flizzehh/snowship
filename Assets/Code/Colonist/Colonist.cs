@@ -42,31 +42,42 @@ namespace Snowship.NColonist {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);
 
 			foreach (ProfessionPrefab professionPrefab in ProfessionPrefab.professionPrefabs) {
-				professions.Add(new Profession(
+				professions.Add(
+					new Profession(
 						professionPrefab,
 						this,
 						Mathf.RoundToInt(ProfessionPrefab.professionPrefabs.Count / 2f)
-				));
+					));
 			}
 
 			foreach (SkillPrefab skillPrefab in GameManager.colonistM.skillPrefabs) {
-				skills.Add(new SkillInstance(
+				skills.Add(
+					new SkillInstance(
 						this,
 						skillPrefab,
 						true,
 						0
-				));
+					));
 			}
 
 			foreach (NeedPrefab needPrefab in GameManager.colonistM.needPrefabs) {
-				needs.Add(new NeedInstance(
+				needs.Add(
+					new NeedInstance(
 						this,
 						needPrefab
-				));
+					));
 			}
 			needs = needs.OrderBy(need => need.prefab.priority).ToList();
 
 			colonists.Add(this);
+
+			GameManager.timeM.OnTimeChanged += OnTimeChanged;
+		}
+
+		private void OnTimeChanged(SimulationDateTime time) {
+			UpdateNeeds();
+			UpdateMoodModifiers();
+			UpdateMood();
 		}
 
 		public override void Update() {
@@ -81,12 +92,6 @@ namespace Snowship.NColonist {
 
 			if (dead) {
 				return;
-			}
-
-			if (GameManager.timeM.minuteChanged) {
-				UpdateNeeds();
-				UpdateMoodModifiers();
-				UpdateMood();
 			}
 
 			if (overTileChanged) {
@@ -107,8 +112,8 @@ namespace Snowship.NColonist {
 					int inventoryWeight = GetInventory().UsedWeight();
 					int inventoryVolume = GetInventory().UsedVolume();
 					if (validEmptyInventoryContainers.Count > 0
-							&& (((inventoryWeight >= GetInventory().maxWeight) || (inventoryVolume >= GetInventory().maxVolume))
-								|| ((inventoryWeight > 0 || inventoryVolume > 0) && ColonistJob.GetColonistJobsCountForColonist(this) <= 0))
+						&& (inventoryWeight >= GetInventory().maxWeight || inventoryVolume >= GetInventory().maxVolume
+							|| ((inventoryWeight > 0 || inventoryVolume > 0) && ColonistJob.GetColonistJobsCountForColonist(this) <= 0))
 					) {
 						EmptyInventory(validEmptyInventoryContainers);
 					} else {
@@ -227,7 +232,7 @@ namespace Snowship.NColonist {
 
 			float targetMood = Mathf.Clamp(baseMood + moodModifiersSum, 0, 100);
 			float moodChangeAmount = ((targetMood - effectiveMood) / (effectiveMood <= 0f ? 1f : effectiveMood));
-			effectiveMood += moodChangeAmount * GameManager.timeM.deltaTime;
+			effectiveMood += moodChangeAmount * GameManager.timeM.Time.DeltaTime;
 			effectiveMood = Mathf.Clamp(effectiveMood, 0, 100);
 		}
 
@@ -263,7 +268,7 @@ namespace Snowship.NColonist {
 			GameManager.uiMOld.SetJobElements();
 
 			if (colonistJob.job.objectPrefab.type == ResourceManager.ObjectEnum.Sleep) {
-				Debug.Log($"{colonistJob.colonist.name} {GameManager.timeM.GetDateString()} {GameManager.timeM.GetTimeString()}");
+				Debug.Log($"Sleeping: {colonistJob.colonist.name} at {GameManager.timeM.Time.DateString} {GameManager.timeM.Time.TimeString}");
 			}
 		}
 
@@ -313,7 +318,7 @@ namespace Snowship.NColonist {
 			}
 			if (job.prefab.name == "Sleep") {
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
-				job.jobProgress += ((restNeed.GetValue() / restNeed.prefab.baseIncreaseRate) / restNeed.prefab.decreaseRateMultiplier) / TimeManager.permanentTimerMultiplier;
+				job.jobProgress += restNeed.GetValue() / restNeed.prefab.baseIncreaseRate / restNeed.prefab.decreaseRateMultiplier / SimulationDateTime.PermanentTimerMultiplier;
 				job.jobProgress += Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
 			}
 
@@ -342,16 +347,16 @@ namespace Snowship.NColonist {
 					job = null;
 					return;
 				}
-			} else if (job.prefab.name == "Sleep" && GameManager.timeM.minuteChanged) {
+			} else if (job.prefab.name == "Sleep") { // TODO: Check that this still works - (removed timeM.minuteChanged, but added the * DeltaTime instead)
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
-				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier);
+				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier * GameManager.timeM.Time.DeltaTime);
 			}
 
 			if (job.activeObject != null) {
 				job.activeObject.SetActiveSprite(job, true);
 			}
 
-			job.jobProgress -= 1 * GameManager.timeM.deltaTime;
+			job.jobProgress -= 1 * GameManager.timeM.Time.DeltaTime;
 
 			if (job.jobProgress <= 0 || Mathf.Approximately(job.jobProgress, 0)) {
 				job.jobProgress = 0;

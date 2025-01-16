@@ -39,7 +39,7 @@ namespace Snowship.NUI {
 			// SetupCreateColonyUI();
 			// SetupLoadSaveUI();
 
-			SetupGameUI();
+			//SetupGameUI();
 
 			//SetupPauseMenu();
 
@@ -55,30 +55,30 @@ namespace Snowship.NUI {
 
 			//SetPauseMenuActive(false);
 
-			InitializeTileInformation();
-			InitializeSelectedContainerIndicator();
-			InitializeSelectedTradingPostIndicator();
-			InitializeSelectedCraftingObjectIndicator();
-
-			CreateActionsPanel();
-
-			CreateProfessionsMenu();
-			CreateClothesList();
-			CreateResourcesList();
-
-			SetSelectedColonistInformation(false);
-			SetSelectedColonistTab(selectedColonistNeedsSkillsTabButton);
-			SetSelectedTraderMenu();
-			SetSelectedContainerInfo();
-			SetSelectedTradingPostInfo();
-			SetSelectedCraftingObjectPanel();
-
-			// TODO SetTradeMenu();
-
-			SetCaravanElements();
-			SetJobElements();
-
-			SetGameUIActive(false);
+			// InitializeTileInformation();
+			// InitializeSelectedContainerIndicator();
+			// InitializeSelectedTradingPostIndicator();
+			// InitializeSelectedCraftingObjectIndicator();
+			//
+			// CreateActionsPanel();
+			//
+			// CreateProfessionsMenu();
+			// CreateClothesList();
+			// CreateResourcesList();
+			//
+			// SetSelectedColonistInformation(false);
+			// SetSelectedColonistTab(selectedColonistNeedsSkillsTabButton);
+			// SetSelectedTraderMenu();
+			// SetSelectedContainerInfo();
+			// SetSelectedTradingPostInfo();
+			// SetSelectedCraftingObjectPanel();
+			//
+			// // TODO SetTradeMenu();
+			//
+			// SetCaravanElements();
+			// SetJobElements();
+			//
+			// SetGameUIActive(false);
 		}
 
 		/*
@@ -239,8 +239,6 @@ namespace Snowship.NUI {
 
 		private void SetupGameUI() {
 			gameUI = canvas.transform.Find("Game-BackgroundPanel").gameObject;
-
-			gameUI.transform.Find("Disclaimer-Text").GetComponent<Text>().text = gameVersionString;
 
 			tileInformation = gameUI.transform.Find("TileInformation-Panel").gameObject;
 
@@ -416,7 +414,7 @@ namespace Snowship.NUI {
 					}
 				}
 
-				if (professionsMenu.activeSelf) {
+				/*if (professionsMenu.activeSelf) {
 					UpdateProfessionsMenu();
 				}
 
@@ -426,7 +424,7 @@ namespace Snowship.NUI {
 
 				if (resourcesMenuPanel.activeSelf) {
 					UpdateResourcesList();
-				}
+				}*/
 
 				UpdateObjectPrefabButtons();
 			}
@@ -491,13 +489,13 @@ namespace Snowship.NUI {
 				return true;
 			}*/
 
-			if (clothesSearchInputField.isFocused) {
-				return true;
-			}
-
-			if (resourcesSearchInputField.isFocused) {
-				return true;
-			}
+			// if (clothesSearchInputField.isFocused) {
+			// 	return true;
+			// }
+			//
+			// if (resourcesSearchInputField.isFocused) {
+			// 	return true;
+			// }
 
 			return false;
 		}
@@ -1340,6 +1338,7 @@ namespace Snowship.NUI {
 		private readonly List<ReservedResourcesColonistElement> selectedColonistReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
 
 		public void SetSelectedColonistInformation(bool sameColonistSelected) {
+			return;
 			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist) {
 				Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 
@@ -1993,14 +1992,6 @@ namespace Snowship.NUI {
 			}
 
 			LayoutRebuilder.ForceRebuildLayoutImmediate(gameUI.transform.Find("RightList-Panel/RightList-ScrollPanel/RightList-Panel").GetComponent<RectTransform>());
-		}
-
-		public void UpdateDateTimeInformation() {
-			dateTimeInformationPanel.transform.Find("DateTimeInformation-Speed-Text").GetComponent<Text>().text = GameManager.timeM.GetTimeModifier() > 0 ? new string('>', GameManager.timeM.GetTimeModifier()) : "-";
-			dateTimeInformationPanel.transform.Find("DateTimeInformation-TimeDayNight-Panel/DateTimeInformation-Time-Panel/DateTimeInformation-Time-Text").GetComponent<Text>().text = $"{(Time.Time.Hour < 10 ? $"0{Time.Time.Hour}" : Time.Time.Hour)}:{(Time.Time.Minute < 10 ? $"0{Time.Time.Minute}" : Time.Time.Minute)}";
-			dateTimeInformationPanel.transform.Find("DateTimeInformation-TimeDayNight-Panel/DateTimeInformation-DayNight-Panel/DateTimeInformation-DayNight-Text").GetComponent<Text>().text = $"{GameManager.timeM.GetDayNightString()}";
-			dateTimeInformationPanel.transform.Find("DateTimeInformation-Date-Text").GetComponent<Text>().text = $"{GameManager.timeM.GetDayWithSuffix()} of {Time.Time.Season}";
-			dateTimeInformationPanel.transform.Find("DateTimeInformation-Year-Text").GetComponent<Text>().text = $"Year {(Time.Time.Year <= 9 ? $"0{Time.Time.Year}" : Time.Time.Year)}";
 		}
 
 		public class SelectionSizePanel {

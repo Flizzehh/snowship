@@ -1127,7 +1127,7 @@ public class TileManager : IManager {
 			} else {
 				sr.color = newColour;
 			}
-			float colourBrightnessMultiplier = Mathf.Lerp(currentHourBrightness, nextHourBrightness, GameManager.timeM.tileBrightnessTime - hour);
+			float colourBrightnessMultiplier = Mathf.Lerp(currentHourBrightness, nextHourBrightness, GameManager.timeM.Time.TileBrightnessTime - hour);
 			sr.color = new Color(sr.color.r * colourBrightnessMultiplier, sr.color.g * colourBrightnessMultiplier, sr.color.b * colourBrightnessMultiplier, 1f);
 
 			if (plant != null) {
@@ -1515,7 +1515,7 @@ public class TileManager : IManager {
 				DetermineVisibleRegionBlocks();
 				UIEvents.UpdateLoadingScreenText("Lighting", "Applying Shadows");
 				await UniTask.NextFrame();
-				SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 			}
 
 			if (mapData.actualMap) {
@@ -2550,7 +2550,7 @@ public class TileManager : IManager {
 						if (range.IsInRange(tile.GetPrecipitation(), tile.temperature)) {
 							tile.SetBiome(biome, setPlant);
 							if (tile.plant != null && tile.plant.small) {
-								tile.plant.growthProgress = UnityEngine.Random.Range(0, TimeManager.dayLengthSeconds * 4);
+								tile.plant.growthProgress = UnityEngine.Random.Range(0, SimulationDateTime.DayLengthSeconds * 4);
 							}
 						}
 					}
@@ -2890,7 +2890,7 @@ public class TileManager : IManager {
 						}
 					}
 				}
-				SetTileBrightness(GameManager.timeM.tileBrightnessTime, false);
+				SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, false);
 			}
 		}
 
@@ -3017,7 +3017,7 @@ public class TileManager : IManager {
 				}
 			}
 			if (setBrightnessAtEnd) {
-				SetTileBrightness(GameManager.timeM.tileBrightnessTime, forceBrightnessUpdate);
+				SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, forceBrightnessUpdate);
 			}
 		}
 

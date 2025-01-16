@@ -13,7 +13,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class ResourceManager : IManager {
+public class ResourceManager : IManager, IDisposable {
+
+	public void Start() {
+		GameManager.timeM.OnTimeChanged += OnTimeChanged;
+	}
+
+	public void Dispose() {
+		GameManager.timeM.OnTimeChanged -= OnTimeChanged;
+	}
+
+	private void OnTimeChanged(SimulationDateTime time) {
+		GrowPlants();
+	}
 
 	public GameObject tilePrefab;
 	public GameObject objectPrefab;
@@ -57,8 +69,6 @@ public class ResourceManager : IManager {
 
 	public void Update() {
 		CalculateResourceTotals();
-
-		GrowPlants();
 
 		foreach (Farm farm in farms) {
 			farm.Update();
@@ -2808,7 +2818,7 @@ public class ResourceManager : IManager {
 					}
 				}
 			}
-			GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+			GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 			litTiles.AddRange(newLitTiles);
 		}
 
@@ -2818,7 +2828,7 @@ public class ResourceManager : IManager {
 			}
 			litTiles.Clear();
 			tile.RemoveLightSourceBrightness(this);
-			GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+			GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 		}
 	}
 
@@ -3171,19 +3181,17 @@ public class ResourceManager : IManager {
 	}
 
 	public void GrowPlants() {
-		if (!GameManager.timeM.GetPaused() && GameManager.timeM.minuteChanged) {
-			List<Plant> growPlants = new List<Plant>();
-			foreach (Plant plant in smallPlants) {
-				plant.growthProgress += 1;
-				if (plant.growthProgress > TimeManager.dayLengthSeconds * 4) {
-					if (UnityEngine.Random.Range(0, 100) < (0.01f * (plant.growthProgress / TimeManager.dayLengthSeconds * 4))) {
-						growPlants.Add(plant);
-					}
+		List<Plant> growPlants = new List<Plant>();
+		foreach (Plant plant in smallPlants) {
+			plant.growthProgress += 1;
+			if (plant.growthProgress > SimulationDateTime.DayLengthSeconds * 4) {
+				if (Random.Range(0, 100) < 0.01f * (plant.growthProgress / SimulationDateTime.DayLengthSeconds * 4)) {
+					growPlants.Add(plant);
 				}
 			}
-			foreach (Plant plant in growPlants) {
-				plant.Grow();
-			}
+		}
+		foreach (Plant plant in growPlants) {
+			plant.Grow();
 		}
 	}
 
@@ -3228,7 +3236,7 @@ public class ResourceManager : IManager {
 		public override void Update() {
 			base.Update();
 
-			if (growTimer >= prefab.growthTimeDays * TimeManager.dayLengthSeconds) {
+			if (growTimer >= prefab.growthTimeDays * SimulationDateTime.DayLengthSeconds) {
 				if (!GameManager.jobM.JobOfTypeExistsAtTile("HarvestFarm", tile)) {
 					GameManager.jobM.CreateJob(
 						new Job(
@@ -3243,7 +3251,7 @@ public class ResourceManager : IManager {
 			} else {
 				growTimer += CalculateGrowthRate();
 
-				int newGrowProgressSpriteIndex = Mathf.FloorToInt((growTimer / ((prefab.growthTimeDays * TimeManager.dayLengthSeconds) + 10)) * growProgressSprites.Count);
+				int newGrowProgressSpriteIndex = Mathf.FloorToInt(growTimer / (prefab.growthTimeDays * SimulationDateTime.DayLengthSeconds + 10) * growProgressSprites.Count);
 				if (newGrowProgressSpriteIndex != growProgressSpriteIndex) {
 					growProgressSpriteIndex = newGrowProgressSpriteIndex;
 					obj.GetComponent<SpriteRenderer>().sprite = growProgressSprites[Mathf.Clamp(growProgressSpriteIndex, 0, maxSpriteIndex)];
@@ -3252,8 +3260,8 @@ public class ResourceManager : IManager {
 		}
 
 		public float CalculateGrowthRate() {
-			float growthRate = GameManager.timeM.deltaTime;
-			growthRate *= Mathf.Max(GameManager.colonyM.colony.map.CalculateBrightnessLevelAtHour(GameManager.timeM.tileBrightnessTime), tile.lightSourceBrightness);
+			float growthRate = GameManager.timeM.Time.DeltaTime;
+			growthRate *= Mathf.Max(GameManager.colonyM.colony.map.CalculateBrightnessLevelAtHour(GameManager.timeM.Time.TileBrightnessTime), tile.lightSourceBrightness);
 			growthRate *= precipitationGrowthMultiplier;
 			growthRate *= temperatureGrowthMultipler;
 			growthRate = Mathf.Clamp(growthRate, 0, 1);

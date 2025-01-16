@@ -82,11 +82,11 @@ namespace Snowship.NJob {
 					if (selectedPrefabPreview.activeSelf) {
 						selectedPrefabPreview.SetActive(false);
 					}
-					GameManager.uiMOld.GetSelectionSizePanel().SetActive(true);
+					// TODO GameManager.uiMOld.GetSelectionSizePanel().SetActive(true);
 				}
 			} else {
 				selectedPrefabPreview.SetActive(false);
-				GameManager.uiMOld.GetSelectionSizePanel().SetActive(false);
+				// TODO GameManager.uiMOld.GetSelectionSizePanel().SetActive(false);
 			}
 		}
 

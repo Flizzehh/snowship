@@ -467,7 +467,7 @@ namespace Snowship.NJob {
 						ResourceManager.PlantPrefab chosenPlantPrefab = GameManager.resourceM.GetPlantPrefabByEnum(chosenPlantEnum);
 
 						job.tile.SetPlant(false, new ResourceManager.Plant(chosenPlantPrefab, job.tile, true, false, job.variation.plants[chosenPlantPrefab]));
-						GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+						GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 					}
 				}
 			},

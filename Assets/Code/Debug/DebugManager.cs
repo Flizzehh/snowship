@@ -885,7 +885,7 @@ public class DebugManager : IManager {
 						if (selectedTiles.Count > 0) {
 							foreach (TileManager.Tile tile in selectedTiles) {
 								tile.SetPlant(false, new ResourceManager.Plant(plantPrefab, tile, small, true, null));
-								GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+								GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 								if (tile.plant != null) {
 									counter += 1;
 								}
@@ -962,7 +962,7 @@ public class DebugManager : IManager {
 		});
 		commandFunctions.Add(Commands.togglesuncycle, delegate (Commands selectedCommand, List<string> parameters) {
 			if (parameters.Count == 0) {
-				holdHour = GameManager.timeM.tileBrightnessTime;
+				holdHour = GameManager.timeM.Time.TileBrightnessTime;
 				toggleSunCycleToggle = !toggleSunCycleToggle;
 			} else {
 				Output("ERROR: Invalid number of parameters specified.");
@@ -975,7 +975,7 @@ public class DebugManager : IManager {
 					if (time >= 0 && time < 24) {
 						holdHour = time;
 						GameManager.timeM.SetTime(time);
-						GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+						GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 					} else {
 						Output("ERROR: Time out of range.");
 					}
@@ -1013,7 +1013,7 @@ public class DebugManager : IManager {
 					tile.sr.color = Color.white;
 				}
 				GameManager.colonyM.colony.map.Bitmasking(GameManager.colonyM.colony.map.tiles, true, true);
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 			} else {
 				Output("ERROR: Invalid number of parameters specified.");
 			}
@@ -1242,7 +1242,7 @@ public class DebugManager : IManager {
 		});
 		commandFunctions.Add(Commands.viewshadowsfrom, delegate (Commands selectedCommand, List<string> parameters) {
 			if (parameters.Count == 0) {
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 				if (selectedTiles.Count > 0) {
 					foreach (TileManager.Tile tile in selectedTiles) {
 						foreach (KeyValuePair<int, Dictionary<TileManager.Tile, float>> shadowsFromKVP in tile.shadowsFrom) {
@@ -1255,7 +1255,7 @@ public class DebugManager : IManager {
 					Output("No tiles are currently selected.");
 				}
 			} else if (parameters.Count == 1) {
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 				if (selectedTiles.Count > 0) {
 					int hour = -1;
 					if (int.TryParse(parameters[0], out hour)) {
@@ -1280,7 +1280,7 @@ public class DebugManager : IManager {
 		});
 		commandFunctions.Add(Commands.viewshadowsto, delegate (Commands selectedCommand, List<string> parameters) {
 			if (parameters.Count == 0) {
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 				if (selectedTiles.Count > 0) {
 					foreach (TileManager.Tile tile in selectedTiles) {
 						foreach (KeyValuePair<int, List<TileManager.Tile>> shadowsToKVP in tile.shadowsTo) {
@@ -1293,7 +1293,7 @@ public class DebugManager : IManager {
 					Output("No tiles are currently selected.");
 				}
 			} else if (parameters.Count == 1) {
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 				if (selectedTiles.Count > 0) {
 					int hour = -1;
 					if (int.TryParse(parameters[0], out hour)) {
@@ -1318,7 +1318,7 @@ public class DebugManager : IManager {
 		});
 		commandFunctions.Add(Commands.viewblockingfrom, delegate (Commands selectedCommand, List<string> parameters) {
 			if (parameters.Count == 0) {
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 				if (selectedTiles.Count > 0) {
 					foreach (TileManager.Tile tile in selectedTiles) {
 						foreach (KeyValuePair<int, List<TileManager.Tile>> blockingShadowsFromKVP in tile.blockingShadowsFrom) {
@@ -1331,7 +1331,7 @@ public class DebugManager : IManager {
 					Output("No tiles are currently selected.");
 				}
 			} else if (parameters.Count == 1) {
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 				if (selectedTiles.Count > 0) {
 					int hour = -1;
 					if (int.TryParse(parameters[0], out hour)) {
@@ -1394,7 +1394,7 @@ public class DebugManager : IManager {
 			if (parameters.Count == 0) {
 				int numFarmsGrown = 0;
 				foreach (ResourceManager.Farm farm in GameManager.resourceM.farms) {
-					farm.growTimer = farm.prefab.growthTimeDays * (TimeManager.dayLengthSeconds - 1);
+					farm.growTimer = farm.prefab.growthTimeDays * (SimulationDateTime.DayLengthSeconds - 1);
 					farm.Update();
 					numFarmsGrown += 1;
 				}

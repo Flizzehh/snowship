@@ -8,16 +8,24 @@ using UnityEngine;
 
 namespace Snowship.NCaravan {
 
-	public class CaravanManager : IManager {
+	public class CaravanManager : IManager, IDisposable {
 
 		public List<Caravan> caravans = new List<Caravan>();
 		private readonly List<Caravan> removeCaravans = new List<Caravan>();
 
 		public int caravanTimer = 0; // The time since the last caravan visited
-		private static readonly int CaravanTimeMin = TimeManager.dayLengthSeconds * 7; // Caravans will only come once every caravanTimeMin in-game minutes
-		private static readonly int CaravanTimeMax = TimeManager.dayLengthSeconds * 27; // Caravans will definitely come if the caravanTimer is greater than caravanTimeMax
+		private const int CaravanTimeMin = SimulationDateTime.DayLengthSeconds * 7; // Caravans will only come once every caravanTimeMin in-game minutes
+		private const int CaravanTimeMax = SimulationDateTime.DayLengthSeconds * 27; // Caravans will definitely come if the caravanTimer is greater than caravanTimeMax
 
 		public Caravan selectedCaravan;
+
+		public void Awake() {
+			GameManager.timeM.OnTimeChanged += OnTimeChanged;
+		}
+
+		public void Dispose() {
+			GameManager.timeM.OnTimeChanged -= OnTimeChanged;
+		}
 
 		public void Update() {
 			UpdateCaravanTimer();
@@ -45,10 +53,11 @@ namespace Snowship.NCaravan {
 			}
 		}
 
+		private void OnTimeChanged(SimulationDateTime simulationDateTime) {
+			UpdateCaravanTimer();
+		}
+
 		private void UpdateCaravanTimer() {
-			if (GameManager.timeM.GetPaused() || !GameManager.timeM.minuteChanged) {
-				return;
-			}
 
 			caravanTimer += 1;
 

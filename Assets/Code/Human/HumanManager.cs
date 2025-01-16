@@ -207,7 +207,7 @@ public class HumanManager : IManager {
 				}
 				wanderTimer = UnityEngine.Random.Range(10f, 20f);
 			} else {
-				wanderTimer -= 1 * GameManager.timeM.deltaTime;
+				wanderTimer -= 1 * GameManager.timeM.Time.DeltaTime;
 			}
 		}
 

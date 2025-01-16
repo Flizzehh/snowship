@@ -32,7 +32,7 @@ namespace Snowship.NColonist {
 		}
 
 		private void UpdateColonistJobs() {
-			if (!GameManager.timeM.GetPaused()) {
+			if (!GameManager.timeM.Time.Paused) {
 				GameManager.jobM.GiveJobsToColonists();
 			}
 		}
@@ -205,7 +205,7 @@ namespace Snowship.NColonist {
 						break;
 				}
 			}
-			if (!GameManager.timeM.IsDay && positiveRestMoodModifier == null) {
+			if (!GameManager.timeM.Time.IsDay && positiveRestMoodModifier == null) {
 				totalSpecialIncrease += (need.prefab.baseIncreaseRate * 2f);
 			}
 			return totalSpecialIncrease;
@@ -404,121 +404,129 @@ namespace Snowship.NColonist {
 		}
 
 		public static readonly Dictionary<NeedEnum, Func<NeedInstance, bool>> needsValueFunctions = new Dictionary<NeedEnum, Func<NeedInstance, bool>>() {
-		{ NeedEnum.Food, delegate (NeedInstance need) {
-			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectFood" || need.colonist.job.objectPrefab.jobType == "Eat")) {
-				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
-					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate * GameManager.timeM.deltaTime);
-					if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // true, true
-						if (GameManager.timeM.minuteChanged) {
-							need.colonist.ReturnJob();
-							return GameManager.colonistM.GetFood(need, false, false); // true, true - TODO use these once implemented
-						}
-					}
-					return false;
-				}
-				if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
-					if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // false, true
-						if (GameManager.timeM.minuteChanged && UnityEngine.Random.Range(0f, 1f) < ((need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue))) {
-							need.colonist.ReturnJob();
-							return GameManager.colonistM.GetFood(need, false, false); // true, false - TODO use these once implemented
-						}
-					}
-					return false;
-				}
-				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.job == null) {
-						if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
-							if (GameManager.timeM.minuteChanged && UnityEngine.Random.Range(0f, 1f) < ((need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue))) {
+			{
+				NeedEnum.Food, delegate(NeedInstance need) {
+					if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectFood" || need.colonist.job.objectPrefab.jobType == "Eat")) {
+						if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
+							need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
+							// TODO Check that this still works properly - (removed timeM.minuteChanged check before each of these 3 blocks)
+							if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // true, true
 								need.colonist.ReturnJob();
-								return GameManager.colonistM.GetFood(need, false, false);
+								return GameManager.colonistM.GetFood(need, false, false); // true, true - TODO use these once implemented
 							}
+							return false;
+						}
+						if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
+							if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // false, true
+								if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue)) {
+									need.colonist.ReturnJob();
+									return GameManager.colonistM.GetFood(need, false, false); // true, false - TODO use these once implemented
+								}
+							}
+							return false;
+						}
+						if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
+							if (need.colonist.job == null) {
+								if (GameManager.colonistM.FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
+									if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
+										need.colonist.ReturnJob();
+										return GameManager.colonistM.GetFood(need, false, false);
+									}
+								}
+							}
+							return false;
 						}
 					}
 					return false;
 				}
-			}
-			return false;
-		} },
-		{ NeedEnum.Water, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectWater" || need.colonist.job.objectPrefab.jobType == "Drink")) {
-				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
-					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate * GameManager.timeM.deltaTime);
-					// TODO Find Water Here (Maximum Priority)
-					return false;
-				}
-				if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
-					// TODO Find Water Here (High Priority)
-					return false;
-				}
-				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.job == null) {
-						// TODO Find Water Here (Low Priority)
+			}, {
+				NeedEnum.Water, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectWater" || need.colonist.job.objectPrefab.jobType == "Drink")) {
+						if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
+							need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
+							// TODO Find Water Here (Maximum Priority)
+							return false;
+						}
+						if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
+							// TODO Find Water Here (High Priority)
+							return false;
+						}
+						if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
+							if (need.colonist.job == null) {
+								// TODO Find Water Here (Low Priority)
+							}
+							return false;
+						}
 					}
 					return false;
 				}
-			}
-			return false;
-		} },
-		{ NeedEnum.Rest, delegate (NeedInstance need) {
-			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "Sleep")) {
-				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
-					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate * GameManager.timeM.deltaTime);
-					if (GameManager.timeM.minuteChanged) {
-						need.colonist.ReturnJob();
-						GameManager.colonistM.GetSleep(need, true);
-					}
-					return false;
-				}
-				if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
-					if (GameManager.timeM.minuteChanged && UnityEngine.Random.Range(0f, 1f) < ((need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue))) {
-						need.colonist.ReturnJob();
-						GameManager.colonistM.GetSleep(need, true);
-					}
-					return false;
-				}
-				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.job == null) {
-						if (GameManager.timeM.minuteChanged && UnityEngine.Random.Range(0f, 1f) < ((need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue))) {
+			}, {
+				NeedEnum.Rest, delegate(NeedInstance need) {
+					if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "Sleep")) {
+						if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
+							need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
 							need.colonist.ReturnJob();
-							GameManager.colonistM.GetSleep(need, false);
+							GameManager.colonistM.GetSleep(need, true);
+							return false;
 						}
+						if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
+							if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue)) {
+								need.colonist.ReturnJob();
+								GameManager.colonistM.GetSleep(need, true);
+							}
+							return false;
+						}
+						if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
+							if (need.colonist.job == null) {
+								if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
+									need.colonist.ReturnJob();
+									GameManager.colonistM.GetSleep(need, false);
+								}
 
+							}
+							return false;
+						}
 					}
 					return false;
 				}
+			}, {
+				NeedEnum.Clothing, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
+			}, {
+				NeedEnum.Shelter, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
+			}, {
+				NeedEnum.Temperature, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
+			}, {
+				NeedEnum.Safety, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
+			}, {
+				NeedEnum.Social, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
+			}, {
+				NeedEnum.Esteem, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
+			}, {
+				NeedEnum.Relaxation, delegate(NeedInstance need) {
+					need.SetValue(0); // Value set to 0 while need not being used
+					return false;
+				}
 			}
-			return false;
-		} },
-		{ NeedEnum.Clothing, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} },
-		{ NeedEnum.Shelter, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} },
-		{ NeedEnum.Temperature, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} },
-		{ NeedEnum.Safety, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} },
-		{ NeedEnum.Social, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} },
-		{ NeedEnum.Esteem, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} },
-		{ NeedEnum.Relaxation, delegate (NeedInstance need) {
-			need.SetValue(0); // Value set to 0 while need not being used
-			return false;
-		} }
-	};
+		};
 
 		/*
 
@@ -935,7 +943,7 @@ namespace Snowship.NColonist {
 			}
 
 			public void Update() {
-				timer -= 1 * GameManager.timeM.deltaTime;
+				timer -= 1 * GameManager.timeM.Time.DeltaTime;
 			}
 		}
 
@@ -1002,7 +1010,7 @@ namespace Snowship.NColonist {
 
 				GameManager.uiMOld.SetColonistElements();
 				GameManager.colonyM.colony.map.Bitmasking(GameManager.colonyM.colony.map.tiles, true, true);
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.tileBrightnessTime, true);
+				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 			}
 		}
 	}
