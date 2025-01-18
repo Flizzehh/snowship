@@ -335,12 +335,12 @@ public class DebugManager : IManager {
 		});
 		commandFunctions.Add(Commands.setneed, delegate (Commands selectedCommand, List<string> parameters) {
 			if (parameters.Count == 2) {
-				ColonistManager.NeedPrefab needPrefab = GameManager.colonistM.needPrefabs.Find(need => need.name == parameters[0]);
+				NeedPrefab needPrefab = NeedPrefab.needPrefabs.Find(need => need.name == parameters[0]);
 				if (needPrefab != null) {
 					if (GameManager.humanM.selectedHuman != null) {
 						if (GameManager.humanM.selectedHuman is Colonist) {
 							Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
-							ColonistManager.NeedInstance needInstance = selectedColonist.needs.Find(need => need.prefab == needPrefab);
+							NeedInstance needInstance = selectedColonist.needs.Find(need => need.prefab == needPrefab);
 							if (needInstance != null) {
 								float newNeedValue = 0;
 								if (float.TryParse(parameters[1], out newNeedValue)) {

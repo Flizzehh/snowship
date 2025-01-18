@@ -101,7 +101,7 @@ namespace Snowship.NPersistence {
 				}
 
 				file.WriteLine(CreateKeyValueString(ColonistProperty.Skills, string.Empty, 1));
-				foreach (ColonistManager.SkillInstance skill in colonist.skills) {
+				foreach (SkillInstance skill in colonist.skills) {
 					file.WriteLine(CreateKeyValueString(SkillProperty.Skill, string.Empty, 2));
 
 					file.WriteLine(CreateKeyValueString(SkillProperty.Type, skill.prefab.type, 3));
@@ -112,7 +112,7 @@ namespace Snowship.NPersistence {
 
 				if (colonist.traits.Count > 0) {
 					file.WriteLine(CreateKeyValueString(ColonistProperty.Traits, string.Empty, 1));
-					foreach (ColonistManager.TraitInstance trait in colonist.traits) {
+					foreach (TraitInstance trait in colonist.traits) {
 						file.WriteLine(CreateKeyValueString(TraitProperty.Trait, string.Empty, 2));
 
 						file.WriteLine(CreateKeyValueString(TraitProperty.Type, trait.prefab.type, 3));
@@ -120,7 +120,7 @@ namespace Snowship.NPersistence {
 				}
 
 				file.WriteLine(CreateKeyValueString(ColonistProperty.Needs, string.Empty, 1));
-				foreach (ColonistManager.NeedInstance need in colonist.needs) {
+				foreach (NeedInstance need in colonist.needs) {
 					file.WriteLine(CreateKeyValueString(NeedProperty.Need, string.Empty, 2));
 
 					file.WriteLine(CreateKeyValueString(NeedProperty.Type, need.prefab.type, 3));
@@ -132,7 +132,7 @@ namespace Snowship.NPersistence {
 
 				if (colonist.moodModifiers.Count > 0) {
 					file.WriteLine(CreateKeyValueString(ColonistProperty.MoodModifiers, string.Empty, 1));
-					foreach (ColonistManager.MoodModifierInstance moodModifier in colonist.moodModifiers) {
+					foreach (MoodModifierInstance moodModifier in colonist.moodModifiers) {
 						file.WriteLine(CreateKeyValueString(MoodModifierProperty.MoodModifier, string.Empty, 2));
 
 						file.WriteLine(CreateKeyValueString(MoodModifierProperty.Type, moodModifier.prefab.type, 3));
@@ -206,13 +206,14 @@ namespace Snowship.NPersistence {
 		}
 
 		public class PersistenceSkill {
-			public ColonistManager.SkillEnum? type;
+
+			public ESkill? type;
 			public int? level;
 			public float? nextLevelExperience;
 			public float? currentExperience;
 
 			public PersistenceSkill(
-				ColonistManager.SkillEnum? type,
+				ESkill? type,
 				int? level,
 				float? nextLevelExperience,
 				float? currentExperience
@@ -225,19 +226,21 @@ namespace Snowship.NPersistence {
 		}
 
 		public class PersistenceTrait {
-			public ColonistManager.TraitEnum? type;
 
-			public PersistenceTrait(ColonistManager.TraitEnum? type) {
+			public ETrait? type;
+
+			public PersistenceTrait(ETrait? type) {
 				this.type = type;
 			}
 		}
 
 		public class PersistenceNeed {
-			public ColonistManager.NeedEnum? type;
+
+			public ENeed? type;
 			public float? value;
 
 			public PersistenceNeed(
-				ColonistManager.NeedEnum? type,
+				ENeed? type,
 				float? value
 			) {
 				this.type = type;
@@ -246,11 +249,12 @@ namespace Snowship.NPersistence {
 		}
 
 		public class PersistenceMoodModifier {
-			public ColonistManager.MoodModifierEnum? type;
+
+			public MoodModifierEnum? type;
 			public float? timeRemaining;
 
 			public PersistenceMoodModifier(
-				ColonistManager.MoodModifierEnum? type,
+				MoodModifierEnum? type,
 				float? timeRemaining
 			) {
 				this.type = type;
@@ -348,7 +352,7 @@ namespace Snowship.NPersistence {
 										switch ((SkillProperty)Enum.Parse(typeof(SkillProperty), skillProperty.Key)) {
 											case SkillProperty.Skill:
 
-												ColonistManager.SkillEnum? skillType = null;
+												ESkill? skillType = null;
 												int? skillLevel = null;
 												float? skillNextLevelExperience = null;
 												float? skillCurrentExperience = null;
@@ -356,7 +360,7 @@ namespace Snowship.NPersistence {
 												foreach (KeyValuePair<string, object> skillSubProperty in (List<KeyValuePair<string, object>>)skillProperty.Value) {
 													switch ((SkillProperty)Enum.Parse(typeof(SkillProperty), skillSubProperty.Key)) {
 														case SkillProperty.Type:
-															skillType = (ColonistManager.SkillEnum)Enum.Parse(typeof(ColonistManager.SkillEnum), (string)skillSubProperty.Value);
+															skillType = (ESkill)Enum.Parse(typeof(ESkill), (string)skillSubProperty.Value);
 															break;
 														case SkillProperty.Level:
 															skillLevel = int.Parse((string)skillSubProperty.Value);
@@ -392,12 +396,12 @@ namespace Snowship.NPersistence {
 										switch ((TraitProperty)Enum.Parse(typeof(TraitProperty), traitProperty.Key)) {
 											case TraitProperty.Trait:
 
-												ColonistManager.TraitEnum? traitType = null;
+												ETrait? traitType = null;
 
 												foreach (KeyValuePair<string, object> traitSubProperty in (List<KeyValuePair<string, object>>)traitProperty.Value) {
 													switch ((TraitProperty)Enum.Parse(typeof(TraitProperty), traitSubProperty.Key)) {
 														case TraitProperty.Type:
-															traitType = (ColonistManager.TraitEnum)Enum.Parse(typeof(ColonistManager.TraitEnum), (string)traitSubProperty.Value);
+															traitType = (ETrait)Enum.Parse(typeof(ETrait), (string)traitSubProperty.Value);
 															break;
 														default:
 															Debug.LogError("Unknown trait sub property: " + traitSubProperty.Key + " " + traitSubProperty.Value);
@@ -421,13 +425,13 @@ namespace Snowship.NPersistence {
 										switch ((NeedProperty)Enum.Parse(typeof(NeedProperty), needProperty.Key)) {
 											case NeedProperty.Need:
 
-												ColonistManager.NeedEnum? needType = null;
+												ENeed? needType = null;
 												float? needValue = null;
 
 												foreach (KeyValuePair<string, object> needSubProperty in (List<KeyValuePair<string, object>>)needProperty.Value) {
 													switch ((NeedProperty)Enum.Parse(typeof(NeedProperty), needSubProperty.Key)) {
 														case NeedProperty.Type:
-															needType = (ColonistManager.NeedEnum)Enum.Parse(typeof(ColonistManager.NeedEnum), (string)needSubProperty.Value);
+															needType = (ENeed)Enum.Parse(typeof(ENeed), (string)needSubProperty.Value);
 															break;
 														case NeedProperty.Value:
 															needValue = float.Parse((string)needSubProperty.Value);
@@ -461,13 +465,13 @@ namespace Snowship.NPersistence {
 										switch ((MoodModifierProperty)Enum.Parse(typeof(MoodModifierProperty), moodModifierProperty.Key)) {
 											case MoodModifierProperty.MoodModifier:
 
-												ColonistManager.MoodModifierEnum? moodModifierType = null;
+												MoodModifierEnum? moodModifierType = null;
 												float? moodModifierTimeRemaining = null;
 
 												foreach (KeyValuePair<string, object> moodModifierSubProperty in (List<KeyValuePair<string, object>>)moodModifierProperty.Value) {
 													switch ((MoodModifierProperty)Enum.Parse(typeof(MoodModifierProperty), moodModifierSubProperty.Key)) {
 														case MoodModifierProperty.Type:
-															moodModifierType = (ColonistManager.MoodModifierEnum)Enum.Parse(typeof(ColonistManager.MoodModifierEnum), (string)moodModifierSubProperty.Value);
+															moodModifierType = (MoodModifierEnum)Enum.Parse(typeof(MoodModifierEnum), (string)moodModifierSubProperty.Value);
 															break;
 														case MoodModifierProperty.TimeRemaining:
 															moodModifierTimeRemaining = float.Parse((string)moodModifierSubProperty.Value);
@@ -570,19 +574,19 @@ namespace Snowship.NPersistence {
 				}
 
 				foreach (PersistenceSkill persistenceSkill in persistenceColonist.persistenceSkills) {
-					ColonistManager.SkillInstance skill = colonist.skills.Find(s => s.prefab.type == persistenceSkill.type);
+					SkillInstance skill = colonist.skills.Find(s => s.prefab.type == persistenceSkill.type);
 					skill.level = persistenceSkill.level.Value;
 					skill.nextLevelExperience = persistenceSkill.nextLevelExperience.Value;
 					skill.currentExperience = persistenceSkill.currentExperience.Value;
 				}
 
 				foreach (PersistenceTrait persistenceTrait in persistenceColonist.persistenceTraits) {
-					ColonistManager.TraitInstance trait = colonist.traits.Find(t => t.prefab.type == persistenceTrait.type);
+					TraitInstance trait = colonist.traits.Find(t => t.prefab.type == persistenceTrait.type);
 					Debug.LogWarning("Load Colonist Traits: " + trait.prefab.type);
 				}
 
 				foreach (PersistenceNeed persistenceNeed in persistenceColonist.persistenceNeeds) {
-					ColonistManager.NeedInstance need = colonist.needs.Find(n => n.prefab.type == persistenceNeed.type);
+					NeedInstance need = colonist.needs.Find(n => n.prefab.type == persistenceNeed.type);
 					need.SetValue(persistenceNeed.value.Value);
 				}
 

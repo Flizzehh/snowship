@@ -50,7 +50,7 @@ namespace Snowship.NColonist {
 					));
 			}
 
-			foreach (SkillPrefab skillPrefab in GameManager.colonistM.skillPrefabs) {
+			foreach (SkillPrefab skillPrefab in SkillPrefab.skillPrefabs) {
 				skills.Add(
 					new SkillInstance(
 						this,
@@ -60,7 +60,7 @@ namespace Snowship.NColonist {
 					));
 			}
 
-			foreach (NeedPrefab needPrefab in GameManager.colonistM.needPrefabs) {
+			foreach (NeedPrefab needPrefab in NeedPrefab.needPrefabs) {
 				needs.Add(
 					new NeedInstance(
 						this,
@@ -166,14 +166,14 @@ namespace Snowship.NColonist {
 
 		private void UpdateNeeds() {
 			foreach (NeedInstance need in needs) {
-				GameManager.colonistM.CalculateNeedValue(need);
+				NeedUtilities.CalculateNeedValue(need);
 				bool checkNeed = false;
 				if (need.colonist.job == null) {
 					checkNeed = true;
 				} else {
 					if (need.colonist.job.prefab.group.name == "Need") {
-						if (GameManager.colonistM.jobToNeedMap.ContainsKey(need.colonist.job.objectPrefab.jobType)) {
-							if (need.prefab.priority < GameManager.colonistM.GetNeedPrefabFromEnum(GameManager.colonistM.jobToNeedMap[need.colonist.job.objectPrefab.jobType]).priority) {
+						if (NeedUtilities.jobToNeedMap.ContainsKey(need.colonist.job.objectPrefab.jobType)) {
+							if (need.prefab.priority < NeedPrefab.GetNeedPrefabFromEnum(NeedUtilities.jobToNeedMap[need.colonist.job.objectPrefab.jobType]).priority) {
 								checkNeed = true;
 							}
 						} else {
@@ -184,7 +184,7 @@ namespace Snowship.NColonist {
 					}
 				}
 				if (checkNeed) {
-					if (needsValueFunctions[need.prefab.type](need)) {
+					if (NeedUtilities.NeedToReactionFunctionMap[need.prefab.type](need)) {
 						break;
 					}
 				}
@@ -192,8 +192,8 @@ namespace Snowship.NColonist {
 		}
 
 		public void UpdateMoodModifiers() {
-			foreach (MoodModifierGroup moodModifierGroup in GameManager.colonistM.moodModifierGroups) {
-				moodModifierFunctions[moodModifierGroup.type](this);
+			foreach (MoodModifierGroup moodModifierGroup in MoodModifierGroup.moodModifierGroups) {
+				MoodModifierUtilities.moodModifierFunctions[moodModifierGroup.type](this);
 			}
 
 			for (int i = 0; i < moodModifiers.Count; i++) {
@@ -207,7 +207,7 @@ namespace Snowship.NColonist {
 		}
 
 		public void AddMoodModifier(MoodModifierEnum moodModifierEnum) {
-			MoodModifierInstance moodModifier = new MoodModifierInstance(this, GameManager.colonistM.GetMoodModifierPrefabFromEnum(moodModifierEnum));
+			MoodModifierInstance moodModifier = new MoodModifierInstance(this, MoodModifierGroup.GetMoodModifierPrefabFromEnum(moodModifierEnum));
 			MoodModifierInstance sameGroupMoodModifier = moodModifiers.Find(findMoodModifier => moodModifier.prefab.group.type == findMoodModifier.prefab.group.type);
 			if (sameGroupMoodModifier != null) {
 				RemoveMoodModifier(sameGroupMoodModifier.prefab.type);
@@ -314,10 +314,10 @@ namespace Snowship.NColonist {
 			job.jobProgress *= (1 + (1 - GetJobSkillMultiplier(job.objectPrefab.jobType)));
 
 			if (job.prefab.name == "Eat") {
-				job.jobProgress += needs.Find(need => need.prefab.type == NeedEnum.Food).GetValue();
+				job.jobProgress += needs.Find(need => need.prefab.type == ENeed.Food).GetValue();
 			}
 			if (job.prefab.name == "Sleep") {
-				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
+				NeedInstance restNeed = needs.Find(need => need.prefab.type == ENeed.Rest);
 				job.jobProgress += restNeed.GetValue() / restNeed.prefab.baseIncreaseRate / restNeed.prefab.decreaseRateMultiplier / SimulationDateTime.PermanentTimerMultiplier;
 				job.jobProgress += Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
 			}
@@ -348,7 +348,7 @@ namespace Snowship.NColonist {
 					return;
 				}
 			} else if (job.prefab.name == "Sleep") { // TODO: Check that this still works - (removed timeM.minuteChanged, but added the * DeltaTime instead)
-				NeedInstance restNeed = needs.Find(need => need.prefab.type == NeedEnum.Rest);
+				NeedInstance restNeed = needs.Find(need => need.prefab.type == ENeed.Rest);
 				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier * GameManager.timeM.Time.DeltaTime);
 			}
 
@@ -411,11 +411,11 @@ namespace Snowship.NColonist {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
 			if (storedJob != null) {
-				if (GameManager.colonistM.jobToNeedMap.ContainsKey(storedJob.objectPrefab.jobType) || !storedJob.prefab.returnable) {
+				if (NeedUtilities.jobToNeedMap.ContainsKey(storedJob.objectPrefab.jobType) || !storedJob.prefab.returnable) {
 					storedJob.Remove();
 					storedJob = null;
 					if (job != null) {
-						if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
+						if (NeedUtilities.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
 							job.Remove();
 						}
 						job = null;
@@ -440,7 +440,7 @@ namespace Snowship.NColonist {
 					job = null;
 				}
 			} else if (job != null) {
-				if (GameManager.colonistM.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
+				if (NeedUtilities.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
 					job.Remove();
 					if (job.jobUIElement != null) {
 						job.jobUIElement.Remove();
@@ -500,7 +500,7 @@ namespace Snowship.NColonist {
 			return professions.Find(p => p.prefab.type == type);
 		}
 
-		public SkillInstance GetSkillFromEnum(SkillEnum type) {
+		public SkillInstance GetSkillFromEnum(ESkill type) {
 			return skills.Find(s => s.prefab.type == type);
 		}
 
@@ -545,7 +545,7 @@ namespace Snowship.NColonist {
 
 			} else {
 
-				ResourceManager.Container container = FindClosestResourceAmountInContainers(this, new ResourceManager.ResourceAmount(clothing, 1));
+				ResourceManager.Container container = NeedUtilities.FindClosestResourceAmountInContainers(this, new ResourceManager.ResourceAmount(clothing, 1));
 
 				if (container != null) {
 

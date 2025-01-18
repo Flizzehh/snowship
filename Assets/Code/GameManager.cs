@@ -90,10 +90,10 @@ public class GameManager : MonoBehaviour {
 		humanM.CreateNames();
 		humanM.CreateHumanSprites();
 
-		colonistM.CreateColonistSkills(); // Skills must currently be ahead of professions to determine skill-profession relationship
+		SkillPrefab.CreateColonistSkills(); // TODO (Solution: Use string references which can be converted to the correct Prefab obj when needed) Skills must currently be ahead of professions to determine skill-profession relationship
 		ProfessionPrefab.CreateProfessionPrefabs();
-		colonistM.CreateColonistNeeds();
-		colonistM.CreateMoodModifiers();
+		NeedPrefab.CreateColonistNeeds();
+		MoodModifierGroup.CreateMoodModifiers();
 
 		foreach (IManager manager in managers) {
 			manager.Awake();

@@ -619,7 +619,7 @@ namespace Snowship.NJob {
 			} else {
 				cost += PathManager.RegionBlockDistance(job.tile.regionBlock, colonist.overTile.regionBlock, true, true, true);
 			}
-			ColonistManager.SkillInstance skill = colonist.GetSkillFromJobType(job.objectPrefab.jobType);
+			SkillInstance skill = colonist.GetSkillFromJobType(job.objectPrefab.jobType);
 			if (skill != null) {
 				cost -= skill.CalculateTotalSkillLevel() * 5f;
 			}

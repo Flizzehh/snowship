@@ -1083,10 +1083,10 @@ namespace Snowship.NUI {
 
 		public class SkillElement {
 			public Colonist colonist;
-			public ColonistManager.SkillInstance skill;
+			public SkillInstance skill;
 			public GameObject obj;
 
-			public SkillElement(Colonist colonist, ColonistManager.SkillInstance skill, Transform parent) {
+			public SkillElement(Colonist colonist, SkillInstance skill, Transform parent) {
 				this.colonist = colonist;
 				this.skill = skill;
 
@@ -1102,7 +1102,7 @@ namespace Snowship.NUI {
 				obj.transform.Find("Level").GetComponent<Text>().text = skill.level + "." + Mathf.RoundToInt(skill.currentExperience / skill.nextLevelExperience * 100f);
 				obj.transform.Find("Experience-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(skill.currentExperience / skill.nextLevelExperience * 100f);
 
-				ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(skill.prefab);
+				SkillInstance highestSkillInstance = SkillInstance.GetBestColonistAtSkill(skill.prefab);
 
 				if (highestSkillInstance != null) {
 					obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((float)skill.level / (highestSkillInstance.level > 0 ? highestSkillInstance.level : 1) * 100f);
@@ -1247,10 +1247,11 @@ namespace Snowship.NUI {
 		}
 
 		public class NeedElement {
-			public ColonistManager.NeedInstance needInstance;
+
+			public NeedInstance needInstance;
 			public GameObject obj;
 
-			public NeedElement(ColonistManager.NeedInstance needInstance, Transform parent) {
+			public NeedElement(NeedInstance needInstance, Transform parent) {
 				this.needInstance = needInstance;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/NeedElement-Panel"), parent, false);
@@ -1270,10 +1271,11 @@ namespace Snowship.NUI {
 		}
 
 		public class MoodModifierElement {
-			public ColonistManager.MoodModifierInstance moodModifierInstance;
+
+			public MoodModifierInstance moodModifierInstance;
 			public GameObject obj;
 
-			public MoodModifierElement(ColonistManager.MoodModifierInstance moodModifierInstance, Transform parent) {
+			public MoodModifierElement(MoodModifierInstance moodModifierInstance, Transform parent) {
 				this.moodModifierInstance = moodModifierInstance;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/MoodModifierElement-Panel"), parent, false);
@@ -1422,8 +1424,8 @@ namespace Snowship.NUI {
 				}
 
 				selectedColonistNeedElements.Clear();
-				List<ColonistManager.NeedInstance> sortedNeeds = selectedColonist.needs.OrderByDescending(need => need.GetValue()).ToList();
-				foreach (ColonistManager.NeedInstance need in sortedNeeds) {
+				List<NeedInstance> sortedNeeds = selectedColonist.needs.OrderByDescending(need => need.GetValue()).ToList();
+				foreach (NeedInstance need in sortedNeeds) {
 					selectedColonistNeedElements.Add(new NeedElement(need, selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/Needs-ScrollPanel/NeedsList-Panel")));
 				}
 			}
@@ -1436,7 +1438,7 @@ namespace Snowship.NUI {
 				}
 
 				selectedColonistMoodModifierElements.Clear();
-				foreach (ColonistManager.MoodModifierInstance moodModifier in selectedColonist.moodModifiers) {
+				foreach (MoodModifierInstance moodModifier in selectedColonist.moodModifiers) {
 					selectedColonistMoodModifierElements.Add(new MoodModifierElement(moodModifier, selectedColonistMoodModifiersPanel.transform.Find("MoodModifier-ScrollPanel/MoodModifierList-Panel")));
 				}
 			}
@@ -1449,8 +1451,8 @@ namespace Snowship.NUI {
 				}
 
 				selectedColonistSkillElements.Clear();
-				List<ColonistManager.SkillInstance> sortedSkills = selectedColonist.skills.OrderByDescending(skill => skill.CalculateTotalSkillLevel()).ToList();
-				foreach (ColonistManager.SkillInstance skill in sortedSkills) {
+				List<SkillInstance> sortedSkills = selectedColonist.skills.OrderByDescending(skill => skill.CalculateTotalSkillLevel()).ToList();
+				foreach (SkillInstance skill in sortedSkills) {
 					selectedColonistSkillElements.Add(new SkillElement(selectedColonist, skill, selectedColonistNeedsSkillsPanel.transform.Find("Skills-Panel/Skills-ScrollPanel/SkillsList-Panel")));
 				}
 			}
@@ -2320,12 +2322,12 @@ namespace Snowship.NUI {
 
 				button.transform.Find("Text").GetComponent<Text>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), (priority - 1f) / (ProfessionPrefab.maxPriority - 1f));
 
-				ColonistManager.SkillInstance highestSkillInstance = GameManager.colonistM.FindHighestSkillInstance(GameManager.colonistM.GetSkillPrefabFromEnum(profession.prefab.relatedSkill));
+				SkillInstance highestSkillInstance = SkillInstance.GetBestColonistAtSkill(SkillPrefab.GetSkillPrefabFromEnum(profession.prefab.relatedSkill));
 
 				if (highestSkillInstance.colonist == profession.colonist) {
 					button.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightYellow);
 				} else {
-					ColonistManager.SkillInstance skillInstance = profession.colonist.GetSkillFromEnum(profession.prefab.relatedSkill);
+					SkillInstance skillInstance = profession.colonist.GetSkillFromEnum(profession.prefab.relatedSkill);
 
 					button.GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), skillInstance.CalculateTotalSkillLevel() / (highestSkillInstance.CalculateTotalSkillLevel() > 0 ? highestSkillInstance.CalculateTotalSkillLevel() : 1));
 				}

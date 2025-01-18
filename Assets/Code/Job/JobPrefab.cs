@@ -679,7 +679,7 @@ namespace Snowship.NJob {
 					delegate (Job job, Colonist colonist) {
 
 						List<ResourceManager.ResourceAmount> resourcesToEat = colonist.GetInventory().resources.Where(r => r.resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(r => ((ResourceManager.Food)r.resource).nutrition).ToList();
-						ColonistManager.NeedInstance foodNeed = colonist.needs.Find(need => need.prefab.type == ColonistManager.NeedEnum.Food);
+						NeedInstance foodNeed = colonist.needs.Find(need => need.prefab.type == ENeed.Food);
 
 						float startingFoodNeedValue = foodNeed.GetValue();
 						foreach (ResourceManager.ResourceAmount ra in resourcesToEat) {
@@ -702,9 +702,9 @@ namespace Snowship.NJob {
 
 						float amountEaten = startingFoodNeedValue - foodNeed.GetValue();
 						if (amountEaten >= 15 && foodNeed.GetValue() <= -10) {
-							colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Stuffed);
+							colonist.AddMoodModifier(MoodModifierEnum.Stuffed);
 						} else if (amountEaten >= 15) {
-							colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Full);
+							colonist.AddMoodModifier(MoodModifierEnum.Full);
 						}
 
 						if (foodNeed.GetValue() < 0) {
@@ -720,10 +720,10 @@ namespace Snowship.NJob {
 								}
 								return false;
 							}) == null) {
-								colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteWithoutATable);
+								colonist.AddMoodModifier(MoodModifierEnum.AteWithoutATable);
 							}
 						} else {
-							colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.AteOnTheFloor);
+							colonist.AddMoodModifier(MoodModifierEnum.AteOnTheFloor);
 						}
 					}
 				}
@@ -736,12 +736,12 @@ namespace Snowship.NJob {
 						if (targetSleepSpot != null) {
 							targetSleepSpot.StopSleeping();
 							if (targetSleepSpot.prefab.restComfortAmount >= 10) {
-								colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.WellRested);
+								colonist.AddMoodModifier(MoodModifierEnum.WellRested);
 							} else {
-								colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Rested);
+								colonist.AddMoodModifier(MoodModifierEnum.Rested);
 							}
 						} else {
-							colonist.AddMoodModifier(ColonistManager.MoodModifierEnum.Rested);
+							colonist.AddMoodModifier(MoodModifierEnum.Rested);
 						}
 						foreach (ResourceManager.SleepSpot sleepSpot in GameManager.resourceM.sleepSpots) {
 							if (sleepSpot.occupyingColonist == colonist) {

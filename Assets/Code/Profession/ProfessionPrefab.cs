@@ -19,7 +19,7 @@ namespace Snowship.NProfession {
 
 		public List<string> jobs;
 
-		public ColonistManager.SkillEnum relatedSkill;
+		public ESkill relatedSkill;
 
 		public ProfessionPrefab(
 			string type,
@@ -30,11 +30,11 @@ namespace Snowship.NProfession {
 
 			this.jobs = jobs;
 
-			relatedSkill = (ColonistManager.SkillEnum)Enum.Parse(
-				typeof(ColonistManager.SkillEnum),
-				Enum.GetNames(typeof(ColonistManager.SkillEnum)).ToList().Find(skillEnumString => type.ToString() == skillEnumString)
+			relatedSkill = (ESkill)Enum.Parse(
+				typeof(ESkill),
+				Enum.GetNames(typeof(ESkill)).ToList().Find(skillEnumString => type.ToString() == skillEnumString)
 			);
-			GameManager.colonistM.GetSkillPrefabFromEnum(relatedSkill).relatedProfession = type;
+			SkillPrefab.GetSkillPrefabFromEnum(relatedSkill).relatedProfession = type;
 		}
 
 		public static void CreateProfessionPrefabs() {
