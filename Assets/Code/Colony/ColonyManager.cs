@@ -12,12 +12,12 @@ namespace Snowship.NColony {
 			if (!initialized) {
 				this.colony = colony;
 
-				UniTask.WhenAll(GameManager.tileM.Initialize(colony, TileManager.MapInitializeType.NewMap));
+				GameManager.tileM.Initialize(colony, TileManager.MapInitializeType.NewMap).Forget();
 			} else {
 				GameManager.colonistM.SpawnStartColonists(3);
 
 				pColony.CreateColony(colony);
-				UniTask.WhenAll(GameManager.persistenceM.CreateSave(colony));
+				GameManager.persistenceM.CreateSave(colony).Forget();
 			}
 		}
 

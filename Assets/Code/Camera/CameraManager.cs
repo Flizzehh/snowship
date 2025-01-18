@@ -3,15 +3,11 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Snowship.NState;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Time = UnityEngine.Time;
 
 namespace Snowship.NCamera {
 
 	public partial class CameraManager : IManager {
-
-
-		private EventSystem eventSystem;
 
 		public GameObject cameraGO;
 		public Camera camera;
@@ -30,8 +26,6 @@ namespace Snowship.NCamera {
 		public event Action<float> OnCameraZoomChanged;
 
 		public void Awake() {
-
-			eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
 			cameraGO = GameObject.Find("Camera");
 			camera = cameraGO.GetComponent<Camera>();

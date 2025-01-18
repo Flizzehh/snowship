@@ -1,13 +1,12 @@
-﻿using System;
-using Snowship.NUI.Generic;
+﻿using Snowship.NUI.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Snowship.NUI.Simulation.SimulationUI {
 	public class UISimulationView : UIView {
 
 		[Header("General")]
-		[SerializeField] private Text disclaimerText;
+		[SerializeField] private TMP_Text disclaimerText;
 
 		public override void OnOpen() {
 

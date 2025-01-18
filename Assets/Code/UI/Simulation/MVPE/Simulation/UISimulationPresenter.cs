@@ -17,6 +17,8 @@ namespace Snowship.NUI.Simulation.SimulationUI {
 			GameManager.inputM.InputSystemActions.Simulation.Escape.performed += OnEscapePerformed;
 
 			View.SetDisclaimerText($"Lumi Games (Snowship {PersistenceManager.GameVersion.text})");
+
+			SetupChildUIs().Forget();
 		}
 
 		public override void OnClose() {
@@ -26,6 +28,10 @@ namespace Snowship.NUI.Simulation.SimulationUI {
 		private void OnEscapePerformed(InputAction.CallbackContext callbackContext) {
 			// TODO Once setup, de-select items from SelectionManager in a FIFO format, and if none remain, then open the PauseMenu
 			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.PauseMenu, ETransitionUIAction.Hide));
+		}
+
+		private async UniTask SetupChildUIs() {
+			await GameManager.uiM.OpenViewAsync<UIDateTime.UIDateTime>(this);
 		}
 
 	}

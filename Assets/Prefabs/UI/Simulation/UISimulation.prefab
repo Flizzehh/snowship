@@ -3760,7 +3760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a64de388ea4f60ae56846bf9a89afb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disclaimerText: {fileID: 0}
+  disclaimerText: {fileID: 5709190792682864741}
 --- !u!1 &4573636158211772274
 GameObject:
   m_ObjectHideFlags: 0

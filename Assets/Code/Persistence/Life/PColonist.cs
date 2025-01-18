@@ -607,7 +607,7 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			GameManager.uiMOld.SetColonistElements();
+			//GameManager.uiMOld.SetColonistElements();
 		}
 
 	}

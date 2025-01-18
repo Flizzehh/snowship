@@ -18,7 +18,7 @@ namespace Snowship.NTime {
 		public float TileBrightnessTime => (float)Math.Round(Hour + Minute / 60f, 2);
 
 		// Time Modifier
-		public bool Paused;
+		public bool Paused = true;
 		public float DeltaTime;
 		public int TimeModifier { get; set; } = 0;
 		public int PreviousTimeModifier { get; set; } = 0;
@@ -27,6 +27,7 @@ namespace Snowship.NTime {
 		public const int DayLengthSeconds = 1440; // Number of seconds in 1 in-game day
 		public const int PermanentDeltaTimeMultiplier = 2;
 		public const int PermanentTimerMultiplier = 2;
+		public const int TimeModifierMax = 3;
 
 		// Date/Time Strings
 		public string Hour12String => $"{Hour12}:{(Minute < 10 ? $"0{Minute}" : Minute)} {(Hour is < 12 or > 23 ? "AM" : "PM")}";

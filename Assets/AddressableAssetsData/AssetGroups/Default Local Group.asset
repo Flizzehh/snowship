@@ -55,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb4110b3d51cbd643a194d51dc84552b
+    m_Address: UI/UIDateTime
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: efedd53ee1e0303488385c3716204e94
     m_Address: UI/UICreateColony
     m_ReadOnly: 0

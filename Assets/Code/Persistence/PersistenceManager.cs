@@ -136,8 +136,6 @@ namespace Snowship.NPersistence {
 
 				string saveDirectoryPath = Directory.GetParent(persistenceSave.path)?.FullName;
 
-				GameManager.timeM.SetPaused(true);
-
 				loadingState = LoadingState.LoadingCamera;
 				UIEvents.UpdateLoadingScreenText("Loading Camera", string.Empty);
 				yield return null;

@@ -997,10 +997,10 @@ public class ResourceManager : IManager, IDisposable {
 			}
 
 			GameManager.resourceM.CalculateResourceTotals();
-			GameManager.uiMOld.SetSelectedColonistInformation(true);
-			GameManager.uiMOld.SetSelectedTraderMenu();
-			GameManager.uiMOld.SetSelectedContainerInfo();
-			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+			//GameManager.uiMOld.SetSelectedColonistInformation(true);
+			//GameManager.uiMOld.SetSelectedTraderMenu();
+			//GameManager.uiMOld.SetSelectedContainerInfo();
+			//GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			ColonistJob.UpdateColonistJobs();
 
 			//return remainingAmount;

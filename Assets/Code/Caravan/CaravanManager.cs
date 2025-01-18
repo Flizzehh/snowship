@@ -28,8 +28,6 @@ namespace Snowship.NCaravan {
 		}
 
 		public void Update() {
-			UpdateCaravanTimer();
-
 			foreach (Caravan caravan in caravans) {
 				if (!caravan.Update()) {
 					removeCaravans.Add(caravan);

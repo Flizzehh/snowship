@@ -1,6 +1,6 @@
 ﻿using Snowship.NState;
-using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Snowship.NCamera {
@@ -27,7 +27,7 @@ namespace Snowship.NCamera {
 
 		private void OnMoveCameraPerformed(InputAction.CallbackContext callbackContext) {
 
-			if (eventSystem.currentSelectedGameObject && eventSystem.currentSelectedGameObject.GetComponent<TMP_InputField>()) {
+			if (GameManager.inputM.IsPlayerTyping()) {
 				return;
 			}
 
@@ -45,7 +45,7 @@ namespace Snowship.NCamera {
 
 		private void OnZoomCameraPerformed(InputAction.CallbackContext callbackContext) {
 
-			if (eventSystem.IsPointerOverGameObject()) {
+			if (EventSystem.current.IsPointerOverGameObject()) {
 				return;
 			}
 

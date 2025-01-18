@@ -1,4 +1,6 @@
 ﻿using System;
+using TMPro;
+using UnityEngine.EventSystems;
 
 namespace Snowship.NInput {
 	public class InputManager : IManager {
@@ -28,5 +30,8 @@ namespace Snowship.NInput {
 			OnInputSystemDisabled?.Invoke(inputSystemActions);
 		}
 
+		public bool IsPlayerTyping() {
+			return EventSystem.current.currentSelectedGameObject && EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>();
+		}
 	}
 }

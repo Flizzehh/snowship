@@ -12,6 +12,7 @@ namespace Snowship.NUI.Simulation.UIDateTime {
 
 		public override void OnCreate() {
 			GameManager.timeM.OnTimeChanged += OnTimeChanged;
+			OnTimeChanged(GameManager.timeM.Time);
 		}
 
 		public override void OnClose() {

@@ -1008,7 +1008,7 @@ namespace Snowship.NColonist {
 					new Colonist(colonistSpawnTile, 1);
 				}
 
-				GameManager.uiMOld.SetColonistElements();
+				//GameManager.uiMOld.SetColonistElements();
 				GameManager.colonyM.colony.map.Bitmasking(GameManager.colonyM.colony.map.tiles, true, true);
 				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 			}

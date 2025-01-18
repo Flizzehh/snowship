@@ -343,7 +343,7 @@ namespace Snowship.NUI {
 				if (newMouseOverTile != mouseOverTile) {
 					mouseOverTile = newMouseOverTile;
 					//if (!pauseMenu.activeSelf) {
-					UpdateTileInformation();
+					//UpdateTileInformation();
 					//}
 				}
 
