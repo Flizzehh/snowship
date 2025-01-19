@@ -1,5 +1,4 @@
-﻿using Snowship.NUI.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 	public class UILifeNeedElement : UIElement<UILifeNeedElementComponent> {

@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NTime;
-using Snowship.NUI.Generic;
 
 namespace Snowship.NUI.Simulation.UIDateTime {
 

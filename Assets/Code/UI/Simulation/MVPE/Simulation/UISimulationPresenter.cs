@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Snowship.NColonist;
 using Snowship.NPersistence;
 using Snowship.NState;
-using Snowship.NUI.Generic;
+using Snowship.NUI.Simulation.UIColonistInfoPanel;
 using UnityEngine.InputSystem;
 
 namespace Snowship.NUI.Simulation.SimulationUI {
@@ -21,7 +21,7 @@ namespace Snowship.NUI.Simulation.SimulationUI {
 
 			SetupChildUIs().Forget();
 
-			GameManager.humanM.OnHumanSelected += OnHumanSelected;
+			GameManager.humanM.OnHumanSelected += human => OnHumanSelected(human).Forget();
 		}
 
 		public override void OnClose() {
@@ -37,11 +37,13 @@ namespace Snowship.NUI.Simulation.SimulationUI {
 			await GameManager.uiM.OpenViewAsync<UIDateTime.UIDateTime>(this);
 		}
 
-		private void OnHumanSelected(HumanManager.Human selectedHuman) {
-			GameManager.uiM.CloseView<UIColonistInfoPanel.UIColonistInfoPanel>();
-			if (selectedHuman is Colonist) {
-				GameManager.uiM.OpenViewAsync<UIColonistInfoPanel.UIColonistInfoPanel>(this).Forget();
+		private async UniTaskVoid OnHumanSelected(HumanManager.Human selectedHuman) {
+			if (selectedHuman is not Colonist selectedColonist) {
+				GameManager.uiM.CloseView<UIColonistInfoPanel.UIColonistInfoPanel>();
+				return;
 			}
+			UIColonistInfoPanelParameters parameters = new(selectedColonist);
+			await GameManager.uiM.ReopenView<UIColonistInfoPanel.UIColonistInfoPanel>(this, parameters);
 		}
 
 	}

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Snowship.NPersistence;
-using UnityEngine;
+﻿using Snowship.NPersistence;
 
 public class UniverseManager : IManager {
 

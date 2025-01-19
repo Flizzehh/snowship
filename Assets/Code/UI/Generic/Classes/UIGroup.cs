@@ -1,41 +1,49 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Snowship.NUI.Generic {
+namespace Snowship.NUI
+{
 	public class UIGroup<TConfig, TView, TPresenter> : IUIGroup
 		where TConfig : IUIConfig
 		where TView : IUIView
-		where TPresenter : IUIPresenter {
-
+		where TPresenter : IUIPresenter
+	{
 		private readonly TConfig config;
 		private readonly TView view;
 		private readonly TPresenter presenter;
 
-		private readonly IUIGroup parent;
 		private readonly List<IUIGroup> children = new List<IUIGroup>();
 
 		public IUIView View => view;
 		public IUIPresenter Presenter => presenter;
 		public IUIConfig Config => config;
-		public IUIGroup Parent => parent;
+		public IUIGroup Parent { get; }
 
 		public bool IsActive => view.IsActive;
 
-		public UIGroup(TConfig config, TView view, TPresenter presenter, IUIGroup parent) {
+		public UIGroup(
+			TConfig config,
+			TView view,
+			TPresenter presenter,
+			IUIGroup parent
+		) {
 			this.config = config;
 			this.view = view;
 			this.presenter = presenter;
 
-			this.parent = parent;
-
-			OnConstructed();
+			Parent = parent;
 		}
 
-		private void OnConstructed() {
-			parent?.AddChild(this);
+		public virtual void OnCreate() {
+			Parent?.AddChild(this);
 
 			view.OnOpen();
 			presenter.OnCreate();
+		}
+
+		public void OnPostCreate() {
+			view.OnPostOpen();
+			presenter.OnPostCreate();
 		}
 
 		public void SetViewActive(bool active) {
@@ -62,7 +70,7 @@ namespace Snowship.NUI.Generic {
 
 			Object.Destroy(view.Instance);
 
-			parent?.RemoveChild(this);
+			Parent?.RemoveChild(this);
 		}
 
 		public IUIGroup FindGroup(IUIPresenter presenterToFind) {

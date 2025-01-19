@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
-using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.CreateColony;
 using Snowship.NUI.Modules;
 using Snowship.NUtilities;

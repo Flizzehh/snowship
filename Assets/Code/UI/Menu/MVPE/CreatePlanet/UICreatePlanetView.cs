@@ -1,6 +1,5 @@
 ﻿using System;
 using Snowship.NPlanet;
-using Snowship.NUI.Generic;
 using Snowship.NUtilities;
 using TMPro;
 using UnityEngine;

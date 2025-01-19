@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using Snowship.NUI.Generic;
 
 namespace Snowship.NUI.Simulation.DebugConsole {
 

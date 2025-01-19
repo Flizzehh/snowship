@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Snowship.NUI.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Snowship.NColonist;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 	public class UIColonistInfoPanelView : UIView {
-
-		[Header("Primary Information")]
+		[Header("General Information")]
 		[SerializeField] private Image colonistImage; // TODO Turn into prefab to show all layers
 		[SerializeField] private TMP_Text colonistNameText;
 		[SerializeField] private TMP_Text currentActionText;
@@ -80,15 +80,64 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 		public event Action<Button> OnTabSelected;
 
+		private Colonist colonist;
+
 		public override void OnOpen() {
 			needsSkillsTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(needsSkillsTabButton));
 			inventoryTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(inventoryTabButton));
 			clothingTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(clothingTabButton));
-
-			OnTabSelected?.Invoke(needsSkillsTabButton);
 		}
 
-		public override void OnClose() {
+		[SuppressMessage("ReSharper", "ParameterHidesMember")]
+		public void SetColonist(Colonist colonist) {
+			this.colonist = colonist;
+
+			SetupUI();
+		}
+
+		private void SetupUI() {
+			SetupGeneralInformation();
+			SetupNeedsSkillsTab();
+			SetupInventoryTab();
+			SetupClothingTab();
+		}
+
+		private void SetupGeneralInformation() {
+			colonistNameText.SetText(colonist.name);
+		}
+
+		private void SetupNeedsSkillsTab() {
+			SetupNeedsSubPanel();
+			SetupMoodSubPanel();
+			SetupSkillsSubPanel();
+		}
+
+		private void SetupNeedsSubPanel() {
+
+		}
+
+		private void SetupMoodSubPanel() {
+
+		}
+
+		private void SetupSkillsSubPanel() {
+
+		}
+
+		private void SetupInventoryTab() {
+
+		}
+
+		private void SetupClothingTab() {
+			SetupCurrentClothingSubPanel();
+			SetupClothingSelectionSubPanel();
+		}
+
+		private void SetupCurrentClothingSubPanel() {
+
+		}
+
+		private void SetupClothingSelectionSubPanel() {
 
 		}
 

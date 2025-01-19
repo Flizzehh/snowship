@@ -1,7 +1,8 @@
-﻿namespace Snowship.NUI.Generic {
+﻿namespace Snowship.NUI
+{
 	public interface IUIPresenter {
-		public void OnCreate();
-		public void OnClose();
-
+		void OnCreate();
+		void OnPostCreate();
+		void OnClose();
 	}
 }

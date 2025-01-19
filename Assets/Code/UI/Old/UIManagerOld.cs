@@ -1,6 +1,5 @@
 ﻿using Snowship.NJob;
 using Snowship.NProfession;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
@@ -13,7 +12,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
-using Time = Snowship.NTime;
 
 namespace Snowship.NUI {
 	public class UIManagerOld : IManager {

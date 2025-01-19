@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Snowship.NUI.Generic {
+namespace Snowship.NUI {
 	public abstract class UIView : MonoBehaviour, IUIView {
 
 		private GameObject instance;
@@ -15,7 +15,16 @@ namespace Snowship.NUI.Generic {
 			instance.SetActive(active);
 		}
 
-		public abstract void OnOpen();
-		public abstract void OnClose();
+		public virtual void OnOpen() {
+		}
+
+		public virtual void OnOpen(IUIParameters parameters) {
+		}
+
+		public virtual void OnPostOpen() {
+		}
+
+		public virtual void OnClose() {
+		}
 	}
 }

@@ -5,7 +5,6 @@ using Snowship.NProfession;
 using Snowship.NTime;
 using Snowship.NUtilities;
 using UnityEngine;
-using static Snowship.NColonist.ColonistManager;
 
 namespace Snowship.NColonist {
 	public class Colonist : HumanManager.Human {

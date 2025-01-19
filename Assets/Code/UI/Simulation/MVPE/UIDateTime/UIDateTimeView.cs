@@ -1,8 +1,5 @@
-﻿using System;
-using Snowship.NUI.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Snowship.NUI.Simulation.UIDateTime {
 	public class UIDateTimeView : UIView {

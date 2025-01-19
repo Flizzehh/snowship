@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NPersistence;
-using Snowship.NUI.Generic;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;

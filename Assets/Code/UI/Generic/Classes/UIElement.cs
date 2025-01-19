@@ -2,7 +2,7 @@
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
 
-namespace Snowship.NUI.Generic {
+namespace Snowship.NUI {
 	public abstract class UIElement<TComponent> where TComponent : UIElementComponent {
 
 		protected readonly TComponent Component;

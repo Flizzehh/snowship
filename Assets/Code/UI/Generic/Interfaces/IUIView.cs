@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-namespace Snowship.NUI.Generic {
+namespace Snowship.NUI {
 	public interface IUIView {
-		public void OnOpen();
-		public void OnClose();
-		public void SetActive(bool active);
-		public GameObject Instance { get; set; }
-		public bool IsActive { get; }
+
+		void OnOpen();
+		void OnOpen(IUIParameters parameters);
+		void OnPostOpen();
+		void OnClose();
+		void SetActive(bool active);
+		GameObject Instance { get; set; }
+		bool IsActive { get; }
 	}
 }

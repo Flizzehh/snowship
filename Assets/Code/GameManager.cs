@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
 	public static readonly StateManager stateM = new StateManager();
 	public static readonly TileManager tileM = new TileManager();
 	public static readonly TimeManager timeM = new TimeManager();
-	public static readonly UIManager uiM = new UIManager();
+	public static readonly IUIManager uiM = new UIManager();
 	public static readonly UIManagerOld uiMOld = new UIManagerOld();
 	public static readonly UniverseManager universeM = new UniverseManager();
 

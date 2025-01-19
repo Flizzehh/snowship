@@ -3,9 +3,6 @@ using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NCaravan;
 using Snowship.NResource.Models;
-using Snowship.NUI.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace Snowship.NUI.Simulation.TradeMenu {
 	[UsedImplicitly]

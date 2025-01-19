@@ -154,7 +154,7 @@ namespace Snowship.NCaravan {
 		public void SetSelectedCaravan(Caravan selectedCaravan) {
 			this.selectedCaravan = selectedCaravan;
 
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UITradeMenu>(null, true));
+			GameManager.uiM.OpenViewAsync<UITradeMenu>().Forget();
 		}
 	}
 }

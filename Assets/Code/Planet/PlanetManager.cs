@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-
-namespace Snowship.NPlanet {
+﻿namespace Snowship.NPlanet {
 	public class PlanetManager : IManager {
 
 		public Planet planet;

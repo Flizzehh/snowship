@@ -1,6 +1,4 @@
-﻿using Snowship.NUI.Generic;
-
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
+﻿namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 	public class UILifeNeedElementComponent : UIElementComponent {
 
 		public override void OnCreate() {

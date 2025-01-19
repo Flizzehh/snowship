@@ -2,7 +2,6 @@
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NState;
-using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.Settings;
 using Snowship.NUtilities;
 using UnityEngine;

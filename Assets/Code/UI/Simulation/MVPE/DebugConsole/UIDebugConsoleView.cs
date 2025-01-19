@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Snowship.NUI.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

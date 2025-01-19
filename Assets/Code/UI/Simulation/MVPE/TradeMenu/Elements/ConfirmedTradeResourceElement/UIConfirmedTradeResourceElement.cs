@@ -1,5 +1,5 @@
 ﻿using Snowship.NResource.Models;
-using Snowship.NUI.Generic;
+using Snowship.NUI;
 using UnityEngine;
 
 public class UIConfirmedTradeResourceElement : UIElement<UIConfirmedTradeResourceElementComponent> {

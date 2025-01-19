@@ -4,7 +4,6 @@ using Snowship.NColony;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
-using Snowship.NUI.Generic;
 using Snowship.NUI.Modules;
 using Snowship.NUtilities;
 using UnityEngine;

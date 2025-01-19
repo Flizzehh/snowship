@@ -1,5 +1,4 @@
 ﻿using System;
-using Snowship.NUI.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

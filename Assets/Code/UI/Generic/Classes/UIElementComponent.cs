@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Snowship.NUI.Generic {
+namespace Snowship.NUI {
 	public abstract class UIElementComponent : MonoBehaviour {
 		private void OnEnable() {
 			OnCreate();

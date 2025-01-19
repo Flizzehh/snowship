@@ -1,5 +1,4 @@
-﻿using Snowship.NUI.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Snowship.NUI.LoadingScreen {

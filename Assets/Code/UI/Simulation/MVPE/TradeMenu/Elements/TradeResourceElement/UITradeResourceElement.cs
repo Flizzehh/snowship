@@ -1,6 +1,5 @@
 ﻿using System;
 using Snowship.NResource.Models;
-using Snowship.NUI.Generic;
 using Snowship.NUtilities;
 using UnityEngine;
 

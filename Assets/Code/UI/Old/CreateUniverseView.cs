@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using Snowship.NUI.Menu.LoadSave;
-using Snowship.NUtilities;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace Snowship.NUI.Menu.LoadSave {
+﻿namespace Snowship.NUI.Menu.LoadSave {
 
 	/*
 	public class CreateUniverseView : IUIView {

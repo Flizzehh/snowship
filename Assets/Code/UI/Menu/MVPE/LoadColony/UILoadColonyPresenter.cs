@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
-using Snowship.NUI.Generic;
 using Snowship.NUI.Menu.CreateColony;
 using Snowship.NUI.Menu.LoadColony;
 using Snowship.NUI.Modules;

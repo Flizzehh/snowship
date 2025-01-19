@@ -1,6 +1,5 @@
 ﻿using System;
 using Snowship.NPersistence;
-using Snowship.NUI.Generic;
 using UnityEngine;
 
 namespace Snowship.NUI.Menu.LoadColony {
