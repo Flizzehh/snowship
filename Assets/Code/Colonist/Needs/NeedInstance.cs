@@ -23,7 +23,7 @@ namespace Snowship.NColonist {
 			value = Mathf.Clamp(value, 0, prefab.clampValue);
 			roundedValue = Mathf.RoundToInt(value / prefab.clampValue * 100);
 			if (GameManager.humanM.selectedHuman == colonist && Mathf.RoundToInt(oldValue / prefab.clampValue * 100) != roundedValue) {
-				GameManager.uiMOld.RemakeSelectedColonistNeeds();
+				// GameManager.uiMOld.RemakeSelectedColonistNeeds(); // TODO Need Value Updated
 			}
 		}
 

@@ -296,7 +296,7 @@ namespace Snowship.NPersistence {
 			PUniverse.ApplyLoadedUniverse(persistenceUniverse);
 
 			PersistencePlanet persistencePlanet = PPlanet.GetPersistencePlanets().Find(pp => string.Equals(Path.GetFullPath(pp.path), Path.GetFullPath(lastSaveProperties.lastSavePlanetPath + "/planet.snowship"), StringComparison.OrdinalIgnoreCase));
-			await PPlanet.ApplyLoadedPlanet(persistencePlanet);
+			PPlanet.ApplyLoadedPlanet(persistencePlanet);
 
 			PersistenceColony persistenceColony = PColony.GetPersistenceColonies().Find(pc => string.Equals(Path.GetFullPath(pc.path), Path.GetFullPath(lastSaveProperties.lastSaveColonyPath + "/colony.snowship"), StringComparison.OrdinalIgnoreCase));
 			GameManager.planetM.SetSelectedPlanetTile(GameManager.planetM.planet.planetTiles.Find(pt => pt.tile.position == persistenceColony.planetPosition));

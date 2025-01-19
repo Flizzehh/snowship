@@ -178,7 +178,7 @@ namespace Snowship.NUI {
 		private GameObject jobsPanel;
 		private GameObject jobListPanel;
 
-		private GameObject selectedColonistInformationPanel;
+		/*private GameObject selectedColonistInformationPanel;
 
 		private GameObject selectedColonistNeedsSkillsTabButton;
 		private GameObject selectedColonistNeedsSkillsTabButtonLinkPanel;
@@ -193,7 +193,7 @@ namespace Snowship.NUI {
 		private GameObject selectedColonistClothingPanel;
 		private GameObject selectedColonistClothingSelectionPanel;
 		private KeyValuePair<GameObject, GameObject> availableClothingTitleAndList;
-		private KeyValuePair<GameObject, GameObject> takenClothingTitleAndList;
+		private KeyValuePair<GameObject, GameObject> takenClothingTitleAndList;*/
 
 		private GameObject selectedTraderMenu;
 		private GameObject tradeMenu;
@@ -254,6 +254,7 @@ namespace Snowship.NUI {
 			jobListPanel = jobsPanel.transform.Find("JobList-Panel").gameObject;
 			jobsPanel.transform.Find("JobsTitle-Panel/CollapseList-Button").GetComponent<Button>().onClick.AddListener(delegate { SetListPanelCollapsed(jobListPanel, jobsPanel.transform.Find("JobsTitle-Panel/CollapseList-Button/Arrow-Text").GetComponent<Text>()); });
 
+			/*
 			selectedColonistInformationPanel = gameUI.transform.Find("SelectedColonistInfo-Panel").gameObject;
 
 			selectedColonistNeedsSkillsPanel = selectedColonistInformationPanel.transform.Find("SelectedTab-Panel/NeedsSkills-Panel").gameObject;
@@ -279,6 +280,7 @@ namespace Snowship.NUI {
 			selectedColonistClothingTabButton = selectedColonistInformationPanel.transform.Find("TabButton-Panel/Clothing-Button").gameObject;
 			selectedColonistClothingTabButton.GetComponent<Button>().onClick.AddListener(delegate { SetSelectedColonistTab(selectedColonistClothingTabButton); });
 			selectedColonistClothingTabButtonLinkPanel = selectedColonistClothingTabButton.transform.Find("Link-Panel").gameObject;
+			*/
 
 			selectedTraderMenu = gameUI.transform.Find("SelectedTraderMenu-Panel").gameObject;
 			// tradeMenu = gameUI.transform.Find("TradeMenu-Panel").gameObject;
@@ -363,7 +365,7 @@ namespace Snowship.NUI {
 					}
 				}
 
-				UpdateSelectedColonistInformation();
+				// UpdateSelectedColonistInformation();
 				UpdateSelectedTraderMenu();
 				// UpdateTradeMenu();
 
@@ -1317,18 +1319,20 @@ namespace Snowship.NUI {
 		}
 
 		public void SetRightListPanelSize() {
-			RectTransform rightListPanel = gameUI.transform.Find("RightList-Panel").GetComponent<RectTransform>();
-			Vector2 rightListSize = rightListPanel.offsetMin;
-			int verticalOffset = 5; // Nothing active default
-			if (selectedColonistInformationPanel.activeSelf) {
-				verticalOffset = 350;
-			} else if (selectedTraderMenu.activeSelf) {
-				verticalOffset = 100;
-			}
-
-			rightListPanel.offsetMin = new Vector2(rightListSize.x, verticalOffset);
+			// TODO Will be re-worked into a top bar
+			// RectTransform rightListPanel = gameUI.transform.Find("RightList-Panel").GetComponent<RectTransform>();
+			// Vector2 rightListSize = rightListPanel.offsetMin;
+			// int verticalOffset = 5; // Nothing active default
+			// if (selectedColonistInformationPanel.activeSelf) {
+			// 	verticalOffset = 350;
+			// } else if (selectedTraderMenu.activeSelf) {
+			// 	verticalOffset = 100;
+			// }
+			//
+			// rightListPanel.offsetMin = new Vector2(rightListSize.x, verticalOffset);
 		}
 
+		/*
 		private readonly List<NeedElement> selectedColonistNeedElements = new List<NeedElement>();
 
 		private readonly List<MoodModifierElement> selectedColonistMoodModifierElements = new List<MoodModifierElement>();
@@ -1340,7 +1344,6 @@ namespace Snowship.NUI {
 		private readonly List<ReservedResourcesColonistElement> selectedColonistReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
 
 		public void SetSelectedColonistInformation(bool sameColonistSelected) {
-			return;
 			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist) {
 				Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
 
@@ -1604,8 +1607,8 @@ namespace Snowship.NUI {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					human.ChangeClothing(clothing.prefab.appearance, clothing);
 
-					/*GameManager.uiMOld.SetSelectedColonistClothingSelectionPanelActive(false);
-					GameManager.uiMOld.SetSelectedColonistInformation(true);*/
+					// GameManager.uiMOld.SetSelectedColonistClothingSelectionPanelActive(false);
+					// GameManager.uiMOld.SetSelectedColonistInformation(true);
 				});
 			}
 		}
@@ -1700,6 +1703,8 @@ namespace Snowship.NUI {
 				}
 			}
 		}
+
+		*/
 
 		public class ColonistElement {
 			public Colonist colonist;
@@ -2424,6 +2429,7 @@ namespace Snowship.NUI {
 		}
 
 		public void SetSelectedTraderMenu() {
+			return;
 			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
 				Caravan caravan = selectedTrader.caravan;
 

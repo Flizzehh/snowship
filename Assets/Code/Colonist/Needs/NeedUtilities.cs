@@ -9,20 +9,21 @@ namespace Snowship.NColonist {
 		// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
 		public static readonly Dictionary<string, ENeed> jobToNeedMap = new Dictionary<string, ENeed> {
 			{ "Sleep", ENeed.Rest },
-			{ "CollectWater", ENeed.Water },
-			{ "Drink", ENeed.Water },
+			// { "CollectWater", ENeed.Water },
+			// { "Drink", ENeed.Water },
 			{ "CollectFood", ENeed.Food },
 			{ "Eat", ENeed.Food }
 		};
 
 		public static readonly Dictionary<ENeed, Func<NeedInstance, float>> NeedToSpecialValueFunctionMap = new Dictionary<ENeed, Func<NeedInstance, float>> {
 			{ ENeed.Rest, CalculateRestNeedSpecialValueIncrease },
-			{ ENeed.Water, CalculateWaterNeedSpecialValueIncrease },
+			// { ENeed.Water, CalculateWaterNeedSpecialValueIncrease },
 			{ ENeed.Food, CalculateFoodNeedSpecialValueIncrease }
 		};
 
 		public static readonly Dictionary<ENeed, Func<NeedInstance, bool>> NeedToReactionFunctionMap = new Dictionary<ENeed, Func<NeedInstance, bool>> {
 			{ ENeed.Rest, DetermineRestNeedReaction },
+			// { ENeed.Water, null },
 			{ ENeed.Food, DetermineFoodNeedReaction }
 		};
 

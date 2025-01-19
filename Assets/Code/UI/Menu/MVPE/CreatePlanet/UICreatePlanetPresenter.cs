@@ -45,7 +45,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			SetWindDirectionSlider();
 
 			CreatePlanetViewModule();
-			UniTask.WhenAll(CreatePlanetPreview());
+			CreatePlanetPreview();
 
 			Debug.Log(createPlanetData.ToString());
 		}
@@ -162,7 +162,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		private void OnRefreshPlanetButtonClicked() {
 			Debug.Log(createPlanetData.ToString());
-			UniTask.WhenAll(CreatePlanetPreview());
+			CreatePlanetPreview();
 		}
 
 		private void OnRandomizePlanetButtonClicked() {
@@ -183,8 +183,8 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 			Debug.LogError("Clicked loaded colony on new planet, this should not be possible!");
 		}
 
-		private async UniTask CreatePlanetPreview() {
-			Planet planet = await GameManager.planetM.CreatePlanet(createPlanetData);
+		private void CreatePlanetPreview() {
+			Planet planet = GameManager.planetM.CreatePlanet(createPlanetData);
 			planetViewModule.DisplayPlanet(
 				planet,
 				pColony.GetPersistenceColonies(),
@@ -194,7 +194,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		private void RandomizePlanetSettings() {
 			View.SetPlanetSeedInputField($"{Random.Range(int.MinValue, int.MaxValue)}");
-			UniTask.WhenAll(CreatePlanetPreview());
+			CreatePlanetPreview();
 		}
 	}
 }

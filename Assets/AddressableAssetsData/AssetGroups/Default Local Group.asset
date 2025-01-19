@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: bd301d844f272e2409e42eb949b92b5b
   m_SerializeEntries:
+  - m_GUID: 0227b4a9dd7ad3e418a4bc62aa7ca210
+    m_Address: UI/UIColonistInfoPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 13440c2087776ad48b8d3e8b929a53b2
     m_Address: UI/UIPauseMenu
     m_ReadOnly: 0

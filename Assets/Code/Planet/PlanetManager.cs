@@ -15,7 +15,7 @@ namespace Snowship.NPlanet {
 			selectedPlanetTile = planetTile;
 		}
 
-		public async UniTask<Planet> CreatePlanet(CreatePlanetData createPlanetData) {
+		public Planet CreatePlanet(CreatePlanetData createPlanetData) {
 			Planet planet = new Planet(
 				createPlanetData.Name,
 				new TileManager.MapData(

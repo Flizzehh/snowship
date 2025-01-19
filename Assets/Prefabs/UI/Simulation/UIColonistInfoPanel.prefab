@@ -1482,6 +1482,7 @@ GameObject:
   - component: {fileID: 9103755834471193762}
   - component: {fileID: 189598538208588268}
   - component: {fileID: 7568201577889941554}
+  - component: {fileID: 7137329324031305545}
   m_Layer: 5
   m_Name: UIColonistInfoPanel
   m_TagString: Untagged
@@ -1574,6 +1575,56 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7137329324031305545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872614466781604729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36d851efd514dcb9f16529846aa95b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colonistImage: {fileID: 4148137912696898162}
+  colonistNameText: {fileID: 818434175842368485}
+  currentActionText: {fileID: 3763632849089288659}
+  storedActionText: {fileID: 8528586603128699478}
+  affiliationText: {fileID: 7621397705813325319}
+  healthSlider: {fileID: 2915797524978234325}
+  moodSlider: {fileID: 3051085160771533181}
+  inventoryWeightSlider: {fileID: 3237425546289271739}
+  inventoryWeightText: {fileID: 8641102354116492866}
+  inventoryVolumeSlider: {fileID: 883544898089395693}
+  inventoryVolumeText: {fileID: 1895634241214966182}
+  needsSkillsTabButton: {fileID: 5780237207548686958}
+  needsSkillsTab: {fileID: 2655091490746551649}
+  moodCurrentText: {fileID: 2170563369240836178}
+  moodViewButton: {fileID: 6508364741959729989}
+  moodTargetText: {fileID: 6888466122594246008}
+  needsListVerticalLayoutGroup: {fileID: 3350149910395234367}
+  moodPanel: {fileID: 1367346259634566045}
+  moodPanelCloseButton: {fileID: 2105871741196087827}
+  moodListVerticalLayoutGroup: {fileID: 8409537754980531480}
+  skillsListVerticalLayoutGroup: {fileID: 8565688069500220259}
+  inventoryTabButton: {fileID: 3296042394773476489}
+  inventoryTab: {fileID: 5244015336527436282}
+  emptyInventoryButton: {fileID: 7783631266279339380}
+  inventoryListGridLayoutGroup: {fileID: 830198129547237217}
+  clothingTabButton: {fileID: 5008810938213039545}
+  clothingTab: {fileID: 5090789773853866425}
+  colonistClothingImage: {fileID: 5894361159773415537}
+  hatButton: {fileID: 7539322161284725100}
+  scarfButton: {fileID: 3228409583859674867}
+  topButton: {fileID: 4362435313200681682}
+  bottomsButton: {fileID: 8846975236449852245}
+  backpackButton: {fileID: 6075218055684953165}
+  clothingSelectionPanel: {fileID: 7583919015770235272}
+  disrobeButton: {fileID: 8931632127054621651}
+  backButton: {fileID: 6938801575671321699}
+  clothesAvailableGridLayoutGroup: {fileID: 2702611888687049190}
+  clothesTakenGridLayoutGroup: {fileID: 5648388950168209880}
 --- !u!1 &874279643125747938
 GameObject:
   m_ObjectHideFlags: 0
@@ -5983,7 +6034,7 @@ GameObject:
   - component: {fileID: 6588512213560718232}
   - component: {fileID: 1895634241214966182}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ColonistInventoryVolume-Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11642,7 +11693,7 @@ GameObject:
   - component: {fileID: 6853764844582499260}
   - component: {fileID: 8641102354116492866}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ColonistInventoryWeight-Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

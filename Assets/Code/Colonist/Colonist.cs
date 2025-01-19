@@ -214,14 +214,14 @@ namespace Snowship.NColonist {
 			}
 			moodModifiers.Add(moodModifier);
 			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.uiMOld.RemakeSelectedColonistMoodModifiers();
+				//GameManager.uiMOld.RemakeSelectedColonistMoodModifiers(); // TODO Mood Added
 			}
 		}
 
 		public void RemoveMoodModifier(MoodModifierEnum moodModifierEnum) {
 			moodModifiers.Remove(moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.type == moodModifierEnum));
 			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.uiMOld.RemakeSelectedColonistMoodModifiers();
+				// GameManager.uiMOld.RemakeSelectedColonistMoodModifiers(); // TODO Mood Removed
 			}
 		}
 
@@ -396,7 +396,7 @@ namespace Snowship.NColonist {
 
 			ColonistJob.UpdateSingleColonistJobs(this);
 			GameManager.uiMOld.SetJobElements();
-			GameManager.uiMOld.UpdateSelectedColonistInformation();
+			// GameManager.uiMOld.UpdateSelectedColonistInformation(); // TODO Job Finished, Skill Updated
 			GameManager.uiMOld.UpdateSelectedContainerInfo();
 			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			GameManager.uiMOld.UpdateTileInformation();

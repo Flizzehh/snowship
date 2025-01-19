@@ -36,7 +36,7 @@ namespace Snowship.NColonist {
 			}
 			ColonistJob.UpdateColonistJobCosts(colonist);
 			if (GameManager.humanM.selectedHuman == colonist) {
-				GameManager.uiMOld.RemakeSelectedColonistSkills();
+				// GameManager.uiMOld.RemakeSelectedColonistSkills(); // TODO Skill Value Updated
 			}
 		}
 

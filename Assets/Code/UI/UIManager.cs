@@ -18,10 +18,10 @@ namespace Snowship.NUI {
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent = null, bool showParent = true) where TUIConfig : IUIConfig, new() {
 
-			IUIConfig config = new TUIConfig();
-			(IUIView view, IUIPresenter presenter) ui = await config.Open(uiParent);
-
 			IUIGroup parentGroup = FindGroup(parent);
+
+			IUIConfig config = new TUIConfig();
+			(IUIView view, IUIPresenter presenter) ui = await config.Open(parentGroup?.View.Instance.transform ?? uiParent);
 
 			UIGroup<IUIConfig, IUIView, IUIPresenter> group = new UIGroup<IUIConfig, IUIView, IUIPresenter>(
 				config,
@@ -95,6 +95,9 @@ namespace Snowship.NUI {
 
 		public void CloseView<TC>() where TC : IUIConfig {
 			IUIGroup group = FindGroup<TC>();
+			if (group == null) {
+				return;
+			}
 			if (group.Parent == null) {
 				parentGroups.Remove(group);
 			}

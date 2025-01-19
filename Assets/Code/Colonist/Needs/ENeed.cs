@@ -2,15 +2,15 @@
 	public enum ENeed {
 
 		Rest,
-		Water,
+		// Water,
 		Food,
-		Temperature,
-		Shelter,
-		Clothing,
-		Safety,
-		Social,
-		Esteem,
-		Relaxation
+		// Temperature,
+		// Shelter,
+		// Clothing,
+		// Safety,
+		// Social,
+		// Esteem,
+		// Relaxation
 
 	};
 }

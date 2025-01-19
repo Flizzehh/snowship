@@ -13,6 +13,8 @@ public class HumanManager : IManager {
 
 	public List<List<Sprite>> humanMoveSprites = new List<List<Sprite>>();
 
+	public event Action<Human> OnHumanSelected;
+
 	public void CreateNames() {
 		foreach (string name in Resources.Load<TextAsset>(@"Data/names-male").text.Split(' ').ToList()) {
 			maleNames.Add(name.ToLower());
@@ -168,7 +170,7 @@ public class HumanManager : IManager {
 
 				SetColour(overTile.sr.color);
 
-				GameManager.uiMOld.SetSelectedColonistInformation(true);
+				// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Clothing Changed
 			}
 		}
 
@@ -241,9 +243,11 @@ public class HumanManager : IManager {
 
 		SetSelectedHumanIndicator();
 
-		GameManager.uiMOld.SetSelectedColonistInformation(false);
+		//GameManager.uiMOld.SetSelectedColonistInformation(false); // TODO Fire event for human being selected
 		GameManager.uiMOld.SetSelectedTraderMenu();
 		GameManager.uiMOld.SetRightListPanelSize();
+
+		OnHumanSelected?.Invoke(selectedHuman);
 	}
 
 	private GameObject selectedHumanIndicator;

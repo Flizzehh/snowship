@@ -1022,7 +1022,7 @@ public class ResourceManager : IManager, IDisposable {
 				}
 				reservedResources.Add(new ReservedResources(resourcesToReserve, humanReservingResources));
 			}
-			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
 			GameManager.uiMOld.SetSelectedTraderMenu();
 			GameManager.uiMOld.SetSelectedContainerInfo();
 			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
@@ -1039,7 +1039,7 @@ public class ResourceManager : IManager, IDisposable {
 			foreach (ReservedResources rr in reservedResourcesByHuman) {
 				reservedResources.Remove(rr);
 			}
-			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
 			GameManager.uiMOld.SetSelectedTraderMenu();
 			GameManager.uiMOld.SetSelectedContainerInfo();
 			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
@@ -1060,7 +1060,7 @@ public class ResourceManager : IManager, IDisposable {
 				reservedResources.Remove(rrRemove);
 			}
 			reservedResourcesToRemove.Clear();
-			GameManager.uiMOld.SetSelectedColonistInformation(true);
+			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
 			GameManager.uiMOld.SetSelectedTraderMenu();
 			GameManager.uiMOld.SetSelectedContainerInfo();
 			GameManager.uiMOld.UpdateSelectedTradingPostInfo();

@@ -29,15 +29,15 @@ namespace Snowship.NUI.Menu.MainMenu {
 		[SerializeField] private Image mainMenuBackgroundImage;
 		[SerializeField] private RectTransform mainMenuBackgroundRectTransform;
 
-		[SerializeField] private float movementMultiplier = 25f;
-
 		[SerializeField] private Image snowshipLogo;
 		[SerializeField] private RectTransform snowshipLogoRectTransform;
 
 		[SerializeField] private GameObject darkBackground;
 
+		// TODO Background movement
+		/*[SerializeField] private float movementMultiplier = 25f;
 		private Vector2 originalBackgroundPosition;
-		private Resolution screenResolution;
+		private Resolution screenResolution;*/
 
 		public event Action OnNewButtonClicked;
 		public event Action OnContinueButtonClicked;
@@ -52,8 +52,8 @@ namespace Snowship.NUI.Menu.MainMenu {
 			settingsButton.onClick.AddListener(() => OnSettingsButtonClicked?.Invoke());
 			exitButton.onClick.AddListener(() => OnExitButtonClicked?.Invoke());
 
-			originalBackgroundPosition = mainMenuBackgroundImage.rectTransform.pivot;
-			screenResolution = Screen.currentResolution;
+			/*originalBackgroundPosition = mainMenuBackgroundImage.rectTransform.pivot;
+			screenResolution = Screen.currentResolution;*/
 		}
 
 		public override void SetActive(bool active) {

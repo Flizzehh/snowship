@@ -10,6 +10,7 @@ namespace Snowship.NUI.Generic {
 		}
 
 		public bool IsActive => instance.activeSelf;
+
 		public virtual void SetActive(bool active) {
 			instance.SetActive(active);
 		}

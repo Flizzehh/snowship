@@ -21,7 +21,7 @@ namespace Snowship.NColonist {
 						colonist.RemoveMoodModifier(MoodModifierEnum.Tired);
 					}
 				}
-			}, {
+			}, /* {
 				MoodModifierGroupEnum.Water, delegate(Colonist colonist) {
 					NeedInstance waterNeed = colonist.needs.Find(ni => ni.prefab.type == ENeed.Water);
 					if (waterNeed.GetValue() >= waterNeed.prefab.critValue) {
@@ -33,7 +33,7 @@ namespace Snowship.NColonist {
 						colonist.RemoveMoodModifier(MoodModifierEnum.Thirsty);
 					}
 				}
-			}, {
+			}, */ {
 				MoodModifierGroupEnum.Food, delegate(Colonist colonist) {
 					NeedInstance foodNeed = colonist.needs.Find(ni => ni.prefab.type == ENeed.Food);
 					if (foodNeed.GetValue() >= foodNeed.prefab.critValue) {

@@ -87,8 +87,8 @@ namespace Snowship.NPersistence {
 			return persistencePlanet;
 		}
 
-		public async UniTask<Planet> ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
-			Planet planet = await GameManager.planetM.CreatePlanet(
+		public Planet ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
+			Planet planet = GameManager.planetM.CreatePlanet(
 				new CreatePlanetData(
 					persistencePlanet.name,
 					persistencePlanet.seed,

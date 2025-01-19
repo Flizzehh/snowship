@@ -94,6 +94,37 @@ namespace Snowship.NColonist {
 			return needPrefabs.Find(needPrefab => needPrefab.type == (ENeed)Enum.Parse(typeof(ENeed), needTypeString));
 		}
 
+		/*
+
+		1440 seconds per in-game day
+		@ 0.01 BRI ... 14.4 points per in-game day
+		@ 0.05 BRI ... 72 points per in-game day
+		@ 0.1 BRI ... 144 points per in-game day
+
+		Convert days to points between 0-100
+		(days * 1440) * BRI = pointsAfterDays
+
+		Convert points between 0-100 to days
+		(pointsAfterDays / BRI) / 1440 = days
+
+		0	NeedName/
+		1	0.01/		BRI			Base rate of increase per second while conditions met
+		2	false/		AMinVB		Whether there is any action taken at MinV
+		3	0/			MinV		No action
+		4	false/		AMaxVB		Whether there is any action taken at MaxV
+		5	0/			MaxV		No action
+		6	false/		ACVB		Whether there is any action taken at CV
+		7	0/			CV			Value until they begin dying from the need not being fulfilled
+		8	false/		DB			Whether they can die from this need not being fulfilled
+		9	0.0/		DR			Base rate of health loss due to the need not being fulfilled
+		10	100/		ClampV		Value above which the food value will be clamped
+		11	0/			Priority	The priority of fulfilling the requirements of this need over others
+		12	2/			Number of Affected Traits
+		13	TraitName,TraitName/	Names of the affected traits
+		14	1.1,1.1`	Multiplier of the BRI for each trait
+
+		*/
+
 		public static void CreateColonistNeeds() {
 			List<string> needDataStringList = Resources.Load<TextAsset>(@"Data/colonist-needs").text.Replace("\t", string.Empty).Split(new string[] { "<Need>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 			foreach (string singleNeedDataString in needDataStringList) {

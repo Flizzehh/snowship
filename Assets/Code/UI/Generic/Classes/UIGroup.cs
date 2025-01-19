@@ -104,6 +104,7 @@ namespace Snowship.NUI.Generic {
 
 			return null;
 		}
+
 		public IUIGroup FindGroup<TConfigToFind>() where TConfigToFind : IUIConfig {
 
 			if (Config.GetType() == typeof(TConfigToFind)) {
@@ -112,7 +113,7 @@ namespace Snowship.NUI.Generic {
 
 			foreach (IUIGroup child in children) {
 				IUIGroup foundGroup = child.FindGroup<TConfigToFind>();
-				if (foundGroup.Config.GetType() == typeof(TConfigToFind)) {
+				if (foundGroup?.Config.GetType() == typeof(TConfigToFind)) {
 					return foundGroup;
 				}
 			}

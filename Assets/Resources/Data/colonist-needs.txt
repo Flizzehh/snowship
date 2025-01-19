@@ -15,22 +15,6 @@
 	<TraitsAffectingThisNeed>
 	<RelatedJobs>Sleep
 <Need>
-	<Type>Water
-	<BaseIncreaseRate>0.01
-	<DecreaseRateMultiplier>3
-	<MinValueAction>true
-	<MinValue>7.2
-	<MaxValueAction>true
-	<MaxValue>43.2
-	<CritValueAction>true
-	<CritValue>86.4
-	<CanDie>true
-	<HealthDecreaseRate>-0.01
-	<ClampValue>100
-	<Priority>1
-	<TraitsAffectingThisNeed>
-	<RelatedJobs>CollectWater,Drink
-<Need>
 	<Type>Food
 	<BaseIncreaseRate>0.01
 	<DecreaseRateMultiplier>3
@@ -46,51 +30,3 @@
 	<Priority>2
 	<TraitsAffectingThisNeed>Dieter:0.5,Overeater:1.5
 	<RelatedJobs>CollectFood,Eat
-<Need>
-	<Type>Temperature
-	<BaseIncreaseRate>0.01
-	<DecreaseRateMultiplier>3
-	<MinValueAction>false
-	<MinValue>0
-	<MaxValueAction>false
-	<MaxValue>0
-	<CritValueAction>false
-	<CritValue>0
-	<CanDie>false
-	<HealthDecreaseRate>0.0
-	<ClampValue>100
-	<Priority>3
-	<TraitsAffectingThisNeed>
-	<RelatedJobs>
-<Need>
-	<Type>Shelter
-	<BaseIncreaseRate>0.01
-	<DecreaseRateMultiplier>3
-	<MinValueAction>false
-	<MinValue>0
-	<MaxValueAction>false
-	<MaxValue>0
-	<CritValueAction>false
-	<CritValue>0
-	<CanDie>false
-	<HealthDecreaseRate>0.0
-	<ClampValue>100
-	<Priority>4
-	<TraitsAffectingThisNeed>
-	<RelatedJobs>
-<Need>
-	<Type>Clothing
-	<BaseIncreaseRate>0.01
-	<DecreaseRateMultiplier>3
-	<MinValueAction>false
-	<MinValue>0
-	<MaxValueAction>false
-	<MaxValue>0
-	<CritValueAction>true
-	<CritValue>0
-	<CanDie>false
-	<HealthDecreaseRate>0.0
-	<ClampValue>100
-	<Priority>5
-	<TraitsAffectingThisNeed>
-	<RelatedJobs>

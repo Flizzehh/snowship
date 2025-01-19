@@ -52,19 +52,19 @@ namespace Snowship.NUI.Menu.MainMenu {
 		}
 
 		private void OnNewButtonClicked() {
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UICreatePlanet>(this, false));
+			GameManager.uiM.OpenViewAsync<UICreatePlanet>(this, false).Forget();
 		}
 
 		private void OnContinueButtonClicked() {
-			UniTask.WhenAll(GameManager.persistenceM.ContinueFromMostRecentSave());
+			GameManager.persistenceM.ContinueFromMostRecentSave().Forget();
 		}
 
 		private void OnLoadButtonClicked() {
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UILoadColony>(this, false));
+			GameManager.uiM.OpenViewAsync<UILoadColony>(this, false).Forget();
 		}
 
 		private void OnSettingsButtonClicked() {
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UISettings>(this, false));
+			GameManager.uiM.OpenViewAsync<UISettings>(this, false).Forget();
 		}
 
 		private void OnExitButtonClicked() {
