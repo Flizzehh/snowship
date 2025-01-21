@@ -13,11 +13,12 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 		public override void OnCreate() {
 
-			View.SetColonist(Parameters.Colonist);
-
 			View.OnTabSelected += OnTabSelected;
 
 			OnTabSelected(View.ButtonToTabMap.First().button);
+
+			View.SetColonist(Parameters.Colonist);
+			View.SetupUI();
 		}
 
 		private void OnTabSelected(Button tabButton) {
@@ -25,6 +26,5 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 				mapping.tab.SetActive(mapping.button == tabButton);
 			}
 		}
-
 	}
 }

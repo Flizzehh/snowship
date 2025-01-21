@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
@@ -5,6 +6,7 @@ using Snowship.NProfession;
 using Snowship.NTime;
 using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NColonist {
 	public class Colonist : HumanManager.Human {
@@ -33,9 +35,12 @@ namespace Snowship.NColonist {
 
 		// Mood
 		public float baseMood = 100;
-		public float moodModifiersSum = 100;
+		public float moodModifiersSum = 0;
 		public float effectiveMood = 100;
 		public readonly List<MoodModifierInstance> moodModifiers = new List<MoodModifierInstance>();
+		public event Action<MoodModifierInstance> OnMoodAdded;
+		public event Action<MoodModifierInstance> OnMoodRemoved;
+		public event Action<float, float> OnMoodChanged;
 
 		public Colonist(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			obj.transform.SetParent(GameManager.resourceM.colonistParent.transform, false);
@@ -129,8 +134,8 @@ namespace Snowship.NColonist {
 
 			ReturnJob();
 			colonists.Remove(this);
-			GameManager.uiMOld.SetColonistElements();
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetColonistElements(); // TODO Update colonist list
+			// GameManager.uiMOld.SetJobElements();
 			foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
@@ -195,44 +200,48 @@ namespace Snowship.NColonist {
 				MoodModifierUtilities.moodModifierFunctions[moodModifierGroup.type](this);
 			}
 
-			for (int i = 0; i < moodModifiers.Count; i++) {
-				MoodModifierInstance moodModifier = moodModifiers[i];
-				moodModifier.Update();
-				if (moodModifier.timer <= 0) {
-					RemoveMoodModifier(moodModifier.prefab.type);
-					i -= 1;
-				}
-			}
+			// for (int i = 0; i < moodModifiers.Count; i++) {
+			// 	MoodModifierInstance moodModifier = moodModifiers[i];
+			// 	//moodModifier.Update();
+			// 	if (moodModifier.timer <= 0) {
+			// 		RemoveMoodModifier(moodModifier.prefab.type);
+			// 		i -= 1;
+			// 	}
+			// }
 		}
 
 		public void AddMoodModifier(MoodModifierEnum moodModifierEnum) {
-			MoodModifierInstance moodModifier = new MoodModifierInstance(this, MoodModifierGroup.GetMoodModifierPrefabFromEnum(moodModifierEnum));
-			MoodModifierInstance sameGroupMoodModifier = moodModifiers.Find(findMoodModifier => moodModifier.prefab.group.type == findMoodModifier.prefab.group.type);
+			MoodModifierInstance moodToAdd = new(this, MoodModifierGroup.GetMoodModifierPrefabFromEnum(moodModifierEnum));
+			MoodModifierInstance sameGroupMoodModifier = moodModifiers.Find(findMoodModifier => moodToAdd.prefab.group.type == findMoodModifier.prefab.group.type);
 			if (sameGroupMoodModifier != null) {
 				RemoveMoodModifier(sameGroupMoodModifier.prefab.type);
 			}
-			moodModifiers.Add(moodModifier);
-			if (GameManager.humanM.selectedHuman == this) {
-				//GameManager.uiMOld.RemakeSelectedColonistMoodModifiers(); // TODO Mood Added
-			}
+			moodModifiers.Add(moodToAdd);
+			OnMoodAdded?.Invoke(moodToAdd);
 		}
 
 		public void RemoveMoodModifier(MoodModifierEnum moodModifierEnum) {
-			moodModifiers.Remove(moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.type == moodModifierEnum));
-			if (GameManager.humanM.selectedHuman == this) {
-				// GameManager.uiMOld.RemakeSelectedColonistMoodModifiers(); // TODO Mood Removed
-			}
+			MoodModifierInstance moodToRemove = moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.type == moodModifierEnum);
+			moodModifiers.Remove(moodToRemove);
+			OnMoodRemoved?.Invoke(moodToRemove);
 		}
 
 		public void UpdateMood() {
+
+			float previousMood = effectiveMood;
+
 			baseMood = Mathf.Clamp(Mathf.RoundToInt(100 - (needs.Sum(need => (need.GetValue() / (need.prefab.priority + 1))))), 0, 100);
 
 			moodModifiersSum = moodModifiers.Sum(hM => hM.prefab.effectAmount);
 
 			float targetMood = Mathf.Clamp(baseMood + moodModifiersSum, 0, 100);
 			float moodChangeAmount = ((targetMood - effectiveMood) / (effectiveMood <= 0f ? 1f : effectiveMood));
-			effectiveMood += moodChangeAmount * GameManager.timeM.Time.DeltaTime;
+			effectiveMood += moodChangeAmount /* * GameManager.timeM.Time.DeltaTime*/;
 			effectiveMood = Mathf.Clamp(effectiveMood, 0, 100);
+
+			if (Mathf.RoundToInt(previousMood) != Mathf.RoundToInt(effectiveMood)) {
+				OnMoodChanged?.Invoke(effectiveMood, moodModifiersSum);
+			}
 		}
 
 		public List<MoodModifierInstance> FindMoodModifierByGroupEnum(MoodModifierGroupEnum moodModifierGroupEnum, int polarity) {
@@ -264,7 +273,7 @@ namespace Snowship.NColonist {
 			}
 			job.SetColonist(this);
 			MoveToTile(job.tile, !job.tile.walkable);
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetJobElements();
 
 			if (colonistJob.job.objectPrefab.type == ResourceManager.ObjectEnum.Sleep) {
 				Debug.Log($"Sleeping: {colonistJob.colonist.name} at {GameManager.timeM.Time.DateString} {GameManager.timeM.Time.TimeString}");
@@ -323,7 +332,7 @@ namespace Snowship.NColonist {
 
 			job.colonistBuildTime = job.jobProgress;
 
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetJobElements();
 		}
 
 		public void WorkJob() {
@@ -348,7 +357,7 @@ namespace Snowship.NColonist {
 				}
 			} else if (job.prefab.name == "Sleep") { // TODO: Check that this still works - (removed timeM.minuteChanged, but added the * DeltaTime instead)
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == ENeed.Rest);
-				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier * GameManager.timeM.Time.DeltaTime);
+				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier /* * GameManager.timeM.Time.DeltaTime*/);
 			}
 
 			if (job.activeObject != null) {
@@ -394,11 +403,11 @@ namespace Snowship.NColonist {
 			}
 
 			ColonistJob.UpdateSingleColonistJobs(this);
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetJobElements();
 			// GameManager.uiMOld.UpdateSelectedColonistInformation(); // TODO Job Finished, Skill Updated
-			GameManager.uiMOld.UpdateSelectedContainerInfo();
-			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
-			GameManager.uiMOld.UpdateTileInformation();
+			// GameManager.uiMOld.UpdateSelectedContainerInfo();
+			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+			// GameManager.uiMOld.UpdateTileInformation();
 
 			if (storedJob != null) {
 				Update();
@@ -422,17 +431,17 @@ namespace Snowship.NColonist {
 					return;
 				}
 				GameManager.jobM.AddExistingJob(storedJob);
-				if (storedJob.jobUIElement != null) {
-					storedJob.jobUIElement.Remove();
-				}
+				// if (storedJob.jobUIElement != null) {
+				// 	storedJob.jobUIElement.Remove();
+				// }
 				if (storedJob.jobPreview != null) {
 					storedJob.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
 				}
 				storedJob = null;
 				if (job != null) {
-					if (job.jobUIElement != null) {
-						job.jobUIElement.Remove();
-					}
+					// if (job.jobUIElement != null) {
+					// 	job.jobUIElement.Remove();
+					// }
 					if (job.jobPreview != null) {
 						job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
 					}
@@ -441,16 +450,16 @@ namespace Snowship.NColonist {
 			} else if (job != null) {
 				if (NeedUtilities.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
 					job.Remove();
-					if (job.jobUIElement != null) {
-						job.jobUIElement.Remove();
-					}
+					// if (job.jobUIElement != null) {
+					// 	job.jobUIElement.Remove();
+					// }
 					job = null;
 					return;
 				}
 				GameManager.jobM.AddExistingJob(job);
-				if (job.jobUIElement != null) {
-					job.jobUIElement.Remove();
-				}
+				// if (job.jobUIElement != null) {
+				// 	job.jobUIElement.Remove();
+				// }
 				if (job.jobPreview != null) {
 					job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
 				}

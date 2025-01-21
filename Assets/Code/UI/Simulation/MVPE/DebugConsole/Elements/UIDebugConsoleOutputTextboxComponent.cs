@@ -18,7 +18,7 @@ namespace Snowship.NUI.Simulation.DebugConsole {
 
 		}
 
-		public override void OnClose() {
+		protected override void OnClose() {
 
 		}
 

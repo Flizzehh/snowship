@@ -1592,17 +1592,17 @@ MonoBehaviour:
   currentActionText: {fileID: 3763632849089288659}
   storedActionText: {fileID: 8528586603128699478}
   affiliationText: {fileID: 7621397705813325319}
-  healthSlider: {fileID: 2915797524978234325}
-  moodSlider: {fileID: 3051085160771533181}
-  inventoryWeightSlider: {fileID: 3237425546289271739}
+  healthSlider: {fileID: 4749391981504973525}
+  moodSlider: {fileID: 2033233955829638287}
+  inventoryWeightSlider: {fileID: 6462479355643995115}
   inventoryWeightText: {fileID: 8641102354116492866}
-  inventoryVolumeSlider: {fileID: 883544898089395693}
+  inventoryVolumeSlider: {fileID: 1014879046738980429}
   inventoryVolumeText: {fileID: 1895634241214966182}
   needsSkillsTabButton: {fileID: 5780237207548686958}
   needsSkillsTab: {fileID: 2655091490746551649}
   moodCurrentText: {fileID: 2170563369240836178}
   moodViewButton: {fileID: 6508364741959729989}
-  moodTargetText: {fileID: 6888466122594246008}
+  moodModifiersSumText: {fileID: 6888466122594246008}
   needsListVerticalLayoutGroup: {fileID: 3350149910395234367}
   moodPanel: {fileID: 1367346259634566045}
   moodPanelCloseButton: {fileID: 2105871741196087827}
@@ -5530,6 +5530,7 @@ GameObject:
   - component: {fileID: 9002131332785150322}
   - component: {fileID: 883544898089395693}
   - component: {fileID: 4806126835887182537}
+  - component: {fileID: 1014879046738980429}
   m_Layer: 5
   m_Name: ColonistInventoryVolume-Slider
   m_TagString: Untagged
@@ -5624,6 +5625,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!114 &1014879046738980429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2696030953795660520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b4e6605a9247d2a74b68e09b31cd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  valueText: {fileID: 1895634241214966182}
 --- !u!1 &2812198010231813782
 GameObject:
   m_ObjectHideFlags: 0
@@ -11878,6 +11892,7 @@ GameObject:
   m_Component:
   - component: {fileID: 892755995392084134}
   - component: {fileID: 2915797524978234325}
+  - component: {fileID: 4749391981504973525}
   m_Layer: 5
   m_Name: ColonistHealth-Slider
   m_TagString: Untagged
@@ -11954,10 +11969,23 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 50
+  m_Value: 10
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4749391981504973525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7311800281400610096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b4e6605a9247d2a74b68e09b31cd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  valueText: {fileID: 0}
 --- !u!1 &7383016121816575401
 GameObject:
   m_ObjectHideFlags: 0
@@ -12122,6 +12150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8622826473410327649}
   - component: {fileID: 3051085160771533181}
+  - component: {fileID: 2033233955829638287}
   m_Layer: 5
   m_Name: ColonistMood-Slider
   m_TagString: Untagged
@@ -12198,10 +12227,23 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 50
+  m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2033233955829638287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7725163117276203933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b4e6605a9247d2a74b68e09b31cd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  valueText: {fileID: 0}
 --- !u!1 &7783921736578740647
 GameObject:
   m_ObjectHideFlags: 0
@@ -12746,6 +12788,7 @@ GameObject:
   - component: {fileID: 4696903492373700463}
   - component: {fileID: 3237425546289271739}
   - component: {fileID: 1064982837608116271}
+  - component: {fileID: 6462479355643995115}
   m_Layer: 5
   m_Name: ColonistInventoryWeight-Slider
   m_TagString: Untagged
@@ -12822,7 +12865,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 34
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -12840,6 +12883,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!114 &6462479355643995115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8237695794027488132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b4e6605a9247d2a74b68e09b31cd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  valueText: {fileID: 8641102354116492866}
 --- !u!1 &8335141042789241316
 GameObject:
   m_ObjectHideFlags: 0

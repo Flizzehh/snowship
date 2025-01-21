@@ -33,7 +33,7 @@ public class HumanManager : IManager {
 
 	public Human selectedHuman;
 
-	public void Update() {
+	public void OnUpdate() {
 		if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
 			SetSelectedHumanFromClick();
 		}
@@ -147,7 +147,7 @@ public class HumanManager : IManager {
 			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightRed100),
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen100),
-				health
+				Health
 			);
 
 			SetMoveSprite();

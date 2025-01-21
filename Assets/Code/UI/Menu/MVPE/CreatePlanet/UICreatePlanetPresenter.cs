@@ -6,6 +6,7 @@ using Snowship.NUI.Menu.CreateColony;
 using Snowship.NUI.Modules;
 using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NUI.Menu.CreatePlanet {
 
@@ -170,7 +171,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 
 		private void OnCreatePlanetButtonClicked() {
 			pPlanet.CreatePlanet(GameManager.planetM.planet);
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UICreateColony>(this, false));
+			GameManager.uiM.OpenViewAsync<UICreateColony>(this, false).Forget();
 		}
 
 		private void OnPlanetTileClicked(PlanetTile planetTile) {
@@ -192,7 +193,8 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void RandomizePlanetSettings() {
-			View.SetPlanetSeedInputField($"{Random.Range(int.MinValue, int.MaxValue)}");
+			createPlanetData.Seed = CreatePlanetData.GenerateRandomPlanetSeed();
+			View.SetPlanetSeedInputField($"{createPlanetData.Seed}");
 			CreatePlanetPreview();
 		}
 	}

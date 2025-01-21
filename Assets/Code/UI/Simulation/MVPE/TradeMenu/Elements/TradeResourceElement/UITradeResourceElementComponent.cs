@@ -44,7 +44,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 			sellAllButton.onClick.AddListener(() => OnSellIncreaseButtonClicked?.Invoke(true));
 		}
 
-		public override void OnClose() {
+		protected override void OnClose() {
 			tradeAmountInputField.onEndEdit.RemoveListener(amountString => OnTradeAmountChanged?.Invoke(amountString));
 			clearButton.onClick.RemoveListener(() => OnClearButtonClicked?.Invoke());
 

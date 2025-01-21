@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour {
 		MoodModifierGroup.CreateMoodModifiers();
 
 		foreach (IManager manager in managers) {
-			manager.Awake();
+			manager.OnCreate();
 		}
 
 		uiMOld.SetupUI();
@@ -106,13 +106,13 @@ public class GameManager : MonoBehaviour {
 
 	public void Start() {
 		foreach (IManager manager in managers) {
-			manager.Start();
+			manager.OnGameSetupComplete();
 		}
 	}
 
 	public void Update() {
 		foreach (IManager manager in managers) {
-			manager.Update();
+			manager.OnUpdate();
 		}
 	}
 }

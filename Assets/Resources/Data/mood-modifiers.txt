@@ -23,20 +23,6 @@
 		<EffectAmount>-20
 		<EffectLengthSeconds>UntilNot
 <MoodModifierGroup>
-	Water
-	<MoodModifier>
-		<Type>Quenched
-		<EffectAmount>10
-		<EffectLengthSeconds>360
-	<MoodModifier>
-		<Type>Thirsty
-		<EffectAmount>-10
-		<EffectLengthSeconds>UntilNot
-	<MoodModifier>
-		<Type>Dehydrated
-		<EffectAmount>-20
-		<EffectLengthSeconds>UntilNot
-<MoodModifierGroup>
 	Food
 	<MoodModifier>
 		<Type>Stuffed

@@ -46,7 +46,7 @@ namespace Snowship.NColonist {
 			return totalSpecialIncrease;
 		}
 
-		private static float CalculateWaterNeedSpecialValueIncrease(NeedInstance needInstance) {
+		/*private static float CalculateWaterNeedSpecialValueIncrease(NeedInstance needInstance) {
 			float totalSpecialIncrease = 0;
 			MoodModifierInstance moodModifier = needInstance.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Water);
 			if (moodModifier != null) {
@@ -55,7 +55,7 @@ namespace Snowship.NColonist {
 				}
 			}
 			return totalSpecialIncrease;
-		}
+		}*/
 
 		public static float CalculateFoodNeedSpecialValueIncrease(NeedInstance needInstance) {
 			float totalSpecialIncrease = 0;
@@ -80,7 +80,7 @@ namespace Snowship.NColonist {
 					needIncreaseAmount *= need.prefab.traitsAffectingThisNeed[trait.prefab.type];
 				}
 			}
-			need.ChangeValue(needIncreaseAmount + (NeedToSpecialValueFunctionMap.ContainsKey(need.prefab.type) ? NeedToSpecialValueFunctionMap[need.prefab.type](need) : 0));
+			need.ChangeValue(needIncreaseAmount + (NeedToSpecialValueFunctionMap.TryGetValue(need.prefab.type, out Func<NeedInstance, float> specialValueFunction) ? specialValueFunction(need) : 0));
 		}
 
 		public static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceManager.ResourceAmount resourceAmount) {

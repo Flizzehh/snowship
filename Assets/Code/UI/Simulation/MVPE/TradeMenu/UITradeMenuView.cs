@@ -62,7 +62,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 
 			// Remove any old-existing elements
 			foreach (UITradeResourceElement tradeResourceElement in tradeResourceElements) {
-				tradeResourceElement.OnClose();
+				tradeResourceElement.Close();
 			}
 			tradeResourceElements.Clear();
 
@@ -101,7 +101,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 		) {
 			// Remove any old-existing elements
 			foreach (UIConfirmedTradeResourceElement confirmedTradeResourceElement in confirmedTradeResourceElements) {
-				confirmedTradeResourceElement.OnClose();
+				confirmedTradeResourceElement.Close();
 			}
 			confirmedTradeResourceElements.Clear();
 

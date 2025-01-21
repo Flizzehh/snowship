@@ -19,7 +19,7 @@ namespace Snowship.NCaravan {
 
 		public Caravan selectedCaravan;
 
-		public void Awake() {
+		public void OnCreate() {
 			GameManager.timeM.OnTimeChanged += OnTimeChanged;
 		}
 
@@ -27,7 +27,7 @@ namespace Snowship.NCaravan {
 			GameManager.timeM.OnTimeChanged -= OnTimeChanged;
 		}
 
-		public void Update() {
+		public void OnUpdate() {
 			foreach (Caravan caravan in caravans) {
 				if (!caravan.Update()) {
 					removeCaravans.Add(caravan);

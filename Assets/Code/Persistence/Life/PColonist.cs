@@ -251,11 +251,11 @@ namespace Snowship.NPersistence {
 		public class PersistenceMoodModifier {
 
 			public MoodModifierEnum? type;
-			public float? timeRemaining;
+			public int? timeRemaining;
 
 			public PersistenceMoodModifier(
 				MoodModifierEnum? type,
-				float? timeRemaining
+				int? timeRemaining
 			) {
 				this.type = type;
 				this.timeRemaining = timeRemaining;
@@ -466,7 +466,7 @@ namespace Snowship.NPersistence {
 											case MoodModifierProperty.MoodModifier:
 
 												MoodModifierEnum? moodModifierType = null;
-												float? moodModifierTimeRemaining = null;
+												int? moodModifierTimeRemaining = null;
 
 												foreach (KeyValuePair<string, object> moodModifierSubProperty in (List<KeyValuePair<string, object>>)moodModifierProperty.Value) {
 													switch ((MoodModifierProperty)Enum.Parse(typeof(MoodModifierProperty), moodModifierSubProperty.Key)) {
@@ -474,7 +474,7 @@ namespace Snowship.NPersistence {
 															moodModifierType = (MoodModifierEnum)Enum.Parse(typeof(MoodModifierEnum), (string)moodModifierSubProperty.Value);
 															break;
 														case MoodModifierProperty.TimeRemaining:
-															moodModifierTimeRemaining = float.Parse((string)moodModifierSubProperty.Value);
+															moodModifierTimeRemaining = int.Parse((string)moodModifierSubProperty.Value);
 															break;
 														default:
 															Debug.LogError("Unknown mood modifier sub property: " + moodModifierSubProperty.Key + " " + moodModifierSubProperty.Value);

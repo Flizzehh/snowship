@@ -13,7 +13,7 @@ namespace Snowship.NTime {
 
 		public event Action<SimulationDateTime> OnTimeChanged;
 
-		public void Start() {
+		public void OnGameSetupComplete() {
 			GameManager.stateM.OnStateChanged += OnStateChanged;
 		}
 
@@ -32,7 +32,7 @@ namespace Snowship.NTime {
 			}
 		}
 
-		public void Update() {
+		public void OnUpdate() {
 			UpdateTime();
 		}
 

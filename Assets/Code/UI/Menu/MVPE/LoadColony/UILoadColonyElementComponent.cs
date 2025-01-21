@@ -16,7 +16,7 @@ namespace Snowship.NUI.Menu.LoadColony {
 			elementButton.onClick.AddListener(() => OnLoadColonyElementComponentButtonClicked?.Invoke());
 		}
 
-		public override void OnClose() {
+		protected override void OnClose() {
 			elementButton.onClick.AddListener(() => OnLoadColonyElementComponentButtonClicked?.Invoke());
 		}
 

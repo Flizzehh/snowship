@@ -2,16 +2,12 @@
 
 namespace Snowship.NUI {
 	public abstract class UIElementComponent : MonoBehaviour {
-		private void OnEnable() {
-			OnCreate();
+		public virtual void OnCreate() {
 		}
 
-		private void OnDisable() {
-			OnClose();
+		protected virtual void OnClose() {
 		}
 
-		public abstract void OnCreate();
-		public abstract void OnClose();
 		public void Close() => OnClose();
 	}
 }

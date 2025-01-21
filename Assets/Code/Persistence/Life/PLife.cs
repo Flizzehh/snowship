@@ -18,7 +18,7 @@ namespace Snowship.NPersistence {
 		public void WriteLifeLines(StreamWriter file, LifeManager.Life life, int startLevel) {
 			file.WriteLine(CreateKeyValueString(LifeProperty.Life, string.Empty, startLevel));
 
-			file.WriteLine(CreateKeyValueString(LifeProperty.Health, life.health, startLevel + 1));
+			file.WriteLine(CreateKeyValueString(LifeProperty.Health, life.Health, startLevel + 1));
 			file.WriteLine(CreateKeyValueString(LifeProperty.Gender, life.gender, startLevel + 1));
 			file.WriteLine(CreateKeyValueString(LifeProperty.Position, FormatVector2ToString(life.obj.transform.position), startLevel + 1));
 			file.WriteLine(CreateKeyValueString(LifeProperty.PreviousPosition, FormatVector2ToString(life.previousPosition), startLevel + 1));

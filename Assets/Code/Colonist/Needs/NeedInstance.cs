@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Snowship.NColonist {
 	public class NeedInstance {
@@ -7,6 +8,8 @@ namespace Snowship.NColonist {
 		public NeedPrefab prefab;
 		private float value = 0;
 		private int roundedValue = 0;
+
+		public event Action<float, int> OnValueChanged;
 
 		public NeedInstance(Colonist colonist, NeedPrefab prefab) {
 			this.colonist = colonist;
@@ -22,12 +25,13 @@ namespace Snowship.NColonist {
 			value = newValue;
 			value = Mathf.Clamp(value, 0, prefab.clampValue);
 			roundedValue = Mathf.RoundToInt(value / prefab.clampValue * 100);
-			if (GameManager.humanM.selectedHuman == colonist && Mathf.RoundToInt(oldValue / prefab.clampValue * 100) != roundedValue) {
-				// GameManager.uiMOld.RemakeSelectedColonistNeeds(); // TODO Need Value Updated
+			if (Mathf.RoundToInt(oldValue / prefab.clampValue * 100) != roundedValue) {
+				OnValueChanged?.Invoke(value, roundedValue);
 			}
 		}
 
 		public void ChangeValue(float amount) {
+			//Debug.Log($"{prefab.name} : {value} + {amount}");
 			SetValue(value + amount);
 		}
 

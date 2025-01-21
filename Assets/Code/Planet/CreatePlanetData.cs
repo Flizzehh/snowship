@@ -112,8 +112,8 @@ namespace Snowship.NPlanet {
 			return StringUtilities.IsAlphanumericWithSpaces(planetName);
 		}
 
-		private static int GenerateRandomPlanetSeed() {
-			return UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+		public static int GenerateRandomPlanetSeed() {
+			return UnityEngine.Random.Range(0, int.MaxValue);
 		}
 
 		private static int GetPlanetSizeByIndex(int index) {

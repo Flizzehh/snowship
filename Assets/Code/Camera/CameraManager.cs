@@ -25,7 +25,7 @@ namespace Snowship.NCamera {
 		private UniTask zoomTaskHandle;
 		public event Action<float> OnCameraZoomChanged;
 
-		public void Awake() {
+		public void OnCreate() {
 
 			cameraGO = GameObject.Find("Camera");
 			camera = cameraGO.GetComponent<Camera>();
@@ -49,7 +49,7 @@ namespace Snowship.NCamera {
 			SetCameraZoom(5);
 		}
 
-		public void Update() {
+		public void OnUpdate() {
 			if (!Mathf.Approximately(moveVector.magnitude, 0)) {
 				MoveCamera();
 			}

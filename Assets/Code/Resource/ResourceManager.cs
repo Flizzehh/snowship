@@ -12,8 +12,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class ResourceManager : IManager, IDisposable {
-
-	public void Start() {
+	public void OnGameSetupComplete() {
 		GameManager.timeM.OnTimeChanged += OnTimeChanged;
 	}
 
@@ -65,7 +64,7 @@ public class ResourceManager : IManager, IDisposable {
 		jobParent = GameObject.Find("JobParent");
 	}
 
-	public void Update() {
+	public void OnUpdate() {
 		CalculateResourceTotals();
 
 		foreach (Farm farm in farms) {
@@ -921,6 +920,8 @@ public class ResourceManager : IManager, IDisposable {
 		public int maxWeight;
 		public int maxVolume;
 
+		public event Action<Inventory> OnInventoryChanged;
+
 		public Inventory(IInventory parent, /*int maxAmount*/int maxWeight, int maxVolume) {
 			this.parent = parent;
 			//this.maxAmount = maxAmount;
@@ -1001,6 +1002,8 @@ public class ResourceManager : IManager, IDisposable {
 			//GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			ColonistJob.UpdateColonistJobs();
 
+			OnInventoryChanged?.Invoke(this);
+
 			//return remainingAmount;
 			return highestOverflowAmount;
 		}
@@ -1021,9 +1024,12 @@ public class ResourceManager : IManager, IDisposable {
 				reservedResources.Add(new ReservedResources(resourcesToReserve, humanReservingResources));
 			}
 			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-			GameManager.uiMOld.SetSelectedTraderMenu();
-			GameManager.uiMOld.SetSelectedContainerInfo();
-			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+			// GameManager.uiMOld.SetSelectedTraderMenu();
+			// GameManager.uiMOld.SetSelectedContainerInfo();
+			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+
+			OnInventoryChanged?.Invoke(this);
+
 			return allResourcesFound;
 		}
 
@@ -1038,9 +1044,12 @@ public class ResourceManager : IManager, IDisposable {
 				reservedResources.Remove(rr);
 			}
 			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-			GameManager.uiMOld.SetSelectedTraderMenu();
-			GameManager.uiMOld.SetSelectedContainerInfo();
-			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+			// GameManager.uiMOld.SetSelectedTraderMenu();
+			// GameManager.uiMOld.SetSelectedContainerInfo();
+			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+
+			OnInventoryChanged?.Invoke(this);
+
 			return reservedResourcesByHuman;
 		}
 
@@ -1059,9 +1068,11 @@ public class ResourceManager : IManager, IDisposable {
 			}
 			reservedResourcesToRemove.Clear();
 			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-			GameManager.uiMOld.SetSelectedTraderMenu();
-			GameManager.uiMOld.SetSelectedContainerInfo();
-			GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+			// GameManager.uiMOld.SetSelectedTraderMenu();
+			// GameManager.uiMOld.SetSelectedContainerInfo();
+			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+
+			OnInventoryChanged?.Invoke(this);
 		}
 
 		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, ResourceAmount resourceAmount, bool limitToMaxAmount) {

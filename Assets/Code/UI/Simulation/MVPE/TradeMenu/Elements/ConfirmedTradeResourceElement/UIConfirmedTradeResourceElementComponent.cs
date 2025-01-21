@@ -11,12 +11,6 @@ public class UIConfirmedTradeResourceElementComponent : UIElementComponent {
 	[SerializeField] private Text resourceNameText;
 	[SerializeField] private Text collectedVsRemainingAmountText;
 
-	public override void OnCreate() {
-	}
-
-	public override void OnClose() {
-	}
-
 	public void SetResource(ConfirmedTradeResourceAmount resourceAmount) {
 		resourceImage.sprite = resourceAmount.resource.image;
 		resourceNameText.text = resourceAmount.resource.name;

@@ -16,36 +16,35 @@ namespace Snowship.NUI {
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>() where TUIConfig : IUIConfig, new() {
-			return await OpenViewAsync<TUIConfig>(null, null, true);
+			return await OpenViewAsync<TUIConfig>(null, null, true, false);
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent) where TUIConfig : IUIConfig, new() {
-			return await OpenViewAsync<TUIConfig>(parent, null, true);
+			return await OpenViewAsync<TUIConfig>(parent, null, true, false);
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent, bool showParent) where TUIConfig : IUIConfig, new() {
-			return await OpenViewAsync<TUIConfig>(parent, null, showParent);
-		}
-
-		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(IUIPresenter parent, IUIParameters parameters) where TUIConfig : IUIConfig, new() {
-			return await OpenViewAsync<TUIConfig>(parent, parameters, true);
+			return await OpenViewAsync<TUIConfig>(parent, null, showParent, false);
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(
 			IUIPresenter parent,
 			IUIParameters parameters,
-			bool showParent
+			bool showParent,
+			bool useParentTransform
 		) where TUIConfig : IUIConfig, new() {
 
 			IUIGroup parentGroup = FindGroup(parent);
 
-			TUIConfig config = new();
 			Transform parentTransform = parentGroup?.View.Instance.transform ?? uiParent;
+			Transform transformToUse = useParentTransform ? parentTransform : uiParent;
+
+			TUIConfig config = new();
 			(IUIView view, IUIPresenter presenter) ui;
 			if (parameters == null) {
-				ui = await config.Open(parentTransform);
+				ui = await config.Open(transformToUse);
 			} else {
-				ui = await ((IUIConfigParameters)config).Open(parentTransform, parameters);
+				ui = await ((IUIConfigParameters)config).Open(transformToUse, parameters);
 			}
 
 			UIGroup<IUIConfig, IUIView, IUIPresenter> group = new(
@@ -67,7 +66,7 @@ namespace Snowship.NUI {
 			return ui.presenter;
 		}
 
-		public async UniTask<IUIPresenter> SwitchViewsAsync<TUIConfigToClose, TUIConfigToOpen>(IUIParameters parameters, bool showParent = true)
+		public async UniTask<IUIPresenter> SwitchViewsAsync<TUIConfigToClose, TUIConfigToOpen>(IUIParameters parameters, bool showParent = true, bool useParentTransform = false)
 			where TUIConfigToClose : IUIConfig
 			where TUIConfigToOpen : IUIConfig, new()
 		{
@@ -77,7 +76,7 @@ namespace Snowship.NUI {
 			}
 
 			IUIPresenter parentPresenter = closeGroup.Parent.Presenter;
-			IUIPresenter presenter = await OpenViewAsync<TUIConfigToOpen>(parentPresenter, parameters, showParent);
+			IUIPresenter presenter = await OpenViewAsync<TUIConfigToOpen>(parentPresenter, parameters, showParent, useParentTransform);
 			closeGroup.Close();
 			return presenter;
 		}
@@ -85,14 +84,15 @@ namespace Snowship.NUI {
 		public async UniTask<IUIPresenter> SwitchViewsOrOpenAsync<TUIConfigToClose, TUIConfigToOpen>(
 			IUIPresenter parent = null,
 			IUIParameters parameters = null,
-			bool showParent = true
+			bool showParent = true,
+			bool useParentTransform = false
 		)
 			where TUIConfigToClose : IUIConfig
 			where TUIConfigToOpen : IUIConfig, new() {
 
 			IUIPresenter presenter = await SwitchViewsAsync<TUIConfigToClose, TUIConfigToOpen>(parameters, showParent);
 			if (presenter == null) {
-				return await GameManager.uiM.OpenViewAsync<TUIConfigToOpen>(parent, parameters, showParent);
+				return await OpenViewAsync<TUIConfigToOpen>(parent, parameters, showParent, useParentTransform);
 			}
 			return null;
 		}
@@ -178,62 +178,5 @@ namespace Snowship.NUI {
 			}
 			parentGroups.Clear();
 		}
-	}
-
-	public interface IUIManager : IManager
-	{
-		void Initialize(Transform uiParent);
-		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>() where TUIConfig : IUIConfig, new();
-
-		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(
-			IUIPresenter parent
-		)
-			where TUIConfig : IUIConfig, new();
-
-		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(
-			IUIPresenter parent,
-			bool showParent
-		)
-			where TUIConfig : IUIConfig, new();
-
-		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(
-			IUIPresenter parent,
-			IUIParameters parameters
-		)
-			where TUIConfig : IUIConfig, new();
-
-		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(
-			IUIPresenter parent,
-			IUIParameters parameters,
-			bool showParent
-		) where TUIConfig : IUIConfig, new();
-
-		UniTask<IUIPresenter> SwitchViewsAsync<TUIConfigToClose, TUIConfigToOpen>(
-			IUIParameters parameters,
-			bool showParent = true
-		)
-			where TUIConfigToClose : IUIConfig
-			where TUIConfigToOpen : IUIConfig, new();
-
-		UniTask<IUIPresenter> SwitchViewsOrOpenAsync<TUIConfigToClose, TUIConfigToOpen>(
-			IUIPresenter parent = null,
-			IUIParameters parameters = null,
-			bool showParent = true
-		)
-			where TUIConfigToClose : IUIConfig
-			where TUIConfigToOpen : IUIConfig, new();
-
-		UniTask<IUIPresenter> ReopenView<TUIConfigToReopen>(
-			IUIPresenter parent = null,
-			IUIParameters parameters = null,
-			bool showParent = true
-		)
-			where TUIConfigToReopen : IUIConfig, new();
-
-		void CloseView<TP>(TP presenter) where TP : IUIPresenter;
-		void CloseView<TC>() where TC : IUIConfig;
-		void GoBack<TP>(TP presenter) where TP : IUIPresenter;
-		void ToggleAllViews();
-		void CloseAllViews();
 	}
 }

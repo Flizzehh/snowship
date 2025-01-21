@@ -1,10 +1,13 @@
 ﻿public interface IManager {
-
-	public void Awake() {
-	}
-	public void Start() {
-	}
-	public void Update() {
+	public void OnCreate() {
 	}
 
+	public void OnGameSetupComplete() {
+	}
+
+	public void OnUpdate() {
+	}
+
+	void OnClose() {
+	}
 }

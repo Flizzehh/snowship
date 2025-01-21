@@ -8,7 +8,7 @@ namespace Snowship.NColonist {
 
 		private readonly List<Colonist> deadColonists = new List<Colonist>();
 
-		public void Update() {
+		public void OnUpdate() {
 			UpdateColonists();
 			UpdateColonistJobs();
 		}

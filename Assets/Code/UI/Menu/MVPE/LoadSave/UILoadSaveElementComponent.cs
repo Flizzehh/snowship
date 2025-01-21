@@ -17,7 +17,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 			elementButton.onClick.AddListener(() => OnLoadSaveElementComponentButtonClicked?.Invoke());
 		}
 
-		public override void OnClose() {
+		protected override void OnClose() {
 			elementButton.onClick.RemoveListener(() => OnLoadSaveElementComponentButtonClicked?.Invoke());
 		}
 

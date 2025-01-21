@@ -3,7 +3,7 @@
 
 		Death,
 		Food,
-		Water,
+		//Water,
 		Rest,
 		Inventory
 

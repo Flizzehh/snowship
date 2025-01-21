@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43198d5ef214d8243b389faa845b1547
+    m_Address: UI/Element/UIResourceAmountElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c952355c3e8bce49a4e749d587812b1
     m_Address: UI/UICreatePlanet
     m_ReadOnly: 0
@@ -40,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62be4476a9304cb44bf864b3a9d7dd2a
+    m_Address: UI/Element/UINeedElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9dd8381cd844f7e4991e97dbbce532e2
     m_Address: UI/UISimulation
     m_ReadOnly: 0
@@ -47,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c1fa6b616b868c344b6746511c9e471b
     m_Address: UI/UIDebugConsole
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d28405e4d4ad5fd44be2d8a8a80c29c9
+    m_Address: UI/Element/UIMoodElement
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

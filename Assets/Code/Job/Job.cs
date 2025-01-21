@@ -32,7 +32,7 @@ namespace Snowship.NJob {
 		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
 		public List<ContainerPickup> containerPickups;
 
-		public UIManagerOld.JobElement jobUIElement;
+		// public UIManagerOld.JobElement jobUIElement;
 
 		public ResourceManager.CraftableResourceInstance createResource;
 		public ResourceManager.ObjectInstance activeObject;
@@ -135,9 +135,9 @@ namespace Snowship.NJob {
 		}
 
 		public void Remove() {
-			if (jobUIElement != null) {
-				jobUIElement.Remove();
-			}
+			// if (jobUIElement != null) {
+			// 	jobUIElement.Remove();
+			// }
 			MonoBehaviour.Destroy(jobPreview);
 		}
 	}

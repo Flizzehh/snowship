@@ -1233,7 +1233,7 @@ public class TileManager : IManager {
 
 	public MapState mapState = MapState.Nothing;
 
-	public void Update() {
+	public void OnUpdate() {
 		if (mapState == MapState.Generated) {
 			GameManager.colonyM.colony.map.DetermineVisibleRegionBlocks();
 		}

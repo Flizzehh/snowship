@@ -9,8 +9,7 @@ public class LifeManager : IManager {
 	public List<Life> life = new List<Life>();
 
 	public class Life : ISelectable {
-
-		public float health;
+		public float Health { get; protected set; }
 
 		public GameObject obj;
 
@@ -26,6 +25,8 @@ public class LifeManager : IManager {
 
 		public enum Gender { Male, Female };
 
+		public event Action<float> OnHealthChanged;
+
 		public Life(TileManager.Tile spawnTile, float startingHealth) {
 			gender = GetRandomGender();
 
@@ -35,7 +36,7 @@ public class LifeManager : IManager {
 
 			previousPosition = obj.transform.position;
 
-			health = startingHealth;
+			Health = startingHealth;
 
 			GameManager.lifeM.life.Add(this);
 		}
@@ -132,13 +133,14 @@ public class LifeManager : IManager {
 
 		public void ChangeHealthValue(float amount) {
 			dead = false;
-			health += amount;
-			if (health > 1f) {
-				health = 1f;
-			} else if (health <= 0f) {
-				health = 0f;
+			Health += amount;
+			if (Health > 1f) {
+				Health = 1f;
+			} else if (Health <= 0f) {
+				Health = 0f;
 				dead = true;
 			}
+			OnHealthChanged?.Invoke(Health);
 		}
 
 		public virtual void Die() {

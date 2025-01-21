@@ -10,8 +10,7 @@ using static Snowship.NJob.JobManager;
 namespace Snowship.NJob {
 
 	public class JobManager : IManager {
-
-		public void Awake() {
+		public void OnCreate() {
 			selectedPrefabPreview = GameObject.Find("SelectedPrefabPreview");
 			selectedPrefabPreview.GetComponent<SpriteRenderer>().sortingOrder = 50;
 			selectedPrefabPreview.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha128);
@@ -20,10 +19,10 @@ namespace Snowship.NJob {
 		private bool changedJobList = false;
 		private int rotationIndex = 0;
 
-		public void Update() {
+		public void OnUpdate() {
 			if (changedJobList) {
 				ColonistJob.UpdateColonistJobs();
-				GameManager.uiMOld.SetJobElements();
+				// GameManager.uiMOld.SetJobElements();
 				changedJobList = false;
 			}
 			GetJobSelectionArea();
@@ -411,7 +410,7 @@ namespace Snowship.NJob {
 			}
 
 			ColonistJob.UpdateColonistJobs();
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetJobElements();
 		}
 
 		public void CancelJob(Job job) {
@@ -446,7 +445,7 @@ namespace Snowship.NJob {
 			Job.jobs.Remove(job);
 
 			ColonistJob.UpdateColonistJobs();
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetJobElements();
 		}
 
 		public void ChangeJobPriorityInSelectionArea(List<TileManager.Tile> selectionArea, int amount) {
@@ -469,7 +468,7 @@ namespace Snowship.NJob {
 			}
 			ColonistJob.UpdateColonistJobs();
 			ColonistJob.UpdateAllColonistJobCosts();
-			GameManager.uiMOld.SetJobElements();
+			// GameManager.uiMOld.SetJobElements();
 		}
 
 		private static readonly Dictionary<int, ResourceManager.ObjectEnum> removeLayerMap = new Dictionary<int, ResourceManager.ObjectEnum>() {
@@ -693,7 +692,7 @@ namespace Snowship.NJob {
 				jobGiven.Key.SetJob(jobGiven.Value);
 			}
 			if (gaveJob) {
-				GameManager.uiMOld.SetJobElements();
+				// GameManager.uiMOld.SetJobElements();
 				ColonistJob.UpdateColonistJobs();
 			}
 		}

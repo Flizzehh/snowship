@@ -14,7 +14,7 @@ namespace Snowship.NInput {
 		public event Action<InputSystemActions> OnInputSystemEnabled;
 		public event Action<InputSystemActions> OnInputSystemDisabled;
 
-		public void Awake() {
+		public void OnCreate() {
 			inputSystemActions = new InputSystemActions();
 
 			EnableInputSystem();

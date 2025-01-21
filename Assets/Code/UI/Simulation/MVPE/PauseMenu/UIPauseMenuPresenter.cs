@@ -37,16 +37,16 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		private void OnContinueButtonClicked() {
-			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close));
+			GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close).Forget();
 		}
 
 		private void OnEscapePerformed(InputAction.CallbackContext callbackContext) {
-			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close));
+			GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close).Forget();
 		}
 
-		private void OnSaveButtonClicked() {
+		private async void OnSaveButtonClicked() {
 			try {
-				UniTask.WhenAll(GameManager.persistenceM.CreateSave(GameManager.colonyM.colony));
+				await GameManager.persistenceM.CreateSave(GameManager.colonyM.colony);
 				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen));
 			} catch (Exception e) {
 				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed));
@@ -55,11 +55,11 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		private void OnSettingsButtonClicked() {
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UISettings>(this, false));
+			GameManager.uiM.OpenViewAsync<UISettings>(this, false).Forget();
 		}
 
 		private void OnExitToMenuButtonClicked() {
-			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.MainMenu, ETransitionUIAction.Close));
+			GameManager.stateM.TransitionToState(EState.MainMenu, ETransitionUIAction.Close).Forget();
 		}
 
 		private void OnExitToDesktopButtonClicked() {

@@ -57,7 +57,7 @@ namespace Snowship.NUI.Presenters {
 		}
 
 		private void OnCreateColonyButtonClicked() {
-			UniTask.WhenAll(GameManager.uiM.OpenViewAsync<UICreateColony>(this, false));
+			GameManager.uiM.OpenViewAsync<UICreateColony>(this, false).Forget();
 		}
 
 		private void OnColonyElementClicked(PersistenceColony colony) {

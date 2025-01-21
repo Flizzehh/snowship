@@ -21,7 +21,7 @@ namespace Snowship.Selectable {
 			Debug.Log("Deselected " + selectable.ToString());
 		}
 
-		public void Update() {
+		public void OnUpdate() {
 			if (Input.GetMouseButtonUp(0)) {
 
 			}
