@@ -85,6 +85,8 @@ public class HumanManager : IManager {
 
 		protected float wanderTimer = UnityEngine.Random.Range(10f, 20f);
 
+		public event Action<Appearance, ResourceManager.Clothing> OnClothingChanged;
+
 		public Human(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			bodyIndices = GetBodyIndices(gender);
 
@@ -170,7 +172,7 @@ public class HumanManager : IManager {
 
 				SetColour(overTile.sr.color);
 
-				// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Clothing Changed
+				OnClothingChanged?.Invoke(appearance, clothing);
 			}
 		}
 

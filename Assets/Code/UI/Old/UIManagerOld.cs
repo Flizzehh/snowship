@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
-using Snowship.NPersistence;
 using Snowship.NResources;
 using Snowship.NUI.Menu.LoadSave;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -18,10 +16,6 @@ namespace Snowship.NUI {
 	// @formatter:off
 	public class UIManagerOld : IManager {
 		// Old Code
-
-		public readonly string gameVersionString = $"Snowship {PersistenceManager.GameVersion.text}";
-
-		public bool playerTyping = false;
 
 		public GameObject canvas;
 
@@ -198,8 +192,6 @@ namespace Snowship.NUI {
 		private GameObject selectedTraderMenu;
 		private GameObject tradeMenu;
 
-		private GameObject dateTimeInformationPanel;
-
 		private SelectionSizePanel selectionSizePanel;
 
 		public SelectionSizePanel GetSelectionSizePanel() {
@@ -255,28 +247,12 @@ namespace Snowship.NUI {
 			jobsPanel.transform.Find("JobsTitle-Panel/CollapseList-Button").GetComponent<Button>().onClick.AddListener(delegate { SetListPanelCollapsed(jobListPanel, jobsPanel.transform.Find("JobsTitle-Panel/CollapseList-Button/Arrow-Text").GetComponent<Text>()); });
 
 			/*
-			selectedColonistInformationPanel = gameUI.transform.Find("SelectedColonistInfo-Panel").gameObject;
-
-			selectedColonistNeedsSkillsPanel = selectedColonistInformationPanel.transform.Find("SelectedTab-Panel/NeedsSkills-Panel").gameObject;
-			selectedColonistMoodModifiersPanel = selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifier-Panel").gameObject;
-			selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/MoodModifiers-Button").GetComponent<Button>().onClick.AddListener(delegate { selectedColonistMoodModifiersPanel.SetActive(!selectedColonistMoodModifiersPanel.activeSelf); });
-			selectedColonistMoodModifiersPanel.transform.Find("Return-Button").GetComponent<Button>().onClick.AddListener(delegate { selectedColonistMoodModifiersPanel.SetActive(!selectedColonistMoodModifiersPanel.activeSelf); });
-			selectedColonistMoodModifiersPanel.SetActive(false);
-
-			selectedColonistInventoryPanel = selectedColonistInformationPanel.transform.Find("SelectedTab-Panel/Inventory-Panel").gameObject;
-
 			selectedColonistClothingPanel = selectedColonistInformationPanel.transform.Find("SelectedTab-Panel/Clothing-Panel").gameObject;
 			selectedColonistClothingSelectionPanel = selectedColonistClothingPanel.transform.Find("ClothingSelection-Panel").gameObject;
 			selectedColonistClothingSelectionPanel.transform.Find("Return-Button").GetComponent<Button>().onClick.AddListener(delegate { SetSelectedColonistClothingSelectionPanelActive(!selectedColonistClothingSelectionPanel.activeSelf); });
 			availableClothingTitleAndList = new KeyValuePair<GameObject, GameObject>(selectedColonistClothingSelectionPanel.transform.Find("ClothingSelection-ScrollPanel/ClothingList-Panel/ClothesAvailableTitle-Panel").gameObject, selectedColonistClothingSelectionPanel.transform.Find("ClothingSelection-ScrollPanel/ClothingList-Panel/ClothesAvailable-Panel").gameObject);
 			takenClothingTitleAndList = new KeyValuePair<GameObject, GameObject>(selectedColonistClothingSelectionPanel.transform.Find("ClothingSelection-ScrollPanel/ClothingList-Panel/ClothesTakenTitle-Panel").gameObject, selectedColonistClothingSelectionPanel.transform.Find("ClothingSelection-ScrollPanel/ClothingList-Panel/ClothesTaken-Panel").gameObject);
 
-			selectedColonistNeedsSkillsTabButton = selectedColonistInformationPanel.transform.Find("TabButton-Panel/NeedsSkills-Button").gameObject;
-			selectedColonistNeedsSkillsTabButton.GetComponent<Button>().onClick.AddListener(delegate { SetSelectedColonistTab(selectedColonistNeedsSkillsTabButton); });
-			selectedColonistNeedsSkillsTabButtonLinkPanel = selectedColonistNeedsSkillsTabButton.transform.Find("Link-Panel").gameObject;
-			selectedColonistInventoryTabButton = selectedColonistInformationPanel.transform.Find("TabButton-Panel/Inventory-Button").gameObject;
-			selectedColonistInventoryTabButton.GetComponent<Button>().onClick.AddListener(delegate { SetSelectedColonistTab(selectedColonistInventoryTabButton); });
-			selectedColonistInventoryTabButtonLinkPanel = selectedColonistInventoryTabButton.transform.Find("Link-Panel").gameObject;
 			selectedColonistClothingTabButton = selectedColonistInformationPanel.transform.Find("TabButton-Panel/Clothing-Button").gameObject;
 			selectedColonistClothingTabButton.GetComponent<Button>().onClick.AddListener(delegate { SetSelectedColonistTab(selectedColonistClothingTabButton); });
 			selectedColonistClothingTabButtonLinkPanel = selectedColonistClothingTabButton.transform.Find("Link-Panel").gameObject;
@@ -286,8 +262,6 @@ namespace Snowship.NUI {
 			// tradeMenu = gameUI.transform.Find("TradeMenu-Panel").gameObject;
 			// tradeMenu.transform.Find("Close-Button").GetComponent<Button>().onClick.AddListener(delegate { SetTradeMenuActive(false); });
 			// tradeMenu.transform.Find("ConfirmTrade-Button").GetComponent<Button>().onClick.AddListener(delegate { ConfirmTrade(); });
-
-			dateTimeInformationPanel = gameUI.transform.Find("DateTimeInformation-Panel").gameObject;
 
 			selectionSizePanel = new SelectionSizePanel(GameObject.Find("SelectionSize-Canvas").GetComponent<Canvas>());
 
@@ -356,11 +330,11 @@ namespace Snowship.NUI {
 						if (GameManager.jobM.GetSelectedPrefab() != null) {
 							GameManager.jobM.SetSelectedPrefab(null, null);
 						} else {
-							if (!playerTyping) {
+							/*if (!playerTyping) {
 								if (!Input.GetMouseButtonDown(1)) {
 									//SetPauseMenuActive(!pauseMenu.activeSelf);
 								}
-							}
+							}*/
 						}
 					}
 				}
@@ -454,52 +428,6 @@ namespace Snowship.NUI {
 
 				UpdateMainMenuBackground();
 			}*/
-
-			playerTyping = IsPlayerTyping();
-		}
-
-		private bool IsPlayerTyping() {
-			/*if (universeNameInputField.isFocused) {
-				return true;
-			}
-
-			if (planetRegenerationCodeInputField.isFocused) {
-				return true;
-			}
-
-			if (planetNameInputField.isFocused) {
-				return true;
-			}
-
-			if (planetSeedInputField.isFocused) {
-				return true;
-			}
-
-			if (mapRegenerationCodeInputField.isFocused) {
-				return true;
-			}
-
-			if (colonyNameInputField.isFocused) {
-				return true;
-			}
-
-			if (mapSeedInputField.isFocused) {
-				return true;
-			}*/
-
-			/*if (GameManager.debugM.debugInput.isFocused) {
-				return true;
-			}*/
-
-			// if (clothesSearchInputField.isFocused) {
-			// 	return true;
-			// }
-			//
-			// if (resourcesSearchInputField.isFocused) {
-			// 	return true;
-			// }
-
-			return false;
 		}
 
 		public ResourceManager.Container selectedContainer;
@@ -1083,43 +1011,6 @@ namespace Snowship.NUI {
 			}
 		}
 
-		/*public class SkillElement {
-			public Colonist colonist;
-			public SkillInstance skill;
-			public GameObject obj;
-
-			public SkillElement(Colonist colonist, SkillInstance skill, Transform parent) {
-				this.colonist = colonist;
-				this.skill = skill;
-
-				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/SkillInfoElement-Panel"), parent, false);
-
-				obj.transform.Find("Name").GetComponent<Text>().text = skill.prefab.name;
-				// ADD SKILL IMAGE
-
-				Update();
-			}
-
-			public void Update() {
-				obj.transform.Find("Level").GetComponent<Text>().text = skill.Level + "." + Mathf.RoundToInt(skill.CurrentExperience / skill.NextLevelExperience * 100f);
-				obj.transform.Find("Experience-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(skill.CurrentExperience / skill.NextLevelExperience * 100f);
-
-				SkillInstance highestSkillInstance = SkillInstance.GetBestColonistAtSkill(skill.prefab);
-
-				if (highestSkillInstance != null) {
-					obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((float)skill.Level / (highestSkillInstance.Level > 0 ? highestSkillInstance.Level : 1) * 100f);
-
-					if (highestSkillInstance.colonist == colonist || Mathf.Approximately(highestSkillInstance.CalculateTotalSkillLevel(), skill.CalculateTotalSkillLevel())) {
-						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkYellow);
-						obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightYellow);
-					} else {
-						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen);
-						obj.transform.Find("Level-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
-					}
-				}
-			}
-		}*/
-
 		public class InventoryElement {
 			public ResourceAmount resourceAmount;
 			public GameObject obj;
@@ -1248,20 +1139,6 @@ namespace Snowship.NUI {
 			}
 		}
 
-		/*public void SetRightListPanelSize() {
-			// TODO Will be re-worked into a top bar
-			// RectTransform rightListPanel = gameUI.transform.Find("RightList-Panel").GetComponent<RectTransform>();
-			// Vector2 rightListSize = rightListPanel.offsetMin;
-			// int verticalOffset = 5; // Nothing active default
-			// if (selectedColonistInformationPanel.activeSelf) {
-			// 	verticalOffset = 350;
-			// } else if (selectedTraderMenu.activeSelf) {
-			// 	verticalOffset = 100;
-			// }
-			//
-			// rightListPanel.offsetMin = new Vector2(rightListSize.x, verticalOffset);
-		}*/
-
 		/*
 		private readonly List<NeedElement> selectedColonistNeedElements = new List<NeedElement>();
 
@@ -1329,64 +1206,6 @@ namespace Snowship.NUI {
 					}
 
 					selectedColonistInventoryElements.Clear();
-				}
-			}
-		}
-
-		public void SetSelectedColonistTab(GameObject tabButtonClicked) {
-			bool needsSkillsClicked = tabButtonClicked == selectedColonistNeedsSkillsTabButton;
-			bool inventoryClicked = tabButtonClicked == selectedColonistInventoryTabButton;
-			bool clothingClicked = tabButtonClicked == selectedColonistClothingTabButton;
-
-			selectedColonistNeedsSkillsPanel.SetActive(needsSkillsClicked);
-			selectedColonistNeedsSkillsTabButtonLinkPanel.SetActive(needsSkillsClicked);
-			selectedColonistMoodModifiersPanel.SetActive(false);
-
-			selectedColonistInventoryPanel.SetActive(inventoryClicked);
-			selectedColonistInventoryTabButtonLinkPanel.SetActive(inventoryClicked);
-
-			selectedColonistClothingPanel.SetActive(clothingClicked);
-			selectedColonistClothingTabButtonLinkPanel.SetActive(clothingClicked);
-			SetSelectedColonistClothingSelectionPanelActive(false);
-		}
-
-		public void RemakeSelectedColonistNeeds() {
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist selectedColonist) {
-				foreach (NeedElement needElement in selectedColonistNeedElements) {
-					Object.Destroy(needElement.obj);
-				}
-
-				selectedColonistNeedElements.Clear();
-				List<NeedInstance> sortedNeeds = selectedColonist.needs.OrderByDescending(need => need.GetValue()).ToList();
-				foreach (NeedInstance need in sortedNeeds) {
-					selectedColonistNeedElements.Add(new NeedElement(need, selectedColonistNeedsSkillsPanel.transform.Find("Needs-Panel/Needs-ScrollPanel/NeedsList-Panel")));
-				}
-			}
-		}
-
-		public void RemakeSelectedColonistMoodModifiers() {
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist selectedColonist) {
-				foreach (MoodModifierElement moodModifierElement in selectedColonistMoodModifierElements) {
-					Object.Destroy(moodModifierElement.obj);
-				}
-
-				selectedColonistMoodModifierElements.Clear();
-				foreach (MoodModifierInstance moodModifier in selectedColonist.moodModifiers) {
-					selectedColonistMoodModifierElements.Add(new MoodModifierElement(moodModifier, selectedColonistMoodModifiersPanel.transform.Find("MoodModifier-ScrollPanel/MoodModifierList-Panel")));
-				}
-			}
-		}
-
-		public void RemakeSelectedColonistSkills() {
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist selectedColonist) {
-				foreach (SkillElement skillElement in selectedColonistSkillElements) {
-					Object.Destroy(skillElement.obj);
-				}
-
-				selectedColonistSkillElements.Clear();
-				List<SkillInstance> sortedSkills = selectedColonist.skills.OrderByDescending(skill => skill.CalculateTotalSkillLevel()).ToList();
-				foreach (SkillInstance skill in sortedSkills) {
-					selectedColonistSkillElements.Add(new SkillElement(selectedColonist, skill, selectedColonistNeedsSkillsPanel.transform.Find("Skills-Panel/Skills-ScrollPanel/SkillsList-Panel")));
 				}
 			}
 		}

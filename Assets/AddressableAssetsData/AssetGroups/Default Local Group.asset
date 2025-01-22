@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5065d9636a7630e47b5d1f542f8608c8
+    m_Address: UI/Element/UIClothingElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5724e56e6d8f4aa4795584190e6f8866
     m_Address: UI/Element/UIDebugConsoleOutputTextbox
     m_ReadOnly: 0
@@ -57,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c1fa6b616b868c344b6746511c9e471b
     m_Address: UI/UIDebugConsole
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c313895e634f59140b0986d5026675a1
+    m_Address: UI/Element/UIClothingButtonElement
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

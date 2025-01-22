@@ -11,7 +11,7 @@ using static Snowship.NUtilities.ColourUtilities;
 namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 	public class UIColonistInfoPanelView : UIView {
 		[Header("General Information")]
-		[SerializeField] private Image colonistImage; // TODO Turn into prefab to show all layers
+		[SerializeField] private UIColonistBodyElementComponent colonistImage;
 		[SerializeField] private TMP_Text colonistNameText;
 		[SerializeField] private TMP_Text currentActionText;
 		[SerializeField] private TMP_Text storedActionText;
@@ -39,40 +39,32 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		[SerializeField] private GameObject moodPanel;
 		[SerializeField] private Button moodPanelCloseButton;
 		[SerializeField] private VerticalLayoutGroup moodListVerticalLayoutGroup;
-		// TODO Mood Element Prefab
 
 		[Header("Skills Sub-Panel")]
 		[SerializeField] private VerticalLayoutGroup skillsListVerticalLayoutGroup;
-		// TODO Skill Element Prefab
 
 		[Header("Inventory Tab")]
 		[SerializeField] private Button inventoryTabButton;
 		[SerializeField] private GameObject inventoryTab;
 		[SerializeField] private Button emptyInventoryButton;
 		[SerializeField] private GridLayoutGroup inventoryListGridLayoutGroup;
-		// TODO Resource Amount Element Prefab
 
 		[Header("Clothing Tab")]
 		[SerializeField] private Button clothingTabButton;
 		[SerializeField] private GameObject clothingTab;
 
 		[Header("Current Clothing Sub-Panel")]
-		[SerializeField] private Image colonistClothingImage; // TODO Turn into prefab to show all layers
-
-		// TODO Turn these buttons into individual prefabs
-		[SerializeField] private Button hatButton;
-		[SerializeField] private Button scarfButton;
-		[SerializeField] private Button topButton;
-		[SerializeField] private Button bottomsButton;
-		[SerializeField] private Button backpackButton;
+		[SerializeField] private UIColonistBodyElementComponent colonistBody;
+		[SerializeField] private VerticalLayoutGroup clothingButtonsListVerticalLayoutGroup;
 
 		[Header("Clothing Selection Sub-Panel")]
 		[SerializeField] private GameObject clothingSelectionPanel;
 		[SerializeField] private Button disrobeButton;
-		[SerializeField] private Button backButton;
+		[SerializeField] private Button clothingSelectionPanelBackButton;
+		[SerializeField] private GameObject clothesAvailableTitleTextPanel;
 		[SerializeField] private GridLayoutGroup clothesAvailableGridLayoutGroup;
+		[SerializeField] private GameObject clothesTakenTitleTextPanel;
 		[SerializeField] private GridLayoutGroup clothesTakenGridLayoutGroup;
-		// TODO Clothing Element Prefab
 
 		public List<(Button button, GameObject tab)> ButtonToTabMap => new List<(Button, GameObject)>() {
 			(needsSkillsTabButton, needsSkillsTab),
@@ -85,7 +77,11 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		private readonly List<UINeedElement> needElements = new();
 		private readonly List<UIMoodElement> moodElements = new();
 		private readonly List<UISkillElement> skillElements = new();
+
 		private readonly List<UIResourceAmountElement> inventoryResourceAmountElements = new();
+
+		private readonly List<UIClothingButtonElement> clothingButtonElements = new();
+		private readonly List<UIClothingElement> clothingElements = new();
 
 		public override void OnOpen() {
 			needsSkillsTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(needsSkillsTabButton));
@@ -95,6 +91,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			moodViewButton.onClick.AddListener(() => SetMoodPanelActive(true));
 			moodPanelCloseButton.onClick.AddListener(() => SetMoodPanelActive(false));
 			SetMoodPanelActive(false);
+
+			clothingSelectionPanelBackButton.onClick.AddListener(() => SetClothingSelectionPanelActive(false));
 		}
 
 		public override void OnClose() {
@@ -104,18 +102,31 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 				needElement.Close();
 			}
 			needElements.Clear();
+
 			foreach (UISkillElement skillElement in skillElements) {
 				skillElement.Close();
 			}
 			skillElements.Clear();
+
 			foreach (UIResourceAmountElement resourceAmountElement in inventoryResourceAmountElements) {
 				resourceAmountElement.Close();
 			}
 			inventoryResourceAmountElements.Clear();
+
+			foreach (UIClothingButtonElement clothingButtonElement in clothingButtonElements) {
+				clothingButtonElement.Close();
+			}
+			clothingButtonElements.Clear();
+
+			foreach (UIClothingElement clothingElement in clothingElements) {
+				clothingElement.Close();
+			}
+			clothingElements.Clear();
 		}
 
 		public void SetColonistInformation(Sprite colonistSprite, string colonistName, string colonistAffiliation) {
-			colonistImage.sprite = colonistSprite;
+			colonistImage.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
+			colonistBody.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
 			colonistNameText.SetText(colonistName);
 			affiliationText.SetText(colonistAffiliation);
 		}
@@ -202,18 +213,58 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			resourceAmountElementToRemove.Close();
 		}
 
-		private void SetupClothingTab() {
-			SetupCurrentClothingSubPanel();
-			SetupClothingSelectionSubPanel();
+		public UIClothingButtonElement CreateClothingButton(HumanManager.Human.Appearance appearance, ResourceManager.Clothing clothing) {
+			UIClothingButtonElement clothingButton = new(
+				clothingButtonsListVerticalLayoutGroup.transform,
+				appearance,
+				clothing
+			);
+			clothingButtonElements.Add(clothingButton);
+			return clothingButton;
 		}
 
-		private void SetupCurrentClothingSubPanel() {
+		public void SetClothingSelectionPanelActive(bool active) {
 
+			foreach (UIClothingElement clothingElement in clothingElements) {
+				clothingElement.Close();
+			}
+			clothingElements.Clear();
+
+			clothingSelectionPanel.SetActive(active);
 		}
 
-		private void SetupClothingSelectionSubPanel() {
-
+		public UIClothingElement CreateAvailableClothingElement(ResourceManager.Clothing clothing) {
+			return CreateClothingElement(clothing, true);
 		}
 
+		public UIClothingElement CreateTakenClothingElement(ResourceManager.Clothing clothing) {
+			return CreateClothingElement(clothing, false);
+		}
+
+		private UIClothingElement CreateClothingElement(ResourceManager.Clothing clothing, bool available) {
+			UIClothingElement clothingElement = new((available ? clothesAvailableGridLayoutGroup : clothesTakenGridLayoutGroup).transform, clothing);
+			clothingElements.Add(clothingElement);
+			return clothingElement;
+		}
+
+		public void SetClothesAvailableTitleTextPanelActive(bool active) {
+			clothesAvailableTitleTextPanel.SetActive(active);
+		}
+
+		public void SetClothesTakenTitleTextPanelActive(bool active) {
+			clothesTakenTitleTextPanel.SetActive(active);
+		}
+
+		public void OnColonistClothingChanged(HumanManager.Human.Appearance appearance, ResourceManager.Clothing clothing) {
+			foreach (UIClothingButtonElement clothingButtonElement in clothingButtonElements) {
+				if (clothingButtonElement.Appearance != appearance) {
+					continue;
+				}
+				clothingButtonElement.SetClothing(clothing);
+				colonistBody.SetClothingOnBodySection(appearance, clothing);
+				colonistImage.SetClothingOnBodySection(appearance, clothing);
+				return;
+			}
+		}
 	}
 }

@@ -551,7 +551,7 @@ namespace Snowship.NColonist {
 
 		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
 
-			if (clothing == null || GetInventory().ContainsResourceAmount(new ResourceAmount(clothing, 1))) {
+			if (clothing == null || GetInventory().resources.Find(ra => ra.Resource == clothing) != null) {
 
 				base.ChangeClothing(appearance, clothing);
 

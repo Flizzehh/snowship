@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NColonist;
 using Snowship.NResources;
@@ -48,6 +49,10 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			SetupInventoryTab();
 			inventory.OnResourceAmountAdded += View.OnInventoryResourceAmountAdded;
 			inventory.OnResourceAmountRemoved += View.OnInventoryResourceAmountRemoved;
+
+			SetupClothingTab();
+			colonist.OnClothingChanged += View.OnColonistClothingChanged;
+			View.SetClothingSelectionPanelActive(false);
 		}
 
 		public override void OnClose() {
@@ -65,6 +70,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			inventory.OnResourceAmountAdded -= View.OnInventoryResourceAmountAdded;
 			inventory.OnResourceAmountRemoved -= View.OnInventoryResourceAmountRemoved;
+
+			colonist.OnClothingChanged -= View.OnColonistClothingChanged;
 
 			foreach (MoodModifierInstance mood in colonist.moodModifiers) {
 				OnMoodRemoved(mood);
@@ -103,6 +110,43 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			foreach (ResourceAmount resourceAmount in inventory.resources) {
 				View.OnInventoryResourceAmountAdded(resourceAmount);
 			}
+		}
+
+		private void SetupClothingTab() {
+			foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> clothingMapping in colonist.clothes) {
+				UIClothingButtonElement clothingButton = View.CreateClothingButton(clothingMapping.Key, clothingMapping.Value);
+				clothingButton.OnButtonClicked += OnClothingButtonClicked;
+			}
+		}
+
+		private void OnClothingButtonClicked(HumanManager.Human.Appearance appearance) {
+			View.SetClothingSelectionPanelActive(true);
+			View.SetClothesAvailableTitleTextPanelActive(false);
+			View.SetClothesTakenTitleTextPanelActive(false);
+			foreach (ResourceManager.Clothing clothing in GameManager.resourceM.GetClothesByAppearance(appearance)) {
+				if (clothing.GetWorldTotalAmount() <= 0) {
+					continue;
+				}
+
+				UIClothingElement clothingElement = null;
+
+				if (clothing.GetAvailableAmount() > 0) {
+					clothingElement = View.CreateAvailableClothingElement(clothing);
+					View.SetClothesAvailableTitleTextPanelActive(true);
+				} else if (colonist.clothes[appearance] == null || clothing.name != colonist.clothes[appearance].name) {
+					clothingElement = View.CreateTakenClothingElement(clothing);
+					View.SetClothesTakenTitleTextPanelActive(true);
+				}
+
+				if (clothingElement != null) {
+					clothingElement.OnButtonClicked += OnClothingElementClicked;
+				}
+			}
+		}
+
+		private void OnClothingElementClicked(ResourceManager.Clothing clothing) {
+			colonist.ChangeClothing(clothing.prefab.appearance, clothing);
+			View.SetClothingSelectionPanelActive(false);
 		}
 	}
 }
