@@ -6,7 +6,6 @@ using Snowship.NUI.Menu.CreateColony;
 using Snowship.NUI.Modules;
 using Snowship.NUtilities;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Snowship.NUI.Menu.CreatePlanet {
 

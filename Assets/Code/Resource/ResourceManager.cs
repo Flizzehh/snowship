@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NPersistence;
+using Snowship.NResources;
 using Snowship.NUI;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -859,16 +860,6 @@ public class ResourceManager : IManager, IDisposable {
 		return GetResourcesInClass(ResourceClassEnum.Clothing).Select(r => (Clothing)r).Where(c => c.prefab.appearance == appearance).ToList();
 	}
 
-	public class ResourceAmount {
-		public Resource resource;
-		public int amount;
-
-		public ResourceAmount(Resource resource, int amount) {
-			this.resource = resource;
-			this.amount = amount;
-		}
-	}
-
 	public class ResourceRange {
 		public Resource resource;
 		public int min;
@@ -908,204 +899,6 @@ public class ResourceManager : IManager, IDisposable {
 		Inventory GetInventory();
 	}
 
-	public class Inventory {
-
-		public List<ResourceAmount> resources = new List<ResourceAmount>();
-		public List<ReservedResources> reservedResources = new List<ReservedResources>();
-
-		public IInventory parent;
-
-		//public int maxAmount;
-
-		public int maxWeight;
-		public int maxVolume;
-
-		public event Action<Inventory> OnInventoryChanged;
-
-		public Inventory(IInventory parent, /*int maxAmount*/int maxWeight, int maxVolume) {
-			this.parent = parent;
-			//this.maxAmount = maxAmount;
-			this.maxWeight = maxWeight;
-			this.maxVolume = maxVolume;
-		}
-
-		//public int CountResources() {
-		//	return resources.Sum(resource => resource.amount) + reservedResources.Sum(reservedResource => reservedResource.resources.Sum(rr => rr.amount));
-		//}
-
-		public int UsedWeight() {
-			return resources.Sum(ra => ra.amount * ra.resource.weight) + reservedResources.Sum(rr => rr.resources.Sum(ra => ra.amount * ra.resource.weight));
-		}
-
-		public int UsedVolume() {
-			return resources.Sum(ra => ra.amount * ra.resource.volume) + reservedResources.Sum(rr => rr.resources.Sum(ra => ra.amount * ra.resource.volume));
-		}
-
-		public int ChangeResourceAmount(Resource resource, int amount, bool limitToMaxAmount) {
-			//int remainingAmount = 0;
-
-			//int remainingWeight = 0;
-			//int remainingVolume = 0;
-
-			int highestOverflowAmount = 0;
-
-			if (limitToMaxAmount && amount > 0) {
-				//remainingAmount = maxAmount - (CountResources() + amount);
-
-				//remainingWeight = maxWeight - (TotalWeight() + (amount * resource.weight));
-				//remainingVolume = maxVolume - (TotalVolume() + (amount * resource.volume));
-
-				//if (remainingAmount < 0) {
-				//	remainingAmount = Mathf.Abs(remainingAmount);
-				//	amount -= remainingAmount;
-				//} else {
-				//	remainingAmount = 0;
-				//}
-
-				int totalWeight = UsedWeight();
-				//Debug.Log("totalWeight: " + totalWeight);
-				int totalVolume = UsedVolume();
-				//Debug.Log("totalVolume: " + totalVolume);
-				int weightOverflowAmount = ((resource.weight * amount) - maxWeight) / resource.weight;
-				int volumeOverflowAmount = ((resource.volume * amount) - maxVolume) / resource.volume;
-
-				highestOverflowAmount = Mathf.Max(weightOverflowAmount, volumeOverflowAmount);
-
-				if (highestOverflowAmount > 0) {
-					amount -= highestOverflowAmount;
-				}
-			}
-
-			ResourceAmount existingResourceAmount = resources.Find(ra => ra.resource == resource);
-			if (existingResourceAmount != null) {
-				if (amount >= 0 || (amount - existingResourceAmount.amount) >= 0) {
-					existingResourceAmount.amount += amount;
-				} else if (amount < 0 && (existingResourceAmount.amount + amount) >= 0) {
-					existingResourceAmount.amount += amount;
-				}
-			} else {
-				if (amount > 0) {
-					resources.Add(new ResourceAmount(resource, amount));
-				}
-			}
-			existingResourceAmount = resources.Find(ra => ra.resource == resource);
-			if (existingResourceAmount != null) {
-				if (existingResourceAmount.amount == 0) {
-					resources.Remove(existingResourceAmount);
-				}
-			}
-
-			GameManager.resourceM.CalculateResourceTotals();
-			//GameManager.uiMOld.SetSelectedColonistInformation(true);
-			//GameManager.uiMOld.SetSelectedTraderMenu();
-			//GameManager.uiMOld.SetSelectedContainerInfo();
-			//GameManager.uiMOld.UpdateSelectedTradingPostInfo();
-			ColonistJob.UpdateColonistJobs();
-
-			OnInventoryChanged?.Invoke(this);
-
-			//return remainingAmount;
-			return highestOverflowAmount;
-		}
-
-		public bool ReserveResources(List<ResourceAmount> resourcesToReserve, HumanManager.Human humanReservingResources) {
-			bool allResourcesFound = true;
-			foreach (ResourceAmount raReserve in resourcesToReserve) {
-				ResourceAmount raInventory = resources.Find(ra => ra.resource == raReserve.resource);
-				if (!(raInventory != null && raInventory.amount >= raReserve.amount)) {
-					allResourcesFound = false;
-				}
-			}
-			if (allResourcesFound) {
-				foreach (ResourceAmount raReserve in resourcesToReserve) {
-					ResourceAmount raInventory = resources.Find(ra => ra.resource == raReserve.resource);
-					ChangeResourceAmount(raInventory.resource, -raReserve.amount, false);
-				}
-				reservedResources.Add(new ReservedResources(resourcesToReserve, humanReservingResources));
-			}
-			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-			// GameManager.uiMOld.SetSelectedTraderMenu();
-			// GameManager.uiMOld.SetSelectedContainerInfo();
-			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
-
-			OnInventoryChanged?.Invoke(this);
-
-			return allResourcesFound;
-		}
-
-		public List<ReservedResources> TakeReservedResources(HumanManager.Human humanReservingResources, List<ResourceAmount> resourcesToTake = null) {
-			List<ReservedResources> reservedResourcesByHuman = new List<ReservedResources>();
-			foreach (ReservedResources rr in reservedResources) {
-				if (rr.human == humanReservingResources && (resourcesToTake == null || rr.resources.Find(ra => resourcesToTake.Find(rtt => rtt.resource == ra.resource) != null) != null)) {
-					reservedResourcesByHuman.Add(rr);
-				}
-			}
-			foreach (ReservedResources rr in reservedResourcesByHuman) {
-				reservedResources.Remove(rr);
-			}
-			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-			// GameManager.uiMOld.SetSelectedTraderMenu();
-			// GameManager.uiMOld.SetSelectedContainerInfo();
-			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
-
-			OnInventoryChanged?.Invoke(this);
-
-			return reservedResourcesByHuman;
-		}
-
-		public void ReleaseReservedResources(HumanManager.Human human) {
-			List<ReservedResources> reservedResourcesToRemove = new List<ReservedResources>();
-			foreach (ReservedResources rr in reservedResources) {
-				if (rr.human == human) {
-					foreach (ResourceAmount ra in rr.resources) {
-						ChangeResourceAmount(ra.resource, ra.amount, false);
-					}
-					reservedResourcesToRemove.Add(rr);
-				}
-			}
-			foreach (ReservedResources rrRemove in reservedResourcesToRemove) {
-				reservedResources.Remove(rrRemove);
-			}
-			reservedResourcesToRemove.Clear();
-			// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-			// GameManager.uiMOld.SetSelectedTraderMenu();
-			// GameManager.uiMOld.SetSelectedContainerInfo();
-			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
-
-			OnInventoryChanged?.Invoke(this);
-		}
-
-		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, ResourceAmount resourceAmount, bool limitToMaxAmount) {
-			Resource resource = resourceAmount.resource;
-			int amount = resourceAmount.amount;
-
-			fromInventory.ChangeResourceAmount(resource, -amount, false);
-			int remainingAmount = toInventory.ChangeResourceAmount(resource, amount, limitToMaxAmount);
-			if (remainingAmount > 0) {
-				fromInventory.ChangeResourceAmount(resource, remainingAmount, false);
-			}
-		}
-
-		public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, List<ResourceAmount> resourceAmounts, bool limitToMaxAmount) {
-			foreach (ResourceAmount resourceAmount in resourceAmounts.ToList()) {
-				TransferResourcesBetweenInventories(
-					fromInventory,
-					toInventory,
-					resourceAmount,
-					limitToMaxAmount
-				);
-			}
-		}
-
-		public bool ContainsResourceAmount(ResourceAmount resourceAmount) {
-			ResourceAmount matchingResource = resources.Find(ra => ra.resource == resourceAmount.resource);
-			if (matchingResource != null) {
-				return matchingResource.amount <= resourceAmount.amount;
-			}
-			return false;
-		}
-	}
-
 	public void CalculateResourceTotals() {
 		foreach (Resource resource in GetResources()) {
 			resource.SetWorldTotalAmount(0);
@@ -1118,32 +911,32 @@ public class ResourceManager : IManager, IDisposable {
 
 		foreach (Colonist colonist in Colonist.colonists) {
 			foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources) {
-				resourceAmount.resource.AddToWorldTotalAmount(resourceAmount.amount);
-				resourceAmount.resource.AddToColonistsTotalAmount(resourceAmount.amount);
+				resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
+				resourceAmount.Resource.AddToColonistsTotalAmount(resourceAmount.Amount);
 			}
 			foreach (ReservedResources reservedResources in colonist.GetInventory().reservedResources) {
 				foreach (ResourceAmount resourceAmount in reservedResources.resources) {
-					resourceAmount.resource.AddToWorldTotalAmount(resourceAmount.amount);
-					resourceAmount.resource.AddToColonistsTotalAmount(resourceAmount.amount);
+					resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
+					resourceAmount.Resource.AddToColonistsTotalAmount(resourceAmount.Amount);
 				}
 			}
 		}
 		foreach (Container container in containers) {
 			foreach (ResourceAmount resourceAmount in container.GetInventory().resources) {
-				resourceAmount.resource.AddToWorldTotalAmount(resourceAmount.amount);
-				resourceAmount.resource.AddToContainerTotalAmount(resourceAmount.amount);
-				resourceAmount.resource.AddToUnreservedContainerTotalAmount(resourceAmount.amount);
+				resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
+				resourceAmount.Resource.AddToContainerTotalAmount(resourceAmount.Amount);
+				resourceAmount.Resource.AddToUnreservedContainerTotalAmount(resourceAmount.Amount);
 			}
 			foreach (ReservedResources reservedResources in container.GetInventory().reservedResources) {
 				foreach (ResourceAmount resourceAmount in reservedResources.resources) {
-					resourceAmount.resource.AddToWorldTotalAmount(resourceAmount.amount);
-					resourceAmount.resource.AddToContainerTotalAmount(resourceAmount.amount);
+					resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
+					resourceAmount.Resource.AddToContainerTotalAmount(resourceAmount.Amount);
 				}
 			}
 		}
 		foreach (TradingPost tradingPost in tradingPosts) {
 			foreach (ResourceAmount resourceAmount in tradingPost.GetInventory().resources) {
-				resourceAmount.resource.AddToUnreservedTradingPostTotalAmount(resourceAmount.amount);
+				resourceAmount.Resource.AddToUnreservedTradingPostTotalAmount(resourceAmount.Amount);
 			}
 		}
 
@@ -1160,22 +953,22 @@ public class ResourceManager : IManager, IDisposable {
 			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonistInventory) {
 					foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources) {
-						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.resource == resourceAmount.resource);
+						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 						if (existingResourceAmount == null) {
-							returnResources.Add(new ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+							returnResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 						} else {
-							existingResourceAmount.amount += resourceAmount.amount;
+							existingResourceAmount.Amount += resourceAmount.Amount;
 						}
 					}
 				}
 				if (colonistReserved) {
 					foreach (ReservedResources reservedResources in colonist.GetInventory().reservedResources) {
 						foreach (ResourceAmount resourceAmount in reservedResources.resources) {
-							ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.resource == resourceAmount.resource);
+							ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 							if (existingResourceAmount == null) {
-								returnResources.Add(new ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+								returnResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 							} else {
-								existingResourceAmount.amount += resourceAmount.amount;
+								existingResourceAmount.Amount += resourceAmount.Amount;
 							}
 						}
 					}
@@ -1186,22 +979,22 @@ public class ResourceManager : IManager, IDisposable {
 			foreach (Container container in containers) {
 				if (containerInventory) {
 					foreach (ResourceAmount resourceAmount in container.GetInventory().resources) {
-						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.resource == resourceAmount.resource);
+						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 						if (existingResourceAmount == null) {
-							returnResources.Add(new ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+							returnResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 						} else {
-							existingResourceAmount.amount += resourceAmount.amount;
+							existingResourceAmount.Amount += resourceAmount.Amount;
 						}
 					}
 				}
 				if (containerReserved) {
 					foreach (ReservedResources reservedResources in container.GetInventory().reservedResources) {
 						foreach (ResourceAmount resourceAmount in reservedResources.resources) {
-							ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.resource == resourceAmount.resource);
+							ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 							if (existingResourceAmount == null) {
-								returnResources.Add(new ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+								returnResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 							} else {
-								existingResourceAmount.amount += resourceAmount.amount;
+								existingResourceAmount.Amount += resourceAmount.Amount;
 							}
 						}
 					}
@@ -2484,11 +2277,11 @@ public class ResourceManager : IManager, IDisposable {
 		List<ResourceAmount> availableResources = new List<ResourceAmount>();
 		foreach (TradingPost tradingPost in GetTradingPostsInRegion(region)) {
 			foreach (ResourceAmount resourceAmount in tradingPost.GetInventory().resources) {
-				ResourceAmount accessibleResource = availableResources.Find(ra => ra.resource == resourceAmount.resource);
+				ResourceAmount accessibleResource = availableResources.Find(ra => ra.Resource == resourceAmount.Resource);
 				if (accessibleResource != null) {
-					accessibleResource.amount += resourceAmount.amount;
+					accessibleResource.Amount += resourceAmount.Amount;
 				} else {
-					availableResources.Add(new ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+					availableResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 				}
 			}
 		}
@@ -2666,7 +2459,7 @@ public class ResourceManager : IManager, IDisposable {
 
 					// Not enableable if don't have enough required resources
 					foreach (ResourceAmount resourceAmount in resource.resource.craftingResources) {
-						if (resourceAmount.resource.GetAvailableAmount() < resourceAmount.amount) {
+						if (resourceAmount.Resource.GetAvailableAmount() < resourceAmount.Amount) {
 							resource.enableable = false;
 							break;
 						}
@@ -2761,7 +2554,7 @@ public class ResourceManager : IManager, IDisposable {
 			} else {
 				fuels.Remove(existingFuel);
 				foreach (CraftableResourceInstance resource in resources) {
-					if (resource.fuelAmounts.Find(ra => ra.resource == fuel) != null) {
+					if (resource.fuelAmounts.Find(ra => ra.Resource == fuel) != null) {
 						if (resource.job != null) {
 							GameManager.jobM.CancelJob(resource.job);
 							resource.job = null;
@@ -3145,7 +2938,7 @@ public class ResourceManager : IManager, IDisposable {
 					foreach (Resource harvestResource in prefab.harvestResources.Select(rr => rr.resource)) {
 						resourceChances.Add(new ResourceAmount(harvestResource, UnityEngine.Random.Range(0, 100)));
 					}
-					harvestResource = resourceChances.OrderByDescending(ra => ra.amount).First().resource;
+					harvestResource = resourceChances.OrderByDescending(ra => ra.Amount).First().Resource;
 				}
 			}
 			if (specificHarvestResource != null) {

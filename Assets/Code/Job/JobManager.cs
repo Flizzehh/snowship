@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NProfession;
+using Snowship.NResources;
 using Snowship.NUtilities;
 using UnityEngine;
 using static Snowship.NJob.JobManager;
@@ -528,21 +529,21 @@ namespace Snowship.NJob {
 			changedJobList = true;
 		}
 
-		public List<ContainerPickup> CalculateColonistPickupContainers(Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToPickup) {
+		public List<ContainerPickup> CalculateColonistPickupContainers(Colonist colonist, List<ResourceAmount> resourcesToPickup) {
 			List<ContainerPickup> containersToPickupFrom = new List<ContainerPickup>();
 			List<ResourceManager.Container> sortedContainersByDistance = GameManager.resourceM.GetContainersInRegion(colonist.overTile.region).OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).ToList();
 			if (sortedContainersByDistance.Count > 0) {
 				foreach (ResourceManager.Container container in sortedContainersByDistance) {
-					List<ResourceManager.ResourceAmount> resourcesToPickupAtContainer = new List<ResourceManager.ResourceAmount>();
-					foreach (ResourceManager.ResourceAmount resourceAmount in container.GetInventory().resources.Where(ra => resourcesToPickup.Find(pickupResource => pickupResource.resource == ra.resource) != null)) {
-						ResourceManager.ResourceAmount pickupResource = resourcesToPickup.Find(pR => pR.resource == resourceAmount.resource);
-						if (resourceAmount.amount >= pickupResource.amount) {
-							resourcesToPickupAtContainer.Add(new ResourceManager.ResourceAmount(pickupResource.resource, pickupResource.amount));
+					List<ResourceAmount> resourcesToPickupAtContainer = new();
+					foreach (ResourceAmount resourceAmount in container.GetInventory().resources.Where(ra => resourcesToPickup.Find(pickupResource => pickupResource.Resource == ra.Resource) != null)) {
+						ResourceAmount pickupResource = resourcesToPickup.Find(pR => pR.Resource == resourceAmount.Resource);
+						if (resourceAmount.Amount >= pickupResource.Amount) {
+							resourcesToPickupAtContainer.Add(new ResourceAmount(pickupResource.Resource, pickupResource.Amount));
 							resourcesToPickup.Remove(pickupResource);
-						} else if (resourceAmount.amount > 0 && resourceAmount.amount < pickupResource.amount) {
-							resourcesToPickupAtContainer.Add(new ResourceManager.ResourceAmount(pickupResource.resource, resourceAmount.amount));
-							pickupResource.amount -= resourceAmount.amount;
-							if (pickupResource.amount <= 0) {
+						} else if (resourceAmount.Amount > 0 && resourceAmount.Amount < pickupResource.Amount) {
+							resourcesToPickupAtContainer.Add(new ResourceAmount(pickupResource.Resource, resourceAmount.Amount));
+							pickupResource.Amount -= resourceAmount.Amount;
+							if (pickupResource.Amount <= 0) {
 								resourcesToPickup.Remove(pickupResource);
 							}
 						} else {
@@ -566,29 +567,29 @@ namespace Snowship.NJob {
 			}
 		}
 
-		public KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>> CalculateColonistResourcesToPickup(Colonist colonist, List<ResourceManager.ResourceAmount> resourcesToFind) {
+		public KeyValuePair<bool, List<List<ResourceAmount>>> CalculateColonistResourcesToPickup(Colonist colonist, List<ResourceAmount> resourcesToFind) {
 			bool colonistHasAllResources = true;
-			List<ResourceManager.ResourceAmount> resourcesColonistHas = new List<ResourceManager.ResourceAmount>();
-			List<ResourceManager.ResourceAmount> resourcesToPickup = new List<ResourceManager.ResourceAmount>();
-			foreach (ResourceManager.ResourceAmount resourceAmount in resourcesToFind) {
-				ResourceManager.ResourceAmount colonistResourceAmount = colonist.GetInventory().resources.Find(resource => resource.resource == resourceAmount.resource);
+			List<ResourceAmount> resourcesColonistHas = new();
+			List<ResourceAmount> resourcesToPickup = new();
+			foreach (ResourceAmount resourceAmount in resourcesToFind) {
+				ResourceAmount colonistResourceAmount = colonist.GetInventory().resources.Find(resource => resource.Resource == resourceAmount.Resource);
 				if (colonistResourceAmount != null) {
-					if (colonistResourceAmount.amount >= resourceAmount.amount) {
-						resourcesColonistHas.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
-					} else if (colonistResourceAmount.amount > 0 && colonistResourceAmount.amount < resourceAmount.amount) {
+					if (colonistResourceAmount.Amount >= resourceAmount.Amount) {
+						resourcesColonistHas.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
+					} else if (colonistResourceAmount.Amount > 0 && colonistResourceAmount.Amount < resourceAmount.Amount) {
 						colonistHasAllResources = false;
-						resourcesColonistHas.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, colonistResourceAmount.amount));
-						resourcesToPickup.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount - colonistResourceAmount.amount));
+						resourcesColonistHas.Add(new ResourceAmount(resourceAmount.Resource, colonistResourceAmount.Amount));
+						resourcesToPickup.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount - colonistResourceAmount.Amount));
 					} else {
 						colonistHasAllResources = false;
-						resourcesToPickup.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+						resourcesToPickup.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 					}
 				} else {
 					colonistHasAllResources = false;
-					resourcesToPickup.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
+					resourcesToPickup.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
 				}
 			}
-			return new KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>>(colonistHasAllResources, new List<List<ResourceManager.ResourceAmount>>() { (resourcesToPickup.Count > 0 ? resourcesToPickup : null), (resourcesColonistHas.Count > 0 ? resourcesColonistHas : null) });
+			return new KeyValuePair<bool, List<List<ResourceAmount>>>(colonistHasAllResources, new List<List<ResourceAmount>>() { resourcesToPickup.Count > 0 ? resourcesToPickup : null, resourcesColonistHas.Count > 0 ? resourcesColonistHas : null });
 		}
 
 		public static float CalculateJobCost(Colonist colonist, Job job, List<ContainerPickup> containerPickups) {
@@ -731,12 +732,12 @@ namespace Snowship.NJob {
 		public Colonist colonist;
 		public Job job;
 
-		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
+		public List<ResourceAmount> resourcesColonistHas;
 		public List<ContainerPickup> containerPickups;
 
 		public float cost;
 
-		public ColonistJob(Colonist colonist, Job job, List<ResourceManager.ResourceAmount> resourcesColonistHas, List<ContainerPickup> containerPickups) {
+		public ColonistJob(Colonist colonist, Job job, List<ResourceAmount> resourcesColonistHas, List<ContainerPickup> containerPickups) {
 			this.colonist = colonist;
 			this.job = job;
 			this.resourcesColonistHas = resourcesColonistHas;
@@ -750,8 +751,8 @@ namespace Snowship.NJob {
 		}
 
 		public void RecalculatePickupResources() {
-			KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.requiredResources);
-			List<ResourceManager.ResourceAmount> resourcesToPickup = returnKVP.Value[0];
+			KeyValuePair<bool, List<List<ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.requiredResources);
+			List<ResourceAmount> resourcesToPickup = returnKVP.Value[0];
 			resourcesColonistHas = returnKVP.Value[1];
 			if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
 				containerPickups = GameManager.jobM.CalculateColonistPickupContainers(colonist, resourcesToPickup);
@@ -784,10 +785,10 @@ namespace Snowship.NJob {
 
 				if (job.requiredResources.Count > 0) {
 
-					KeyValuePair<bool, List<List<ResourceManager.ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.requiredResources);
+					KeyValuePair<bool, List<List<ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.requiredResources);
 					bool colonistHasAllResources = returnKVP.Key;
-					List<ResourceManager.ResourceAmount> resourcesToPickup = returnKVP.Value[0];
-					List<ResourceManager.ResourceAmount> resourcesColonistHas = returnKVP.Value[1];
+					List<ResourceAmount> resourcesToPickup = returnKVP.Value[0];
+					List<ResourceAmount> resourcesColonistHas = returnKVP.Value[1];
 
 					if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
 
@@ -837,9 +838,9 @@ namespace Snowship.NJob {
 
 	public class ContainerPickup {
 		public ResourceManager.Container container;
-		public List<ResourceManager.ResourceAmount> resourcesToPickup = new List<ResourceManager.ResourceAmount>();
+		public List<ResourceAmount> resourcesToPickup = new();
 
-		public ContainerPickup(ResourceManager.Container container, List<ResourceManager.ResourceAmount> resourcesToPickup) {
+		public ContainerPickup(ResourceManager.Container container, List<ResourceAmount> resourcesToPickup) {
 			this.container = container;
 			this.resourcesToPickup = resourcesToPickup;
 		}

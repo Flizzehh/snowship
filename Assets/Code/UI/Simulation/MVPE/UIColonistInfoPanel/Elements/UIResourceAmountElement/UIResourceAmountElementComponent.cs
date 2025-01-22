@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel.UIInventoryResource
+namespace Snowship.NUI.Simulation
 {
 	public class UIResourceAmountElementComponent : UIElementComponent
 	{
@@ -10,10 +10,16 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel.UIInventoryResource
 		[SerializeField] private TMP_Text resourceAmountText;
 		[SerializeField] private Image resourceImage;
 
-		public void SetResourceAmount(ResourceManager.ResourceAmount resourceAmount) {
-			resourceNameText.SetText(resourceAmount.resource.name);
-			resourceAmountText.SetText(resourceAmount.amount.ToString());
-			resourceImage.sprite = resourceAmount.resource.image;
+		public void SetResourceImage(Sprite resourceSprite) {
+			resourceImage.sprite = resourceSprite;
+		}
+
+		public void SetResourceName(string resourceName) {
+			resourceNameText.SetText(resourceName);
+		}
+
+		public void SetResourceAmount(string resourceAmount) {
+			resourceAmountText.SetText(resourceAmount);
 		}
 	}
 }

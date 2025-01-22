@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
 using Snowship.NProfession;
+using Snowship.NResources;
 using Snowship.NTime;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -222,6 +223,9 @@ namespace Snowship.NColonist {
 
 		public void RemoveMoodModifier(MoodModifierEnum moodModifierEnum) {
 			MoodModifierInstance moodToRemove = moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.type == moodModifierEnum);
+			if (moodToRemove == null) {
+				return;
+			}
 			moodModifiers.Remove(moodToRemove);
 			OnMoodRemoved?.Invoke(moodToRemove);
 		}
@@ -519,7 +523,7 @@ namespace Snowship.NColonist {
 		public float GetJobSkillMultiplier(string jobType) {
 			SkillInstance skill = GetSkillFromJobType(jobType);
 			if (skill != null) {
-				return 1 * (-(1f / (((skill.prefab.affectedJobTypes[jobType]) * (skill.level)) + 1)) + 1);
+				return 1 * (-(1f / (skill.prefab.affectedJobTypes[jobType] * skill.Level + 1)) + 1);
 			}
 			return 1.0f;
 		}
@@ -547,20 +551,20 @@ namespace Snowship.NColonist {
 
 		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
 
-			if (clothing == null || GetInventory().ContainsResourceAmount(new ResourceManager.ResourceAmount(clothing, 1))) {
+			if (clothing == null || GetInventory().ContainsResourceAmount(new ResourceAmount(clothing, 1))) {
 
 				base.ChangeClothing(appearance, clothing);
 
 			} else {
 
-				ResourceManager.Container container = NeedUtilities.FindClosestResourceAmountInContainers(this, new ResourceManager.ResourceAmount(clothing, 1));
+				ResourceManager.Container container = NeedUtilities.FindClosestResourceAmountInContainers(this, new ResourceAmount(clothing, 1));
 
 				if (container != null) {
 
-					ResourceManager.ResourceAmount clothingToPickup = new ResourceManager.ResourceAmount(clothing, 1);
+					ResourceAmount clothingToPickup = new(clothing, 1);
 
 					container.GetInventory().ReserveResources(
-						new List<ResourceManager.ResourceAmount> {
+						new List<ResourceAmount> {
 							clothingToPickup
 						},
 						this
@@ -574,12 +578,12 @@ namespace Snowship.NColonist {
 							null,
 							0
 						) {
-							requiredResources = new List<ResourceManager.ResourceAmount> { clothingToPickup },
-							resourcesColonistHas = new List<ResourceManager.ResourceAmount>(),
+							requiredResources = new List<ResourceAmount> { clothingToPickup },
+							resourcesColonistHas = new List<ResourceAmount>(),
 							containerPickups = new List<ContainerPickup> {
 								new ContainerPickup(
 									container,
-									new List<ResourceManager.ResourceAmount> { clothingToPickup }
+									new List<ResourceAmount> { clothingToPickup }
 								)
 							}
 						}

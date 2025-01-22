@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Snowship.NJob;
 using Snowship.NResource.Models;
+using Snowship.NResources;
 using Snowship.NUtilities;
 
 namespace Snowship.NCaravan {
@@ -35,12 +36,12 @@ namespace Snowship.NCaravan {
 
 				if (overTile == tradingPost.zeroPointTile) {
 					foreach (ResourceManager.ReservedResources rr in tradingPost.GetInventory().TakeReservedResources(this)) {
-						foreach (ResourceManager.ResourceAmount ra in rr.resources) {
-							caravan.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
+						foreach (ResourceAmount ra in rr.resources) {
+							caravan.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
 
-							ConfirmedTradeResourceAmount confirmedTradeResourceAmount = caravan.confirmedResourcesToTrade.Find(crtt => crtt.resource == ra.resource);
+							ConfirmedTradeResourceAmount confirmedTradeResourceAmount = caravan.confirmedResourcesToTrade.Find(crtt => crtt.resource == ra.Resource);
 							if (confirmedTradeResourceAmount != null) {
-								confirmedTradeResourceAmount.amountRemaining += ra.amount;
+								confirmedTradeResourceAmount.amountRemaining += ra.Amount;
 							}
 						}
 					}
@@ -56,13 +57,13 @@ namespace Snowship.NCaravan {
 						null,
 						0
 					) {
-						transferResources = new List<ResourceManager.ResourceAmount>()
+						transferResources = new List<ResourceAmount>()
 					};
 					foreach (ConfirmedTradeResourceAmount confirmedTradeResourceAmount in caravan.confirmedResourcesToTrade) {
 						if (confirmedTradeResourceAmount.tradeAmount > 0) {
 							tradingPost.GetInventory().ChangeResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount, false);
 							confirmedTradeResourceAmount.amountRemaining = 0;
-							job.transferResources.Add(new ResourceManager.ResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount));
+							job.transferResources.Add(new ResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount));
 						}
 					}
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NResource.Models;
+using Snowship.NResources;
 using Snowship.NTime;
 using Snowship.Selectable;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Snowship.NCaravan {
 
 		public Location location;
 
-		private readonly ResourceManager.Inventory inventory;
+		private readonly Inventory inventory;
 
 		public List<TradeResourceAmount> resourcesToTrade = new List<TradeResourceAmount>();
 
@@ -40,7 +41,7 @@ namespace Snowship.NCaravan {
 		private readonly List<Trader> removeTraders = new List<Trader>();
 
 		public Caravan() {
-			inventory = new ResourceManager.Inventory(this, int.MaxValue, int.MaxValue);
+			inventory = new Inventory(this, int.MaxValue, int.MaxValue);
 		}
 
 		public Caravan(
@@ -61,7 +62,7 @@ namespace Snowship.NCaravan {
 				spawnTiles.Remove(spawnTile);
 			}
 
-			inventory = new ResourceManager.Inventory(this, int.MaxValue, int.MaxValue);
+			inventory = new Inventory(this, int.MaxValue, int.MaxValue);
 
 			resourceGroup = GameManager.resourceM.GetRandomResourceGroup();
 			foreach (ResourceManager.Resource resource in resourceGroup.resources.OrderBy(r => Random.Range(0f, 1f))) { // Randomize resource group list
@@ -101,26 +102,26 @@ namespace Snowship.NCaravan {
 			List<TradeResourceAmount> tradeResourceAmounts = new List<TradeResourceAmount>();
 			tradeResourceAmounts.AddRange(resourcesToTrade);
 
-			List<ResourceManager.ResourceAmount> caravanResourceAmounts = inventory.resources;
+			List<ResourceAmount> caravanResourceAmounts = inventory.resources;
 
-			foreach (ResourceManager.ResourceAmount resourceAmount in caravanResourceAmounts) {
-				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.resource);
+			foreach (ResourceAmount resourceAmount in caravanResourceAmounts) {
+				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.Resource);
 				if (existingTradeResourceAmount == null) {
-					tradeResourceAmounts.Add(new TradeResourceAmount(resourceAmount.resource, resourceAmount.amount, 0, this));
+					tradeResourceAmounts.Add(new TradeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, 0, this));
 				} else {
 					existingTradeResourceAmount.Update();
 				}
 			}
 
-			List<ResourceManager.ResourceAmount> colonyResourceAmounts = new List<ResourceManager.ResourceAmount>();
+			List<ResourceAmount> colonyResourceAmounts = new();
 			if (traders.Count > 0) {
 				colonyResourceAmounts = GameManager.resourceM.GetAvailableResourcesInTradingPostsInRegion(traders.Find(t => t != null).overTile.region);
 			}
 
-			foreach (ResourceManager.ResourceAmount resourceAmount in colonyResourceAmounts) {
-				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.resource);
+			foreach (ResourceAmount resourceAmount in colonyResourceAmounts) {
+				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.Resource);
 				if (existingTradeResourceAmount == null) {
-					tradeResourceAmounts.Add(new TradeResourceAmount(resourceAmount.resource, 0, resourceAmount.amount, this));
+					tradeResourceAmounts.Add(new TradeResourceAmount(resourceAmount.Resource, 0, resourceAmount.Amount, this));
 				} else {
 					existingTradeResourceAmount.Update();
 				}
@@ -171,10 +172,10 @@ namespace Snowship.NCaravan {
 				}
 			}
 
-			List<ResourceManager.ResourceAmount> resourcesToReserve = new List<ResourceManager.ResourceAmount>();
+			List<ResourceAmount> resourcesToReserve = new();
 			foreach (TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
 				if (tradeResourceAmount.GetTradeAmount() < 0) {
-					resourcesToReserve.Add(new ResourceManager.ResourceAmount(tradeResourceAmount.resource, Mathf.Abs(tradeResourceAmount.GetTradeAmount())));
+					resourcesToReserve.Add(new ResourceAmount(tradeResourceAmount.resource, Mathf.Abs(tradeResourceAmount.GetTradeAmount())));
 				}
 			}
 
@@ -191,15 +192,15 @@ namespace Snowship.NCaravan {
 			Trader primaryTrader = traders[0];
 			if (primaryTrader != null) {
 				foreach (ResourceManager.TradingPost tradingPost in GameManager.resourceM.GetTradingPostsInRegion(primaryTrader.overTile.region).OrderBy(tp => PathManager.RegionBlockDistance(primaryTrader.overTile.regionBlock, tp.zeroPointTile.regionBlock, true, true, false))) {
-					List<ResourceManager.ResourceAmount> resourcesToReserveAtThisTradingPost = new List<ResourceManager.ResourceAmount>();
-					List<ResourceManager.ResourceAmount> resourcesToReserveToRemove = new List<ResourceManager.ResourceAmount>();
-					foreach (ResourceManager.ResourceAmount resourceToReserve in resourcesToReserve) {
-						ResourceManager.ResourceAmount resourceAmount = tradingPost.GetInventory().resources.Find(r => r.resource == resourceToReserve.resource);
+					List<ResourceAmount> resourcesToReserveAtThisTradingPost = new();
+					List<ResourceAmount> resourcesToReserveToRemove = new();
+					foreach (ResourceAmount resourceToReserve in resourcesToReserve) {
+						ResourceAmount resourceAmount = tradingPost.GetInventory().resources.Find(r => r.Resource == resourceToReserve.Resource);
 						if (resourceAmount != null) {
-							int amountToReserve = resourceToReserve.amount < resourceAmount.amount ? resourceToReserve.amount : resourceAmount.amount;
-							resourcesToReserveAtThisTradingPost.Add(new ResourceManager.ResourceAmount(resourceToReserve.resource, amountToReserve));
-							resourceToReserve.amount -= amountToReserve;
-							if (resourceToReserve.amount == 0) {
+							int amountToReserve = resourceToReserve.Amount < resourceAmount.Amount ? resourceToReserve.Amount : resourceAmount.Amount;
+							resourcesToReserveAtThisTradingPost.Add(new ResourceAmount(resourceToReserve.Resource, amountToReserve));
+							resourceToReserve.Amount -= amountToReserve;
+							if (resourceToReserve.Amount == 0) {
 								resourcesToReserveToRemove.Add(resourceToReserve);
 							}
 						}
@@ -210,7 +211,7 @@ namespace Snowship.NCaravan {
 						tradingPostsWithReservedResources.Add(tradingPost);
 					}
 
-					foreach (ResourceManager.ResourceAmount resourceToReserveToRemove in resourcesToReserveToRemove) {
+					foreach (ResourceAmount resourceToReserveToRemove in resourcesToReserveToRemove) {
 						resourcesToReserve.Remove(resourceToReserveToRemove);
 					}
 
@@ -272,7 +273,7 @@ namespace Snowship.NCaravan {
 			}
 		}
 
-		public ResourceManager.Inventory GetInventory() {
+		public Inventory GetInventory() {
 			return inventory;
 		}
 

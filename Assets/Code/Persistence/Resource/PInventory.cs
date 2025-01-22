@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NResources;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -28,7 +29,7 @@ namespace Snowship.NPersistence {
 			ContainerPosition
 		}
 
-		public void WriteInventoryLines(StreamWriter file, ResourceManager.Inventory inventory, int startLevel) {
+		public void WriteInventoryLines(StreamWriter file, Inventory inventory, int startLevel) {
 			file.WriteLine(CreateKeyValueString(InventoryProperty.Inventory, string.Empty, startLevel));
 			file.WriteLine(CreateKeyValueString(InventoryProperty.MaxWeight, inventory.maxWeight, startLevel + 1));
 			file.WriteLine(CreateKeyValueString(InventoryProperty.MaxVolume, inventory.maxVolume, startLevel + 1));
@@ -39,7 +40,7 @@ namespace Snowship.NPersistence {
 			}
 			if (inventory.resources.Count > 0) {
 				file.WriteLine(CreateKeyValueString(InventoryProperty.Resources, string.Empty, startLevel + 1));
-				foreach (ResourceManager.ResourceAmount resourceAmount in inventory.resources) {
+				foreach (ResourceAmount resourceAmount in inventory.resources) {
 					WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
@@ -49,7 +50,7 @@ namespace Snowship.NPersistence {
 					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.ReservedResourceAmounts, string.Empty, startLevel + 2));
 					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.HumanName, reservedResources.human.name, startLevel + 3));
 					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.Resources, string.Empty, startLevel + 3));
-					foreach (ResourceManager.ResourceAmount resourceAmount in reservedResources.resources) {
+					foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 						WriteResourceAmountLines(file, resourceAmount, startLevel + 4);
 					}
 				}
@@ -59,16 +60,16 @@ namespace Snowship.NPersistence {
 		public class PersistenceInventory {
 			public int? maxWeight;
 			public int? maxVolume;
-			public List<ResourceManager.ResourceAmount> resources;
-			public List<KeyValuePair<string, List<ResourceManager.ResourceAmount>>> reservedResources;
+			public List<ResourceAmount> resources;
+			public List<KeyValuePair<string, List<ResourceAmount>>> reservedResources;
 			public string humanName;
 			public Vector2? containerZeroPointTilePosition;
 
 			public PersistenceInventory(
 				int? maxWeight,
 				int? maxVolume,
-				List<ResourceManager.ResourceAmount> resources,
-				List<KeyValuePair<string, List<ResourceManager.ResourceAmount>>> reservedResources,
+				List<ResourceAmount> resources,
+				List<KeyValuePair<string, List<ResourceAmount>>> reservedResources,
 				string humanName,
 				Vector2? containerZeroPointTilePosition
 			) {
@@ -84,8 +85,8 @@ namespace Snowship.NPersistence {
 		public PersistenceInventory LoadPersistenceInventory(List<KeyValuePair<string, object>> properties) {
 			int? maxWeight = null;
 			int? maxVolume = null;
-			List<ResourceManager.ResourceAmount> resources = new List<ResourceManager.ResourceAmount>();
-			List<KeyValuePair<string, List<ResourceManager.ResourceAmount>>> reservedResources = new List<KeyValuePair<string, List<ResourceManager.ResourceAmount>>>();
+			List<ResourceAmount> resources = new();
+			List<KeyValuePair<string, List<ResourceAmount>>> reservedResources = new();
 			string humanName = null;
 			Vector2? containerZeroPointTilePosition = null;
 
@@ -110,7 +111,7 @@ namespace Snowship.NPersistence {
 								case ReservedResourcesProperty.ReservedResourceAmounts:
 
 									string reservingHumanName = null;
-									List<ResourceManager.ResourceAmount> resourcesToReserve = new List<ResourceManager.ResourceAmount>();
+									List<ResourceAmount> resourcesToReserve = new();
 
 									foreach (KeyValuePair<string, object> reservedResourcesSubProperty in (List<KeyValuePair<string, object>>)reservedResourcesProperty.Value) {
 										ReservedResourcesProperty reservedResourcesSubPropertyKey = (ReservedResourcesProperty)Enum.Parse(typeof(ReservedResourcesProperty), reservedResourcesSubProperty.Key);
@@ -129,7 +130,7 @@ namespace Snowship.NPersistence {
 										}
 									}
 
-									reservedResources.Add(new KeyValuePair<string, List<ResourceManager.ResourceAmount>>(reservingHumanName, resourcesToReserve));
+									reservedResources.Add(new KeyValuePair<string, List<ResourceAmount>>(reservingHumanName, resourcesToReserve));
 
 									break;
 								default:
@@ -153,13 +154,13 @@ namespace Snowship.NPersistence {
 			return new PersistenceInventory(maxWeight, maxVolume, resources, reservedResources, humanName, containerZeroPointTilePosition);
 		}
 
-		public void WriteResourceAmountLines(StreamWriter file, ResourceManager.ResourceAmount resourceAmount, int startLevel) {
+		public void WriteResourceAmountLines(StreamWriter file, ResourceAmount resourceAmount, int startLevel) {
 			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.ResourceAmount, string.Empty, startLevel));
-			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.Type, resourceAmount.resource.type, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.Amount, resourceAmount.amount, startLevel + 1));
+			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.Type, resourceAmount.Resource.type, startLevel + 1));
+			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.Amount, resourceAmount.Amount, startLevel + 1));
 		}
 
-		public ResourceManager.ResourceAmount LoadResourceAmount(List<KeyValuePair<string, object>> properties) {
+		public ResourceAmount LoadResourceAmount(List<KeyValuePair<string, object>> properties) {
 			ResourceManager.Resource resource = null;
 			int? amount = null;
 
@@ -178,7 +179,7 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			return new ResourceManager.ResourceAmount(resource, amount.Value);
+			return new ResourceAmount(resource, amount.Value);
 		}
 
 	}

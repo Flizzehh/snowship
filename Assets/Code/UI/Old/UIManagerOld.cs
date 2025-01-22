@@ -5,6 +5,7 @@ using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NPersistence;
+using Snowship.NResources;
 using Snowship.NUI.Menu.LoadSave;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -14,6 +15,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Snowship.NUI {
+	// @formatter:off
 	public class UIManagerOld : IManager {
 		// Old Code
 
@@ -659,12 +661,12 @@ namespace Snowship.NUI {
 
 				requiredResourceElements.Clear();
 
-				foreach (ResourceManager.ResourceAmount resourceAmount in prefab.commonResources) {
+				foreach (ResourceAmount resourceAmount in prefab.commonResources) {
 					requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, requiredResourceElementsPanel.transform));
 				}
 
 				if (prefab.lastSelectedVariation != null) {
-					foreach (ResourceManager.ResourceAmount resourceAmount in prefab.lastSelectedVariation.uniqueResources) {
+					foreach (ResourceAmount resourceAmount in prefab.lastSelectedVariation.uniqueResources) {
 						requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, requiredResourceElementsPanel.transform));
 					}
 				}
@@ -699,8 +701,8 @@ namespace Snowship.NUI {
 			private void UpdateVariationsIndicator() {
 				bool requiredResourcesMet = false;
 				if (prefab.commonResources.Count > 0) {
-					foreach (ResourceManager.ResourceAmount resourceAmount in prefab.commonResources) {
-						requiredResourcesMet = resourceAmount.amount <= resourceAmount.resource.GetAvailableAmount();
+					foreach (ResourceAmount resourceAmount in prefab.commonResources) {
+						requiredResourcesMet = resourceAmount.Amount <= resourceAmount.Resource.GetAvailableAmount();
 						if (!requiredResourcesMet) {
 							break;
 						}
@@ -714,8 +716,8 @@ namespace Snowship.NUI {
 					foreach (ResourceManager.Variation variation in prefab.variations) {
 						bool variationResourcesMet = false;
 						if (variation.uniqueResources.Count > 0) {
-							foreach (ResourceManager.ResourceAmount resourceAmount in variation.uniqueResources) {
-								variationResourcesMet = resourceAmount.amount <= resourceAmount.resource.GetAvailableAmount();
+							foreach (ResourceAmount resourceAmount in variation.uniqueResources) {
+								variationResourcesMet = resourceAmount.Amount <= resourceAmount.Resource.GetAvailableAmount();
 								if (!variationResourcesMet) {
 									break;
 								}
@@ -738,26 +740,26 @@ namespace Snowship.NUI {
 		}
 
 		private class RequiredResourceElement {
-			public ResourceManager.ResourceAmount resourceAmount;
+			public ResourceAmount resourceAmount;
 			public GameObject obj;
 
-			public RequiredResourceElement(ResourceManager.ResourceAmount resourceAmount, Transform parent) {
+			public RequiredResourceElement(ResourceAmount resourceAmount, Transform parent) {
 				this.resourceAmount = resourceAmount;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/RequiredResource-Panel"), parent, false);
 
-				obj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
-				obj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.resource.name;
+				obj.transform.Find("ResourceImage-Image").GetComponent<Image>().sprite = resourceAmount.Resource.image;
+				obj.transform.Find("ResourceName-Text").GetComponent<Text>().text = resourceAmount.Resource.name;
 
 				Update();
 			}
 
 			public void Update() {
-				int availableAmount = resourceAmount.resource.GetAvailableAmount();
+				int availableAmount = resourceAmount.Resource.GetAvailableAmount();
 
-				obj.GetComponent<Image>().color = availableAmount >= resourceAmount.amount ? ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen) : ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
+				obj.GetComponent<Image>().color = availableAmount >= resourceAmount.Amount ? ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen) : ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
 
-				obj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = availableAmount + " / " + resourceAmount.amount;
+				obj.transform.Find("AvailableOverRequiredValue-Text").GetComponent<Text>().text = availableAmount + " / " + resourceAmount.Amount;
 			}
 
 			public void Destroy() {
@@ -807,11 +809,11 @@ namespace Snowship.NUI {
 
 				requiredResourceElements.Clear();
 
-				foreach (ResourceManager.ResourceAmount resourceAmount in variation.prefab.commonResources) {
+				foreach (ResourceAmount resourceAmount in variation.prefab.commonResources) {
 					requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, requiredResourceElementsPanel.transform));
 				}
 
-				foreach (ResourceManager.ResourceAmount resourceAmount in variation.uniqueResources) {
+				foreach (ResourceAmount resourceAmount in variation.uniqueResources) {
 					requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, requiredResourceElementsPanel.transform));
 				}
 			}
@@ -1081,7 +1083,7 @@ namespace Snowship.NUI {
 			}
 		}
 
-		public class SkillElement {
+		/*public class SkillElement {
 			public Colonist colonist;
 			public SkillInstance skill;
 			public GameObject obj;
@@ -1099,13 +1101,13 @@ namespace Snowship.NUI {
 			}
 
 			public void Update() {
-				obj.transform.Find("Level").GetComponent<Text>().text = skill.level + "." + Mathf.RoundToInt(skill.currentExperience / skill.nextLevelExperience * 100f);
-				obj.transform.Find("Experience-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(skill.currentExperience / skill.nextLevelExperience * 100f);
+				obj.transform.Find("Level").GetComponent<Text>().text = skill.Level + "." + Mathf.RoundToInt(skill.CurrentExperience / skill.NextLevelExperience * 100f);
+				obj.transform.Find("Experience-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(skill.CurrentExperience / skill.NextLevelExperience * 100f);
 
 				SkillInstance highestSkillInstance = SkillInstance.GetBestColonistAtSkill(skill.prefab);
 
 				if (highestSkillInstance != null) {
-					obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((float)skill.level / (highestSkillInstance.level > 0 ? highestSkillInstance.level : 1) * 100f);
+					obj.transform.Find("Level-Slider").GetComponent<Slider>().value = Mathf.RoundToInt((float)skill.Level / (highestSkillInstance.Level > 0 ? highestSkillInstance.Level : 1) * 100f);
 
 					if (highestSkillInstance.colonist == colonist || Mathf.Approximately(highestSkillInstance.CalculateTotalSkillLevel(), skill.CalculateTotalSkillLevel())) {
 						obj.transform.Find("Level-Slider/Fill Area/Fill").GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkYellow);
@@ -1116,25 +1118,25 @@ namespace Snowship.NUI {
 					}
 				}
 			}
-		}
+		}*/
 
 		public class InventoryElement {
-			public ResourceManager.ResourceAmount resourceAmount;
+			public ResourceAmount resourceAmount;
 			public GameObject obj;
 
-			public InventoryElement(ResourceManager.ResourceAmount resourceAmount, Transform parent) {
+			public InventoryElement(ResourceAmount resourceAmount, Transform parent) {
 				this.resourceAmount = resourceAmount;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ResourceInfoElement-Panel"), parent, false);
 
-				obj.transform.Find("Name").GetComponent<Text>().text = resourceAmount.resource.name;
-				obj.transform.Find("Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
+				obj.transform.Find("Name").GetComponent<Text>().text = resourceAmount.Resource.name;
+				obj.transform.Find("Image").GetComponent<Image>().sprite = resourceAmount.Resource.image;
 
 				Update();
 			}
 
 			public void Update() {
-				obj.transform.Find("Amount").GetComponent<Text>().text = resourceAmount.amount.ToString();
+				obj.transform.Find("Amount").GetComponent<Text>().text = resourceAmount.Amount.ToString();
 			}
 		}
 
@@ -1173,7 +1175,7 @@ namespace Snowship.NUI {
 					int newTransferAmount = 0;
 					if (int.TryParse(transferAmountInput.text, out newTransferAmount)) {
 						if (newTransferAmount != transferAmount && newTransferAmount >= 0) {
-							int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.resource == resource).amount;
+							int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.Resource == resource).Amount;
 							if (newTransferAmount > availableAmount) {
 								newTransferAmount = availableAmount;
 							}
@@ -1194,7 +1196,7 @@ namespace Snowship.NUI {
 			}
 
 			public void Update() {
-				int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.resource == resource).amount;
+				int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.Resource == resource).Amount;
 				obj.transform.Find("Amount").GetComponent<Text>().text = availableAmount.ToString();
 				if (transferAmount > availableAmount) {
 					transferAmount = availableAmount;
@@ -1217,7 +1219,7 @@ namespace Snowship.NUI {
 				obj.transform.Find("ColonistInfo-Panel/ColonistReservedCount-Text").GetComponent<Text>().text = reservedResources.resources.Count.ToString();
 				obj.transform.Find("ColonistInfo-Panel/ColonistImage").GetComponent<Image>().sprite = human.moveSprites[0];
 
-				foreach (ResourceManager.ResourceAmount ra in reservedResources.resources.OrderByDescending(ra => ra.amount)) {
+				foreach (ResourceAmount ra in reservedResources.resources.OrderByDescending(ra => ra.Amount)) {
 					InventoryElement inventoryElement = new InventoryElement(ra, obj.transform.Find("ReservedResourcesList-Panel"));
 					inventoryElement.obj.GetComponent<RectTransform>().sizeDelta = new Vector2(180, 32);
 					reservedResourceElements.Add(inventoryElement);
@@ -1226,97 +1228,27 @@ namespace Snowship.NUI {
 		}
 
 		public class ReservedResourceElement {
-			public ResourceManager.ResourceAmount resourceAmount;
+			public ResourceAmount resourceAmount;
 			public GameObject obj;
 
-			public ReservedResourceElement(ResourceManager.ResourceAmount resourceAmount, Transform parent) {
+			public ReservedResourceElement(ResourceAmount resourceAmount, Transform parent) {
 				this.resourceAmount = resourceAmount;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ReservedResourceInfoElement-Panel"), parent, false);
 
-				obj.transform.Find("Name").GetComponent<Text>().text = resourceAmount.resource.name;
+				obj.transform.Find("Name").GetComponent<Text>().text = resourceAmount.Resource.name;
 
-				obj.transform.Find("Image").GetComponent<Image>().sprite = resourceAmount.resource.image;
+				obj.transform.Find("Image").GetComponent<Image>().sprite = resourceAmount.Resource.image;
 
 				Update();
 			}
 
 			public void Update() {
-				obj.transform.Find("Amount").GetComponent<Text>().text = resourceAmount.amount.ToString();
+				obj.transform.Find("Amount").GetComponent<Text>().text = resourceAmount.Amount.ToString();
 			}
 		}
 
-		/*public class NeedElement {
-
-			public NeedInstance needInstance;
-			public GameObject obj;
-
-			public NeedElement(NeedInstance needInstance, Transform parent) {
-				this.needInstance = needInstance;
-
-				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/NeedElement-Panel"), parent, false);
-
-				obj.transform.Find("NeedName-Text").GetComponent<Text>().text = needInstance.prefab.name;
-
-				Update();
-			}
-
-			public void Update() {
-				obj.transform.Find("NeedValue-Text").GetComponent<Text>().text = needInstance.GetRoundedValue() + "%";
-
-				obj.transform.Find("Need-Slider").GetComponent<Slider>().value = needInstance.GetValue();
-				obj.transform.Find("Need-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), needInstance.GetValue() / needInstance.prefab.clampValue);
-				obj.transform.Find("Need-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), needInstance.GetValue() / needInstance.prefab.clampValue);
-			}
-		}*/
-
-		/*public class MoodModifierElement {
-
-			public MoodModifierInstance moodModifierInstance;
-			public GameObject obj;
-
-			public MoodModifierElement(MoodModifierInstance moodModifierInstance, Transform parent) {
-				this.moodModifierInstance = moodModifierInstance;
-
-				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/MoodModifierElement-Panel"), parent, false);
-
-				obj.transform.Find("MoodModifierName-Text").GetComponent<Text>().text = moodModifierInstance.prefab.name;
-				if (moodModifierInstance.prefab.effectAmount > 0) {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen);
-				} else if (moodModifierInstance.prefab.effectAmount < 0) {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
-				} else {
-					obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
-				}
-
-				Update();
-			}
-
-			public bool Update() {
-				if (!moodModifierInstance.colonist.moodModifiers.Contains(moodModifierInstance)) {
-					Object.Destroy(obj);
-					return false;
-				}
-
-				if (moodModifierInstance.prefab.infinite) {
-					obj.transform.Find("MoodModifierTime-Text").GetComponent<Text>().text = "Until Not";
-				} else {
-					obj.transform.Find("MoodModifierTime-Text").GetComponent<Text>().text = Mathf.RoundToInt(moodModifierInstance.timer) + "s (" + Mathf.RoundToInt(moodModifierInstance.prefab.effectLengthSeconds) + "s)";
-				}
-
-				if (moodModifierInstance.prefab.effectAmount > 0) {
-					obj.transform.Find("MoodModifierAmount-Text").GetComponent<Text>().text = "+" + moodModifierInstance.prefab.effectAmount + "%";
-				} else if (moodModifierInstance.prefab.effectAmount < 0) {
-					obj.transform.Find("MoodModifierAmount-Text").GetComponent<Text>().text = moodModifierInstance.prefab.effectAmount + "%";
-				} else {
-					obj.transform.Find("MoodModifierAmount-Text").GetComponent<Text>().text = moodModifierInstance.prefab.effectAmount + "%";
-				}
-
-				return true;
-			}
-		}*/
-
-		public void SetRightListPanelSize() {
+		/*public void SetRightListPanelSize() {
 			// TODO Will be re-worked into a top bar
 			// RectTransform rightListPanel = gameUI.transform.Find("RightList-Panel").GetComponent<RectTransform>();
 			// Vector2 rightListSize = rightListPanel.offsetMin;
@@ -1328,7 +1260,7 @@ namespace Snowship.NUI {
 			// }
 			//
 			// rightListPanel.offsetMin = new Vector2(rightListSize.x, verticalOffset);
-		}
+		}*/
 
 		/*
 		private readonly List<NeedElement> selectedColonistNeedElements = new List<NeedElement>();
@@ -2107,7 +2039,7 @@ namespace Snowship.NUI {
 					containerReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel")));
 				}
 
-				foreach (ResourceManager.ResourceAmount ra in selectedContainer.GetInventory().resources.OrderByDescending(ra => ra.amount)) {
+				foreach (ResourceAmount ra in selectedContainer.GetInventory().resources.OrderByDescending(ra => ra.Amount)) {
 					InventoryElement inventoryElement = new InventoryElement(ra, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel"));
 					inventoryElement.obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 					containerInventoryElements.Add(inventoryElement);
@@ -2193,7 +2125,7 @@ namespace Snowship.NUI {
 					Job job = new Job(JobPrefab.GetJobPrefabByName("TransferResources"), selectedTradingPost.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.TransferResources), null, 0);
 					foreach (ResourceTransferElement rte in tradingPostResourceTransferElements) {
 						if (rte.transferAmount > 0) {
-							job.requiredResources.Add(new ResourceManager.ResourceAmount(rte.resource, rte.transferAmount));
+							job.requiredResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
 						}
 					}
 
@@ -2217,18 +2149,18 @@ namespace Snowship.NUI {
 					tradingPostReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel")));
 				}
 
-				foreach (ResourceManager.ResourceAmount ra in selectedTradingPost.GetInventory().resources) {
-					ResourceTransferElement inventoryElement = new ResourceTransferElement(ra.resource, selectedTradingPost, ResourceTransferElement.TransferType.Out, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel"));
+				foreach (ResourceAmount ra in selectedTradingPost.GetInventory().resources) {
+					ResourceTransferElement inventoryElement = new(ra.Resource, selectedTradingPost, ResourceTransferElement.TransferType.Out, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel"));
 					tradingPostInventoryElements.Add(inventoryElement);
 				}
 
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().onClick.AddListener(delegate {
 					Job job = new Job(JobPrefab.GetJobPrefabByName("CollectResources"), selectedTradingPost.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectResources), null, 0) {
-						transferResources = new List<ResourceManager.ResourceAmount>()
+						transferResources = new List<ResourceAmount>()
 					};
 					foreach (ResourceTransferElement rte in tradingPostInventoryElements) {
 						if (rte.transferAmount > 0) {
-							job.transferResources.Add(new ResourceManager.ResourceAmount(rte.resource, rte.transferAmount));
+							job.transferResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
 							rte.transferAmountInput.text = "0";
 						}
 					}
@@ -2943,7 +2875,7 @@ namespace Snowship.NUI {
 				panel.transform.Find("ResourceData-Panel/Name").GetComponent<Text>().text = resource.resource.name;
 				panel.transform.Find("ResourceData-Panel/Image").GetComponent<Image>().sprite = resource.resource.image;
 
-				foreach (ResourceManager.ResourceAmount resourceAmount in resource.resource.craftingResources) {
+				foreach (ResourceAmount resourceAmount in resource.resource.craftingResources) {
 					requiredResourceElements.Add(new RequiredResourceElement(resourceAmount, panel.transform.Find("RequiredResources-Panel")));
 				}
 
@@ -3032,72 +2964,6 @@ namespace Snowship.NUI {
 				panel.GetComponent<VerticalLayoutGroup>().enabled = false;
 				panel.GetComponent<VerticalLayoutGroup>().enabled = true;
 			}
-		}
-
-		public void SetPauseMenuActive(bool active) {
-			SetSettingsMenuActive(false);
-
-			// pauseMenu.SetActive(active);
-
-			// pauseSaveButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
-
-			// GameManager.timeM.SetPaused(pauseMenu.activeSelf);
-		}
-
-		public void TogglePauseMenuButtons(bool state) {
-			// pauseMenuButtons.SetActive(state);
-			// pauseLabel.SetActive(pauseMenuButtons.activeSelf);
-		}
-
-		public enum UIScaleMode {
-			ConstantPixelSize,
-			ScaleWithScreenSize
-		};
-
-		public void SetSettingsMenuActive(bool active) {
-			// settingsPanel.SetActive(active);
-			//
-			// ToggleMainMenuButtons(settingsPanel);
-			// TogglePauseMenuButtons(!settingsPanel.activeSelf);
-			// if (settingsPanel.activeSelf) {
-			// 	GameObject resolutionSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/ResolutionSettings-Panel").gameObject;
-			// 	Slider resolutionSlider = resolutionSettingsPanel.transform.Find("Resolution-Slider").GetComponent<Slider>();
-			// 	resolutionSlider.minValue = 0;
-			// 	resolutionSlider.maxValue = Screen.resolutions.Length - 1;
-			// 	resolutionSlider.onValueChanged.AddListener(delegate {
-			// 		Resolution r = Screen.resolutions[Mathf.RoundToInt(resolutionSlider.value)];
-			// 		GameManager.persistenceM.settingsState.resolution = r;
-			// 		GameManager.persistenceM.settingsState.resolutionWidth = r.width;
-			// 		GameManager.persistenceM.settingsState.resolutionHeight = r.height;
-			// 		GameManager.persistenceM.settingsState.refreshRate = r.refreshRate;
-			// 		resolutionSettingsPanel.transform.Find("ResolutionValue-Text").GetComponent<Text>().text = GameManager.persistenceM.settingsState.resolutionWidth + " × " + GameManager.persistenceM.settingsState.resolutionHeight + " @ " + r.refreshRate + "hz";
-			// 	});
-			// 	resolutionSlider.value = Screen.resolutions.ToList().IndexOf(GameManager.persistenceM.settingsState.resolution);
-			//
-			// 	GameObject fullscreenSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/FullscreenSettings-Panel").gameObject;
-			// 	Toggle fullscreenToggle = fullscreenSettingsPanel.transform.Find("Fullscreen-Toggle").GetComponent<Toggle>();
-			// 	fullscreenToggle.onValueChanged.AddListener(delegate { GameManager.persistenceM.settingsState.fullscreen = fullscreenToggle.isOn; });
-			// 	fullscreenToggle.isOn = GameManager.persistenceM.settingsState.fullscreen;
-			//
-			// 	GameObject UIScaleModeSettingsPanel = settingsPanel.transform.Find("SettingsList-ScrollPanel/SettingsList-Panel/UIScaleModeSettings-Panel").gameObject;
-			// 	Toggle UIScaleModeToggle = UIScaleModeSettingsPanel.transform.Find("UIScaleMode-Toggle").GetComponent<Toggle>();
-			// 	UIScaleModeToggle.onValueChanged.AddListener(delegate {
-			// 		if (UIScaleModeToggle.isOn) {
-			// 			GameManager.persistenceM.settingsState.scaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-			// 		} else {
-			// 			GameManager.persistenceM.settingsState.scaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-			// 		}
-			// 	});
-			// 	if (GameManager.persistenceM.settingsState.scaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize) {
-			// 		UIScaleModeToggle.isOn = true;
-			// 	} else if (GameManager.persistenceM.settingsState.scaleMode == CanvasScaler.ScaleMode.ConstantPixelSize) {
-			// 		UIScaleModeToggle.isOn = false;
-			// 	}
-			// }
-		}
-
-		public void ExitToMenu() {
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
 
 		public bool IsPointerOverUI() {

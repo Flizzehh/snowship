@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Snowship.NColonist;
+using Snowship.NResources;
 using Snowship.NUI.Components;
-using Snowship.NUI.Simulation.UIColonistInfoPanel.UIInventoryResource;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -84,128 +82,90 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 		public event Action<Button> OnTabSelected;
 
-		private Colonist colonist;
-
 		private readonly List<UINeedElement> needElements = new();
 		private readonly List<UIMoodElement> moodElements = new();
+		private readonly List<UISkillElement> skillElements = new();
 		private readonly List<UIResourceAmountElement> inventoryResourceAmountElements = new();
 
 		public override void OnOpen() {
 			needsSkillsTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(needsSkillsTabButton));
 			inventoryTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(inventoryTabButton));
 			clothingTabButton.onClick.AddListener(() => OnTabSelected?.Invoke(clothingTabButton));
+
+			moodViewButton.onClick.AddListener(() => SetMoodPanelActive(true));
+			moodPanelCloseButton.onClick.AddListener(() => SetMoodPanelActive(false));
+			SetMoodPanelActive(false);
 		}
 
 		public override void OnClose() {
 			base.OnClose();
 
-			colonist.OnHealthChanged -= healthSlider.SetValue;
-			colonist.OnMoodChanged -= OnMoodChanged;
-			colonist.OnMoodAdded -= OnMoodAdded;
-			colonist.OnMoodRemoved -= OnMoodRemoved;
-			colonist.GetInventory().OnInventoryChanged -= OnInventoryChanged;
-
 			foreach (UINeedElement needElement in needElements) {
 				needElement.Close();
 			}
-			foreach (UIMoodElement moodElement in moodElements) {
-				moodElement.Close();
+			needElements.Clear();
+			foreach (UISkillElement skillElement in skillElements) {
+				skillElement.Close();
 			}
+			skillElements.Clear();
+			foreach (UIResourceAmountElement resourceAmountElement in inventoryResourceAmountElements) {
+				resourceAmountElement.Close();
+			}
+			inventoryResourceAmountElements.Clear();
 		}
 
-		[SuppressMessage("ReSharper", "ParameterHidesMember")]
-		public void SetColonist(Colonist colonist) {
-			this.colonist = colonist;
-
-			colonist.OnMoodAdded += OnMoodAdded;
-			colonist.OnMoodRemoved += OnMoodRemoved;
+		public void SetColonistInformation(Sprite colonistSprite, string colonistName, string colonistAffiliation) {
+			colonistImage.sprite = colonistSprite;
+			colonistNameText.SetText(colonistName);
+			affiliationText.SetText(colonistAffiliation);
 		}
 
-		public void SetupUI() {
-			SetupGeneralInformation();
-			SetupSliders();
-			SetupNeedsSkillsTab();
-			SetupInventoryTab();
-			SetupClothingTab();
-		}
-
-		private void SetupGeneralInformation() {
-			colonistImage.sprite = colonist.moveSprites[0];
-			colonistNameText.SetText($"{colonist.name} ({colonist.gender.ToString()[0]})");
-			affiliationText.SetText($"Colonist of {GameManager.colonyM.colony.name}");
-		}
-
-		private void SetupSliders() {
-			SetupHealthSlider();
-			SetupMoodSlider();
-			SetupInventorySliders();
-		}
-
-		private void SetupHealthSlider() {
-			colonist.OnHealthChanged += healthSlider.SetValue;
+		public void SetupHealthSlider((float min, float max) sliderRange, float healthValue, bool wholeNumbers) {
 			healthSlider.SetFillColours(EColour.DarkRed, EColour.DarkGreen);
 			healthSlider.SetHandleColours(EColour.LightRed, EColour.LightGreen);
-			healthSlider.SetSliderRange(0, 1, colonist.Health, false);
+			healthSlider.SetSliderRange(sliderRange.min, sliderRange.max, healthValue, wholeNumbers);
 		}
 
-		private void SetupMoodSlider() {
-			colonist.OnMoodChanged += OnMoodChanged;
-			moodSlider.SetFillColours(EColour.DarkRed, EColour.DarkGreen);
-			moodSlider.SetHandleColours(EColour.LightRed, EColour.LightGreen);
-			moodSlider.SetSliderRange(0, 100, colonist.effectiveMood);
-			OnMoodChanged(colonist.effectiveMood, colonist.moodModifiersSum);
+		public void OnHealthChanged(float healthValue) {
+			healthSlider.SetValue(healthValue);
 		}
 
-		private void SetupInventorySliders() {
-			ResourceManager.Inventory inventory = colonist.GetInventory();
-			inventory.OnInventoryChanged += OnInventoryChanged;
+		public void SetupInventorySliders(Inventory inventory) {
 			inventoryWeightSlider.SetSliderRange(0, inventory.maxWeight, inventory.UsedWeight());
 			inventoryVolumeSlider.SetSliderRange(0, inventory.maxVolume, inventory.UsedVolume());
 			OnInventoryChanged(inventory);
 		}
 
-		private void OnInventoryChanged(ResourceManager.Inventory inventory) {
+		public void OnInventoryChanged(Inventory inventory) {
 			int usedWeight = inventory.UsedWeight();
 			int usedVolume = inventory.UsedVolume();
 			inventoryWeightSlider.SetValue(usedWeight, $"{Mathf.RoundToInt(usedWeight / (float)inventory.maxWeight * 100)}");
 			inventoryVolumeSlider.SetValue(usedVolume, $"{Mathf.RoundToInt(usedVolume / (float)inventory.maxVolume * 100)}");
 		}
 
-		private void SetupNeedsSkillsTab() {
-			SetupNeedsSubPanel();
-			SetupMoodSubPanel();
-			SetupSkillsSubPanel();
-		}
-
-		private void SetupNeedsSubPanel() {
-			moodViewButton.onClick.AddListener(() => SetMoodPanelActive(true));
-			foreach (NeedInstance need in colonist.needs.OrderByDescending(need => need.GetValue())) {
-				needElements.Add(new UINeedElement(needsListVerticalLayoutGroup.transform, need));
-			}
-		}
-
-		private void SetupMoodSubPanel() {
-			SetMoodPanelActive(false);
-			moodPanelCloseButton.onClick.AddListener(() => SetMoodPanelActive(false));
-			foreach (MoodModifierInstance mood in colonist.moodModifiers) {
-				AddMoodElement(mood);
-			}
+		public void AddNeedElement(NeedInstance need) {
+			needElements.Add(new UINeedElement(needsListVerticalLayoutGroup.transform, need));
 		}
 
 		private void SetMoodPanelActive(bool active) {
 			moodPanel.SetActive(active);
 		}
 
-		private void AddMoodElement(MoodModifierInstance mood) {
+		public void SetupMoodSlider((float min, float max) sliderRange, float moodValue, bool wholeNumbers) {
+			moodSlider.SetFillColours(EColour.DarkRed, EColour.DarkGreen);
+			moodSlider.SetHandleColours(EColour.LightRed, EColour.LightGreen);
+			moodSlider.SetSliderRange(sliderRange.min, sliderRange.max, moodValue, wholeNumbers);
+		}
+
+		public void AddMoodElement(MoodModifierInstance mood) {
 			moodElements.Add(new UIMoodElement(moodListVerticalLayoutGroup.transform, mood));
 		}
 
-		private void OnMoodAdded(MoodModifierInstance mood) {
+		public void OnMoodAdded(MoodModifierInstance mood) {
 			AddMoodElement(mood);
-			mood.OnTimerAtZero += OnMoodTimerAtZero;
 		}
 
-		private void OnMoodChanged(float effectiveMood, float moodModifiersSum) {
+		public void OnMoodChanged(float effectiveMood, float moodModifiersSum) {
 			moodSlider.SetValue(effectiveMood);
 
 			moodCurrentText.SetText($"{Mathf.RoundToInt(effectiveMood)}%");
@@ -219,7 +179,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			};
 		}
 
-		private void OnMoodRemoved(MoodModifierInstance mood) {
+		public void OnMoodRemoved(MoodModifierInstance mood) {
 			UIMoodElement moodElementToRemove = moodElements.Find(moodElement => moodElement.Mood == mood);
 			if (moodElementToRemove == null) {
 				return;
@@ -228,19 +188,18 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			moodElementToRemove.Close();
 		}
 
-		private void OnMoodTimerAtZero(MoodModifierInstance mood) {
-			mood.OnTimerAtZero -= OnMoodTimerAtZero;
-			OnMoodRemoved(mood);
+		public void AddSkillElement(SkillInstance skill) {
+			skillElements.Add(new UISkillElement(skillsListVerticalLayoutGroup.transform, skill));
 		}
 
-		private void SetupSkillsSubPanel() {
-
+		public void OnInventoryResourceAmountAdded(ResourceAmount resourceAmount) {
+			inventoryResourceAmountElements.Add(new UIResourceAmountElement(inventoryListGridLayoutGroup.transform, resourceAmount));
 		}
 
-		private void SetupInventoryTab() {
-			foreach (ResourceManager.ResourceAmount resourceAmount in colonist.GetInventory().resources) {
-				inventoryResourceAmountElements.Add(new UIResourceAmountElement(inventoryListGridLayoutGroup.transform, resourceAmount));
-			}
+		public void OnInventoryResourceAmountRemoved(ResourceAmount resourceAmount) {
+			UIResourceAmountElement resourceAmountElementToRemove = inventoryResourceAmountElements.Find(e => e.ResourceAmount == resourceAmount);
+			inventoryResourceAmountElements.Remove(resourceAmountElementToRemove);
+			resourceAmountElementToRemove.Close();
 		}
 
 		private void SetupClothingTab() {

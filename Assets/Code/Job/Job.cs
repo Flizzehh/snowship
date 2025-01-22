@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Snowship.NColonist;
-using Snowship.NUI;
+using Snowship.NResources;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -27,9 +27,9 @@ namespace Snowship.NJob {
 		public float jobProgress;
 		public float colonistBuildTime;
 
-		public List<ResourceManager.ResourceAmount> requiredResources = new List<ResourceManager.ResourceAmount>();
+		public List<ResourceAmount> requiredResources = new();
 
-		public List<ResourceManager.ResourceAmount> resourcesColonistHas;
+		public List<ResourceAmount> resourcesColonistHas;
 		public List<ContainerPickup> containerPickups;
 
 		// public UIManagerOld.JobElement jobUIElement;
@@ -37,7 +37,7 @@ namespace Snowship.NJob {
 		public ResourceManager.CraftableResourceInstance createResource;
 		public ResourceManager.ObjectInstance activeObject;
 
-		public List<ResourceManager.ResourceAmount> transferResources;
+		public List<ResourceAmount> transferResources;
 
 		public Job(JobPrefab prefab, TileManager.Tile tile, ResourceManager.ObjectPrefab objectPrefab, ResourceManager.Variation variation, int rotationIndex) {
 

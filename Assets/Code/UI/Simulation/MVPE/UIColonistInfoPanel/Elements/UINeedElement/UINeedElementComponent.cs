@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel
+namespace Snowship.NUI.Simulation
 {
 	public class UINeedElementComponent : UIElementComponent
 	{

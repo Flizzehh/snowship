@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NResources;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -93,7 +94,7 @@ namespace Snowship.NPersistence {
 									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Enableable, resource.enableable, 4));
 									if (resource.fuelAmounts.Count > 0) {
 										file.WriteLine(CreateKeyValueString(CraftableResourceProperty.FuelAmounts, string.Empty, 4));
-										foreach (ResourceManager.ResourceAmount fuelAmount in resource.fuelAmounts) {
+										foreach (ResourceAmount fuelAmount in resource.fuelAmounts) {
 											pInventory.WriteResourceAmountLines(file, fuelAmount, 5);
 										}
 									}
@@ -184,7 +185,7 @@ namespace Snowship.NPersistence {
 			public int? targetAmount;
 			public int? remainingAmount;
 			public bool? enableable;
-			public List<ResourceManager.ResourceAmount> fuelAmounts;
+			public List<ResourceAmount> fuelAmounts;
 
 			public PersistenceCraftableResourceInstance(
 				ResourceManager.Resource resource,
@@ -193,7 +194,7 @@ namespace Snowship.NPersistence {
 				int? targetAmount,
 				int? remainingAmount,
 				bool? enableable,
-				List<ResourceManager.ResourceAmount> fuelAmounts
+				List<ResourceAmount> fuelAmounts
 			) {
 				this.resource = resource;
 				this.priority = priority;
@@ -280,7 +281,7 @@ namespace Snowship.NPersistence {
 															int? targetAmount = null;
 															int? remainingAmount = null;
 															bool? enableable = null;
-															List<ResourceManager.ResourceAmount> fuelAmounts = new List<ResourceManager.ResourceAmount>();
+															List<ResourceAmount> fuelAmounts = new();
 
 															foreach (KeyValuePair<string, object> craftableResourceProperty in (List<KeyValuePair<string, object>>)resourcesProperty.Value) {
 																switch ((CraftableResourceProperty)Enum.Parse(typeof(CraftableResourceProperty), craftableResourceProperty.Key)) {
@@ -434,8 +435,8 @@ namespace Snowship.NPersistence {
 						ResourceManager.Container container = (ResourceManager.Container)objectInstance;
 						container.GetInventory().maxWeight = persistenceObject.persistenceInventory.maxWeight.Value;
 						container.GetInventory().maxVolume = persistenceObject.persistenceInventory.maxVolume.Value;
-						foreach (ResourceManager.ResourceAmount resourceAmount in persistenceObject.persistenceInventory.resources) {
-							container.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+						foreach (ResourceAmount resourceAmount in persistenceObject.persistenceInventory.resources) {
+							container.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 						}
 						// TODO (maybe already done?) Reserved resources must be set after colonists are loaded
 						break;

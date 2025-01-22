@@ -1,11 +1,29 @@
-﻿using UnityEngine;
+﻿using Snowship.NResources;
+using UnityEngine;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel.UIInventoryResource
+namespace Snowship.NUI.Simulation
 {
 	public class UIResourceAmountElement : UIElement<UIResourceAmountElementComponent>
 	{
-		public UIResourceAmountElement(Transform parent, ResourceManager.ResourceAmount resourceAmount) : base(parent) {
-			Component.SetResourceAmount(resourceAmount);
+		public readonly ResourceAmount ResourceAmount;
+
+		public UIResourceAmountElement(Transform parent, ResourceAmount resourceAmount) : base(parent) {
+			ResourceAmount = resourceAmount;
+
+			Component.SetResourceImage(resourceAmount.Resource.image);
+			Component.SetResourceName(resourceAmount.Resource.name);
+
+			resourceAmount.OnAmountChanged += OnResourceAmountChanged;
+			OnResourceAmountChanged(resourceAmount.Amount);
+		}
+
+		protected override void OnClose() {
+			base.OnClose();
+			ResourceAmount.OnAmountChanged -= OnResourceAmountChanged;
+		}
+
+		private void OnResourceAmountChanged(int amount) {
+			Component.SetResourceAmount(amount.ToString());
 		}
 	}
 }

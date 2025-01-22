@@ -1,7 +1,7 @@
 ﻿using Snowship.NColonist;
 using UnityEngine;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel
+namespace Snowship.NUI.Simulation
 {
 	public class UINeedElement : UIElement<UINeedElementComponent>
 	{

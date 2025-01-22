@@ -60,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ced627a98e233904ca0c5206f4442b1e
+    m_Address: UI/Element/UISkillElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d28405e4d4ad5fd44be2d8a8a80c29c9
     m_Address: UI/Element/UIMoodElement
     m_ReadOnly: 0

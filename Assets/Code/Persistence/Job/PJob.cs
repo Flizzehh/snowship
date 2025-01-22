@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Snowship.NJob;
+using Snowship.NResources;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -64,14 +65,14 @@ namespace Snowship.NPersistence {
 
 			if (job.requiredResources != null && job.requiredResources.Count > 0) {
 				file.WriteLine(CreateKeyValueString(JobProperty.RequiredResources, string.Empty, startLevel + 1));
-				foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
+				foreach (ResourceAmount resourceAmount in job.requiredResources) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
 
 			if (job.resourcesColonistHas != null && job.resourcesColonistHas.Count > 0) {
 				file.WriteLine(CreateKeyValueString(JobProperty.ResourcesColonistHas, string.Empty, startLevel + 1));
-				foreach (ResourceManager.ResourceAmount resourceAmount in job.resourcesColonistHas) {
+				foreach (ResourceAmount resourceAmount in job.resourcesColonistHas) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
@@ -85,7 +86,7 @@ namespace Snowship.NPersistence {
 
 					if (containerPickup.resourcesToPickup.Count > 0) {
 						file.WriteLine(CreateKeyValueString(ContainerPickupProperty.ResourcesToPickup, string.Empty, startLevel + 3));
-						foreach (ResourceManager.ResourceAmount resourceAmount in containerPickup.resourcesToPickup) {
+						foreach (ResourceAmount resourceAmount in containerPickup.resourcesToPickup) {
 							pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 4);
 						}
 					}
@@ -105,7 +106,7 @@ namespace Snowship.NPersistence {
 
 			if (job.transferResources != null && job.transferResources.Count > 0) {
 				file.WriteLine(CreateKeyValueString(JobProperty.TransferResources, string.Empty, startLevel + 1));
-				foreach (ResourceManager.ResourceAmount resourceAmount in job.transferResources) {
+				foreach (ResourceAmount resourceAmount in job.transferResources) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
@@ -121,12 +122,12 @@ namespace Snowship.NPersistence {
 			public bool? started;
 			public float? progress;
 			public float? colonistBuildTime;
-			public List<ResourceManager.ResourceAmount> requiredResources;
-			public List<ResourceManager.ResourceAmount> resourcesColonistHas;
+			public List<ResourceAmount> requiredResources;
+			public List<ResourceAmount> resourcesColonistHas;
 			public List<PersistenceContainerPickup> containerPickups;
 			public ResourceManager.Resource createResource;
 			public PObject.PersistenceObject activeObject;
-			public List<ResourceManager.ResourceAmount> transferResources;
+			public List<ResourceAmount> transferResources;
 
 			public PersistenceJob(
 				string prefab,
@@ -138,12 +139,12 @@ namespace Snowship.NPersistence {
 				bool? started,
 				float? progress,
 				float? colonistBuildTime,
-				List<ResourceManager.ResourceAmount> requiredResources,
-				List<ResourceManager.ResourceAmount> resourcesColonistHas,
+				List<ResourceAmount> requiredResources,
+				List<ResourceAmount> resourcesColonistHas,
 				List<PersistenceContainerPickup> containerPickups,
 				ResourceManager.Resource createResource,
 				PObject.PersistenceObject activeObject,
-				List<ResourceManager.ResourceAmount> transferResources
+				List<ResourceAmount> transferResources
 			) {
 				this.prefab = prefab;
 				this.type = type;
@@ -165,11 +166,11 @@ namespace Snowship.NPersistence {
 
 		public class PersistenceContainerPickup {
 			public Vector2? containerPickupZeroPointTilePosition;
-			public List<ResourceManager.ResourceAmount> containerPickupResourceAmounts;
+			public List<ResourceAmount> containerPickupResourceAmounts;
 
 			public PersistenceContainerPickup(
 				Vector2? containerPickupZeroPointTilePosition,
-				List<ResourceManager.ResourceAmount> containerPickupResourceAmounts
+				List<ResourceAmount> containerPickupResourceAmounts
 			) {
 				this.containerPickupZeroPointTilePosition = containerPickupZeroPointTilePosition;
 				this.containerPickupResourceAmounts = containerPickupResourceAmounts;
@@ -202,12 +203,12 @@ namespace Snowship.NPersistence {
 			bool? started = null;
 			float? progress = null;
 			float? colonistBuildTime = null;
-			List<ResourceManager.ResourceAmount> requiredResources = new List<ResourceManager.ResourceAmount>();
-			List<ResourceManager.ResourceAmount> resourcesColonistHas = null;
+			List<ResourceAmount> requiredResources = new();
+			List<ResourceAmount> resourcesColonistHas = null;
 			List<PersistenceContainerPickup> containerPickups = null;
 			ResourceManager.Resource createResource = null;
 			PObject.PersistenceObject activeObject = null;
-			List<ResourceManager.ResourceAmount> transferResources = null;
+			List<ResourceAmount> transferResources = null;
 
 			foreach (KeyValuePair<string, object> jobProperty in properties) {
 				JobProperty jobPropertyKey = (JobProperty)Enum.Parse(typeof(JobProperty), jobProperty.Key);
@@ -245,7 +246,7 @@ namespace Snowship.NPersistence {
 						}
 						break;
 					case JobProperty.ResourcesColonistHas:
-						resourcesColonistHas = new List<ResourceManager.ResourceAmount>();
+						resourcesColonistHas = new List<ResourceAmount>();
 						foreach (KeyValuePair<string, object> resourceAmountProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
 							resourcesColonistHas.Add(pInventory.LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
 						}
@@ -260,7 +261,7 @@ namespace Snowship.NPersistence {
 								case ContainerPickupProperty.ContainerPickup:
 
 									Vector2? containerPickupZeroPointTilePosition = null;
-									List<ResourceManager.ResourceAmount> containerPickupResourceAmounts = new List<ResourceManager.ResourceAmount>();
+									List<ResourceAmount> containerPickupResourceAmounts = new();
 
 									foreach (KeyValuePair<string, object> containerPickupSubProperty in (List<KeyValuePair<string, object>>)containerPickupProperty.Value) {
 										switch ((ContainerPickupProperty)Enum.Parse(typeof(ContainerPickupProperty), containerPickupSubProperty.Key)) {
@@ -326,7 +327,7 @@ namespace Snowship.NPersistence {
 						);
 						break;
 					case JobProperty.TransferResources:
-						transferResources = new List<ResourceManager.ResourceAmount>();
+						transferResources = new List<ResourceAmount>();
 						foreach (KeyValuePair<string, object> resourceAmountProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
 							transferResources.Add(pInventory.LoadResourceAmount((List<KeyValuePair<string, object>>)resourceAmountProperty.Value));
 						}

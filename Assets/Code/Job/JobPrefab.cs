@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
+using Snowship.NResources;
 using UnityEngine;
 
 namespace Snowship.NJob {
@@ -229,7 +230,7 @@ namespace Snowship.NJob {
 			{
 				"WearClothes",
 				delegate (Job job) {
-					return $"Wearing {job.requiredResources[0].resource.name}.";
+					return $"Wearing {job.requiredResources[0].Resource.name}.";
 				}
 			}
 		};
@@ -302,8 +303,8 @@ namespace Snowship.NJob {
 				"Build",
 				new() {
 					delegate (Job job, Colonist colonist) {
-						foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
-							colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
+						foreach (ResourceAmount resourceAmount in job.requiredResources) {
+							colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
 						}
 						if (job.objectPrefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Roofs) {
 							job.tile.SetRoof(true);
@@ -318,12 +319,12 @@ namespace Snowship.NJob {
 						bool previousWalkability = job.tile.walkable;
 						ResourceManager.ObjectInstance instance = job.tile.GetObjectInstanceAtLayer(job.objectPrefab.layer);
 						if (instance != null) {
-							foreach (ResourceManager.ResourceAmount resourceAmount in instance.prefab.commonResources) {
-								colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+							foreach (ResourceAmount resourceAmount in instance.prefab.commonResources) {
+								colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
 							}
 							if (instance.variation != null) {
-								foreach (ResourceManager.ResourceAmount resourceAmount in instance.variation.uniqueResources) {
-									colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+								foreach (ResourceAmount resourceAmount in instance.variation.uniqueResources) {
+									colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
 								}
 							}
 							if (instance is ResourceManager.Farm farm) {
@@ -331,18 +332,18 @@ namespace Snowship.NJob {
 									job.colonist.GetInventory().ChangeResourceAmount(farm.prefab.seedResource, 1, false);
 								}
 							} else if (instance is ResourceManager.IInventory inventory) {
-								List<ResourceManager.ResourceAmount> nonReservedResourcesToRemove = new List<ResourceManager.ResourceAmount>();
-								foreach (ResourceManager.ResourceAmount resourceAmount in inventory.GetInventory().resources) {
-									nonReservedResourcesToRemove.Add(new ResourceManager.ResourceAmount(resourceAmount.resource, resourceAmount.amount));
-									colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+								List<ResourceAmount> nonReservedResourcesToRemove = new();
+								foreach (ResourceAmount resourceAmount in inventory.GetInventory().resources) {
+									nonReservedResourcesToRemove.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
+									colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 								}
-								foreach (ResourceManager.ResourceAmount resourceAmount in nonReservedResourcesToRemove) {
-									inventory.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
+								foreach (ResourceAmount resourceAmount in nonReservedResourcesToRemove) {
+									inventory.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
 								}
 								List<ResourceManager.ReservedResources> reservedResourcesToRemove = new List<ResourceManager.ReservedResources>();
 								foreach (ResourceManager.ReservedResources reservedResources in inventory.GetInventory().reservedResources) {
-									foreach (ResourceManager.ResourceAmount resourceAmount in reservedResources.resources) {
-										colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+									foreach (ResourceAmount resourceAmount in reservedResources.resources) {
+										colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 									}
 									reservedResourcesToRemove.Add(reservedResources);
 									if (reservedResources.human is Colonist human) {
@@ -370,8 +371,8 @@ namespace Snowship.NJob {
 							switch (job.objectPrefab.type) {
 								case ResourceManager.ObjectEnum.RemoveRoof:
 									job.tile.SetRoof(false);
-									foreach (ResourceManager.ResourceAmount resourceAmount in GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Roof).commonResources) {
-										colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, Mathf.RoundToInt(resourceAmount.amount), false);
+									foreach (ResourceAmount resourceAmount in GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Roof).commonResources) {
+										colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
 									}
 									break;
 								default:
@@ -443,8 +444,8 @@ namespace Snowship.NJob {
 				"PlantPlant",
 				new() {
 					delegate (Job job, Colonist colonist) {
-						foreach (ResourceManager.ResourceAmount ra in job.requiredResources) {
-							colonist.GetInventory().ChangeResourceAmount(ra.resource, -ra.amount, false);
+						foreach (ResourceAmount ra in job.requiredResources) {
+							colonist.GetInventory().ChangeResourceAmount(ra.Resource, -ra.Amount, false);
 						}
 						Dictionary<ResourceManager.PlantEnum, float> plantChances = job.tile.biome.plantChances
 							.Where(plantChance => job.variation.plants
@@ -553,8 +554,8 @@ namespace Snowship.NJob {
 				"CreateResource",
 				new() {
 					delegate (Job job, Colonist colonist) {
-						foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources) {
-							colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, -resourceAmount.amount, false);
+						foreach (ResourceAmount resourceAmount in job.requiredResources) {
+							colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
 						}
 						colonist.GetInventory().ChangeResourceAmount(job.createResource.resource, job.createResource.resource.amountCreated, false);
 
@@ -582,9 +583,9 @@ namespace Snowship.NJob {
 							ContainerPickup containerPickup = colonist.storedJob.containerPickups.Find(pickup => pickup.container == container);
 							if (containerPickup != null) {
 								foreach (ResourceManager.ReservedResources rr in containerPickup.container.GetInventory().TakeReservedResources(colonist, containerPickup.resourcesToPickup)) {
-									foreach (ResourceManager.ResourceAmount ra in rr.resources) {
-										if (containerPickup.resourcesToPickup.Find(rtp => rtp.resource == ra.resource) != null) {
-											colonist.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
+									foreach (ResourceAmount ra in rr.resources) {
+										if (containerPickup.resourcesToPickup.Find(rtp => rtp.Resource == ra.Resource) != null) {
+											colonist.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
 										}
 									}
 								}
@@ -620,7 +621,7 @@ namespace Snowship.NJob {
 					delegate (Job job, Colonist colonist) {
 						ResourceManager.Container container = GameManager.resourceM.GetContainerOrChildOnTile(colonist.overTile);
 						if (container != null) {
-							ResourceManager.Inventory.TransferResourcesBetweenInventories(colonist.GetInventory(), container.GetInventory(), job.requiredResources, true);
+							Inventory.TransferResourcesBetweenInventories(colonist.GetInventory(), container.GetInventory(), job.requiredResources, true);
 						}
 					}
 				}
@@ -632,8 +633,8 @@ namespace Snowship.NJob {
 						ResourceManager.Container container = GameManager.resourceM.GetContainerOrChildOnTile(colonist.overTile);
 						if (container != null) {
 							foreach (ResourceManager.ReservedResources rr in container.GetInventory().TakeReservedResources(colonist)) {
-								foreach (ResourceManager.ResourceAmount ra in rr.resources) {
-									colonist.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
+								foreach (ResourceAmount ra in rr.resources) {
+									colonist.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
 								}
 							}
 						}
@@ -646,7 +647,7 @@ namespace Snowship.NJob {
 					delegate (Job job, Colonist colonist) {
 						ResourceManager.Container container = GameManager.resourceM.GetContainerOrChildOnTile(colonist.overTile);
 						if (container != null) {
-							ResourceManager.Inventory.TransferResourcesBetweenInventories(
+							Inventory.TransferResourcesBetweenInventories(
 								colonist.GetInventory(), // fromInventory
 								container.GetInventory(), // toInventory
 								colonist.GetInventory().resources, // resourceAmounts
@@ -663,8 +664,8 @@ namespace Snowship.NJob {
 						ResourceManager.Container container = GameManager.resourceM.GetContainerOrChildOnTile(colonist.overTile);
 						if (container != null) {
 							foreach (ResourceManager.ReservedResources rr in container.GetInventory().TakeReservedResources(colonist)) {
-								foreach (ResourceManager.ResourceAmount ra in rr.resources) {
-									colonist.GetInventory().ChangeResourceAmount(ra.resource, ra.amount, false);
+								foreach (ResourceAmount ra in rr.resources) {
+									colonist.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
 								}
 							}
 						}
@@ -677,20 +678,20 @@ namespace Snowship.NJob {
 				new() {
 					delegate (Job job, Colonist colonist) {
 
-						List<ResourceManager.ResourceAmount> resourcesToEat = colonist.GetInventory().resources.Where(r => r.resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(r => ((ResourceManager.Food)r.resource).nutrition).ToList();
+						List<ResourceAmount> resourcesToEat = colonist.GetInventory().resources.Where(r => r.Resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(r => ((ResourceManager.Food)r.Resource).nutrition).ToList();
 						NeedInstance foodNeed = colonist.needs.Find(need => need.prefab.type == ENeed.Food);
 
 						float startingFoodNeedValue = foodNeed.GetValue();
-						foreach (ResourceManager.ResourceAmount ra in resourcesToEat) {
+						foreach (ResourceAmount ra in resourcesToEat) {
 							bool stopEating = false;
-							for (int i = 0; i < ra.amount; i++) {
+							for (int i = 0; i < ra.Amount; i++) {
 								if (foodNeed.GetValue() <= 0) {
 									stopEating = true;
 									break;
 								}
-								foodNeed.ChangeValue(-((ResourceManager.Food)ra.resource).nutrition);
-								colonist.GetInventory().ChangeResourceAmount(ra.resource, -1, false);
-								if (ra.resource.type == ResourceManager.ResourceEnum.Apple || ra.resource.type == ResourceManager.ResourceEnum.BakedApple) {
+								foodNeed.ChangeValue(-((ResourceManager.Food)ra.Resource).nutrition);
+								colonist.GetInventory().ChangeResourceAmount(ra.Resource, -1, false);
+								if (ra.Resource.type == ResourceManager.ResourceEnum.Apple || ra.Resource.type == ResourceManager.ResourceEnum.BakedApple) {
 									colonist.GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.AppleSeed), UnityEngine.Random.Range(1, 5), false);
 								}
 							}
@@ -754,8 +755,8 @@ namespace Snowship.NJob {
 				"WearClothes",
 				new() {
 					delegate (Job job, Colonist colonist) {
-						foreach (ResourceManager.ResourceAmount resourceAmount in job.requiredResources.Where(ra => ra.resource.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
-							ResourceManager.Clothing clothing = (ResourceManager.Clothing)resourceAmount.resource;
+						foreach (ResourceAmount resourceAmount in job.requiredResources.Where(ra => ra.Resource.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
+							ResourceManager.Clothing clothing = (ResourceManager.Clothing)resourceAmount.Resource;
 							colonist.ChangeClothing(clothing.prefab.appearance, clothing);
 						}
 					}

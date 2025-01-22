@@ -1,5 +1,6 @@
 ﻿using System;
 using Snowship.NCaravan;
+using Snowship.NResources;
 
 namespace Snowship.NResource.Models {
 	public class TradeResourceAmount : IDisposable {
@@ -41,17 +42,17 @@ namespace Snowship.NResource.Models {
 
 		public void UpdateCaravanAmount() {
 
-			ResourceManager.ResourceAmount caravanResourceAmount = caravan.GetInventory().resources.Find(ra => ra.resource == resource);
+			ResourceAmount caravanResourceAmount = caravan.GetInventory().resources.Find(ra => ra.Resource == resource);
 			if (caravanResourceAmount == null) {
 				OnCaravanAmountUpdated?.Invoke(-1);
 				return;
 			}
 
-			if (caravanAmount == caravanResourceAmount.amount) {
+			if (caravanAmount == caravanResourceAmount.Amount) {
 				return;
 			}
 
-			caravanAmount = caravanResourceAmount.amount;
+			caravanAmount = caravanResourceAmount.Amount;
 			OnCaravanAmountUpdated?.Invoke(caravanAmount);
 		}
 

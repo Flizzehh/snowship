@@ -79,7 +79,7 @@ public class HumanManager : IManager {
 		// Carrying Item
 
 		// Inventory
-		private readonly ResourceManager.Inventory inventory;
+		private readonly Inventory inventory;
 
 		public enum Appearance { Skin, Hair, Hat, Top, Bottoms, Scarf, Backpack };
 
@@ -90,7 +90,7 @@ public class HumanManager : IManager {
 
 			moveSprites = GameManager.humanM.humanMoveSprites[bodyIndices[Appearance.Skin]];
 
-			inventory = new ResourceManager.Inventory(this, 50000, 50000);
+			inventory = new Inventory(this, 50000, 50000);
 
 			SetName(GameManager.humanM.GetName(gender));
 
@@ -218,7 +218,7 @@ public class HumanManager : IManager {
 			GameManager.humanM.humans.Remove(this);
 		}
 
-		public ResourceManager.Inventory GetInventory() {
+		public Inventory GetInventory() {
 			return inventory;
 		}
 	}
@@ -244,8 +244,8 @@ public class HumanManager : IManager {
 		SetSelectedHumanIndicator();
 
 		//GameManager.uiMOld.SetSelectedColonistInformation(false); // TODO Fire event for human being selected
-		GameManager.uiMOld.SetSelectedTraderMenu();
-		GameManager.uiMOld.SetRightListPanelSize();
+		//GameManager.uiMOld.SetSelectedTraderMenu();
+		//GameManager.uiMOld.SetRightListPanelSize();
 
 		OnHumanSelected?.Invoke(selectedHuman);
 	}

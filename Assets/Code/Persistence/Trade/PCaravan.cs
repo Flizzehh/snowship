@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NResource.Models;
+using Snowship.NResources;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -386,8 +387,8 @@ namespace Snowship.NPersistence {
 
 				caravan.GetInventory().maxWeight = persistenceCaravan.persistenceInventory.maxWeight.Value;
 				caravan.GetInventory().maxVolume = persistenceCaravan.persistenceInventory.maxVolume.Value;
-				foreach (ResourceManager.ResourceAmount resourceAmount in persistenceCaravan.persistenceInventory.resources) {
-					caravan.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+				foreach (ResourceAmount resourceAmount in persistenceCaravan.persistenceInventory.resources) {
+					caravan.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 				}
 
 				foreach (PersistenceTradeResourceAmount persistenceTradeResourceAmount in persistenceCaravan.persistenceResourcesToTrade) {
@@ -426,8 +427,8 @@ namespace Snowship.NPersistence {
 
 					trader.GetInventory().maxWeight = persistenceTrader.persistenceHuman.persistenceInventory.maxWeight.Value;
 					trader.GetInventory().maxVolume = persistenceTrader.persistenceHuman.persistenceInventory.maxVolume.Value;
-					foreach (ResourceManager.ResourceAmount resourceAmount in persistenceTrader.persistenceHuman.persistenceInventory.resources) {
-						trader.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+					foreach (ResourceAmount resourceAmount in persistenceTrader.persistenceHuman.persistenceInventory.resources) {
+						trader.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 					}
 
 					foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in persistenceTrader.persistenceHuman.clothes) {

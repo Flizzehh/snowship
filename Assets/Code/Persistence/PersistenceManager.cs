@@ -8,6 +8,7 @@ using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence.Save;
+using Snowship.NResources;
 using Snowship.NState;
 using Snowship.NUI;
 using UnityEngine;
@@ -225,9 +226,9 @@ namespace Snowship.NPersistence {
 					switch (objectInstance.prefab.instanceType) {
 						case ResourceManager.ObjectInstanceType.Container:
 							ResourceManager.Container container = (ResourceManager.Container)objectInstance;
-							foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceObject.persistenceInventory.reservedResources) {
-								foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-									container.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+							foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceObject.persistenceInventory.reservedResources) {
+								foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
+									container.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 								}
 								container.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 							}
@@ -251,9 +252,9 @@ namespace Snowship.NPersistence {
 					PCaravan.PersistenceCaravan persistenceCaravan = persistenceCaravans[i];
 					Caravan caravan = GameManager.caravanM.caravans[i];
 
-					foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceCaravan.persistenceInventory.reservedResources) {
-						foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-							caravan.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+					foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceCaravan.persistenceInventory.reservedResources) {
+						foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
+							caravan.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 						}
 						caravan.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 					}
@@ -262,9 +263,9 @@ namespace Snowship.NPersistence {
 						PCaravan.PersistenceTrader persistenceTrader = persistenceCaravan.persistenceTraders[t];
 						Trader trader = caravan.traders[t];
 
-						foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceTrader.persistenceHuman.persistenceInventory.reservedResources) {
-							foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-								trader.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+						foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceTrader.persistenceHuman.persistenceInventory.reservedResources) {
+							foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
+								trader.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 							}
 							trader.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 						}

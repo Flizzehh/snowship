@@ -4,6 +4,7 @@ using System.IO;
 using Snowship.NColonist;
 using Snowship.NJob;
 using Snowship.NProfession;
+using Snowship.NResources;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -105,9 +106,9 @@ namespace Snowship.NPersistence {
 					file.WriteLine(CreateKeyValueString(SkillProperty.Skill, string.Empty, 2));
 
 					file.WriteLine(CreateKeyValueString(SkillProperty.Type, skill.prefab.type, 3));
-					file.WriteLine(CreateKeyValueString(SkillProperty.Level, skill.level, 3));
-					file.WriteLine(CreateKeyValueString(SkillProperty.NextLevelExperience, skill.nextLevelExperience, 3));
-					file.WriteLine(CreateKeyValueString(SkillProperty.CurrentExperience, skill.currentExperience, 3));
+					file.WriteLine(CreateKeyValueString(SkillProperty.Level, skill.Level, 3));
+					file.WriteLine(CreateKeyValueString(SkillProperty.NextLevelExperience, skill.NextLevelExperience, 3));
+					file.WriteLine(CreateKeyValueString(SkillProperty.CurrentExperience, skill.CurrentExperience, 3));
 				}
 
 				if (colonist.traits.Count > 0) {
@@ -540,8 +541,8 @@ namespace Snowship.NPersistence {
 
 				colonist.GetInventory().maxWeight = persistenceColonist.persistenceHuman.persistenceInventory.maxWeight.Value;
 				colonist.GetInventory().maxVolume = persistenceColonist.persistenceHuman.persistenceInventory.maxVolume.Value;
-				foreach (ResourceManager.ResourceAmount resourceAmount in persistenceColonist.persistenceHuman.persistenceInventory.resources) {
-					colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+				foreach (ResourceAmount resourceAmount in persistenceColonist.persistenceHuman.persistenceInventory.resources) {
+					colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 				}
 
 				foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in persistenceColonist.persistenceHuman.clothes) {
@@ -575,9 +576,9 @@ namespace Snowship.NPersistence {
 
 				foreach (PersistenceSkill persistenceSkill in persistenceColonist.persistenceSkills) {
 					SkillInstance skill = colonist.skills.Find(s => s.prefab.type == persistenceSkill.type);
-					skill.level = persistenceSkill.level.Value;
-					skill.nextLevelExperience = persistenceSkill.nextLevelExperience.Value;
-					skill.currentExperience = persistenceSkill.currentExperience.Value;
+					skill.Level = persistenceSkill.level.Value;
+					skill.NextLevelExperience = persistenceSkill.nextLevelExperience.Value;
+					skill.CurrentExperience = persistenceSkill.currentExperience.Value;
 				}
 
 				foreach (PersistenceTrait persistenceTrait in persistenceColonist.persistenceTraits) {
@@ -603,9 +604,9 @@ namespace Snowship.NPersistence {
 				PersistenceColonist persistenceColonist = persistenceColonists[i];
 				Colonist colonist = Colonist.colonists[i];
 
-				foreach (KeyValuePair<string, List<ResourceManager.ResourceAmount>> humanToReservedResourcesKVP in persistenceColonist.persistenceHuman.persistenceInventory.reservedResources) {
-					foreach (ResourceManager.ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-						colonist.GetInventory().ChangeResourceAmount(resourceAmount.resource, resourceAmount.amount, false);
+				foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceColonist.persistenceHuman.persistenceInventory.reservedResources) {
+					foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
+						colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 					}
 					colonist.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 				}

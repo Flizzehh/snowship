@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
+using Snowship.NResources;
 
 namespace Snowship.NColonist {
 	public static class NeedUtilities {
@@ -83,7 +84,7 @@ namespace Snowship.NColonist {
 			need.ChangeValue(needIncreaseAmount + (NeedToSpecialValueFunctionMap.TryGetValue(need.prefab.type, out Func<NeedInstance, float> specialValueFunction) ? specialValueFunction(need) : 0));
 		}
 
-		public static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceManager.ResourceAmount resourceAmount) {
+		public static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceAmount resourceAmount) {
 
 			List<ResourceManager.Container> containersWithResourceAmount = new List<ResourceManager.Container>();
 
@@ -95,27 +96,27 @@ namespace Snowship.NColonist {
 			return containersWithResourceAmount.OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).FirstOrDefault();
 		}
 
-		private static KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>> FindClosestFood(Colonist colonist, float minimumNutritionRequired, bool takeFromOtherColonists, bool eatAnything) {
-			List<KeyValuePair<KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>, int>> resourcesPerInventory = new List<KeyValuePair<KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>, int>>();
+		private static KeyValuePair<Inventory, List<ResourceAmount>> FindClosestFood(Colonist colonist, float minimumNutritionRequired, bool takeFromOtherColonists, bool eatAnything) {
+			List<KeyValuePair<KeyValuePair<Inventory, List<ResourceAmount>>, int>> resourcesPerInventory = new();
 			int totalNutrition = 0;
 			foreach (ResourceManager.Container container in GameManager.resourceM.GetContainersInRegion(colonist.overTile.region).OrderBy(c => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, c.tile.regionBlock, true, true, false))) {
-				List<ResourceManager.ResourceAmount> resourcesToReserve = new List<ResourceManager.ResourceAmount>();
-				foreach (ResourceManager.ResourceAmount ra in container.GetInventory().resources.Where(ra => ra.resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(ra => ((ResourceManager.Food)ra.resource).nutrition).ToList()) {
+				List<ResourceAmount> resourcesToReserve = new();
+				foreach (ResourceAmount ra in container.GetInventory().resources.Where(ra => ra.Resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(ra => ((ResourceManager.Food)ra.Resource).nutrition).ToList()) {
 					int numReserved = 0;
-					for (int i = 0; i < ra.amount; i++) {
+					for (int i = 0; i < ra.Amount; i++) {
 						numReserved += 1;
-						totalNutrition += ((ResourceManager.Food)ra.resource).nutrition;
+						totalNutrition += ((ResourceManager.Food)ra.Resource).nutrition;
 						if (totalNutrition >= minimumNutritionRequired) {
 							break;
 						}
 					}
-					resourcesToReserve.Add(new ResourceManager.ResourceAmount(ra.resource, numReserved));
+					resourcesToReserve.Add(new ResourceAmount(ra.Resource, numReserved));
 					if (totalNutrition >= minimumNutritionRequired) {
 						break;
 					}
 				}
 				if (totalNutrition >= minimumNutritionRequired) {
-					resourcesPerInventory.Add(new KeyValuePair<KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>, int>(new KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>(container.GetInventory(), resourcesToReserve), totalNutrition));
+					resourcesPerInventory.Add(new KeyValuePair<KeyValuePair<Inventory, List<ResourceAmount>>, int>(new KeyValuePair<Inventory, List<ResourceAmount>>(container.GetInventory(), resourcesToReserve), totalNutrition));
 					break;
 				}
 			}
@@ -125,15 +126,15 @@ namespace Snowship.NColonist {
 			if (resourcesPerInventory.Count > 0) {
 				return resourcesPerInventory[0].Key;
 			} else {
-				return new KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>>(null, null);
+				return new KeyValuePair<Inventory, List<ResourceAmount>>(null, null);
 			}
 		}
 
 		public static bool GetFood(NeedInstance need, bool takeFromOtherColonists, bool eatAnything) {
-			if (need.colonist.GetInventory().resources.Find(ra => ra.resource.groupType == ResourceManager.ResourceGroupEnum.Foods) == null) {
-				KeyValuePair<ResourceManager.Inventory, List<ResourceManager.ResourceAmount>> closestFood = FindClosestFood(need.colonist, need.GetValue(), takeFromOtherColonists, eatAnything);
+			if (need.colonist.GetInventory().resources.Find(ra => ra.Resource.groupType == ResourceManager.ResourceGroupEnum.Foods) == null) {
+				KeyValuePair<Inventory, List<ResourceAmount>> closestFood = FindClosestFood(need.colonist, need.GetValue(), takeFromOtherColonists, eatAnything);
 
-				List<ResourceManager.ResourceAmount> resourcesToReserve = closestFood.Value;
+				List<ResourceAmount> resourcesToReserve = closestFood.Value;
 				if (closestFood.Key != null) {
 					if (closestFood.Key.parent is ResourceManager.Container container) {
 						container.GetInventory().ReserveResources(resourcesToReserve, need.colonist);
@@ -171,8 +172,8 @@ namespace Snowship.NColonist {
 				int total = 0;
 
 				int amountOnThisColonist = 0;
-				foreach (ResourceManager.ResourceAmount resourceAmount in colonist.GetInventory().resources.Where(ra => ra.resource.groupType == resourceGroup)) {
-					amountOnThisColonist += resourceAmount.amount;
+				foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources.Where(ra => ra.Resource.groupType == resourceGroup)) {
+					amountOnThisColonist += resourceAmount.Amount;
 				}
 				total += amountOnThisColonist;
 
@@ -187,8 +188,8 @@ namespace Snowship.NColonist {
 					foreach (Colonist otherColonist in Colonist.colonists) {
 						if (colonist != otherColonist) {
 							int amountOnOtherColonist = 0;
-							foreach (ResourceManager.ResourceAmount resourceAmount in otherColonist.GetInventory().resources.Where(ra => ra.resource.groupType == resourceGroup)) {
-								amountOnOtherColonist += resourceAmount.amount;
+							foreach (ResourceAmount resourceAmount in otherColonist.GetInventory().resources.Where(ra => ra.Resource.groupType == resourceGroup)) {
+								amountOnOtherColonist += resourceAmount.Amount;
 							}
 							total += amountOnOtherColonist;
 						}
