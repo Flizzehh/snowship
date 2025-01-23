@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Snowship.NJob;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -114,7 +114,7 @@ namespace Snowship.NPersistence {
 
 		public class PersistenceJob {
 			public string prefab;
-			public ResourceManager.ObjectEnum? type;
+			public ObjectPrefab.ObjectEnum? type;
 			public string variation;
 			public Vector2? position;
 			public int? rotationIndex;
@@ -125,13 +125,13 @@ namespace Snowship.NPersistence {
 			public List<ResourceAmount> requiredResources;
 			public List<ResourceAmount> resourcesColonistHas;
 			public List<PersistenceContainerPickup> containerPickups;
-			public ResourceManager.Resource createResource;
+			public Resource createResource;
 			public PObject.PersistenceObject activeObject;
 			public List<ResourceAmount> transferResources;
 
 			public PersistenceJob(
 				string prefab,
-				ResourceManager.ObjectEnum? type,
+				ObjectPrefab.ObjectEnum? type,
 				string variation,
 				Vector2? position,
 				int? rotationIndex,
@@ -142,7 +142,7 @@ namespace Snowship.NPersistence {
 				List<ResourceAmount> requiredResources,
 				List<ResourceAmount> resourcesColonistHas,
 				List<PersistenceContainerPickup> containerPickups,
-				ResourceManager.Resource createResource,
+				Resource createResource,
 				PObject.PersistenceObject activeObject,
 				List<ResourceAmount> transferResources
 			) {
@@ -195,7 +195,7 @@ namespace Snowship.NPersistence {
 
 		public PersistenceJob LoadPersistenceJob(List<KeyValuePair<string, object>> properties) {
 			string prefab = null;
-			ResourceManager.ObjectEnum? type = null;
+			ObjectPrefab.ObjectEnum? type = null;
 			string variation = null;
 			Vector2? position = null;
 			int? rotationIndex = null;
@@ -206,7 +206,7 @@ namespace Snowship.NPersistence {
 			List<ResourceAmount> requiredResources = new();
 			List<ResourceAmount> resourcesColonistHas = null;
 			List<PersistenceContainerPickup> containerPickups = null;
-			ResourceManager.Resource createResource = null;
+			Resource createResource = null;
 			PObject.PersistenceObject activeObject = null;
 			List<ResourceAmount> transferResources = null;
 
@@ -217,7 +217,7 @@ namespace Snowship.NPersistence {
 						prefab = StringUtilities.RemoveNonAlphanumericChars((string)jobProperty.Value);
 						break;
 					case JobProperty.Type:
-						type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)jobProperty.Value);
+						type = (ObjectPrefab.ObjectEnum)Enum.Parse(typeof(ObjectPrefab.ObjectEnum), (string)jobProperty.Value);
 						break;
 					case JobProperty.Variation:
 						variation = StringUtilities.RemoveNonAlphanumericChars((string)jobProperty.Value);
@@ -291,11 +291,11 @@ namespace Snowship.NPersistence {
 						}
 						break;
 					case JobProperty.CreateResource:
-						createResource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)jobProperty.Value));
+						createResource = Resource.GetResourceByEnum((EResource)Enum.Parse(typeof(EResource), (string)jobProperty.Value));
 						break;
 					case JobProperty.ActiveObject:
 						Vector2? activeObjectZeroPointTilePosition = null;
-						ResourceManager.ObjectEnum? activeObjectType = null;
+						ObjectPrefab.ObjectEnum? activeObjectType = null;
 
 						foreach (KeyValuePair<string, object> activeObjectProperty in (List<KeyValuePair<string, object>>)jobProperty.Value) {
 							switch ((PObject.ObjectProperty)Enum.Parse(typeof(PObject.ObjectProperty), activeObjectProperty.Key)) {
@@ -303,7 +303,7 @@ namespace Snowship.NPersistence {
 									activeObjectZeroPointTilePosition = new Vector2(float.Parse(((string)activeObjectProperty.Value).Split(',')[0]), float.Parse(((string)activeObjectProperty.Value).Split(',')[1]));
 									break;
 								case PObject.ObjectProperty.Type:
-									activeObjectType = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)activeObjectProperty.Value);
+									activeObjectType = (ObjectPrefab.ObjectEnum)Enum.Parse(typeof(ObjectPrefab.ObjectEnum), (string)activeObjectProperty.Value);
 									break;
 								default:
 									Debug.LogError("Unknown active tile object property: " + activeObjectProperty.Key + " " + activeObjectProperty.Value);
@@ -373,7 +373,7 @@ namespace Snowship.NPersistence {
 				foreach (PersistenceContainerPickup persistenceContainerPickup in persistenceJob.containerPickups) {
 					containerPickups.Add(
 						new ContainerPickup(
-							GameManager.resourceM.containers.Find(c => c.zeroPointTile == GameManager.colonyM.colony.map.GetTileFromPosition(persistenceContainerPickup.containerPickupZeroPointTilePosition.Value)),
+							Container.containers.Find(c => c.zeroPointTile == GameManager.colonyM.colony.map.GetTileFromPosition(persistenceContainerPickup.containerPickupZeroPointTilePosition.Value)),
 							persistenceContainerPickup.containerPickupResourceAmounts
 						));
 				}
@@ -382,8 +382,8 @@ namespace Snowship.NPersistence {
 			Job job = new(
 				JobPrefab.GetJobPrefabByName(persistenceJob.prefab),
 				GameManager.colonyM.colony.map.GetTileFromPosition(persistenceJob.position.Value),
-				GameManager.resourceM.GetObjectPrefabByEnum(persistenceJob.type.Value),
-				GameManager.resourceM.GetObjectPrefabByEnum(persistenceJob.type.Value).GetVariationFromString(persistenceJob.variation),
+				ObjectPrefab.GetObjectPrefabByEnum(persistenceJob.type.Value),
+				ObjectPrefab.GetObjectPrefabByEnum(persistenceJob.type.Value).GetVariationFromString(persistenceJob.variation),
 				persistenceJob.rotationIndex.Value
 			) { started = persistenceJob.started ?? false, jobProgress = persistenceJob.progress ?? 0, colonistBuildTime = persistenceJob.colonistBuildTime ?? 0, requiredResources = persistenceJob.requiredResources, resourcesColonistHas = persistenceJob.resourcesColonistHas, containerPickups = containerPickups, transferResources = persistenceJob.transferResources };
 			if (persistenceJob.priority.HasValue) {
@@ -391,8 +391,8 @@ namespace Snowship.NPersistence {
 			}
 
 			if (persistenceJob.createResource != null) {
-				ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)job.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeObject.type);
-				ResourceManager.CraftableResourceInstance craftableResourceInstance = craftingObject.resources.Find(r => r.resource == persistenceJob.createResource);
+				CraftingObject craftingObject = (CraftingObject)job.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeObject.type);
+				CraftableResourceInstance craftableResourceInstance = craftingObject.resources.Find(r => r.resource == persistenceJob.createResource);
 				job.SetCreateResourceData(craftableResourceInstance, false);
 				craftableResourceInstance.job = job;
 			}

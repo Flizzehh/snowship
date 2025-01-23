@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NJob;
+using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.NUI.Simulation.DebugConsole;
 using Snowship.NUtilities;
@@ -430,7 +431,7 @@ public class DebugManager : IManager
 			Commands.changeinvamt,
 			delegate(List<string> parameters) {
 				if (parameters.Count == 2) {
-					ResourceManager.Resource resource = GameManager.resourceM.GetResources().Find(r => r.type.ToString() == parameters[0]);
+					Resource resource = Resource.GetResources().Find(r => r.type.ToString() == parameters[0]);
 					if (resource != null) {
 						if (GameManager.humanM.selectedHuman != null || GameManager.uiMOld.selectedContainer != null) {
 							if (GameManager.humanM.selectedHuman != null) {
@@ -458,7 +459,7 @@ public class DebugManager : IManager
 								foreach (Colonist colonist in Colonist.colonists) {
 									colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
 								}
-								foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
+								foreach (Container container in Container.containers) {
 									container.GetInventory().ChangeResourceAmount(resource, amount, false);
 								}
 								Output($"SUCCESS: Added {amount} {resource.name} to all colonists and all containers.");
@@ -472,7 +473,7 @@ public class DebugManager : IManager
 				} else if (parameters.Count == 3) {
 					if (bool.TryParse(parameters[2], out bool allColonists)) {
 						if (allColonists) {
-							ResourceManager.Resource resource = GameManager.resourceM.GetResources().Find(r => r.type.ToString() == parameters[0]);
+							Resource resource = Resource.GetResources().Find(r => r.type.ToString() == parameters[0]);
 							if (resource != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
 									foreach (Colonist colonist in Colonist.colonists) {
@@ -491,7 +492,7 @@ public class DebugManager : IManager
 				} else if (parameters.Count == 4) {
 					if (bool.TryParse(parameters[2], out bool allColonists)) {
 						if (allColonists) {
-							ResourceManager.Resource resource = GameManager.resourceM.GetResources().Find(r => r.type.ToString() == parameters[0]);
+							Resource resource = Resource.GetResources().Find(r => r.type.ToString() == parameters[0]);
 							if (resource != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
 									foreach (Colonist colonist in Colonist.colonists) {
@@ -509,10 +510,10 @@ public class DebugManager : IManager
 					}
 					if (bool.TryParse(parameters[3], out bool allContainers)) {
 						if (allContainers) {
-							ResourceManager.Resource resource = GameManager.resourceM.GetResources().Find(r => r.type.ToString() == parameters[0]);
+							Resource resource = Resource.GetResources().Find(r => r.type.ToString() == parameters[0]);
 							if (resource != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
-									foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
+									foreach (Container container in Container.containers) {
 										container.GetInventory().ChangeResourceAmount(resource, amount, false);
 									}
 								} else {
@@ -534,7 +535,7 @@ public class DebugManager : IManager
 			Commands.listresources,
 			delegate(List<string> parameters) {
 				if (parameters.Count == 0) {
-					foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources()) {
+					foreach (Resource resource in Resource.GetResources()) {
 						Output(resource.type.ToString());
 					}
 				} else {
@@ -547,8 +548,8 @@ public class DebugManager : IManager
 			delegate(List<string> parameters) {
 				if (parameters.Count == 1) {
 					if (int.TryParse(parameters[0], out int index)) {
-						if (index >= 0 && index < GameManager.resourceM.containers.Count) {
-							GameManager.uiMOld.SetSelectedContainer(GameManager.resourceM.containers[index]);
+						if (index >= 0 && index < Container.containers.Count) {
+							GameManager.uiMOld.SetSelectedContainer(Container.containers[index]);
 						} else {
 							Output("ERROR: Container index out of range.");
 						}
@@ -838,20 +839,20 @@ public class DebugManager : IManager
 			delegate(List<string> parameters) {
 				int counter = 0;
 				if (parameters.Count == 3) {
-					ResourceManager.ObjectPrefab objectPrefab = GameManager.resourceM.GetObjectPrefabByString(parameters[0]);
+					ObjectPrefab objectPrefab = ObjectPrefab.GetObjectPrefabByString(parameters[0]);
 					if (objectPrefab != null) {
 						// Variation doesn't need a null check because everything is designed around it working regardless of whether it's null or not
-						ResourceManager.Variation variation = objectPrefab.GetVariationFromString(parameters[1]);
+						Variation variation = objectPrefab.GetVariationFromString(parameters[1]);
 
 						if (int.TryParse(parameters[1], out int rotation)) {
 							if (rotation >= 0 && rotation < objectPrefab.GetBitmaskSpritesForVariation(variation).Count) {
 								if (selectedTiles.Count > 0) {
 									foreach (TileManager.Tile tile in selectedTiles) {
 										if (tile.objectInstances.ContainsKey(objectPrefab.layer) && tile.objectInstances[objectPrefab.layer] != null) {
-											GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[objectPrefab.layer]);
+											ObjectInstance.RemoveObjectInstance(tile.objectInstances[objectPrefab.layer]);
 											tile.RemoveObjectAtLayer(objectPrefab.layer);
 										}
-										tile.SetObject(GameManager.resourceM.CreateObjectInstance(objectPrefab, variation, tile, rotation, true));
+										tile.SetObject(ObjectInstance.CreateObjectInstance(objectPrefab, variation, tile, rotation, true));
 										tile.GetObjectInstanceAtLayer(objectPrefab.layer).FinishCreation();
 										counter += 1;
 									}
@@ -868,18 +869,18 @@ public class DebugManager : IManager
 						Output("ERROR: Unable to parse tile object.");
 					}
 				} else if (parameters.Count == 2) {
-					ResourceManager.ObjectPrefab objectPrefab = GameManager.resourceM.GetObjectPrefabByString(parameters[0]);
+					ObjectPrefab objectPrefab = ObjectPrefab.GetObjectPrefabByString(parameters[0]);
 					if (objectPrefab != null) {
 						// Variation doesn't need a null check because everything is designed around it working regardless of whether it's null or not
-						ResourceManager.Variation variation = objectPrefab.GetVariationFromString(parameters[1]);
+						Variation variation = objectPrefab.GetVariationFromString(parameters[1]);
 
 						if (selectedTiles.Count > 0) {
 							foreach (TileManager.Tile tile in selectedTiles) {
 								if (tile.objectInstances.ContainsKey(objectPrefab.layer) && tile.objectInstances[objectPrefab.layer] != null) {
-									GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[objectPrefab.layer]);
+									ObjectInstance.RemoveObjectInstance(tile.objectInstances[objectPrefab.layer]);
 									tile.RemoveObjectAtLayer(objectPrefab.layer);
 								}
-								tile.SetObject(GameManager.resourceM.CreateObjectInstance(objectPrefab, variation, tile, 0, true));
+								tile.SetObject(ObjectInstance.CreateObjectInstance(objectPrefab, variation, tile, 0, true));
 								tile.GetObjectInstanceAtLayer(objectPrefab.layer).FinishCreation();
 								counter += 1;
 							}
@@ -903,12 +904,12 @@ public class DebugManager : IManager
 				if (parameters.Count == 0) {
 					if (selectedTiles.Count > 0) {
 						foreach (TileManager.Tile tile in selectedTiles) {
-							List<ResourceManager.ObjectInstance> removeTOIs = new();
-							foreach (KeyValuePair<int, ResourceManager.ObjectInstance> toiKVP in tile.objectInstances) {
+							List<ObjectInstance> removeTOIs = new();
+							foreach (KeyValuePair<int, ObjectInstance> toiKVP in tile.objectInstances) {
 								removeTOIs.Add(toiKVP.Value);
 							}
-							foreach (ResourceManager.ObjectInstance toi in removeTOIs) {
-								GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[toi.prefab.layer]);
+							foreach (ObjectInstance toi in removeTOIs) {
+								ObjectInstance.RemoveObjectInstance(tile.objectInstances[toi.prefab.layer]);
 								tile.RemoveObjectAtLayer(toi.prefab.layer);
 							}
 							counter += 1;
@@ -921,7 +922,7 @@ public class DebugManager : IManager
 						if (selectedTiles.Count > 0) {
 							foreach (TileManager.Tile tile in selectedTiles) {
 								if (tile.objectInstances.ContainsKey(layer) && tile.objectInstances[layer] != null) {
-									GameManager.resourceM.RemoveObjectInstance(tile.objectInstances[layer]);
+									ObjectInstance.RemoveObjectInstance(tile.objectInstances[layer]);
 									tile.RemoveObjectAtLayer(layer);
 									counter += 1;
 								}
@@ -942,7 +943,7 @@ public class DebugManager : IManager
 			Commands.listtileobjs,
 			delegate(List<string> parameters) {
 				if (parameters.Count == 0) {
-					foreach (ResourceManager.ObjectPrefab top in GameManager.resourceM.GetObjectPrefabs()) {
+					foreach (ObjectPrefab top in ObjectPrefab.GetObjectPrefabs()) {
 						Output(top.type.ToString());
 					}
 				} else {
@@ -955,12 +956,12 @@ public class DebugManager : IManager
 			delegate(List<string> parameters) {
 				int counter = 0;
 				if (parameters.Count == 2) {
-					ResourceManager.PlantPrefab plantPrefab = GameManager.resourceM.GetPlantPrefabByString(parameters[0]);
+					PlantPrefab plantPrefab = PlantPrefab.GetPlantPrefabByString(parameters[0]);
 					if (plantPrefab != null) {
 						if (bool.TryParse(parameters[1], out bool small)) {
 							if (selectedTiles.Count > 0) {
 								foreach (TileManager.Tile tile in selectedTiles) {
-									tile.SetPlant(false, new ResourceManager.Plant(plantPrefab, tile, small, true, null));
+									tile.SetPlant(false, new Plant(plantPrefab, tile, small, true, null));
 									GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
 									if (tile.plant != null) {
 										counter += 1;
@@ -1006,7 +1007,7 @@ public class DebugManager : IManager
 			Commands.listtileplants,
 			delegate(List<string> parameters) {
 				if (parameters.Count == 0) {
-					foreach (ResourceManager.PlantPrefab plantGroup in GameManager.resourceM.GetPlantPrefabs()) {
+					foreach (PlantPrefab plantGroup in PlantPrefab.GetPlantPrefabs()) {
 						Output(plantGroup.type.ToString());
 					}
 				} else {
@@ -1548,7 +1549,7 @@ public class DebugManager : IManager
 			delegate(List<string> parameters) {
 				if (parameters.Count == 0) {
 					int numFarmsGrown = 0;
-					foreach (ResourceManager.Farm farm in GameManager.resourceM.farms) {
+					foreach (Farm farm in Farm.farms) {
 						farm.growTimer = farm.prefab.growthTimeDays * (SimulationDateTime.DayLengthSeconds - 1);
 						farm.Update();
 						numFarmsGrown += 1;

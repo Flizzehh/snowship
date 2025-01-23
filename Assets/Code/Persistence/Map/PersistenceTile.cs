@@ -1,4 +1,6 @@
-﻿namespace Snowship.NPersistence {
+﻿using Snowship.NResource;
+
+namespace Snowship.NPersistence {
 	public class PersistenceTile {
 
 		public int? tileIndex;
@@ -11,11 +13,11 @@
 		public bool? tileDug;
 		public string tileSpriteName;
 
-		public ResourceManager.PlantPrefab plantPrefab;
+		public PlantPrefab plantPrefab;
 		public string plantSpriteName;
 		public bool? plantSmall;
 		public float? plantGrowthProgress;
-		public ResourceManager.Resource plantHarvestResource;
+		public Resource plantHarvestResource;
 		public float? plantIntegrity;
 
 		public PersistenceTile(
@@ -28,11 +30,11 @@
 			bool? tileRoof,
 			bool? tileDug,
 			string tileSpriteName,
-			ResourceManager.PlantPrefab plantPrefab,
+			PlantPrefab plantPrefab,
 			string plantSpriteName,
 			bool? plantSmall,
 			float? plantGrowthProgress,
-			ResourceManager.Resource plantHarvestResource,
+			Resource plantHarvestResource,
 			float? plantIntegrity
 		) {
 			this.tileIndex = tileIndex;

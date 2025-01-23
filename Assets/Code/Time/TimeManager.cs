@@ -15,6 +15,8 @@ namespace Snowship.NTime {
 
 		public void OnGameSetupComplete() {
 			GameManager.stateM.OnStateChanged += OnStateChanged;
+
+			OnTimeChanged?.Invoke(Time);
 		}
 
 		[SuppressMessage("ReSharper", "InvertIf")]

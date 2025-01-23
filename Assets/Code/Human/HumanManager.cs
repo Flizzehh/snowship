@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
+using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -61,14 +62,15 @@ public class HumanManager : IManager {
 
 	public List<Human> humans = new List<Human>();
 
-	public class Human : LifeManager.Life, ResourceManager.IInventory {
+	public class Human : LifeManager.Life, IInventory
+	{
 
 		public string name;
 		public GameObject nameCanvas;
 		public GameObject humanObj;
 
 		public Dictionary<Appearance, int> bodyIndices;
-		public Dictionary<Appearance, ResourceManager.Clothing> clothes = new Dictionary<Appearance, ResourceManager.Clothing>() {
+		public Dictionary<Appearance, Clothing> clothes = new Dictionary<Appearance, Clothing>() {
 			{ Appearance.Hat, null },
 			{ Appearance.Top, null },
 			{ Appearance.Bottoms, null },
@@ -85,7 +87,7 @@ public class HumanManager : IManager {
 
 		protected float wanderTimer = UnityEngine.Random.Range(10f, 20f);
 
-		public event Action<Appearance, ResourceManager.Clothing> OnClothingChanged;
+		public event Action<Appearance, Clothing> OnClothingChanged;
 
 		public Human(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			bodyIndices = GetBodyIndices(gender);
@@ -155,7 +157,7 @@ public class HumanManager : IManager {
 			SetMoveSprite();
 		}
 
-		public virtual void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
+		public virtual void ChangeClothing(Appearance appearance, Clothing clothing) {
 			if (clothes[appearance] != clothing) {
 
 				if (clothing != null) {
@@ -186,7 +188,7 @@ public class HumanManager : IManager {
 
 		private void SetMoveSprite() {
 			int moveSpriteIndex = CalculateMoveSpriteIndex();
-			foreach (KeyValuePair<Appearance, ResourceManager.Clothing> appearanceToClothingKVP in clothes) {
+			foreach (KeyValuePair<Appearance, Clothing> appearanceToClothingKVP in clothes) {
 				if (appearanceToClothingKVP.Value != null) {
 					humanObj.transform.Find(appearanceToClothingKVP.Key.ToString()).GetComponent<SpriteRenderer>().sprite = appearanceToClothingKVP.Value.moveSprites[moveSpriteIndex];
 				}

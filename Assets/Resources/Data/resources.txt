@@ -472,7 +472,7 @@
 	<Type>Clothing
 	<Resources>
 		<Resource>
-			<Type>WhiteSweater
+			<Type>Sweater
 			<Classes>Craftable,Clothing
 			<Weight>500
 			<Volume>300
@@ -488,7 +488,7 @@
 				<WaterResistance>10
 				<Colours>Cyan,Green,Blue,Purple,Navy,Yellow,Orange,Red,White,Gray
 		<Resource>
-			<Type>WhiteShirt
+			<Type>Shirt
 			<Classes>Craftable,Clothing
 			<Weight>200
 			<Volume>150
@@ -504,7 +504,7 @@
 				<WaterResistance>2
 				<Colours>Cyan,Green,Blue,Purple,Navy,Yellow,Orange,Red,White,Gray
 		<Resource>
-			<Type>BrownSmallBackpack
+			<Type>SmallBackpack
 			<Classes>Craftable,Clothing,Bag
 			<Weight>500
 			<Volume>500

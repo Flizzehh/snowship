@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Snowship.NResources
+namespace Snowship.NResource
 {
 	public class ResourceAmount
 	{
-		public readonly ResourceManager.Resource Resource;
+		public readonly Resource Resource;
 
 		private int amount;
 		public int Amount {
@@ -14,7 +14,7 @@ namespace Snowship.NResources
 
 		public event Action<int> OnAmountChanged;
 
-		public ResourceAmount(ResourceManager.Resource resource, int amount) {
+		public ResourceAmount(Resource resource, int amount) {
 			Resource = resource;
 			Amount = amount;
 		}

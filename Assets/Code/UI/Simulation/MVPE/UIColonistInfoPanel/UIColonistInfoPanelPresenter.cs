@@ -2,7 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NColonist;
-using Snowship.NResources;
+using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -113,17 +113,22 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		}
 
 		private void SetupClothingTab() {
-			foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> clothingMapping in colonist.clothes) {
+			foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> clothingMapping in colonist.clothes) {
 				UIClothingButtonElement clothingButton = View.CreateClothingButton(clothingMapping.Key, clothingMapping.Value);
 				clothingButton.OnButtonClicked += OnClothingButtonClicked;
 			}
 		}
 
 		private void OnClothingButtonClicked(HumanManager.Human.Appearance appearance) {
+
 			View.SetClothingSelectionPanelActive(true);
 			View.SetClothesAvailableTitleTextPanelActive(false);
 			View.SetClothesTakenTitleTextPanelActive(false);
-			foreach (ResourceManager.Clothing clothing in GameManager.resourceM.GetClothesByAppearance(appearance)) {
+
+			View.SetDisrobeButtonTarget(appearance);
+
+			List<Clothing> clothesByAppearance = Clothing.GetClothesByAppearance(appearance);
+			foreach (Clothing clothing in clothesByAppearance) {
 				if (clothing.GetWorldTotalAmount() <= 0) {
 					continue;
 				}
@@ -144,7 +149,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			}
 		}
 
-		private void OnClothingElementClicked(ResourceManager.Clothing clothing) {
+		private void OnClothingElementClicked(Clothing clothing) {
 			colonist.ChangeClothing(clothing.prefab.appearance, clothing);
 			View.SetClothingSelectionPanelActive(false);
 		}

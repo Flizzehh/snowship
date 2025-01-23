@@ -1,4 +1,5 @@
-﻿using Snowship.NUtilities;
+﻿using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,16 +13,16 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 		public Type type;
 
-		public ResourceManager.Resource resource;
-		public ResourceManager.CraftingObject craftingObject;
+		public Resource resource;
+		public CraftingObject craftingObject;
 
 		public GameObject panel;
 
 		public PriorityResourceElement(
 			Type type,
-			ResourceManager.Resource resource,
+			Resource resource,
 			Transform parent,
-			ResourceManager.CraftingObject craftingObject
+			CraftingObject craftingObject
 		) {
 			this.type = type;
 			this.resource = resource;
@@ -52,12 +53,12 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 			UpdatePriorityButtonText(0);
 			if (type == Type.Resource) {
-				ResourceManager.CraftableResourceInstance craftableResource = craftingObject.GetCraftableResourceFromResource(resource);
+				CraftableResourceInstance craftableResource = craftingObject.GetCraftableResourceFromResource(resource);
 				if (craftableResource != null) {
 					UpdatePriorityButtonText(craftableResource.priority.Get());
 				}
 			} else if (type == Type.Fuel) {
-				ResourceManager.PriorityResourceInstance fuel = craftingObject.GetFuelFromFuelResource(resource);
+				PriorityResourceInstance fuel = craftingObject.GetFuelFromFuelResource(resource);
 				if (fuel != null) {
 					UpdatePriorityButtonText(fuel.priority.Get());
 				}
@@ -91,7 +92,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 			panel.transform.Find("Priority-Button/Text").GetComponent<Text>().color = Color.Lerp(
 				ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen),
 				ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed),
-				(priority - 1f) / (ResourceManager.PriorityResourceInstance.priorityMax - 1f)
+				(priority - 1f) / (PriorityResourceInstance.priorityMax - 1f)
 			);
 		}
 

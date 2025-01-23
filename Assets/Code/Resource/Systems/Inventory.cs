@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
-using Snowship.NResources;
+using Snowship.NResource;
 using UnityEngine;
 
 public class Inventory
 {
 	public List<ResourceAmount> resources = new();
-	public List<ResourceManager.ReservedResources> reservedResources = new();
+	public List<ReservedResources> reservedResources = new();
 
-	public ResourceManager.IInventory parent;
+	public IInventory parent;
 
 	public int maxWeight;
 	public int maxVolume;
@@ -19,7 +19,7 @@ public class Inventory
 	public event Action<ResourceAmount> OnResourceAmountAdded;
 	public event Action<ResourceAmount> OnResourceAmountRemoved;
 
-	public Inventory(ResourceManager.IInventory parent, /*int maxAmount*/int maxWeight, int maxVolume) {
+	public Inventory(IInventory parent, /*int maxAmount*/int maxWeight, int maxVolume) {
 		this.parent = parent;
 		this.maxWeight = maxWeight;
 		this.maxVolume = maxVolume;
@@ -33,7 +33,7 @@ public class Inventory
 		return resources.Sum(ra => ra.Amount * ra.Resource.volume) + reservedResources.Sum(rr => rr.resources.Sum(ra => ra.Amount * ra.Resource.volume));
 	}
 
-	public int ChangeResourceAmount(ResourceManager.Resource resource, int amount, bool limitToMaxAmount) {
+	public int ChangeResourceAmount(Resource resource, int amount, bool limitToMaxAmount) {
 		int highestOverflowAmount = 0;
 
 		if (limitToMaxAmount && amount > 0) {
@@ -89,7 +89,7 @@ public class Inventory
 				ResourceAmount raInventory = resources.Find(ra => ra.Resource == raReserve.Resource);
 				ChangeResourceAmount(raInventory.Resource, -raReserve.Amount, false);
 			}
-			reservedResources.Add(new ResourceManager.ReservedResources(resourcesToReserve, humanReservingResources));
+			reservedResources.Add(new ReservedResources(resourcesToReserve, humanReservingResources));
 		}
 		// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
 		// GameManager.uiMOld.SetSelectedTraderMenu();
@@ -101,14 +101,14 @@ public class Inventory
 		return allResourcesFound;
 	}
 
-	public List<ResourceManager.ReservedResources> TakeReservedResources(HumanManager.Human humanReservingResources, List<ResourceAmount> resourcesToTake = null) {
-		List<ResourceManager.ReservedResources> reservedResourcesByHuman = new();
-		foreach (ResourceManager.ReservedResources rr in reservedResources) {
+	public List<ReservedResources> TakeReservedResources(HumanManager.Human humanReservingResources, List<ResourceAmount> resourcesToTake = null) {
+		List<ReservedResources> reservedResourcesByHuman = new();
+		foreach (ReservedResources rr in reservedResources) {
 			if (rr.human == humanReservingResources && (resourcesToTake == null || rr.resources.Find(ra => resourcesToTake.Find(rtt => rtt.Resource == ra.Resource) != null) != null)) {
 				reservedResourcesByHuman.Add(rr);
 			}
 		}
-		foreach (ResourceManager.ReservedResources rr in reservedResourcesByHuman) {
+		foreach (ReservedResources rr in reservedResourcesByHuman) {
 			reservedResources.Remove(rr);
 		}
 		// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
@@ -122,8 +122,8 @@ public class Inventory
 	}
 
 	public void ReleaseReservedResources(HumanManager.Human human) {
-		List<ResourceManager.ReservedResources> reservedResourcesToRemove = new();
-		foreach (ResourceManager.ReservedResources rr in reservedResources) {
+		List<ReservedResources> reservedResourcesToRemove = new();
+		foreach (ReservedResources rr in reservedResources) {
 			if (rr.human == human) {
 				foreach (ResourceAmount ra in rr.resources) {
 					ChangeResourceAmount(ra.Resource, ra.Amount, false);
@@ -131,7 +131,7 @@ public class Inventory
 				reservedResourcesToRemove.Add(rr);
 			}
 		}
-		foreach (ResourceManager.ReservedResources rrRemove in reservedResourcesToRemove) {
+		foreach (ReservedResources rrRemove in reservedResourcesToRemove) {
 			reservedResources.Remove(rrRemove);
 		}
 		reservedResourcesToRemove.Clear();
@@ -144,7 +144,7 @@ public class Inventory
 	}
 
 	public static void TransferResourcesBetweenInventories(Inventory fromInventory, Inventory toInventory, ResourceAmount resourceAmount, bool limitToMaxAmount) {
-		ResourceManager.Resource resource = resourceAmount.Resource;
+		Resource resource = resourceAmount.Resource;
 		int amount = resourceAmount.Amount;
 
 		fromInventory.ChangeResourceAmount(resource, -amount, false);

@@ -1,10 +1,11 @@
-﻿namespace Snowship.NResource.Models {
+﻿namespace Snowship.NResource
+{
 	public class ConfirmedTradeResourceAmount {
-		public ResourceManager.Resource resource;
+		public Resource resource;
 		public int tradeAmount;
 		public int amountRemaining;
 
-		public ConfirmedTradeResourceAmount(ResourceManager.Resource resource, int tradeAmount) {
+		public ConfirmedTradeResourceAmount(Resource resource, int tradeAmount) {
 			this.resource = resource;
 			this.tradeAmount = tradeAmount;
 			amountRemaining = tradeAmount;

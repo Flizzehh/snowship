@@ -1,15 +1,16 @@
 ﻿using System;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NUI.Simulation
 {
 	public class UIClothingElement : UIElement<UIClothingElementComponent>
 	{
-		private readonly ResourceManager.Clothing clothing;
+		private readonly Clothing clothing;
 
-		public event Action<ResourceManager.Clothing> OnButtonClicked;
+		public event Action<Clothing> OnButtonClicked;
 
-		public UIClothingElement(Transform parent, ResourceManager.Clothing clothing) : base(parent) {
+		public UIClothingElement(Transform parent, Clothing clothing) : base(parent) {
 			this.clothing = clothing;
 
 			Component.SetClothingImage(clothing.image);

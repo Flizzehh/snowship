@@ -8,7 +8,7 @@ using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence.Save;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NState;
 using Snowship.NUI;
 using UnityEngine;
@@ -221,11 +221,11 @@ namespace Snowship.NPersistence {
 
 				for (int i = 0; i < persistenceObjects.Count; i++) {
 					PObject.PersistenceObject persistenceObject = persistenceObjects[i];
-					ResourceManager.ObjectInstance objectInstance = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value).objectInstances.Values.ToList().Find(o => o.prefab.type == persistenceObject.type);
+					ObjectInstance objectInstance = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value).objectInstances.Values.ToList().Find(o => o.prefab.type == persistenceObject.type);
 
 					switch (objectInstance.prefab.instanceType) {
-						case ResourceManager.ObjectInstanceType.Container:
-							ResourceManager.Container container = (ResourceManager.Container)objectInstance;
+						case ObjectInstance.ObjectInstanceType.Container:
+							Container container = (Container)objectInstance;
 							foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceObject.persistenceInventory.reservedResources) {
 								foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
 									container.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
@@ -233,12 +233,12 @@ namespace Snowship.NPersistence {
 								container.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 							}
 							break;
-						case ResourceManager.ObjectInstanceType.CraftingObject:
-							ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)objectInstance;
+						case ObjectInstance.ObjectInstanceType.CraftingObject:
+							CraftingObject craftingObject = (CraftingObject)objectInstance;
 							craftingObject.SetActive(persistenceObject.active.Value);
 							break;
-						case ResourceManager.ObjectInstanceType.SleepSpot:
-							ResourceManager.SleepSpot sleepSpot = (ResourceManager.SleepSpot)objectInstance;
+						case ObjectInstance.ObjectInstanceType.SleepSpot:
+							SleepSpot sleepSpot = (SleepSpot)objectInstance;
 							if (persistenceObject.occupyingColonistName != null) {
 								sleepSpot.occupyingColonist = Colonist.colonists.Find(c => c.name == persistenceObject.occupyingColonistName);
 							}

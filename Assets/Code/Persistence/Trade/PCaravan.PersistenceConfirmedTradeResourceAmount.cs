@@ -1,14 +1,15 @@
-﻿namespace Snowship.NPersistence {
+﻿using Snowship.NResource;
+
+namespace Snowship.NPersistence {
 	public partial class PCaravan {
 
 		public class PersistenceConfirmedTradeResourceAmount {
-
-			public ResourceManager.ResourceEnum? type;
+			public EResource? type;
 			public int? tradeAmount;
 			public int? amountRemaining;
 
 			public PersistenceConfirmedTradeResourceAmount(
-				ResourceManager.ResourceEnum? type,
+				EResource? type,
 				int? tradeAmount,
 				int? amountRemaining
 			) {

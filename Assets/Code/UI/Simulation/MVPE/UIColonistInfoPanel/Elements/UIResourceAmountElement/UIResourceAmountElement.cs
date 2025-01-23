@@ -1,4 +1,4 @@
-﻿using Snowship.NResources;
+﻿using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NUI.Simulation

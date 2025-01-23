@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NProfession;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
 using static Snowship.NJob.JobManager;
@@ -32,8 +32,8 @@ namespace Snowship.NJob {
 
 		private SelectedPrefab selectedPrefab;
 
-		public void SetSelectedPrefab(ResourceManager.ObjectPrefab newPrefab, ResourceManager.Variation newVariation) {
-			if (selectedPrefab == null || selectedPrefab.prefab != newPrefab || !ResourceManager.Variation.Equals(selectedPrefab.variation, newVariation)) {
+		public void SetSelectedPrefab(ObjectPrefab newPrefab, Variation newVariation) {
+			if (selectedPrefab == null || selectedPrefab.prefab != newPrefab || !Variation.Equals(selectedPrefab.variation, newVariation)) {
 				if (newPrefab != null) {
 					selectedPrefab = new SelectedPrefab(newPrefab, newVariation);
 					rotationIndex = 0;
@@ -96,54 +96,69 @@ namespace Snowship.NJob {
 			ObjectsAtSameLayer, OmitNonCoastWater, OmitHoles, OmitPreviousDig, BiomeSupportsSelectedPlants, OmitObjectInstancesOnAdditionalTiles, Fillable
 		};
 
-		private static readonly Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, ResourceManager.Variation, bool>> selectionModifierFunctions = new Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ResourceManager.ObjectPrefab, ResourceManager.Variation, bool>>() {
-		{ SelectionModifiersEnum.Walkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+		private static readonly Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ObjectPrefab, Variation, bool>> selectionModifierFunctions = new Dictionary<SelectionModifiersEnum, Func<TileManager.Tile, TileManager.Tile, ObjectPrefab, Variation, bool>>() {
+			{
+				SelectionModifiersEnum.Walkable, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.walkable;
-		} },
-		{ SelectionModifiersEnum.WalkableIncludingFences, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
-			ResourceManager.ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(2);
-			if (objectInstance != null && objectInstance.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Fences) {
+				}
+			}, {
+				SelectionModifiersEnum.WalkableIncludingFences, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
+					ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(2);
+					if (objectInstance != null && objectInstance.prefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.Fences) {
 				return true;
 			}
 			return posTile.walkable;
-		} },
-		{ SelectionModifiersEnum.OmitWalkable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitWalkable, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return !posTile.walkable;
-		} },
-		{ SelectionModifiersEnum.Buildable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.Buildable, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.buildable;
-		} },
-		{ SelectionModifiersEnum.OmitBuildable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitBuildable, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return !posTile.buildable;
-		} },
-		{ SelectionModifiersEnum.StoneTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.StoneTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Stone;
-		} },
-		{ SelectionModifiersEnum.OmitStoneTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitStoneTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Stone;
-		} },
-		{ SelectionModifiersEnum.AllWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.AllWaterTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water;
-		} },
-		{ SelectionModifiersEnum.OmitAllWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitAllWaterTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Water;
-		} },
-		{ SelectionModifiersEnum.LiquidWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.LiquidWaterTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.classes[TileManager.TileType.ClassEnum.LiquidWater];
-		} },
-		{ SelectionModifiersEnum.OmitLiquidWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitLiquidWaterTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return !posTile.tileType.classes[TileManager.TileType.ClassEnum.LiquidWater];
-		} },
-		{ SelectionModifiersEnum.OmitNonStoneAndWaterTypes, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitNonStoneAndWaterTypes, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Water && posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Stone;
-		} },
-		{ SelectionModifiersEnum.Plants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.Plants, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.plant != null;
-		} },
-		{ SelectionModifiersEnum.OmitPlants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitPlants, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.plant == null;
-		} },
-		{ SelectionModifiersEnum.OmitSameLayerJobs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitSameLayerJobs, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			foreach (Job job in Job.jobs) {
 				if (job.objectPrefab.layer == prefab.layer) {
 					if (job.tile == posTile) {
@@ -181,23 +196,29 @@ namespace Snowship.NJob {
 				}
 			}
 			return true;
-		} },
-		{ SelectionModifiersEnum.OmitSameLayerObjectInstances, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitSameLayerObjectInstances, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return !posTile.objectInstances.ContainsKey(prefab.layer) || posTile.objectInstances[prefab.layer] == null;
-		} },
-		{ SelectionModifiersEnum.Farms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.Farms, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.farm != null;
-		} },
-		{ SelectionModifiersEnum.OmitFarms, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitFarms, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.farm == null;
-		} },
-		{ SelectionModifiersEnum.Roofs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.Roofs, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.HasRoof();
-		} },
-		{ SelectionModifiersEnum.OmitRoofs, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitRoofs, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return !posTile.HasRoof();
-		} },
-		{ SelectionModifiersEnum.CloseToSupport, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.CloseToSupport, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			for (int y = -5; y < 5; y++) {
 				for (int x = -5; x < 5; x++) {
 					TileManager.Tile supportTile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(posTile.position.x + x, posTile.position.y + y));
@@ -207,41 +228,50 @@ namespace Snowship.NJob {
 				}
 			}
 			return false;
-		} },
-		{ SelectionModifiersEnum.ObjectsAtSameLayer, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.ObjectsAtSameLayer, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.GetObjectInstanceAtLayer(prefab.layer) != null;
-		} },
-		{ SelectionModifiersEnum.Objects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.Objects, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.GetAllObjectInstances().Count > 0;
-		} },
-		{ SelectionModifiersEnum.OmitObjects, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitObjects, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.GetAllObjectInstances().Count <= 0;
-		} },
-		{ SelectionModifiersEnum.OmitNonCoastWater, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitNonCoastWater, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			if (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water) {
 				if (!(posTile.surroundingTiles.Find(t => t != null && t.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Water) != null)) {
 					return false;
 				}
 			}
 			return true;
-		} },
-		{ SelectionModifiersEnum.OmitHoles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitHoles, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.tileType.groupType != TileManager.TileTypeGroup.TypeEnum.Hole;
-		} },
-		{ SelectionModifiersEnum.OmitPreviousDig, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.OmitPreviousDig, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return !posTile.dugPreviously;
-		} },
-		{ SelectionModifiersEnum.BiomeSupportsSelectedPlants, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.BiomeSupportsSelectedPlants, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.biome.plantChances.Keys.Intersect(variation.plants.Select(plant => plant.Key.type)).Any();
-		} },
-		{ SelectionModifiersEnum.OmitObjectInstancesOnAdditionalTiles, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
-			ResourceManager.ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(prefab.layer);
+				}
+			}, {
+				SelectionModifiersEnum.OmitObjectInstancesOnAdditionalTiles, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
+					ObjectInstance objectInstance = posTile.GetObjectInstanceAtLayer(prefab.layer);
 			if (objectInstance != null && objectInstance.tile != posTile) {
 				return false;
 			}
 			return true;
-		} },
-		{ SelectionModifiersEnum.Fillable, delegate (TileManager.Tile tile, TileManager.Tile posTile, ResourceManager.ObjectPrefab prefab, ResourceManager.Variation variation) {
+				}
+			}, {
+				SelectionModifiersEnum.Fillable, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			return posTile.dugPreviously || (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Hole || (posTile.tileType.groupType == TileManager.TileTypeGroup.TypeEnum.Water && selectionModifierFunctions[SelectionModifiersEnum.OmitNonCoastWater](tile, posTile, prefab, variation)));
 		} },
 	};
@@ -472,17 +502,17 @@ namespace Snowship.NJob {
 			// GameManager.uiMOld.SetJobElements();
 		}
 
-		private static readonly Dictionary<int, ResourceManager.ObjectEnum> removeLayerMap = new Dictionary<int, ResourceManager.ObjectEnum>() {
-		{ 1, ResourceManager.ObjectEnum.RemoveFloor },
-		{ 2, ResourceManager.ObjectEnum.RemoveObject }
+		private static readonly Dictionary<int, ObjectPrefab.ObjectEnum> removeLayerMap = new Dictionary<int, ObjectPrefab.ObjectEnum>() {
+			{ 1, ObjectPrefab.ObjectEnum.RemoveFloor },
+			{ 2, ObjectPrefab.ObjectEnum.RemoveObject }
 	};
 
 		public void CreateJobsInSelectionArea(SelectedPrefab selectedPrefab, List<TileManager.Tile> selectionArea) {
 			foreach (TileManager.Tile tile in selectionArea) {
-				if (selectedPrefab.prefab.type == ResourceManager.ObjectEnum.RemoveAll) {
-					foreach (ResourceManager.ObjectInstance objectInstance in tile.GetAllObjectInstances()) {
+				if (selectedPrefab.prefab.type == ObjectPrefab.ObjectEnum.RemoveAll) {
+					foreach (ObjectInstance objectInstance in tile.GetAllObjectInstances()) {
 						if (removeLayerMap.ContainsKey(objectInstance.prefab.layer) && !JobOfPrefabTypeExistsAtTile(removeLayerMap[objectInstance.prefab.layer], objectInstance.tile)) {
-							ResourceManager.ObjectPrefab selectedRemovePrefab = GameManager.resourceM.GetObjectPrefabByEnum(removeLayerMap[objectInstance.prefab.layer]);
+							ObjectPrefab selectedRemovePrefab = ObjectPrefab.GetObjectPrefabByEnum(removeLayerMap[objectInstance.prefab.layer]);
 							bool createJobAtTile = true;
 							foreach (SelectionModifiersEnum selectionModifier in selectedRemovePrefab.selectionModifiers) {
 								if (selectionModifier != SelectionModifiersEnum.Outline) {
@@ -512,7 +542,7 @@ namespace Snowship.NJob {
 						selectedPrefab.variation,
 						rotationIndex
 					));
-					foreach (ResourceManager.ObjectInstance objectInstance in tile.GetAllObjectInstances()) {
+					foreach (ObjectInstance objectInstance in tile.GetAllObjectInstances()) {
 						objectInstance.SetActive(false);
 					}
 				}
@@ -531,9 +561,9 @@ namespace Snowship.NJob {
 
 		public List<ContainerPickup> CalculateColonistPickupContainers(Colonist colonist, List<ResourceAmount> resourcesToPickup) {
 			List<ContainerPickup> containersToPickupFrom = new List<ContainerPickup>();
-			List<ResourceManager.Container> sortedContainersByDistance = GameManager.resourceM.GetContainersInRegion(colonist.overTile.region).OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).ToList();
+			List<Container> sortedContainersByDistance = Container.GetContainersInRegion(colonist.overTile.region).OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).ToList();
 			if (sortedContainersByDistance.Count > 0) {
-				foreach (ResourceManager.Container container in sortedContainersByDistance) {
+				foreach (Container container in sortedContainersByDistance) {
 					List<ResourceAmount> resourcesToPickupAtContainer = new();
 					foreach (ResourceAmount resourceAmount in container.GetInventory().resources.Where(ra => resourcesToPickup.Find(pickupResource => pickupResource.Resource == ra.Resource) != null)) {
 						ResourceAmount pickupResource = resourcesToPickup.Find(pR => pR.Resource == resourceAmount.Resource);
@@ -711,7 +741,7 @@ namespace Snowship.NJob {
 			return false;
 		}
 
-		public bool JobOfPrefabTypeExistsAtTile(ResourceManager.ObjectEnum prefabType, TileManager.Tile tile) {
+		public bool JobOfPrefabTypeExistsAtTile(ObjectPrefab.ObjectEnum prefabType, TileManager.Tile tile) {
 			if (Job.jobs.Find(job => job.objectPrefab.type == prefabType && job.tile == tile) != null) {
 				return true;
 			}
@@ -837,23 +867,23 @@ namespace Snowship.NJob {
 	}
 
 	public class ContainerPickup {
-		public ResourceManager.Container container;
+		public Container container;
 		public List<ResourceAmount> resourcesToPickup = new();
 
-		public ContainerPickup(ResourceManager.Container container, List<ResourceAmount> resourcesToPickup) {
+		public ContainerPickup(Container container, List<ResourceAmount> resourcesToPickup) {
 			this.container = container;
 			this.resourcesToPickup = resourcesToPickup;
 		}
 	}
 
 	public class SelectedPrefab {
-		public readonly ResourceManager.ObjectPrefab prefab;
-		public readonly ResourceManager.Variation variation;
+		public readonly ObjectPrefab prefab;
+		public readonly Variation variation;
 
 		public SelectedPrefab(
 			// Update the Equals method below whenever adding/removing parameters
-			ResourceManager.ObjectPrefab prefab,
-			ResourceManager.Variation variation
+			ObjectPrefab prefab,
+			Variation variation
 		) {
 			this.prefab = prefab;
 			this.variation = variation;

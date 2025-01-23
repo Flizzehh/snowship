@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Snowship.NJob;
-using Snowship.NResource.Models;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUtilities;
 
 namespace Snowship.NCaravan {
@@ -11,7 +10,7 @@ namespace Snowship.NCaravan {
 
 		public TileManager.Tile leaveTile;
 
-		public List<ResourceManager.TradingPost> tradingPosts;
+		public List<TradingPost> tradingPosts;
 
 		public Trader(TileManager.Tile spawnTile, float startingHealth, Caravan caravan) : base(spawnTile, startingHealth) {
 			this.caravan = caravan;
@@ -29,13 +28,13 @@ namespace Snowship.NCaravan {
 			base.Update();
 
 			if (tradingPosts != null && tradingPosts.Count > 0) {
-				ResourceManager.TradingPost tradingPost = tradingPosts[0];
+				TradingPost tradingPost = tradingPosts[0];
 				if (path.Count <= 0) {
 					MoveToTile(tradingPost.zeroPointTile, false);
 				}
 
 				if (overTile == tradingPost.zeroPointTile) {
-					foreach (ResourceManager.ReservedResources rr in tradingPost.GetInventory().TakeReservedResources(this)) {
+					foreach (ReservedResources rr in tradingPost.GetInventory().TakeReservedResources(this)) {
 						foreach (ResourceAmount ra in rr.resources) {
 							caravan.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
 
@@ -53,7 +52,7 @@ namespace Snowship.NCaravan {
 					Job job = new Job(
 						JobPrefab.GetJobPrefabByName("CollectResources"),
 						tradingPost.tile,
-						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectResources),
+						ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources),
 						null,
 						0
 					) {

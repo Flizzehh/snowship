@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Snowship.NResources;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -35,7 +35,7 @@ namespace Snowship.NPersistence {
 			file.WriteLine(CreateKeyValueString(InventoryProperty.MaxVolume, inventory.maxVolume, startLevel + 1));
 			if (inventory.parent is HumanManager.Human human) {
 				file.WriteLine(CreateKeyValueString(InventoryProperty.HumanName, human.name, startLevel + 1));
-			} else if (inventory.parent is ResourceManager.Container container) {
+			} else if (inventory.parent is Container container) {
 				file.WriteLine(CreateKeyValueString(InventoryProperty.ContainerPosition, FormatVector2ToString(container.zeroPointTile.obj.transform.position), startLevel + 1));
 			}
 			if (inventory.resources.Count > 0) {
@@ -46,7 +46,7 @@ namespace Snowship.NPersistence {
 			}
 			if (inventory.reservedResources.Count > 0) {
 				file.WriteLine(CreateKeyValueString(InventoryProperty.ReservedResources, string.Empty, startLevel + 1));
-				foreach (ResourceManager.ReservedResources reservedResources in inventory.reservedResources) {
+				foreach (ReservedResources reservedResources in inventory.reservedResources) {
 					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.ReservedResourceAmounts, string.Empty, startLevel + 2));
 					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.HumanName, reservedResources.human.name, startLevel + 3));
 					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.Resources, string.Empty, startLevel + 3));
@@ -161,14 +161,14 @@ namespace Snowship.NPersistence {
 		}
 
 		public ResourceAmount LoadResourceAmount(List<KeyValuePair<string, object>> properties) {
-			ResourceManager.Resource resource = null;
+			Resource resource = null;
 			int? amount = null;
 
 			foreach (KeyValuePair<string, object> resourceAmountProperty in properties) {
 				ResourceAmountProperty resourceAmountPropertyKey = (ResourceAmountProperty)Enum.Parse(typeof(ResourceAmountProperty), resourceAmountProperty.Key);
 				switch (resourceAmountPropertyKey) {
 					case ResourceAmountProperty.Type:
-						resource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)resourceAmountProperty.Value));
+						resource = Resource.GetResourceByEnum((EResource)Enum.Parse(typeof(EResource), (string)resourceAmountProperty.Value));
 						break;
 					case ResourceAmountProperty.Amount:
 						amount = int.Parse((string)resourceAmountProperty.Value);

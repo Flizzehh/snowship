@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -15,7 +16,7 @@ namespace Snowship.NPersistence {
 
 			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "resources.snowship");
 
-			foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources()) {
+			foreach (Resource resource in Resource.GetResources()) {
 				file.WriteLine(CreateKeyValueString(ResourceProperty.Resource, string.Empty, 0));
 
 				file.WriteLine(CreateKeyValueString(ResourceProperty.Type, resource.type, 1));
@@ -31,13 +32,13 @@ namespace Snowship.NPersistence {
 				switch (key) {
 					case ResourceProperty.Resource:
 
-						ResourceManager.Resource resource = null;
+						Resource resource = null;
 
 						foreach (KeyValuePair<string, object> resourceProperty in (List<KeyValuePair<string, object>>)property.Value) {
 							ResourceProperty resourcePropertyKey = (ResourceProperty)Enum.Parse(typeof(ResourceProperty), resourceProperty.Key);
 							switch (resourcePropertyKey) {
 								case ResourceProperty.Type:
-									resource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)resourceProperty.Value));
+									resource = Resource.GetResourceByEnum((EResource)Enum.Parse(typeof(EResource), (string)resourceProperty.Value));
 									break;
 								default:
 									Debug.LogError("Unknown resource property: " + resourceProperty.Key + " " + resourceProperty.Value);

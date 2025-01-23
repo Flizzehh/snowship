@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -21,7 +22,7 @@ namespace Snowship.NPersistence {
 			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "ui.snowship");
 
 			file.WriteLine(CreateKeyValueString(UIProperty.ObjectPrefabs, string.Empty, 0));
-			foreach (ResourceManager.ObjectPrefab objectPrefab in GameManager.resourceM.GetObjectPrefabs()) {
+			foreach (ObjectPrefab objectPrefab in ObjectPrefab.GetObjectPrefabs()) {
 				file.WriteLine(CreateKeyValueString(ObjectPrefabProperty.ObjectPrefab, string.Empty, 1));
 
 				file.WriteLine(CreateKeyValueString(ObjectPrefabProperty.Type, objectPrefab.type, 2));
@@ -36,19 +37,19 @@ namespace Snowship.NPersistence {
 				switch ((UIProperty)Enum.Parse(typeof(UIProperty), property.Key)) {
 					case UIProperty.ObjectPrefabs:
 
-						Dictionary<ResourceManager.ObjectPrefab, ResourceManager.Variation> lastSelectedVariations = new Dictionary<ResourceManager.ObjectPrefab, ResourceManager.Variation>();
+						Dictionary<ObjectPrefab, Variation> lastSelectedVariations = new();
 
 						foreach (KeyValuePair<string, object> objectPrefabProperty in (List<KeyValuePair<string, object>>)property.Value) {
 							switch ((ObjectPrefabProperty)Enum.Parse(typeof(ObjectPrefabProperty), objectPrefabProperty.Key)) {
 								case ObjectPrefabProperty.ObjectPrefab:
 
-									ResourceManager.ObjectPrefab objectPrefab = null;
-									ResourceManager.Variation lastSelectedVariation = null;
+									ObjectPrefab objectPrefab = null;
+									Variation lastSelectedVariation = null;
 
 									foreach (KeyValuePair<string, object> objectPrefabSubProperty in (List<KeyValuePair<string, object>>)objectPrefabProperty.Value) {
 										switch ((ObjectPrefabProperty)Enum.Parse(typeof(ObjectPrefabProperty), objectPrefabSubProperty.Key)) {
 											case ObjectPrefabProperty.Type:
-												objectPrefab = GameManager.resourceM.GetObjectPrefabByString((string)objectPrefabSubProperty.Value);
+												objectPrefab = ObjectPrefab.GetObjectPrefabByString((string)objectPrefabSubProperty.Value);
 												break;
 											case ObjectPrefabProperty.LastSelectedVariation:
 												lastSelectedVariation = objectPrefab.GetVariationFromString((string)objectPrefabSubProperty.Value);
@@ -68,7 +69,7 @@ namespace Snowship.NPersistence {
 							}
 						}
 
-						foreach (ResourceManager.ObjectPrefab objectPrefab in GameManager.resourceM.GetObjectPrefabs()) {
+						foreach (ObjectPrefab objectPrefab in ObjectPrefab.GetObjectPrefabs()) {
 							objectPrefab.lastSelectedVariation = lastSelectedVariations[objectPrefab];
 						}
 

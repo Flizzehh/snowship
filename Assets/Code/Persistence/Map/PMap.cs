@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -76,11 +77,11 @@ namespace Snowship.NPersistence {
 						bool? tileDug = null;
 						string tileSpriteName = null;
 
-						ResourceManager.PlantPrefab plantPrefab = null;
+						PlantPrefab plantPrefab = null;
 						string plantSpriteName = null;
 						bool? plantSmall = null;
 						float? plantGrowthProgress = null;
-						ResourceManager.Resource plantHarvestResource = null;
+						Resource plantHarvestResource = null;
 						float? plantIntegrity = null;
 
 						foreach (KeyValuePair<string, object> tileProperty in (List<KeyValuePair<string, object>>)property.Value) {
@@ -116,7 +117,7 @@ namespace Snowship.NPersistence {
 									foreach (KeyValuePair<string, object> plantProperty in (List<KeyValuePair<string, object>>)tileProperty.Value) {
 										switch ((PlantProperty)Enum.Parse(typeof(PlantProperty), plantProperty.Key)) {
 											case PlantProperty.Type:
-												plantPrefab = GameManager.resourceM.GetPlantPrefabByString((string)plantProperty.Value);
+												plantPrefab = PlantPrefab.GetPlantPrefabByString((string)plantProperty.Value);
 												break;
 											case PlantProperty.Sprite:
 												plantSpriteName = (string)plantProperty.Value;
@@ -128,7 +129,7 @@ namespace Snowship.NPersistence {
 												plantGrowthProgress = float.Parse((string)plantProperty.Value);
 												break;
 											case PlantProperty.HarvestResource:
-												plantHarvestResource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)plantProperty.Value));
+												plantHarvestResource = Resource.GetResourceByEnum((EResource)Enum.Parse(typeof(EResource), (string)plantProperty.Value));
 												break;
 											case PlantProperty.Integrity:
 												plantIntegrity = float.Parse((string)plantProperty.Value);
@@ -315,18 +316,18 @@ namespace Snowship.NPersistence {
 					bool originalTileValidPlant = originalTile.plantPrefab != null;
 
 					bool modifiedTilePlantGroupExists = modifiedTile != null && modifiedTile.plantPrefab != null;
-					bool modifiedTileValidPlant = modifiedTilePlantGroupExists && modifiedTile.plantPrefab.type != ResourceManager.PlantEnum.None;
-					bool plantRemoved = modifiedTilePlantGroupExists && modifiedTile.plantPrefab.type == ResourceManager.PlantEnum.None;
+					bool modifiedTileValidPlant = modifiedTilePlantGroupExists && modifiedTile.plantPrefab.type != Plant.PlantEnum.None;
+					bool plantRemoved = modifiedTilePlantGroupExists && modifiedTile.plantPrefab.type == Plant.PlantEnum.None;
 
 					if (modifiedTileValidPlant || (originalTileValidPlant && !plantRemoved)) {
 						tile.SetPlant(
 							false,
-							new ResourceManager.Plant(
-								modifiedTile != null && modifiedTile.plantPrefab != null && modifiedTile.plantPrefab.type != ResourceManager.PlantEnum.None ? modifiedTile.plantPrefab : originalTile.plantPrefab,
+							new Plant(
+								modifiedTile != null && modifiedTile.plantPrefab != null && modifiedTile.plantPrefab.type != Plant.PlantEnum.None ? modifiedTile.plantPrefab : originalTile.plantPrefab,
 								tile,
 								modifiedTile != null && modifiedTile.plantSmall.HasValue ? modifiedTile.plantSmall.Value : originalTile.plantSmall.Value,
 								false,
-								modifiedTile != null && modifiedTile.plantHarvestResource != null && modifiedTile.plantHarvestResource.type != ResourceManager.ResourceEnum.None ? modifiedTile.plantHarvestResource : originalTile.plantHarvestResource
+								modifiedTile != null && modifiedTile.plantHarvestResource != null && modifiedTile.plantHarvestResource.type != EResource.None ? modifiedTile.plantHarvestResource : originalTile.plantHarvestResource
 							) { integrity = modifiedTile != null && modifiedTile.plantIntegrity.HasValue ? modifiedTile.plantIntegrity.Value : originalTile.plantIntegrity.Value, growthProgress = modifiedTile != null && modifiedTile.plantGrowthProgress.HasValue ? modifiedTile.plantGrowthProgress.Value : originalTile.plantGrowthProgress.Value }
 						);
 					}

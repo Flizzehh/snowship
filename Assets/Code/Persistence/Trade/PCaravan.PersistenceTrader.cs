@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Snowship.NResource;
 
 namespace Snowship.NPersistence {
 	public partial class PCaravan {
@@ -8,13 +9,13 @@ namespace Snowship.NPersistence {
 			public PLife.PersistenceLife persistenceLife;
 			public PHuman.PersistenceHuman persistenceHuman;
 			public TileManager.Tile leaveTile;
-			public List<ResourceManager.TradingPost> tradingPosts;
+			public List<TradingPost> tradingPosts;
 
 			public PersistenceTrader(
 				PLife.PersistenceLife persistenceLife,
 				PHuman.PersistenceHuman persistenceHuman,
 				TileManager.Tile leaveTile,
-				List<ResourceManager.TradingPost> tradingPosts
+				List<TradingPost> tradingPosts
 			) {
 				this.persistenceLife = persistenceLife;
 				this.persistenceHuman = persistenceHuman;

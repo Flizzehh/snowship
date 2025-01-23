@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Snowship.NResource.Models;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.Selectable;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Snowship.NCaravan {
-	public class Caravan : ResourceManager.IInventory, ISelectable, IDisposable {
+	public class Caravan : IInventory, ISelectable, IDisposable
+	{
 
 		public List<Trader> traders = new List<Trader>();
 		public int numTraders;
@@ -25,7 +25,7 @@ namespace Snowship.NCaravan {
 
 		public TileManager.Tile targetTile;
 
-		public ResourceManager.ResourceGroup resourceGroup;
+		public ResourceGroup resourceGroup;
 
 		public int leaveTimer;
 		public const int leaveTimerMax = SimulationDateTime.DayLengthSeconds * 2;
@@ -64,8 +64,8 @@ namespace Snowship.NCaravan {
 
 			inventory = new Inventory(this, int.MaxValue, int.MaxValue);
 
-			resourceGroup = GameManager.resourceM.GetRandomResourceGroup();
-			foreach (ResourceManager.Resource resource in resourceGroup.resources.OrderBy(r => Random.Range(0f, 1f))) { // Randomize resource group list
+			resourceGroup = ResourceGroup.GetRandomResourceGroup();
+			foreach (Resource resource in resourceGroup.resources.OrderBy(r => Random.Range(0f, 1f))) { // Randomize resource group list
 				int resourceGroupResourceCount = Mathf.Clamp(resourceGroup.resources.Count, MinDistinctResources + 1, int.MaxValue); // Ensure minimum count of (minimumDistinctResources + 1)
 				if (Random.Range(0f, 1f) < Mathf.Clamp(((resourceGroupResourceCount - inventory.resources.Count) - MinDistinctResources) / (float)(resourceGroupResourceCount - MinDistinctResources), MinDistinctResourceChance, 1f)) { // Decrease chance of additional distinct resources on caravan as distinct resources on caravan increase
 					int resourceAvailableAmount = resource.GetAvailableAmount();
@@ -115,7 +115,7 @@ namespace Snowship.NCaravan {
 
 			List<ResourceAmount> colonyResourceAmounts = new();
 			if (traders.Count > 0) {
-				colonyResourceAmounts = GameManager.resourceM.GetAvailableResourcesInTradingPostsInRegion(traders.Find(t => t != null).overTile.region);
+				colonyResourceAmounts = TradingPost.GetAvailableResourcesInTradingPostsInRegion(traders.Find(t => t != null).overTile.region);
 			}
 
 			foreach (ResourceAmount resourceAmount in colonyResourceAmounts) {
@@ -132,11 +132,11 @@ namespace Snowship.NCaravan {
 			return tradeResourceAmounts;
 		}
 
-		public bool DetermineImportanceForResource(ResourceManager.Resource resource) {
+		public bool DetermineImportanceForResource(Resource resource) {
 			return false; // TODO This needs to be implemented once the originLocation is properly implemented (see above)
 		}
 
-		public int DeterminePriceForResource(ResourceManager.Resource resource) {
+		public int DeterminePriceForResource(Resource resource) {
 			return resource.price;
 		}
 
@@ -187,11 +187,11 @@ namespace Snowship.NCaravan {
 
 			resourcesToTrade.Clear();
 
-			List<ResourceManager.TradingPost> tradingPostsWithReservedResources = new List<ResourceManager.TradingPost>();
+			List<TradingPost> tradingPostsWithReservedResources = new();
 
 			Trader primaryTrader = traders[0];
 			if (primaryTrader != null) {
-				foreach (ResourceManager.TradingPost tradingPost in GameManager.resourceM.GetTradingPostsInRegion(primaryTrader.overTile.region).OrderBy(tp => PathManager.RegionBlockDistance(primaryTrader.overTile.regionBlock, tp.zeroPointTile.regionBlock, true, true, false))) {
+				foreach (TradingPost tradingPost in TradingPost.GetTradingPostsInRegion(primaryTrader.overTile.region).OrderBy(tp => PathManager.RegionBlockDistance(primaryTrader.overTile.regionBlock, tp.zeroPointTile.regionBlock, true, true, false))) {
 					List<ResourceAmount> resourcesToReserveAtThisTradingPost = new();
 					List<ResourceAmount> resourcesToReserveToRemove = new();
 					foreach (ResourceAmount resourceToReserve in resourcesToReserve) {

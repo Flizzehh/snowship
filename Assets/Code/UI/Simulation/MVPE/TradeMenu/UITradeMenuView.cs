@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
-using Snowship.NResource.Models;
+using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -82,7 +82,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 		}
 
 		public void AddTradeResourceElementIfMissing(
-			ResourceManager.Resource resource,
+			Resource resource,
 			int caravanAmount,
 			int colonyAmount,
 			Caravan caravan

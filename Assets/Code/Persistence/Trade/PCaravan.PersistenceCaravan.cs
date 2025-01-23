@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Snowship.NCaravan;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -10,7 +11,7 @@ namespace Snowship.NPersistence {
 			public CaravanType? type;
 			public Location location;
 			public Vector2? targetTilePosition;
-			public ResourceManager.ResourceGroup resourceGroup;
+			public ResourceGroup resourceGroup;
 			public int? leaveTimer;
 			public bool? leaving;
 			public PInventory.PersistenceInventory persistenceInventory;
@@ -22,7 +23,7 @@ namespace Snowship.NPersistence {
 				CaravanType? type,
 				Location location,
 				Vector2? targetTilePosition,
-				ResourceManager.ResourceGroup resourceGroup,
+				ResourceGroup resourceGroup,
 				int? leaveTimer,
 				bool? leaving,
 				PInventory.PersistenceInventory persistenceInventory,

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -63,8 +63,8 @@ namespace Snowship.NPersistence {
 
 			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "objects.snowship");
 
-			foreach (List<ResourceManager.ObjectInstance> instances in GameManager.resourceM.objectInstances.Values) {
-				foreach (ResourceManager.ObjectInstance instance in instances) {
+			foreach (List<ObjectInstance> instances in ObjectInstance.ObjectInstances.Values) {
+				foreach (ObjectInstance instance in instances) {
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Object, string.Empty, 0));
 
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Type, instance.prefab.type, 1));
@@ -74,15 +74,15 @@ namespace Snowship.NPersistence {
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Integrity, instance.integrity, 1));
 					file.WriteLine(CreateKeyValueString(ObjectProperty.Active, instance.active, 1));
 
-					if (instance is ResourceManager.Container container) {
+					if (instance is Container container) {
 						file.WriteLine(CreateKeyValueString(ObjectProperty.Container, string.Empty, 1));
 						pInventory.WriteInventoryLines(file, container.GetInventory(), 2);
-					} else if (instance is ResourceManager.CraftingObject craftingObject) {
+					} else if (instance is CraftingObject craftingObject) {
 						if (craftingObject.resources.Count > 0 || craftingObject.fuels.Count > 0) {
 							file.WriteLine(CreateKeyValueString(ObjectProperty.CraftingObject, string.Empty, 1));
 							if (craftingObject.resources.Count > 0) {
 								file.WriteLine(CreateKeyValueString(CraftingObjectProperty.Resources, string.Empty, 2));
-								foreach (ResourceManager.CraftableResourceInstance resource in craftingObject.resources) {
+								foreach (CraftableResourceInstance resource in craftingObject.resources) {
 									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.CraftableResource, string.Empty, 3));
 
 									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Resource, resource.resource.type, 4));
@@ -102,7 +102,7 @@ namespace Snowship.NPersistence {
 							}
 							if (craftingObject.fuels.Count > 0) {
 								file.WriteLine(CreateKeyValueString(CraftingObjectProperty.Fuels, string.Empty, 2));
-								foreach (ResourceManager.PriorityResourceInstance fuel in craftingObject.fuels) {
+								foreach (PriorityResourceInstance fuel in craftingObject.fuels) {
 									file.WriteLine(CreateKeyValueString(PriorityResourceProperty.PriorityResource, string.Empty, 3));
 
 									file.WriteLine(CreateKeyValueString(PriorityResourceProperty.Resource, fuel.resource.type, 4));
@@ -110,10 +110,10 @@ namespace Snowship.NPersistence {
 								}
 							}
 						}
-					} else if (instance is ResourceManager.Farm farm) {
+					} else if (instance is Farm farm) {
 						file.WriteLine(CreateKeyValueString(ObjectProperty.Farm, string.Empty, 1));
 						file.WriteLine(CreateKeyValueString(FarmProperty.GrowTimer, farm.growTimer, 2));
-					} else if (instance is ResourceManager.SleepSpot sleepSpot) {
+					} else if (instance is SleepSpot sleepSpot) {
 						file.WriteLine(CreateKeyValueString(ObjectProperty.SleepSpot, string.Empty, 1));
 						file.WriteLine(CreateKeyValueString(SleepSpotProperty.OccupyingColonistName, sleepSpot.occupyingColonist.name, 2));
 					}
@@ -124,7 +124,7 @@ namespace Snowship.NPersistence {
 		}
 
 		public class PersistenceObject {
-			public ResourceManager.ObjectEnum? type;
+			public ObjectPrefab.ObjectEnum? type;
 			public string variation;
 			public Vector2? zeroPointTilePosition;
 			public int? rotationIndex;
@@ -136,17 +136,17 @@ namespace Snowship.NPersistence {
 
 			// Crafting Object
 			public List<PersistenceCraftableResourceInstance> persistenceResources;
-			public List<ResourceManager.PriorityResourceInstance> fuels;
+			public List<PriorityResourceInstance> fuels;
 
 			// Farm
-			public ResourceManager.Resource seedResource;
+			public Resource seedResource;
 			public float? growTimer;
 
 			// Sleep Spot
 			public string occupyingColonistName;
 
 			public PersistenceObject(
-				ResourceManager.ObjectEnum? type,
+				ObjectPrefab.ObjectEnum? type,
 				string variation,
 				Vector2? zeroPointTilePosition,
 				int? rotationIndex,
@@ -154,8 +154,8 @@ namespace Snowship.NPersistence {
 				bool? active,
 				PInventory.PersistenceInventory persistenceInventory,
 				List<PersistenceCraftableResourceInstance> persistenceResources,
-				List<ResourceManager.PriorityResourceInstance> fuels,
-				ResourceManager.Resource seedResource,
+				List<PriorityResourceInstance> fuels,
+				Resource seedResource,
 				float? growTimer,
 				string occupyingColonistName
 			) {
@@ -179,18 +179,18 @@ namespace Snowship.NPersistence {
 		}
 
 		public class PersistenceCraftableResourceInstance {
-			public ResourceManager.Resource resource;
+			public Resource resource;
 			public int? priority;
-			public ResourceManager.CreationMethod? creationMethod;
+			public CraftableResourceInstance.CreationMethod? creationMethod;
 			public int? targetAmount;
 			public int? remainingAmount;
 			public bool? enableable;
 			public List<ResourceAmount> fuelAmounts;
 
 			public PersistenceCraftableResourceInstance(
-				ResourceManager.Resource resource,
+				Resource resource,
 				int? priority,
-				ResourceManager.CreationMethod? creationMethod,
+				CraftableResourceInstance.CreationMethod? creationMethod,
 				int? targetAmount,
 				int? remainingAmount,
 				bool? enableable,
@@ -214,7 +214,7 @@ namespace Snowship.NPersistence {
 				switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), property.Key)) {
 					case ObjectProperty.Object:
 
-						ResourceManager.ObjectEnum? type = null;
+						ObjectPrefab.ObjectEnum? type = null;
 						string variation = null;
 						Vector2? zeroPointTilePosition = null;
 						int? rotationIndex = null;
@@ -226,10 +226,10 @@ namespace Snowship.NPersistence {
 
 						// Crafting Object
 						List<PersistenceCraftableResourceInstance> persistenceResources = new List<PersistenceCraftableResourceInstance>();
-						List<ResourceManager.PriorityResourceInstance> fuels = new List<ResourceManager.PriorityResourceInstance>();
+						List<PriorityResourceInstance> fuels = new();
 
 						// Farm
-						ResourceManager.Resource seedResource = null;
+						Resource seedResource = null;
 						float? growTimer = null;
 
 						// Sleep Spot
@@ -238,7 +238,7 @@ namespace Snowship.NPersistence {
 						foreach (KeyValuePair<string, object> objectProperty in (List<KeyValuePair<string, object>>)property.Value) {
 							switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), objectProperty.Key)) {
 								case ObjectProperty.Type:
-									type = (ResourceManager.ObjectEnum)Enum.Parse(typeof(ResourceManager.ObjectEnum), (string)objectProperty.Value);
+									type = (ObjectPrefab.ObjectEnum)Enum.Parse(typeof(ObjectPrefab.ObjectEnum), (string)objectProperty.Value);
 									break;
 								case ObjectProperty.Variation:
 									variation = StringUtilities.RemoveNonAlphanumericChars((string)objectProperty.Value);
@@ -275,9 +275,9 @@ namespace Snowship.NPersistence {
 													switch ((CraftableResourceProperty)Enum.Parse(typeof(CraftableResourceProperty), resourcesProperty.Key)) {
 														case CraftableResourceProperty.CraftableResource:
 
-															ResourceManager.Resource resource = null;
+															Resource resource = null;
 															int? priority = null;
-															ResourceManager.CreationMethod? creationMethod = null;
+															CraftableResourceInstance.CreationMethod? creationMethod = null;
 															int? targetAmount = null;
 															int? remainingAmount = null;
 															bool? enableable = null;
@@ -286,13 +286,13 @@ namespace Snowship.NPersistence {
 															foreach (KeyValuePair<string, object> craftableResourceProperty in (List<KeyValuePair<string, object>>)resourcesProperty.Value) {
 																switch ((CraftableResourceProperty)Enum.Parse(typeof(CraftableResourceProperty), craftableResourceProperty.Key)) {
 																	case CraftableResourceProperty.Resource:
-																		resource = GameManager.resourceM.GetResourceByString((string)craftableResourceProperty.Value);
+																		resource = Resource.GetResourceByString((string)craftableResourceProperty.Value);
 																		break;
 																	case CraftableResourceProperty.Priority:
 																		priority = int.Parse((string)craftableResourceProperty.Value);
 																		break;
 																	case CraftableResourceProperty.CreationMethod:
-																		creationMethod = (ResourceManager.CreationMethod)Enum.Parse(typeof(ResourceManager.CreationMethod), (string)craftableResourceProperty.Value);
+																		creationMethod = (CraftableResourceInstance.CreationMethod)Enum.Parse(typeof(CraftableResourceInstance.CreationMethod), (string)craftableResourceProperty.Value);
 																		break;
 																	case CraftableResourceProperty.TargetAmount:
 																		targetAmount = int.Parse((string)craftableResourceProperty.Value);
@@ -332,13 +332,13 @@ namespace Snowship.NPersistence {
 													switch ((PriorityResourceProperty)Enum.Parse(typeof(PriorityResourceProperty), fuelsProperty.Key)) {
 														case PriorityResourceProperty.PriorityResource:
 
-															ResourceManager.Resource resource = null;
+															Resource resource = null;
 															int? priority = null;
 
 															foreach (KeyValuePair<string, object> priorityResourceProperty in (List<KeyValuePair<string, object>>)fuelsProperty.Value) {
 																switch ((PriorityResourceProperty)Enum.Parse(typeof(PriorityResourceProperty), priorityResourceProperty.Key)) {
 																	case PriorityResourceProperty.Resource:
-																		resource = GameManager.resourceM.GetResourceByString((string)priorityResourceProperty.Value);
+																		resource = Resource.GetResourceByString((string)priorityResourceProperty.Value);
 																		break;
 																	case PriorityResourceProperty.Priority:
 																		priority = int.Parse((string)priorityResourceProperty.Value);
@@ -346,7 +346,7 @@ namespace Snowship.NPersistence {
 																}
 															}
 
-															fuels.Add(new ResourceManager.PriorityResourceInstance(resource, priority.Value));
+															fuels.Add(new PriorityResourceInstance(resource, priority.Value));
 
 															break;
 													}
@@ -418,8 +418,8 @@ namespace Snowship.NPersistence {
 			foreach (PersistenceObject persistenceObject in persistenceObjects) {
 				TileManager.Tile zeroPointTile = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value);
 
-				ResourceManager.ObjectPrefab objectPrefab = GameManager.resourceM.GetObjectPrefabByEnum(persistenceObject.type.Value);
-				ResourceManager.ObjectInstance objectInstance = GameManager.resourceM.CreateObjectInstance(
+				ObjectPrefab objectPrefab = ObjectPrefab.GetObjectPrefabByEnum(persistenceObject.type.Value);
+				ObjectInstance objectInstance = ObjectInstance.CreateObjectInstance(
 					objectPrefab,
 					objectPrefab.GetVariationFromString(persistenceObject.variation),
 					zeroPointTile,
@@ -430,9 +430,9 @@ namespace Snowship.NPersistence {
 				objectInstance.SetActive(persistenceObject.active.Value);
 
 				switch (objectPrefab.instanceType) {
-					case ResourceManager.ObjectInstanceType.Container:
-					case ResourceManager.ObjectInstanceType.TradingPost:
-						ResourceManager.Container container = (ResourceManager.Container)objectInstance;
+					case ObjectInstance.ObjectInstanceType.Container:
+					case ObjectInstance.ObjectInstanceType.TradingPost:
+						Container container = (Container)objectInstance;
 						container.GetInventory().maxWeight = persistenceObject.persistenceInventory.maxWeight.Value;
 						container.GetInventory().maxVolume = persistenceObject.persistenceInventory.maxVolume.Value;
 						foreach (ResourceAmount resourceAmount in persistenceObject.persistenceInventory.resources) {
@@ -440,16 +440,16 @@ namespace Snowship.NPersistence {
 						}
 						// TODO (maybe already done?) Reserved resources must be set after colonists are loaded
 						break;
-					case ResourceManager.ObjectInstanceType.Farm:
-						ResourceManager.Farm farm = (ResourceManager.Farm)objectInstance;
+					case ObjectInstance.ObjectInstanceType.Farm:
+						Farm farm = (Farm)objectInstance;
 						farm.growTimer = persistenceObject.growTimer.Value;
 						break;
-					case ResourceManager.ObjectInstanceType.CraftingObject:
-						ResourceManager.CraftingObject craftingObject = (ResourceManager.CraftingObject)objectInstance;
+					case ObjectInstance.ObjectInstanceType.CraftingObject:
+						CraftingObject craftingObject = (CraftingObject)objectInstance;
 						craftingObject.SetActive(false); // Gets set to proper state after loading jobBacklog, this prevents it from creating a CreateResource job before then
 						foreach (PersistenceCraftableResourceInstance persistenceResource in persistenceObject.persistenceResources) {
 							craftingObject.resources.Add(
-								new ResourceManager.CraftableResourceInstance(
+								new CraftableResourceInstance(
 									persistenceResource.resource,
 									persistenceResource.priority.Value,
 									persistenceResource.creationMethod.Value,
@@ -461,7 +461,7 @@ namespace Snowship.NPersistence {
 						}
 						craftingObject.fuels = persistenceObject.fuels;
 						break;
-					case ResourceManager.ObjectInstanceType.SleepSpot:
+					case ObjectInstance.ObjectInstanceType.SleepSpot:
 						// Occupying colonist must be set after colonists are loaded
 						break;
 				}

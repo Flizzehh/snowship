@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NUI.Simulation
@@ -7,14 +8,14 @@ namespace Snowship.NUI.Simulation
 	public class UIClothingButtonElement : UIElement<UIClothingButtonElementComponent>
 	{
 		public readonly HumanManager.Human.Appearance Appearance;
-		private ResourceManager.Clothing clothing;
+		private Clothing clothing;
 
 		public event Action<HumanManager.Human.Appearance> OnButtonClicked;
 
 		public UIClothingButtonElement(
 			Transform parent,
 			HumanManager.Human.Appearance appearance,
-			ResourceManager.Clothing clothing
+			Clothing clothing
 		) : base(
 			parent
 		) {
@@ -38,7 +39,7 @@ namespace Snowship.NUI.Simulation
 		}
 
 		[SuppressMessage("ReSharper", "ParameterHidesMember")]
-		public void SetClothing(ResourceManager.Clothing clothing) {
+		public void SetClothing(Clothing clothing) {
 			this.clothing = clothing;
 			if (clothing != null) {
 				Component.SetNameText(clothing.name);

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Snowship.NCaravan;
-using Snowship.NResource.Models;
-using Snowship.NResources;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -154,7 +153,7 @@ namespace Snowship.NPersistence {
 						CaravanType? type = null;
 						Location location = null;
 						Vector2? targetTilePosition = null;
-						ResourceManager.ResourceGroup resourceGroup = null;
+						ResourceGroup resourceGroup = null;
 						int? leaveTimer = null;
 						bool? leaving = null;
 						PInventory.PersistenceInventory persistenceInventory = null;
@@ -210,7 +209,7 @@ namespace Snowship.NPersistence {
 									targetTilePosition = new Vector2(float.Parse(((string)caravanProperty.Value).Split(',')[0]), float.Parse(((string)caravanProperty.Value).Split(',')[1]));
 									break;
 								case CaravanProperty.ResourceGroup:
-									resourceGroup = GameManager.resourceM.GetResourceGroupByEnum((ResourceManager.ResourceGroupEnum)Enum.Parse(typeof(ResourceManager.ResourceGroupEnum), (string)caravanProperty.Value));
+									resourceGroup = ResourceGroup.GetResourceGroupByEnum((ResourceGroup.ResourceGroupEnum)Enum.Parse(typeof(ResourceGroup.ResourceGroupEnum), (string)caravanProperty.Value));
 									break;
 								case CaravanProperty.LeaveTimer:
 									leaveTimer = int.Parse((string)caravanProperty.Value);
@@ -226,7 +225,7 @@ namespace Snowship.NPersistence {
 										switch ((TradeResourceAmountProperty)Enum.Parse(typeof(TradeResourceAmountProperty), resourceToTradeProperty.Key)) {
 											case TradeResourceAmountProperty.TradeResourceAmount:
 
-												ResourceManager.ResourceEnum? resourceToTradeType = null;
+												EResource? resourceToTradeType = null;
 												int? resourceToTradeCaravanAmount = null;
 												int? resourceToTradeTradeAmount = null;
 												int? resourceToTradeCaravanPrice = null;
@@ -234,7 +233,7 @@ namespace Snowship.NPersistence {
 												foreach (KeyValuePair<string, object> resourceToTradeSubProperty in (List<KeyValuePair<string, object>>)resourceToTradeProperty.Value) {
 													switch ((TradeResourceAmountProperty)Enum.Parse(typeof(TradeResourceAmountProperty), resourceToTradeSubProperty.Key)) {
 														case TradeResourceAmountProperty.Type:
-															resourceToTradeType = (ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)resourceToTradeSubProperty.Value);
+															resourceToTradeType = (EResource)Enum.Parse(typeof(EResource), (string)resourceToTradeSubProperty.Value);
 															break;
 														case TradeResourceAmountProperty.CaravanAmount:
 															resourceToTradeCaravanAmount = int.Parse((string)resourceToTradeSubProperty.Value);
@@ -270,14 +269,14 @@ namespace Snowship.NPersistence {
 										switch ((ConfirmedTradeResourceAmountProperty)Enum.Parse(typeof(ConfirmedTradeResourceAmountProperty), confirmedResourceToTradeProperty.Key)) {
 											case ConfirmedTradeResourceAmountProperty.ConfirmedTradeResourceAmount:
 
-												ResourceManager.ResourceEnum? confirmedResourceToTradeType = null;
+												EResource? confirmedResourceToTradeType = null;
 												int? confirmedResourceToTradeTradeAmount = null;
 												int? confirmedResourceToTradeAmountRemaining = null;
 
 												foreach (KeyValuePair<string, object> confirmedResourceToTradeSubProperty in (List<KeyValuePair<string, object>>)confirmedResourceToTradeProperty.Value) {
 													switch ((ConfirmedTradeResourceAmountProperty)Enum.Parse(typeof(ConfirmedTradeResourceAmountProperty), confirmedResourceToTradeSubProperty.Key)) {
 														case ConfirmedTradeResourceAmountProperty.Type:
-															confirmedResourceToTradeType = (ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)confirmedResourceToTradeSubProperty.Value);
+															confirmedResourceToTradeType = (EResource)Enum.Parse(typeof(EResource), (string)confirmedResourceToTradeSubProperty.Value);
 															break;
 														case ConfirmedTradeResourceAmountProperty.TradeAmount:
 															confirmedResourceToTradeTradeAmount = int.Parse((string)confirmedResourceToTradeSubProperty.Value);
@@ -312,7 +311,7 @@ namespace Snowship.NPersistence {
 												PLife.PersistenceLife persistenceLife = null;
 												PHuman.PersistenceHuman persistenceHuman = null;
 												TileManager.Tile traderLeaveTile = null;
-												List<ResourceManager.TradingPost> traderTradingPosts = new List<ResourceManager.TradingPost>();
+												List<TradingPost> traderTradingPosts = new();
 
 												foreach (KeyValuePair<string, object> traderSubProperty in (List<KeyValuePair<string, object>>)traderProperty.Value) {
 													switch ((TraderProperty)Enum.Parse(typeof(TraderProperty), traderSubProperty.Key)) {
@@ -328,7 +327,7 @@ namespace Snowship.NPersistence {
 														case TraderProperty.TradingPosts:
 															foreach (string vector2String in ((string)traderSubProperty.Value).Split(';')) {
 																TileManager.Tile tradingPostZeroPointTile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(float.Parse(vector2String.Split(',')[0]), float.Parse(vector2String.Split(',')[1])));
-																traderTradingPosts.Add(GameManager.resourceM.tradingPosts.Find(tp => tp.zeroPointTile == tradingPostZeroPointTile));
+																traderTradingPosts.Add(TradingPost.tradingPosts.Find(tp => tp.zeroPointTile == tradingPostZeroPointTile));
 															}
 															break;
 														default:
@@ -393,7 +392,7 @@ namespace Snowship.NPersistence {
 
 				foreach (PersistenceTradeResourceAmount persistenceTradeResourceAmount in persistenceCaravan.persistenceResourcesToTrade) {
 					TradeResourceAmount tradeResourceAmount = new TradeResourceAmount(
-						GameManager.resourceM.GetResourceByEnum(persistenceTradeResourceAmount.type.Value),
+						Resource.GetResourceByEnum(persistenceTradeResourceAmount.type.Value),
 						persistenceTradeResourceAmount.caravanAmount.Value,
 						0,
 						caravan
@@ -404,7 +403,7 @@ namespace Snowship.NPersistence {
 				foreach (PersistenceConfirmedTradeResourceAmount persistenceConfirmedTradeResourceAmount in persistenceCaravan.persistenceConfirmedResourcesToTrade) {
 					caravan.confirmedResourcesToTrade.Add(
 						new ConfirmedTradeResourceAmount(
-							GameManager.resourceM.GetResourceByEnum(persistenceConfirmedTradeResourceAmount.type.Value),
+							Resource.GetResourceByEnum(persistenceConfirmedTradeResourceAmount.type.Value),
 							persistenceConfirmedTradeResourceAmount.tradeAmount.Value
 						) { amountRemaining = persistenceConfirmedTradeResourceAmount.amountRemaining.Value }
 					);
@@ -431,8 +430,8 @@ namespace Snowship.NPersistence {
 						trader.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 					}
 
-					foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in persistenceTrader.persistenceHuman.clothes) {
-						trader.GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
+					foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothingKVP in persistenceTrader.persistenceHuman.clothes) {
+						trader.GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
 						trader.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value);
 					}
 

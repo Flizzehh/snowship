@@ -1,4 +1,5 @@
-﻿using Snowship.NUtilities;
+﻿using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,9 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 		public CraftableResourceElement(
 			Type type,
-			ResourceManager.Resource resource,
+			Resource resource,
 			Transform parent,
-			ResourceManager.CraftingObject craftingObject
+			CraftingObject craftingObject
 		) : base(
 			type,
 			resource,
@@ -33,7 +34,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 
 		public override void ChangePriority(int amount) {
 
-			ResourceManager.CraftableResourceInstance craftableResource = craftingObject.GetCraftableResourceFromResource(resource);
+			CraftableResourceInstance craftableResource = craftingObject.GetCraftableResourceFromResource(resource);
 			if (craftableResource == null) {
 				craftableResource = craftingObject.ToggleResource(resource, 0);
 			}

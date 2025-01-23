@@ -7,6 +7,7 @@ using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
+using Snowship.NResource;
 using Snowship.NState;
 using Snowship.NUI;
 using Snowship.NUtilities;
@@ -103,13 +104,13 @@ public class TileManager : IManager {
 
 		public readonly bool blocksLight;
 
-		public readonly List<ResourceManager.ResourceRange> resourceRanges;
+		public readonly List<ResourceRange> resourceRanges;
 
 		public readonly List<Sprite> baseSprites = new List<Sprite>();
 		public readonly List<Sprite> bitmaskSprites = new List<Sprite>();
 		public readonly List<Sprite> riverSprites = new List<Sprite>();
 
-		public TileType(TileTypeGroup.TypeEnum groupType, TypeEnum type, Dictionary<ClassEnum, bool> classes, float walkSpeed, bool walkable, bool buildable, bool bitmasking, bool blocksLight, List<ResourceManager.ResourceRange> resourceRanges) {
+		public TileType(TileTypeGroup.TypeEnum groupType, TypeEnum type, Dictionary<ClassEnum, bool> classes, float walkSpeed, bool walkable, bool buildable, bool bitmasking, bool blocksLight, List<ResourceRange> resourceRanges) {
 			this.groupType = groupType;
 
 			this.type = type;
@@ -166,7 +167,7 @@ public class TileManager : IManager {
 												bool? buildable = null;
 												bool? bitmasking = null;
 												bool? blocksLight = null;
-												List<ResourceManager.ResourceRange> resourceRanges = new List<ResourceManager.ResourceRange>();
+												List<ResourceRange> resourceRanges = new();
 
 												foreach (ClassEnum tileTypeClassEnum in Enum.GetValues(typeof(ClassEnum))) {
 													classes.Add(tileTypeClassEnum, false);
@@ -199,10 +200,10 @@ public class TileManager : IManager {
 															break;
 														case PropertyEnum.ResourceRanges:
 															foreach (string resourceRangeString in ((string)tileTypeSubProperty.Value).Split(',')) {
-																ResourceManager.Resource resource = GameManager.resourceM.GetResourceByEnum((ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), resourceRangeString.Split(':')[0]));
+																Resource resource = Resource.GetResourceByEnum((EResource)Enum.Parse(typeof(EResource), resourceRangeString.Split(':')[0]));
 																int min = int.Parse(resourceRangeString.Split(':')[1].Split('-')[0]);
 																int max = int.Parse(resourceRangeString.Split(':')[1].Split('-')[1]);
-																resourceRanges.Add(new ResourceManager.ResourceRange(resource, min, max));
+																resourceRanges.Add(new ResourceRange(resource, min, max));
 															}
 															break;
 														default:
@@ -296,7 +297,7 @@ public class TileManager : IManager {
 
 		public readonly Dictionary<TileTypeGroup.TypeEnum, TileType> tileTypes;
 
-		public readonly Dictionary<ResourceManager.PlantEnum, float> plantChances;
+		public readonly Dictionary<Plant.PlantEnum, float> plantChances;
 
 		public readonly List<Range> ranges;
 
@@ -305,7 +306,7 @@ public class TileManager : IManager {
 		public Biome(
 			TypeEnum type,
 			Dictionary<TileTypeGroup.TypeEnum, TileType> tileTypes,
-			Dictionary<ResourceManager.PlantEnum, float> plantChances,
+			Dictionary<Plant.PlantEnum, float> plantChances,
 			List<Range> ranges,
 			Color colour
 		) {
@@ -329,7 +330,7 @@ public class TileManager : IManager {
 
 						TypeEnum? type = null;
 						Dictionary<TileTypeGroup.TypeEnum, TileType> tileTypes = new Dictionary<TileTypeGroup.TypeEnum, TileType>();
-						Dictionary<ResourceManager.PlantEnum, float> plantChances = new Dictionary<ResourceManager.PlantEnum, float>();
+						Dictionary<Plant.PlantEnum, float> plantChances = new();
 						List<Range> ranges = new List<Range>();
 						Color? colour = null;
 
@@ -349,7 +350,7 @@ public class TileManager : IManager {
 								case PropertyEnum.PlantChances:
 									foreach (KeyValuePair<string, object> plantChanceProperty in (List<KeyValuePair<string, object>>)biomeSubProperty.Value) {
 										plantChances.Add(
-											(ResourceManager.PlantEnum)Enum.Parse(typeof(ResourceManager.PlantEnum), plantChanceProperty.Key),
+											(Plant.PlantEnum)Enum.Parse(typeof(Plant.PlantEnum), plantChanceProperty.Key),
 											float.Parse((string)plantChanceProperty.Value)
 										);
 									}
@@ -508,7 +509,7 @@ public class TileManager : IManager {
 
 		public static readonly List<ResourceVein> resourceVeins = new List<ResourceVein>();
 
-		public ResourceManager.ResourceEnum resourceType;
+		public EResource resourceType;
 		public GroupEnum groupType;
 		public Dictionary<TileTypeGroup.TypeEnum, TileType.TypeEnum> tileTypes;
 		public int numVeinsByMapSize = 0;
@@ -517,7 +518,7 @@ public class TileManager : IManager {
 		public int veinSizeRange = 0;
 
 		public ResourceVein(
-			ResourceManager.ResourceEnum resourceType,
+			EResource resourceType,
 			GroupEnum groupType,
 			Dictionary<TileTypeGroup.TypeEnum, TileType.TypeEnum> tileTypes,
 			int numVeinsByMapSize,
@@ -534,52 +535,60 @@ public class TileManager : IManager {
 			this.veinSizeRange = veinSizeRange;
 		}
 
-		public static readonly Dictionary<ResourceManager.ResourceEnum, Func<Tile, bool>> resourceVeinValidTileFunctions = new Dictionary<ResourceManager.ResourceEnum, Func<Tile, bool>>() {
-			{ ResourceManager.ResourceEnum.Clay, delegate (Tile tile) {
+		public static readonly Dictionary<EResource, Func<Tile, bool>> resourceVeinValidTileFunctions = new Dictionary<EResource, Func<Tile, bool>>() {
+			{
+				EResource.Clay, delegate(Tile tile) {
 				if (((tile.tileType.groupType == TileTypeGroup.TypeEnum.Water && tile.horizontalSurroundingTiles.Find(t => t != null && t.tileType.groupType != TileTypeGroup.TypeEnum.Water) != null) || (tile.tileType.groupType != TileTypeGroup.TypeEnum.Water)) && (tile.tileType.groupType != TileTypeGroup.TypeEnum.Stone)) {
 					if (tile.temperature >= -30) {
 						return true;
 					}
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.Coal, delegate (Tile tile) {
+				}
+			}, {
+				EResource.Coal, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.GoldOre, delegate (Tile tile) {
+				}
+			}, {
+				EResource.GoldOre, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.SilverOre, delegate (Tile tile) {
+				}
+			}, {
+				EResource.SilverOre, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.BronzeOre, delegate (Tile tile) {
+				}
+			}, {
+				EResource.BronzeOre, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.IronOre, delegate (Tile tile) {
+				}
+			}, {
+				EResource.IronOre, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.CopperOre, delegate (Tile tile) {
+				}
+			}, {
+				EResource.CopperOre, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
 				return false;
-			} },
-			{ ResourceManager.ResourceEnum.Chalk, delegate (Tile tile) {
+				}
+			}, {
+				EResource.Chalk, delegate(Tile tile) {
 				if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					return true;
 				}
@@ -605,7 +614,7 @@ public class TileManager : IManager {
 										switch ((PropertyEnum)Enum.Parse(typeof(PropertyEnum), resourceVeinProperty.Key)) {
 											case PropertyEnum.Vein:
 
-												ResourceManager.ResourceEnum? resourceType = null;
+												EResource? resourceType = null;
 												Dictionary<TileTypeGroup.TypeEnum, TileType.TypeEnum> tileTypes = new Dictionary<TileTypeGroup.TypeEnum, TileType.TypeEnum>();
 												int? numVeinsByMapSize = null;
 												int? veinDistance = null;
@@ -615,7 +624,7 @@ public class TileManager : IManager {
 												foreach (KeyValuePair<string, object> resourceVeinSubProperty in (List<KeyValuePair<string, object>>)resourceVeinProperty.Value) {
 													switch ((PropertyEnum)Enum.Parse(typeof(PropertyEnum), resourceVeinSubProperty.Key)) {
 														case PropertyEnum.ResourceType:
-															resourceType = (ResourceManager.ResourceEnum)Enum.Parse(typeof(ResourceManager.ResourceEnum), (string)resourceVeinSubProperty.Value);
+															resourceType = (EResource)Enum.Parse(typeof(EResource), (string)resourceVeinSubProperty.Value);
 															break;
 														case PropertyEnum.TileTypes:
 															foreach (string tileTypesString in ((string)resourceVeinSubProperty.Value).Split(',')) {
@@ -708,8 +717,8 @@ public class TileManager : IManager {
 		public Map.RegionBlock squareRegionBlock;
 
 		public Biome biome;
-		public ResourceManager.Plant plant;
-		public ResourceManager.Farm farm;
+		public Plant plant;
+		public Farm farm;
 
 		private float precipitation = 0;
 		public float temperature = 0;
@@ -729,11 +738,11 @@ public class TileManager : IManager {
 		public Dictionary<int, List<Tile>> shadowsTo = new Dictionary<int, List<Tile>>(); // Tiles that have shadows due to this tile
 		public Dictionary<int, List<Tile>> blockingShadowsFrom = new Dictionary<int, List<Tile>>(); // Tiles that have shadows that were cut short because this tile was in the way
 
-		public Dictionary<ResourceManager.LightSource, float> lightSourceBrightnesses = new Dictionary<ResourceManager.LightSource, float>();
-		public ResourceManager.LightSource primaryLightSource;
+		public Dictionary<LightSource, float> lightSourceBrightnesses = new();
+		public LightSource primaryLightSource;
 		public float lightSourceBrightness;
 
-		public Dictionary<int, ResourceManager.ObjectInstance> objectInstances = new Dictionary<int, ResourceManager.ObjectInstance>();
+		public Dictionary<int, ObjectInstance> objectInstances = new();
 
 		public bool dugPreviously;
 
@@ -972,16 +981,16 @@ public class TileManager : IManager {
 			}
 		}
 
-		public void SetPlant(bool onlyRemovePlant, ResourceManager.Plant specificPlant) {
+		public void SetPlant(bool onlyRemovePlant, Plant specificPlant) {
 			if (plant != null) {
 				plant.Remove();
 				plant = null;
 			}
 			if (!onlyRemovePlant) {
 				if (specificPlant == null) {
-					ResourceManager.PlantPrefab biomePlantGroup = GameManager.resourceM.GetPlantPrefabByBiome(biome, false);
+					PlantPrefab biomePlantGroup = PlantPrefab.GetPlantPrefabByBiome(biome, false);
 					if (biomePlantGroup != null) {
-						plant = new ResourceManager.Plant(biomePlantGroup, this, null, true, null);
+						plant = new Plant(biomePlantGroup, this, null, true, null);
 					}
 				} else {
 					plant = specificPlant;
@@ -990,7 +999,7 @@ public class TileManager : IManager {
 			SetWalkSpeed();
 		}
 
-		public void SetObject(ResourceManager.ObjectInstance instance) {
+		public void SetObject(ObjectInstance instance) {
 			AddObjectInstanceToLayer(instance, instance.prefab.layer);
 			PostChangeObject();
 		}
@@ -1003,7 +1012,7 @@ public class TileManager : IManager {
 			bool recalculatedLighting = false;
 			bool recalculatedRegion = false;
 
-			foreach (KeyValuePair<int, ResourceManager.ObjectInstance> layerToObjectInstance in objectInstances) {
+			foreach (KeyValuePair<int, ObjectInstance> layerToObjectInstance in objectInstances) {
 				if (layerToObjectInstance.Value != null) {
 
 					// Object Instances are iterated from lowest layer to highest layer (sorted in AddObjectInstaceToLayer),
@@ -1028,7 +1037,7 @@ public class TileManager : IManager {
 			SetWalkSpeed();
 		}
 
-		private void AddObjectInstanceToLayer(ResourceManager.ObjectInstance instance, int layer) {
+		private void AddObjectInstanceToLayer(ObjectInstance instance, int layer) {
 			if (objectInstances.ContainsKey(layer)) { // If the layer exists
 				if (objectInstances[layer] != null) { // If the object at the layer exists
 					if (instance != null) { // If the object being added exists, throw error
@@ -1047,14 +1056,14 @@ public class TileManager : IManager {
 
 		public void RemoveObjectAtLayer(int layer) {
 			if (objectInstances.ContainsKey(layer)) {
-				ResourceManager.ObjectInstance instance = objectInstances[layer];
+				ObjectInstance instance = objectInstances[layer];
 				if (instance != null) {
 					MonoBehaviour.Destroy(instance.obj);
 					foreach (Tile additionalTile in instance.additionalTiles) {
 						additionalTile.objectInstances[layer] = null;
 						additionalTile.PostChangeObject();
 					}
-					if (instance.prefab.instanceType == ResourceManager.ObjectInstanceType.Farm) {
+					if (instance.prefab.instanceType == ObjectInstance.ObjectInstanceType.Farm) {
 						farm = null;
 					}
 					objectInstances[layer] = null;
@@ -1063,7 +1072,7 @@ public class TileManager : IManager {
 			PostChangeObject();
 		}
 
-		public void SetObjectInstanceReference(ResourceManager.ObjectInstance objectInstanceReference) {
+		public void SetObjectInstanceReference(ObjectInstance objectInstanceReference) {
 			if (objectInstances.ContainsKey(objectInstanceReference.prefab.layer)) {
 				if (objectInstances[objectInstanceReference.prefab.layer] != null) {
 					if (objectInstanceReference != null) {
@@ -1080,16 +1089,16 @@ public class TileManager : IManager {
 			PostChangeObject();
 		}
 
-		public ResourceManager.ObjectInstance GetObjectInstanceAtLayer(int layer) {
+		public ObjectInstance GetObjectInstanceAtLayer(int layer) {
 			if (objectInstances.ContainsKey(layer)) {
 				return objectInstances[layer];
 			}
 			return null;
 		}
 
-		public List<ResourceManager.ObjectInstance> GetAllObjectInstances() {
-			List<ResourceManager.ObjectInstance> allObjectInstances = new List<ResourceManager.ObjectInstance>();
-			foreach (KeyValuePair<int, ResourceManager.ObjectInstance> kvp in objectInstances) {
+		public List<ObjectInstance> GetAllObjectInstances() {
+			List<ObjectInstance> allObjectInstances = new();
+			foreach (KeyValuePair<int, ObjectInstance> kvp in objectInstances) {
 				if (kvp.Value != null) {
 					allObjectInstances.Add(kvp.Value);
 				}
@@ -1110,7 +1119,7 @@ public class TileManager : IManager {
 			if (plant != null && walkSpeed > 0.6f) {
 				walkSpeed = 0.6f;
 			}
-			ResourceManager.ObjectInstance lowestWalkSpeedObject = objectInstances.Values.Where(o => o != null).OrderBy(o => o.prefab.walkSpeed).FirstOrDefault();
+			ObjectInstance lowestWalkSpeedObject = objectInstances.Values.Where(o => o != null).OrderBy(o => o.prefab.walkSpeed).FirstOrDefault();
 			if (lowestWalkSpeedObject != null) {
 				walkSpeed = lowestWalkSpeedObject.prefab.walkSpeed;
 			}
@@ -1132,7 +1141,7 @@ public class TileManager : IManager {
 			if (plant != null) {
 				plant.obj.GetComponent<SpriteRenderer>().color = sr.color;
 			}
-			foreach (ResourceManager.ObjectInstance instance in GetAllObjectInstances()) {
+			foreach (ObjectInstance instance in GetAllObjectInstances()) {
 				instance.SetColour(sr.color);
 			}
 			brightness = colourBrightnessMultiplier;
@@ -1143,13 +1152,13 @@ public class TileManager : IManager {
 			SetColour(sr.color, hour);
 		}
 
-		public void AddLightSourceBrightness(ResourceManager.LightSource lightSource, float brightness) {
+		public void AddLightSourceBrightness(LightSource lightSource, float brightness) {
 			lightSourceBrightnesses.Add(lightSource, brightness);
 			lightSourceBrightness = lightSourceBrightnesses.Max(kvp => kvp.Value);
 			primaryLightSource = lightSourceBrightnesses.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
 		}
 
-		public void RemoveLightSourceBrightness(ResourceManager.LightSource lightSource) {
+		public void RemoveLightSourceBrightness(LightSource lightSource) {
 			lightSourceBrightnesses.Remove(lightSource);
 			if (lightSourceBrightnesses.Count > 0) {
 				lightSourceBrightness = lightSourceBrightnesses.Max(kvp => kvp.Value);
@@ -1221,7 +1230,7 @@ public class TileManager : IManager {
 				plant.SetVisible(visible);
 			}
 
-			foreach (ResourceManager.ObjectInstance objectInstance in GetAllObjectInstances()) {
+			foreach (ObjectInstance objectInstance in GetAllObjectInstances()) {
 				objectInstance.SetVisible(visible);
 			}
 		}
@@ -2730,7 +2739,7 @@ public class TileManager : IManager {
 
 		public int BitSum(
 			List<TileType.TypeEnum> compareTileTypes,
-			List<ResourceManager.ObjectEnum> compareObjectTypes,
+			List<ObjectPrefab.ObjectEnum> compareObjectTypes,
 			List<Tile> tilesToSum,
 			bool includeMapEdge
 		) {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NColonist {
@@ -43,9 +44,9 @@ namespace Snowship.NColonist {
 			GameManager.cameraM.SetCameraPosition(averageColonistPosition);
 
 			// TODO TEMPORARY COLONIST TESTING STUFF
-			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.WheatSeed), UnityEngine.Random.Range(5, 11), false);
-			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.Potato), UnityEngine.Random.Range(5, 11), false);
-			Colonist.colonists[UnityEngine.Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(ResourceManager.ResourceEnum.CottonSeed), UnityEngine.Random.Range(5, 11), false);
+			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.WheatSeed), Random.Range(5, 11), false);
+			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.Potato), Random.Range(5, 11), false);
+			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.CottonSeed), Random.Range(5, 11), false);
 		}
 
 		public void SpawnColonists(int amount) {

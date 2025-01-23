@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Snowship.NColonist;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -13,8 +13,8 @@ namespace Snowship.NJob {
 		public JobPrefab prefab;
 
 		public TileManager.Tile tile;
-		public ResourceManager.ObjectPrefab objectPrefab;
-		public ResourceManager.Variation variation;
+		public ObjectPrefab objectPrefab;
+		public Variation variation;
 		public Colonist colonist;
 
 		public int rotationIndex;
@@ -34,12 +34,12 @@ namespace Snowship.NJob {
 
 		// public UIManagerOld.JobElement jobUIElement;
 
-		public ResourceManager.CraftableResourceInstance createResource;
-		public ResourceManager.ObjectInstance activeObject;
+		public CraftableResourceInstance createResource;
+		public ObjectInstance activeObject;
 
 		public List<ResourceAmount> transferResources;
 
-		public Job(JobPrefab prefab, TileManager.Tile tile, ResourceManager.ObjectPrefab objectPrefab, ResourceManager.Variation variation, int rotationIndex) {
+		public Job(JobPrefab prefab, TileManager.Tile tile, ObjectPrefab objectPrefab, Variation variation, int rotationIndex) {
 
 			this.prefab = prefab;
 
@@ -81,7 +81,7 @@ namespace Snowship.NJob {
 			}
 		}
 
-		public void SetCreateResourceData(ResourceManager.CraftableResourceInstance resource, bool addToResourcesToBuild = true) {
+		public void SetCreateResourceData(CraftableResourceInstance resource, bool addToResourcesToBuild = true) {
 			createResource = resource;
 
 			jobProgress += createResource.resource.craftingTime;
@@ -107,7 +107,7 @@ namespace Snowship.NJob {
 						new Job(
 							JobPrefab.GetJobPrefabByName("PickupResources"),
 							containerPickups[0].container.tile,
-							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.PickupResources),
+							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.PickupResources),
 							null,
 							0),
 						null,

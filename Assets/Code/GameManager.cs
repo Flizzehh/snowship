@@ -69,19 +69,17 @@ public class GameManager : MonoBehaviour {
 
 	public void Awake() {
 
+
+
 		// Initializations
 
 		uiM.Initialize(uiParent);
 
 		// Awakes
 
-		resourceM.SetResourceReferences();
-		resourceM.SetGameObjectReferences();
-		resourceM.CreateJobPrefabs();
-		resourceM.CreateResources();
-		resourceM.CreatePlantPrefabs();
-		resourceM.CreateObjectPrefabs();
-		resourceM.LoadLocationNames();
+		foreach (IManager manager in managers) {
+			manager.OnCreate();
+		}
 
 		TileManager.TileType.InitializeTileTypes();
 		TileManager.Biome.InitializeBiomes();
@@ -94,10 +92,6 @@ public class GameManager : MonoBehaviour {
 		ProfessionPrefab.CreateProfessionPrefabs();
 		NeedPrefab.CreateColonistNeeds();
 		MoodModifierGroup.CreateMoodModifiers();
-
-		foreach (IManager manager in managers) {
-			manager.OnCreate();
-		}
 
 		uiMOld.SetupUI();
 

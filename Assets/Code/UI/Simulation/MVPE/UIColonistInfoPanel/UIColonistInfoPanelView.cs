@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Snowship.NColonist;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUI.Components;
 using TMPro;
 using UnityEngine;
@@ -213,7 +213,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			resourceAmountElementToRemove.Close();
 		}
 
-		public UIClothingButtonElement CreateClothingButton(HumanManager.Human.Appearance appearance, ResourceManager.Clothing clothing) {
+		public UIClothingButtonElement CreateClothingButton(HumanManager.Human.Appearance appearance, Clothing clothing) {
 			UIClothingButtonElement clothingButton = new(
 				clothingButtonsListVerticalLayoutGroup.transform,
 				appearance,
@@ -233,15 +233,25 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			clothingSelectionPanel.SetActive(active);
 		}
 
-		public UIClothingElement CreateAvailableClothingElement(ResourceManager.Clothing clothing) {
+		public void SetDisrobeButtonTarget(HumanManager.Human.Appearance appearance) {
+			disrobeButton.onClick.RemoveAllListeners();
+			disrobeButton.onClick.AddListener(() => OnDisrobeButtonClicked(appearance));
+		}
+
+		public void OnDisrobeButtonClicked(HumanManager.Human.Appearance appearance) {
+			disrobeButton.onClick.AddListener(() => OnColonistClothingChanged(appearance, null));
+			SetClothingSelectionPanelActive(false);
+		}
+
+		public UIClothingElement CreateAvailableClothingElement(Clothing clothing) {
 			return CreateClothingElement(clothing, true);
 		}
 
-		public UIClothingElement CreateTakenClothingElement(ResourceManager.Clothing clothing) {
+		public UIClothingElement CreateTakenClothingElement(Clothing clothing) {
 			return CreateClothingElement(clothing, false);
 		}
 
-		private UIClothingElement CreateClothingElement(ResourceManager.Clothing clothing, bool available) {
+		private UIClothingElement CreateClothingElement(Clothing clothing, bool available) {
 			UIClothingElement clothingElement = new((available ? clothesAvailableGridLayoutGroup : clothesTakenGridLayoutGroup).transform, clothing);
 			clothingElements.Add(clothingElement);
 			return clothingElement;
@@ -255,7 +265,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			clothesTakenTitleTextPanel.SetActive(active);
 		}
 
-		public void OnColonistClothingChanged(HumanManager.Human.Appearance appearance, ResourceManager.Clothing clothing) {
+		public void OnColonistClothingChanged(HumanManager.Human.Appearance appearance, Clothing clothing) {
 			foreach (UIClothingButtonElement clothingButtonElement in clothingButtonElements) {
 				if (clothingButtonElement.Appearance != appearance) {
 					continue;

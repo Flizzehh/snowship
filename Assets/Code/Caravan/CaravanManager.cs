@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Snowship.NResource;
 using Snowship.NUI.Simulation.TradeMenu;
 using UnityEngine;
 
@@ -119,16 +120,16 @@ namespace Snowship.NCaravan {
 				numTraders = edgeTilesCloseToTargetSpawnTile.Count;
 			}
 
-			List<ResourceManager.ObjectInstance> tradingPosts = new List<ResourceManager.ObjectInstance>();
-			foreach (ResourceManager.ObjectPrefab prefab in GameManager.resourceM.objectInstances.Keys.Where(op => op.subGroupType == ResourceManager.ObjectSubGroupEnum.TradingPosts)) {
-				foreach (ResourceManager.ObjectInstance tradingPost in GameManager.resourceM.objectInstances[prefab]) {
+			List<ObjectInstance> tradingPosts = new();
+			foreach (ObjectPrefab prefab in ObjectInstance.ObjectInstances.Keys.Where(op => op.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.TradingPosts)) {
+				foreach (ObjectInstance tradingPost in ObjectInstance.ObjectInstances[prefab]) {
 					if (tradingPost.zeroPointTile.region == targetSpawnTile.region) {
 						tradingPosts.Add(tradingPost);
 					}
 				}
 			}
 
-			ResourceManager.ObjectInstance selectedTradingPost = null;
+			ObjectInstance selectedTradingPost = null;
 			if (tradingPosts.Count > 0) {
 				selectedTradingPost = tradingPosts[UnityEngine.Random.Range(0, tradingPosts.Count)];
 			}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
-using Snowship.NResources;
+using Snowship.NResource;
 
 namespace Snowship.NColonist {
 	public static class NeedUtilities {
@@ -84,11 +84,11 @@ namespace Snowship.NColonist {
 			need.ChangeValue(needIncreaseAmount + (NeedToSpecialValueFunctionMap.TryGetValue(need.prefab.type, out Func<NeedInstance, float> specialValueFunction) ? specialValueFunction(need) : 0));
 		}
 
-		public static ResourceManager.Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceAmount resourceAmount) {
+		public static Container FindClosestResourceAmountInContainers(Colonist colonist, ResourceAmount resourceAmount) {
 
-			List<ResourceManager.Container> containersWithResourceAmount = new List<ResourceManager.Container>();
+			List<Container> containersWithResourceAmount = new();
 
-			foreach (ResourceManager.Container container in GameManager.resourceM.GetContainersInRegion(colonist.overTile.region)) {
+			foreach (Container container in Container.GetContainersInRegion(colonist.overTile.region)) {
 				if (container.GetInventory().ContainsResourceAmount(resourceAmount)) {
 					containersWithResourceAmount.Add(container);
 				}
@@ -99,13 +99,13 @@ namespace Snowship.NColonist {
 		private static KeyValuePair<Inventory, List<ResourceAmount>> FindClosestFood(Colonist colonist, float minimumNutritionRequired, bool takeFromOtherColonists, bool eatAnything) {
 			List<KeyValuePair<KeyValuePair<Inventory, List<ResourceAmount>>, int>> resourcesPerInventory = new();
 			int totalNutrition = 0;
-			foreach (ResourceManager.Container container in GameManager.resourceM.GetContainersInRegion(colonist.overTile.region).OrderBy(c => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, c.tile.regionBlock, true, true, false))) {
+			foreach (Container container in Container.GetContainersInRegion(colonist.overTile.region).OrderBy(c => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, c.tile.regionBlock, true, true, false))) {
 				List<ResourceAmount> resourcesToReserve = new();
-				foreach (ResourceAmount ra in container.GetInventory().resources.Where(ra => ra.Resource.classes.Contains(ResourceManager.ResourceClassEnum.Food)).OrderBy(ra => ((ResourceManager.Food)ra.Resource).nutrition).ToList()) {
+				foreach (ResourceAmount ra in container.GetInventory().resources.Where(ra => ra.Resource.classes.Contains(Resource.ResourceClassEnum.Food)).OrderBy(ra => ((Food)ra.Resource).nutrition).ToList()) {
 					int numReserved = 0;
 					for (int i = 0; i < ra.Amount; i++) {
 						numReserved += 1;
-						totalNutrition += ((ResourceManager.Food)ra.Resource).nutrition;
+						totalNutrition += ((Food)ra.Resource).nutrition;
 						if (totalNutrition >= minimumNutritionRequired) {
 							break;
 						}
@@ -131,17 +131,17 @@ namespace Snowship.NColonist {
 		}
 
 		public static bool GetFood(NeedInstance need, bool takeFromOtherColonists, bool eatAnything) {
-			if (need.colonist.GetInventory().resources.Find(ra => ra.Resource.groupType == ResourceManager.ResourceGroupEnum.Foods) == null) {
+			if (need.colonist.GetInventory().resources.Find(ra => ra.Resource.groupType == ResourceGroup.ResourceGroupEnum.Foods) == null) {
 				KeyValuePair<Inventory, List<ResourceAmount>> closestFood = FindClosestFood(need.colonist, need.GetValue(), takeFromOtherColonists, eatAnything);
 
 				List<ResourceAmount> resourcesToReserve = closestFood.Value;
 				if (closestFood.Key != null) {
-					if (closestFood.Key.parent is ResourceManager.Container container) {
+					if (closestFood.Key.parent is Container container) {
 						container.GetInventory().ReserveResources(resourcesToReserve, need.colonist);
 						Job job = new Job(
 							JobPrefab.GetJobPrefabByName("CollectFood"),
 							container.tile,
-							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectFood),
+							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectFood),
 							null,
 							0
 						);
@@ -159,10 +159,10 @@ namespace Snowship.NColonist {
 			return false;
 		}
 
-		public static int FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum resourceGroup, Colonist colonist, bool worldTotal, bool includeOtherColonists) {
+		public static int FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum resourceGroup, Colonist colonist, bool worldTotal, bool includeOtherColonists) {
 			if (worldTotal) {
 				int total = 0;
-				foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources()) {
+				foreach (Resource resource in Resource.GetResources()) {
 					if (resource.groupType == resourceGroup) {
 						total += resource.GetWorldTotalAmount();
 					}
@@ -178,7 +178,7 @@ namespace Snowship.NColonist {
 				total += amountOnThisColonist;
 
 				int amountUnreservedInContainers = 0;
-				foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources().Where(r => r.groupType == resourceGroup)) {
+				foreach (Resource resource in Resource.GetResources().Where(r => r.groupType == resourceGroup)) {
 					amountUnreservedInContainers += resource.GetUnreservedContainerTotalAmount();
 				}
 				total += amountUnreservedInContainers;
@@ -202,10 +202,10 @@ namespace Snowship.NColonist {
 		}
 
 		public static bool GetSleep(NeedInstance need, bool sleepAnywhere) {
-			if (GameManager.resourceM.sleepSpots.Count > 0) {
-				List<ResourceManager.SleepSpot> validSleepSpots = GameManager.resourceM.sleepSpots.Where(sleepSpot => sleepSpot.occupyingColonist == null && sleepSpot.tile.region == need.colonist.overTile.region).ToList();
+			if (SleepSpot.sleepSpots.Count > 0) {
+				List<SleepSpot> validSleepSpots = SleepSpot.sleepSpots.Where(sleepSpot => sleepSpot.occupyingColonist == null && sleepSpot.tile.region == need.colonist.overTile.region).ToList();
 				if (validSleepSpots.Count > 0) {
-					ResourceManager.SleepSpot chosenSleepSpot = validSleepSpots.OrderByDescending(sleepSpot => sleepSpot.prefab.restComfortAmount / (PathManager.RegionBlockDistance(need.colonist.overTile.regionBlock, sleepSpot.tile.regionBlock, true, true, false) + 1)).ToList()[0];
+					SleepSpot chosenSleepSpot = validSleepSpots.OrderByDescending(sleepSpot => sleepSpot.prefab.restComfortAmount / (PathManager.RegionBlockDistance(need.colonist.overTile.regionBlock, sleepSpot.tile.regionBlock, true, true, false) + 1)).ToList()[0];
 					chosenSleepSpot.StartSleeping(need.colonist);
 					need.colonist.SetJob(
 						new ColonistJob(
@@ -213,7 +213,7 @@ namespace Snowship.NColonist {
 							new Job(
 								JobPrefab.GetJobPrefabByName("Sleep"),
 								chosenSleepSpot.tile,
-								GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Sleep),
+								ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Sleep),
 								null,
 								0
 							),
@@ -230,7 +230,7 @@ namespace Snowship.NColonist {
 						new Job(
 							JobPrefab.GetJobPrefabByName("Sleep"),
 							need.colonist.overTile,
-							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Sleep),
+							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Sleep),
 							null,
 							0),
 						null,
@@ -246,14 +246,14 @@ namespace Snowship.NColonist {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
 					// TODO Check that this still works properly - (removed timeM.minuteChanged check before each of these 3 blocks)
-					if (FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // true, true
+					if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // true, true
 						need.colonist.ReturnJob();
 						return GetFood(need, false, false); // true, true - TODO use these once implemented
 					}
 					return false;
 				}
 				if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
-					if (FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // false, true
+					if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // false, true
 						if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue)) {
 							need.colonist.ReturnJob();
 							return GetFood(need, false, false); // true, false - TODO use these once implemented
@@ -263,7 +263,7 @@ namespace Snowship.NColonist {
 				}
 				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
 					if (need.colonist.job == null) {
-						if (FindAvailableResourceAmount(ResourceManager.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
+						if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
 							if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
 								need.colonist.ReturnJob();
 								return GetFood(need, false, false);

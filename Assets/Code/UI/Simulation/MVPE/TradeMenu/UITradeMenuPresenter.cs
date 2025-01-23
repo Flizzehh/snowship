@@ -2,7 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NCaravan;
-using Snowship.NResource.Models;
+using Snowship.NResource;
 
 namespace Snowship.NUI.Simulation.TradeMenu {
 	[UsedImplicitly]

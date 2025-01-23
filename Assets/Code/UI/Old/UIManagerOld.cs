@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NUI.Menu.LoadSave;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -278,21 +278,21 @@ namespace Snowship.NUI {
 			objectsMenuButton.GetComponent<Button>().onClick.AddListener(delegate { ToggleObjectPrefabsList(true); });
 			objectPrefabsList.SetActive(false);
 
-			clothesMenuButton = gameUI.transform.Find("Management-Panel/ClothesMenu-Button").gameObject;
+			/*clothesMenuButton = gameUI.transform.Find("Management-Panel/ClothesMenu-Button").gameObject;
 			clothesMenuPanel = clothesMenuButton.transform.Find("ClothesMenu-Panel").gameObject;
 			clothesSearchInputField = clothesMenuPanel.transform.Find("ClothesSearch-InputField").GetComponent<InputField>();
 			clothesSearchInputField.onValueChanged.AddListener(delegate { FilterClothesList(clothesSearchInputField.text); });
 			clothesList = clothesMenuPanel.transform.Find("ClothesList-ScrollPanel").gameObject;
 			clothesMenuButton.GetComponent<Button>().onClick.AddListener(delegate { SetClothesList(); });
-			clothesMenuPanel.SetActive(false);
+			clothesMenuPanel.SetActive(false);*/
 
-			resourcesMenuButton = gameUI.transform.Find("Management-Panel/ResourcesMenu-Button").gameObject;
+			/*resourcesMenuButton = gameUI.transform.Find("Management-Panel/ResourcesMenu-Button").gameObject;
 			resourcesMenuPanel = resourcesMenuButton.transform.Find("ResourcesMenu-Panel").gameObject;
 			resourcesSearchInputField = resourcesMenuPanel.transform.Find("ResourcesSearch-InputField").GetComponent<InputField>();
 			resourcesSearchInputField.onValueChanged.AddListener(delegate { FilterResourcesList(resourcesSearchInputField.text); });
 			resourcesList = resourcesMenuPanel.transform.Find("ResourcesList-ScrollPanel").gameObject;
 			resourcesMenuButton.GetComponent<Button>().onClick.AddListener(delegate { SetResourcesList(); });
-			resourcesMenuPanel.SetActive(false);
+			resourcesMenuPanel.SetActive(false);*/
 
 			selectedCraftingObjectPanel = gameUI.transform.Find("SelectedCraftingObject-Panel").gameObject;
 			selectedCraftingObjectSelectResourcesPanel = selectedCraftingObjectPanel.transform.Find("SelectResources-Panel").gameObject;
@@ -374,17 +374,17 @@ namespace Snowship.NUI {
 				}
 
 				if (Input.GetMouseButtonDown(0) && !IsPointerOverUI()) {
-					ResourceManager.Container container = GameManager.resourceM.containers.Find(findContainer => findContainer.tile == newMouseOverTile || findContainer.additionalTiles.Contains(newMouseOverTile));
+					Container container = Container.containers.Find(findContainer => findContainer.tile == newMouseOverTile || findContainer.additionalTiles.Contains(newMouseOverTile));
 					if (container != null) {
 						SetSelectedContainer(container);
 					}
 
-					ResourceManager.TradingPost tradingPost = GameManager.resourceM.tradingPosts.Find(tp => tp.tile == newMouseOverTile || tp.additionalTiles.Contains(newMouseOverTile));
+					TradingPost tradingPost = TradingPost.tradingPosts.Find(tp => tp.tile == newMouseOverTile || tp.additionalTiles.Contains(newMouseOverTile));
 					if (tradingPost != null) {
 						SetSelectedTradingPost(tradingPost);
 					}
 
-					ResourceManager.CraftingObject mto = GameManager.resourceM.craftingObjectInstances.Find(mtoi => mtoi.tile == newMouseOverTile || mtoi.additionalTiles.Contains(newMouseOverTile));
+					CraftingObject mto = CraftingObject.craftingObjectInstances.Find(mtoi => mtoi.tile == newMouseOverTile || mtoi.additionalTiles.Contains(newMouseOverTile));
 					if (mto != null) {
 						SetSelectedCraftingObject(mto);
 					}
@@ -430,9 +430,9 @@ namespace Snowship.NUI {
 			}*/
 		}
 
-		public ResourceManager.Container selectedContainer;
+		public Container selectedContainer;
 
-		public void SetSelectedContainer(ResourceManager.Container container) {
+		public void SetSelectedContainer(Container container) {
 			selectedContainer = null;
 			if (selectedTradingPost != null) {
 				SetSelectedTradingPost(null);
@@ -446,9 +446,9 @@ namespace Snowship.NUI {
 			SetSelectedContainerInfo();
 		}
 
-		public ResourceManager.TradingPost selectedTradingPost;
+		public TradingPost selectedTradingPost;
 
-		public void SetSelectedTradingPost(ResourceManager.TradingPost tradingPost) {
+		public void SetSelectedTradingPost(TradingPost tradingPost) {
 			selectedTradingPost = null;
 			if (selectedContainer != null) {
 				SetSelectedContainer(null);
@@ -462,9 +462,9 @@ namespace Snowship.NUI {
 			SetSelectedTradingPostInfo();
 		}
 
-		public ResourceManager.CraftingObject selectedCraftingObject;
+		public CraftingObject selectedCraftingObject;
 
-		public void SetSelectedCraftingObject(ResourceManager.CraftingObject newSelectedCraftingObject) {
+		public void SetSelectedCraftingObject(CraftingObject newSelectedCraftingObject) {
 			selectedCraftingObject = null;
 			if (selectedContainer != null) {
 				SetSelectedContainer(null);
@@ -523,7 +523,7 @@ namespace Snowship.NUI {
 		}
 
 		private class ObjectPrefabButton {
-			public ResourceManager.ObjectPrefab prefab;
+			public ObjectPrefab prefab;
 			public GameObject obj;
 			public Transform parent;
 
@@ -534,13 +534,13 @@ namespace Snowship.NUI {
 
 			public GameObject variationsIndicator;
 
-			public ObjectPrefabButton(ResourceManager.ObjectPrefab prefab, Transform parent) {
+			public ObjectPrefabButton(ObjectPrefab prefab, Transform parent) {
 				this.prefab = prefab;
 				this.parent = parent;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/BuildObject-Button-Prefab"), parent, false);
 
-				ResourceManager.Variation variation = prefab.lastSelectedVariation;
+				Variation variation = prefab.lastSelectedVariation;
 				obj.transform.Find("Text").GetComponent<Text>().text = prefab.GetInstanceNameFromVariation(variation);
 				obj.transform.Find("Image").GetComponent<Image>().sprite = prefab.GetBaseSpriteForVariation(variation);
 
@@ -570,7 +570,7 @@ namespace Snowship.NUI {
 				UpdateVariationsIndicator();
 			}
 
-			public void SetVariation(ResourceManager.Variation variation) {
+			public void SetVariation(Variation variation) {
 				prefab.SetVariation(variation);
 
 				SetRequiredResourceElements();
@@ -607,7 +607,7 @@ namespace Snowship.NUI {
 
 				variationElements.Clear();
 
-				foreach (ResourceManager.Variation variation in prefab.variations) {
+				foreach (Variation variation in prefab.variations) {
 					variationElements.Add(new VariationElement(variation, variationElementsPanel.transform, this));
 				}
 
@@ -641,7 +641,7 @@ namespace Snowship.NUI {
 
 				bool anyVariationResourcesMet = false;
 				if (prefab.variations.Count > 0) {
-					foreach (ResourceManager.Variation variation in prefab.variations) {
+					foreach (Variation variation in prefab.variations) {
 						bool variationResourcesMet = false;
 						if (variation.uniqueResources.Count > 0) {
 							foreach (ResourceAmount resourceAmount in variation.uniqueResources) {
@@ -696,13 +696,13 @@ namespace Snowship.NUI {
 		}
 
 		private class VariationElement {
-			public ResourceManager.Variation variation;
+			public Variation variation;
 			public GameObject obj;
 
 			public GameObject requiredResourceElementsPanel;
 			public List<RequiredResourceElement> requiredResourceElements = new List<RequiredResourceElement>();
 
-			public VariationElement(ResourceManager.Variation variation, Transform parent, ObjectPrefabButton prefabElement) {
+			public VariationElement(Variation variation, Transform parent, ObjectPrefabButton prefabElement) {
 				this.variation = variation;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/BuildVariation-Button-Prefab"), parent, false);
@@ -757,14 +757,14 @@ namespace Snowship.NUI {
 			}
 		}
 
-		private static readonly List<ResourceManager.ObjectGroupEnum> separateMenuGroups = new List<ResourceManager.ObjectGroupEnum>() {
-			ResourceManager.ObjectGroupEnum.Farm,
-			ResourceManager.ObjectGroupEnum.Terraform,
-			ResourceManager.ObjectGroupEnum.Command
+		private static readonly List<ObjectPrefabGroup.ObjectGroupEnum> separateMenuGroups = new List<ObjectPrefabGroup.ObjectGroupEnum>() {
+			ObjectPrefabGroup.ObjectGroupEnum.Farm,
+			ObjectPrefabGroup.ObjectGroupEnum.Terraform,
+			ObjectPrefabGroup.ObjectGroupEnum.Command
 		};
 
-		private static readonly List<ResourceManager.ObjectGroupEnum> noMenuGroups = new List<ResourceManager.ObjectGroupEnum>() {
-			ResourceManager.ObjectGroupEnum.None
+		private static readonly List<ObjectPrefabGroup.ObjectGroupEnum> noMenuGroups = new List<ObjectPrefabGroup.ObjectGroupEnum>() {
+			ObjectPrefabGroup.ObjectGroupEnum.None
 		};
 
 		private readonly List<ObjectPrefabButton> objectPrefabButtons = new List<ObjectPrefabButton>();
@@ -777,7 +777,7 @@ namespace Snowship.NUI {
 			MenuButton buildButton = new MenuButton(null, actionsPanel, Resources.Load<GameObject>(@"UI/UIElements/BuildMenu-Panel-Prefab"), "Build");
 			topLevelButtons.Add(buildButton);
 
-			foreach (ResourceManager.ObjectPrefabGroup group in GameManager.resourceM.GetObjectPrefabGroups()) {
+			foreach (ObjectPrefabGroup group in ObjectPrefabGroup.GetObjectPrefabGroups()) {
 				if (noMenuGroups.Contains(group.type)) {
 					continue;
 				}
@@ -792,12 +792,12 @@ namespace Snowship.NUI {
 					topLevelButtons.Add(groupButton);
 				}
 
-				foreach (ResourceManager.ObjectPrefabSubGroup subGroup in group.subGroups) {
+				foreach (ObjectPrefabSubGroup subGroup in group.subGroups) {
 					MenuButton subGroupButton = new MenuButton(subGroup, groupButton.panel.transform, Resources.Load<GameObject>(@"UI/UIElements/BuildItem-Panel-Prefab"), subGroup.name);
 
 					groupButton.AddChildButton(subGroupButton);
 
-					foreach (ResourceManager.ObjectPrefab prefab in subGroup.prefabs) {
+					foreach (ObjectPrefab prefab in subGroup.prefabs) {
 						ObjectPrefabButton objectPrefabButton = new ObjectPrefabButton(prefab, subGroupButton.panel.transform);
 
 						subGroupButton.AddChildButton(objectPrefabButton);
@@ -905,7 +905,7 @@ namespace Snowship.NUI {
 
 					if (mouseOverTile.tileType.resourceRanges.Count > 0) {
 						for (int i = 0; i < mouseOverTile.tileType.resourceRanges.Count; i++) {
-							ResourceManager.ResourceRange resourceRange = mouseOverTile.tileType.resourceRanges[i];
+							ResourceRange resourceRange = mouseOverTile.tileType.resourceRanges[i];
 
 							if (tileResourceElements.Count <= i) {
 								tileResourceElements.Add(Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/TileInfoElement-ResourceData-Panel"), tileInformation.transform, false));
@@ -952,7 +952,7 @@ namespace Snowship.NUI {
 					}
 
 					if (mouseOverTile.GetAllObjectInstances().Count > 0) {
-						foreach (ResourceManager.ObjectInstance objectInstance in mouseOverTile.GetAllObjectInstances().OrderBy(o => o.prefab.layer).ToList()) {
+						foreach (ObjectInstance objectInstance in mouseOverTile.GetAllObjectInstances().OrderBy(o => o.prefab.layer).ToList()) {
 							if (!objectElements.ContainsKey(objectInstance.prefab.layer)) {
 								GameObject spriteObject = Object.Instantiate(GameManager.resourceM.tileImage, tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage"), false);
 								spriteObject.name = layerToLayerNameMap[objectInstance.prefab.layer];
@@ -1037,8 +1037,8 @@ namespace Snowship.NUI {
 				Out
 			}
 
-			public ResourceManager.Resource resource;
-			public ResourceManager.TradingPost tradingPost;
+			public Resource resource;
+			public TradingPost tradingPost;
 
 			public TransferType transferType;
 
@@ -1049,7 +1049,7 @@ namespace Snowship.NUI {
 
 			public int transferAmount = 0;
 
-			public ResourceTransferElement(ResourceManager.Resource resource, ResourceManager.TradingPost tradingPost, TransferType transferType, Transform parent) {
+			public ResourceTransferElement(Resource resource, TradingPost tradingPost, TransferType transferType, Transform parent) {
 				this.resource = resource;
 				this.tradingPost = tradingPost;
 				this.transferType = transferType;
@@ -1097,11 +1097,11 @@ namespace Snowship.NUI {
 		}
 
 		public class ReservedResourcesColonistElement {
-			public ResourceManager.ReservedResources reservedResources;
+			public ReservedResources reservedResources;
 			public List<InventoryElement> reservedResourceElements = new List<InventoryElement>();
 			public GameObject obj;
 
-			public ReservedResourcesColonistElement(HumanManager.Human human, ResourceManager.ReservedResources reservedResources, Transform parent) {
+			public ReservedResourcesColonistElement(HumanManager.Human human, ReservedResources reservedResources, Transform parent) {
 				this.reservedResources = reservedResources;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ReservedResourcesColonistInfoElement-Panel"), parent, false);
@@ -1854,7 +1854,7 @@ namespace Snowship.NUI {
 					volumeSliderPanel.SetActive(false);
 				}
 
-				foreach (ResourceManager.ReservedResources rr in selectedContainer.GetInventory().reservedResources) {
+				foreach (ReservedResources rr in selectedContainer.GetInventory().reservedResources) {
 					containerReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel")));
 				}
 
@@ -1934,14 +1934,14 @@ namespace Snowship.NUI {
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().minValue = 0;
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.GetInventory().maxVolume;
 
-				foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources()) {
+				foreach (Resource resource in Resource.GetResources()) {
 					if (resource.GetAvailableAmount() > 0) {
 						tradingPostResourceTransferElements.Add(new ResourceTransferElement(resource, selectedTradingPost, ResourceTransferElement.TransferType.In, selectedTradingPostPanel.transform.Find("AvailableResources-Panel/AvailableResources-ScrollPanel/AvailableResourcesList-Panel")));
 					}
 				}
 
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					Job job = new Job(JobPrefab.GetJobPrefabByName("TransferResources"), selectedTradingPost.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.TransferResources), null, 0);
+					Job job = new(JobPrefab.GetJobPrefabByName("TransferResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.TransferResources), null, 0);
 					foreach (ResourceTransferElement rte in tradingPostResourceTransferElements) {
 						if (rte.transferAmount > 0) {
 							job.requiredResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
@@ -1964,7 +1964,7 @@ namespace Snowship.NUI {
 
 				//selectedTradingPostPanel.transform.Find("Inventory-Panel/InventorySpacePercentage-Text").GetComponent<Text>().text = Mathf.RoundToInt((inventorySpace / (float)selectedTradingPost.prefab.maxInventoryAmount) * 100) + "%";
 
-				foreach (ResourceManager.ReservedResources rr in selectedTradingPost.GetInventory().reservedResources) {
+				foreach (ReservedResources rr in selectedTradingPost.GetInventory().reservedResources) {
 					tradingPostReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel")));
 				}
 
@@ -1974,7 +1974,7 @@ namespace Snowship.NUI {
 				}
 
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					Job job = new Job(JobPrefab.GetJobPrefabByName("CollectResources"), selectedTradingPost.tile, GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.CollectResources), null, 0) {
+					Job job = new Job(JobPrefab.GetJobPrefabByName("CollectResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources), null, 0) {
 						transferResources = new List<ResourceAmount>()
 					};
 					foreach (ResourceTransferElement rte in tradingPostInventoryElements) {
@@ -2208,12 +2208,12 @@ namespace Snowship.NUI {
 
 
 		public class ObjectPrefabElement {
-			public ResourceManager.ObjectPrefab prefab;
+			public ObjectPrefab prefab;
 			public GameObject obj;
 			public GameObject objectInstancesList;
 			public List<ObjectInstanceElement> instanceElements = new List<ObjectInstanceElement>();
 
-			public ObjectPrefabElement(ResourceManager.ObjectPrefab prefab, Transform parent) {
+			public ObjectPrefabElement(ObjectPrefab prefab, Transform parent) {
 				this.prefab = prefab;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ObjectPrefab-Button"), parent, false);
@@ -2249,7 +2249,7 @@ namespace Snowship.NUI {
 				}
 
 				objectInstancesList.SetActive(true);
-				foreach (ResourceManager.ObjectInstance instance in GameManager.resourceM.GetObjectInstancesByPrefab(prefab)) {
+				foreach (ObjectInstance instance in ObjectInstance.GetObjectInstancesByPrefab(prefab)) {
 					instanceElements.Add(new ObjectInstanceElement(instance, objectInstancesList.transform.Find("ObjectInstancesList-Panel")));
 				}
 
@@ -2276,10 +2276,10 @@ namespace Snowship.NUI {
 		}
 
 		public class ObjectInstanceElement {
-			public ResourceManager.ObjectInstance instance;
+			public ObjectInstance instance;
 			public GameObject obj;
 
-			public ObjectInstanceElement(ResourceManager.ObjectInstance instance, Transform parent) {
+			public ObjectInstanceElement(ObjectInstance instance, Transform parent) {
 				this.instance = instance;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ObjectInstance-Button"), parent, false);
@@ -2290,17 +2290,17 @@ namespace Snowship.NUI {
 
 				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.cameraM.SetCameraPosition(instance.obj.transform.position); });
 
-				ResourceManager.Container container = GameManager.resourceM.containers.Find(findContainer => findContainer == instance);
+				Container container = Container.containers.Find(findContainer => findContainer == instance);
 				if (container != null) {
 					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedContainer(container); });
 				}
 
-				ResourceManager.TradingPost tradingPost = GameManager.resourceM.tradingPosts.Find(tp => tp == instance);
+				TradingPost tradingPost = TradingPost.tradingPosts.Find(tp => tp == instance);
 				if (tradingPost != null) {
 					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedTradingPost(tradingPost); });
 				}
 
-				ResourceManager.CraftingObject mto = GameManager.resourceM.craftingObjectInstances.Find(findMTO => findMTO == instance);
+				CraftingObject mto = CraftingObject.craftingObjectInstances.Find(findMTO => findMTO == instance);
 				if (mto != null) {
 					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedCraftingObject(mto); });
 				}
@@ -2336,8 +2336,8 @@ namespace Snowship.NUI {
 			Remove
 		};
 
-		public void ChangeObjectPrefabElements(ChangeTypeEnum changeType, ResourceManager.ObjectPrefab prefab) {
-			if (prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.None || prefab.groupType == ResourceManager.ObjectGroupEnum.Command) {
+		public void ChangeObjectPrefabElements(ChangeTypeEnum changeType, ObjectPrefab prefab) {
+			if (prefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.None || prefab.groupType == ObjectPrefabGroup.ObjectGroupEnum.Command) {
 				return;
 			}
 
@@ -2354,7 +2354,7 @@ namespace Snowship.NUI {
 			}
 		}
 
-		private void AddObjectPrefabElement(ResourceManager.ObjectPrefab prefab) {
+		private void AddObjectPrefabElement(ObjectPrefab prefab) {
 			ObjectPrefabElement objectPrefabElement = objectPrefabElements.Find(element => element.prefab == prefab);
 			if (objectPrefabElement == null) {
 				objectPrefabElements.Add(new ObjectPrefabElement(prefab, objectPrefabsList.transform.Find("ObjectPrefabsList-Panel")));
@@ -2363,14 +2363,14 @@ namespace Snowship.NUI {
 			}
 		}
 
-		private void UpdateObjectPrefabElement(ResourceManager.ObjectPrefab prefab) {
+		private void UpdateObjectPrefabElement(ObjectPrefab prefab) {
 			ObjectPrefabElement objectPrefabElement = objectPrefabElements.Find(element => element.prefab == prefab);
 			if (objectPrefabElement != null) {
 				objectPrefabElement.AddObjectInstancesList(false);
 			}
 		}
 
-		private void RemoveObjectPrefabElement(ResourceManager.ObjectPrefab prefab) {
+		private void RemoveObjectPrefabElement(ObjectPrefab prefab) {
 			ObjectPrefabElement objectPrefabElement = objectPrefabElements.Find(element => element.prefab == prefab);
 			if (objectPrefabElement != null) {
 				objectPrefabElement.Remove();
@@ -2384,13 +2384,13 @@ namespace Snowship.NUI {
 		}
 
 		public class ResourceElement {
-			public ResourceManager.Resource resource;
+			public Resource resource;
 			public GameObject obj;
 
 			public bool filterActive = true; // True if the resources filter deems this element visible
 			public bool amountActive; // True if the total world amount is > 0
 
-			public ResourceElement(ResourceManager.Resource resource, Transform parent) {
+			public ResourceElement(Resource resource, Transform parent) {
 				this.resource = resource;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ResourceListResourceElement-Panel"), parent, false);
@@ -2426,7 +2426,7 @@ namespace Snowship.NUI {
 			}
 		}
 
-		public List<ResourceElement> clothingElements = new List<ResourceElement>();
+		/*public List<ResourceElement> clothingElements = new List<ResourceElement>();
 
 		public void CreateClothesList() {
 			foreach (ResourceElement clothingElement in clothingElements) {
@@ -2440,9 +2440,9 @@ namespace Snowship.NUI {
 				newClothingElement.resource.resourceListElement = newClothingElement;
 				clothingElements.Add(newClothingElement);
 			}
-		}
+		}*/
 
-		public void SetClothesList() {
+		/*public void SetClothesList() {
 			//DisableAdminPanels(clothesMenuPanel);
 			clothesMenuPanel.SetActive(!clothesMenuPanel.activeSelf);
 			if (clothingElements.Count <= 0) {
@@ -2454,9 +2454,9 @@ namespace Snowship.NUI {
 			foreach (ResourceElement clothingElement in clothingElements) {
 				clothingElement.filterActive = string.IsNullOrEmpty(searchString) || clothingElement.resource.name.ToLower().Contains(searchString.ToLower());
 			}
-		}
+		}*/
 
-		public void DisableClothesList() {
+		/*public void DisableClothesList() {
 			clothesMenuPanel.SetActive(false);
 		}
 
@@ -2470,9 +2470,9 @@ namespace Snowship.NUI {
 				clothingElement.obj.transform.SetSiblingIndex(index);
 				index += 1;
 			}
-		}
+		}*/
 
-		public List<ResourceElement> resourceElements = new List<ResourceElement>();
+		/*public List<ResourceElement> resourceElements = new List<ResourceElement>();
 
 		public void CreateResourcesList() {
 			foreach (ResourceElement resourceElement in resourceElements) {
@@ -2481,14 +2481,14 @@ namespace Snowship.NUI {
 
 			resourceElements.Clear();
 			Transform resourcesListParent = resourcesList.transform.Find("ResourcesList-Panel");
-			foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResources().Where(r => !r.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
+			foreach (Resource resource in GameManager.resourceM.GetResources().Where(r => !r.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
 				ResourceElement newResourceElement = new ResourceElement(resource, resourcesListParent);
 				newResourceElement.resource.resourceListElement = newResourceElement;
 				resourceElements.Add(newResourceElement);
 			}
-		}
+		}*/
 
-		public void SetResourcesList() {
+		/*public void SetResourcesList() {
 			//DisableAdminPanels(resourcesMenuPanel);
 			resourcesMenuPanel.SetActive(!resourcesMenuPanel.activeSelf);
 			if (resourceElements.Count <= 0) {
@@ -2516,7 +2516,7 @@ namespace Snowship.NUI {
 				resourceElement.obj.transform.SetSiblingIndex(index);
 				index += 1;
 			}
-		}
+		}*/
 
 		public void InitializeSelectedCraftingObjectIndicator() {
 			selectedCraftingObjectIndicator = Object.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
@@ -2560,7 +2560,7 @@ namespace Snowship.NUI {
 					Object.Destroy(child.gameObject);
 				}
 
-				foreach (ResourceManager.CraftableResourceInstance resource in selectedCraftingObject.resources.OrderBy(r => r.priority.Get())) {
+				foreach (CraftableResourceInstance resource in selectedCraftingObject.resources.OrderBy(r => r.priority.Get())) {
 					GameObject selectedResourcePreview = Object.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/SelectedResourcePreview-Image"), selectedResourcesPanel, false);
 					selectedResourcePreview.GetComponent<Image>().sprite = resource.resource.image;
 
@@ -2573,7 +2573,7 @@ namespace Snowship.NUI {
 					Object.Destroy(child.gameObject);
 				}
 
-				foreach (ResourceManager.PriorityResourceInstance fuel in selectedCraftingObject.fuels.OrderBy(f => f.priority.Get())) {
+				foreach (PriorityResourceInstance fuel in selectedCraftingObject.fuels.OrderBy(f => f.priority.Get())) {
 					GameObject selectedFuelPreview = Object.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/SelectedResourcePreview-Image"), selectedFuelsPanel, false);
 					selectedFuelPreview.GetComponent<Image>().sprite = fuel.resource.image;
 				}
@@ -2616,7 +2616,7 @@ namespace Snowship.NUI {
 			craftableResourceElements.Clear();
 
 			if (selectedCraftingObjectSelectResourcesPanel.activeSelf) {
-				foreach (ResourceManager.Resource resource in GameManager.resourceM.GetResourcesByCraftingObject(selectedCraftingObject).OrderBy(r => r.name)) {
+				foreach (Resource resource in selectedCraftingObject.GetResourcesByCraftingObject().OrderBy(r => r.name)) {
 					craftableResourceElements.Add(new CraftableResourceElement(PriorityResourceElement.Type.Resource, resource, selectedCraftingObjectSelectResourcesPanel.transform.Find("SelectResources-ScrollPanel/SelectResourcesList-Panel"), selectedCraftingObject));
 				}
 			} else {
@@ -2636,7 +2636,7 @@ namespace Snowship.NUI {
 			fuelResourceElements.Clear();
 
 			if (selectedCraftingObjectSelectFuelsPanel.activeSelf) {
-				foreach (ResourceManager.Resource resource in ResourceManager.GetResourcesInClass(ResourceManager.ResourceClassEnum.Fuel).OrderBy(r => r.fuelEnergy)) {
+				foreach (Resource resource in Resource.GetResourcesInClass(Resource.ResourceClassEnum.Fuel).OrderBy(r => r.fuelEnergy)) {
 					fuelResourceElements.Add(new FuelResourceElement(PriorityResourceElement.Type.Fuel, resource, selectedCraftingObjectSelectFuelsPanel.transform.Find("SelectFuels-ScrollPanel/SelectFuelsList-Panel"), selectedCraftingObject));
 				}
 			} else {
@@ -2645,7 +2645,7 @@ namespace Snowship.NUI {
 		}
 
 		private class FuelResourceElement : PriorityResourceElement {
-			public FuelResourceElement(Type type, ResourceManager.Resource resource, Transform parent, ResourceManager.CraftingObject craftingObject) : base(type, resource, parent, craftingObject) {
+			public FuelResourceElement(Type type, Resource resource, Transform parent, CraftingObject craftingObject) : base(type, resource, parent, craftingObject) {
 			}
 
 			public override void Update() {
@@ -2655,7 +2655,7 @@ namespace Snowship.NUI {
 			}
 
 			public override void ChangePriority(int amount) {
-				ResourceManager.PriorityResourceInstance fuel = craftingObject.GetFuelFromFuelResource(resource);
+				PriorityResourceInstance fuel = craftingObject.GetFuelFromFuelResource(resource);
 				if (fuel == null) {
 					fuel = craftingObject.ToggleFuel(resource, 0);
 				}
@@ -2673,7 +2673,7 @@ namespace Snowship.NUI {
 		}
 
 		private class CraftingResourceElement {
-			public ResourceManager.CraftableResourceInstance resource;
+			public CraftableResourceInstance resource;
 
 			public GameObject panel;
 			public List<RequiredResourceElement> requiredResourceElements = new List<RequiredResourceElement>();
@@ -2686,7 +2686,7 @@ namespace Snowship.NUI {
 			private readonly InputField createAmountInputField;
 			private readonly Text remainingAmountText;
 
-			public CraftingResourceElement(ResourceManager.CraftableResourceInstance resource, Transform parent) {
+			public CraftingResourceElement(CraftableResourceInstance resource, Transform parent) {
 				this.resource = resource;
 
 				panel = Object.Instantiate(Resources.Load<GameObject>(@"UI/Prefabs/SelectedCraftingObject/CraftableResource-Panel"), parent, false);
@@ -2704,15 +2704,15 @@ namespace Snowship.NUI {
 
 				singleRunButton.GetComponent<Button>().onClick.AddListener(delegate {
 					resource.ResetAmounts();
-					SetCreationMethod(ResourceManager.CreationMethod.SingleRun);
+					SetCreationMethod(CraftableResourceInstance.CreationMethod.SingleRun);
 				});
 				maintainStockButton.GetComponent<Button>().onClick.AddListener(delegate {
 					resource.ResetAmounts();
-					SetCreationMethod(ResourceManager.CreationMethod.MaintainStock);
+					SetCreationMethod(CraftableResourceInstance.CreationMethod.MaintainStock);
 				});
 				continuousRunButton.GetComponent<Button>().onClick.AddListener(delegate {
 					resource.ResetAmounts();
-					SetCreationMethod(ResourceManager.CreationMethod.ContinuousRun);
+					SetCreationMethod(CraftableResourceInstance.CreationMethod.ContinuousRun);
 				});
 
 				createAmountPanel = panel.transform.Find("CreateAmount-Panel");
@@ -2722,13 +2722,13 @@ namespace Snowship.NUI {
 				createAmountInputField.onEndEdit.AddListener(delegate {
 					if (int.TryParse(createAmountInputField.text, out int targetAmount)) {
 						switch (resource.creationMethod) {
-							case ResourceManager.CreationMethod.SingleRun:
+							case CraftableResourceInstance.CreationMethod.SingleRun:
 								resource.UpdateTargetAmount(targetAmount);
 								break;
-							case ResourceManager.CreationMethod.MaintainStock:
+							case CraftableResourceInstance.CreationMethod.MaintainStock:
 								resource.UpdateTargetAmount(targetAmount);
 								break;
-							case ResourceManager.CreationMethod.ContinuousRun:
+							case CraftableResourceInstance.CreationMethod.ContinuousRun:
 								resource.SetTargetAmount(0);
 								break;
 						}
@@ -2748,7 +2748,7 @@ namespace Snowship.NUI {
 				remainingAmountText.text = resource.GetRemainingAmount().ToString();
 			}
 
-			public void SetCreationMethod(ResourceManager.CreationMethod creationMethod) {
+			public void SetCreationMethod(CraftableResourceInstance.CreationMethod creationMethod) {
 				resource.creationMethod = creationMethod;
 
 				singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey220);
@@ -2758,15 +2758,15 @@ namespace Snowship.NUI {
 				createAmountPanel.gameObject.SetActive(true);
 
 				switch (resource.creationMethod) {
-					case ResourceManager.CreationMethod.SingleRun:
+					case CraftableResourceInstance.CreationMethod.SingleRun:
 						singleRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 						createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Create Amount";
 						break;
-					case ResourceManager.CreationMethod.MaintainStock:
+					case CraftableResourceInstance.CreationMethod.MaintainStock:
 						maintainStockButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 						createAmountPanel.transform.Find("CreateAmount-Text").GetComponent<Text>().text = "Maintain Amount";
 						break;
-					case ResourceManager.CreationMethod.ContinuousRun:
+					case CraftableResourceInstance.CreationMethod.ContinuousRun:
 						continuousRunButton.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.DarkGrey50);
 						createAmountPanel.gameObject.SetActive(false);
 						break;

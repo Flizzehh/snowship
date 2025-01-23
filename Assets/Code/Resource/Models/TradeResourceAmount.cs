@@ -1,11 +1,10 @@
 ﻿using System;
 using Snowship.NCaravan;
-using Snowship.NResources;
 
-namespace Snowship.NResource.Models {
+namespace Snowship.NResource
+{
 	public class TradeResourceAmount : IDisposable {
-
-		public ResourceManager.Resource resource;
+		public Resource resource;
 
 		public int caravanAmount;
 		public int colonyAmount;
@@ -20,7 +19,7 @@ namespace Snowship.NResource.Models {
 		public event Action<int> OnColonyAmountUpdated;
 		public event Action<int> OnTradeAmountUpdated;
 
-		public TradeResourceAmount(ResourceManager.Resource resource, int caravanAmount, int colonyAmount, Caravan caravan) {
+		public TradeResourceAmount(Resource resource, int caravanAmount, int colonyAmount, Caravan caravan) {
 			this.resource = resource;
 			resource.OnUnreservedTradingPostTotalAmountChanged += SetColonyAmount;
 

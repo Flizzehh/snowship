@@ -4,7 +4,7 @@ using System.IO;
 using Snowship.NColonist;
 using Snowship.NJob;
 using Snowship.NProfession;
-using Snowship.NResources;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -545,8 +545,8 @@ namespace Snowship.NPersistence {
 					colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 				}
 
-				foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothingKVP in persistenceColonist.persistenceHuman.clothes) {
-					colonist.GetInventory().ChangeResourceAmount(GameManager.resourceM.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
+				foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothingKVP in persistenceColonist.persistenceHuman.clothes) {
+					colonist.GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
 					colonist.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value);
 				}
 

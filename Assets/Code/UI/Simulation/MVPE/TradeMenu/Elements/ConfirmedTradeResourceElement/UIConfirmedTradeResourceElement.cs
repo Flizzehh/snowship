@@ -1,4 +1,4 @@
-﻿using Snowship.NResource.Models;
+﻿using Snowship.NResource;
 using Snowship.NUI;
 using UnityEngine;
 

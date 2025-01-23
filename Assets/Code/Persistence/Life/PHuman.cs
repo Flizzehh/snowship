@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
@@ -27,7 +28,7 @@ namespace Snowship.NPersistence {
 
 			if (human.clothes.Any(kvp => kvp.Value != null)) {
 				file.WriteLine(CreateKeyValueString(HumanProperty.Clothes, string.Empty, startLevel + 1));
-				foreach (KeyValuePair<HumanManager.Human.Appearance, ResourceManager.Clothing> appearanceToClothing in human.clothes) {
+				foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothing in human.clothes) {
 					if (appearanceToClothing.Value != null) {
 						file.WriteLine(CreateKeyValueString(appearanceToClothing.Key, appearanceToClothing.Value.prefab.clothingType + ":" + appearanceToClothing.Value.colour, startLevel + 2));
 					}
@@ -41,10 +42,10 @@ namespace Snowship.NPersistence {
 			public string name;
 			public int? skinIndex;
 			public int? hairIndex;
-			public Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing> clothes;
+			public Dictionary<HumanManager.Human.Appearance, Clothing> clothes;
 			public PInventory.PersistenceInventory persistenceInventory;
 
-			public PersistenceHuman(string name, int? skinIndex, int? hairIndex, Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing> clothes, PInventory.PersistenceInventory persistenceInventory) {
+			public PersistenceHuman(string name, int? skinIndex, int? hairIndex, Dictionary<HumanManager.Human.Appearance, Clothing> clothes, PInventory.PersistenceInventory persistenceInventory) {
 				this.name = name;
 				this.skinIndex = skinIndex;
 				this.hairIndex = hairIndex;
@@ -75,7 +76,7 @@ namespace Snowship.NPersistence {
 			string name = null;
 			int? skinIndex = null;
 			int? hairIndex = null;
-			Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing> clothes = new Dictionary<HumanManager.Human.Appearance, ResourceManager.Clothing>();
+			Dictionary<HumanManager.Human.Appearance, Clothing> clothes = new();
 			PInventory.PersistenceInventory persistenceInventory = null;
 
 			foreach (KeyValuePair<string, object> humanProperty in properties) {
@@ -92,9 +93,9 @@ namespace Snowship.NPersistence {
 					case HumanProperty.Clothes:
 						foreach (KeyValuePair<string, object> clothingProperty in (List<KeyValuePair<string, object>>)humanProperty.Value) {
 							HumanManager.Human.Appearance clothingPropertyKey = (HumanManager.Human.Appearance)Enum.Parse(typeof(HumanManager.Human.Appearance), clothingProperty.Key);
-							ResourceManager.ClothingEnum clothingType = (ResourceManager.ClothingEnum)Enum.Parse(typeof(ResourceManager.ClothingEnum), ((string)clothingProperty.Value).Split(':')[0]);
+							Clothing.ClothingEnum clothingType = (Clothing.ClothingEnum)Enum.Parse(typeof(Clothing.ClothingEnum), ((string)clothingProperty.Value).Split(':')[0]);
 							string colour = ((string)clothingProperty.Value).Split(':')[1];
-							clothes.Add(clothingPropertyKey, GameManager.resourceM.GetClothesByAppearance(clothingPropertyKey).Find(c => c.prefab.clothingType == clothingType && c.colour == colour));
+							clothes.Add(clothingPropertyKey, Clothing.GetClothesByAppearance(clothingPropertyKey).Find(c => c.prefab.clothingType == clothingType && c.colour == colour));
 						}
 						break;
 					case HumanProperty.Inventory:

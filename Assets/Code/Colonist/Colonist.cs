@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
 using Snowship.NProfession;
-using Snowship.NResources;
+using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -113,7 +113,7 @@ namespace Snowship.NColonist {
 			}
 			if (job == null) {
 				if (path.Count <= 0) {
-					List<ResourceManager.Container> validEmptyInventoryContainers = FindValidContainersToEmptyInventory();
+					List<Container> validEmptyInventoryContainers = FindValidContainersToEmptyInventory();
 					int inventoryWeight = GetInventory().UsedWeight();
 					int inventoryVolume = GetInventory().UsedVolume();
 					if (validEmptyInventoryContainers.Count > 0
@@ -137,7 +137,7 @@ namespace Snowship.NColonist {
 			colonists.Remove(this);
 			// GameManager.uiMOld.SetColonistElements(); // TODO Update colonist list
 			// GameManager.uiMOld.SetJobElements();
-			foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
+			foreach (Container container in Container.containers) {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
 			if (GameManager.humanM.selectedHuman == this) {
@@ -146,20 +146,20 @@ namespace Snowship.NColonist {
 			ColonistJob.UpdateAllColonistJobCosts();
 		}
 
-		public List<ResourceManager.Container> FindValidContainersToEmptyInventory() {
-			return GameManager.resourceM.GetContainersInRegion(overTile.region).Where(container => container.GetInventory().UsedWeight() < container.GetInventory().maxWeight && container.GetInventory().UsedVolume() < container.GetInventory().maxVolume).ToList();
+		public List<Container> FindValidContainersToEmptyInventory() {
+			return Container.GetContainersInRegion(overTile.region).Where(container => container.GetInventory().UsedWeight() < container.GetInventory().maxWeight && container.GetInventory().UsedVolume() < container.GetInventory().maxVolume).ToList();
 		}
 
-		public void EmptyInventory(List<ResourceManager.Container> validContainers) {
+		public void EmptyInventory(List<Container> validContainers) {
 			if (GetInventory().UsedWeight() > 0 && GetInventory().UsedVolume() > 0 && validContainers.Count > 0) {
 				ReturnJob();
-				ResourceManager.Container closestContainer = validContainers.OrderBy(container => PathManager.RegionBlockDistance(container.tile.regionBlock, overTile.regionBlock, true, true, false)).ToList()[0];
+				Container closestContainer = validContainers.OrderBy(container => PathManager.RegionBlockDistance(container.tile.regionBlock, overTile.regionBlock, true, true, false)).ToList()[0];
 				SetJob(new ColonistJob(
 					this,
 					new Job(
 						JobPrefab.GetJobPrefabByName("EmptyInventory"),
 						closestContainer.tile,
-						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.EmptyInventory),
+						ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.EmptyInventory),
 						null,
 						0
 					),
@@ -270,7 +270,7 @@ namespace Snowship.NColonist {
 				}
 			}
 			if (job.transferResources != null && job.transferResources.Count > 0) {
-				ResourceManager.Container collectContainer = (ResourceManager.Container)job.tile.GetAllObjectInstances().Find(oi => oi is ResourceManager.Container);
+				Container collectContainer = (Container)job.tile.GetAllObjectInstances().Find(oi => oi is Container);
 				if (collectContainer != null) {
 					collectContainer.GetInventory().ReserveResources(job.transferResources, this);
 				}
@@ -279,7 +279,7 @@ namespace Snowship.NColonist {
 			MoveToTile(job.tile, !job.tile.walkable);
 			// GameManager.uiMOld.SetJobElements();
 
-			if (colonistJob.job.objectPrefab.type == ResourceManager.ObjectEnum.Sleep) {
+			if (colonistJob.job.objectPrefab.type == ObjectPrefab.ObjectEnum.Sleep) {
 				Debug.Log($"Sleeping: {colonistJob.colonist.name} at {GameManager.timeM.Time.DateString} {GameManager.timeM.Time.TimeString}");
 			}
 		}
@@ -287,9 +287,9 @@ namespace Snowship.NColonist {
 		public void SetEatJob() {
 
 			// Find a chair (ideally next to a table) for the colonist to sit at to eat
-			List<ResourceManager.ObjectInstance> chairs = new List<ResourceManager.ObjectInstance>();
-			foreach (ResourceManager.ObjectPrefab chairPrefab in GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Chairs).prefabs) {
-				List<ResourceManager.ObjectInstance> chairsFromPrefab = GameManager.resourceM.GetObjectInstancesByPrefab(chairPrefab);
+			List<ObjectInstance> chairs = new();
+			foreach (ObjectPrefab chairPrefab in ObjectPrefabSubGroup.GetObjectPrefabSubGroupByEnum(ObjectPrefabSubGroup.ObjectSubGroupEnum.Chairs).prefabs) {
+				List<ObjectInstance> chairsFromPrefab = ObjectInstance.GetObjectInstancesByPrefab(chairPrefab);
 				if (chairsFromPrefab != null) {
 					chairs.AddRange(chairsFromPrefab);
 				}
@@ -297,9 +297,9 @@ namespace Snowship.NColonist {
 			chairs.Select(chair => chair.tile.region == overTile.region);
 			chairs.OrderBy(chair => PathManager.RegionBlockDistance(overTile.regionBlock, chair.tile.regionBlock, true, true, false));
 			chairs.OrderByDescending(chair => chair.tile.surroundingTiles.Find(surroundingTile => {
-				ResourceManager.ObjectInstance tableNextToChair = surroundingTile.GetObjectInstanceAtLayer(2);
+				ObjectInstance tableNextToChair = surroundingTile.GetObjectInstanceAtLayer(2);
 				if (tableNextToChair != null) {
-					return tableNextToChair.prefab.subGroupType == ResourceManager.ObjectSubGroupEnum.Tables;
+					return tableNextToChair.prefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.Tables;
 				}
 				return false;
 			}) != null);
@@ -310,7 +310,7 @@ namespace Snowship.NColonist {
 					new Job(
 						JobPrefab.GetJobPrefabByName("Eat"),
 						chairs.Count > 0 ? chairs[0].tile : overTile,
-						GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.Eat),
+						ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Eat),
 						null,
 						0
 					),
@@ -353,7 +353,7 @@ namespace Snowship.NColonist {
 				job.prefab.name == "PickupResources"
 			) {
 
-				ResourceManager.Container containerOnTile = GameManager.resourceM.containers.Find(container => container.tile == job.tile);
+				Container containerOnTile = Container.containers.Find(container => container.tile == job.tile);
 				if (containerOnTile == null) {
 					job.Remove();
 					job = null;
@@ -385,7 +385,7 @@ namespace Snowship.NColonist {
 
 			MonoBehaviour.Destroy(finishedJob.jobPreview);
 			if (finishedJob.objectPrefab.addToTileWhenBuilt) {
-				finishedJob.tile.SetObject(GameManager.resourceM.CreateObjectInstance(finishedJob.objectPrefab, finishedJob.variation, finishedJob.tile, finishedJob.rotationIndex, true));
+				finishedJob.tile.SetObject(ObjectInstance.CreateObjectInstance(finishedJob.objectPrefab, finishedJob.variation, finishedJob.tile, finishedJob.rotationIndex, true));
 				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.objectPrefab.layer).obj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
 				finishedJob.tile.GetObjectInstanceAtLayer(finishedJob.objectPrefab.layer).FinishCreation();
 				if (finishedJob.objectPrefab.canRotate) {
@@ -419,7 +419,7 @@ namespace Snowship.NColonist {
 		}
 
 		public void ReturnJob() {
-			foreach (ResourceManager.Container container in GameManager.resourceM.containers) {
+			foreach (Container container in Container.containers) {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
 			if (storedJob != null) {
@@ -549,7 +549,7 @@ namespace Snowship.NColonist {
 			return string.Empty;
 		}
 
-		public override void ChangeClothing(Appearance appearance, ResourceManager.Clothing clothing) {
+		public override void ChangeClothing(Appearance appearance, Clothing clothing) {
 
 			if (clothing == null || GetInventory().resources.Find(ra => ra.Resource == clothing) != null) {
 
@@ -557,7 +557,7 @@ namespace Snowship.NColonist {
 
 			} else {
 
-				ResourceManager.Container container = NeedUtilities.FindClosestResourceAmountInContainers(this, new ResourceAmount(clothing, 1));
+				Container container = NeedUtilities.FindClosestResourceAmountInContainers(this, new ResourceAmount(clothing, 1));
 
 				if (container != null) {
 
@@ -574,7 +574,7 @@ namespace Snowship.NColonist {
 						new Job(
 							JobPrefab.GetJobPrefabByName("WearClothes"),
 							container.tile,
-							GameManager.resourceM.GetObjectPrefabByEnum(ResourceManager.ObjectEnum.WearClothes),
+							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.WearClothes),
 							null,
 							0
 						) {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ namespace Snowship.NUI.Simulation
 	{
 		[SerializeField] private List<UIColonistBodyClothingSection> clothingSections = new();
 
-		public void SetClothingOnBodySection(HumanManager.Human.Appearance appearance, ResourceManager.Clothing clothing) {
+		public void SetClothingOnBodySection(HumanManager.Human.Appearance appearance, Clothing clothing) {
 			SetBodySectionSprite(appearance, clothing.moveSprites[0]);
 		}
 
