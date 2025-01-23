@@ -11,7 +11,7 @@ using static Snowship.NUtilities.ColourUtilities;
 namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 	public class UIColonistInfoPanelView : UIView {
 		[Header("General Information")]
-		[SerializeField] private UIColonistBodyElementComponent colonistImage;
+		[SerializeField] private UIHumanBodyElementComponent humanImage;
 		[SerializeField] private TMP_Text colonistNameText;
 		[SerializeField] private TMP_Text currentActionText;
 		[SerializeField] private TMP_Text storedActionText;
@@ -54,7 +54,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		[SerializeField] private GameObject clothingTab;
 
 		[Header("Current Clothing Sub-Panel")]
-		[SerializeField] private UIColonistBodyElementComponent colonistBody;
+		[SerializeField] private UIHumanBodyElementComponent humanBody;
 		[SerializeField] private VerticalLayoutGroup clothingButtonsListVerticalLayoutGroup;
 
 		[Header("Clothing Selection Sub-Panel")]
@@ -73,11 +73,13 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		};
 
 		public event Action<Button> OnTabSelected;
+		public event Action OnEmptyInventoryButtonClicked;
 
 		private readonly List<UINeedElement> needElements = new();
 		private readonly List<UIMoodElement> moodElements = new();
 		private readonly List<UISkillElement> skillElements = new();
 
+		private readonly List<UIReservedResourcesElement> reservedResourcesElements = new();
 		private readonly List<UIResourceAmountElement> inventoryResourceAmountElements = new();
 
 		private readonly List<UIClothingButtonElement> clothingButtonElements = new();
@@ -91,6 +93,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			moodViewButton.onClick.AddListener(() => SetMoodPanelActive(true));
 			moodPanelCloseButton.onClick.AddListener(() => SetMoodPanelActive(false));
 			SetMoodPanelActive(false);
+
+			emptyInventoryButton.onClick.AddListener(() => OnEmptyInventoryButtonClicked?.Invoke());
 
 			clothingSelectionPanelBackButton.onClick.AddListener(() => SetClothingSelectionPanelActive(false));
 		}
@@ -125,8 +129,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		}
 
 		public void SetColonistInformation(Sprite colonistSprite, string colonistName, string colonistAffiliation) {
-			colonistImage.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
-			colonistBody.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
+			humanImage.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
+			humanBody.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
 			colonistNameText.SetText(colonistName);
 			affiliationText.SetText(colonistAffiliation);
 		}
@@ -246,8 +250,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			disrobeButton.onClick.AddListener(() => OnDisrobeButtonClicked(appearance));
 		}
 
-		public void OnDisrobeButtonClicked(HumanManager.Human.Appearance appearance) {
-			disrobeButton.onClick.AddListener(() => OnColonistClothingChanged(appearance, null));
+		private void OnDisrobeButtonClicked(HumanManager.Human.Appearance appearance) {
+			OnColonistClothingChanged(appearance, null);
 			SetClothingSelectionPanelActive(false);
 		}
 
@@ -279,10 +283,23 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 					continue;
 				}
 				clothingButtonElement.SetClothing(clothing);
-				colonistBody.SetClothingOnBodySection(appearance, clothing);
-				colonistImage.SetClothingOnBodySection(appearance, clothing);
+				humanBody.SetClothingOnBodySection(appearance, clothing);
+				humanImage.SetClothingOnBodySection(appearance, clothing);
 				return;
 			}
+		}
+
+		public void OnInventoryReservedResourcesAdded(ReservedResources reservedResources) {
+			reservedResourcesElements.Add(new UIReservedResourcesElement(inventoryListGridLayoutGroup.transform, reservedResources));
+		}
+
+		public void OnInventoryReservedResourcesRemoved(ReservedResources reservedResources) {
+			UIReservedResourcesElement reservedResourcesElement = reservedResourcesElements.Find(rre => rre.ReservedResources == reservedResources);
+			if (reservedResourcesElement == null) {
+				return;
+			}
+			reservedResourcesElements.Remove(reservedResourcesElement);
+			reservedResourcesElement.Close();
 		}
 	}
 }

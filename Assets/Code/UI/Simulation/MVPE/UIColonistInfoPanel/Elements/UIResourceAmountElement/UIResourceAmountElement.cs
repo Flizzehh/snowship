@@ -1,4 +1,5 @@
-﻿using Snowship.NResource;
+﻿using System;
+using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NUI.Simulation
@@ -6,6 +7,7 @@ namespace Snowship.NUI.Simulation
 	public class UIResourceAmountElement : UIElement<UIResourceAmountElementComponent>
 	{
 		public readonly ResourceAmount ResourceAmount;
+		public event Action<UIResourceAmountElement> OnAmountChanged;
 
 		public UIResourceAmountElement(Transform parent, ResourceAmount resourceAmount) : base(parent) {
 			ResourceAmount = resourceAmount;
@@ -24,6 +26,7 @@ namespace Snowship.NUI.Simulation
 
 		private void OnResourceAmountChanged(int amount) {
 			Component.SetResourceAmount(amount.ToString());
+			OnAmountChanged?.Invoke(this);
 		}
 	}
 }

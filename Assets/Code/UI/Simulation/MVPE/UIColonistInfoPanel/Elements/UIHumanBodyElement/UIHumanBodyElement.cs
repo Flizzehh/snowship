@@ -6,9 +6,9 @@ using UnityEngine;
 namespace Snowship.NUI.Simulation
 {
 	[UsedImplicitly]
-	public class UIColonistBodyElement : UIElement<UIColonistBodyElementComponent>
+	public class UIHumanBodyElement : UIElement<UIHumanBodyElementComponent>
 	{
-		public UIColonistBodyElement(Transform parent, Colonist colonist) : base(parent) {
+		public UIHumanBodyElement(Transform parent, HumanManager.Human colonist) : base(parent) {
 			foreach ((HumanManager.Human.Appearance appearance, Clothing clothing) in colonist.clothes) {
 				SetClothingOnBodySection(appearance, clothing);
 			}

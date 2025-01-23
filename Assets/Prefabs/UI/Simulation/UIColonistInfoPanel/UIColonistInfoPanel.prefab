@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e36d851efd514dcb9f16529846aa95b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colonistImage: {fileID: 8940727074626806304}
+  humanImage: {fileID: 8940727074626806304}
   colonistNameText: {fileID: 818434175842368485}
   currentActionText: {fileID: 3763632849089288659}
   storedActionText: {fileID: 8528586603128699478}
@@ -1141,7 +1141,7 @@ MonoBehaviour:
   inventoryListGridLayoutGroup: {fileID: 830198129547237217}
   clothingTabButton: {fileID: 5008810938213039545}
   clothingTab: {fileID: 5090789773853866425}
-  colonistBody: {fileID: 6050041116909456580}
+  humanBody: {fileID: 6050041116909456580}
   clothingButtonsListVerticalLayoutGroup: {fileID: 982404860750365383}
   clothingSelectionPanel: {fileID: 7583919015770235272}
   disrobeButton: {fileID: 8931632127054621651}
@@ -10276,7 +10276,7 @@ PrefabInstance:
     - target: {fileID: 1107858212254291568, guid: c3b4be9a4c4e3b44892d398b06c5a979,
         type: 3}
       propertyPath: m_Name
-      value: UIColonistBody
+      value: UIHumanBodyElement-Primary
       objectReference: {fileID: 0}
     - target: {fileID: 8812946850273320249, guid: c3b4be9a4c4e3b44892d398b06c5a979,
         type: 3}
@@ -10412,7 +10412,7 @@ PrefabInstance:
     - target: {fileID: 1107858212254291568, guid: c3b4be9a4c4e3b44892d398b06c5a979,
         type: 3}
       propertyPath: m_Name
-      value: ColonistBody-Image
+      value: UIHumanBodyElement-ClothingTab
       objectReference: {fileID: 0}
     - target: {fileID: 8812946850273320249, guid: c3b4be9a4c4e3b44892d398b06c5a979,
         type: 3}

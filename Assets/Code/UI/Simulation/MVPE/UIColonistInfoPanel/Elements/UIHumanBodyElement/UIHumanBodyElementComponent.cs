@@ -6,16 +6,16 @@ using UnityEngine.UI;
 
 namespace Snowship.NUI.Simulation
 {
-	public class UIColonistBodyElementComponent : UIElementComponent
+	public class UIHumanBodyElementComponent : UIElementComponent
 	{
-		[SerializeField] private List<UIColonistBodyClothingSection> clothingSections = new();
+		[SerializeField] private List<UIHumanBodyClothingSection> clothingSections = new();
 
 		public void SetClothingOnBodySection(HumanManager.Human.Appearance appearance, Clothing clothing) {
 			SetBodySectionSprite(appearance, clothing.moveSprites[0]);
 		}
 
 		public void SetBodySectionSprite(HumanManager.Human.Appearance appearance, Sprite sprite) {
-			foreach (UIColonistBodyClothingSection clothingSection in clothingSections) {
+			foreach (UIHumanBodyClothingSection clothingSection in clothingSections) {
 				if (clothingSection.appearance != appearance) {
 					continue;
 				}
@@ -29,7 +29,7 @@ namespace Snowship.NUI.Simulation
 	}
 
 	[Serializable]
-	public struct UIColonistBodyClothingSection
+	public struct UIHumanBodyClothingSection
 	{
 		public HumanManager.Human.Appearance appearance;
 		public Image sectionImage;

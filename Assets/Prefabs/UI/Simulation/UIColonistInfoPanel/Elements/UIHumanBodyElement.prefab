@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6994656809385158110}
   - component: {fileID: 7145217161242952043}
   m_Layer: 5
-  m_Name: UIColonistBody
+  m_Name: UIHumanBodyElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5ad24039ad01e6b4e856a7e04f4921dc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 47db007d9fc24ed469b09f17ba6bbd89, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

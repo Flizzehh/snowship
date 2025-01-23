@@ -70,6 +70,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3b4be9a4c4e3b44892d398b06c5a979
+    m_Address: UI/Element/UIHumanBodyElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c49c4dd6d232d1f4186ecbaa0f7d7bee
+    m_Address: UI/Element/UIReservedResourcesElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ced627a98e233904ca0c5206f4442b1e
     m_Address: UI/Element/UISkillElement
     m_ReadOnly: 0

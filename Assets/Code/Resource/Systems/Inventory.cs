@@ -19,6 +19,9 @@ public class Inventory
 	public event Action<ResourceAmount> OnResourceAmountAdded;
 	public event Action<ResourceAmount> OnResourceAmountRemoved;
 
+	public event Action<ReservedResources> OnReservedResourcesAdded;
+	public event Action<ReservedResources> OnReservedResourcesRemoved;
+
 	public Inventory(IInventory parent, /*int maxAmount*/int maxWeight, int maxVolume) {
 		this.parent = parent;
 		this.maxWeight = maxWeight;
@@ -89,12 +92,10 @@ public class Inventory
 				ResourceAmount raInventory = resources.Find(ra => ra.Resource == raReserve.Resource);
 				ChangeResourceAmount(raInventory.Resource, -raReserve.Amount, false);
 			}
-			reservedResources.Add(new ReservedResources(resourcesToReserve, humanReservingResources));
+			ReservedResources rr = new(resourcesToReserve, humanReservingResources);
+			reservedResources.Add(rr);
+			OnReservedResourcesAdded?.Invoke(rr);
 		}
-		// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-		// GameManager.uiMOld.SetSelectedTraderMenu();
-		// GameManager.uiMOld.SetSelectedContainerInfo();
-		// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 
 		OnInventoryChanged?.Invoke(this);
 
@@ -110,11 +111,8 @@ public class Inventory
 		}
 		foreach (ReservedResources rr in reservedResourcesByHuman) {
 			reservedResources.Remove(rr);
+			OnReservedResourcesRemoved?.Invoke(rr);
 		}
-		// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-		// GameManager.uiMOld.SetSelectedTraderMenu();
-		// GameManager.uiMOld.SetSelectedContainerInfo();
-		// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 
 		OnInventoryChanged?.Invoke(this);
 
@@ -133,13 +131,9 @@ public class Inventory
 		}
 		foreach (ReservedResources rrRemove in reservedResourcesToRemove) {
 			reservedResources.Remove(rrRemove);
+			OnReservedResourcesRemoved?.Invoke(rrRemove);
 		}
 		reservedResourcesToRemove.Clear();
-		// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-		// GameManager.uiMOld.SetSelectedTraderMenu();
-		// GameManager.uiMOld.SetSelectedContainerInfo();
-		// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
-
 		OnInventoryChanged?.Invoke(this);
 	}
 
@@ -171,5 +165,9 @@ public class Inventory
 			return matchingResource.Amount <= resourceAmount.Amount;
 		}
 		return false;
+	}
+
+	public List<ReservedResources> GetReservedResourcesByHuman(HumanManager.Human human) {
+		return reservedResources.Where(rr => rr.human == human).ToList();
 	}
 }

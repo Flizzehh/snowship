@@ -50,11 +50,14 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			colonist.OnMoodRemoved += OnMoodRemoved;
 
 			View.SetupInventorySliders(inventory);
+			View.OnEmptyInventoryButtonClicked += OnEmptyInventoryButtonClicked;
 			inventory.OnInventoryChanged += View.OnInventoryChanged;
 
 			SetupInventoryTab();
 			inventory.OnResourceAmountAdded += View.OnInventoryResourceAmountAdded;
 			inventory.OnResourceAmountRemoved += View.OnInventoryResourceAmountRemoved;
+			inventory.OnReservedResourcesAdded += View.OnInventoryReservedResourcesAdded;
+			inventory.OnReservedResourcesRemoved += View.OnInventoryReservedResourcesRemoved;
 
 			SetupClothingTab();
 			colonist.OnClothingChanged += View.OnColonistClothingChanged;
@@ -75,10 +78,13 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			colonist.OnMoodChanged -= View.OnMoodChanged;
 			colonist.OnMoodRemoved -= OnMoodRemoved;
 
+			View.OnEmptyInventoryButtonClicked -= OnEmptyInventoryButtonClicked;
 			inventory.OnInventoryChanged -= View.OnInventoryChanged;
 
 			inventory.OnResourceAmountAdded -= View.OnInventoryResourceAmountAdded;
 			inventory.OnResourceAmountRemoved -= View.OnInventoryResourceAmountRemoved;
+			inventory.OnReservedResourcesAdded -= View.OnInventoryReservedResourcesAdded;
+			inventory.OnReservedResourcesRemoved -= View.OnInventoryReservedResourcesRemoved;
 
 			colonist.OnClothingChanged -= View.OnColonistClothingChanged;
 
@@ -127,6 +133,10 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			foreach (ResourceAmount resourceAmount in inventory.resources) {
 				View.OnInventoryResourceAmountAdded(resourceAmount);
 			}
+		}
+
+		private void OnEmptyInventoryButtonClicked() {
+			colonist.EmptyInventory(colonist.FindValidContainersToEmptyInventory());
 		}
 
 		private void SetupClothingTab() {
