@@ -100,7 +100,7 @@ namespace Snowship.NJob {
 		public void SetColonist(Colonist colonist) {
 			this.colonist = colonist;
 			if (prefab.name != "PickupResources" && containerPickups != null && containerPickups.Count > 0) {
-				colonist.storedJob = this;
+				colonist.StoredJob = this;
 				colonist.SetJob(
 					new ColonistJob(
 						colonist,

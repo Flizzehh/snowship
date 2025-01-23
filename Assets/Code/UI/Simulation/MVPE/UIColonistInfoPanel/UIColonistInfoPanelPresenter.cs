@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NColonist;
+using Snowship.NJob;
 using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,11 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			SetupNeedsSkillsTab();
 
+			colonist.OnJobChanged += OnJobChanged;
+			colonist.OnStoredJobChanged += OnStoredJobChanged;
+			OnJobChanged(colonist.Job);
+			OnStoredJobChanged(colonist.StoredJob);
+
 			View.SetupHealthSlider((0, 1), colonist.Health, true);
 			View.OnHealthChanged(colonist.Health);
 			colonist.OnHealthChanged += View.OnHealthChanged;
@@ -60,6 +66,9 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			View.OnTabSelected -= OnTabSelected;
 
+			colonist.OnJobChanged -= OnJobChanged;
+			colonist.OnStoredJobChanged -= OnStoredJobChanged;
+
 			colonist.OnHealthChanged -= View.OnHealthChanged;
 
 			colonist.OnMoodAdded -= OnMoodAdded;
@@ -82,6 +91,14 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			foreach ((Button button, GameObject tab) mapping in View.ButtonToTabMap) {
 				mapping.tab.SetActive(mapping.button == tabButton);
 			}
+		}
+
+		private void OnJobChanged(Job job) {
+			View.SetCurrentActionText(colonist.GetCurrentActionString());
+		}
+
+		private void OnStoredJobChanged(Job job) {
+			View.SetStoredActionText(colonist.GetStoredActionString());
 		}
 
 		private void OnMoodAdded(MoodModifierInstance mood) {

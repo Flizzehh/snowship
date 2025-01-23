@@ -172,24 +172,24 @@ namespace Snowship.NJob {
 				}
 			}
 			foreach (Colonist colonist in Colonist.colonists) {
-				if (colonist.job != null && colonist.job.objectPrefab.layer == prefab.layer) {
-					if (colonist.job.tile == posTile) {
+				if (colonist.Job != null && colonist.Job.objectPrefab.layer == prefab.layer) {
+					if (colonist.Job.tile == posTile) {
 						return false;
 					}
-					foreach (Vector2 multiTilePosition in colonist.job.objectPrefab.multiTilePositions[colonist.job.rotationIndex]) {
-						if (GameManager.colonyM.colony.map.GetTileFromPosition(colonist.job.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
+					foreach (Vector2 multiTilePosition in colonist.Job.objectPrefab.multiTilePositions[colonist.Job.rotationIndex]) {
+						if (GameManager.colonyM.colony.map.GetTileFromPosition(colonist.Job.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
 							return false;
 						}
 					}
 				}
 			}
 			foreach (Colonist colonist in Colonist.colonists) {
-				if (colonist.storedJob != null && colonist.storedJob.objectPrefab.layer == prefab.layer) {
-					if (colonist.storedJob.tile == posTile) {
+				if (colonist.StoredJob != null && colonist.StoredJob.objectPrefab.layer == prefab.layer) {
+					if (colonist.StoredJob.tile == posTile) {
 						return false;
 					}
-					foreach (Vector2 multiTilePosition in colonist.storedJob.objectPrefab.multiTilePositions[colonist.storedJob.rotationIndex]) {
-						if (GameManager.colonyM.colony.map.GetTileFromPosition(colonist.storedJob.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
+					foreach (Vector2 multiTilePosition in colonist.StoredJob.objectPrefab.multiTilePositions[colonist.StoredJob.rotationIndex]) {
+						if (GameManager.colonyM.colony.map.GetTileFromPosition(colonist.StoredJob.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
 							return false;
 						}
 					}
@@ -407,34 +407,34 @@ namespace Snowship.NJob {
 			removeJobs.Clear();
 
 			foreach (Colonist colonist in Colonist.colonists) {
-				if (!((colonist.job != null && selectionArea.Contains(colonist.job.tile)) || (colonist.storedJob != null && selectionArea.Contains(colonist.storedJob.tile)))) {
+				if (!((colonist.Job != null && selectionArea.Contains(colonist.Job.tile)) || (colonist.StoredJob != null && selectionArea.Contains(colonist.StoredJob.tile)))) {
 					continue;
 				}
 
-				if (colonist.storedJob != null) {
-					if (colonist.storedJob.containerPickups != null) {
-						foreach (ContainerPickup containerPickup in colonist.storedJob.containerPickups) {
+				if (colonist.StoredJob != null) {
+					if (colonist.StoredJob.containerPickups != null) {
+						foreach (ContainerPickup containerPickup in colonist.StoredJob.containerPickups) {
 							containerPickup.container.GetInventory().ReleaseReservedResources(colonist);
 						}
 					}
-					if (colonist.storedJob.objectPrefab.jobType == "CreateResource") {
-						colonist.storedJob.createResource.job = null;
+					if (colonist.StoredJob.objectPrefab.jobType == "CreateResource") {
+						colonist.StoredJob.createResource.job = null;
 					}
-					colonist.storedJob.Remove();
-					colonist.storedJob = null;
+					colonist.StoredJob.Remove();
+					colonist.StoredJob = null;
 				}
 
-				if (colonist.job != null) {
-					if (colonist.job.containerPickups != null) {
-						foreach (ContainerPickup containerPickup in colonist.job.containerPickups) {
+				if (colonist.Job != null) {
+					if (colonist.Job.containerPickups != null) {
+						foreach (ContainerPickup containerPickup in colonist.Job.containerPickups) {
 							containerPickup.container.GetInventory().ReleaseReservedResources(colonist);
 						}
 					}
-					if (colonist.job.objectPrefab.jobType == "CreateResource") {
-						colonist.job.createResource.job = null;
+					if (colonist.Job.objectPrefab.jobType == "CreateResource") {
+						colonist.Job.createResource.job = null;
 					}
-					colonist.job.Remove();
-					colonist.job = null;
+					colonist.Job.Remove();
+					colonist.Job = null;
 					colonist.path.Clear();
 					colonist.MoveToClosestWalkableTile(false);
 				}
@@ -445,7 +445,7 @@ namespace Snowship.NJob {
 		}
 
 		public void CancelJob(Job job) {
-			Colonist colonist = Colonist.colonists.Find(c => c.job == job || c.storedJob == job);
+			Colonist colonist = Colonist.colonists.Find(c => c.Job == job || c.StoredJob == job);
 			if (colonist != null) {
 				if (job.containerPickups != null) {
 					foreach (ContainerPickup containerPickup in job.containerPickups) {
@@ -453,14 +453,14 @@ namespace Snowship.NJob {
 					}
 				}
 
-				if (colonist.job == job) {
-					colonist.job = null;
+				if (colonist.Job == job) {
+					colonist.Job = null;
 					colonist.path.Clear();
 					colonist.MoveToClosestWalkableTile(false);
 				}
 
-				if (colonist.storedJob == job) {
-					colonist.storedJob = null;
+				if (colonist.StoredJob == job) {
+					colonist.StoredJob = null;
 				}
 			}
 
@@ -486,14 +486,14 @@ namespace Snowship.NJob {
 				}
 			}
 			foreach (Colonist colonist in Colonist.colonists) {
-				if (colonist.job != null) {
-					if (selectionArea.Contains(colonist.job.tile)) {
-						colonist.job.ChangePriority(amount);
+				if (colonist.Job != null) {
+					if (selectionArea.Contains(colonist.Job.tile)) {
+						colonist.Job.ChangePriority(amount);
 					}
 				}
-				if (colonist.storedJob != null) {
-					if (selectionArea.Contains(colonist.storedJob.tile)) {
-						colonist.job.ChangePriority(amount);
+				if (colonist.StoredJob != null) {
+					if (selectionArea.Contains(colonist.StoredJob.tile)) {
+						colonist.Job.ChangePriority(amount);
 					}
 				}
 			}
@@ -678,24 +678,24 @@ namespace Snowship.NJob {
 			Dictionary<Colonist, ColonistJob> jobsGiven = new Dictionary<Colonist, ColonistJob>();
 
 			foreach (Colonist colonist in Colonist.colonists) {
-				if (colonist.job == null && !colonist.playerMoved && colonist.backlog.Count > 0) {
-					ColonistJob backlogJob = new ColonistJob(colonist, colonist.backlog[0], colonist.backlog[0].resourcesColonistHas, colonist.backlog[0].containerPickups);
+				if (colonist.Job == null && !colonist.playerMoved && colonist.Backlog.Count > 0) {
+					ColonistJob backlogJob = new(colonist, colonist.Backlog[0], colonist.Backlog[0].resourcesColonistHas, colonist.Backlog[0].containerPickups);
 					gaveJob = true;
 					jobsGiven.Add(colonist, backlogJob);
-					colonist.backlog.Remove(backlogJob.job);
+					colonist.Backlog.Remove(backlogJob.job);
 				}
 			}
 
 			foreach (KeyValuePair<Colonist, List<ColonistJob>> colonistKVP in ColonistJob.colonistJobs) {
 				Colonist colonist = colonistKVP.Key;
 				List<ColonistJob> colonistJobsList = colonistKVP.Value;
-				if (colonist.job == null && !colonist.playerMoved && !jobsGiven.ContainsKey(colonist)) {
+				if (colonist.Job == null && !colonist.playerMoved && !jobsGiven.ContainsKey(colonist)) {
 					for (int i = 0; i < colonistJobsList.Count; i++) {
 						ColonistJob colonistJob = colonistJobsList[i];
 						bool bestColonistForJob = true;
 						foreach (KeyValuePair<Colonist, List<ColonistJob>> otherColonistKVP in ColonistJob.colonistJobs) {
 							Colonist otherColonist = otherColonistKVP.Key;
-							if (colonist != otherColonist && otherColonist.job == null) {
+							if (colonist != otherColonist && otherColonist.Job == null) {
 								ColonistJob otherColonistJob = otherColonistKVP.Value.Find(job => job.job == colonistJob.job);
 								if (otherColonistJob != null && otherColonistJob.cost < colonistJob.cost) {
 									bestColonistForJob = false;
@@ -732,10 +732,10 @@ namespace Snowship.NJob {
 			if (Job.jobs.Find(job => job.prefab.name == jobType && job.tile == tile) != null) {
 				return true;
 			}
-			if (Colonist.colonists.Find(colonist => colonist.job != null && colonist.job.objectPrefab.jobType == jobType && colonist.job.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.Job != null && colonist.Job.objectPrefab.jobType == jobType && colonist.Job.tile == tile) != null) {
 				return true;
 			}
-			if (Colonist.colonists.Find(colonist => colonist.storedJob != null && colonist.storedJob.objectPrefab.jobType == jobType && colonist.storedJob.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.StoredJob != null && colonist.StoredJob.objectPrefab.jobType == jobType && colonist.StoredJob.tile == tile) != null) {
 				return true;
 			}
 			return false;
@@ -745,10 +745,10 @@ namespace Snowship.NJob {
 			if (Job.jobs.Find(job => job.objectPrefab.type == prefabType && job.tile == tile) != null) {
 				return true;
 			}
-			if (Colonist.colonists.Find(colonist => colonist.job != null && colonist.job.objectPrefab.type == prefabType && colonist.job.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.Job != null && colonist.Job.objectPrefab.type == prefabType && colonist.Job.tile == tile) != null) {
 				return true;
 			}
-			if (Colonist.colonists.Find(colonist => colonist.storedJob != null && colonist.storedJob.objectPrefab.type == prefabType && colonist.storedJob.tile == tile) != null) {
+			if (Colonist.colonists.Find(colonist => colonist.StoredJob != null && colonist.StoredJob.objectPrefab.type == prefabType && colonist.StoredJob.tile == tile) != null) {
 				return true;
 			}
 			return false;
@@ -852,7 +852,7 @@ namespace Snowship.NJob {
 
 		public static void UpdateColonistJobs() {
 			colonistJobs.Clear();
-			List<Colonist> availableColonists = Colonist.colonists.Where(colonist => colonist.job == null && colonist.overTile.walkable).ToList();
+			List<Colonist> availableColonists = Colonist.colonists.Where(colonist => colonist.Job == null && colonist.overTile.walkable).ToList();
 			foreach (Colonist colonist in availableColonists) {
 				UpdateSingleColonistJobs(colonist);
 			}

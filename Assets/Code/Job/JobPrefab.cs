@@ -579,8 +579,8 @@ namespace Snowship.NJob {
 				new() {
 					delegate (Job job, Colonist colonist) {
 						Container container = Container.GetContainerOrChildOnTile(colonist.overTile);
-						if (container != null && colonist.storedJob != null) {
-							ContainerPickup containerPickup = colonist.storedJob.containerPickups.Find(pickup => pickup.container == container);
+						if (container != null && colonist.StoredJob != null) {
+							ContainerPickup containerPickup = colonist.StoredJob.containerPickups.Find(pickup => pickup.container == container);
 							if (containerPickup != null) {
 								foreach (ReservedResources rr in containerPickup.container.GetInventory().TakeReservedResources(colonist, containerPickup.resourcesToPickup)) {
 									foreach (ResourceAmount ra in rr.resources) {
@@ -589,25 +589,26 @@ namespace Snowship.NJob {
 										}
 									}
 								}
-								colonist.storedJob.containerPickups.RemoveAt(0);
+								colonist.StoredJob.containerPickups.RemoveAt(0);
 							}
 						}
-						if (colonist.storedJob != null) {
-							if (colonist.storedJob.containerPickups.Count <= 0) {
-								colonist.SetJob(new ColonistJob(colonist, colonist.storedJob, colonist.storedJob.resourcesColonistHas, null));
-								colonist.storedJob = null;
+						if (colonist.StoredJob != null) {
+							if (colonist.StoredJob.containerPickups.Count <= 0) {
+								colonist.SetJob(new ColonistJob(colonist, colonist.StoredJob, colonist.StoredJob.resourcesColonistHas, null));
+								colonist.StoredJob = null;
 							} else {
 								colonist.SetJob(
 									new ColonistJob(
 										colonist,
 										new Job(
 											JobPrefab.GetJobPrefabByName("PickupResources"),
-											colonist.storedJob.containerPickups[0].container.tile,
+											colonist.StoredJob.containerPickups[0].container.tile,
 											ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.PickupResources),
 											null,
 											0),
-										colonist.storedJob.resourcesColonistHas,
-										colonist.storedJob.containerPickups),
+										colonist.StoredJob.resourcesColonistHas,
+										colonist.StoredJob.containerPickups
+									),
 									false
 								);
 							}

@@ -80,15 +80,15 @@ namespace Snowship.NPersistence {
 
 				file.WriteLine(CreateKeyValueString(ColonistProperty.PlayerMoved, colonist.playerMoved, 1));
 
-				if (colonist.job != null) {
-					pJob.WriteJobLines(file, colonist.job, PJob.JobProperty.Job, 1);
+				if (colonist.Job != null) {
+					pJob.WriteJobLines(file, colonist.Job, PJob.JobProperty.Job, 1);
 				}
-				if (colonist.storedJob != null) {
-					pJob.WriteJobLines(file, colonist.storedJob, PJob.JobProperty.StoredJob, 1);
+				if (colonist.StoredJob != null) {
+					pJob.WriteJobLines(file, colonist.StoredJob, PJob.JobProperty.StoredJob, 1);
 				}
-				if (colonist.backlog.Count > 0) {
+				if (colonist.Backlog.Count > 0) {
 					file.WriteLine(CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
-					foreach (Job backlogJob in colonist.backlog) {
+					foreach (Job backlogJob in colonist.Backlog) {
 						pJob.WriteJobLines(file, backlogJob, PJob.JobProperty.BacklogJob, 2);
 					}
 				}
@@ -552,7 +552,7 @@ namespace Snowship.NPersistence {
 
 				if (persistenceColonist.persistenceStoredJob != null) {
 					Job storedJob = pJob.LoadJob(persistenceColonist.persistenceStoredJob);
-					colonist.storedJob = storedJob;
+					colonist.StoredJob = storedJob;
 				}
 
 				if (persistenceColonist.persistenceJob != null) {
@@ -562,7 +562,7 @@ namespace Snowship.NPersistence {
 
 				foreach (PJob.PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
 					Job backlogJob = pJob.LoadJob(persistenceBacklogJob);
-					colonist.backlog.Add(backlogJob);
+					colonist.Backlog.Add(backlogJob);
 				}
 
 				if (persistenceColonist.persistenceLife.pathEndPosition.HasValue) {

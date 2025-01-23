@@ -131,6 +131,14 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			affiliationText.SetText(colonistAffiliation);
 		}
 
+		public void SetCurrentActionText(string text) {
+			currentActionText.SetText(text);
+		}
+
+		public void SetStoredActionText(string text) {
+			storedActionText.SetText(text);
+		}
+
 		public void SetupHealthSlider((float min, float max) sliderRange, float healthValue, bool wholeNumbers) {
 			healthSlider.SetFillColours(EColour.DarkRed, EColour.DarkGreen);
 			healthSlider.SetHandleColours(EColour.LightRed, EColour.LightGreen);

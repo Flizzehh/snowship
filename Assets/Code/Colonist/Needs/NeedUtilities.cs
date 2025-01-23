@@ -72,7 +72,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static void CalculateNeedValue(NeedInstance need) {
-			if (need.colonist.job != null && need.prefab.relatedJobs.Contains(need.colonist.job.objectPrefab.jobType)) {
+			if (need.colonist.Job != null && need.prefab.relatedJobs.Contains(need.colonist.Job.objectPrefab.jobType)) {
 				return;
 			}
 			float needIncreaseAmount = need.prefab.baseIncreaseRate;
@@ -242,7 +242,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static bool DetermineFoodNeedReaction(NeedInstance need) {
-			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "CollectFood" || need.colonist.job.objectPrefab.jobType == "Eat")) {
+			if (need.colonist.Job == null || !(need.colonist.Job.objectPrefab.jobType == "CollectFood" || need.colonist.Job.objectPrefab.jobType == "Eat")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
 					// TODO Check that this still works properly - (removed timeM.minuteChanged check before each of these 3 blocks)
@@ -262,7 +262,7 @@ namespace Snowship.NColonist {
 					return false;
 				}
 				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.job == null) {
+					if (need.colonist.Job == null) {
 						if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
 							if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
 								need.colonist.ReturnJob();
@@ -277,7 +277,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static bool DetermineRestNeedReaction(NeedInstance need) {
-			if (need.colonist.job == null || !(need.colonist.job.objectPrefab.jobType == "Sleep")) {
+			if (need.colonist.Job == null || !(need.colonist.Job.objectPrefab.jobType == "Sleep")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
 					need.colonist.ReturnJob();
@@ -292,7 +292,7 @@ namespace Snowship.NColonist {
 					return false;
 				}
 				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.job == null) {
+					if (need.colonist.Job == null) {
 						if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
 							need.colonist.ReturnJob();
 							GetSleep(need, false);

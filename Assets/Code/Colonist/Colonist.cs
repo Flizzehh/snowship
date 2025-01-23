@@ -17,10 +17,28 @@ namespace Snowship.NColonist {
 		public bool playerMoved;
 
 		// Job
-		public Job job;
-		public Job storedJob;
-		public Job needJob;
-		public readonly List<Job> backlog = new();
+		private Job job;
+		public Job Job {
+			get => job;
+			set {
+				job = value;
+				OnJobChanged?.Invoke(value);
+			}
+		}
+
+		private Job storedJob;
+		public Job StoredJob {
+			get => storedJob;
+			set {
+				storedJob = value;
+				OnStoredJobChanged?.Invoke(value);
+			}
+		}
+		public Job NeedJob;
+		public readonly List<Job> Backlog = new();
+
+		public event Action<Job> OnJobChanged;
+		public event Action<Job> OnStoredJobChanged;
 
 		// Professions
 		public readonly List<Profession> professions = new List<Profession>();
@@ -39,6 +57,7 @@ namespace Snowship.NColonist {
 		public float moodModifiersSum = 0;
 		public float effectiveMood = 100;
 		public readonly List<MoodModifierInstance> moodModifiers = new List<MoodModifierInstance>();
+
 		public event Action<MoodModifierInstance> OnMoodAdded;
 		public event Action<MoodModifierInstance> OnMoodRemoved;
 		public event Action<float, float> OnMoodChanged;
@@ -103,15 +122,15 @@ namespace Snowship.NColonist {
 				ColonistJob.UpdateColonistJobCosts(this);
 			}
 
-			if (job != null) {
-				if (!job.started && overTile == job.tile) {
+			if (Job != null) {
+				if (!Job.started && overTile == Job.tile) {
 					StartJob();
 				}
-				if (job.started && overTile == job.tile && !Mathf.Approximately(job.jobProgress, 0)) {
+				if (Job.started && overTile == Job.tile && !Mathf.Approximately(Job.jobProgress, 0)) {
 					WorkJob();
 				}
 			}
-			if (job == null) {
+			if (Job == null) {
 				if (path.Count <= 0) {
 					List<Container> validEmptyInventoryContainers = FindValidContainersToEmptyInventory();
 					int inventoryWeight = GetInventory().UsedWeight();
@@ -173,12 +192,12 @@ namespace Snowship.NColonist {
 			foreach (NeedInstance need in needs) {
 				NeedUtilities.CalculateNeedValue(need);
 				bool checkNeed = false;
-				if (need.colonist.job == null) {
+				if (need.colonist.Job == null) {
 					checkNeed = true;
 				} else {
-					if (need.colonist.job.prefab.group.name == "Need") {
-						if (NeedUtilities.jobToNeedMap.ContainsKey(need.colonist.job.objectPrefab.jobType)) {
-							if (need.prefab.priority < NeedPrefab.GetNeedPrefabFromEnum(NeedUtilities.jobToNeedMap[need.colonist.job.objectPrefab.jobType]).priority) {
+					if (need.colonist.Job.prefab.group.name == "Need") {
+						if (NeedUtilities.jobToNeedMap.ContainsKey(need.colonist.Job.objectPrefab.jobType)) {
+							if (need.prefab.priority < NeedPrefab.GetNeedPrefabFromEnum(NeedUtilities.jobToNeedMap[need.colonist.Job.objectPrefab.jobType]).priority) {
 								checkNeed = true;
 							}
 						} else {
@@ -261,23 +280,22 @@ namespace Snowship.NColonist {
 		}
 
 		public void SetJob(ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {
-			job = colonistJob.job;
-			job.resourcesColonistHas = colonistJob.resourcesColonistHas;
-			job.containerPickups = colonistJob.containerPickups;
-			if (reserveResourcesInContainerPickups && (job.containerPickups != null && job.containerPickups.Count > 0)) {
-				foreach (ContainerPickup containerPickup in job.containerPickups) {
+			Job = colonistJob.job;
+			Job.resourcesColonistHas = colonistJob.resourcesColonistHas;
+			Job.containerPickups = colonistJob.containerPickups;
+			if (reserveResourcesInContainerPickups && Job.containerPickups != null && Job.containerPickups.Count > 0) {
+				foreach (ContainerPickup containerPickup in Job.containerPickups) {
 					containerPickup.container.GetInventory().ReserveResources(containerPickup.resourcesToPickup, this);
 				}
 			}
-			if (job.transferResources != null && job.transferResources.Count > 0) {
-				Container collectContainer = (Container)job.tile.GetAllObjectInstances().Find(oi => oi is Container);
+			if (Job.transferResources != null && Job.transferResources.Count > 0) {
+				Container collectContainer = (Container)Job.tile.GetAllObjectInstances().Find(oi => oi is Container);
 				if (collectContainer != null) {
-					collectContainer.GetInventory().ReserveResources(job.transferResources, this);
+					collectContainer.GetInventory().ReserveResources(Job.transferResources, this);
 				}
 			}
-			job.SetColonist(this);
-			MoveToTile(job.tile, !job.tile.walkable);
-			// GameManager.uiMOld.SetJobElements();
+			Job.SetColonist(this);
+			MoveToTile(Job.tile, !Job.tile.walkable);
 
 			if (colonistJob.job.objectPrefab.type == ObjectPrefab.ObjectEnum.Sleep) {
 				Debug.Log($"Sleeping: {colonistJob.colonist.name} at {GameManager.timeM.Time.DateString} {GameManager.timeM.Time.TimeString}");
@@ -321,67 +339,67 @@ namespace Snowship.NColonist {
 		}
 
 		public void StartJob() {
-			job.started = true;
+			Job.started = true;
 
-			job.jobProgress *= (1 + (1 - GetJobSkillMultiplier(job.objectPrefab.jobType)));
+			Job.jobProgress *= 1 + (1 - GetJobSkillMultiplier(Job.objectPrefab.jobType));
 
-			if (job.prefab.name == "Eat") {
-				job.jobProgress += needs.Find(need => need.prefab.type == ENeed.Food).GetValue();
+			if (Job.prefab.name == "Eat") {
+				Job.jobProgress += needs.Find(need => need.prefab.type == ENeed.Food).GetValue();
 			}
-			if (job.prefab.name == "Sleep") {
+			if (Job.prefab.name == "Sleep") {
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == ENeed.Rest);
-				job.jobProgress += restNeed.GetValue() / restNeed.prefab.baseIncreaseRate / restNeed.prefab.decreaseRateMultiplier / SimulationDateTime.PermanentTimerMultiplier;
-				job.jobProgress += Random.Range(job.jobProgress * 0.1f, job.jobProgress * 0.3f);
+				Job.jobProgress += restNeed.GetValue() / restNeed.prefab.baseIncreaseRate / restNeed.prefab.decreaseRateMultiplier / SimulationDateTime.PermanentTimerMultiplier;
+				Job.jobProgress += Random.Range(Job.jobProgress * 0.1f, Job.jobProgress * 0.3f);
 			}
 
-			job.colonistBuildTime = job.jobProgress;
+			Job.colonistBuildTime = Job.jobProgress;
 
 			// GameManager.uiMOld.SetJobElements();
 		}
 
 		public void WorkJob() {
 
-			if (job.prefab.name == "HarvestFarm" && job.tile.farm == null) {
-				job.Remove();
-				job = null;
+			if (Job.prefab.name == "HarvestFarm" && Job.tile.farm == null) {
+				Job.Remove();
+				Job = null;
 				return;
 			}
 
 			if (
-				job.prefab.name == "EmptyInventory" ||
-				job.prefab.name == "CollectFood" ||
-				job.prefab.name == "PickupResources"
+				Job.prefab.name == "EmptyInventory" ||
+				Job.prefab.name == "CollectFood" ||
+				Job.prefab.name == "PickupResources"
 			) {
 
-				Container containerOnTile = Container.containers.Find(container => container.tile == job.tile);
+				Container containerOnTile = Container.containers.Find(container => container.tile == Job.tile);
 				if (containerOnTile == null) {
-					job.Remove();
-					job = null;
+					Job.Remove();
+					Job = null;
 					return;
 				}
-			} else if (job.prefab.name == "Sleep") { // TODO: Check that this still works - (removed timeM.minuteChanged, but added the * DeltaTime instead)
+			} else if (Job.prefab.name == "Sleep") { // TODO: Check that this still works - (removed timeM.minuteChanged, but added the * DeltaTime instead)
 				NeedInstance restNeed = needs.Find(need => need.prefab.type == ENeed.Rest);
 				restNeed.ChangeValue(-restNeed.prefab.baseIncreaseRate * restNeed.prefab.decreaseRateMultiplier /* * GameManager.timeM.Time.DeltaTime*/);
 			}
 
-			if (job.activeObject != null) {
-				job.activeObject.SetActiveSprite(job, true);
+			if (Job.activeObject != null) {
+				Job.activeObject.SetActiveSprite(Job, true);
 			}
 
-			job.jobProgress -= 1 * GameManager.timeM.Time.DeltaTime;
+			Job.jobProgress -= 1 * GameManager.timeM.Time.DeltaTime;
 
-			if (job.jobProgress <= 0 || Mathf.Approximately(job.jobProgress, 0)) {
-				job.jobProgress = 0;
+			if (Job.jobProgress <= 0 || Mathf.Approximately(Job.jobProgress, 0)) {
+				Job.jobProgress = 0;
 				FinishJob();
 				return;
 			}
 
-			job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, ((job.colonistBuildTime - job.jobProgress) / job.colonistBuildTime));
+			Job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, (Job.colonistBuildTime - Job.jobProgress) / Job.colonistBuildTime);
 		}
 
 		public void FinishJob() {
-			Job finishedJob = job;
-			job = null;
+			Job finishedJob = Job;
+			Job = null;
 
 			MonoBehaviour.Destroy(finishedJob.jobPreview);
 			if (finishedJob.objectPrefab.addToTileWhenBuilt) {
@@ -413,7 +431,7 @@ namespace Snowship.NColonist {
 			// GameManager.uiMOld.UpdateSelectedTradingPostInfo();
 			// GameManager.uiMOld.UpdateTileInformation();
 
-			if (storedJob != null) {
+			if (StoredJob != null) {
 				Update();
 			}
 		}
@@ -422,52 +440,40 @@ namespace Snowship.NColonist {
 			foreach (Container container in Container.containers) {
 				container.GetInventory().ReleaseReservedResources(this);
 			}
-			if (storedJob != null) {
-				if (NeedUtilities.jobToNeedMap.ContainsKey(storedJob.objectPrefab.jobType) || !storedJob.prefab.returnable) {
-					storedJob.Remove();
-					storedJob = null;
-					if (job != null) {
-						if (NeedUtilities.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
-							job.Remove();
+			if (StoredJob != null) {
+				if (NeedUtilities.jobToNeedMap.ContainsKey(StoredJob.objectPrefab.jobType) || !StoredJob.prefab.returnable) {
+					StoredJob.Remove();
+					StoredJob = null;
+					if (Job != null) {
+						if (NeedUtilities.jobToNeedMap.ContainsKey(Job.objectPrefab.jobType) || !Job.prefab.returnable) {
+							Job.Remove();
 						}
-						job = null;
+						Job = null;
 					}
 					return;
 				}
-				GameManager.jobM.AddExistingJob(storedJob);
-				// if (storedJob.jobUIElement != null) {
-				// 	storedJob.jobUIElement.Remove();
-				// }
-				if (storedJob.jobPreview != null) {
-					storedJob.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
+				GameManager.jobM.AddExistingJob(StoredJob);
+				if (StoredJob.jobPreview != null) {
+					StoredJob.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
 				}
-				storedJob = null;
-				if (job != null) {
-					// if (job.jobUIElement != null) {
-					// 	job.jobUIElement.Remove();
-					// }
-					if (job.jobPreview != null) {
-						job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
+				StoredJob = null;
+				if (Job != null) {
+					if (Job.jobPreview != null) {
+						Job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
 					}
-					job = null;
+					Job = null;
 				}
-			} else if (job != null) {
-				if (NeedUtilities.jobToNeedMap.ContainsKey(job.objectPrefab.jobType) || !job.prefab.returnable) {
-					job.Remove();
-					// if (job.jobUIElement != null) {
-					// 	job.jobUIElement.Remove();
-					// }
-					job = null;
+			} else if (Job != null) {
+				if (NeedUtilities.jobToNeedMap.ContainsKey(Job.objectPrefab.jobType) || !Job.prefab.returnable) {
+					Job.Remove();
+					Job = null;
 					return;
 				}
-				GameManager.jobM.AddExistingJob(job);
-				// if (job.jobUIElement != null) {
-				// 	job.jobUIElement.Remove();
-				// }
-				if (job.jobPreview != null) {
-					job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
+				GameManager.jobM.AddExistingJob(Job);
+				if (Job.jobPreview != null) {
+					Job.jobPreview.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.25f);
 				}
-				job = null;
+				Job = null;
 			}
 		}
 
@@ -501,7 +507,7 @@ namespace Snowship.NColonist {
 		public void PlayerMoveToTile(TileManager.Tile tile) {
 			playerMoved = true;
 			ReturnJob();
-			if (job != null) {
+			if (Job != null) {
 				MoveToTile(tile, false);
 			} else {
 				MoveToTile(tile, false);
@@ -534,16 +540,16 @@ namespace Snowship.NColonist {
 		}
 
 		public override string GetCurrentActionString() {
-			if (job != null) {
-				return job.prefab.GetJobDescription(job);
+			if (Job != null) {
+				return Job.prefab.GetJobDescription(Job);
 			}
 
 			return "Wandering around.";
 		}
 
 		public override string GetStoredActionString() {
-			if (storedJob != null) {
-				return storedJob.prefab.GetJobDescription(storedJob);
+			if (StoredJob != null) {
+				return StoredJob.prefab.GetJobDescription(StoredJob);
 			}
 
 			return string.Empty;
@@ -570,7 +576,7 @@ namespace Snowship.NColonist {
 						this
 					);
 
-					backlog.Add(
+					Backlog.Add(
 						new Job(
 							JobPrefab.GetJobPrefabByName("WearClothes"),
 							container.tile,
