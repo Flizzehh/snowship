@@ -10,8 +10,8 @@ namespace Snowship.NUI.Simulation.DebugConsole {
 
 		public override void OnCreate() {
 
-			GameManager.debugM.OnConsoleOutputProduced += OnDebugOutputReceived;
-			GameManager.debugM.OnConsoleClearRequested += ClearConsole;
+			GameManager.Get<DebugManager>().OnConsoleOutputProduced += OnDebugOutputReceived;
+			GameManager.Get<DebugManager>().OnConsoleClearRequested += ClearConsole;
 
 			View.SelectDebugInputField();
 
@@ -20,14 +20,14 @@ namespace Snowship.NUI.Simulation.DebugConsole {
 
 		public override void OnClose() {
 
-			GameManager.debugM.OnConsoleOutputProduced -= OnDebugOutputReceived;
-			GameManager.debugM.OnConsoleClearRequested -= ClearConsole;
+			GameManager.Get<DebugManager>().OnConsoleOutputProduced -= OnDebugOutputReceived;
+			GameManager.Get<DebugManager>().OnConsoleClearRequested -= ClearConsole;
 
 			View.OnDebugCommandSent -= OnDebugCommandSent;
 		}
 
 		private void OnDebugCommandSent(string text) {
-			GameManager.debugM.ParseCommandInput(text);
+			GameManager.Get<DebugManager>().ParseCommandInput(text);
 		}
 
 		private void OnDebugOutputReceived(string text) {

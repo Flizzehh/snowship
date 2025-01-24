@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PLastSave : PersistenceHandler {
+	public class PLastSave
+	{
 
 		private readonly PUniverse pUniverse = new PUniverse();
 
@@ -39,12 +41,12 @@ namespace Snowship.NPersistence {
 				return;
 			}
 
-			string persistentDataPath = GetPersistentDataPath();
+			string persistentDataPath = PU.GetPersistentDataPath();
 			string lastSaveFilePath = persistentDataPath + "/lastsave.snowship";
 			if (File.Exists(lastSaveFilePath)) {
 				File.WriteAllText(lastSaveFilePath, string.Empty);
 			} else {
-				CreateFileAtDirectory(persistentDataPath, "lastsave.snowship").Close();
+				PU.CreateFileAtDirectory(persistentDataPath, "lastsave.snowship").Close();
 			}
 			StreamWriter lastSaveFile = new StreamWriter(lastSaveFilePath);
 			SaveLastSave(lastSaveFile, lastSaveProperties);
@@ -53,17 +55,17 @@ namespace Snowship.NPersistence {
 
 		private void SaveLastSave(StreamWriter file, LastSaveProperties lastSaveProperties) {
 			if (lastSaveProperties != null) {
-				file.WriteLine(CreateKeyValueString(LastSaveProperty.LastSaveUniversePath, lastSaveProperties.lastSaveUniversePath, 0));
-				file.WriteLine(CreateKeyValueString(LastSaveProperty.LastSavePlanetPath, lastSaveProperties.lastSavePlanetPath, 0));
-				file.WriteLine(CreateKeyValueString(LastSaveProperty.LastSaveColonyPath, lastSaveProperties.lastSaveColonyPath, 0));
-				file.WriteLine(CreateKeyValueString(LastSaveProperty.LastSaveSavePath, lastSaveProperties.lastSaveSavePath, 0));
+				file.WriteLine(PU.CreateKeyValueString(LastSaveProperty.LastSaveUniversePath, lastSaveProperties.lastSaveUniversePath, 0));
+				file.WriteLine(PU.CreateKeyValueString(LastSaveProperty.LastSavePlanetPath, lastSaveProperties.lastSavePlanetPath, 0));
+				file.WriteLine(PU.CreateKeyValueString(LastSaveProperty.LastSaveColonyPath, lastSaveProperties.lastSaveColonyPath, 0));
+				file.WriteLine(PU.CreateKeyValueString(LastSaveProperty.LastSaveSavePath, lastSaveProperties.lastSaveSavePath, 0));
 			}
 		}
 
 		private Dictionary<LastSaveProperty, string> LoadLastSave(string path) {
 			Dictionary<LastSaveProperty, string> properties = new Dictionary<LastSaveProperty, string>();
 
-			foreach (KeyValuePair<string, object> property in GetKeyValuePairsFromFile(path)) {
+			foreach (KeyValuePair<string, object> property in PU.GetKeyValuePairsFromFile(path)) {
 				LastSaveProperty key = (LastSaveProperty)Enum.Parse(typeof(LastSaveProperty), property.Key);
 				object value = property.Value;
 				switch (key) {
@@ -89,7 +91,7 @@ namespace Snowship.NPersistence {
 		}
 
 		public LastSaveProperties GetLastSaveProperties() {
-			string lastSaveFilePath = GetPersistentDataPath() + "/lastsave.snowship";
+			string lastSaveFilePath = PU.GetPersistentDataPath() + "/lastsave.snowship";
 			if (!File.Exists(lastSaveFilePath)) {
 				return null;
 			}

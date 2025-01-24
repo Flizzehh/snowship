@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.Selectable;
@@ -74,11 +75,11 @@ namespace Snowship.NCaravan {
 				}
 			}
 
-			GameManager.timeM.OnTimeChanged += UpdateCaravanLeaveState;
+			GameManager.Get<TimeManager>().OnTimeChanged += UpdateCaravanLeaveState;
 		}
 
 		public void Dispose() {
-			GameManager.timeM.OnTimeChanged -= UpdateCaravanLeaveState;
+			GameManager.Get<TimeManager>().OnTimeChanged -= UpdateCaravanLeaveState;
 		}
 
 		private void SpawnTrader(TileManager.Tile spawnTile) {
@@ -259,7 +260,7 @@ namespace Snowship.NCaravan {
 				leaveTimer = 0;
 
 				foreach (Trader trader in traders) {
-					List<TileManager.Tile> validLeaveTiles = GameManager.colonyM.colony.map.edgeTiles.Where(t => t.region == trader.overTile.region).ToList();
+					List<TileManager.Tile> validLeaveTiles = GameManager.Get<ColonyManager>().colony.map.edgeTiles.Where(t => t.region == trader.overTile.region).ToList();
 					if (validLeaveTiles.Count > 0) {
 						trader.leaveTile = validLeaveTiles[Random.Range(0, validLeaveTiles.Count)];
 						trader.MoveToTile(trader.leaveTile, false);

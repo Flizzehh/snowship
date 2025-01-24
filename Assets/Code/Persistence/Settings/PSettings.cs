@@ -3,7 +3,8 @@ using System.IO;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
-	public class PSettings : PersistenceHandler {
+	public class PSettings
+	{
 
 		public SettingsState SettingsState;
 		public SettingsState NewSettingsState;

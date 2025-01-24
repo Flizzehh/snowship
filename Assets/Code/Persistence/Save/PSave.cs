@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Snowship.NColony;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
-namespace Snowship.NPersistence.Save {
-	public class PSave : PersistenceHandler {
+namespace Snowship.NPersistence
+{
+	public class PSave
+	{
 
 		public enum SaveProperty {
 			SaveDateTime
@@ -13,9 +17,9 @@ namespace Snowship.NPersistence.Save {
 
 		public void SaveSave(string saveDirectoryPath, string saveDateTime) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "save.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "save.snowship");
 
-			file.WriteLine(CreateKeyValueString(SaveProperty.SaveDateTime, saveDateTime, 0));
+			file.WriteLine(PU.CreateKeyValueString(SaveProperty.SaveDateTime, saveDateTime, 0));
 
 			file.Close();
 		}
@@ -39,14 +43,14 @@ namespace Snowship.NPersistence.Save {
 
 		public List<PersistenceSave> GetPersistenceSaves() {
 			List<PersistenceSave> persistenceSaves = new List<PersistenceSave>();
-			string savesPath = GameManager.colonyM.colony.directory + "/Saves";
+			string savesPath = GameManager.Get<ColonyManager>().colony.directory + "/Saves";
 			if (Directory.Exists(savesPath)) {
 				foreach (string saveDirectoryPath in Directory.GetDirectories(savesPath)) {
 					PersistenceSave persistenceSave = LoadSave(saveDirectoryPath + "/save.snowship");
 
 					string screenshotPath = Directory.GetFiles(saveDirectoryPath).ToList().Find(f => Path.GetExtension(f).ToLower() == ".png");
 					if (screenshotPath != null) {
-						persistenceSave.image = LoadSpriteFromImageFile(screenshotPath);
+						persistenceSave.image = PU.LoadSpriteFromImageFile(screenshotPath);
 					}
 					persistenceSaves.Add(persistenceSave);
 				}
@@ -60,7 +64,7 @@ namespace Snowship.NPersistence.Save {
 
 			List<KeyValuePair<string, object>> properties;
 			try {
-				properties = GetKeyValuePairsFromFile(path);
+				properties = PU.GetKeyValuePairsFromFile(path);
 			} catch (Exception e) {
 				Debug.LogError(e.ToString());
 				persistenceSave.loadable = false;

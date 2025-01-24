@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NJob;
 using Snowship.NPersistence;
+using Snowship.NPlanet;
 using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.NUtilities;
@@ -44,11 +47,11 @@ public class ResourceManager : IManager, IDisposable
 	}
 
 	public void OnGameSetupComplete() {
-		GameManager.timeM.OnTimeChanged += OnTimeChanged;
+		GameManager.Get<TimeManager>().OnTimeChanged += OnTimeChanged;
 	}
 
 	public void Dispose() {
-		GameManager.timeM.OnTimeChanged -= OnTimeChanged;
+		GameManager.Get<TimeManager>().OnTimeChanged -= OnTimeChanged;
 	}
 
 	private void OnTimeChanged(SimulationDateTime time) {
@@ -141,7 +144,7 @@ public class ResourceManager : IManager, IDisposable
 
 		Dictionary<EResource, List<(EResource resource, float amount)>> craftingResourcesTemp = new();
 
-		List<KeyValuePair<string, object>> resourceGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resources").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> resourceGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resources").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> resourceGroupProperty in resourceGroupProperties) {
 			switch ((ResourceGroupPropertyEnum)Enum.Parse(typeof(ResourceGroupPropertyEnum), resourceGroupProperty.Key)) {
 				case ResourceGroupPropertyEnum.ResourceGroup:
@@ -457,7 +460,7 @@ public class ResourceManager : IManager, IDisposable
 			0
 		);
 		job.SetCreateResourceData(resource);
-		GameManager.jobM.CreateJob(job);
+		GameManager.Get<JobManager>().CreateJob(job);
 		return job;
 	}
 
@@ -582,7 +585,7 @@ public class ResourceManager : IManager, IDisposable
 	}
 
 	private void CreateJobPrefabs() {
-		List<KeyValuePair<string, object>> jobPrefabGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/job-prefabs").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> jobPrefabGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/job-prefabs").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> jobPrefabGroupProperty in jobPrefabGroupProperties) {
 			switch ((JobPrefabGroupPropertyEnum)Enum.Parse(typeof(JobPrefabGroupPropertyEnum), jobPrefabGroupProperty.Key)) {
 				case JobPrefabGroupPropertyEnum.Group:
@@ -725,7 +728,7 @@ public class ResourceManager : IManager, IDisposable
 	}
 
 	private void CreateObjectPrefabs() {
-		List<KeyValuePair<string, object>> objectGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/objects").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> objectGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/objects").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> objectGroupProperty in objectGroupProperties) {
 			switch ((ObjectGroupPropertyEnum)Enum.Parse(typeof(ObjectGroupPropertyEnum), objectGroupProperty.Key)) {
 				case ObjectGroupPropertyEnum.Group:
@@ -1116,7 +1119,7 @@ public class ResourceManager : IManager, IDisposable
 	}
 
 	private void CreatePlantPrefabs() {
-		List<KeyValuePair<string, object>> plantGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/plants").text.Split('\n').ToList());
+		List<KeyValuePair<string, object>> plantGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/plants").text.Split('\n').ToList());
 		foreach (KeyValuePair<string, object> plantGroupProperty in plantGroupProperties) {
 			switch ((PlantGroupPropertyEnum)Enum.Parse(typeof(PlantGroupPropertyEnum), plantGroupProperty.Key)) {
 				case PlantGroupPropertyEnum.PlantGroup:
@@ -1255,10 +1258,10 @@ public class ResourceManager : IManager, IDisposable
 	public string GetRandomLocationName() {
 		List<string> filteredLocationNames = locationNames.Where(
 				ln =>
-					(GameManager.universeM.universe == null || ln != GameManager.universeM.universe.name)
-					&& (GameManager.planetM.planet == null || ln != GameManager.planetM.planet.name)
-					&& (GameManager.colonyM.colony == null || ln != GameManager.colonyM.colony.name)
-					&& GameManager.caravanM.caravans.Find(c => c.location.name == ln) == null
+					(GameManager.Get<UniverseManager>().universe == null || ln != GameManager.Get<UniverseManager>().universe.name)
+					&& (GameManager.Get<PlanetManager>().planet == null || ln != GameManager.Get<PlanetManager>().planet.name)
+					&& (GameManager.Get<ColonyManager>().colony == null || ln != GameManager.Get<ColonyManager>().colony.name)
+					&& GameManager.Get<CaravanManager>().caravans.Find(c => c.location.name == ln) == null
 			)
 			.ToList();
 
@@ -1368,7 +1371,7 @@ public class ResourceManager : IManager, IDisposable
 						surroundingTilesToUse
 					);
 					// TODO Not-fully-working implementation of walls and stone connecting
-					//sum += GameManager.colonyM.colony.map.BitSum(
+					//sum += GameManager.Get<ColonyManager>().colony.map.BitSum(
 					//	TileManager.TileTypeGroup.GetTileTypeGroupByEnum(TileManager.TileTypeGroup.TypeEnum.Stone).tileTypes.Select(tileType => tileType.type).ToList(),
 					//	new List<ObjectEnum>() { objectInstance.prefab.type },
 					//	surroundingTilesToUse,

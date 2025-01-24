@@ -5,7 +5,6 @@ namespace Snowship.NUI
 {
 	public interface IUIManager : IManager
 	{
-		void Initialize(Transform uiParent);
 		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>() where TUIConfig : IUIConfig, new();
 
 		UniTask<IUIPresenter> OpenViewAsync<TUIConfig>(

@@ -7,19 +7,18 @@ using Cysharp.Threading.Tasks;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
-using Snowship.NPersistence.Save;
+using Snowship.NPlanet;
 using Snowship.NResource;
 using Snowship.NState;
 using Snowship.NUI;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
 	public class PersistenceManager : IManager {
 
 		public static readonly (int increment, string text) GameVersion = (3, "2025.1");
 		public static readonly (int increment, string text) SaveVersion = (3, "2025.1");
-
-		private readonly PersistenceHandler persistenceHandler = new PersistenceHandler();
 
 		public PSettings PSettings { get; } = new PSettings();
 		public PLastSave PLastSave { get; } = new PLastSave();
@@ -50,7 +49,7 @@ namespace Snowship.NPersistence {
 
 		public async UniTask CreateSave(Colony colony) {
 			string savesDirectoryPath = colony.directory + "/Saves";
-			string dateTimeString = PersistenceHandler.GenerateDateTimeString();
+			string dateTimeString = PersistenceUtilities.GenerateDateTimeString();
 			string saveDirectoryPath = savesDirectoryPath + "/Save-" + dateTimeString;
 
 			try {
@@ -67,27 +66,27 @@ namespace Snowship.NPersistence {
 				PTime.SaveTime(saveDirectoryPath);
 				PUI.SaveUI(saveDirectoryPath);
 
-				string lastSaveDateTime = PersistenceHandler.GenerateSaveDateTimeString();
-				string lastSaveTimeChunk = PersistenceHandler.GenerateDateTimeString();
+				string lastSaveDateTime = PersistenceUtilities.GenerateSaveDateTimeString();
+				string lastSaveTimeChunk = PersistenceUtilities.GenerateDateTimeString();
 
-				GameManager.universeM.universe.SetLastSaveDateTime(lastSaveDateTime, lastSaveTimeChunk);
-				PUniverse.UpdateUniverseSave(GameManager.universeM.universe);
+				GameManager.Get<UniverseManager>().universe.SetLastSaveDateTime(lastSaveDateTime, lastSaveTimeChunk);
+				PUniverse.UpdateUniverseSave(GameManager.Get<UniverseManager>().universe);
 
-				GameManager.planetM.planet.SetLastSaveDateTime(lastSaveDateTime, lastSaveTimeChunk);
-				PPlanet.UpdatePlanetSave(GameManager.planetM.planet);
+				GameManager.Get<PlanetManager>().planet.SetLastSaveDateTime(lastSaveDateTime, lastSaveTimeChunk);
+				PPlanet.UpdatePlanetSave(GameManager.Get<PlanetManager>().planet);
 
 				colony.SetLastSaveDateTime(lastSaveDateTime, lastSaveTimeChunk);
-				PColony.UpdateColonySave(GameManager.colonyM.colony);
+				PColony.UpdateColonySave(GameManager.Get<ColonyManager>().colony);
 
 				PSave.SaveSave(saveDirectoryPath, lastSaveDateTime);
 
-				await persistenceHandler.CreateScreenshot(saveDirectoryPath + "/screenshot-" + dateTimeString);
+				await PU.CreateScreenshot(saveDirectoryPath + "/screenshot-" + dateTimeString);
 
 				PLastSave.UpdateLastSave(
 					new PLastSave.LastSaveProperties(
-						GameManager.universeM.universe.directory,
-						GameManager.planetM.planet.directory,
-						GameManager.colonyM.colony.directory,
+						GameManager.Get<UniverseManager>().universe.directory,
+						GameManager.Get<PlanetManager>().planet.directory,
+						GameManager.Get<ColonyManager>().colony.directory,
 						saveDirectoryPath
 					));
 			} catch (Exception e) {
@@ -123,13 +122,13 @@ namespace Snowship.NPersistence {
 		public IEnumerator ApplyLoadedSave(PSave.PersistenceSave persistenceSave) {
 			loadingState = LoadingState.NothingLoaded;
 			if (persistenceSave != null) {
-				GameManager.tileM.mapState = TileManager.MapState.Generating;
+				GameManager.Get<TileManager>().mapState = TileManager.MapState.Generating;
 
-				GameManager.uiMOld.SetGameUIActive(false);
+				GameManager.Get<UIManagerOld>().SetGameUIActive(false);
 
 				UIEvents.UpdateLoadingScreenText("Loading Colony", string.Empty);
 				yield return null;
-				GameManager.colonyM.LoadColony(GameManager.colonyM.colony, false);
+				GameManager.Get<ColonyManager>().LoadColony(GameManager.Get<ColonyManager>().colony, false);
 
 				if (persistenceSave.path == null) {
 					throw new Exception("persistenceSave.path is null");
@@ -164,11 +163,11 @@ namespace Snowship.NPersistence {
 				loadingState = LoadingState.LoadingMap;
 				UIEvents.UpdateLoadingScreenText("Loading Original Map", string.Empty);
 				yield return null;
-				GameManager.colonyM.colony.map = new TileManager.Map() { mapData = GameManager.colonyM.colony.mapData };
-				TileManager.Map map = GameManager.colonyM.colony.map;
+				GameManager.Get<ColonyManager>().colony.map = new TileManager.Map() { mapData = GameManager.Get<ColonyManager>().colony.mapData };
+				TileManager.Map map = GameManager.Get<ColonyManager>().colony.map;
 
-				List<PersistenceTile> originalTiles = PMap.LoadTiles(GameManager.colonyM.colony.directory + "/Map/tiles.snowship");
-				List<PersistenceRiver> originalRivers = PRiver.LoadRivers(GameManager.colonyM.colony.directory + "/Map/rivers.snowship");
+				List<PersistenceTile> originalTiles = PMap.LoadTiles(GameManager.Get<ColonyManager>().colony.directory + "/Map/tiles.snowship");
+				List<PersistenceRiver> originalRivers = PRiver.LoadRivers(GameManager.Get<ColonyManager>().colony.directory + "/Map/rivers.snowship");
 
 				UIEvents.UpdateLoadingScreenText("Loading Modified Map", string.Empty);
 				yield return null;
@@ -221,7 +220,7 @@ namespace Snowship.NPersistence {
 
 				for (int i = 0; i < persistenceObjects.Count; i++) {
 					PObject.PersistenceObject persistenceObject = persistenceObjects[i];
-					ObjectInstance objectInstance = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value).objectInstances.Values.ToList().Find(o => o.prefab.type == persistenceObject.type);
+					ObjectInstance objectInstance = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value).objectInstances.Values.ToList().Find(o => o.prefab.type == persistenceObject.type);
 
 					switch (objectInstance.prefab.instanceType) {
 						case ObjectInstance.ObjectInstanceType.Container:
@@ -230,7 +229,7 @@ namespace Snowship.NPersistence {
 								foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
 									container.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 								}
-								container.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+								container.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 							}
 							break;
 						case ObjectInstance.ObjectInstanceType.CraftingObject:
@@ -250,13 +249,13 @@ namespace Snowship.NPersistence {
 
 				for (int i = 0; i < persistenceCaravans.Count; i++) {
 					PCaravan.PersistenceCaravan persistenceCaravan = persistenceCaravans[i];
-					Caravan caravan = GameManager.caravanM.caravans[i];
+					Caravan caravan = GameManager.Get<CaravanManager>().caravans[i];
 
 					foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceCaravan.persistenceInventory.reservedResources) {
 						foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
 							caravan.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 						}
-						caravan.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+						caravan.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 					}
 
 					for (int t = 0; t < caravan.traders.Count; t++) {
@@ -267,7 +266,7 @@ namespace Snowship.NPersistence {
 							foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
 								trader.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 							}
-							trader.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+							trader.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 						}
 					}
 				}
@@ -276,8 +275,8 @@ namespace Snowship.NPersistence {
 				map.SetInitialRegionVisibility();
 
 				loadingState = LoadingState.FinishedLoading;
-				GameManager.tileM.mapState = TileManager.MapState.Generated;
-				GameManager.uiMOld.SetGameUIActive(true);
+				GameManager.Get<TileManager>().mapState = TileManager.MapState.Generated;
+				GameManager.Get<UIManagerOld>().SetGameUIActive(true);
 			} else {
 				Debug.LogError("Unable to load a save without a save being selected.");
 			}
@@ -300,15 +299,15 @@ namespace Snowship.NPersistence {
 			PPlanet.ApplyLoadedPlanet(persistencePlanet);
 
 			PersistenceColony persistenceColony = PColony.GetPersistenceColonies().Find(pc => string.Equals(Path.GetFullPath(pc.path), Path.GetFullPath(lastSaveProperties.lastSaveColonyPath + "/colony.snowship"), StringComparison.OrdinalIgnoreCase));
-			GameManager.planetM.SetSelectedPlanetTile(GameManager.planetM.planet.planetTiles.Find(pt => pt.tile.position == persistenceColony.planetPosition));
+			GameManager.Get<PlanetManager>().SetSelectedPlanetTile(GameManager.Get<PlanetManager>().planet.planetTiles.Find(pt => pt.tile.position == persistenceColony.planetPosition));
 			PColony.ApplyLoadedColony(persistenceColony);
 
-			await GameManager.stateM.TransitionToState(EState.LoadToSimulation);
+			await GameManager.Get<StateManager>().TransitionToState(EState.LoadToSimulation);
 
 			PSave.PersistenceSave persistenceSave = PSave.GetPersistenceSaves().Find(ps => string.Equals(Path.GetFullPath(ps.path), Path.GetFullPath(lastSaveProperties.lastSaveSavePath + "/save.snowship"), StringComparison.OrdinalIgnoreCase));
-			await GameManager.persistenceM.ApplyLoadedSave(persistenceSave);
+			await GameManager.Get<PersistenceManager>().ApplyLoadedSave(persistenceSave);
 
-			await GameManager.stateM.TransitionToState(EState.Simulation);
+			await GameManager.Get<StateManager>().TransitionToState(EState.Simulation);
 		}
 	}
 }

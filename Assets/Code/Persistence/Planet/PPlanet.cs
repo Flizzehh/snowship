@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using Snowship.NPlanet;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PPlanet : PersistenceHandler {
+	public class PPlanet : Planet
+	{
 
 		public enum PlanetProperty {
 			LastSaveDateTime,
@@ -21,20 +23,20 @@ namespace Snowship.NPersistence {
 		}
 
 		public void SavePlanet(StreamWriter file, Planet planet) {
-			file.WriteLine(CreateKeyValueString(PlanetProperty.LastSaveDateTime, planet.lastSaveDateTime, 0));
-			file.WriteLine(CreateKeyValueString(PlanetProperty.LastSaveTimeChunk, planet.lastSaveTimeChunk, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.LastSaveDateTime, planet.lastSaveDateTime, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.LastSaveTimeChunk, planet.lastSaveTimeChunk, 0));
 
-			file.WriteLine(CreateKeyValueString(PlanetProperty.Name, planet.name, 0));
-			file.WriteLine(CreateKeyValueString(PlanetProperty.Seed, planet.mapData.mapSeed, 0));
-			file.WriteLine(CreateKeyValueString(PlanetProperty.Size, planet.mapData.mapSize, 0));
-			file.WriteLine(CreateKeyValueString(PlanetProperty.SunDistance, planet.mapData.planetDistance, 0));
-			file.WriteLine(CreateKeyValueString(PlanetProperty.TempRange, planet.mapData.temperatureRange, 0));
-			file.WriteLine(CreateKeyValueString(PlanetProperty.WindDirection, planet.mapData.primaryWindDirection, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.Name, planet.name, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.Seed, planet.mapData.mapSeed, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.Size, planet.mapData.mapSize, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.SunDistance, planet.mapData.planetDistance, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.TempRange, planet.mapData.temperatureRange, 0));
+			file.WriteLine(PU.CreateKeyValueString(PlanetProperty.WindDirection, planet.mapData.primaryWindDirection, 0));
 		}
 
 		public List<PersistencePlanet> GetPersistencePlanets() {
 			List<PersistencePlanet> persistencePlanets = new List<PersistencePlanet>();
-			string planetsPath = GameManager.universeM.universe.directory + "/Planets";
+			string planetsPath = GameManager.Get<UniverseManager>().universe.directory + "/Planets";
 			if (Directory.Exists(planetsPath)) {
 				foreach (string planetDirectoryPath in Directory.GetDirectories(planetsPath)) {
 					persistencePlanets.Add(LoadPlanet(planetDirectoryPath + "/planet.snowship"));
@@ -48,7 +50,7 @@ namespace Snowship.NPersistence {
 
 			PersistencePlanet persistencePlanet = new PersistencePlanet(path);
 
-			foreach (KeyValuePair<string, object> property in GetKeyValuePairsFromFile(path)) {
+			foreach (KeyValuePair<string, object> property in PU.GetKeyValuePairsFromFile(path)) {
 				switch ((PlanetProperty)Enum.Parse(typeof(PlanetProperty), property.Key)) {
 					case PlanetProperty.LastSaveDateTime:
 						persistencePlanet.lastSaveDateTime = (string)property.Value;
@@ -87,7 +89,8 @@ namespace Snowship.NPersistence {
 		}
 
 		public Planet ApplyLoadedPlanet(PersistencePlanet persistencePlanet) {
-			Planet planet = GameManager.planetM.CreatePlanet(
+			Planet planet = GameManager.Get<PlanetManager>()
+				.CreatePlanet(
 				new CreatePlanetData(
 					persistencePlanet.name,
 					persistencePlanet.seed,
@@ -107,17 +110,17 @@ namespace Snowship.NPersistence {
 				return;
 			}
 
-			if (GameManager.universeM.universe == null) {
-				GameManager.universeM.CreateUniverse(UniverseManager.GetRandomUniverseName());
+			if (GameManager.Get<UniverseManager>().universe == null) {
+				GameManager.Get<UniverseManager>().CreateUniverse(UniverseManager.GetRandomUniverseName());
 			}
 
-			if (string.IsNullOrEmpty(GameManager.universeM.universe?.directory)) {
+			if (string.IsNullOrEmpty(GameManager.Get<UniverseManager>().universe?.directory)) {
 				Debug.LogError("Universe directory is null or empty.");
 				return;
 			}
 
-			string planetsDirectoryPath = GameManager.universeM.universe.directory + "/Planets";
-			string dateTimeString = GenerateDateTimeString();
+			string planetsDirectoryPath = GameManager.Get<UniverseManager>().universe.directory + "/Planets";
+			string dateTimeString = PU.GenerateDateTimeString();
 			string planetDirectoryPath = planetsDirectoryPath + "/Planet-" + dateTimeString;
 			Directory.CreateDirectory(planetDirectoryPath);
 			planet.SetDirectory(planetDirectoryPath);
@@ -137,12 +140,12 @@ namespace Snowship.NPersistence {
 				return;
 			}
 
-			if (GameManager.universeM.universe == null) {
+			if (GameManager.Get<UniverseManager>().universe == null) {
 				Debug.LogError("Universe to save the planet to is null.");
 				return;
 			}
 
-			if (string.IsNullOrEmpty(GameManager.universeM.universe.directory)) {
+			if (string.IsNullOrEmpty(GameManager.Get<UniverseManager>().universe.directory)) {
 				Debug.LogError("Universe directory is null or empty.");
 				return;
 			}
@@ -151,7 +154,7 @@ namespace Snowship.NPersistence {
 			if (File.Exists(planetFilePath)) {
 				File.WriteAllText(planetFilePath, string.Empty);
 			} else {
-				CreateFileAtDirectory(planet.directory, "planet.snowship").Close();
+				PU.CreateFileAtDirectory(planet.directory, "planet.snowship").Close();
 			}
 			StreamWriter planetFile = new StreamWriter(planetFilePath);
 			SavePlanet(planetFile, planet);

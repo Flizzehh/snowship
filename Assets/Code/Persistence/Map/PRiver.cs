@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Snowship.NColony;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PRiver : PersistenceHandler {
+	public class PRiver : TileManager.Map.River
+	{
 
 		public enum RiverProperty {
 			River,
@@ -24,27 +27,27 @@ namespace Snowship.NPersistence {
 		}
 
 		public void SaveOriginalRivers(StreamWriter file) {
-			foreach (TileManager.Map.River river in GameManager.colonyM.colony.map.rivers) {
+			foreach (TileManager.Map.River river in GameManager.Get<ColonyManager>().colony.map.rivers) {
 				WriteOriginalRiverLines(file, river, 0, RiverProperty.SmallRiver);
 			}
-			foreach (TileManager.Map.River river in GameManager.colonyM.colony.map.largeRivers) {
+			foreach (TileManager.Map.River river in GameManager.Get<ColonyManager>().colony.map.largeRivers) {
 				WriteOriginalRiverLines(file, river, 0, RiverProperty.LargeRiver);
 			}
 		}
 
 		private void WriteOriginalRiverLines(StreamWriter file, TileManager.Map.River river, int startLevel, RiverProperty riverType) {
-			file.WriteLine(CreateKeyValueString(RiverProperty.River, string.Empty, startLevel));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.River, string.Empty, startLevel));
 
-			file.WriteLine(CreateKeyValueString(RiverProperty.Type, riverType, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(RiverProperty.StartTilePosition, FormatVector2ToString(river.startTile.position), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.Type, riverType, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.StartTilePosition, PU.FormatVector2ToString(river.startTile.position), startLevel + 1));
 			if (river.centreTile != null) {
-				file.WriteLine(CreateKeyValueString(RiverProperty.CentreTilePosition, FormatVector2ToString(river.centreTile.position), startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(RiverProperty.CentreTilePosition, PU.FormatVector2ToString(river.centreTile.position), startLevel + 1));
 			}
-			file.WriteLine(CreateKeyValueString(RiverProperty.EndTilePosition, FormatVector2ToString(river.endTile.position), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.EndTilePosition, PU.FormatVector2ToString(river.endTile.position), startLevel + 1));
 
-			file.WriteLine(CreateKeyValueString(RiverProperty.ExpandRadius, river.expandRadius, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(RiverProperty.IgnoreStone, river.ignoreStone, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(RiverProperty.TilePositions, string.Join(";", river.tiles.Select(t => FormatVector2ToString(t.position)).ToArray()), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.ExpandRadius, river.expandRadius, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.IgnoreStone, river.ignoreStone, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(RiverProperty.TilePositions, string.Join(";", river.tiles.Select(t => PU.FormatVector2ToString(t.position)).ToArray()), startLevel + 1));
 		}
 
 
@@ -52,7 +55,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceRiver> LoadRivers(string path) {
 			List<PersistenceRiver> rivers = new List<PersistenceRiver>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((RiverProperty)Enum.Parse(typeof(RiverProperty), property.Key)) {
 					case RiverProperty.River:
@@ -126,9 +129,9 @@ namespace Snowship.NPersistence {
 
 		public void SaveModifiedRivers(string saveDirectoryPath, List<PersistenceRiver> originalRivers) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "rivers.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "rivers.snowship");
 
-			TileManager.Map map = GameManager.colonyM.colony.map;
+			TileManager.Map map = GameManager.Get<ColonyManager>().colony.map;
 			int numRivers = map.rivers.Count + map.largeRivers.Count;
 			if (originalRivers.Count != numRivers) {
 				Debug.LogError("Loaded river count " + originalRivers.Count + " and current river count " + numRivers + " does not match.");
@@ -157,7 +160,7 @@ namespace Snowship.NPersistence {
 			Dictionary<RiverProperty, string> riverDifferences = new Dictionary<RiverProperty, string>();
 
 			if (river.startTile.position != originalRiver.startTilePosition.Value) {
-				riverDifferences.Add(RiverProperty.StartTilePosition, FormatVector2ToString(river.startTile.position));
+				riverDifferences.Add(RiverProperty.StartTilePosition, PU.FormatVector2ToString(river.startTile.position));
 			}
 
 			if (river.centreTile == null) {
@@ -166,16 +169,16 @@ namespace Snowship.NPersistence {
 				}
 			} else {
 				if (!originalRiver.centreTilePosition.HasValue) { // Original centre tile, centre tile was removed
-					riverDifferences.Add(RiverProperty.CentreTilePosition, FormatVector2ToString(river.centreTile.position));
+					riverDifferences.Add(RiverProperty.CentreTilePosition, PU.FormatVector2ToString(river.centreTile.position));
 				} else { // Centre tile has remained, properties potentially changed
 					if (river.centreTile.position != originalRiver.centreTilePosition.Value) {
-						riverDifferences.Add(RiverProperty.CentreTilePosition, FormatVector2ToString(river.centreTile.position));
+						riverDifferences.Add(RiverProperty.CentreTilePosition, PU.FormatVector2ToString(river.centreTile.position));
 					}
 				}
 			}
 
 			if (river.endTile.position != originalRiver.endTilePosition.Value) {
-				riverDifferences.Add(RiverProperty.EndTilePosition, FormatVector2ToString(river.endTile.position));
+				riverDifferences.Add(RiverProperty.EndTilePosition, PU.FormatVector2ToString(river.endTile.position));
 			}
 
 			if (river.expandRadius != originalRiver.expandRadius.Value) {
@@ -195,7 +198,7 @@ namespace Snowship.NPersistence {
 				}
 			}
 			if (addedRiverTiles.Count > 0) {
-				riverDifferences.Add(RiverProperty.AddedTilePositions, string.Join(";", addedRiverTiles.Select(v2 => FormatVector2ToString(v2)).ToArray()));
+				riverDifferences.Add(RiverProperty.AddedTilePositions, string.Join(";", addedRiverTiles.Select(v2 => PU.FormatVector2ToString(v2)).ToArray()));
 			}
 
 			List<Vector2> removedRiverTiles = new List<Vector2>();
@@ -205,14 +208,14 @@ namespace Snowship.NPersistence {
 				}
 			}
 			if (removedRiverTiles.Count > 0) {
-				riverDifferences.Add(RiverProperty.RemovedTilePositions, string.Join(";", removedRiverTiles.Select(v2 => FormatVector2ToString(v2)).ToArray()));
+				riverDifferences.Add(RiverProperty.RemovedTilePositions, string.Join(";", removedRiverTiles.Select(v2 => PU.FormatVector2ToString(v2)).ToArray()));
 			}
 
 			if (riverDifferences.Count > 0) {
-				file.WriteLine(CreateKeyValueString(RiverProperty.River, string.Empty, 0));
-				file.WriteLine(CreateKeyValueString(RiverProperty.Index, index, 1));
+				file.WriteLine(PU.CreateKeyValueString(RiverProperty.River, string.Empty, 0));
+				file.WriteLine(PU.CreateKeyValueString(RiverProperty.Index, index, 1));
 				foreach (KeyValuePair<RiverProperty, string> riverProperty in riverDifferences) {
-					file.WriteLine(CreateKeyValueString(riverProperty.Key, riverProperty.Value, 1));
+					file.WriteLine(PU.CreateKeyValueString(riverProperty.Key, riverProperty.Value, 1));
 				}
 			}
 		}

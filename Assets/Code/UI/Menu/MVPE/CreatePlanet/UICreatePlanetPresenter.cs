@@ -127,7 +127,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void OnBackButtonClicked() {
-			GameManager.uiM.GoBack(this);
+			GameManager.Get<UIManager>().GoBack(this);
 		}
 
 		private void OnPlanetNameChanged(string planetName) {
@@ -169,12 +169,12 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void OnCreatePlanetButtonClicked() {
-			pPlanet.CreatePlanet(GameManager.planetM.planet);
-			GameManager.uiM.OpenViewAsync<UICreateColony>(this, false).Forget();
+			pPlanet.CreatePlanet(GameManager.Get<PlanetManager>().planet);
+			GameManager.Get<UIManager>().OpenViewAsync<UICreateColony>(this, false).Forget();
 		}
 
 		private void OnPlanetTileClicked(PlanetTile planetTile) {
-			GameManager.planetM.SetSelectedPlanetTile(planetTile);
+			GameManager.Get<PlanetManager>().SetSelectedPlanetTile(planetTile);
 			View.SetPlanetTileData(planetTile);
 		}
 
@@ -183,7 +183,7 @@ namespace Snowship.NUI.Menu.CreatePlanet {
 		}
 
 		private void CreatePlanetPreview() {
-			Planet planet = GameManager.planetM.CreatePlanet(createPlanetData);
+			Planet planet = GameManager.Get<PlanetManager>().CreatePlanet(createPlanetData);
 			planetViewModule.DisplayPlanet(
 				planet,
 				pColony.GetPersistenceColonies(),

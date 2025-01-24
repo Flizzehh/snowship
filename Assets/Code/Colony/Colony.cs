@@ -15,8 +15,11 @@ namespace Snowship.NColony {
 			this.name = name;
 			this.mapData = mapData;
 
-			lastSaveDateTime = PersistenceHandler.GenerateSaveDateTimeString();
-			lastSaveTimeChunk = PersistenceHandler.GenerateDateTimeString();
+			lastSaveDateTime = PersistenceUtilities.GenerateSaveDateTimeString();
+			lastSaveTimeChunk = PersistenceUtilities.GenerateDateTimeString();
+		}
+
+		protected Colony() {
 		}
 
 		public void SetDirectory(string directory) {

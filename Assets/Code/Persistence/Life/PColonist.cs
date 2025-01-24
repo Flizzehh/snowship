@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NJob;
 using Snowship.NProfession;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PColonist : PersistenceHandler {
-
+	public class PColonist : Colonist
+	{
 		private readonly PLife pLife = new PLife();
 		private readonly PHuman pHuman = new PHuman();
 
@@ -27,7 +29,6 @@ namespace Snowship.NPersistence {
 			Skills,
 			Traits,
 			Needs,
-			BaseMood,
 			EffectiveMood,
 			MoodModifiers
 		}
@@ -69,16 +70,16 @@ namespace Snowship.NPersistence {
 
 		public void SaveColonists(string saveDirectoryPath) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "colonists.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "colonists.snowship");
 
 			foreach (Colonist colonist in Colonist.colonists) {
-				file.WriteLine(CreateKeyValueString(ColonistProperty.Colonist, string.Empty, 0));
+				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.Colonist, string.Empty, 0));
 
 				pLife.WriteLifeLines(file, colonist, 1);
 
 				pHuman.WriteHumanLines(file, colonist, 1);
 
-				file.WriteLine(CreateKeyValueString(ColonistProperty.PlayerMoved, colonist.playerMoved, 1));
+				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.PlayerMoved, colonist.playerMoved, 1));
 
 				if (colonist.Job != null) {
 					pJob.WriteJobLines(file, colonist.Job, PJob.JobProperty.Job, 1);
@@ -87,57 +88,56 @@ namespace Snowship.NPersistence {
 					pJob.WriteJobLines(file, colonist.StoredJob, PJob.JobProperty.StoredJob, 1);
 				}
 				if (colonist.Backlog.Count > 0) {
-					file.WriteLine(CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
+					file.WriteLine(PU.CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
 					foreach (Job backlogJob in colonist.Backlog) {
 						pJob.WriteJobLines(file, backlogJob, PJob.JobProperty.BacklogJob, 2);
 					}
 				}
 
-				file.WriteLine(CreateKeyValueString(ColonistProperty.Professions, string.Empty, 1));
+				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.Professions, string.Empty, 1));
 				foreach (Profession profession in colonist.professions) {
-					file.WriteLine(CreateKeyValueString(ProfessionProperty.Profession, string.Empty, 2));
+					file.WriteLine(PU.CreateKeyValueString(ProfessionProperty.Profession, string.Empty, 2));
 
-					file.WriteLine(CreateKeyValueString(ProfessionProperty.Name, profession.prefab.type, 3));
-					file.WriteLine(CreateKeyValueString(ProfessionProperty.Priority, profession.GetPriority(), 3));
+					file.WriteLine(PU.CreateKeyValueString(ProfessionProperty.Name, profession.prefab.type, 3));
+					file.WriteLine(PU.CreateKeyValueString(ProfessionProperty.Priority, profession.GetPriority(), 3));
 				}
 
-				file.WriteLine(CreateKeyValueString(ColonistProperty.Skills, string.Empty, 1));
+				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.Skills, string.Empty, 1));
 				foreach (SkillInstance skill in colonist.skills) {
-					file.WriteLine(CreateKeyValueString(SkillProperty.Skill, string.Empty, 2));
+					file.WriteLine(PU.CreateKeyValueString(SkillProperty.Skill, string.Empty, 2));
 
-					file.WriteLine(CreateKeyValueString(SkillProperty.Type, skill.prefab.type, 3));
-					file.WriteLine(CreateKeyValueString(SkillProperty.Level, skill.Level, 3));
-					file.WriteLine(CreateKeyValueString(SkillProperty.NextLevelExperience, skill.NextLevelExperience, 3));
-					file.WriteLine(CreateKeyValueString(SkillProperty.CurrentExperience, skill.CurrentExperience, 3));
+					file.WriteLine(PU.CreateKeyValueString(SkillProperty.Type, skill.prefab.type, 3));
+					file.WriteLine(PU.CreateKeyValueString(SkillProperty.Level, skill.Level, 3));
+					file.WriteLine(PU.CreateKeyValueString(SkillProperty.NextLevelExperience, skill.NextLevelExperience, 3));
+					file.WriteLine(PU.CreateKeyValueString(SkillProperty.CurrentExperience, skill.CurrentExperience, 3));
 				}
 
 				if (colonist.traits.Count > 0) {
-					file.WriteLine(CreateKeyValueString(ColonistProperty.Traits, string.Empty, 1));
+					file.WriteLine(PU.CreateKeyValueString(ColonistProperty.Traits, string.Empty, 1));
 					foreach (TraitInstance trait in colonist.traits) {
-						file.WriteLine(CreateKeyValueString(TraitProperty.Trait, string.Empty, 2));
+						file.WriteLine(PU.CreateKeyValueString(TraitProperty.Trait, string.Empty, 2));
 
-						file.WriteLine(CreateKeyValueString(TraitProperty.Type, trait.prefab.type, 3));
+						file.WriteLine(PU.CreateKeyValueString(TraitProperty.Type, trait.prefab.type, 3));
 					}
 				}
 
-				file.WriteLine(CreateKeyValueString(ColonistProperty.Needs, string.Empty, 1));
+				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.Needs, string.Empty, 1));
 				foreach (NeedInstance need in colonist.needs) {
-					file.WriteLine(CreateKeyValueString(NeedProperty.Need, string.Empty, 2));
+					file.WriteLine(PU.CreateKeyValueString(NeedProperty.Need, string.Empty, 2));
 
-					file.WriteLine(CreateKeyValueString(NeedProperty.Type, need.prefab.type, 3));
-					file.WriteLine(CreateKeyValueString(NeedProperty.Value, need.GetValue(), 3));
+					file.WriteLine(PU.CreateKeyValueString(NeedProperty.Type, need.prefab.type, 3));
+					file.WriteLine(PU.CreateKeyValueString(NeedProperty.Value, need.GetValue(), 3));
 				}
 
-				file.WriteLine(CreateKeyValueString(ColonistProperty.BaseMood, colonist.baseMood, 1));
-				file.WriteLine(CreateKeyValueString(ColonistProperty.EffectiveMood, colonist.effectiveMood, 1));
+				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.EffectiveMood, colonist.Moods.EffectiveMood, 1));
 
-				if (colonist.moodModifiers.Count > 0) {
-					file.WriteLine(CreateKeyValueString(ColonistProperty.MoodModifiers, string.Empty, 1));
-					foreach (MoodModifierInstance moodModifier in colonist.moodModifiers) {
-						file.WriteLine(CreateKeyValueString(MoodModifierProperty.MoodModifier, string.Empty, 2));
+				if (colonist.Moods.MoodModifiers.Count > 0) {
+					file.WriteLine(PU.CreateKeyValueString(ColonistProperty.MoodModifiers, string.Empty, 1));
+					foreach (MoodModifierInstance moodModifier in colonist.Moods.MoodModifiers) {
+						file.WriteLine(PU.CreateKeyValueString(MoodModifierProperty.MoodModifier, string.Empty, 2));
 
-						file.WriteLine(CreateKeyValueString(MoodModifierProperty.Type, moodModifier.prefab.type, 3));
-						file.WriteLine(CreateKeyValueString(MoodModifierProperty.TimeRemaining, moodModifier.timer, 3));
+						file.WriteLine(PU.CreateKeyValueString(MoodModifierProperty.Type, moodModifier.Prefab.type, 3));
+						file.WriteLine(PU.CreateKeyValueString(MoodModifierProperty.TimeRemaining, moodModifier.Timer, 3));
 					}
 				}
 			}
@@ -158,7 +158,6 @@ namespace Snowship.NPersistence {
 			public List<PersistenceSkill> persistenceSkills;
 			public List<PersistenceTrait> persistenceTraits;
 			public List<PersistenceNeed> persistenceNeeds;
-			public float? baseMood;
 			public float? effectiveMood;
 			public List<PersistenceMoodModifier> persistenceMoodModifiers;
 
@@ -173,7 +172,6 @@ namespace Snowship.NPersistence {
 				List<PersistenceSkill> persistenceSkills,
 				List<PersistenceTrait> persistenceTraits,
 				List<PersistenceNeed> persistenceNeeds,
-				float? baseMood,
 				float? effectiveMood,
 				List<PersistenceMoodModifier> persistenceMoodModifiers
 			) {
@@ -187,7 +185,6 @@ namespace Snowship.NPersistence {
 				this.persistenceSkills = persistenceSkills;
 				this.persistenceTraits = persistenceTraits;
 				this.persistenceNeeds = persistenceNeeds;
-				this.baseMood = baseMood;
 				this.effectiveMood = effectiveMood;
 				this.persistenceMoodModifiers = persistenceMoodModifiers;
 			}
@@ -266,7 +263,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceColonist> LoadColonists(string path) {
 			List<PersistenceColonist> persistenceColonists = new List<PersistenceColonist>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((ColonistProperty)Enum.Parse(typeof(ColonistProperty), property.Key)) {
 					case ColonistProperty.Colonist:
@@ -284,7 +281,6 @@ namespace Snowship.NPersistence {
 						List<PersistenceSkill> persistenceSkills = new List<PersistenceSkill>();
 						List<PersistenceTrait> persistenceTraits = new List<PersistenceTrait>();
 						List<PersistenceNeed> persistenceNeeds = new List<PersistenceNeed>();
-						float? baseMood = null;
 						float? effectiveMood = null;
 						List<PersistenceMoodModifier> persistenceMoodModifiers = new List<PersistenceMoodModifier>();
 
@@ -455,9 +451,6 @@ namespace Snowship.NPersistence {
 										}
 									}
 									break;
-								case ColonistProperty.BaseMood:
-									baseMood = float.Parse((string)colonistProperty.Value);
-									break;
 								case ColonistProperty.EffectiveMood:
 									effectiveMood = float.Parse((string)colonistProperty.Value);
 									break;
@@ -509,7 +502,6 @@ namespace Snowship.NPersistence {
 								persistenceSkills,
 								persistenceTraits,
 								persistenceNeeds,
-								baseMood,
 								effectiveMood,
 								persistenceMoodModifiers
 							));
@@ -520,14 +512,14 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			GameManager.persistenceM.loadingState = PersistenceManager.LoadingState.LoadedColonists;
+			GameManager.Get<PersistenceManager>().loadingState = PersistenceManager.LoadingState.LoadedColonists;
 			return persistenceColonists;
 		}
 
 		public void ApplyLoadedColonists(List<PersistenceColonist> persistenceColonists) {
 			foreach (PersistenceColonist persistenceColonist in persistenceColonists) {
 				Colonist colonist = new Colonist(
-					GameManager.colonyM.colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.position.Value),
+					GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.position.Value),
 					persistenceColonist.persistenceLife.health.Value
 				) { gender = persistenceColonist.persistenceLife.gender.Value, previousPosition = persistenceColonist.persistenceLife.previousPosition.Value, playerMoved = persistenceColonist.playerMoved.Value, };
 
@@ -536,7 +528,7 @@ namespace Snowship.NPersistence {
 				colonist.SetName(persistenceColonist.persistenceHuman.name);
 
 				colonist.bodyIndices[HumanManager.Human.Appearance.Skin] = persistenceColonist.persistenceHuman.skinIndex.Value;
-				colonist.moveSprites = GameManager.humanM.humanMoveSprites[colonist.bodyIndices[HumanManager.Human.Appearance.Skin]];
+				colonist.moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[colonist.bodyIndices[Appearance.Skin]];
 				colonist.bodyIndices[HumanManager.Human.Appearance.Hair] = persistenceColonist.persistenceHuman.hairIndex.Value;
 
 				colonist.GetInventory().maxWeight = persistenceColonist.persistenceHuman.persistenceInventory.maxWeight.Value;
@@ -566,7 +558,7 @@ namespace Snowship.NPersistence {
 				}
 
 				if (persistenceColonist.persistenceLife.pathEndPosition.HasValue) {
-					colonist.MoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.pathEndPosition.Value), true);
+					colonist.MoveToTile(GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.pathEndPosition.Value), true);
 				}
 
 				foreach (PersistenceProfession persistenceProfession in persistenceColonist.persistenceProfessions) {
@@ -592,12 +584,13 @@ namespace Snowship.NPersistence {
 				}
 
 				foreach (PersistenceMoodModifier persistenceMoodModifier in persistenceColonist.persistenceMoodModifiers) {
-					colonist.AddMoodModifier(persistenceMoodModifier.type.Value);
-					colonist.moodModifiers.Find(hm => hm.prefab.type == persistenceMoodModifier.type.Value).timer = persistenceMoodModifier.timeRemaining.Value;
+					colonist.Moods.AddMoodModifier(persistenceMoodModifier.type.Value);
+					colonist.Moods.MoodModifiers.Find(hm => hm.Prefab.type == persistenceMoodModifier.type.Value).Timer = persistenceMoodModifier.timeRemaining.Value;
 				}
 
-				colonist.baseMood = persistenceColonist.baseMood.Value;
-				colonist.effectiveMood = persistenceColonist.effectiveMood.Value;
+				colonist.Moods = new Moods(colonist) {
+					EffectiveMood = persistenceColonist.effectiveMood.Value
+				};
 			}
 
 			for (int i = 0; i < persistenceColonists.Count; i++) {
@@ -608,11 +601,11 @@ namespace Snowship.NPersistence {
 					foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
 						colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 					}
-					colonist.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.humanM.humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+					colonist.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
 				}
 			}
 
-			//GameManager.uiMOld.SetColonistElements();
+			//GameManager.Get<UIManagerOld>().SetColonistElements();
 		}
 
 	}

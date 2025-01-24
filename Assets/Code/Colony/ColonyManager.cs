@@ -1,5 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
+using Snowship.NColonist;
 using Snowship.NPersistence;
+using Snowship.NPlanet;
 using UnityEngine;
 
 namespace Snowship.NColony {
@@ -11,12 +13,12 @@ namespace Snowship.NColony {
 			if (!initialized) {
 				this.colony = colony;
 
-				GameManager.tileM.Initialize(colony, TileManager.MapInitializeType.NewMap).Forget();
+				GameManager.Get<TileManager>().Initialize(colony, TileManager.MapInitializeType.NewMap).Forget();
 			} else {
-				GameManager.colonistM.SpawnStartColonists(3);
+				GameManager.Get<ColonistManager>().SpawnStartColonists(3);
 
 				pColony.CreateColony(colony);
-				GameManager.persistenceM.CreateSave(colony).Forget();
+				GameManager.Get<PersistenceManager>().CreateSave(colony).Forget();
 			}
 		}
 
@@ -24,7 +26,7 @@ namespace Snowship.NColony {
 			Colony colony = new Colony(
 				createColonyData.Name,
 				new TileManager.MapData(
-					GameManager.planetM.planet.mapData,
+					GameManager.Get<PlanetManager>().planet.mapData,
 					createColonyData.Seed,
 					createColonyData.Size,
 					true,
@@ -38,7 +40,7 @@ namespace Snowship.NColony {
 					createColonyData.PlanetTile.isRiver,
 					createColonyData.PlanetTile.surroundingPlanetTileRivers,
 					false,
-					GameManager.planetM.planet.primaryWindDirection,
+					GameManager.Get<PlanetManager>().planet.primaryWindDirection,
 					createColonyData.PlanetTile.tile.position
 				)
 			);
@@ -51,7 +53,7 @@ namespace Snowship.NColony {
 
 				Random.InitState(colony.mapData.mapSeed);
 
-				//GameManager.tileM.Initialize(colony, TileManager.MapInitializeType.LoadMap);
+				//GameManager.Get<TileManager>().Initialize(colony, TileManager.MapInitializeType.LoadMap);
 			}
 		}
 

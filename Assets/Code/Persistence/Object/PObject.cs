@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PObject : PersistenceHandler {
+	public class PObject
+	{
 
 		private readonly PInventory pInventory = new PInventory();
 
@@ -61,39 +64,39 @@ namespace Snowship.NPersistence {
 
 		public void SaveObjects(string saveDirectoryPath) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "objects.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "objects.snowship");
 
 			foreach (List<ObjectInstance> instances in ObjectInstance.ObjectInstances.Values) {
 				foreach (ObjectInstance instance in instances) {
-					file.WriteLine(CreateKeyValueString(ObjectProperty.Object, string.Empty, 0));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Object, string.Empty, 0));
 
-					file.WriteLine(CreateKeyValueString(ObjectProperty.Type, instance.prefab.type, 1));
-					file.WriteLine(CreateKeyValueString(ObjectProperty.Variation, instance.variation == null ? "null" : instance.variation.name, 1));
-					file.WriteLine(CreateKeyValueString(ObjectProperty.Position, FormatVector2ToString(instance.zeroPointTile.obj.transform.position), 1));
-					file.WriteLine(CreateKeyValueString(ObjectProperty.RotationIndex, instance.rotationIndex, 1));
-					file.WriteLine(CreateKeyValueString(ObjectProperty.Integrity, instance.integrity, 1));
-					file.WriteLine(CreateKeyValueString(ObjectProperty.Active, instance.active, 1));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Type, instance.prefab.type, 1));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Variation, instance.variation == null ? "null" : instance.variation.name, 1));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Position, PU.FormatVector2ToString(instance.zeroPointTile.obj.transform.position), 1));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.RotationIndex, instance.rotationIndex, 1));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Integrity, instance.integrity, 1));
+					file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Active, instance.active, 1));
 
 					if (instance is Container container) {
-						file.WriteLine(CreateKeyValueString(ObjectProperty.Container, string.Empty, 1));
+						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Container, string.Empty, 1));
 						pInventory.WriteInventoryLines(file, container.GetInventory(), 2);
 					} else if (instance is CraftingObject craftingObject) {
 						if (craftingObject.resources.Count > 0 || craftingObject.fuels.Count > 0) {
-							file.WriteLine(CreateKeyValueString(ObjectProperty.CraftingObject, string.Empty, 1));
+							file.WriteLine(PU.CreateKeyValueString(ObjectProperty.CraftingObject, string.Empty, 1));
 							if (craftingObject.resources.Count > 0) {
-								file.WriteLine(CreateKeyValueString(CraftingObjectProperty.Resources, string.Empty, 2));
+								file.WriteLine(PU.CreateKeyValueString(CraftingObjectProperty.Resources, string.Empty, 2));
 								foreach (CraftableResourceInstance resource in craftingObject.resources) {
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.CraftableResource, string.Empty, 3));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.CraftableResource, string.Empty, 3));
 
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Resource, resource.resource.type, 4));
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Priority, resource.priority.Get(), 4));
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.CreationMethod, resource.creationMethod, 4));
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.TargetAmount, resource.GetTargetAmount(), 4));
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.RemainingAmount, resource.GetRemainingAmount(), 4));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.Resource, resource.resource.type, 4));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.Priority, resource.priority.Get(), 4));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.CreationMethod, resource.creationMethod, 4));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.TargetAmount, resource.GetTargetAmount(), 4));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.RemainingAmount, resource.GetRemainingAmount(), 4));
 
-									file.WriteLine(CreateKeyValueString(CraftableResourceProperty.Enableable, resource.enableable, 4));
+									file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.Enableable, resource.enableable, 4));
 									if (resource.fuelAmounts.Count > 0) {
-										file.WriteLine(CreateKeyValueString(CraftableResourceProperty.FuelAmounts, string.Empty, 4));
+										file.WriteLine(PU.CreateKeyValueString(CraftableResourceProperty.FuelAmounts, string.Empty, 4));
 										foreach (ResourceAmount fuelAmount in resource.fuelAmounts) {
 											pInventory.WriteResourceAmountLines(file, fuelAmount, 5);
 										}
@@ -101,21 +104,21 @@ namespace Snowship.NPersistence {
 								}
 							}
 							if (craftingObject.fuels.Count > 0) {
-								file.WriteLine(CreateKeyValueString(CraftingObjectProperty.Fuels, string.Empty, 2));
+								file.WriteLine(PU.CreateKeyValueString(CraftingObjectProperty.Fuels, string.Empty, 2));
 								foreach (PriorityResourceInstance fuel in craftingObject.fuels) {
-									file.WriteLine(CreateKeyValueString(PriorityResourceProperty.PriorityResource, string.Empty, 3));
+									file.WriteLine(PU.CreateKeyValueString(PriorityResourceProperty.PriorityResource, string.Empty, 3));
 
-									file.WriteLine(CreateKeyValueString(PriorityResourceProperty.Resource, fuel.resource.type, 4));
-									file.WriteLine(CreateKeyValueString(PriorityResourceProperty.Priority, fuel.priority.Get(), 4));
+									file.WriteLine(PU.CreateKeyValueString(PriorityResourceProperty.Resource, fuel.resource.type, 4));
+									file.WriteLine(PU.CreateKeyValueString(PriorityResourceProperty.Priority, fuel.priority.Get(), 4));
 								}
 							}
 						}
 					} else if (instance is Farm farm) {
-						file.WriteLine(CreateKeyValueString(ObjectProperty.Farm, string.Empty, 1));
-						file.WriteLine(CreateKeyValueString(FarmProperty.GrowTimer, farm.growTimer, 2));
+						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Farm, string.Empty, 1));
+						file.WriteLine(PU.CreateKeyValueString(FarmProperty.GrowTimer, farm.growTimer, 2));
 					} else if (instance is SleepSpot sleepSpot) {
-						file.WriteLine(CreateKeyValueString(ObjectProperty.SleepSpot, string.Empty, 1));
-						file.WriteLine(CreateKeyValueString(SleepSpotProperty.OccupyingColonistName, sleepSpot.occupyingColonist.name, 2));
+						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.SleepSpot, string.Empty, 1));
+						file.WriteLine(PU.CreateKeyValueString(SleepSpotProperty.OccupyingColonistName, sleepSpot.occupyingColonist.name, 2));
 					}
 				}
 			}
@@ -209,7 +212,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceObject> LoadObjects(string path) {
 			List<PersistenceObject> persistenceObjects = new List<PersistenceObject>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((ObjectProperty)Enum.Parse(typeof(ObjectProperty), property.Key)) {
 					case ObjectProperty.Object:
@@ -410,13 +413,13 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			GameManager.persistenceM.loadingState = PersistenceManager.LoadingState.LoadedObjects;
+			GameManager.Get<PersistenceManager>().loadingState = PersistenceManager.LoadingState.LoadedObjects;
 			return persistenceObjects;
 		}
 
 		public void ApplyLoadedObjects(List<PersistenceObject> persistenceObjects) {
 			foreach (PersistenceObject persistenceObject in persistenceObjects) {
-				TileManager.Tile zeroPointTile = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value);
+				TileManager.Tile zeroPointTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceObject.zeroPointTilePosition.Value);
 
 				ObjectPrefab objectPrefab = ObjectPrefab.GetObjectPrefabByEnum(persistenceObject.type.Value);
 				ObjectInstance objectInstance = ObjectInstance.CreateObjectInstance(

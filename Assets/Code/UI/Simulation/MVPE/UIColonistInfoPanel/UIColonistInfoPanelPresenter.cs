@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NJob;
 using Snowship.NResource;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			View.SetColonistInformation(
 				colonist.moveSprites[0],
 				$"{colonist.name} ({colonist.gender.ToString()[0]})",
-				$"Colonist of {GameManager.colonyM.colony.name}"
+				$"Colonist of {GameManager.Get<ColonyManager>().colony.name}"
 			);
 
 			SetupNeedsSkillsTab();
@@ -43,11 +44,11 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			View.OnHealthChanged(colonist.Health);
 			colonist.OnHealthChanged += View.OnHealthChanged;
 
-			View.SetupMoodSlider((0, 100), colonist.effectiveMood, true);
-			View.OnMoodChanged(colonist.effectiveMood, colonist.moodModifiersSum);
-			colonist.OnMoodAdded += OnMoodAdded;
-			colonist.OnMoodChanged += View.OnMoodChanged;
-			colonist.OnMoodRemoved += OnMoodRemoved;
+			View.SetupMoodSlider((0, 100), colonist.Moods.EffectiveMood, true);
+			View.OnMoodChanged(colonist.Moods.EffectiveMood, colonist.Moods.MoodModifiersSum);
+			colonist.Moods.OnMoodAdded += OnMoodAdded;
+			colonist.Moods.OnMoodChanged += View.OnMoodChanged;
+			colonist.Moods.OnMoodRemoved += OnMoodRemoved;
 
 			View.SetupInventorySliders(inventory);
 			View.OnEmptyInventoryButtonClicked += OnEmptyInventoryButtonClicked;
@@ -74,9 +75,9 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			colonist.OnHealthChanged -= View.OnHealthChanged;
 
-			colonist.OnMoodAdded -= OnMoodAdded;
-			colonist.OnMoodChanged -= View.OnMoodChanged;
-			colonist.OnMoodRemoved -= OnMoodRemoved;
+			colonist.Moods.OnMoodAdded -= OnMoodAdded;
+			colonist.Moods.OnMoodChanged -= View.OnMoodChanged;
+			colonist.Moods.OnMoodRemoved -= OnMoodRemoved;
 
 			View.OnEmptyInventoryButtonClicked -= OnEmptyInventoryButtonClicked;
 			inventory.OnInventoryChanged -= View.OnInventoryChanged;
@@ -88,7 +89,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			colonist.OnClothingChanged -= View.OnColonistClothingChanged;
 
-			foreach (MoodModifierInstance mood in colonist.moodModifiers) {
+			foreach (MoodModifierInstance mood in colonist.Moods.MoodModifiers) {
 				OnMoodRemoved(mood);
 			}
 		}
@@ -121,7 +122,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			foreach (NeedInstance need in colonist.needs.OrderByDescending(need => need.GetValue())) {
 				View.AddNeedElement(need);
 			}
-			foreach (MoodModifierInstance mood in colonist.moodModifiers) {
+			foreach (MoodModifierInstance mood in colonist.Moods.MoodModifiers) {
 				View.AddMoodElement(mood);
 			}
 			foreach (SkillInstance skill in colonist.skills) {

@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using Snowship.NPersistence.Save;
+using Snowship.NPersistence;
 
 namespace Snowship.NUI.Menu.LoadSave {
 
@@ -32,11 +32,11 @@ namespace Snowship.NUI.Menu.LoadSave {
 		}
 
 		private void OnBackButtonClicked() {
-			GameManager.uiM.CloseView(this);
+			GameManager.Get<UIManager>().CloseView(this);
 		}
 
 		private void OnLoadSaveButtonClicked() {
-			GameManager.persistenceM.ApplyLoadedSave(selectedSave);
+			GameManager.Get<PersistenceManager>().ApplyLoadedSave(selectedSave);
 		}
 
 		private void OnSaveElementClicked(PSave.PersistenceSave save) {

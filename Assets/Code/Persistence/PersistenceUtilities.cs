@@ -7,17 +7,17 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Snowship.NPersistence {
-	public class PersistenceHandler {
-
-		public string GetPersistentDataPath() {
+	public static class PersistenceUtilities
+	{
+		public static string GetPersistentDataPath() {
 			return Application.persistentDataPath;
 		}
 
-		public string CreateKeyValueString(object key, object value, int level) {
+		public static string CreateKeyValueString(object key, object value, int level) {
 			return $"{new string('\t', level)}<{key}>{value}";
 		}
 
-		public StreamWriter CreateFileAtDirectory(string directory, string fileName) {
+		public static StreamWriter CreateFileAtDirectory(string directory, string fileName) {
 			string filePath = directory + "/" + fileName;
 			FileStream fileStream = File.Create(filePath);
 			fileStream.Close();
@@ -25,7 +25,7 @@ namespace Snowship.NPersistence {
 			return new StreamWriter(filePath);
 		}
 
-		public List<KeyValuePair<string, object>> GetKeyValuePairsFromFile(string path) {
+		public static List<KeyValuePair<string, object>> GetKeyValuePairsFromFile(string path) {
 			return GetKeyValuePairsFromLines(File.ReadAllLines(path).ToList());
 		}
 
@@ -83,7 +83,7 @@ namespace Snowship.NPersistence {
 			return properties;
 		}
 
-		public string FormatVector2ToString(Vector2 vector2) {
+		public static string FormatVector2ToString(Vector2 vector2) {
 			return vector2.x + "," + vector2.y;
 		}
 
@@ -115,7 +115,7 @@ namespace Snowship.NPersistence {
 			);
 		}
 
-		public async UniTask CreateScreenshot(string fileName) {
+		public static async UniTask CreateScreenshot(string fileName) {
 			GameObject canvas = GameObject.Find("Canvas");
 			canvas.SetActive(false);
 			await UniTask.WaitForEndOfFrame();
@@ -123,7 +123,7 @@ namespace Snowship.NPersistence {
 			canvas.SetActive(true);
 		}
 
-		public Sprite LoadSpriteFromImageFile(string path, int x = 280, int y = 158) {
+		public static Sprite LoadSpriteFromImageFile(string path, int x = 280, int y = 158) {
 			if (File.Exists(path)) {
 				byte[] fileData = File.ReadAllBytes(path);
 				Texture2D texture = new Texture2D(x, y);
@@ -133,7 +133,7 @@ namespace Snowship.NPersistence {
 			return null;
 		}
 
-		public Sprite LoadSaveImageFromSaveDirectoryPath(string saveDirectoryPath) {
+		public static Sprite LoadSaveImageFromSaveDirectoryPath(string saveDirectoryPath) {
 			string screenshotPath = Directory.GetFiles(saveDirectoryPath).ToList().Find(f => Path.GetExtension(f).ToLower() == ".png");
 			if (screenshotPath != null) {
 				return LoadSpriteFromImageFile(screenshotPath);

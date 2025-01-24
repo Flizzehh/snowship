@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PUI : PersistenceHandler {
+	public class PUI
+	{
 
 		public enum UIProperty {
 			ObjectPrefabs
@@ -19,21 +21,21 @@ namespace Snowship.NPersistence {
 
 		public void SaveUI(string saveDirectoryPath) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "ui.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "ui.snowship");
 
-			file.WriteLine(CreateKeyValueString(UIProperty.ObjectPrefabs, string.Empty, 0));
+			file.WriteLine(PU.CreateKeyValueString(UIProperty.ObjectPrefabs, string.Empty, 0));
 			foreach (ObjectPrefab objectPrefab in ObjectPrefab.GetObjectPrefabs()) {
-				file.WriteLine(CreateKeyValueString(ObjectPrefabProperty.ObjectPrefab, string.Empty, 1));
+				file.WriteLine(PU.CreateKeyValueString(ObjectPrefabProperty.ObjectPrefab, string.Empty, 1));
 
-				file.WriteLine(CreateKeyValueString(ObjectPrefabProperty.Type, objectPrefab.type, 2));
-				file.WriteLine(CreateKeyValueString(ObjectPrefabProperty.LastSelectedVariation, (objectPrefab.lastSelectedVariation == null ? "null" : objectPrefab.lastSelectedVariation.name), 2));
+				file.WriteLine(PU.CreateKeyValueString(ObjectPrefabProperty.Type, objectPrefab.type, 2));
+				file.WriteLine(PU.CreateKeyValueString(ObjectPrefabProperty.LastSelectedVariation, objectPrefab.lastSelectedVariation == null ? "null" : objectPrefab.lastSelectedVariation.name, 2));
 			}
 
 			file.Close();
 		}
 
 		public void LoadUI(string path) {
-			foreach (KeyValuePair<string, object> property in GetKeyValuePairsFromFile(path)) {
+			foreach (KeyValuePair<string, object> property in PU.GetKeyValuePairsFromFile(path)) {
 				switch ((UIProperty)Enum.Parse(typeof(UIProperty), property.Key)) {
 					case UIProperty.ObjectPrefabs:
 

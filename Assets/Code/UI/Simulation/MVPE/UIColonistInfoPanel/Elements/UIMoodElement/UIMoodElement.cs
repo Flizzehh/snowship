@@ -12,9 +12,9 @@ namespace Snowship.NUI.Simulation
 
 			mood.OnTimerChanged += OnMoodTimerChanged;
 
-			Component.SetMoodNameText(mood.prefab.name);
-			Component.SetMoodEffectAmountText(mood.prefab.effectAmount);
-			OnMoodTimerChanged(Mood.timer);
+			Component.SetMoodNameText(mood.Prefab.name);
+			Component.SetMoodEffectAmountText(mood.Prefab.effectAmount);
+			OnMoodTimerChanged(Mood.Timer);
 		}
 
 		protected override void OnClose() {
@@ -23,7 +23,7 @@ namespace Snowship.NUI.Simulation
 		}
 
 		private void OnMoodTimerChanged(int moodTimer) {
-			Component.SetMoodTimerText(moodTimer, Mood.prefab.effectLengthSeconds, Mood.prefab.infinite);
+			Component.SetMoodTimerText(moodTimer, Mood.Prefab.effectLengthSeconds, Mood.Prefab.infinite);
 		}
 	}
 }

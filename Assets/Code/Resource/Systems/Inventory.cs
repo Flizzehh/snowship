@@ -28,6 +28,9 @@ public class Inventory
 		this.maxVolume = maxVolume;
 	}
 
+	protected Inventory() {
+	}
+
 	public int UsedWeight() {
 		return resources.Sum(ra => ra.Amount * ra.Resource.weight) + reservedResources.Sum(rr => rr.resources.Sum(ra => ra.Amount * ra.Resource.weight));
 	}
@@ -70,7 +73,7 @@ public class Inventory
 			OnResourceAmountRemoved?.Invoke(existingResourceAmount);
 		}
 
-		GameManager.resourceM.CalculateResourceTotals();
+		GameManager.Get<ResourceManager>().CalculateResourceTotals();
 		ColonistJob.UpdateColonistJobs();
 
 		OnInventoryChanged?.Invoke(this);

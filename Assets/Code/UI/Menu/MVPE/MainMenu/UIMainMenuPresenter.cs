@@ -32,7 +32,7 @@ namespace Snowship.NUI.Menu.MainMenu {
 			if (lastSaveProperties != null) {
 				View.SetupContinueButton(
 					pLastSave.IsLastSaveUniverseLoadable(),
-					pLastSave.LoadSaveImageFromSaveDirectoryPath(lastSaveProperties.lastSaveSavePath)
+					PersistenceUtilities.LoadSaveImageFromSaveDirectoryPath(lastSaveProperties.lastSaveSavePath)
 				);
 			} else {
 				View.DisableContinueButton();
@@ -51,19 +51,19 @@ namespace Snowship.NUI.Menu.MainMenu {
 		}
 
 		private void OnNewButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UICreatePlanet>(this, false).Forget();
+			GameManager.Get<UIManager>().OpenViewAsync<UICreatePlanet>(this, false).Forget();
 		}
 
 		private void OnContinueButtonClicked() {
-			GameManager.persistenceM.ContinueFromMostRecentSave().Forget();
+			GameManager.Get<PersistenceManager>().ContinueFromMostRecentSave().Forget();
 		}
 
 		private void OnLoadButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UILoadColony>(this, false).Forget();
+			GameManager.Get<UIManager>().OpenViewAsync<UILoadColony>(this, false).Forget();
 		}
 
 		private void OnSettingsButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UISettings>(this, false).Forget();
+			GameManager.Get<UIManager>().OpenViewAsync<UISettings>(this, false).Forget();
 		}
 
 		private void OnExitButtonClicked() {

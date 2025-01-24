@@ -39,7 +39,7 @@ namespace Snowship.NCaravan {
 
 		public static Location GenerateLocation() {
 
-			string name = GameManager.resourceM.GetRandomLocationName();
+			string name = GameManager.Get<ResourceManager>().GetRandomLocationName();
 
 			string wealth = Wealth[UnityEngine.Random.Range(0, Wealth.Count)];
 			string resourceRichness = ResourceRichness[UnityEngine.Random.Range(0, ResourceRichness.Count)];

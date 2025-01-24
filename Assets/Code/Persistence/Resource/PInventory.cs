@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PInventory : PersistenceHandler {
+	public class PInventory : Inventory
+	{
 
 		public enum ResourceAmountProperty {
 			ResourceAmount,
@@ -30,26 +32,26 @@ namespace Snowship.NPersistence {
 		}
 
 		public void WriteInventoryLines(StreamWriter file, Inventory inventory, int startLevel) {
-			file.WriteLine(CreateKeyValueString(InventoryProperty.Inventory, string.Empty, startLevel));
-			file.WriteLine(CreateKeyValueString(InventoryProperty.MaxWeight, inventory.maxWeight, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(InventoryProperty.MaxVolume, inventory.maxVolume, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(InventoryProperty.Inventory, string.Empty, startLevel));
+			file.WriteLine(PU.CreateKeyValueString(InventoryProperty.MaxWeight, inventory.maxWeight, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(InventoryProperty.MaxVolume, inventory.maxVolume, startLevel + 1));
 			if (inventory.parent is HumanManager.Human human) {
-				file.WriteLine(CreateKeyValueString(InventoryProperty.HumanName, human.name, startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.HumanName, human.name, startLevel + 1));
 			} else if (inventory.parent is Container container) {
-				file.WriteLine(CreateKeyValueString(InventoryProperty.ContainerPosition, FormatVector2ToString(container.zeroPointTile.obj.transform.position), startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.ContainerPosition, PU.FormatVector2ToString(container.zeroPointTile.obj.transform.position), startLevel + 1));
 			}
 			if (inventory.resources.Count > 0) {
-				file.WriteLine(CreateKeyValueString(InventoryProperty.Resources, string.Empty, startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.Resources, string.Empty, startLevel + 1));
 				foreach (ResourceAmount resourceAmount in inventory.resources) {
 					WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
 			if (inventory.reservedResources.Count > 0) {
-				file.WriteLine(CreateKeyValueString(InventoryProperty.ReservedResources, string.Empty, startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.ReservedResources, string.Empty, startLevel + 1));
 				foreach (ReservedResources reservedResources in inventory.reservedResources) {
-					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.ReservedResourceAmounts, string.Empty, startLevel + 2));
-					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.HumanName, reservedResources.human.name, startLevel + 3));
-					file.WriteLine(CreateKeyValueString(ReservedResourcesProperty.Resources, string.Empty, startLevel + 3));
+					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.ReservedResourceAmounts, string.Empty, startLevel + 2));
+					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.HumanName, reservedResources.human.name, startLevel + 3));
+					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.Resources, string.Empty, startLevel + 3));
 					foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 						WriteResourceAmountLines(file, resourceAmount, startLevel + 4);
 					}
@@ -155,9 +157,9 @@ namespace Snowship.NPersistence {
 		}
 
 		public void WriteResourceAmountLines(StreamWriter file, ResourceAmount resourceAmount, int startLevel) {
-			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.ResourceAmount, string.Empty, startLevel));
-			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.Type, resourceAmount.Resource.type, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(ResourceAmountProperty.Amount, resourceAmount.Amount, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(ResourceAmountProperty.ResourceAmount, string.Empty, startLevel));
+			file.WriteLine(PU.CreateKeyValueString(ResourceAmountProperty.Type, resourceAmount.Resource.type, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(ResourceAmountProperty.Amount, resourceAmount.Amount, startLevel + 1));
 		}
 
 		public ResourceAmount LoadResourceAmount(List<KeyValuePair<string, object>> properties) {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Snowship.NCamera;
 using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NPersistence;
@@ -138,7 +139,7 @@ public class TileManager : IManager {
 		}
 
 		public static void InitializeTileTypes() {
-			List<KeyValuePair<string, object>> tileTypeGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/tile-types").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> tileTypeGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/tile-types").text.Split('\n').ToList());
 			foreach (KeyValuePair<string, object> tileTypeGroupProperty in tileTypeGroupProperties) {
 				switch ((TileTypeGroup.PropertyEnum)Enum.Parse(typeof(TileTypeGroup.PropertyEnum), tileTypeGroupProperty.Key)) {
 					case TileTypeGroup.PropertyEnum.TileTypeGroup:
@@ -323,7 +324,7 @@ public class TileManager : IManager {
 		}
 
 		public static void InitializeBiomes() {
-			List<KeyValuePair<string, object>> biomeProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/biomes").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> biomeProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/biomes").text.Split('\n').ToList());
 			foreach (KeyValuePair<string, object> biomeProperty in biomeProperties) {
 				switch ((PropertyEnum)Enum.Parse(typeof(PropertyEnum), biomeProperty.Key)) {
 					case PropertyEnum.Biome:
@@ -597,7 +598,7 @@ public class TileManager : IManager {
 		};
 
 		public static void InitializeResourceVeins() {
-			List<KeyValuePair<string, object>> resourceVeinGroupProperties = PersistenceHandler.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resource-veins").text.Split('\n').ToList());
+			List<KeyValuePair<string, object>> resourceVeinGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/resource-veins").text.Split('\n').ToList());
 			foreach (KeyValuePair<string, object> resourceVeinGroupProperty in resourceVeinGroupProperties) {
 				switch ((GroupPropertyEnum)Enum.Parse(typeof(GroupPropertyEnum), resourceVeinGroupProperty.Key)) {
 					case GroupPropertyEnum.VeinGroup:
@@ -753,8 +754,8 @@ public class TileManager : IManager {
 
 			this.position = position;
 
-			obj = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, new Vector2(position.x + 0.5f, position.y + 0.5f), Quaternion.identity);
-			obj.transform.SetParent(GameManager.resourceM.tileParent.transform, true);
+			obj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, new Vector2(position.x + 0.5f, position.y + 0.5f), Quaternion.identity);
+			obj.transform.SetParent(GameManager.Get<ResourceManager>().tileParent.transform, true);
 			obj.name = "Tile: " + position;
 
 			sr = obj.GetComponent<SpriteRenderer>();
@@ -825,11 +826,11 @@ public class TileManager : IManager {
 								tile.ChangeRegion(largestRegion, false, false);
 							}
 							surroundingRegion.tiles.Clear();
-							GameManager.colonyM.colony.map.regions.Remove(surroundingRegion);
+							GameManager.Get<ColonyManager>().colony.map.regions.Remove(surroundingRegion);
 						}
 						region.SetVisible(anyVisible, true, false);
 					} else {
-						ChangeRegion(new Map.Region(tileType, GameManager.colonyM.colony.map.regions[GameManager.colonyM.colony.map.regions.Count - 1].id + 1), false, false);
+						ChangeRegion(new Map.Region(tileType, GameManager.Get<ColonyManager>().colony.map.regions[GameManager.Get<ColonyManager>().colony.map.regions.Count - 1].id + 1), false, false);
 					}
 				} else { // Type is not walkable, old type was walkable (e.g. was ground, now stone)
 					ChangeRegion(null, false, false);
@@ -1135,7 +1136,7 @@ public class TileManager : IManager {
 			} else {
 				sr.color = newColour;
 			}
-			float colourBrightnessMultiplier = Mathf.Lerp(currentHourBrightness, nextHourBrightness, GameManager.timeM.Time.TileBrightnessTime - hour);
+			float colourBrightnessMultiplier = Mathf.Lerp(currentHourBrightness, nextHourBrightness, GameManager.Get<TimeManager>().Time.TileBrightnessTime - hour);
 			sr.color = new Color(sr.color.r * colourBrightnessMultiplier, sr.color.g * colourBrightnessMultiplier, sr.color.b * colourBrightnessMultiplier, 1f);
 
 			if (plant != null) {
@@ -1244,7 +1245,7 @@ public class TileManager : IManager {
 
 	public void OnUpdate() {
 		if (mapState == MapState.Generated) {
-			GameManager.colonyM.colony.map.DetermineVisibleRegionBlocks();
+			GameManager.Get<ColonyManager>().colony.map.DetermineVisibleRegionBlocks();
 		}
 	}
 
@@ -1325,7 +1326,7 @@ public class TileManager : IManager {
 
 	public async UniTask Initialize(Colony colony, MapInitializeType mapInitializeType) {
 
-		GameManager.uiMOld.SetGameUIActive(false);
+		GameManager.Get<UIManagerOld>().SetGameUIActive(false);
 
 		mapState = MapState.Generating;
 
@@ -1338,21 +1339,21 @@ public class TileManager : IManager {
 	}
 
 	private async UniTask PostInitializeMap(MapInitializeType mapInitializeType) {
-		while (!GameManager.colonyM.colony.map.created) {
+		while (!GameManager.Get<ColonyManager>().colony.map.created) {
 			await UniTask.NextFrame();
 		}
 
-		GameManager.tileM.mapState = MapState.Generated;
+		GameManager.Get<TileManager>().mapState = MapState.Generated;
 
 		if (mapInitializeType == MapInitializeType.NewMap) {
-			GameManager.colonyM.SetupNewColony(GameManager.colonyM.colony, true);
+			GameManager.Get<ColonyManager>().SetupNewColony(GameManager.Get<ColonyManager>().colony, true);
 		} else if (mapInitializeType == MapInitializeType.LoadMap) {
-			GameManager.colonyM.LoadColony(GameManager.colonyM.colony, true);
+			GameManager.Get<ColonyManager>().LoadColony(GameManager.Get<ColonyManager>().colony, true);
 		}
 
-		GameManager.colonyM.colony.map.SetInitialRegionVisibility();
+		GameManager.Get<ColonyManager>().colony.map.SetInitialRegionVisibility();
 
-		GameManager.uiMOld.SetGameUIActive(true);
+		GameManager.Get<UIManagerOld>().SetGameUIActive(true);
 	}
 
 	public Map CreateMap(MapData mapData) {
@@ -1366,17 +1367,17 @@ public class TileManager : IManager {
 		public bool created = false;
 
 		public MapData mapData;
+
 		public Map(MapData mapData) {
 
 			this.mapData = mapData;
 
 			DetermineShadowDirectionsAtHour(mapData.equatorOffset);
 
-			UniTask.WhenAll(CreateMap());
+			CreateMap().Forget();
 		}
 
 		public Map() {
-			DetermineShadowDirectionsAtHour(GameManager.colonyM.colony.mapData.equatorOffset);
 		}
 
 		public List<Tile> tiles = new List<Tile>();
@@ -1523,7 +1524,7 @@ public class TileManager : IManager {
 				DetermineVisibleRegionBlocks();
 				UIEvents.UpdateLoadingScreenText("Lighting", "Applying Shadows");
 				await UniTask.NextFrame();
-				SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
+				SetTileBrightness(GameManager.Get<TimeManager>().Time.TileBrightnessTime, true);
 			}
 
 			if (mapData.actualMap) {
@@ -1539,7 +1540,7 @@ public class TileManager : IManager {
 			created = true;
 
 			if (mapData.actualMap) {
-				await GameManager.stateM.TransitionToState(EState.Simulation);
+				await GameManager.Get<StateManager>().TransitionToState(EState.Simulation);
 			}
 		}
 
@@ -1728,11 +1729,11 @@ public class TileManager : IManager {
 				tilesToModify = tilesToModify.Distinct().ToList();
 
 				if (bitmasking) {
-					GameManager.colonyM.colony.map.Bitmasking(tilesToModify, true, false);
+					GameManager.Get<ColonyManager>().colony.map.Bitmasking(tilesToModify, true, false);
 				}
 
 				if (recalculateLighting) {
-					GameManager.colonyM.colony.map.RecalculateLighting(tilesToModify, true);
+					GameManager.Get<ColonyManager>().colony.map.RecalculateLighting(tilesToModify, true);
 				}
 
 			}
@@ -2162,6 +2163,9 @@ public class TileManager : IManager {
 						tiles = map.RiverPathfinding(startTile, endTile, expandRadius, ignoreStone);
 					}
 				}
+			}
+
+			protected River() {
 			}
 		}
 
@@ -2800,8 +2804,8 @@ public class TileManager : IManager {
 				} else if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Stone) {
 					sum = BitSum(TileTypeGroup.GetTileTypeGroupByEnum(TileTypeGroup.TypeEnum.Stone).tileTypes.Select(tt => tt.type).ToList(), null, surroundingTilesToUse, includeMapEdge);
 					// Not-fully-working implementation of walls and stone connecting
-					//sum += GameManager.resourceM.BitSumObjects(
-					//	GameManager.resourceM.GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Walls).prefabs.Select(prefab => prefab.type).ToList(),
+					//sum += GameManager.Get<ResourceManager>().BitSumObjects(
+					//	GameManager.Get<ResourceManager>().GetObjectPrefabSubGroupByEnum(ResourceManager.ObjectSubGroupEnum.Walls).prefabs.Select(prefab => prefab.type).ToList(),
 					//	surroundingTilesToUse
 					//);
 				} else if (tile.tileType.groupType == TileTypeGroup.TypeEnum.Hole) {
@@ -2871,19 +2875,19 @@ public class TileManager : IManager {
 		private int lastOrthographicSize = -1;
 
 		public void DetermineVisibleRegionBlocks() {
-			RegionBlock newCentreRegionBlock = GetTileFromPosition(GameManager.cameraM.cameraGO.transform.position).squareRegionBlock;
-			if (newCentreRegionBlock != centreRegionBlock || Mathf.RoundToInt(GameManager.cameraM.camera.orthographicSize) != lastOrthographicSize) {
+			RegionBlock newCentreRegionBlock = GetTileFromPosition(GameManager.Get<CameraManager>().cameraGO.transform.position).squareRegionBlock;
+			if (newCentreRegionBlock != centreRegionBlock || Mathf.RoundToInt(GameManager.Get<CameraManager>().camera.orthographicSize) != lastOrthographicSize) {
 				visibleRegionBlocks.Clear();
-				lastOrthographicSize = Mathf.RoundToInt(GameManager.cameraM.camera.orthographicSize);
+				lastOrthographicSize = Mathf.RoundToInt(GameManager.Get<CameraManager>().camera.orthographicSize);
 				centreRegionBlock = newCentreRegionBlock;
-				float maxVisibleRegionBlockDistance = GameManager.cameraM.camera.orthographicSize * ((float)Screen.width / Screen.height);
+				float maxVisibleRegionBlockDistance = GameManager.Get<CameraManager>().camera.orthographicSize * ((float)Screen.width / Screen.height);
 				List<RegionBlock> frontier = new List<RegionBlock>() { centreRegionBlock };
 				List<RegionBlock> checkedBlocks = new List<RegionBlock>() { centreRegionBlock };
 				while (frontier.Count > 0) {
 					RegionBlock currentRegionBlock = frontier[0];
 					frontier.RemoveAt(0);
 					visibleRegionBlocks.Add(currentRegionBlock);
-					float currentRegionBlockCameraDistance = Vector2.Distance(currentRegionBlock.averagePosition, GameManager.cameraM.cameraGO.transform.position);
+					float currentRegionBlockCameraDistance = Vector2.Distance(currentRegionBlock.averagePosition, GameManager.Get<CameraManager>().cameraGO.transform.position);
 					foreach (RegionBlock nBlock in currentRegionBlock.surroundingRegionBlocks) {
 						if (currentRegionBlockCameraDistance <= maxVisibleRegionBlockDistance) {
 							if (!checkedBlocks.Contains(nBlock)) {
@@ -2898,7 +2902,7 @@ public class TileManager : IManager {
 						}
 					}
 				}
-				SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, false);
+				SetTileBrightness(GameManager.Get<TimeManager>().Time.TileBrightnessTime, false);
 			}
 		}
 
@@ -2912,10 +2916,10 @@ public class TileManager : IManager {
 					}
 				}
 			}
-			foreach (LifeManager.Life life in GameManager.lifeM.life) {
+			foreach (LifeManager.Life life in GameManager.Get<LifeManager>().life) {
 				life.SetColour(life.overTile.sr.color);
 			}
-			GameManager.cameraM.camera.backgroundColor = newColour * 0.5f;
+			GameManager.Get<CameraManager>().camera.backgroundColor = newColour * 0.5f;
 		}
 
 		private readonly Dictionary<int, Vector2> shadowDirectionAtHour = new Dictionary<int, Vector2>();
@@ -2963,6 +2967,9 @@ public class TileManager : IManager {
 
 		private static readonly float distanceIncreaseAmount = 0.1f; // 0.1f
 		private void DetermineShadowTiles(List<Tile> shadowSourceTiles, bool setBrightnessAtEnd, bool forceBrightnessUpdate) {
+			if (shadowDirectionAtHour.Count == 0) {
+				DetermineShadowDirectionsAtHour(GameManager.Get<ColonyManager>().colony.mapData.equatorOffset);
+			}
 			for (int h = 0; h < 24; h++) {
 				Vector2 hourDirection = shadowDirectionAtHour[h];
 				float maxShadowDistanceAtHour = hourDirection.magnitude * 5f + (Mathf.Pow(h - 12, 2) / 6f);
@@ -3025,7 +3032,7 @@ public class TileManager : IManager {
 				}
 			}
 			if (setBrightnessAtEnd) {
-				SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, forceBrightnessUpdate);
+				SetTileBrightness(GameManager.Get<TimeManager>().Time.TileBrightnessTime, forceBrightnessUpdate);
 			}
 		}
 

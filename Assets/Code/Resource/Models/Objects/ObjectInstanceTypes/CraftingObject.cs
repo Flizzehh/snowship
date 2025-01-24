@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NJob;
 using UnityEngine;
 
 namespace Snowship.NResource
@@ -68,16 +69,16 @@ namespace Snowship.NResource
 						switch (resource.creationMethod) {
 							case CraftableResourceInstance.CreationMethod.SingleRun:
 								if (resource.GetRemainingAmount() > 0) {
-									resource.job = GameManager.resourceM.CreateResource(resource, this);
+									resource.job = GameManager.Get<ResourceManager>().CreateResource(resource, this);
 								}
 								break;
 							case CraftableResourceInstance.CreationMethod.MaintainStock:
 								if (resource.GetTargetAmount() > resource.resource.GetAvailableAmount()) {
-									resource.job = GameManager.resourceM.CreateResource(resource, this);
+									resource.job = GameManager.Get<ResourceManager>().CreateResource(resource, this);
 								}
 								break;
 							case CraftableResourceInstance.CreationMethod.ContinuousRun:
-								resource.job = GameManager.resourceM.CreateResource(resource, this);
+								resource.job = GameManager.Get<ResourceManager>().CreateResource(resource, this);
 								break;
 						}
 					}
@@ -95,7 +96,7 @@ namespace Snowship.NResource
 			if (!active) {
 				foreach (CraftableResourceInstance resource in resources) {
 					if (resource.job != null) {
-						GameManager.jobM.CancelJob(resource.job);
+						GameManager.Get<JobManager>().CancelJob(resource.job);
 						resource.job = null;
 					}
 				}
@@ -110,7 +111,7 @@ namespace Snowship.NResource
 			} else {
 				resources.Remove(existingResource);
 				if (existingResource.job != null) {
-					GameManager.jobM.CancelJob(existingResource.job);
+					GameManager.Get<JobManager>().CancelJob(existingResource.job);
 					existingResource.job = null;
 				}
 				existingResource = null;
@@ -128,7 +129,7 @@ namespace Snowship.NResource
 				foreach (CraftableResourceInstance resource in resources) {
 					if (resource.fuelAmounts.Find(ra => ra.Resource == fuel) != null) {
 						if (resource.job != null) {
-							GameManager.jobM.CancelJob(resource.job);
+							GameManager.Get<JobManager>().CancelJob(resource.job);
 							resource.job = null;
 						}
 					}

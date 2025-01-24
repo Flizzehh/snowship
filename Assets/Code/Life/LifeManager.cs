@@ -1,6 +1,8 @@
 ﻿using Snowship.Selectable;
 using System;
 using System.Collections.Generic;
+using Snowship.NColony;
+using Snowship.NTime;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -31,14 +33,18 @@ public class LifeManager : IManager {
 			gender = GetRandomGender();
 
 			overTile = spawnTile;
-			obj = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, overTile.obj.transform.position, Quaternion.identity);
+			obj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, overTile.obj.transform.position, Quaternion.identity);
 			obj.GetComponent<SpriteRenderer>().sortingOrder = 10; // Life Sprite
 
 			previousPosition = obj.transform.position;
 
 			Health = startingHealth;
 
-			GameManager.lifeM.life.Add(this);
+			GameManager.Get<LifeManager>().life.Add(this);
+		}
+
+		protected Life() {
+
 		}
 
 		public static Gender GetRandomGender() {
@@ -47,7 +53,7 @@ public class LifeManager : IManager {
 
 		public virtual void Update() {
 			overTileChanged = false;
-			TileManager.Tile newOverTile = GameManager.colonyM.colony.map.GetTileFromPosition(obj.transform.position);
+			TileManager.Tile newOverTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(obj.transform.position);
 			if (overTile != newOverTile) {
 				overTileChanged = true;
 				overTile = newOverTile;
@@ -93,8 +99,8 @@ public class LifeManager : IManager {
 					moveTimer = 0;
 					path.RemoveAt(0);
 				} else {
-					moveSpeedRampingMultiplier = Mathf.Clamp01(moveSpeedRampingMultiplier + GameManager.timeM.Time.DeltaTime);
-					moveTimer += 2 * GameManager.timeM.Time.DeltaTime * overTile.walkSpeed * moveSpeedMultiplier * moveSpeedRampingMultiplier;
+					moveSpeedRampingMultiplier = Mathf.Clamp01(moveSpeedRampingMultiplier + GameManager.Get<TimeManager>().Time.DeltaTime);
+					moveTimer += 2 * GameManager.Get<TimeManager>().Time.DeltaTime * overTile.walkSpeed * moveSpeedMultiplier * moveSpeedRampingMultiplier;
 				}
 			} else {
 				path.Clear();
@@ -111,7 +117,7 @@ public class LifeManager : IManager {
 		public int CalculateMoveSpriteIndex() {
 			int moveSpriteIndex = 0;
 			if (path.Count > 0) {
-				TileManager.Tile previousTile = GameManager.colonyM.colony.map.GetTileFromPosition(previousPosition);
+				TileManager.Tile previousTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(previousPosition);
 				if (previousTile != path[0]) {
 					moveSpriteIndex = previousTile.surroundingTiles.IndexOf(path[0]);
 					if (moveSpriteIndex == -1) {
@@ -149,7 +155,7 @@ public class LifeManager : IManager {
 
 		public virtual void Remove() {
 			Object.Destroy(obj);
-			GameManager.lifeM.life.Remove(this);
+			GameManager.Get<LifeManager>().life.Remove(this);
 		}
 
 		public void SetVisible(bool visible) {

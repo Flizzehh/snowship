@@ -61,7 +61,7 @@ namespace Snowship.NUI.Modules {
 
 				PersistenceColony colony = persistenceColonies?.Find(colony => colony.planetPosition == planetTile.tile.position);
 				if (colony != null) {
-					GameObject colonyObj = Object.Instantiate(GameManager.resourceM.colonyObj, planetTileGameObject.transform, false);
+					GameObject colonyObj = Object.Instantiate(GameManager.Get<ResourceManager>().colonyObj, planetTileGameObject.transform, false);
 					colonyObj.name = $"Colony {colony.name}";
 					colonyObj.GetComponent<Button>().onClick.AddListener(() => OnColonyTileClicked?.Invoke(colony));
 				}

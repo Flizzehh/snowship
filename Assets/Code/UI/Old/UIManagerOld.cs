@@ -2,8 +2,10 @@
 using Snowship.NProfession;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NUI.Menu.LoadSave;
 using Snowship.NUtilities;
@@ -100,8 +102,8 @@ namespace Snowship.NUI {
 
 			Button backButton = loadPlanetPanel.transform.Find("Back-Button").GetComponent<Button>();
 			backButton.onClick.AddListener(delegate {
-				GameManager.planetM.SetPlanet(null);
-				GameManager.colonyM.SetColony(null);
+				GameManager.Get<PlanetManager>().SetPlanet(null);
+				GameManager.Get<ColonyManager>().SetColony(null);
 
 				SetSelectedPlanetElement(null);
 
@@ -111,8 +113,8 @@ namespace Snowship.NUI {
 
 			Button createPlanetButton = loadPlanetPanel.transform.Find("CreatePlanet-Button").GetComponent<Button>();
 			createPlanetButton.onClick.AddListener(delegate {
-				GameManager.planetM.SetPlanet(null);
-				GameManager.colonyM.SetColony(null);
+				GameManager.Get<PlanetManager>().SetPlanet(null);
+				GameManager.Get<ColonyManager>().SetColony(null);
 
 				SetSelectedPlanetElement(null);
 
@@ -125,8 +127,8 @@ namespace Snowship.NUI {
 			loadPlanetButton = loadPlanetPanel.transform.Find("LoadPlanet-Button").GetComponent<Button>();
 			loadPlanetButton.onClick.AddListener(delegate {
 				if (selectedPlanetElement != null) {
-					GameManager.persistenceM.ApplyLoadedPlanet(selectedPlanetElement.persistencePlanet);
-					GameManager.colonyM.SetColony(null);
+					GameManager.Get<PersistenceManager>().ApplyLoadedPlanet(selectedPlanetElement.persistencePlanet);
+					GameManager.Get<ColonyManager>().SetColony(null);
 
 					SetSelectedPlanetElement(null);
 
@@ -313,9 +315,9 @@ namespace Snowship.NUI {
 		}
 
 		public void OnUpdate() {
-			if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
-				mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
-				TileManager.Tile newMouseOverTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
+			if (GameManager.Get<TileManager>().mapState == TileManager.MapState.Generated) {
+				mousePosition = GameManager.Get<CameraManager>().camera.ScreenToWorldPoint(Input.mousePosition);
+				TileManager.Tile newMouseOverTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(mousePosition);
 				if (newMouseOverTile != mouseOverTile) {
 					mouseOverTile = newMouseOverTile;
 					//if (!pauseMenu.activeSelf) {
@@ -324,11 +326,11 @@ namespace Snowship.NUI {
 				}
 
 				if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape)) {
-					if (GameManager.jobM.firstTile != null) {
-						GameManager.jobM.StopSelection();
+					if (GameManager.Get<JobManager>().firstTile != null) {
+						GameManager.Get<JobManager>().StopSelection();
 					} else {
-						if (GameManager.jobM.GetSelectedPrefab() != null) {
-							GameManager.jobM.SetSelectedPrefab(null, null);
+						if (GameManager.Get<JobManager>().GetSelectedPrefab() != null) {
+							GameManager.Get<JobManager>().SetSelectedPrefab(null, null);
 						} else {
 							/*if (!playerTyping) {
 								if (!Input.GetMouseButtonDown(1)) {
@@ -406,7 +408,7 @@ namespace Snowship.NUI {
 			}
 			/*else {
 				if ((Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape)) &&
-					GameManager.tileM.mapState != TileManager.MapState.Generating && !playerTyping) {
+					GameManager.Get<TileManager>().mapState != TileManager.MapState.Generating && !playerTyping) {
 					if (loadUniversePanel.activeSelf) {
 						SetSelectedUniverseElement(null);
 					}
@@ -556,7 +558,7 @@ namespace Snowship.NUI {
 				SetVariationElements();
 				UpdateVariationElements();
 
-				obj.GetComponent<HandleClickScript>().Initialize(delegate { GameManager.jobM.SetSelectedPrefab(prefab, prefab.lastSelectedVariation); }, null, delegate {
+				obj.GetComponent<HandleClickScript>().Initialize(delegate { GameManager.Get<JobManager>().SetSelectedPrefab(prefab, prefab.lastSelectedVariation); }, null, delegate {
 					if (prefab.variations.Count > 0) {
 						variationElementsPanel.SetActive(!variationElementsPanel.activeSelf);
 						requiredResourceElementsPanel.SetActive(!variationElementsPanel.activeSelf);
@@ -719,7 +721,7 @@ namespace Snowship.NUI {
 				obj.GetComponent<HandleClickScript>().Initialize(delegate {
 					prefabElement.SetVariation(variation);
 					requiredResourceElementsPanel.SetActive(false);
-					GameManager.jobM.SetSelectedPrefab(prefabElement.prefab, variation);
+					GameManager.Get<JobManager>().SetSelectedPrefab(prefabElement.prefab, variation);
 				}, null, delegate {
 					prefabElement.variationElementsPanel.SetActive(false);
 					requiredResourceElementsPanel.SetActive(false);
@@ -954,10 +956,10 @@ namespace Snowship.NUI {
 					if (mouseOverTile.GetAllObjectInstances().Count > 0) {
 						foreach (ObjectInstance objectInstance in mouseOverTile.GetAllObjectInstances().OrderBy(o => o.prefab.layer).ToList()) {
 							if (!objectElements.ContainsKey(objectInstance.prefab.layer)) {
-								GameObject spriteObject = Object.Instantiate(GameManager.resourceM.tileImage, tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage"), false);
+								GameObject spriteObject = Object.Instantiate(GameManager.Get<ResourceManager>().tileImage, tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage"), false);
 								spriteObject.name = layerToLayerNameMap[objectInstance.prefab.layer];
 
-								GameObject dataObject = Object.Instantiate(GameManager.resourceM.objectDataPanel, tileInformation.transform, false);
+								GameObject dataObject = Object.Instantiate(GameManager.Get<ResourceManager>().objectDataPanel, tileInformation.transform, false);
 								dataObject.name = layerToLayerNameMap[objectInstance.prefab.layer];
 
 								objectElements.Add(objectInstance.prefab.layer, new List<GameObject>() {
@@ -995,8 +997,8 @@ namespace Snowship.NUI {
 
 					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel").GetComponent<RectTransform>().sizeDelta = new Vector2(140, 100);
 				} else {
-					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().sprite = GameManager.resourceM.whiteSquareSprite;
-					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().color = GameManager.cameraM.camera.backgroundColor;
+					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().sprite = GameManager.Get<ResourceManager>().whiteSquareSprite;
+					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInfoElement-TileImage-Panel/TileInfoElement-TileImage").GetComponent<Image>().color = GameManager.Get<CameraManager>().camera.backgroundColor;
 
 					tileInformation.transform.Find("TileInformation-GeneralInfo-Panel/TileInformation-Type").GetComponent<Text>().text = "Undiscovered";
 
@@ -1151,15 +1153,15 @@ namespace Snowship.NUI {
 		private readonly List<ReservedResourcesColonistElement> selectedColonistReservedResourcesColonistElements = new List<ReservedResourcesColonistElement>();
 
 		public void SetSelectedColonistInformation(bool sameColonistSelected) {
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist) {
-				Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
+			if (GameManager.Get<HumanManager>().selectedHuman != null && GameManager.Get<HumanManager>().selectedHuman is Colonist) {
+				Colonist selectedColonist = (Colonist)GameManager.Get<HumanManager>().selectedHuman;
 
 				selectedColonistInformationPanel.SetActive(true);
 
-				selectedColonistInformationPanel.transform.Find("ColonistName-Text").GetComponent<Text>().text = GameManager.humanM.selectedHuman.name + " (" + GameManager.humanM.selectedHuman.gender.ToString()[0] + ")";
-				selectedColonistInformationPanel.transform.Find("ColonistBaseSprite-Image").GetComponent<Image>().sprite = GameManager.humanM.selectedHuman.moveSprites[0];
+				selectedColonistInformationPanel.transform.Find("ColonistName-Text").GetComponent<Text>().text = GameManager.Get<HumanManager>().selectedHuman.name + " (" + GameManager.Get<HumanManager>().selectedHuman.gender.ToString()[0] + ")";
+				selectedColonistInformationPanel.transform.Find("ColonistBaseSprite-Image").GetComponent<Image>().sprite = GameManager.Get<HumanManager>().selectedHuman.moveSprites[0];
 
-				selectedColonistInformationPanel.transform.Find("AffiliationName-Text").GetComponent<Text>().text = "Colonist of " + GameManager.colonyM.colony.name;
+				selectedColonistInformationPanel.transform.Find("AffiliationName-Text").GetComponent<Text>().text = "Colonist of " + GameManager.Get<ColonyManager>().colony.name;
 
 				RemakeSelectedColonistNeeds();
 				RemakeSelectedColonistMoodModifiers();
@@ -1226,11 +1228,11 @@ namespace Snowship.NUI {
 			}
 
 			selectedColonistInventoryElements.Clear();
-			foreach (ResourceManager.ReservedResources rr in GameManager.humanM.selectedHuman.GetInventory().reservedResources) {
+			foreach (ResourceManager.ReservedResources rr in GameManager.Get<HumanManager>().selectedHuman.GetInventory().reservedResources) {
 				selectedColonistReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedColonistInventoryPanel.transform.Find("Inventory-ScrollPanel/InventoryList-Panel")));
 			}
 
-			foreach (ResourceManager.ResourceAmount ra in GameManager.humanM.selectedHuman.GetInventory().resources) {
+			foreach (ResourceManager.ResourceAmount ra in GameManager.Get<HumanManager>().selectedHuman.GetInventory().resources) {
 				selectedColonistInventoryElements.Add(new InventoryElement(ra, selectedColonistInventoryPanel.transform.Find("Inventory-ScrollPanel/InventoryList-Panel")));
 			}
 
@@ -1268,14 +1270,14 @@ namespace Snowship.NUI {
 					checkJobs.Clear();
 				}
 
-				selectedColonistClothingPanel.transform.Find("ColonistBody-Image/Colonist" + appearanceToClothingKVP.Key + "-Image").GetComponent<Image>().sprite = clothing == null ? GameManager.resourceM.clearSquareSprite : clothing.moveSprites[0];
+				selectedColonistClothingPanel.transform.Find("ColonistBody-Image/Colonist" + appearanceToClothingKVP.Key + "-Image").GetComponent<Image>().sprite = clothing == null ? GameManager.Get<ResourceManager>().clearSquareSprite : clothing.moveSprites[0];
 
-				clothingTypeButton.interactable = GameManager.resourceM.GetClothesByAppearance(appearanceToClothingKVP.Key).Count > 0 || selectedColonist.clothes[appearanceToClothingKVP.Key] != null;
+				clothingTypeButton.interactable = GameManager.Get<ResourceManager>().GetClothesByAppearance(appearanceToClothingKVP.Key).Count > 0 || selectedColonist.clothes[appearanceToClothingKVP.Key] != null;
 				clothingTypeButton.onClick.RemoveAllListeners();
 				clothingTypeButton.onClick.AddListener(delegate { SetSelectedColonistClothingSelectionPanel(true, appearanceToClothingKVP.Key, selectedColonist); });
 
 				clothingTypeButton.transform.Find("Name").GetComponent<Text>().text = clothing == null ? "None" : clothing.name;
-				clothingTypeButton.transform.Find("Image").GetComponent<Image>().sprite = clothing == null ? GameManager.resourceM.clearSquareSprite : clothing.image;
+				clothingTypeButton.transform.Find("Image").GetComponent<Image>().sprite = clothing == null ? GameManager.Get<ResourceManager>().clearSquareSprite : clothing.image;
 			}
 
 			if (!selectionPanelKeepState) {
@@ -1319,12 +1321,12 @@ namespace Snowship.NUI {
 					SetSelectedColonistInformation(true);
 				});
 
-				List<ResourceManager.Clothing> clothes = GameManager.resourceM.GetClothesByAppearance(clothingType);
+				List<ResourceManager.Clothing> clothes = GameManager.Get<ResourceManager>().GetClothesByAppearance(clothingType);
 				foreach (ResourceManager.Clothing clothing in clothes.Where(c => c.GetWorldTotalAmount() > 0)) {
 					if (clothing.GetAvailableAmount() > 0) {
-						availableClothingElements.Add(new ClothingElement(clothing, GameManager.humanM.selectedHuman, availableClothingTitleAndList.Value.transform));
+						availableClothingElements.Add(new ClothingElement(clothing, GameManager.Get<HumanManager>().selectedHuman, availableClothingTitleAndList.Value.transform));
 					} else if (selectedColonist.clothes[clothingType] == null || clothing.name != selectedColonist.clothes[clothingType].name) {
-						takenClothingElements.Add(new ClothingElement(clothing, GameManager.humanM.selectedHuman, takenClothingTitleAndList.Value.transform));
+						takenClothingElements.Add(new ClothingElement(clothing, GameManager.Get<HumanManager>().selectedHuman, takenClothingTitleAndList.Value.transform));
 					}
 				}
 
@@ -1356,8 +1358,8 @@ namespace Snowship.NUI {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					human.ChangeClothing(clothing.prefab.appearance, clothing);
 
-					// GameManager.uiMOld.SetSelectedColonistClothingSelectionPanelActive(false);
-					// GameManager.uiMOld.SetSelectedColonistInformation(true);
+					// GameManager.Get<UIManagerOld>().SetSelectedColonistClothingSelectionPanelActive(false);
+					// GameManager.Get<UIManagerOld>().SetSelectedColonistInformation(true);
 				});
 			}
 		}
@@ -1373,8 +1375,8 @@ namespace Snowship.NUI {
 		private readonly List<MoodModifierElement> removeHME = new List<MoodModifierElement>();
 
 		public void UpdateSelectedColonistInformation() {
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Colonist) {
-				Colonist selectedColonist = (Colonist)GameManager.humanM.selectedHuman;
+			if (GameManager.Get<HumanManager>().selectedHuman != null && GameManager.Get<HumanManager>().selectedHuman is Colonist) {
+				Colonist selectedColonist = (Colonist)GameManager.Get<HumanManager>().selectedHuman;
 
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedColonist.health * 100);
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistHealth-Panel/ColonistHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), selectedColonist.health);
@@ -1466,7 +1468,7 @@ namespace Snowship.NUI {
 
 				obj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
 				obj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
-				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
+				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<HumanManager>().SetSelectedHuman(colonist); });
 
 				Update();
 			}
@@ -1519,7 +1521,7 @@ namespace Snowship.NUI {
 
 				obj.GetComponent<RectTransform>().sizeDelta = new Vector2(135, obj.GetComponent<RectTransform>().sizeDelta.y);
 
-				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(caravan.traders[0]); });
+				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<HumanManager>().SetSelectedHuman(caravan.traders[0]); });
 
 				affiliatedColonyNameText = obj.transform.Find("AffiliatedColonyName-Text").GetComponent<Text>();
 				affiliatedColonyNameText.text = caravan.location.name;
@@ -1527,7 +1529,7 @@ namespace Snowship.NUI {
 				resourceGroupNameText = obj.transform.Find("ResourceGroupName-Text").GetComponent<Text>();
 				resourceGroupNameText.text = caravan.resourceGroup.name;
 
-				obj.transform.Find("TradeWithCaravan-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.caravanM.SetSelectedCaravan(caravan); });
+				obj.transform.Find("TradeWithCaravan-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<CaravanManager>().SetSelectedCaravan(caravan); });
 
 				Update();
 			}
@@ -1558,11 +1560,11 @@ namespace Snowship.NUI {
 		}
 
 		public void SetCaravanElements() {
-			if (GameManager.caravanM.caravans.Count > 0) {
+			if (GameManager.Get<CaravanManager>().caravans.Count > 0) {
 				RemoveCaravanElements();
 				caravansPanel.SetActive(true);
 				if (caravansPanel.activeSelf) {
-					foreach (Caravan caravan in GameManager.caravanM.caravans.Where(c => c.traders[0].overTile.IsVisibleToAColonist()).OrderByDescending(c => c.confirmedResourcesToTrade.Count > 0)) {
+					foreach (Caravan caravan in GameManager.Get<CaravanManager>().caravans.Where(c => c.traders[0].overTile.IsVisibleToAColonist()).OrderByDescending(c => c.confirmedResourcesToTrade.Count > 0)) {
 						caravanElements.Add(new CaravanElement(caravan, caravansPanel.transform.Find("CaravanList-Panel")));
 					}
 				}
@@ -1601,7 +1603,7 @@ namespace Snowship.NUI {
 				jobInfoNameText.text = job.prefab.GetJobInfoNameText(job);
 
 				jobInfo.transform.Find("Type").GetComponent<Text>().text = StringUtilities.SplitByCapitals(job.objectPrefab.jobType.ToString());
-				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.cameraM.SetCameraPosition(job.tile.obj.transform.position); });
+				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<CameraManager>().SetCameraPosition(job.tile.obj.transform.position); });
 
 				bool hasPriority = job.priority != 0;
 
@@ -1636,7 +1638,7 @@ namespace Snowship.NUI {
 					colonistObj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistInfoElement-Panel"), obj.transform.Find("Content"), false);
 					colonistObj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
 					colonistObj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
-					colonistObj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
+					colonistObj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<HumanManager>().SetSelectedHuman(colonist); });
 					colonistObj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha64);
 
 					colonistObj.GetComponent<RectTransform>().sizeDelta = new Vector2(obj.GetComponent<LayoutElement>().minWidth - 6, colonistObj.GetComponent<RectTransform>().sizeDelta.y);
@@ -1687,7 +1689,7 @@ namespace Snowship.NUI {
 			}
 
 			public void Remove() {
-				GameManager.uiMOld.jobElements.Remove(this);
+				GameManager.Get<UIManagerOld>().jobElements.Remove(this);
 				job.jobUIElement = null;
 				DestroyObjects();
 			}
@@ -1780,15 +1782,15 @@ namespace Snowship.NUI {
 				countValue.text = (xSizeFloored * ySizeFloored).ToString();
 				selectedValue.text = selectionAreaCount.ToString();
 
-				canvas.transform.localScale = Vector2.one * (0.005f * 0.5f * GameManager.cameraM.camera.orthographicSize);
+				canvas.transform.localScale = Vector2.one * (0.005f * 0.5f * GameManager.Get<CameraManager>().camera.orthographicSize);
 				canvas.transform.position = new Vector2(mousePosition.x + (canvas.GetComponent<RectTransform>().sizeDelta.x / 2f + 10) * canvas.transform.localScale.x, mousePosition.y + (canvas.GetComponent<RectTransform>().sizeDelta.y / 2f + 10) * canvas.transform.localScale.y);
 			}
 		}
 
 		public void InitializeSelectedContainerIndicator() {
-			selectedContainerIndicator = Object.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
+			selectedContainerIndicator = Object.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, Vector2.zero, Quaternion.identity);
 			SpriteRenderer sCISR = selectedContainerIndicator.GetComponent<SpriteRenderer>();
-			sCISR.sprite = GameManager.resourceM.selectionCornersSprite;
+			sCISR.sprite = GameManager.Get<ResourceManager>().selectionCornersSprite;
 			sCISR.name = "SelectedContainerIndicator";
 			sCISR.sortingOrder = 20; // Selected Container Indicator Sprite
 			sCISR.color = new Color(1f, 1f, 1f, 0.75f);
@@ -1878,9 +1880,9 @@ namespace Snowship.NUI {
 		}
 
 		public void InitializeSelectedTradingPostIndicator() {
-			selectedTradingPostIndicator = Object.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
+			selectedTradingPostIndicator = Object.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, Vector2.zero, Quaternion.identity);
 			SpriteRenderer sTPISR = selectedTradingPostIndicator.GetComponent<SpriteRenderer>();
-			sTPISR.sprite = GameManager.resourceM.selectionCornersSprite;
+			sTPISR.sprite = GameManager.Get<ResourceManager>().selectionCornersSprite;
 			sTPISR.name = "SelectedTradingPostIndicator";
 			sTPISR.sortingOrder = 20; // Selected Trading Post Indicator Sprite
 			sTPISR.color = new Color(1f, 1f, 1f, 0.75f);
@@ -1949,7 +1951,7 @@ namespace Snowship.NUI {
 					}
 
 					if (job.requiredResources.Count > 0) {
-						GameManager.jobM.CreateJob(job);
+						GameManager.Get<JobManager>().CreateJob(job);
 					}
 				});
 
@@ -1985,7 +1987,7 @@ namespace Snowship.NUI {
 					}
 
 					if (job.transferResources.Count > 0) {
-						GameManager.jobM.CreateJob(job);
+						GameManager.Get<JobManager>().CreateJob(job);
 					}
 				});
 
@@ -2103,7 +2105,7 @@ namespace Snowship.NUI {
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ColonistProfessionsRow-Panel"), parent, false);
 
-				obj.transform.Find("Colonist-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.humanM.SetSelectedHuman(colonist); });
+				obj.transform.Find("Colonist-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<HumanManager>().SetSelectedHuman(colonist); });
 
 				obj.transform.Find("Colonist-Button/Text").GetComponent<Text>().text = colonist.name;
 				obj.transform.Find("Colonist-Button/Image").GetComponent<Image>().sprite = colonist.moveSprites[0];
@@ -2177,7 +2179,7 @@ namespace Snowship.NUI {
 
 		public void SetSelectedTraderMenu() {
 			return;
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
+			if (GameManager.Get<HumanManager>().selectedHuman != null && GameManager.Get<HumanManager>().selectedHuman is Trader selectedTrader) {
 				Caravan caravan = selectedTrader.caravan;
 
 				selectedTraderMenu.SetActive(true);
@@ -2190,14 +2192,14 @@ namespace Snowship.NUI {
 				selectedTraderMenu.transform.Find("TraderCurrentAction-Text").GetComponent<Text>().text = caravan.leaving ? "Leaving the Area" : "Ready to Trade";
 				selectedTraderMenu.transform.Find("TraderStoredAction-Text").GetComponent<Text>().text = string.Empty;
 
-				selectedTraderMenu.transform.Find("TradeWithCaravan-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.caravanM.SetSelectedCaravan(caravan); });
+				selectedTraderMenu.transform.Find("TradeWithCaravan-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<CaravanManager>().SetSelectedCaravan(caravan); });
 			} else {
 				selectedTraderMenu.SetActive(false);
 			}
 		}
 
 		public void UpdateSelectedTraderMenu() {
-			if (GameManager.humanM.selectedHuman != null && GameManager.humanM.selectedHuman is Trader selectedTrader) {
+			if (GameManager.Get<HumanManager>().selectedHuman != null && GameManager.Get<HumanManager>().selectedHuman is Trader selectedTrader) {
 				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider").GetComponent<Slider>().value = Mathf.RoundToInt(selectedTrader.Health * 100);
 				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Fill Area/Fill").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.DarkRed), ColourUtilities.GetColour(ColourUtilities.EColour.DarkGreen), selectedTrader.Health);
 				selectedTraderMenu.transform.Find("TraderHealth-Panel/TraderHealth-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), selectedTrader.Health);
@@ -2225,8 +2227,8 @@ namespace Snowship.NUI {
 				obj.GetComponent<Button>().onClick.AddListener(delegate {
 					objectInstancesList.SetActive(!objectInstancesList.activeSelf);
 					if (objectInstancesList.activeSelf) {
-						objectInstancesList.transform.SetParent(GameManager.uiMOld.canvas.transform);
-						foreach (ObjectPrefabElement objectPrefabElement in GameManager.uiMOld.objectPrefabElements) {
+						objectInstancesList.transform.SetParent(GameManager.Get<UIManagerOld>().canvas.transform);
+						foreach (ObjectPrefabElement objectPrefabElement in GameManager.Get<UIManagerOld>().objectPrefabElements) {
 							if (objectPrefabElement != this) {
 								objectPrefabElement.objectInstancesList.SetActive(false);
 							}
@@ -2288,21 +2290,21 @@ namespace Snowship.NUI {
 				obj.transform.Find("ObjectInstanceName-Text").GetComponent<Text>().text = instance.prefab.name;
 				obj.transform.Find("TilePosition-Text").GetComponent<Text>().text = "(" + Mathf.FloorToInt(instance.tile.obj.transform.position.x) + ", " + Mathf.FloorToInt(instance.tile.obj.transform.position.y) + ")";
 
-				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.cameraM.SetCameraPosition(instance.obj.transform.position); });
+				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<CameraManager>().SetCameraPosition(instance.obj.transform.position); });
 
 				Container container = Container.containers.Find(findContainer => findContainer == instance);
 				if (container != null) {
-					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedContainer(container); });
+					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<UIManagerOld>().SetSelectedContainer(container); });
 				}
 
 				TradingPost tradingPost = TradingPost.tradingPosts.Find(tp => tp == instance);
 				if (tradingPost != null) {
-					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedTradingPost(tradingPost); });
+					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<UIManagerOld>().SetSelectedTradingPost(tradingPost); });
 				}
 
 				CraftingObject mto = CraftingObject.craftingObjectInstances.Find(findMTO => findMTO == instance);
 				if (mto != null) {
-					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.uiMOld.SetSelectedCraftingObject(mto); });
+					obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<UIManagerOld>().SetSelectedCraftingObject(mto); });
 				}
 			}
 		}
@@ -2481,7 +2483,7 @@ namespace Snowship.NUI {
 
 			resourceElements.Clear();
 			Transform resourcesListParent = resourcesList.transform.Find("ResourcesList-Panel");
-			foreach (Resource resource in GameManager.resourceM.GetResources().Where(r => !r.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
+			foreach (Resource resource in GameManager.Get<ResourceManager>().GetResources().Where(r => !r.classes.Contains(ResourceManager.ResourceClassEnum.Clothing))) {
 				ResourceElement newResourceElement = new ResourceElement(resource, resourcesListParent);
 				newResourceElement.resource.resourceListElement = newResourceElement;
 				resourceElements.Add(newResourceElement);
@@ -2519,9 +2521,9 @@ namespace Snowship.NUI {
 		}*/
 
 		public void InitializeSelectedCraftingObjectIndicator() {
-			selectedCraftingObjectIndicator = Object.Instantiate(GameManager.resourceM.tilePrefab, Vector2.zero, Quaternion.identity);
+			selectedCraftingObjectIndicator = Object.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, Vector2.zero, Quaternion.identity);
 			SpriteRenderer spriteRenderer = selectedCraftingObjectIndicator.GetComponent<SpriteRenderer>();
-			spriteRenderer.sprite = GameManager.resourceM.selectionCornersSprite;
+			spriteRenderer.sprite = GameManager.Get<ResourceManager>().selectionCornersSprite;
 			spriteRenderer.name = "SelectedCraftingObjectIndicator";
 			spriteRenderer.sortingOrder = 20; // Selected MTO Indicator Sprite
 			spriteRenderer.color = new Color(1f, 1f, 1f, 0.75f);

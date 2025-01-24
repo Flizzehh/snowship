@@ -39,9 +39,9 @@
 
 			Button backButton = loadUniversePanel.transform.Find("Back-Button").GetComponent<Button>();
 			backButton.onClick.AddListener(delegate {
-				GameManager.universeM.SetUniverse(null);
-				GameManager.planetM.SetPlanet(null);
-				GameManager.colonyM.SetColony(null);
+				GameManager.Get<UniverseManager>().SetUniverse(null);
+				GameManager.Get<PlanetManager>().SetPlanet(null);
+				GameManager.Get<ColonyManager>().SetColony(null);
 
 				SetSelectedUniverseElement(null);
 
@@ -53,8 +53,8 @@
 			loadUniverseButton = loadUniversePanel.transform.Find("LoadUniverse-Button").GetComponent<Button>();
 			loadUniverseButton.onClick.AddListener(delegate {
 				if (selectedUniverseElement != null) {
-					GameManager.persistenceM.ApplyLoadedConfiguration(selectedUniverseElement.persistenceUniverse);
-					GameManager.persistenceM.ApplyLoadedUniverse(selectedUniverseElement.persistenceUniverse);
+					GameManager.Get<PersistenceManager>().ApplyLoadedConfiguration(selectedUniverseElement.persistenceUniverse);
+					GameManager.Get<PersistenceManager>().ApplyLoadedUniverse(selectedUniverseElement.persistenceUniverse);
 
 					SetSelectedUniverseElement(null);
 
@@ -76,7 +76,7 @@
 			universeElements.Clear();
 
 			if (loadUniversePanel.gameObject.activeSelf) {
-				foreach (PersistenceManager.PersistenceUniverse persistenceUniverse in GameManager.persistenceM.GetPersistenceUniverses()) {
+				foreach (PersistenceManager.PersistenceUniverse persistenceUniverse in GameManager.Get<PersistenceManager>().GetPersistenceUniverses()) {
 					universeElements.Add(new UniverseElement(persistenceUniverse, universesListPanel));
 				}
 			}
@@ -89,9 +89,9 @@
 
 			Button backButton = createUniversePanel.transform.Find("Back-Button").GetComponent<Button>();
 			backButton.onClick.AddListener(delegate {
-				GameManager.universeM.SetUniverse(null);
-				GameManager.planetM.SetPlanet(null);
-				GameManager.colonyM.SetColony(null);
+				GameManager.Get<UniverseManager>().SetUniverse(null);
+				GameManager.Get<PlanetManager>().SetPlanet(null);
+				GameManager.Get<ColonyManager>().SetColony(null);
 
 				universeNameInputField.text = UniverseManager.GetRandomUniverseName();
 
@@ -102,9 +102,9 @@
 
 			Button saveUniverseButton = createUniversePanel.transform.Find("SaveUniverse-Button").GetComponent<Button>();
 			saveUniverseButton.onClick.AddListener(delegate {
-				GameManager.universeM.CreateUniverse(universeNameInputField.text);
-				GameManager.planetM.SetPlanet(null);
-				GameManager.colonyM.SetColony(null);
+				GameManager.Get<UniverseManager>().CreateUniverse(universeNameInputField.text);
+				GameManager.Get<PlanetManager>().SetPlanet(null);
+				GameManager.Get<ColonyManager>().SetColony(null);
 
 				universeNameInputField.text = UniverseManager.GetRandomUniverseName();
 

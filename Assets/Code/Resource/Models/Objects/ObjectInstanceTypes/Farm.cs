@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Snowship.NColony;
 using Snowship.NJob;
 using Snowship.NTime;
 using UnityEngine;
@@ -36,8 +37,9 @@ namespace Snowship.NResource
 			base.Update();
 
 			if (growTimer >= prefab.growthTimeDays * SimulationDateTime.DayLengthSeconds) {
-				if (!GameManager.jobM.JobOfTypeExistsAtTile("HarvestFarm", tile)) {
-					GameManager.jobM.CreateJob(
+				if (!GameManager.Get<JobManager>().JobOfTypeExistsAtTile("HarvestFarm", tile)) {
+					GameManager.Get<JobManager>()
+						.CreateJob(
 						new Job(
 							JobPrefab.GetJobPrefabByName("HarvestFarm"),
 							tile,
@@ -59,8 +61,8 @@ namespace Snowship.NResource
 		}
 
 		public float CalculateGrowthRate() {
-			float growthRate = GameManager.timeM.Time.DeltaTime;
-			growthRate *= Mathf.Max(GameManager.colonyM.colony.map.CalculateBrightnessLevelAtHour(GameManager.timeM.Time.TileBrightnessTime), tile.lightSourceBrightness);
+			float growthRate = GameManager.Get<TimeManager>().Time.DeltaTime;
+			growthRate *= Mathf.Max(GameManager.Get<ColonyManager>().colony.map.CalculateBrightnessLevelAtHour(GameManager.Get<TimeManager>().Time.TileBrightnessTime), tile.lightSourceBrightness);
 			growthRate *= precipitationGrowthMultiplier;
 			growthRate *= temperatureGrowthMultipler;
 			growthRate = Mathf.Clamp(growthRate, 0, 1);

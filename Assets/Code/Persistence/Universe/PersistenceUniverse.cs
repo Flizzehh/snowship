@@ -10,8 +10,8 @@ namespace Snowship.NPersistence {
 		public PersistenceUniverse(string path) {
 			this.path = path;
 
-			configurationProperties = GameManager.persistenceM.PUniverse.LoadConfiguration(path + "/configuration.snowship");
-			universeProperties = GameManager.persistenceM.PUniverse.LoadUniverse(path + "/universe.snowship");
+			configurationProperties = GameManager.Get<PersistenceManager>().PUniverse.LoadConfiguration(path + "/configuration.snowship");
+			universeProperties = GameManager.Get<PersistenceManager>().PUniverse.LoadUniverse(path + "/universe.snowship");
 		}
 	}
 }

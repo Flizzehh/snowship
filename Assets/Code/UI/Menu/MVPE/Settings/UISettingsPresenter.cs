@@ -9,8 +9,7 @@ namespace Snowship.NUI.Menu.Settings {
 
 	[UsedImplicitly]
 	public class UISettingsPresenter : UIPresenter<UISettingsView> {
-
-		private readonly PSettings pSettings = GameManager.persistenceM.PSettings;
+		private readonly PSettings pSettings = GameManager.Get<PersistenceManager>().PSettings;
 
 		public UISettingsPresenter(UISettingsView view) : base(view) {
 		}
@@ -42,16 +41,16 @@ namespace Snowship.NUI.Menu.Settings {
 		}
 
 		private void OnCancelButtonClicked() {
-			GameManager.uiM.GoBack(this);
+			GameManager.Get<UIManager>().GoBack(this);
 		}
 
 		private void OnApplyButtonClicked() {
-			GameManager.persistenceM.PSettings.ApplySettings();
+			GameManager.Get<PersistenceManager>().PSettings.ApplySettings();
 		}
 
 		private void OnAcceptButtonClicked() {
-			GameManager.persistenceM.PSettings.ApplySettings();
-			GameManager.uiM.GoBack(this);
+			GameManager.Get<PersistenceManager>().PSettings.ApplySettings();
+			GameManager.Get<UIManager>().GoBack(this);
 		}
 
 		private void SetResolutionSlider() {

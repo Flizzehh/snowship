@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCamera;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NResource;
+using Snowship.NTime;
+using Snowship.NUI;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,11 +39,11 @@ public class HumanManager : IManager {
 	public Human selectedHuman;
 
 	public void OnUpdate() {
-		if (GameManager.tileM.mapState == TileManager.MapState.Generated) {
+		if (GameManager.Get<TileManager>().mapState == TileManager.MapState.Generated) {
 			SetSelectedHumanFromClick();
 		}
 		if (Input.GetKey(KeyCode.F) && selectedHuman != null) {
-			GameManager.cameraM.SetCameraPosition(selectedHuman.obj.transform.position);
+			GameManager.Get<CameraManager>().SetCameraPosition(selectedHuman.obj.transform.position);
 		}
 	}
 
@@ -92,20 +96,24 @@ public class HumanManager : IManager {
 		public Human(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 			bodyIndices = GetBodyIndices(gender);
 
-			moveSprites = GameManager.humanM.humanMoveSprites[bodyIndices[Appearance.Skin]];
+			moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[bodyIndices[Appearance.Skin]];
 
 			inventory = new Inventory(this, 50000, 50000);
 
-			SetName(GameManager.humanM.GetName(gender));
+			SetName(GameManager.Get<HumanManager>().GetName(gender));
 
-			humanObj = MonoBehaviour.Instantiate(GameManager.resourceM.humanPrefab, obj.transform, false);
+			humanObj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().humanPrefab, obj.transform, false);
 			int appearanceIndex = 1;
 			foreach (Appearance appearance in clothes.Keys) {
 				humanObj.transform.Find(appearance.ToString()).GetComponent<SpriteRenderer>().sortingOrder = obj.GetComponent<SpriteRenderer>().sortingOrder + appearanceIndex;
 				appearanceIndex += 1;
 			}
 
-			GameManager.humanM.humans.Add(this);
+			GameManager.Get<HumanManager>().humans.Add(this);
+		}
+
+		protected Human() {
+
 		}
 
 		public static Dictionary<Appearance, int> GetBodyIndices(Gender gender) {
@@ -147,7 +155,7 @@ public class HumanManager : IManager {
 		public override void Update() {
 			base.Update();
 
-			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.cameraM.camera.orthographicSize, 2, 10) * 0.001f;
+			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.Get<CameraManager>().camera.orthographicSize, 2, 10) * 0.001f;
 			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightRed100),
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen100),
@@ -166,7 +174,7 @@ public class HumanManager : IManager {
 				}
 
 				if (clothes[appearance] != null) {
-					humanObj.transform.Find(appearance.ToString()).GetComponent<SpriteRenderer>().sprite = GameManager.resourceM.clearSquareSprite;
+					humanObj.transform.Find(appearance.ToString()).GetComponent<SpriteRenderer>().sprite = GameManager.Get<ResourceManager>().clearSquareSprite;
 					inventory.ChangeResourceAmount(clothes[appearance], 1, false);
 				}
 
@@ -198,7 +206,7 @@ public class HumanManager : IManager {
 		protected void Wander(TileManager.Tile stayNearTile, int stayNearTileDistance) {
 			if (wanderTimer <= 0) {
 				List<TileManager.Tile> validWanderTiles = overTile.surroundingTiles
-					.Where(tile => tile != null && tile.walkable && tile.buildable && GameManager.humanM.humans.Find(human => human.overTile == tile) == null)
+					.Where(tile => tile != null && tile.walkable && tile.buildable && GameManager.Get<HumanManager>().humans.Find(human => human.overTile == tile) == null)
 					.Where(tile => tile.GetObjectInstanceAtLayer(2) == null)
 					.ToList();
 				if (stayNearTile != null) {
@@ -213,13 +221,13 @@ public class HumanManager : IManager {
 				}
 				wanderTimer = UnityEngine.Random.Range(10f, 20f);
 			} else {
-				wanderTimer -= 1 * GameManager.timeM.Time.DeltaTime;
+				wanderTimer -= 1 * GameManager.Get<TimeManager>().Time.DeltaTime;
 			}
 		}
 
 		public override void Remove() {
 			base.Remove();
-			GameManager.humanM.humans.Remove(this);
+			GameManager.Get<HumanManager>().humans.Remove(this);
 		}
 
 		public Inventory GetInventory() {
@@ -228,13 +236,13 @@ public class HumanManager : IManager {
 	}
 
 	private void SetSelectedHumanFromClick() {
-		if (Input.GetMouseButtonDown(0) && !GameManager.uiMOld.IsPointerOverUI()) {
-			Vector2 mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
+		if (Input.GetMouseButtonDown(0) && !GameManager.Get<UIManagerOld>().IsPointerOverUI()) {
+			Vector2 mousePosition = GameManager.Get<CameraManager>().camera.ScreenToWorldPoint(Input.mousePosition);
 			Human newSelectedHuman = humans.Find(human => Vector2.Distance(human.obj.transform.position, mousePosition) < 0.5f);
 			if (newSelectedHuman != null) {
 				SetSelectedHuman(newSelectedHuman);
 			} else if (selectedHuman != null && selectedHuman is Colonist colonist) {
-				colonist.PlayerMoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition));
+				colonist.PlayerMoveToTile(GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(mousePosition));
 			}
 		}
 		if (Input.GetMouseButtonDown(1)) {
@@ -247,9 +255,9 @@ public class HumanManager : IManager {
 
 		SetSelectedHumanIndicator();
 
-		//GameManager.uiMOld.SetSelectedColonistInformation(false); // TODO Fire event for human being selected
-		//GameManager.uiMOld.SetSelectedTraderMenu();
-		//GameManager.uiMOld.SetRightListPanelSize();
+		//GameManager.Get<UIManagerOld>().SetSelectedColonistInformation(false); // TODO Fire event for human being selected
+		//GameManager.Get<UIManagerOld>().SetSelectedTraderMenu();
+		//GameManager.Get<UIManagerOld>().SetRightListPanelSize();
 
 		OnHumanSelected?.Invoke(selectedHuman);
 	}
@@ -261,12 +269,12 @@ public class HumanManager : IManager {
 			MonoBehaviour.Destroy(selectedHumanIndicator);
 		}
 		if (selectedHuman != null) {
-			selectedHumanIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, selectedHuman.obj.transform, false);
+			selectedHumanIndicator = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, selectedHuman.obj.transform, false);
 			selectedHumanIndicator.name = "SelectedHumanIndicator";
 			selectedHumanIndicator.transform.localScale = new Vector2(1f, 1f) * 1.2f;
 
 			SpriteRenderer sCISR = selectedHumanIndicator.GetComponent<SpriteRenderer>();
-			sCISR.sprite = GameManager.resourceM.selectionCornersSprite;
+			sCISR.sprite = GameManager.Get<ResourceManager>().selectionCornersSprite;
 			sCISR.sortingOrder = 20; // Selected Colonist Indicator Sprite
 			sCISR.color = new Color(1f, 1f, 1f, 0.75f);
 		}

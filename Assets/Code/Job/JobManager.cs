@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCamera;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NProfession;
 using Snowship.NResource;
+using Snowship.NUI;
 using Snowship.NUtilities;
 using UnityEngine;
 using static Snowship.NJob.JobManager;
@@ -23,7 +26,7 @@ namespace Snowship.NJob {
 		public void OnUpdate() {
 			if (changedJobList) {
 				ColonistJob.UpdateColonistJobs();
-				// GameManager.uiMOld.SetJobElements();
+				// GameManager.Get<UIManagerOld>().SetJobElements();
 				changedJobList = false;
 			}
 			GetJobSelectionArea();
@@ -52,8 +55,8 @@ namespace Snowship.NJob {
 
 		private GameObject selectedPrefabPreview;
 		public void SelectedPrefabPreview() {
-			Vector2 mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
-			TileManager.Tile tile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
+			Vector2 mousePosition = GameManager.Get<CameraManager>().camera.ScreenToWorldPoint(Input.mousePosition);
+			TileManager.Tile tile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(mousePosition);
 			selectedPrefabPreview.transform.position = tile.obj.transform.position + (Vector3)selectedPrefab.prefab.anchorPositionOffset[rotationIndex];
 		}
 
@@ -66,7 +69,7 @@ namespace Snowship.NJob {
 						if (selectedPrefab.prefab.canRotate) {
 							selectedPrefabPreview.GetComponent<SpriteRenderer>().sprite = selectedPrefab.prefab.GetBitmaskSpritesForVariation(selectedPrefab.variation)[rotationIndex];
 						}
-						GameManager.uiMOld.GetSelectionSizePanel().SetActive(false);
+						GameManager.Get<UIManagerOld>().GetSelectionSizePanel().SetActive(false);
 					}
 					SelectedPrefabPreview();
 					if (Input.GetKeyDown(KeyCode.R)) {
@@ -82,11 +85,11 @@ namespace Snowship.NJob {
 					if (selectedPrefabPreview.activeSelf) {
 						selectedPrefabPreview.SetActive(false);
 					}
-					// TODO GameManager.uiMOld.GetSelectionSizePanel().SetActive(true);
+					// TODO GameManager.Get<UIManagerOld>().GetSelectionSizePanel().SetActive(true);
 				}
 			} else {
 				selectedPrefabPreview.SetActive(false);
-				// TODO GameManager.uiMOld.GetSelectionSizePanel().SetActive(false);
+				// TODO GameManager.Get<UIManagerOld>().GetSelectionSizePanel().SetActive(false);
 			}
 		}
 
@@ -165,7 +168,7 @@ namespace Snowship.NJob {
 						return false;
 					}
 					foreach (Vector2 multiTilePosition in job.objectPrefab.multiTilePositions[job.rotationIndex]) {
-						if (GameManager.colonyM.colony.map.GetTileFromPosition(job.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
+						if (GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(job.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
 							return false;
 						}
 					}
@@ -177,7 +180,7 @@ namespace Snowship.NJob {
 						return false;
 					}
 					foreach (Vector2 multiTilePosition in colonist.Job.objectPrefab.multiTilePositions[colonist.Job.rotationIndex]) {
-						if (GameManager.colonyM.colony.map.GetTileFromPosition(colonist.Job.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
+						if (GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(colonist.Job.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
 							return false;
 						}
 					}
@@ -189,7 +192,7 @@ namespace Snowship.NJob {
 						return false;
 					}
 					foreach (Vector2 multiTilePosition in colonist.StoredJob.objectPrefab.multiTilePositions[colonist.StoredJob.rotationIndex]) {
-						if (GameManager.colonyM.colony.map.GetTileFromPosition(colonist.StoredJob.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
+						if (GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(colonist.StoredJob.tile.obj.transform.position + (Vector3)multiTilePosition) == posTile) {
 							return false;
 						}
 					}
@@ -221,7 +224,7 @@ namespace Snowship.NJob {
 				SelectionModifiersEnum.CloseToSupport, delegate(TileManager.Tile tile, TileManager.Tile posTile, ObjectPrefab prefab, Variation variation) {
 			for (int y = -5; y < 5; y++) {
 				for (int x = -5; x < 5; x++) {
-					TileManager.Tile supportTile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(posTile.position.x + x, posTile.position.y + y));
+					TileManager.Tile supportTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(new Vector2(posTile.position.x + x, posTile.position.y + y));
 					if (!supportTile.buildable && !supportTile.walkable) {
 						return true;
 					}
@@ -297,9 +300,9 @@ namespace Snowship.NJob {
 			selectionIndicators.Clear();
 
 			if (selectedPrefab != null) {
-				Vector2 mousePosition = GameManager.cameraM.camera.ScreenToWorldPoint(Input.mousePosition);
-				if (Input.GetMouseButtonDown(0) && !GameManager.uiMOld.IsPointerOverUI()) {
-					firstTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
+				Vector2 mousePosition = GameManager.Get<CameraManager>().camera.ScreenToWorldPoint(Input.mousePosition);
+				if (Input.GetMouseButtonDown(0) && !GameManager.Get<UIManagerOld>().IsPointerOverUI()) {
+					firstTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(mousePosition);
 				}
 				if (firstTile != null) {
 					if (stopSelection) {
@@ -307,7 +310,7 @@ namespace Snowship.NJob {
 						firstTile = null;
 						return;
 					}
-					TileManager.Tile secondTile = GameManager.colonyM.colony.map.GetTileFromPosition(mousePosition);
+					TileManager.Tile secondTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(mousePosition);
 					if (secondTile != null) {
 
 						enableSelectionPreview = false;
@@ -326,7 +329,7 @@ namespace Snowship.NJob {
 						for (float y = smallerY; y < maxY; y += (addedToSelectionArea ? selectedPrefab.prefab.dimensions[rotationIndex].y : 1)) {
 							for (float x = smallerX; x < maxX; x += (addedToSelectionArea ? selectedPrefab.prefab.dimensions[rotationIndex].x : 1)) {
 								addedToSelectionArea = true; // default = false // Try swapping x and y values when the object is rotated vertically (i.e. rotationIndex == 1 || 3).
-								TileManager.Tile tile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(x, y));
+								TileManager.Tile tile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(new Vector2(x, y));
 								bool addTile = true;
 								bool addOutlineTile = true;
 								if (selectedPrefab.prefab.selectionModifiers.Contains(SelectionModifiersEnum.Outline)) {
@@ -336,8 +339,8 @@ namespace Snowship.NJob {
 									if (selectionModifier != SelectionModifiersEnum.Outline) {
 										foreach (Vector2 multiTilePosition in selectedPrefab.prefab.multiTilePositions[rotationIndex]) {
 											Vector2 actualMultiTilePosition = tile.obj.transform.position + (Vector3)multiTilePosition;
-											if (actualMultiTilePosition.x >= 0 && actualMultiTilePosition.x < GameManager.colonyM.colony.map.mapData.mapSize && actualMultiTilePosition.y >= 0 && actualMultiTilePosition.y < GameManager.colonyM.colony.map.mapData.mapSize) {
-												TileManager.Tile posTile = GameManager.colonyM.colony.map.GetTileFromPosition(actualMultiTilePosition);
+											if (actualMultiTilePosition.x >= 0 && actualMultiTilePosition.x < GameManager.Get<ColonyManager>().colony.map.mapData.mapSize && actualMultiTilePosition.y >= 0 && actualMultiTilePosition.y < GameManager.Get<ColonyManager>().colony.map.mapData.mapSize) {
+												TileManager.Tile posTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(actualMultiTilePosition);
 												addTile = selectionModifierFunctions[selectionModifier](tile, posTile, selectedPrefab.prefab, selectedPrefab.variation);
 												if (!addTile) {
 													break;
@@ -356,7 +359,7 @@ namespace Snowship.NJob {
 									selectionArea.Add(tile);
 									addedToSelectionArea = true;
 
-									GameObject selectionIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, GameManager.resourceM.selectionParent.transform, false);
+									GameObject selectionIndicator = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.Get<ResourceManager>().selectionParent.transform, false);
 									selectionIndicator.transform.position = tile.obj.transform.position + (Vector3)selectedPrefab.prefab.anchorPositionOffset[rotationIndex];
 									;
 									selectionIndicator.name = "Selection Indicator";
@@ -371,7 +374,7 @@ namespace Snowship.NJob {
 							}
 						}
 
-						GameManager.uiMOld.GetSelectionSizePanel().Update(smallerX - maxX, smallerY - maxY, selectionArea.Count);
+						GameManager.Get<UIManagerOld>().GetSelectionSizePanel().Update(smallerX - maxX, smallerY - maxY, selectionArea.Count);
 
 						if (Input.GetMouseButtonUp(0)) {
 							if (selectedPrefab.prefab.jobType == "Cancel") {
@@ -441,7 +444,7 @@ namespace Snowship.NJob {
 			}
 
 			ColonistJob.UpdateColonistJobs();
-			// GameManager.uiMOld.SetJobElements();
+			// GameManager.Get<UIManagerOld>().SetJobElements();
 		}
 
 		public void CancelJob(Job job) {
@@ -476,7 +479,7 @@ namespace Snowship.NJob {
 			Job.jobs.Remove(job);
 
 			ColonistJob.UpdateColonistJobs();
-			// GameManager.uiMOld.SetJobElements();
+			// GameManager.Get<UIManagerOld>().SetJobElements();
 		}
 
 		public void ChangeJobPriorityInSelectionArea(List<TileManager.Tile> selectionArea, int amount) {
@@ -499,7 +502,7 @@ namespace Snowship.NJob {
 			}
 			ColonistJob.UpdateColonistJobs();
 			ColonistJob.UpdateAllColonistJobCosts();
-			// GameManager.uiMOld.SetJobElements();
+			// GameManager.Get<UIManagerOld>().SetJobElements();
 		}
 
 		private static readonly Dictionary<int, ObjectPrefab.ObjectEnum> removeLayerMap = new Dictionary<int, ObjectPrefab.ObjectEnum>() {
@@ -723,7 +726,7 @@ namespace Snowship.NJob {
 				jobGiven.Key.SetJob(jobGiven.Value);
 			}
 			if (gaveJob) {
-				// GameManager.uiMOld.SetJobElements();
+				// GameManager.Get<UIManagerOld>().SetJobElements();
 				ColonistJob.UpdateColonistJobs();
 			}
 		}
@@ -781,11 +784,11 @@ namespace Snowship.NJob {
 		}
 
 		public void RecalculatePickupResources() {
-			KeyValuePair<bool, List<List<ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.requiredResources);
+			KeyValuePair<bool, List<List<ResourceAmount>>> returnKVP = GameManager.Get<JobManager>().CalculateColonistResourcesToPickup(colonist, job.requiredResources);
 			List<ResourceAmount> resourcesToPickup = returnKVP.Value[0];
 			resourcesColonistHas = returnKVP.Value[1];
 			if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
-				containerPickups = GameManager.jobM.CalculateColonistPickupContainers(colonist, resourcesToPickup);
+				containerPickups = GameManager.Get<JobManager>().CalculateColonistPickupContainers(colonist, resourcesToPickup);
 			} else {
 				containerPickups = null;
 			}
@@ -815,14 +818,14 @@ namespace Snowship.NJob {
 
 				if (job.requiredResources.Count > 0) {
 
-					KeyValuePair<bool, List<List<ResourceAmount>>> returnKVP = GameManager.jobM.CalculateColonistResourcesToPickup(colonist, job.requiredResources);
+					KeyValuePair<bool, List<List<ResourceAmount>>> returnKVP = GameManager.Get<JobManager>().CalculateColonistResourcesToPickup(colonist, job.requiredResources);
 					bool colonistHasAllResources = returnKVP.Key;
 					List<ResourceAmount> resourcesToPickup = returnKVP.Value[0];
 					List<ResourceAmount> resourcesColonistHas = returnKVP.Value[1];
 
 					if (resourcesToPickup != null) { // If there are resources the colonist doesn't have
 
-						List<ContainerPickup> containerPickups = GameManager.jobM.CalculateColonistPickupContainers(colonist, resourcesToPickup);
+						List<ContainerPickup> containerPickups = GameManager.Get<JobManager>().CalculateColonistPickupContainers(colonist, resourcesToPickup);
 
 						if (containerPickups != null) { // If all resources were found in containers
 							validJobs.Add(new ColonistJob(colonist, job, resourcesColonistHas, containerPickups));

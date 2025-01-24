@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Snowship.NCaravan;
+using Snowship.NColony;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public partial class PCaravan : PersistenceHandler {
+	public partial class PCaravan : Caravan
+	{
 
 		private readonly PInventory pInventory = new PInventory();
 		private readonly PLife pLife = new PLife();
@@ -62,74 +65,74 @@ namespace Snowship.NPersistence {
 
 		public void SaveCaravans(string saveDirectoryPath) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "caravans.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "caravans.snowship");
 
-			file.WriteLine(CreateKeyValueString(CaravanProperty.CaravanTimer, GameManager.caravanM.caravanTimer, 0));
+			file.WriteLine(PU.CreateKeyValueString(CaravanProperty.CaravanTimer, GameManager.Get<CaravanManager>().caravanTimer, 0));
 
-			foreach (Caravan caravan in GameManager.caravanM.caravans) {
-				file.WriteLine(CreateKeyValueString(CaravanProperty.Caravan, string.Empty, 0));
+			foreach (Caravan caravan in GameManager.Get<CaravanManager>().caravans) {
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.Caravan, string.Empty, 0));
 
-				file.WriteLine(CreateKeyValueString(CaravanProperty.Type, caravan.caravanType, 1));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.Type, caravan.caravanType, 1));
 
-				file.WriteLine(CreateKeyValueString(CaravanProperty.Location, string.Empty, 1));
-				file.WriteLine(CreateKeyValueString(LocationProperty.Name, caravan.location.name, 2));
-				file.WriteLine(CreateKeyValueString(LocationProperty.Wealth, caravan.location.wealth, 2));
-				file.WriteLine(CreateKeyValueString(LocationProperty.ResourceRichness, caravan.location.resourceRichness, 2));
-				file.WriteLine(CreateKeyValueString(LocationProperty.CitySize, caravan.location.citySize, 2));
-				file.WriteLine(CreateKeyValueString(LocationProperty.BiomeType, caravan.location.biomeType, 2));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.Location, string.Empty, 1));
+				file.WriteLine(PU.CreateKeyValueString(LocationProperty.Name, caravan.location.name, 2));
+				file.WriteLine(PU.CreateKeyValueString(LocationProperty.Wealth, caravan.location.wealth, 2));
+				file.WriteLine(PU.CreateKeyValueString(LocationProperty.ResourceRichness, caravan.location.resourceRichness, 2));
+				file.WriteLine(PU.CreateKeyValueString(LocationProperty.CitySize, caravan.location.citySize, 2));
+				file.WriteLine(PU.CreateKeyValueString(LocationProperty.BiomeType, caravan.location.biomeType, 2));
 
-				file.WriteLine(CreateKeyValueString(CaravanProperty.TargetTile, FormatVector2ToString(caravan.targetTile.obj.transform.position), 1));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.TargetTile, PU.FormatVector2ToString(caravan.targetTile.obj.transform.position), 1));
 
-				file.WriteLine(CreateKeyValueString(CaravanProperty.ResourceGroup, caravan.resourceGroup.type, 1));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.ResourceGroup, caravan.resourceGroup.type, 1));
 
-				file.WriteLine(CreateKeyValueString(CaravanProperty.LeaveTimer, caravan.leaveTimer, 1));
-				file.WriteLine(CreateKeyValueString(CaravanProperty.Leaving, caravan.leaving, 1));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.LeaveTimer, caravan.leaveTimer, 1));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.Leaving, caravan.leaving, 1));
 
 				pInventory.WriteInventoryLines(file, caravan.GetInventory(), 1);
 
 				List<TradeResourceAmount> tradeResourceAmounts = caravan.GenerateTradeResourceAmounts();
 				if (tradeResourceAmounts.Count > 0) {
-					file.WriteLine(CreateKeyValueString(CaravanProperty.ResourcesToTrade, string.Empty, 1));
+					file.WriteLine(PU.CreateKeyValueString(CaravanProperty.ResourcesToTrade, string.Empty, 1));
 					foreach (TradeResourceAmount tra in caravan.GenerateTradeResourceAmounts()) {
-						file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.TradeResourceAmount, string.Empty, 2));
+						file.WriteLine(PU.CreateKeyValueString(TradeResourceAmountProperty.TradeResourceAmount, string.Empty, 2));
 
-						file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.Type, tra.resource.type, 3));
+						file.WriteLine(PU.CreateKeyValueString(TradeResourceAmountProperty.Type, tra.resource.type, 3));
 
-						file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.CaravanAmount, tra.caravanAmount, 3));
+						file.WriteLine(PU.CreateKeyValueString(TradeResourceAmountProperty.CaravanAmount, tra.caravanAmount, 3));
 
-						file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.TradeAmount, tra.GetTradeAmount(), 3));
+						file.WriteLine(PU.CreateKeyValueString(TradeResourceAmountProperty.TradeAmount, tra.GetTradeAmount(), 3));
 
-						file.WriteLine(CreateKeyValueString(TradeResourceAmountProperty.Price, tra.caravanResourcePrice, 3));
+						file.WriteLine(PU.CreateKeyValueString(TradeResourceAmountProperty.Price, tra.caravanResourcePrice, 3));
 					}
 				}
 
 				if (caravan.confirmedResourcesToTrade.Count > 0) {
-					file.WriteLine(CreateKeyValueString(CaravanProperty.ConfirmedResourcesToTrade, string.Empty, 1));
+					file.WriteLine(PU.CreateKeyValueString(CaravanProperty.ConfirmedResourcesToTrade, string.Empty, 1));
 					foreach (ConfirmedTradeResourceAmount ctra in caravan.confirmedResourcesToTrade) {
-						file.WriteLine(CreateKeyValueString(ConfirmedTradeResourceAmountProperty.ConfirmedTradeResourceAmount, string.Empty, 2));
+						file.WriteLine(PU.CreateKeyValueString(ConfirmedTradeResourceAmountProperty.ConfirmedTradeResourceAmount, string.Empty, 2));
 
-						file.WriteLine(CreateKeyValueString(ConfirmedTradeResourceAmountProperty.Type, ctra.resource.type, 3));
+						file.WriteLine(PU.CreateKeyValueString(ConfirmedTradeResourceAmountProperty.Type, ctra.resource.type, 3));
 
-						file.WriteLine(CreateKeyValueString(ConfirmedTradeResourceAmountProperty.TradeAmount, ctra.tradeAmount, 3));
+						file.WriteLine(PU.CreateKeyValueString(ConfirmedTradeResourceAmountProperty.TradeAmount, ctra.tradeAmount, 3));
 
-						file.WriteLine(CreateKeyValueString(ConfirmedTradeResourceAmountProperty.AmountRemaining, ctra.amountRemaining, 3));
+						file.WriteLine(PU.CreateKeyValueString(ConfirmedTradeResourceAmountProperty.AmountRemaining, ctra.amountRemaining, 3));
 					}
 				}
 
-				file.WriteLine(CreateKeyValueString(CaravanProperty.Traders, string.Empty, 1));
+				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.Traders, string.Empty, 1));
 				foreach (Trader trader in caravan.traders) {
-					file.WriteLine(CreateKeyValueString(TraderProperty.Trader, string.Empty, 2));
+					file.WriteLine(PU.CreateKeyValueString(TraderProperty.Trader, string.Empty, 2));
 
 					pLife.WriteLifeLines(file, trader, 3);
 
 					pHuman.WriteHumanLines(file, trader, 3);
 
 					if (trader.leaveTile != null) {
-						file.WriteLine(CreateKeyValueString(TraderProperty.LeaveTile, FormatVector2ToString(trader.leaveTile.obj.transform.position), 3));
+						file.WriteLine(PU.CreateKeyValueString(TraderProperty.LeaveTile, PU.FormatVector2ToString(trader.leaveTile.obj.transform.position), 3));
 					}
 
 					if (trader.tradingPosts != null && trader.tradingPosts.Count > 0) {
-						file.WriteLine(CreateKeyValueString(TraderProperty.TradingPosts, string.Join(";", trader.tradingPosts.Select(tp => FormatVector2ToString(tp.zeroPointTile.obj.transform.position)).ToArray()), 3));
+						file.WriteLine(PU.CreateKeyValueString(TraderProperty.TradingPosts, string.Join(";", trader.tradingPosts.Select(tp => PU.FormatVector2ToString(tp.zeroPointTile.obj.transform.position)).ToArray()), 3));
 					}
 				}
 			}
@@ -140,11 +143,11 @@ namespace Snowship.NPersistence {
 		public List<PersistenceCaravan> LoadCaravans(string path) {
 			List<PersistenceCaravan> persistenceCaravans = new List<PersistenceCaravan>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((CaravanProperty)Enum.Parse(typeof(CaravanProperty), property.Key)) {
 					case CaravanProperty.CaravanTimer:
-						GameManager.caravanM.caravanTimer = int.Parse((string)property.Value);
+						GameManager.Get<CaravanManager>().caravanTimer = int.Parse((string)property.Value);
 						break;
 					case CaravanProperty.Caravan:
 
@@ -322,11 +325,11 @@ namespace Snowship.NPersistence {
 															persistenceHuman = pHuman.LoadPersistenceHuman((List<KeyValuePair<string, object>>)traderSubProperty.Value);
 															break;
 														case TraderProperty.LeaveTile:
-															traderLeaveTile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(float.Parse(((string)traderSubProperty.Value).Split(',')[0]), float.Parse(((string)traderSubProperty.Value).Split(',')[1])));
+															traderLeaveTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(new Vector2(float.Parse(((string)traderSubProperty.Value).Split(',')[0]), float.Parse(((string)traderSubProperty.Value).Split(',')[1])));
 															break;
 														case TraderProperty.TradingPosts:
 															foreach (string vector2String in ((string)traderSubProperty.Value).Split(';')) {
-																TileManager.Tile tradingPostZeroPointTile = GameManager.colonyM.colony.map.GetTileFromPosition(new Vector2(float.Parse(vector2String.Split(',')[0]), float.Parse(vector2String.Split(',')[1])));
+																TileManager.Tile tradingPostZeroPointTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(new Vector2(float.Parse(vector2String.Split(',')[0]), float.Parse(vector2String.Split(',')[1])));
 																traderTradingPosts.Add(TradingPost.tradingPosts.Find(tp => tp.zeroPointTile == tradingPostZeroPointTile));
 															}
 															break;
@@ -376,13 +379,13 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			GameManager.persistenceM.loadingState = PersistenceManager.LoadingState.LoadedCaravans;
+			GameManager.Get<PersistenceManager>().loadingState = PersistenceManager.LoadingState.LoadedCaravans;
 			return persistenceCaravans;
 		}
 
 		public void ApplyLoadedCaravans(List<PersistenceCaravan> persistenceCaravans) {
 			foreach (PersistenceCaravan persistenceCaravan in persistenceCaravans) {
-				Caravan caravan = new Caravan() { numTraders = persistenceCaravan.persistenceTraders.Count, caravanType = persistenceCaravan.type.Value, location = persistenceCaravan.location, targetTile = GameManager.colonyM.colony.map.GetTileFromPosition(persistenceCaravan.targetTilePosition.Value), resourceGroup = persistenceCaravan.resourceGroup, leaveTimer = persistenceCaravan.leaveTimer.Value, leaving = persistenceCaravan.leaving.Value };
+				Caravan caravan = new() { numTraders = persistenceCaravan.persistenceTraders.Count, caravanType = persistenceCaravan.type.Value, location = persistenceCaravan.location, targetTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceCaravan.targetTilePosition.Value), resourceGroup = persistenceCaravan.resourceGroup, leaveTimer = persistenceCaravan.leaveTimer.Value, leaving = persistenceCaravan.leaving.Value };
 
 				caravan.GetInventory().maxWeight = persistenceCaravan.persistenceInventory.maxWeight.Value;
 				caravan.GetInventory().maxVolume = persistenceCaravan.persistenceInventory.maxVolume.Value;
@@ -411,7 +414,7 @@ namespace Snowship.NPersistence {
 
 				foreach (PersistenceTrader persistenceTrader in persistenceCaravan.persistenceTraders) {
 					Trader trader = new Trader(
-						GameManager.colonyM.colony.map.GetTileFromPosition(persistenceTrader.persistenceLife.position.Value),
+						GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceTrader.persistenceLife.position.Value),
 						persistenceTrader.persistenceLife.health.Value,
 						caravan
 					) { gender = persistenceTrader.persistenceLife.gender.Value, previousPosition = persistenceTrader.persistenceLife.previousPosition.Value };
@@ -421,7 +424,7 @@ namespace Snowship.NPersistence {
 					trader.SetName(persistenceTrader.persistenceHuman.name);
 
 					trader.bodyIndices[HumanManager.Human.Appearance.Skin] = persistenceTrader.persistenceHuman.skinIndex.Value;
-					trader.moveSprites = GameManager.humanM.humanMoveSprites[trader.bodyIndices[HumanManager.Human.Appearance.Skin]];
+					trader.moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[trader.bodyIndices[HumanManager.Human.Appearance.Skin]];
 					trader.bodyIndices[HumanManager.Human.Appearance.Hair] = persistenceTrader.persistenceHuman.hairIndex.Value;
 
 					trader.GetInventory().maxWeight = persistenceTrader.persistenceHuman.persistenceInventory.maxWeight.Value;
@@ -436,7 +439,7 @@ namespace Snowship.NPersistence {
 					}
 
 					if (persistenceTrader.persistenceLife.pathEndPosition.HasValue) {
-						trader.MoveToTile(GameManager.colonyM.colony.map.GetTileFromPosition(persistenceTrader.persistenceLife.pathEndPosition.Value), true);
+						trader.MoveToTile(GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceTrader.persistenceLife.pathEndPosition.Value), true);
 					}
 
 					trader.leaveTile = persistenceTrader.leaveTile;
@@ -446,7 +449,7 @@ namespace Snowship.NPersistence {
 					caravan.traders.Add(trader);
 				}
 
-				GameManager.caravanM.AddCaravan(caravan);
+				GameManager.Get<CaravanManager>().AddCaravan(caravan);
 			}
 		}
 

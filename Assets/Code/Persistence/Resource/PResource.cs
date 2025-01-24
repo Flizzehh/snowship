@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PResource : PersistenceHandler {
+	public class PResource : Resource
+	{
 
 		public enum ResourceProperty {
 			Resource,
@@ -14,19 +16,19 @@ namespace Snowship.NPersistence {
 
 		public void SaveResources(string saveDirectoryPath) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "resources.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "resources.snowship");
 
 			foreach (Resource resource in Resource.GetResources()) {
-				file.WriteLine(CreateKeyValueString(ResourceProperty.Resource, string.Empty, 0));
+				file.WriteLine(PU.CreateKeyValueString(ResourceProperty.Resource, string.Empty, 0));
 
-				file.WriteLine(CreateKeyValueString(ResourceProperty.Type, resource.type, 1));
+				file.WriteLine(PU.CreateKeyValueString(ResourceProperty.Type, resource.type, 1));
 			}
 
 			file.Close();
 		}
 
 		public void LoadResources(string path) {
-			foreach (KeyValuePair<string, object> property in GetKeyValuePairsFromFile(path)) {
+			foreach (KeyValuePair<string, object> property in PU.GetKeyValuePairsFromFile(path)) {
 				ResourceProperty key = (ResourceProperty)Enum.Parse(typeof(ResourceProperty), property.Key);
 				object value = property.Value;
 				switch (key) {
@@ -53,7 +55,7 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			GameManager.persistenceM.loadingState = PersistenceManager.LoadingState.LoadedResources;
+			GameManager.Get<PersistenceManager>().loadingState = PersistenceManager.LoadingState.LoadedResources;
 		}
 
 	}

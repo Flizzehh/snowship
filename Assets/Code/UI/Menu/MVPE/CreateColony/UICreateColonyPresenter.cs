@@ -56,7 +56,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 		private void CreatePlanetViewModule() {
 			planetViewModule = new PlanetViewModule(View.PlanetViewGridLayoutGroup, View.PlanetTilePrefab);
 			planetViewModule.DisplayPlanet(
-				GameManager.planetM.planet,
+				GameManager.Get<PlanetManager>().planet,
 				pColony.GetPersistenceColonies(),
 				true
 			);
@@ -73,7 +73,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 		}
 
 		private void CreatePlanetPreview() {
-			Planet planet = GameManager.planetM.planet;
+			Planet planet = GameManager.Get<PlanetManager>().planet;
 			planetViewModule.DisplayPlanet(
 				planet,
 				pColony.GetPersistenceColonies(),
@@ -102,7 +102,7 @@ namespace Snowship.NUI.Menu.CreateColony {
 		}
 
 		private void OnBackButtonClicked() {
-			GameManager.uiM.GoBack(this);
+			GameManager.Get<UIManager>().GoBack(this);
 		}
 
 		private void OnColonyNameChanged(string colonyName) {
@@ -133,12 +133,12 @@ namespace Snowship.NUI.Menu.CreateColony {
 		}
 
 		private void OnCreateColonyButtonClicked() {
-			Colony colony = GameManager.colonyM.CreateColony(createColonyData);
+			Colony colony = GameManager.Get<ColonyManager>().CreateColony(createColonyData);
 
 			// TODO This should be handled in the ColonyManager itself
-			GameManager.colonyM.SetupNewColony(colony, false);
+			GameManager.Get<ColonyManager>().SetupNewColony(colony, false);
 
-			UniTask.WhenAll(GameManager.stateM.TransitionToState(EState.LoadToSimulation));
+			GameManager.Get<StateManager>().TransitionToState(EState.LoadToSimulation).Forget();
 		}
 
 		private void OnColonyTileClicked(PersistenceColony persistenceColony) {

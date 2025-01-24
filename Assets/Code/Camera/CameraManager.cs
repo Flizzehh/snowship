@@ -1,6 +1,8 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Snowship.NColony;
+using Snowship.NInput;
 using Snowship.NState;
 using UnityEngine;
 using Time = UnityEngine.Time;
@@ -34,17 +36,18 @@ namespace Snowship.NCamera {
 			OnCameraPositionChanged?.Invoke(cameraTransform.position);
 			OnCameraZoomChanged?.Invoke(camera.orthographicSize);
 
-			GameManager.stateM.OnStateChanged += OnStateChanged;
+			GameManager.Get<StateManager>().OnStateChanged += OnStateChanged;
 
-			OnInputSystemEnabled(GameManager.inputM.InputSystemActions);
-			GameManager.inputM.OnInputSystemDisabled += OnInputSystemDisabled;
+			OnInputSystemEnabled(GameManager.Get<InputManager>().InputSystemActions);
+			GameManager.Get<InputManager>().OnInputSystemDisabled += OnInputSystemDisabled;
 		}
+
 		private void OnStateChanged((EState previousState, EState newState) states) {
 			if (states is not { previousState: EState.MainMenu, newState: EState.LoadToSimulation }) {
 				return;
 			}
 
-			int mapSize = GameManager.colonyM.colony.mapData.mapSize;
+			int mapSize = GameManager.Get<ColonyManager>().colony.mapData.mapSize;
 			SetCameraPosition(Vector2.one * mapSize / 2f);
 			SetCameraZoom(5);
 		}
@@ -53,13 +56,6 @@ namespace Snowship.NCamera {
 			if (!Mathf.Approximately(moveVector.magnitude, 0)) {
 				MoveCamera();
 			}
-		}
-
-		public void OnClose() {
-			GameManager.stateM.OnStateChanged -= OnStateChanged;
-
-			GameManager.inputM.OnInputSystemEnabled -= OnInputSystemEnabled;
-			GameManager.inputM.OnInputSystemDisabled -= OnInputSystemDisabled;
 		}
 
 		public Vector2 GetCameraPosition() {
@@ -78,8 +74,8 @@ namespace Snowship.NCamera {
 
 			cameraTransform.Translate(moveVector * (CameraMoveSpeedMultiplier * camera.orthographicSize * Time.deltaTime));
 			cameraTransform.position = new Vector2(
-				Mathf.Clamp(cameraTransform.position.x, 0, GameManager.colonyM.colony.map.mapData.mapSize),
-				Mathf.Clamp(cameraTransform.position.y, 0, GameManager.colonyM.colony.map.mapData.mapSize)
+				Mathf.Clamp(cameraTransform.position.x, 0, GameManager.Get<ColonyManager>().colony.map.mapData.mapSize),
+				Mathf.Clamp(cameraTransform.position.y, 0, GameManager.Get<ColonyManager>().colony.map.mapData.mapSize)
 			);
 			OnCameraPositionChanged?.Invoke(cameraTransform.position);
 		}

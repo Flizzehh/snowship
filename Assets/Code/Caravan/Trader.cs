@@ -15,7 +15,7 @@ namespace Snowship.NCaravan {
 		public Trader(TileManager.Tile spawnTile, float startingHealth, Caravan caravan) : base(spawnTile, startingHealth) {
 			this.caravan = caravan;
 
-			obj.transform.SetParent(GameManager.resourceM.traderParent.transform, false);
+			obj.transform.SetParent(GameManager.Get<ResourceManager>().traderParent.transform, false);
 		}
 
 		public override void SetName(string name) {
@@ -67,7 +67,7 @@ namespace Snowship.NCaravan {
 					}
 
 					caravan.confirmedResourcesToTrade.Clear();
-					GameManager.jobM.CreateJob(job);
+					GameManager.Get<JobManager>().CreateJob(job);
 				}
 			}
 			else {
@@ -83,8 +83,8 @@ namespace Snowship.NCaravan {
 		public override void Remove() {
 			base.Remove();
 
-			if (GameManager.humanM.selectedHuman == this) {
-				GameManager.humanM.SetSelectedHuman(null);
+			if (GameManager.Get<HumanManager>().selectedHuman == this) {
+				GameManager.Get<HumanManager>().SetSelectedHuman(null);
 			}
 		}
 	}

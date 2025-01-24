@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Snowship.NUI;
 
 namespace Snowship.NState {
 	public partial class StateManager : IManager {
@@ -13,8 +14,8 @@ namespace Snowship.NState {
 		public event Action<(EState previousState, EState newState)> OnStateChanged;
 
 		public void OnCreate() {
-			UniTask.WhenAll(TransitionToState(EState.Boot));
-			UniTask.WhenAll(TransitionToState(EState.MainMenu));
+			TransitionToState(EState.Boot).Forget();
+			TransitionToState(EState.MainMenu).Forget();
 		}
 
 		public async UniTask TransitionToState(EState newState, ETransitionUIAction transitionUIAction = ETransitionUIAction.Close) {
@@ -39,10 +40,10 @@ namespace Snowship.NState {
 				case ETransitionUIAction.Nothing:
 					break;
 				case ETransitionUIAction.Hide:
-					GameManager.uiM.ToggleAllViews();
+					GameManager.Get<UIManager>().ToggleAllViews();
 					break;
 				case ETransitionUIAction.Close:
-					GameManager.uiM.CloseAllViews();
+					GameManager.Get<UIManager>().CloseAllViews();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(transitionUIAction), transitionUIAction, null);

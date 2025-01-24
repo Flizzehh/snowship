@@ -1,6 +1,9 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
+using Snowship.NColony;
+using Snowship.NInput;
+using Snowship.NPersistence;
 using Snowship.NState;
 using Snowship.NUI.Menu.Settings;
 using Snowship.NUtilities;
@@ -23,7 +26,7 @@ namespace Snowship.NUI.Menu.PauseMenu {
 			View.OnExitToMenuButtonClicked += OnExitToMenuButtonClicked;
 			View.OnExitToDesktopButtonClicked += OnExitToDesktopButtonClicked;
 
-			GameManager.inputM.InputSystemActions.Simulation.Escape.performed += OnEscapePerformed;
+			GameManager.Get<InputManager>().InputSystemActions.Simulation.Escape.performed += OnEscapePerformed;
 		}
 
 		public override void OnClose() {
@@ -33,20 +36,20 @@ namespace Snowship.NUI.Menu.PauseMenu {
 			View.OnExitToMenuButtonClicked -= OnExitToMenuButtonClicked;
 			View.OnExitToDesktopButtonClicked -= OnExitToDesktopButtonClicked;
 
-			GameManager.inputM.InputSystemActions.Simulation.Escape.performed -= OnEscapePerformed;
+			GameManager.Get<InputManager>().InputSystemActions.Simulation.Escape.performed -= OnEscapePerformed;
 		}
 
 		private void OnContinueButtonClicked() {
-			GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close).Forget();
+			GameManager.Get<StateManager>().TransitionToState(EState.Simulation, ETransitionUIAction.Close).Forget();
 		}
 
 		private void OnEscapePerformed(InputAction.CallbackContext callbackContext) {
-			GameManager.stateM.TransitionToState(EState.Simulation, ETransitionUIAction.Close).Forget();
+			GameManager.Get<StateManager>().TransitionToState(EState.Simulation, ETransitionUIAction.Close).Forget();
 		}
 
 		private async void OnSaveButtonClicked() {
 			try {
-				await GameManager.persistenceM.CreateSave(GameManager.colonyM.colony);
+				await GameManager.Get<PersistenceManager>().CreateSave(GameManager.Get<ColonyManager>().colony);
 				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen));
 			} catch (Exception e) {
 				View.SetSaveButtonImageColour(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed));
@@ -55,11 +58,11 @@ namespace Snowship.NUI.Menu.PauseMenu {
 		}
 
 		private void OnSettingsButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UISettings>(this, false).Forget();
+			GameManager.Get<UIManager>().OpenViewAsync<UISettings>(this, false).Forget();
 		}
 
 		private void OnExitToMenuButtonClicked() {
-			GameManager.stateM.TransitionToState(EState.MainMenu, ETransitionUIAction.Close).Forget();
+			GameManager.Get<StateManager>().TransitionToState(EState.MainMenu, ETransitionUIAction.Close).Forget();
 		}
 
 		private void OnExitToDesktopButtonClicked() {

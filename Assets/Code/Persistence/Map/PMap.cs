@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NColony;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PMap : PersistenceHandler {
+	public class PMap : TileManager.Map
+	{
 
 		private readonly PRiver pRiver = new PRiver();
 
@@ -33,29 +36,29 @@ namespace Snowship.NPersistence {
 		}
 
 		public void SaveOriginalTiles(StreamWriter file) {
-			foreach (TileManager.Tile tile in GameManager.colonyM.colony.map.tiles) {
-				file.WriteLine(CreateKeyValueString(TileProperty.Tile, string.Empty, 0));
+			foreach (TileManager.Tile tile in GameManager.Get<ColonyManager>().colony.map.tiles) {
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Tile, string.Empty, 0));
 
-				file.WriteLine(CreateKeyValueString(TileProperty.Height, tile.height, 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.TileType, tile.tileType.type, 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.Temperature, tile.temperature, 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.Precipitation, tile.GetPrecipitation(), 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.Biome, tile.biome.type, 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.Roof, tile.HasRoof(), 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.Dug, tile.dugPreviously, 1));
-				file.WriteLine(CreateKeyValueString(TileProperty.Sprite, tile.sr.sprite.name, 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Height, tile.height, 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.TileType, tile.tileType.type, 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Temperature, tile.temperature, 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Precipitation, tile.GetPrecipitation(), 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Biome, tile.biome.type, 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Roof, tile.HasRoof(), 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Dug, tile.dugPreviously, 1));
+				file.WriteLine(PU.CreateKeyValueString(TileProperty.Sprite, tile.sr.sprite.name, 1));
 
 				if (tile.plant != null) {
-					file.WriteLine(CreateKeyValueString(TileProperty.Plant, string.Empty, 1));
+					file.WriteLine(PU.CreateKeyValueString(TileProperty.Plant, string.Empty, 1));
 
-					file.WriteLine(CreateKeyValueString(PlantProperty.Type, tile.plant.prefab.type, 2));
-					file.WriteLine(CreateKeyValueString(PlantProperty.Sprite, tile.plant.obj.GetComponent<SpriteRenderer>().sprite.name, 2));
-					file.WriteLine(CreateKeyValueString(PlantProperty.Small, tile.plant.small, 2));
-					file.WriteLine(CreateKeyValueString(PlantProperty.GrowthProgress, tile.plant.growthProgress, 2));
+					file.WriteLine(PU.CreateKeyValueString(PlantProperty.Type, tile.plant.prefab.type, 2));
+					file.WriteLine(PU.CreateKeyValueString(PlantProperty.Sprite, tile.plant.obj.GetComponent<SpriteRenderer>().sprite.name, 2));
+					file.WriteLine(PU.CreateKeyValueString(PlantProperty.Small, tile.plant.small, 2));
+					file.WriteLine(PU.CreateKeyValueString(PlantProperty.GrowthProgress, tile.plant.growthProgress, 2));
 					if (tile.plant.harvestResource != null) {
-						file.WriteLine(CreateKeyValueString(PlantProperty.HarvestResource, tile.plant.harvestResource.type, 2));
+						file.WriteLine(PU.CreateKeyValueString(PlantProperty.HarvestResource, tile.plant.harvestResource.type, 2));
 					}
-					file.WriteLine(CreateKeyValueString(PlantProperty.Integrity, tile.plant.integrity, 2));
+					file.WriteLine(PU.CreateKeyValueString(PlantProperty.Integrity, tile.plant.integrity, 2));
 				}
 			}
 		}
@@ -63,7 +66,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceTile> LoadTiles(string path) {
 			List<PersistenceTile> persistenceTiles = new List<PersistenceTile>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((TileProperty)Enum.Parse(typeof(TileProperty), property.Key)) {
 					case TileProperty.Tile:
@@ -176,9 +179,9 @@ namespace Snowship.NPersistence {
 
 		public void SaveModifiedTiles(string saveDirectoryPath, List<PersistenceTile> originalTiles) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "tiles.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "tiles.snowship");
 
-			TileManager.Map map = GameManager.colonyM.colony.map;
+			TileManager.Map map = GameManager.Get<ColonyManager>().colony.map;
 			if (map.tiles.Count != originalTiles.Count) {
 				Debug.LogError("Loaded tile count " + map.tiles.Count + " and current tile count " + originalTiles.Count + " does not match.");
 			}
@@ -276,13 +279,13 @@ namespace Snowship.NPersistence {
 				}
 
 				if (tileDifferences.Count > 0) {
-					file.WriteLine(CreateKeyValueString(TileProperty.Tile, string.Empty, 0));
-					file.WriteLine(CreateKeyValueString(TileProperty.Index, i, 1));
+					file.WriteLine(PU.CreateKeyValueString(TileProperty.Tile, string.Empty, 0));
+					file.WriteLine(PU.CreateKeyValueString(TileProperty.Index, i, 1));
 					foreach (KeyValuePair<TileProperty, string> tileProperty in tileDifferences) {
-						file.WriteLine(CreateKeyValueString(tileProperty.Key, tileProperty.Value, 1));
+						file.WriteLine(PU.CreateKeyValueString(tileProperty.Key, tileProperty.Value, 1));
 						if (tileProperty.Key == TileProperty.Plant) {
 							foreach (KeyValuePair<PlantProperty, string> plantProperty in plantDifferences) {
-								file.WriteLine(CreateKeyValueString(plantProperty.Key, plantProperty.Value, 2));
+								file.WriteLine(PU.CreateKeyValueString(plantProperty.Key, plantProperty.Value, 2));
 							}
 						}
 					}
@@ -346,7 +349,7 @@ namespace Snowship.NPersistence {
 
 			map.RecalculateLighting(map.tiles, true, true);
 
-			GameManager.persistenceM.loadingState = PersistenceManager.LoadingState.LoadedMap;
+			GameManager.Get<PersistenceManager>().loadingState = PersistenceManager.LoadingState.LoadedMap;
 		}
 
 		public void ApplyMapBitmasking(List<PersistenceTile> originalTiles, List<PersistenceTile> modifiedTiles, TileManager.Map map) {

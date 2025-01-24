@@ -94,6 +94,9 @@ namespace Snowship.NResource
 			this.craftingTime = craftingTime;
 		}
 
+		protected Resource() {
+		}
+
 		public int GetWorldTotalAmount() {
 			return worldTotalAmount;
 		}

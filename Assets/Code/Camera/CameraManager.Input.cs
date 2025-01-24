@@ -1,4 +1,5 @@
-﻿using Snowship.NState;
+﻿using Snowship.NInput;
+using Snowship.NState;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -27,11 +28,11 @@ namespace Snowship.NCamera {
 
 		private void OnMoveCameraPerformed(InputAction.CallbackContext callbackContext) {
 
-			if (GameManager.inputM.IsPlayerTyping()) {
+			if (GameManager.Get<InputManager>().IsPlayerTyping()) {
 				return;
 			}
 
-			if (GameManager.stateM.State != EState.Simulation) {
+			if (GameManager.Get<StateManager>().State != EState.Simulation) {
 				return;
 			}
 
@@ -49,7 +50,7 @@ namespace Snowship.NCamera {
 				return;
 			}
 
-			if (GameManager.stateM.State != EState.Simulation) {
+			if (GameManager.Get<StateManager>().State != EState.Simulation) {
 				return;
 			}
 

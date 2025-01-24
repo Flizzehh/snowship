@@ -53,11 +53,11 @@ namespace Snowship.NUI.Presenters {
 		}
 
 		private void OnBackButtonClicked() {
-			GameManager.uiM.CloseView(this);
+			GameManager.Get<UIManager>().CloseView(this);
 		}
 
 		private void OnCreateColonyButtonClicked() {
-			GameManager.uiM.OpenViewAsync<UICreateColony>(this, false).Forget();
+			GameManager.Get<UIManager>().OpenViewAsync<UICreateColony>(this, false).Forget();
 		}
 
 		private void OnColonyElementClicked(PersistenceColony colony) {
@@ -71,7 +71,7 @@ namespace Snowship.NUI.Presenters {
 		private void CreateColonyElements() {
 			List<PersistenceColony> colonies = pColony.GetPersistenceColonies();
 
-			planetViewModule.DisplayPlanet(GameManager.planetM.planet, colonies, true);
+			planetViewModule.DisplayPlanet(GameManager.Get<PlanetManager>().planet, colonies, true);
 
 			foreach (PersistenceColony colony in colonies) {
 				UILoadColonyElement loadColonyElement = new UILoadColonyElement(colony, View.ColonyElementsParent);

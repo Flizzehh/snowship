@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
+using Snowship.NColony;
 using Snowship.NResource;
+using Snowship.NTime;
+using Snowship.NUI;
 using UnityEngine;
 
 namespace Snowship.NJob {
@@ -353,12 +356,12 @@ namespace Snowship.NJob {
 								foreach (ReservedResources reservedResourceToRemove in reservedResourcesToRemove) {
 									inventory.GetInventory().reservedResources.Remove(reservedResourceToRemove);
 								}
-								// GameManager.uiMOld.SetSelectedColonistInformation(true); // TODO Inventory Updated
-								GameManager.uiMOld.SetSelectedContainerInfo();
-								GameManager.uiMOld.UpdateSelectedTradingPostInfo();
+								// GameManager.Get<UIManagerOld>().SetSelectedColonistInformation(true); // TODO Inventory Updated
+								GameManager.Get<UIManagerOld>().SetSelectedContainerInfo();
+								GameManager.Get<UIManagerOld>().UpdateSelectedTradingPostInfo();
 							} else if (instance is CraftingObject craftingObject) {
 								foreach (Job removeJob in craftingObject.resources.Where(resource => resource.job != null).Select(resource => resource.job)) {
-									GameManager.jobM.CancelJob(removeJob);
+									GameManager.Get<JobManager>().CancelJob(removeJob);
 								}
 							} else if (instance is SleepSpot sleepSpot) {
 								if (sleepSpot.occupyingColonist != null) {
@@ -381,9 +384,9 @@ namespace Snowship.NJob {
 							}
 						}
 
-						GameManager.resourceM.Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
+						GameManager.Get<ResourceManager>().Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
 						if (job.tile.walkable && !previousWalkability) {
-							GameManager.colonyM.colony.map.RemoveTileBrightnessEffect(job.tile);
+							GameManager.Get<ColonyManager>().colony.map.RemoveTileBrightnessEffect(job.tile);
 						}
 					}
 				}
@@ -409,7 +412,9 @@ namespace Snowship.NJob {
 								colonist.GetInventory().ChangeResourceAmount(harvestResourceRange.resource, UnityEngine.Random.Range(harvestResourceRange.min, harvestResourceRange.max), false);
 							}
 
-							GameManager.jobM.CreateJob(new Job(
+							GameManager.Get<JobManager>()
+								.CreateJob(
+									new Job(
 								JobPrefab.GetJobPrefabByName("PlantFarm"),
 								job.tile,
 								job.tile.farm.prefab,
@@ -421,7 +426,7 @@ namespace Snowship.NJob {
 							ObjectInstance.RemoveObjectInstance(job.tile.farm);
 							job.tile.RemoveObjectAtLayer(layer);
 						}
-						GameManager.resourceM.Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
+						GameManager.Get<ResourceManager>().Bitmask(new List<TileManager.Tile>() { job.tile }.Concat(job.tile.surroundingTiles).ToList());
 					}
 				}
 			},
@@ -467,7 +472,7 @@ namespace Snowship.NJob {
 						PlantPrefab chosenPlantPrefab = PlantPrefab.GetPlantPrefabByEnum(chosenPlantEnum);
 
 						job.tile.SetPlant(false, new Plant(chosenPlantPrefab, job.tile, true, false, job.variation.plants[chosenPlantPrefab]));
-						GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
+						GameManager.Get<ColonyManager>().colony.map.SetTileBrightness(GameManager.Get<TimeManager>().Time.TileBrightnessTime, true);
 					}
 				}
 			},
@@ -484,7 +489,7 @@ namespace Snowship.NJob {
 							job.tile.SetTileType(job.tile.biome.tileTypes[TileManager.TileTypeGroup.TypeEnum.Ground], false, true, true);
 						}
 
-						GameManager.colonyM.colony.map.RemoveTileBrightnessEffect(job.tile);
+						GameManager.Get<ColonyManager>().colony.map.RemoveTileBrightnessEffect(job.tile);
 
 						foreach (LightSource lightSource in LightSource.lightSources) {
 							if (Vector2.Distance(job.tile.obj.transform.position, lightSource.obj.transform.position) <= lightSource.prefab.maxLightDistance) {
@@ -703,9 +708,9 @@ namespace Snowship.NJob {
 
 						float amountEaten = startingFoodNeedValue - foodNeed.GetValue();
 						if (amountEaten >= 15 && foodNeed.GetValue() <= -10) {
-							colonist.AddMoodModifier(MoodModifierEnum.Stuffed);
+							colonist.Moods.AddMoodModifier(MoodModifierEnum.Stuffed);
 						} else if (amountEaten >= 15) {
-							colonist.AddMoodModifier(MoodModifierEnum.Full);
+							colonist.Moods.AddMoodModifier(MoodModifierEnum.Full);
 						}
 
 						if (foodNeed.GetValue() < 0) {
@@ -721,10 +726,10 @@ namespace Snowship.NJob {
 								}
 								return false;
 							}) == null) {
-								colonist.AddMoodModifier(MoodModifierEnum.AteWithoutATable);
+								colonist.Moods.AddMoodModifier(MoodModifierEnum.AteWithoutATable);
 							}
 						} else {
-							colonist.AddMoodModifier(MoodModifierEnum.AteOnTheFloor);
+							colonist.Moods.AddMoodModifier(MoodModifierEnum.AteOnTheFloor);
 						}
 					}
 				}
@@ -737,12 +742,12 @@ namespace Snowship.NJob {
 						if (targetSleepSpot != null) {
 							targetSleepSpot.StopSleeping();
 							if (targetSleepSpot.prefab.restComfortAmount >= 10) {
-								colonist.AddMoodModifier(MoodModifierEnum.WellRested);
+								colonist.Moods.AddMoodModifier(MoodModifierEnum.WellRested);
 							} else {
-								colonist.AddMoodModifier(MoodModifierEnum.Rested);
+								colonist.Moods.AddMoodModifier(MoodModifierEnum.Rested);
 							}
 						} else {
-							colonist.AddMoodModifier(MoodModifierEnum.Rested);
+							colonist.Moods.AddMoodModifier(MoodModifierEnum.Rested);
 						}
 						foreach (SleepSpot sleepSpot in SleepSpot.sleepSpots) {
 							if (sleepSpot.occupyingColonist == colonist) {

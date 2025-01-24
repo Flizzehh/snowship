@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NColony;
 using Snowship.NJob;
 using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PJob : PersistenceHandler {
+	public class PJob : Job
+	{
 
 		private readonly PInventory pInventory = new PInventory();
 
@@ -33,7 +36,8 @@ namespace Snowship.NPersistence {
 			TransferResources
 		}
 
-		public enum ContainerPickupProperty {
+		private enum ContainerPickupProperty
+		{
 			ContainerPickup,
 			Position,
 			ResourcesToPickup
@@ -41,7 +45,7 @@ namespace Snowship.NPersistence {
 
 		public void SaveJobs(string saveDirectoryPath) {
 
-			StreamWriter file = CreateFileAtDirectory(saveDirectoryPath, "jobs.snowship");
+			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "jobs.snowship");
 
 			foreach (Job job in Job.jobs) {
 				WriteJobLines(file, job, JobProperty.Job, 0);
@@ -51,41 +55,41 @@ namespace Snowship.NPersistence {
 		}
 
 		public void WriteJobLines(StreamWriter file, Job job, JobProperty jobType, int startLevel) {
-			file.WriteLine(CreateKeyValueString(jobType, string.Empty, startLevel));
+			file.WriteLine(PU.CreateKeyValueString(jobType, string.Empty, startLevel));
 
-			file.WriteLine(CreateKeyValueString(JobProperty.Prefab, job.prefab.name, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.Type, job.objectPrefab.type, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.Variation, job.variation == null ? "null" : job.variation.name, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.Position, FormatVector2ToString(job.tile.obj.transform.position), startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.RotationIndex, job.rotationIndex, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.Priority, job.priority, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.Started, job.started, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.Progress, job.jobProgress, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(JobProperty.ColonistBuildTime, job.colonistBuildTime, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Prefab, job.prefab.name, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Type, job.objectPrefab.type, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Variation, job.variation == null ? "null" : job.variation.name, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Position, PU.FormatVector2ToString(job.tile.obj.transform.position), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.RotationIndex, job.rotationIndex, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Priority, job.priority, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Started, job.started, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Progress, job.jobProgress, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.ColonistBuildTime, job.colonistBuildTime, startLevel + 1));
 
-			if (job.requiredResources != null && job.requiredResources.Count > 0) {
-				file.WriteLine(CreateKeyValueString(JobProperty.RequiredResources, string.Empty, startLevel + 1));
+			if (job.requiredResources is { Count: > 0 }) {
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.RequiredResources, string.Empty, startLevel + 1));
 				foreach (ResourceAmount resourceAmount in job.requiredResources) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
 
-			if (job.resourcesColonistHas != null && job.resourcesColonistHas.Count > 0) {
-				file.WriteLine(CreateKeyValueString(JobProperty.ResourcesColonistHas, string.Empty, startLevel + 1));
+			if (job.resourcesColonistHas is { Count: > 0 }) {
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.ResourcesColonistHas, string.Empty, startLevel + 1));
 				foreach (ResourceAmount resourceAmount in job.resourcesColonistHas) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
 
-			if (job.containerPickups != null && job.containerPickups.Count > 0) {
-				file.WriteLine(CreateKeyValueString(JobProperty.ContainerPickups, string.Empty, startLevel + 1));
+			if (job.containerPickups is { Count: > 0 }) {
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.ContainerPickups, string.Empty, startLevel + 1));
 				foreach (ContainerPickup containerPickup in job.containerPickups) {
-					file.WriteLine(CreateKeyValueString(ContainerPickupProperty.ContainerPickup, string.Empty, startLevel + 2));
+					file.WriteLine(PU.CreateKeyValueString(ContainerPickupProperty.ContainerPickup, string.Empty, startLevel + 2));
 
-					file.WriteLine(CreateKeyValueString(ContainerPickupProperty.Position, FormatVector2ToString(containerPickup.container.zeroPointTile.obj.transform.position), startLevel + 3));
+					file.WriteLine(PU.CreateKeyValueString(ContainerPickupProperty.Position, PU.FormatVector2ToString(containerPickup.container.zeroPointTile.obj.transform.position), startLevel + 3));
 
 					if (containerPickup.resourcesToPickup.Count > 0) {
-						file.WriteLine(CreateKeyValueString(ContainerPickupProperty.ResourcesToPickup, string.Empty, startLevel + 3));
+						file.WriteLine(PU.CreateKeyValueString(ContainerPickupProperty.ResourcesToPickup, string.Empty, startLevel + 3));
 						foreach (ResourceAmount resourceAmount in containerPickup.resourcesToPickup) {
 							pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 4);
 						}
@@ -94,18 +98,18 @@ namespace Snowship.NPersistence {
 			}
 
 			if (job.createResource != null) {
-				file.WriteLine(CreateKeyValueString(JobProperty.CreateResource, job.createResource.resource.type, startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.CreateResource, job.createResource.resource.type, startLevel + 1));
 			}
 
 			if (job.activeObject != null) {
-				file.WriteLine(CreateKeyValueString(JobProperty.ActiveObject, string.Empty, startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.ActiveObject, string.Empty, startLevel + 1));
 
-				file.WriteLine(CreateKeyValueString(PObject.ObjectProperty.Position, FormatVector2ToString(job.activeObject.zeroPointTile.obj.transform.position), startLevel + 2));
-				file.WriteLine(CreateKeyValueString(PObject.ObjectProperty.Type, job.activeObject.prefab.type, startLevel + 2));
+				file.WriteLine(PU.CreateKeyValueString(PObject.ObjectProperty.Position, PU.FormatVector2ToString(job.activeObject.zeroPointTile.obj.transform.position), startLevel + 2));
+				file.WriteLine(PU.CreateKeyValueString(PObject.ObjectProperty.Type, job.activeObject.prefab.type, startLevel + 2));
 			}
 
-			if (job.transferResources != null && job.transferResources.Count > 0) {
-				file.WriteLine(CreateKeyValueString(JobProperty.TransferResources, string.Empty, startLevel + 1));
+			if (job.transferResources is { Count: > 0 }) {
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.TransferResources, string.Empty, startLevel + 1));
 				foreach (ResourceAmount resourceAmount in job.transferResources) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
@@ -180,7 +184,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceJob> LoadJobs(string path) {
 			List<PersistenceJob> persistenceJobs = new List<PersistenceJob>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((JobProperty)Enum.Parse(typeof(JobProperty), property.Key)) {
 					case JobProperty.Job:
@@ -189,7 +193,7 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			GameManager.persistenceM.loadingState = PersistenceManager.LoadingState.LoadedJobs;
+			GameManager.Get<PersistenceManager>().loadingState = PersistenceManager.LoadingState.LoadedJobs;
 			return persistenceJobs;
 		}
 
@@ -362,7 +366,7 @@ namespace Snowship.NPersistence {
 
 		public void ApplyLoadedJobs(List<PersistenceJob> persistenceJobs) {
 			foreach (PersistenceJob persistenceJob in persistenceJobs) {
-				GameManager.jobM.CreateJob(LoadJob(persistenceJob));
+				GameManager.Get<JobManager>().CreateJob(LoadJob(persistenceJob));
 			}
 		}
 
@@ -373,15 +377,16 @@ namespace Snowship.NPersistence {
 				foreach (PersistenceContainerPickup persistenceContainerPickup in persistenceJob.containerPickups) {
 					containerPickups.Add(
 						new ContainerPickup(
-							Container.containers.Find(c => c.zeroPointTile == GameManager.colonyM.colony.map.GetTileFromPosition(persistenceContainerPickup.containerPickupZeroPointTilePosition.Value)),
+							Container.containers.Find(c => c.zeroPointTile == GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceContainerPickup.containerPickupZeroPointTilePosition.Value)),
 							persistenceContainerPickup.containerPickupResourceAmounts
-						));
+						)
+					);
 				}
 			}
 
 			Job job = new(
 				JobPrefab.GetJobPrefabByName(persistenceJob.prefab),
-				GameManager.colonyM.colony.map.GetTileFromPosition(persistenceJob.position.Value),
+				GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceJob.position.Value),
 				ObjectPrefab.GetObjectPrefabByEnum(persistenceJob.type.Value),
 				ObjectPrefab.GetObjectPrefabByEnum(persistenceJob.type.Value).GetVariationFromString(persistenceJob.variation),
 				persistenceJob.rotationIndex.Value

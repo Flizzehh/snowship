@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NJob;
 using Snowship.NResource;
+using Snowship.NTime;
 
 namespace Snowship.NColonist {
 	public static class NeedUtilities {
@@ -30,9 +31,9 @@ namespace Snowship.NColonist {
 
 		public static float CalculateRestNeedSpecialValueIncrease(NeedInstance needInstance) {
 			float totalSpecialIncrease = 0;
-			MoodModifierInstance positiveRestMoodModifier = needInstance.colonist.FindMoodModifierByGroupEnum(MoodModifierGroupEnum.Rest, 1).FirstOrDefault();
+			MoodModifierInstance positiveRestMoodModifier = needInstance.colonist.Moods.FindMoodModifierByGroupEnum(MoodModifierGroupEnum.Rest, 1).FirstOrDefault();
 			if (positiveRestMoodModifier != null) {
-				switch (positiveRestMoodModifier.prefab.type) {
+				switch (positiveRestMoodModifier.Prefab.type) {
 					case MoodModifierEnum.WellRested:
 						totalSpecialIncrease -= needInstance.prefab.baseIncreaseRate * 0.8f;
 						break;
@@ -41,7 +42,7 @@ namespace Snowship.NColonist {
 						break;
 				}
 			}
-			if (!GameManager.timeM.Time.IsDay && positiveRestMoodModifier == null) {
+			if (!GameManager.Get<TimeManager>().Time.IsDay && positiveRestMoodModifier == null) {
 				totalSpecialIncrease += needInstance.prefab.baseIncreaseRate * 2f;
 			}
 			return totalSpecialIncrease;
@@ -60,11 +61,11 @@ namespace Snowship.NColonist {
 
 		public static float CalculateFoodNeedSpecialValueIncrease(NeedInstance needInstance) {
 			float totalSpecialIncrease = 0;
-			MoodModifierInstance moodModifier = needInstance.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Food);
+			MoodModifierInstance moodModifier = needInstance.colonist.Moods.MoodModifiers.Find(findMoodModifier => findMoodModifier.Prefab.group.type == MoodModifierGroupEnum.Food);
 			if (moodModifier != null) {
-				if (moodModifier.prefab.type == MoodModifierEnum.Stuffed) {
+				if (moodModifier.Prefab.type == MoodModifierEnum.Stuffed) {
 					totalSpecialIncrease -= needInstance.prefab.baseIncreaseRate * 0.9f;
-				} else if (moodModifier.prefab.type == MoodModifierEnum.Full) {
+				} else if (moodModifier.Prefab.type == MoodModifierEnum.Full) {
 					totalSpecialIncrease -= needInstance.prefab.baseIncreaseRate * 0.5f;
 				}
 			}

@@ -31,8 +31,11 @@ namespace Snowship.NPlanet {
 				mapData.primaryWindDirection.ToString().PadLeft(2, '0')
 			);
 
-			lastSaveDateTime = PersistenceHandler.GenerateSaveDateTimeString();
-			lastSaveTimeChunk = PersistenceHandler.GenerateDateTimeString();
+			lastSaveDateTime = PersistenceUtilities.GenerateSaveDateTimeString();
+			lastSaveTimeChunk = PersistenceUtilities.GenerateDateTimeString();
+		}
+
+		protected Planet() {
 		}
 
 		public void SetDirectory(string directory) {

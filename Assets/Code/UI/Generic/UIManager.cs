@@ -1,18 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Snowship.NUI {
 	public class UIManager : IUIManager
 	{
-		private Transform uiParent;
+		private Transform canvas;
 
 		private readonly List<IUIGroup> parentGroups = new List<IUIGroup>();
 
-		[SuppressMessage("ReSharper", "ParameterHidesMember")]
-		public void Initialize(Transform uiParent) {
-			this.uiParent = uiParent;
+		public void OnCreate() {
+			canvas = GameManager.SharedReferences.canvas;
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>() where TUIConfig : IUIConfig, new() {
@@ -36,8 +34,8 @@ namespace Snowship.NUI {
 
 			IUIGroup parentGroup = FindGroup(parent);
 
-			Transform parentTransform = parentGroup?.View.Instance.transform ?? uiParent;
-			Transform transformToUse = useParentTransform ? parentTransform : uiParent;
+			Transform parentTransform = parentGroup?.View.Instance.transform ?? canvas;
+			Transform transformToUse = useParentTransform ? parentTransform : canvas;
 
 			TUIConfig config = new();
 			(IUIView view, IUIPresenter presenter) ui;

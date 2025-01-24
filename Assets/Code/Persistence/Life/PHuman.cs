@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using Snowship.NResource;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PHuman : PersistenceHandler {
+	public class PHuman : HumanManager.Human
+	{
 
 		private readonly PInventory pInventory = new PInventory();
 
@@ -20,17 +22,17 @@ namespace Snowship.NPersistence {
 		}
 
 		public void WriteHumanLines(StreamWriter file, HumanManager.Human human, int startLevel) {
-			file.WriteLine(CreateKeyValueString(HumanProperty.Human, string.Empty, startLevel));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.Human, string.Empty, startLevel));
 
-			file.WriteLine(CreateKeyValueString(HumanProperty.Name, human.name, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(HumanProperty.SkinIndex, human.bodyIndices[HumanManager.Human.Appearance.Skin], startLevel + 1));
-			file.WriteLine(CreateKeyValueString(HumanProperty.HairIndex, human.bodyIndices[HumanManager.Human.Appearance.Hair], startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.Name, human.name, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.SkinIndex, human.bodyIndices[Appearance.Skin], startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.HairIndex, human.bodyIndices[Appearance.Hair], startLevel + 1));
 
 			if (human.clothes.Any(kvp => kvp.Value != null)) {
-				file.WriteLine(CreateKeyValueString(HumanProperty.Clothes, string.Empty, startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(HumanProperty.Clothes, string.Empty, startLevel + 1));
 				foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothing in human.clothes) {
 					if (appearanceToClothing.Value != null) {
-						file.WriteLine(CreateKeyValueString(appearanceToClothing.Key, appearanceToClothing.Value.prefab.clothingType + ":" + appearanceToClothing.Value.colour, startLevel + 2));
+						file.WriteLine(PU.CreateKeyValueString(appearanceToClothing.Key, appearanceToClothing.Value.prefab.clothingType + ":" + appearanceToClothing.Value.colour, startLevel + 2));
 					}
 				}
 			}
@@ -57,7 +59,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceHuman> LoadHumans(string path) {
 			List<PersistenceHuman> persistenceHumans = new List<PersistenceHuman>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((HumanProperty)Enum.Parse(typeof(HumanProperty), property.Key)) {
 					case HumanProperty.Human:

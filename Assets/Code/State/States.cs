@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Snowship.NUI;
 using Snowship.NUI.LoadingScreen;
 using Snowship.NUI.Menu.MainMenu;
 using Snowship.NUI.Menu.PauseMenu;
 using Snowship.NUI.Simulation.SimulationUI;
 
-namespace Snowship.NState {
-	public partial class StateManager {
-
+namespace Snowship.NState
+{
+	public partial class StateManager
+	{
 		public Dictionary<EState, State> States => states;
 
 		private static readonly Dictionary<EState, State> states = new() {
@@ -23,14 +25,15 @@ namespace Snowship.NState {
 					EState.MainMenu,
 					new List<EState> { EState.LoadToSimulation, EState.QuitToDesktop },
 					new List<Func<UniTask>> {
-						async () => await GameManager.uiM.OpenViewAsync<UIMainMenu>()
-					})
+						async () => await GameManager.Get<UIManager>().OpenViewAsync<UIMainMenu>()
+					}
+				)
 			}, {
 				EState.LoadToSimulation, new State(
 					EState.LoadToSimulation,
 					new List<EState> { EState.Simulation },
 					new List<Func<UniTask>> {
-						async () => await GameManager.uiM.OpenViewAsync<UILoadingScreen>()
+						async () => await GameManager.Get<UIManager>().OpenViewAsync<UILoadingScreen>()
 					}
 				)
 			}, {
@@ -38,7 +41,7 @@ namespace Snowship.NState {
 					EState.Simulation,
 					new List<EState> { EState.PauseMenu, EState.Saving, EState.QuitToMenu, EState.QuitToDesktop },
 					new List<Func<UniTask>> {
-						async () => await GameManager.uiM.OpenViewAsync<UISimulation>()
+						async () => await GameManager.Get<UIManager>().OpenViewAsync<UISimulation>()
 					}
 				)
 			}, {
@@ -46,7 +49,7 @@ namespace Snowship.NState {
 					EState.PauseMenu,
 					new List<EState> { EState.Simulation },
 					new List<Func<UniTask>> {
-						async () => await GameManager.uiM.OpenViewAsync<UIPauseMenu>()
+						async () => await GameManager.Get<UIManager>().OpenViewAsync<UIPauseMenu>()
 					}
 				)
 			}, {

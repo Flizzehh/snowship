@@ -52,7 +52,7 @@ namespace Snowship.NJob {
 
 			SetRequiredResources();
 
-			jobPreview = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, GameManager.resourceM.jobParent.transform, false);
+			jobPreview = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.Get<ResourceManager>().jobParent.transform, false);
 			jobPreview.transform.position = tile.obj.transform.position + (Vector3)objectPrefab.anchorPositionOffset[rotationIndex];
 			jobPreview.name = "JobPreview: " + objectPrefab.name + " at " + jobPreview.transform.position;
 			SpriteRenderer jPSR = jobPreview.GetComponent<SpriteRenderer>();
@@ -67,6 +67,9 @@ namespace Snowship.NJob {
 
 			jobProgress = objectPrefab.timeToBuild;
 			colonistBuildTime = objectPrefab.timeToBuild;
+		}
+
+		protected Job() {
 		}
 
 		private void SetRequiredResources() {
@@ -120,7 +123,7 @@ namespace Snowship.NJob {
 		public void ChangePriority(int amount) {
 			priority += amount;
 			if (priorityIndicator == null && jobPreview != null) {
-				priorityIndicator = MonoBehaviour.Instantiate(GameManager.resourceM.tilePrefab, jobPreview.transform, false);
+				priorityIndicator = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, jobPreview.transform, false);
 				priorityIndicator.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(@"UI/priorityIndicator");
 				priorityIndicator.GetComponent<SpriteRenderer>().sortingOrder = jobPreview.GetComponent<SpriteRenderer>().sortingOrder + 1; // Priority Indicator Sprite
 				if (priority == 1) {

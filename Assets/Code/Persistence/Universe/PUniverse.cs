@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PUniverse : PersistenceHandler {
+	public class PUniverse : UniverseManager.Universe
+	{
 
 		public enum ConfigurationProperty {
 			GameVersion,
@@ -21,14 +23,14 @@ namespace Snowship.NPersistence {
 		// Universe
 
 		public string GenerateUniversesPath() {
-			return GetPersistentDataPath() + "/Universes";
+			return PU.GetPersistentDataPath() + "/Universes";
 		}
 
 		public void SaveUniverse(StreamWriter file, UniverseManager.Universe universe) {
-			file.WriteLine(CreateKeyValueString(UniverseProperty.LastSaveDateTime, universe.lastSaveDateTime, 0));
-			file.WriteLine(CreateKeyValueString(UniverseProperty.LastSaveTimeChunk, universe.lastSaveTimeChunk, 0));
+			file.WriteLine(PU.CreateKeyValueString(UniverseProperty.LastSaveDateTime, universe.lastSaveDateTime, 0));
+			file.WriteLine(PU.CreateKeyValueString(UniverseProperty.LastSaveTimeChunk, universe.lastSaveTimeChunk, 0));
 
-			file.WriteLine(CreateKeyValueString(UniverseProperty.Name, universe.name, 0));
+			file.WriteLine(PU.CreateKeyValueString(UniverseProperty.Name, universe.name, 0));
 		}
 
 		public List<PersistenceUniverse> GetPersistenceUniverses() {
@@ -46,7 +48,7 @@ namespace Snowship.NPersistence {
 		public Dictionary<UniverseProperty, string> LoadUniverse(string path) {
 			Dictionary<UniverseProperty, string> properties = new Dictionary<UniverseProperty, string>();
 
-			foreach (KeyValuePair<string, object> property in GetKeyValuePairsFromFile(path)) {
+			foreach (KeyValuePair<string, object> property in PU.GetKeyValuePairsFromFile(path)) {
 				UniverseProperty key = (UniverseProperty)Enum.Parse(typeof(UniverseProperty), property.Key);
 				switch (key) {
 					case UniverseProperty.LastSaveDateTime:
@@ -65,7 +67,7 @@ namespace Snowship.NPersistence {
 
 		public void ApplyLoadedUniverse(PersistenceUniverse persistenceUniverse) {
 			UniverseManager.Universe universe = new UniverseManager.Universe(persistenceUniverse.universeProperties[UniverseProperty.Name]) { directory = persistenceUniverse.path, lastSaveDateTime = persistenceUniverse.universeProperties[UniverseProperty.LastSaveDateTime], lastSaveTimeChunk = persistenceUniverse.universeProperties[UniverseProperty.LastSaveTimeChunk] };
-			GameManager.universeM.SetUniverse(universe);
+			GameManager.Get<UniverseManager>().SetUniverse(universe);
 		}
 
 		public void CreateUniverse(UniverseManager.Universe universe) {
@@ -75,7 +77,7 @@ namespace Snowship.NPersistence {
 			}
 
 			string universesDirectoryPath = GenerateUniversesPath();
-			string dateTimeString = GenerateDateTimeString();
+			string dateTimeString = PU.GenerateDateTimeString();
 			string universeDirectoryPath = universesDirectoryPath + "/Universe-" + dateTimeString;
 			Directory.CreateDirectory(universeDirectoryPath);
 			universe.SetDirectory(universeDirectoryPath);
@@ -96,7 +98,7 @@ namespace Snowship.NPersistence {
 			if (File.Exists(configurationFilePath)) {
 				File.WriteAllText(configurationFilePath, string.Empty);
 			} else {
-				CreateFileAtDirectory(universe.directory, "configuration.snowship").Close();
+				PU.CreateFileAtDirectory(universe.directory, "configuration.snowship").Close();
 			}
 			StreamWriter configurationFile = new StreamWriter(configurationFilePath);
 			SaveConfiguration(configurationFile);
@@ -106,7 +108,7 @@ namespace Snowship.NPersistence {
 			if (File.Exists(universeFilePath)) {
 				File.WriteAllText(universeFilePath, string.Empty);
 			} else {
-				CreateFileAtDirectory(universe.directory, "universe.snowship").Close();
+				PU.CreateFileAtDirectory(universe.directory, "universe.snowship").Close();
 			}
 			StreamWriter universeFile = new StreamWriter(universeFilePath);
 			SaveUniverse(universeFile, universe);
@@ -116,14 +118,14 @@ namespace Snowship.NPersistence {
 		// Configuration
 
 		public void SaveConfiguration(StreamWriter file) {
-			file.WriteLine(CreateKeyValueString(ConfigurationProperty.GameVersion, PersistenceManager.GameVersion.text, 0));
-			file.WriteLine(CreateKeyValueString(ConfigurationProperty.SaveVersion, PersistenceManager.SaveVersion.text, 0));
+			file.WriteLine(PU.CreateKeyValueString(ConfigurationProperty.GameVersion, PersistenceManager.GameVersion.text, 0));
+			file.WriteLine(PU.CreateKeyValueString(ConfigurationProperty.SaveVersion, PersistenceManager.SaveVersion.text, 0));
 		}
 
 		public Dictionary<ConfigurationProperty, string> LoadConfiguration(string path) {
 			Dictionary<ConfigurationProperty, string> properties = new Dictionary<ConfigurationProperty, string>();
 
-			foreach (KeyValuePair<string, object> property in GetKeyValuePairsFromFile(path)) {
+			foreach (KeyValuePair<string, object> property in PU.GetKeyValuePairsFromFile(path)) {
 				ConfigurationProperty key = (ConfigurationProperty)Enum.Parse(typeof(ConfigurationProperty), property.Key);
 				object value = property.Value;
 				switch (key) {

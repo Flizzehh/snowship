@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NCamera;
+using Snowship.NColony;
+using Snowship.NJob;
 using Snowship.NResource;
+using Snowship.NTime;
 using UnityEngine;
 
 namespace Snowship.NColonist {
@@ -28,8 +32,8 @@ namespace Snowship.NColonist {
 		}
 
 		private void UpdateColonistJobs() {
-			if (!GameManager.timeM.Time.Paused) {
-				GameManager.jobM.GiveJobsToColonists();
+			if (!GameManager.Get<TimeManager>().Time.Paused) {
+				GameManager.Get<JobManager>().GiveJobsToColonists();
 			}
 		}
 
@@ -41,7 +45,7 @@ namespace Snowship.NColonist {
 				averageColonistPosition = new Vector2(averageColonistPosition.x + colonist.obj.transform.position.x, averageColonistPosition.y + colonist.obj.transform.position.y);
 			}
 			averageColonistPosition /= Colonist.colonists.Count;
-			GameManager.cameraM.SetCameraPosition(averageColonistPosition);
+			GameManager.Get<CameraManager>().SetCameraPosition(averageColonistPosition);
 
 			// TODO TEMPORARY COLONIST TESTING STUFF
 			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.WheatSeed), Random.Range(5, 11), false);
@@ -51,14 +55,14 @@ namespace Snowship.NColonist {
 
 		public void SpawnColonists(int amount) {
 			if (amount > 0) {
-				int mapSize = GameManager.colonyM.colony.map.mapData.mapSize;
+				int mapSize = GameManager.Get<ColonyManager>().colony.map.mapData.mapSize;
 				for (int i = 0; i < amount; i++) {
-					List<TileManager.Tile> walkableTilesByDistanceToCentre = GameManager.colonyM.colony.map.tiles.Where(o => o.walkable && o.buildable && Colonist.colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f))/*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
+					List<TileManager.Tile> walkableTilesByDistanceToCentre = GameManager.Get<ColonyManager>().colony.map.tiles.Where(o => o.walkable && o.buildable && Colonist.colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f)) /*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
 					if (walkableTilesByDistanceToCentre.Count <= 0) {
-						foreach (TileManager.Tile tile in GameManager.colonyM.colony.map.tiles.Where(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f)) <= 4f)) {
+						foreach (TileManager.Tile tile in GameManager.Get<ColonyManager>().colony.map.tiles.Where(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f)) <= 4f)) {
 							tile.SetTileType(tile.biome.tileTypes[TileManager.TileTypeGroup.TypeEnum.Ground], true, true, true);
 						}
-						walkableTilesByDistanceToCentre = GameManager.colonyM.colony.map.tiles.Where(o => o.walkable && Colonist.colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f))/*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
+						walkableTilesByDistanceToCentre = GameManager.Get<ColonyManager>().colony.map.tiles.Where(o => o.walkable && Colonist.colonists.Find(c => c.overTile == o) == null).OrderBy(o => Vector2.Distance(o.obj.transform.position, new Vector2(mapSize / 2f, mapSize / 2f)) /*pathM.RegionBlockDistance(o.regionBlock,tileM.GetTileFromPosition(new Vector2(mapSize / 2f,mapSize / 2f)).regionBlock,true,true)*/).ToList();
 					}
 
 					List<TileManager.Tile> validSpawnTiles = new List<TileManager.Tile>();
@@ -92,9 +96,9 @@ namespace Snowship.NColonist {
 					new Colonist(colonistSpawnTile, 1);
 				}
 
-				//GameManager.uiMOld.SetColonistElements();
-				GameManager.colonyM.colony.map.Bitmasking(GameManager.colonyM.colony.map.tiles, true, true);
-				GameManager.colonyM.colony.map.SetTileBrightness(GameManager.timeM.Time.TileBrightnessTime, true);
+				//GameManager.Get<UIManagerOld>().SetColonistElements();
+				GameManager.Get<ColonyManager>().colony.map.Bitmasking(GameManager.Get<ColonyManager>().colony.map.tiles, true, true);
+				GameManager.Get<ColonyManager>().colony.map.SetTileBrightness(GameManager.Get<TimeManager>().Time.TileBrightnessTime, true);
 			}
 		}
 	}

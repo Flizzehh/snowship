@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PLife : PersistenceHandler {
+	public class PLife : LifeManager.Life
+	{
 
 		public enum LifeProperty {
 			Life,
@@ -16,14 +18,14 @@ namespace Snowship.NPersistence {
 		}
 
 		public void WriteLifeLines(StreamWriter file, LifeManager.Life life, int startLevel) {
-			file.WriteLine(CreateKeyValueString(LifeProperty.Life, string.Empty, startLevel));
+			file.WriteLine(PU.CreateKeyValueString(LifeProperty.Life, string.Empty, startLevel));
 
-			file.WriteLine(CreateKeyValueString(LifeProperty.Health, life.Health, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(LifeProperty.Gender, life.gender, startLevel + 1));
-			file.WriteLine(CreateKeyValueString(LifeProperty.Position, FormatVector2ToString(life.obj.transform.position), startLevel + 1));
-			file.WriteLine(CreateKeyValueString(LifeProperty.PreviousPosition, FormatVector2ToString(life.previousPosition), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(LifeProperty.Health, life.Health, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(LifeProperty.Gender, life.gender, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(LifeProperty.Position, PU.FormatVector2ToString(life.obj.transform.position), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(LifeProperty.PreviousPosition, PU.FormatVector2ToString(life.previousPosition), startLevel + 1));
 			if (life.path.Count > 0) {
-				file.WriteLine(CreateKeyValueString(LifeProperty.PathEndPosition, FormatVector2ToString(life.path[life.path.Count - 1].obj.transform.position), startLevel + 1));
+				file.WriteLine(PU.CreateKeyValueString(LifeProperty.PathEndPosition, PU.FormatVector2ToString(life.path[life.path.Count - 1].obj.transform.position), startLevel + 1));
 			}
 		}
 
@@ -46,7 +48,7 @@ namespace Snowship.NPersistence {
 		public List<PersistenceLife> LoadLife(string path) {
 			List<PersistenceLife> persistenceLife = new List<PersistenceLife>();
 
-			List<KeyValuePair<string, object>> properties = GetKeyValuePairsFromFile(path);
+			List<KeyValuePair<string, object>> properties = PU.GetKeyValuePairsFromFile(path);
 			foreach (KeyValuePair<string, object> property in properties) {
 				switch ((LifeProperty)Enum.Parse(typeof(LifeProperty), property.Key)) {
 					case LifeProperty.Life:

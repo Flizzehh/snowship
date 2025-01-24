@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NColony;
 using Snowship.NJob;
 using Snowship.NUI;
 using Snowship.Selectable;
@@ -64,7 +65,7 @@ namespace Snowship.NResource
 
 			this.rotationIndex = rotationIndex;
 
-			obj = MonoBehaviour.Instantiate(GameManager.resourceM.objectPrefab, zeroPointTile.obj.transform, false);
+			obj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().objectPrefab, zeroPointTile.obj.transform, false);
 			sr = obj.GetComponent<SpriteRenderer>();
 			obj.transform.position += (Vector3)prefab.anchorPositionOffset[rotationIndex];
 			obj.name = "Tile Object Instance: " + prefab.name;
@@ -97,8 +98,8 @@ namespace Snowship.NResource
 				bitmaskingTiles.AddRange(additionalTile.surroundingTiles);
 			}
 			bitmaskingTiles = bitmaskingTiles.Distinct().ToList();
-			GameManager.resourceM.Bitmask(bitmaskingTiles);
-			GameManager.colonyM.colony.map.Bitmasking(bitmaskingTiles, true, true);
+			GameManager.Get<ResourceManager>().Bitmask(bitmaskingTiles);
+			GameManager.Get<ColonyManager>().colony.map.Bitmasking(bitmaskingTiles, true, true);
 			foreach (TileManager.Tile tile in additionalTiles) {
 				SetColour(tile.sr.color);
 			}
@@ -124,7 +125,7 @@ namespace Snowship.NResource
 					}
 				}
 			} else {
-				aosr.sprite = GameManager.resourceM.clearSquareSprite;
+				aosr.sprite = GameManager.Get<ResourceManager>().clearSquareSprite;
 			}
 		}
 
@@ -201,10 +202,10 @@ namespace Snowship.NResource
 		public static void AddObjectInstance(ObjectInstance objectInstance) {
 			if (ObjectInstances.ContainsKey(objectInstance.prefab)) {
 				ObjectInstances[objectInstance.prefab].Add(objectInstance);
-				GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, objectInstance.prefab);
+				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, objectInstance.prefab);
 			} else {
 				ObjectInstances.Add(objectInstance.prefab, new List<ObjectInstance>() { objectInstance });
-				GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Add, objectInstance.prefab);
+				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Add, objectInstance.prefab);
 			}
 		}
 
@@ -215,8 +216,8 @@ namespace Snowship.NResource
 				case ObjectInstanceType.Container:
 					Container container = (Container)instance;
 
-					if (GameManager.uiMOld.selectedContainer == container) {
-						GameManager.uiMOld.SetSelectedContainer(null);
+					if (GameManager.Get<UIManagerOld>().selectedContainer == container) {
+						GameManager.Get<UIManagerOld>().SetSelectedContainer(null);
 					}
 
 					Container.containers.Remove(container);
@@ -224,8 +225,8 @@ namespace Snowship.NResource
 				case ObjectInstanceType.TradingPost:
 					TradingPost tradingPost = (TradingPost)instance;
 
-					if (GameManager.uiMOld.selectedTradingPost == tradingPost) {
-						GameManager.uiMOld.SetSelectedTradingPost(null);
+					if (GameManager.Get<UIManagerOld>().selectedTradingPost == tradingPost) {
+						GameManager.Get<UIManagerOld>().SetSelectedTradingPost(null);
 					}
 
 					TradingPost.tradingPosts.Remove(tradingPost);
@@ -245,8 +246,8 @@ namespace Snowship.NResource
 				case ObjectInstanceType.CraftingObject:
 					CraftingObject craftingObject = (CraftingObject)instance;
 
-					if (GameManager.uiMOld.selectedCraftingObject == craftingObject) {
-						GameManager.uiMOld.SetSelectedCraftingObject(null);
+					if (GameManager.Get<UIManagerOld>().selectedCraftingObject == craftingObject) {
+						GameManager.Get<UIManagerOld>().SetSelectedCraftingObject(null);
 					}
 
 					CraftingObject.craftingObjectInstances.Remove(craftingObject);
@@ -266,7 +267,7 @@ namespace Snowship.NResource
 			if (ObjectInstances.ContainsKey(instance.prefab)) {
 				ObjectInstances[instance.prefab].Remove(instance);
 
-				GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, instance.prefab);
+				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, instance.prefab);
 			} else {
 				Debug.LogWarning("Tried removing a tile object instance which isn't in the list");
 			}
@@ -274,7 +275,7 @@ namespace Snowship.NResource
 			if (ObjectInstances[instance.prefab].Count <= 0) {
 				ObjectInstances.Remove(instance.prefab);
 
-				GameManager.uiMOld.ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Remove, instance.prefab);
+				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Remove, instance.prefab);
 			}
 		}
 	}

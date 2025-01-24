@@ -16,7 +16,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 		}
 
 		public override void OnCreate() {
-			Caravan caravan = GameManager.caravanM.selectedCaravan;
+			Caravan caravan = GameManager.Get<CaravanManager>().selectedCaravan;
 
 			View.SetCaravanInformation(caravan);
 
@@ -45,14 +45,14 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 		// TODO Probably needs to be two methods, one for adding/removing TREs as values resource totals change, and one for summing up the trade amounts as TradeAmounts change
 		// public void UpdateTradeMenu() {
 		//
-		// 	if (GameManager.caravanM.selectedCaravan.traders.Count > 0) {
-		// 		List<ResourceManager.ResourceAmount> availableResources = GameManager.resourceM.GetAvailableResourcesInTradingPostsInRegion(GameManager.caravanM.selectedCaravan.traders.Find(t => t != null).overTile.region);
+		// 	if (GameManager.Get<CaravanManager>().selectedCaravan.traders.Count > 0) {
+		// 		List<ResourceManager.ResourceAmount> availableResources = GameManager.Get<ResourceManager>().GetAvailableResourcesInTradingPostsInRegion(GameManager.Get<CaravanManager>().selectedCaravan.traders.Find(t => t != null).overTile.region);
 		// 		foreach (ResourceManager.ResourceAmount resourceAmount in availableResources) {
 		// 			View.AddTradeResourceElementIfMissing(
 		// 				resourceAmount.resource,
 		// 				0,
 		// 				resourceAmount.amount,
-		// 				GameManager.caravanM.selectedCaravan
+		// 				GameManager.Get<CaravanManager>().selectedCaravan
 		// 			);
 		// 		}
 		// 	}
@@ -101,7 +101,7 @@ namespace Snowship.NUI.Simulation.TradeMenu {
 		// }
 
 		public void ConfirmTrade() {
-			Caravan caravan = GameManager.caravanM.selectedCaravan;
+			Caravan caravan = GameManager.Get<CaravanManager>().selectedCaravan;
 
 			if (caravan == null) {
 				return;

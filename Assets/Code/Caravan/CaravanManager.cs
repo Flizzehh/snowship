@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Snowship.NColony;
 using Snowship.NResource;
+using Snowship.NUI;
 using Snowship.NUI.Simulation.TradeMenu;
 using UnityEngine;
 
@@ -21,11 +23,11 @@ namespace Snowship.NCaravan {
 		public Caravan selectedCaravan;
 
 		public void OnCreate() {
-			GameManager.timeM.OnTimeChanged += OnTimeChanged;
+			GameManager.Get<TimeManager>().OnTimeChanged += OnTimeChanged;
 		}
 
 		public void Dispose() {
-			GameManager.timeM.OnTimeChanged -= OnTimeChanged;
+			GameManager.Get<TimeManager>().OnTimeChanged -= OnTimeChanged;
 		}
 
 		public void OnUpdate() {
@@ -42,7 +44,7 @@ namespace Snowship.NCaravan {
 
 				caravans.Remove(caravan);
 
-				GameManager.uiMOld.SetCaravanElements();
+				GameManager.Get<UIManagerOld>().SetCaravanElements();
 			}
 
 			removeCaravans.Clear();
@@ -76,7 +78,7 @@ namespace Snowship.NCaravan {
 
 			switch (caravanType) {
 				case CaravanType.Foot or CaravanType.Wagon:
-					validSpawnTiles.AddRange(GameManager.colonyM.colony.map.edgeTiles.Where(tile => tile.walkable && !tile.tileType.classes[TileManager.TileType.ClassEnum.LiquidWater]).ToList());
+					validSpawnTiles.AddRange(GameManager.Get<ColonyManager>().colony.map.edgeTiles.Where(tile => tile.walkable && !tile.tileType.classes[TileManager.TileType.ClassEnum.LiquidWater]).ToList());
 					break;
 				case CaravanType.Boat:
 					// TODO Implement boat caravans
@@ -149,13 +151,13 @@ namespace Snowship.NCaravan {
 		public void AddCaravan(Caravan caravan) {
 			caravans.Add(caravan);
 
-			GameManager.uiMOld.SetCaravanElements();
+			GameManager.Get<UIManagerOld>().SetCaravanElements();
 		}
 
 		public void SetSelectedCaravan(Caravan selectedCaravan) {
 			this.selectedCaravan = selectedCaravan;
 
-			GameManager.uiM.OpenViewAsync<UITradeMenu>().Forget();
+			GameManager.Get<UIManager>().OpenViewAsync<UITradeMenu>().Forget();
 		}
 	}
 }

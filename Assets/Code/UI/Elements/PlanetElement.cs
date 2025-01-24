@@ -26,7 +26,7 @@ namespace Snowship.NUI.Menu.LoadSave {
 			obj.transform.Find("LastSaveData-Panel/LastSavedDateTime-Text").GetComponent<Text>().text = persistencePlanet.lastSaveDateTime;
 
 			obj.GetComponent<Button>().onClick.AddListener(delegate {
-				// TODO GameManager.uiMOld.SetSelectedPlanetElement(this);
+				// TODO GameManager.Get<UIManagerOld>().SetSelectedPlanetElement(this);
 			});
 		}
 

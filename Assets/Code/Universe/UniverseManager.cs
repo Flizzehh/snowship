@@ -7,7 +7,7 @@ public class UniverseManager : IManager {
 	private readonly PUniverse pUniverse = new PUniverse();
 
 	public static string GetRandomUniverseName() {
-		//return GameManager.resourceM.GetRandomLocationName();
+		//return GameManager.Get<ResourceManager>().GetRandomLocationName();
 		return "Universe " + System.DateTime.Today.ToString("ddMMyyyy");
 	}
 
@@ -34,8 +34,11 @@ public class UniverseManager : IManager {
 		public Universe(string name) {
 			this.name = name;
 
-			lastSaveDateTime = PersistenceHandler.GenerateSaveDateTimeString();
-			lastSaveTimeChunk = PersistenceHandler.GenerateDateTimeString();
+			lastSaveDateTime = PersistenceUtilities.GenerateSaveDateTimeString();
+			lastSaveTimeChunk = PersistenceUtilities.GenerateDateTimeString();
+		}
+
+		protected Universe() {
 		}
 
 		public void SetDirectory(string directory) {

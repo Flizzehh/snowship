@@ -55,7 +55,7 @@ namespace Snowship.NColony {
 		}
 
 		public static string GenerateRandomColonyName() {
-			return GameManager.resourceM.GetRandomLocationName();
+			return GameManager.Get<ResourceManager>().GetRandomLocationName();
 		}
 
 		public bool CanCreateColony() {

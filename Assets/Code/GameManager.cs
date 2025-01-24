@@ -1,8 +1,10 @@
-﻿using Snowship.NJob;
+﻿using System;
+using Snowship.NJob;
 using Snowship.NProfession;
 using Snowship.Selectable;
 using Snowship.NTime;
 using System.Collections.Generic;
+using Snowship;
 using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
@@ -15,87 +17,64 @@ using Snowship.NUI;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+	public static SharedReferences SharedReferences { get; private set; }
 
-	[SerializeField] private Transform uiParent;
-
-	public static readonly CameraManager cameraM = new CameraManager();
-	public static readonly CaravanManager caravanM = new CaravanManager();
-	public static readonly ColonistManager colonistM = new ColonistManager();
-	public static readonly ColonyManager colonyM = new ColonyManager();
-	public static readonly DebugManager debugM = new DebugManager();
-	public static readonly HumanManager humanM = new HumanManager();
-	public static readonly InputManager inputM = new InputManager();
-	public static readonly JobManager jobM = new JobManager();
-	public static readonly LifeManager lifeM = new LifeManager();
-	public static readonly PersistenceManager persistenceM = new PersistenceManager();
-	public static readonly PlanetManager planetM = new PlanetManager();
-	public static readonly ResourceManager resourceM = new ResourceManager();
-	public static readonly SelectableManager selectableManager = new SelectableManager();
-	public static readonly StateManager stateM = new StateManager();
-	public static readonly TileManager tileM = new TileManager();
-	public static readonly TimeManager timeM = new TimeManager();
-	public static readonly IUIManager uiM = new UIManager();
-	public static readonly UIManagerOld uiMOld = new UIManagerOld();
-	public static readonly UniverseManager universeM = new UniverseManager();
-
-	private static readonly List<IManager> managers = new List<IManager>() {
-		stateM,
-		inputM,
-
-		timeM,
-		debugM,
-
-		resourceM,
-
-		lifeM,
-		humanM,
-		colonistM,
-		jobM,
-		caravanM,
-
-
-		tileM,
-		planetM,
-		universeM,
-
-		persistenceM,
-
-		uiM,
-		uiMOld,
-		cameraM,
-
-		selectableManager
-	};
+	private static readonly Dictionary<Type, IManager> managersMap = new();
+	private static readonly List<IManager> managers = new();
 
 	public void Awake() {
 
-
-
-		// Initializations
-
-		uiM.Initialize(uiParent);
+		SharedReferences = GetComponent<SharedReferences>();
 
 		// Awakes
+		CreateManagers();
 
 		foreach (IManager manager in managers) {
 			manager.OnCreate();
 		}
 
+		SpecialManagerSetups();
+	}
+
+	private void CreateManagers() {
+		Create<InputManager>();
+		Create<TimeManager>();
+		Create<ResourceManager>();
+		Create<LifeManager>();
+		Create<HumanManager>();
+		Create<ColonistManager>();
+		Create<CaravanManager>();
+		Create<JobManager>();
+		Create<TileManager>();
+		Create<ColonyManager>();
+		Create<PlanetManager>();
+		Create<UniverseManager>();
+		Create<PersistenceManager>();
+		Create<UIManager>();
+		Create<UIManagerOld>();
+		Create<SelectableManager>();
+		Create<CameraManager>();
+		Create<DebugManager>();
+		Create<StateManager>();
+	}
+
+	private void SpecialManagerSetups() {
+		// TODO Move these to be called from their respective files
 		TileManager.TileType.InitializeTileTypes();
 		TileManager.Biome.InitializeBiomes();
 		TileManager.ResourceVein.InitializeResourceVeins();
 
-		humanM.CreateNames();
-		humanM.CreateHumanSprites();
+		Get<HumanManager>().CreateNames();
+		Get<HumanManager>().CreateHumanSprites();
 
 		SkillPrefab.CreateColonistSkills(); // TODO (Solution: Use string references which can be converted to the correct Prefab obj when needed) Skills must currently be ahead of professions to determine skill-profession relationship
 		ProfessionPrefab.CreateProfessionPrefabs();
 		NeedPrefab.CreateColonistNeeds();
 		MoodModifierGroup.CreateMoodModifiers();
 
-		uiMOld.SetupUI();
+		Get<UIManagerOld>().SetupUI();
 
-		persistenceM.PSettings.CreateSettingsState();
+		Get<PersistenceManager>().PSettings.CreateSettingsState();
 	}
 
 	public void Start() {
@@ -108,5 +87,15 @@ public class GameManager : MonoBehaviour {
 		foreach (IManager manager in managers) {
 			manager.OnUpdate();
 		}
+	}
+
+	private static void Create<TManager>() where TManager : class, IManager, new() {
+		TManager manager = new();
+		managersMap.Add(typeof(TManager), manager);
+		managers.Add(manager);
+	}
+
+	public static TManager Get<TManager>() where TManager : class, IManager {
+		return managersMap[typeof(TManager)] as TManager;
 	}
 }

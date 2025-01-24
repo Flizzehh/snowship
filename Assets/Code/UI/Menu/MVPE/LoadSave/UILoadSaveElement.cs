@@ -1,5 +1,5 @@
 ﻿using System;
-using Snowship.NPersistence.Save;
+using Snowship.NPersistence;
 using Snowship.NUtilities;
 using UnityEngine;
 

@@ -4,33 +4,35 @@ using Snowship.NTime;
 namespace Snowship.NColonist {
 	public class MoodModifierInstance : IDisposable
 	{
-		public Colonist colonist;
-		public MoodModifierPrefab prefab;
+		public readonly MoodModifierPrefab Prefab;
 
-		public int timer = 0;
+		public int Timer = 0;
 
 		public event Action<int> OnTimerChanged;
 		public event Action<MoodModifierInstance> OnTimerAtZero;
 
-		public MoodModifierInstance(Colonist colonist, MoodModifierPrefab prefab) {
-			this.colonist = colonist;
-			this.prefab = prefab;
+		public MoodModifierInstance(MoodModifierPrefab prefab) {
+			Prefab = prefab;
 
-			timer = prefab.effectLengthSeconds;
+			Timer = prefab.effectLengthSeconds;
 
-			GameManager.timeM.OnTimeChanged += OnTimeChanged;
+			if (!prefab.infinite) {
+				GameManager.Get<TimeManager>().OnTimeChanged += OnTimeChanged;
+			}
 		}
 
 		private void OnTimeChanged(SimulationDateTime time) {
-			timer -= 1;
-			OnTimerChanged?.Invoke(timer);
-			if (timer <= 0) {
+			Timer -= 1;
+			OnTimerChanged?.Invoke(Timer);
+			if (Timer <= 0) {
 				OnTimerAtZero?.Invoke(this);
 			}
 		}
 
 		public void Dispose() {
-			GameManager.timeM.OnTimeChanged -= OnTimeChanged;
+			if (!Prefab.infinite) {
+				GameManager.Get<TimeManager>().OnTimeChanged -= OnTimeChanged;
+			}
 		}
 	}
 }
