@@ -52,7 +52,7 @@ namespace Snowship.NJob {
 
 			SetRequiredResources();
 
-			jobPreview = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.Get<ResourceManager>().jobParent.transform, false);
+			jobPreview = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.SharedReferences.JobParent, false);
 			jobPreview.transform.position = tile.obj.transform.position + (Vector3)objectPrefab.anchorPositionOffset[rotationIndex];
 			jobPreview.name = "JobPreview: " + objectPrefab.name + " at " + jobPreview.transform.position;
 			SpriteRenderer jPSR = jobPreview.GetComponent<SpriteRenderer>();

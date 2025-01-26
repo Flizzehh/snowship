@@ -755,7 +755,7 @@ public class TileManager : IManager {
 			this.position = position;
 
 			obj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, new Vector2(position.x + 0.5f, position.y + 0.5f), Quaternion.identity);
-			obj.transform.SetParent(GameManager.Get<ResourceManager>().tileParent.transform, true);
+			obj.transform.SetParent(GameManager.SharedReferences.TileParent, true);
 			obj.name = "Tile: " + position;
 
 			sr = obj.GetComponent<SpriteRenderer>();
@@ -1243,12 +1243,6 @@ public class TileManager : IManager {
 
 	public MapState mapState = MapState.Nothing;
 
-	public void OnUpdate() {
-		if (mapState == MapState.Generated) {
-			GameManager.Get<ColonyManager>().colony.map.DetermineVisibleRegionBlocks();
-		}
-	}
-
 	public class MapData {
 		public int mapSeed;
 		public int mapSize;
@@ -1338,8 +1332,9 @@ public class TileManager : IManager {
 		colony.map = CreateMap(colony.mapData);
 	}
 
-	private async UniTask PostInitializeMap(MapInitializeType mapInitializeType) {
-		while (!GameManager.Get<ColonyManager>().colony.map.created) {
+	public async UniTask PostInitializeMap(MapInitializeType mapInitializeType) {
+		Map map = GameManager.Get<ColonyManager>().colony.map;
+		while (!map.Created) {
 			await UniTask.NextFrame();
 		}
 
@@ -1347,11 +1342,13 @@ public class TileManager : IManager {
 
 		if (mapInitializeType == MapInitializeType.NewMap) {
 			GameManager.Get<ColonyManager>().SetupNewColony(GameManager.Get<ColonyManager>().colony, true);
-		} else if (mapInitializeType == MapInitializeType.LoadMap) {
-			GameManager.Get<ColonyManager>().LoadColony(GameManager.Get<ColonyManager>().colony, true);
 		}
 
-		GameManager.Get<ColonyManager>().colony.map.SetInitialRegionVisibility();
+		map.SetInitialRegionVisibility();
+		map.DetermineVisibleRegionBlocks();
+		CameraManager cameraM = GameManager.Get<CameraManager>();
+		cameraM.OnCameraPositionChanged += map.OnCameraPositionChanged;
+		cameraM.OnCameraZoomChanged += map.OnCameraZoomChanged;
 
 		GameManager.Get<UIManagerOld>().SetGameUIActive(true);
 	}
@@ -1362,9 +1359,10 @@ public class TileManager : IManager {
 		//return map;
 	}
 
-	public class Map {
 
-		public bool created = false;
+
+	public class Map {
+		public bool Created = false;
 
 		public MapData mapData;
 
@@ -1386,6 +1384,7 @@ public class TileManager : IManager {
 		public Dictionary<int, List<Tile>> sortedEdgeTiles = new Dictionary<int, List<Tile>>();
 
 		public async UniTask CreateMap() {
+
 			if (mapData.actualMap) {
 				UIEvents.UpdateLoadingScreenText("Map", "Creating Tiles");
 				await UniTask.NextFrame();
@@ -1537,11 +1536,19 @@ public class TileManager : IManager {
 				UIEvents.UpdateLoadingScreenText("Finalizing", string.Empty);
 				await UniTask.NextFrame();
 			}
-			created = true;
+			Created = true;
 
 			if (mapData.actualMap) {
 				await GameManager.Get<StateManager>().TransitionToState(EState.Simulation);
 			}
+		}
+
+		public void OnCameraPositionChanged(Vector2 position) {
+			DetermineVisibleRegionBlocks();
+		}
+
+		public void OnCameraZoomChanged(float zoom) {
+			DetermineVisibleRegionBlocks();
 		}
 
 		void CreateTiles() {
@@ -2875,19 +2882,20 @@ public class TileManager : IManager {
 		private int lastOrthographicSize = -1;
 
 		public void DetermineVisibleRegionBlocks() {
-			RegionBlock newCentreRegionBlock = GetTileFromPosition(GameManager.Get<CameraManager>().cameraGO.transform.position).squareRegionBlock;
-			if (newCentreRegionBlock != centreRegionBlock || Mathf.RoundToInt(GameManager.Get<CameraManager>().camera.orthographicSize) != lastOrthographicSize) {
+			Camera camera = GameManager.Get<CameraManager>().camera;
+			RegionBlock newCentreRegionBlock = GetTileFromPosition(camera.transform.position).squareRegionBlock;
+			if (newCentreRegionBlock != centreRegionBlock || Mathf.RoundToInt(camera.orthographicSize) != lastOrthographicSize) {
 				visibleRegionBlocks.Clear();
-				lastOrthographicSize = Mathf.RoundToInt(GameManager.Get<CameraManager>().camera.orthographicSize);
+				lastOrthographicSize = Mathf.RoundToInt(camera.orthographicSize);
 				centreRegionBlock = newCentreRegionBlock;
-				float maxVisibleRegionBlockDistance = GameManager.Get<CameraManager>().camera.orthographicSize * ((float)Screen.width / Screen.height);
+				float maxVisibleRegionBlockDistance = camera.orthographicSize * ((float)Screen.width / Screen.height);
 				List<RegionBlock> frontier = new List<RegionBlock>() { centreRegionBlock };
 				List<RegionBlock> checkedBlocks = new List<RegionBlock>() { centreRegionBlock };
 				while (frontier.Count > 0) {
 					RegionBlock currentRegionBlock = frontier[0];
 					frontier.RemoveAt(0);
 					visibleRegionBlocks.Add(currentRegionBlock);
-					float currentRegionBlockCameraDistance = Vector2.Distance(currentRegionBlock.averagePosition, GameManager.Get<CameraManager>().cameraGO.transform.position);
+					float currentRegionBlockCameraDistance = Vector2.Distance(currentRegionBlock.averagePosition, camera.transform.position);
 					foreach (RegionBlock nBlock in currentRegionBlock.surroundingRegionBlocks) {
 						if (currentRegionBlockCameraDistance <= maxVisibleRegionBlockDistance) {
 							if (!checkedBlocks.Contains(nBlock)) {
@@ -2923,12 +2931,14 @@ public class TileManager : IManager {
 		}
 
 		private readonly Dictionary<int, Vector2> shadowDirectionAtHour = new Dictionary<int, Vector2>();
+		private bool shadowDirectionsCalculated = false;
 		public void DetermineShadowDirectionsAtHour(float equatorOffset) {
 			for (int h = 0; h < 24; h++) {
 				float hShadow = (2f * ((h - 12f) / 24f)) * (1f - Mathf.Pow(equatorOffset, 2f));
 				float vShadow = Mathf.Pow(2f * ((h - 12f) / 24f), 2f) * equatorOffset + (equatorOffset / 2f);
 				shadowDirectionAtHour.Add(h, new Vector2(hShadow, vShadow) * 5f);
 			}
+			shadowDirectionsCalculated = true;
 		}
 
 		public float CalculateBrightnessLevelAtHour(float time) {
@@ -2967,7 +2977,7 @@ public class TileManager : IManager {
 
 		private static readonly float distanceIncreaseAmount = 0.1f; // 0.1f
 		private void DetermineShadowTiles(List<Tile> shadowSourceTiles, bool setBrightnessAtEnd, bool forceBrightnessUpdate) {
-			if (shadowDirectionAtHour.Count == 0) {
+			if (!shadowDirectionsCalculated) {
 				DetermineShadowDirectionsAtHour(GameManager.Get<ColonyManager>().colony.mapData.equatorOffset);
 			}
 			for (int h = 0; h < 24; h++) {

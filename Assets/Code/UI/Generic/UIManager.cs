@@ -10,7 +10,7 @@ namespace Snowship.NUI {
 		private readonly List<IUIGroup> parentGroups = new List<IUIGroup>();
 
 		public void OnCreate() {
-			canvas = GameManager.SharedReferences.canvas;
+			canvas = GameManager.SharedReferences.Canvas;
 		}
 
 		public async UniTask<IUIPresenter> OpenViewAsync<TUIConfig>() where TUIConfig : IUIConfig, new() {

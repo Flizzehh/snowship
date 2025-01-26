@@ -11,9 +11,7 @@ namespace Snowship.NCamera {
 
 	public partial class CameraManager : IManager {
 
-		public GameObject cameraGO;
 		public Camera camera;
-		private Transform cameraTransform;
 
 		private const float CameraMoveSpeedMultiplier = 1.25f;
 		public event Action<Vector2> OnCameraPositionChanged;
@@ -29,12 +27,7 @@ namespace Snowship.NCamera {
 
 		public void OnCreate() {
 
-			cameraGO = GameObject.Find("Camera");
-			camera = cameraGO.GetComponent<Camera>();
-			cameraTransform = cameraGO.transform;
-
-			OnCameraPositionChanged?.Invoke(cameraTransform.position);
-			OnCameraZoomChanged?.Invoke(camera.orthographicSize);
+			camera = GameManager.SharedReferences.Camera;
 
 			GameManager.Get<StateManager>().OnStateChanged += OnStateChanged;
 
@@ -59,11 +52,11 @@ namespace Snowship.NCamera {
 		}
 
 		public Vector2 GetCameraPosition() {
-			return cameraGO.transform.position;
+			return camera.transform.position;
 		}
 
 		public void SetCameraPosition(Vector2 position) {
-			cameraGO.transform.position = position;
+			camera.transform.position = position;
 		}
 
 		public void SetCameraZoom(float zoom) {
@@ -72,12 +65,12 @@ namespace Snowship.NCamera {
 
 		private void MoveCamera() {
 
-			cameraTransform.Translate(moveVector * (CameraMoveSpeedMultiplier * camera.orthographicSize * Time.deltaTime));
-			cameraTransform.position = new Vector2(
-				Mathf.Clamp(cameraTransform.position.x, 0, GameManager.Get<ColonyManager>().colony.map.mapData.mapSize),
-				Mathf.Clamp(cameraTransform.position.y, 0, GameManager.Get<ColonyManager>().colony.map.mapData.mapSize)
+			camera.transform.Translate(moveVector * (CameraMoveSpeedMultiplier * camera.orthographicSize * Time.deltaTime));
+			camera.transform.position = new Vector2(
+				Mathf.Clamp(camera.transform.position.x, 0, GameManager.Get<ColonyManager>().colony.map.mapData.mapSize),
+				Mathf.Clamp(camera.transform.position.y, 0, GameManager.Get<ColonyManager>().colony.map.mapData.mapSize)
 			);
-			OnCameraPositionChanged?.Invoke(cameraTransform.position);
+			OnCameraPositionChanged?.Invoke(camera.transform.position);
 		}
 
 		private void ZoomCamera() {

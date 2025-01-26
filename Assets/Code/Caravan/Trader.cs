@@ -15,7 +15,7 @@ namespace Snowship.NCaravan {
 		public Trader(TileManager.Tile spawnTile, float startingHealth, Caravan caravan) : base(spawnTile, startingHealth) {
 			this.caravan = caravan;
 
-			obj.transform.SetParent(GameManager.Get<ResourceManager>().traderParent.transform, false);
+			obj.transform.SetParent(GameManager.SharedReferences.LifeParent, false);
 		}
 
 		public override void SetName(string name) {

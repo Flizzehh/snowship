@@ -119,7 +119,7 @@ namespace Snowship.NPersistence {
 
 		public LoadingState loadingState;
 
-		public IEnumerator ApplyLoadedSave(PSave.PersistenceSave persistenceSave) {
+		public async UniTask ApplyLoadedSave(PSave.PersistenceSave persistenceSave) {
 			loadingState = LoadingState.NothingLoaded;
 			if (persistenceSave != null) {
 				GameManager.Get<TileManager>().mapState = TileManager.MapState.Generating;
@@ -127,7 +127,7 @@ namespace Snowship.NPersistence {
 				GameManager.Get<UIManagerOld>().SetGameUIActive(false);
 
 				UIEvents.UpdateLoadingScreenText("Loading Colony", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				GameManager.Get<ColonyManager>().LoadColony(GameManager.Get<ColonyManager>().colony, false);
 
 				if (persistenceSave.path == null) {
@@ -138,31 +138,31 @@ namespace Snowship.NPersistence {
 
 				loadingState = LoadingState.LoadingCamera;
 				UIEvents.UpdateLoadingScreenText("Loading Camera", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				PCamera.LoadCamera(saveDirectoryPath + "/camera.snowship");
 				while (loadingState != LoadingState.LoadedCamera) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingTime;
 				UIEvents.UpdateLoadingScreenText("Loading Time", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				PTime.LoadTime(saveDirectoryPath + "/time.snowship");
 				while (loadingState != LoadingState.LoadedTime) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingResources;
 				UIEvents.UpdateLoadingScreenText("Loading Resources", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				PResource.LoadResources(saveDirectoryPath + "/resources.snowship");
 				while (loadingState != LoadingState.LoadedResources) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingMap;
 				UIEvents.UpdateLoadingScreenText("Loading Original Map", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				GameManager.Get<ColonyManager>().colony.map = new TileManager.Map() { mapData = GameManager.Get<ColonyManager>().colony.mapData };
 				TileManager.Map map = GameManager.Get<ColonyManager>().colony.map;
 
@@ -170,52 +170,52 @@ namespace Snowship.NPersistence {
 				List<PersistenceRiver> originalRivers = PRiver.LoadRivers(GameManager.Get<ColonyManager>().colony.directory + "/Map/rivers.snowship");
 
 				UIEvents.UpdateLoadingScreenText("Loading Modified Map", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				List<PersistenceTile> modifiedTiles = PMap.LoadTiles(saveDirectoryPath + "/tiles.snowship");
 				List<PersistenceRiver> modifiedRivers = PRiver.LoadRivers(saveDirectoryPath + "/rivers.snowship");
 
 				UIEvents.UpdateLoadingScreenText("Applying Changes to Map", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				PMap.ApplyLoadedTiles(originalTiles, modifiedTiles, map);
 				PRiver.ApplyLoadedRivers(originalRivers, modifiedRivers, map);
 				while (loadingState != LoadingState.LoadedMap) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingObjects;
 				UIEvents.UpdateLoadingScreenText("Loading Object Data", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				List<PObject.PersistenceObject> persistenceObjects = PObject.LoadObjects(saveDirectoryPath + "/objects.snowship");
 				PObject.ApplyLoadedObjects(persistenceObjects);
 				while (loadingState != LoadingState.LoadedObjects) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingCaravans;
 				UIEvents.UpdateLoadingScreenText("Loading Caravan Data", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				List<PCaravan.PersistenceCaravan> persistenceCaravans = PCaravan.LoadCaravans(saveDirectoryPath + "/caravans.snowship");
 				PCaravan.ApplyLoadedCaravans(persistenceCaravans);
 				while (loadingState != LoadingState.LoadedCaravans) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingJobs;
 				UIEvents.UpdateLoadingScreenText("Loading Job Data", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				List<PJob.PersistenceJob> persistenceJobs = PJob.LoadJobs(saveDirectoryPath + "/jobs.snowship");
 				PJob.ApplyLoadedJobs(persistenceJobs);
 				while (loadingState != LoadingState.LoadedJobs) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				loadingState = LoadingState.LoadingColonists;
 				UIEvents.UpdateLoadingScreenText("Loading Colonist Data", string.Empty);
-				yield return null;
+				await UniTask.WaitForEndOfFrame();
 				List<PColonist.PersistenceColonist> persistenceColonists = PColonist.LoadColonists(saveDirectoryPath + "/colonists.snowship");
 				PColonist.ApplyLoadedColonists(persistenceColonists);
 				while (loadingState != LoadingState.LoadedColonists) {
-					yield return null;
+					await UniTask.WaitForEndOfFrame();
 				}
 
 				for (int i = 0; i < persistenceObjects.Count; i++) {
@@ -272,11 +272,11 @@ namespace Snowship.NPersistence {
 				}
 
 				PMap.ApplyMapBitmasking(originalTiles, modifiedTiles, map);
-				map.SetInitialRegionVisibility();
+				map.Created = true;
+
+				await GameManager.Get<TileManager>().PostInitializeMap(TileManager.MapInitializeType.LoadMap);
 
 				loadingState = LoadingState.FinishedLoading;
-				GameManager.Get<TileManager>().mapState = TileManager.MapState.Generated;
-				GameManager.Get<UIManagerOld>().SetGameUIActive(true);
 			} else {
 				Debug.LogError("Unable to load a save without a save being selected.");
 			}

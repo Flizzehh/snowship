@@ -26,19 +26,12 @@ public class ResourceManager : IManager, IDisposable
 	public GameObject tileImage;
 	public GameObject objectDataPanel;
 
-	public GameObject tileParent;
-	public GameObject colonistParent;
-	public GameObject traderParent;
-	public GameObject selectionParent;
-	public GameObject jobParent;
-
 	public event Action OnResourceTotalsUpdated;
 
 	private static readonly List<string> locationNames = new();
 
 	public void OnCreate() {
 		SetResourceReferences();
-		SetGameObjectReferences();
 		CreateJobPrefabs();
 		CreateResources();
 		CreatePlantPrefabs();
@@ -69,14 +62,6 @@ public class ResourceManager : IManager, IDisposable
 		colonyObj = Resources.Load<GameObject>(@"UI/UIElements/ColonyObj");
 		tileImage = Resources.Load<GameObject>(@"UI/UIElements/TileInfoElement-TileImage");
 		objectDataPanel = Resources.Load<GameObject>(@"UI/UIElements/TileInfoElement-ObjectData-Panel");
-	}
-
-	private void SetGameObjectReferences() {
-		tileParent = GameObject.Find("TileParent");
-		colonistParent = GameObject.Find("ColonistParent");
-		traderParent = GameObject.Find("TraderParent");
-		selectionParent = GameObject.Find("SelectionParent");
-		jobParent = GameObject.Find("JobParent");
 	}
 
 	public void OnUpdate() {

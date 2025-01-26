@@ -35,8 +35,8 @@ namespace Snowship.NUI.Menu.LoadSave {
 			GameManager.Get<UIManager>().CloseView(this);
 		}
 
-		private void OnLoadSaveButtonClicked() {
-			GameManager.Get<PersistenceManager>().ApplyLoadedSave(selectedSave);
+		private async void OnLoadSaveButtonClicked() {
+			await GameManager.Get<PersistenceManager>().ApplyLoadedSave(selectedSave);
 		}
 
 		private void OnSaveElementClicked(PSave.PersistenceSave save) {

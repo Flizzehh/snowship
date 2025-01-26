@@ -57,7 +57,7 @@ namespace Snowship.NColonist {
 		public Moods Moods;
 
 		public Colonist(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
-			obj.transform.SetParent(GameManager.Get<ResourceManager>().colonistParent.transform, false);
+			obj.transform.SetParent(GameManager.SharedReferences.LifeParent, false);
 
 			Moods = new Moods(this);
 

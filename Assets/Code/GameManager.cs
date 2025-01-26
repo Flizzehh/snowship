@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour {
 	private void CreateManagers() {
 		Create<InputManager>();
 		Create<TimeManager>();
+		Create<CameraManager>();
 		Create<ResourceManager>();
 		Create<LifeManager>();
 		Create<HumanManager>();
@@ -53,7 +54,6 @@ public class GameManager : MonoBehaviour {
 		Create<UIManager>();
 		Create<UIManagerOld>();
 		Create<SelectableManager>();
-		Create<CameraManager>();
 		Create<DebugManager>();
 		Create<StateManager>();
 	}

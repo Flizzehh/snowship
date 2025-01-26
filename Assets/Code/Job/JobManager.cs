@@ -359,7 +359,7 @@ namespace Snowship.NJob {
 									selectionArea.Add(tile);
 									addedToSelectionArea = true;
 
-									GameObject selectionIndicator = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.Get<ResourceManager>().selectionParent.transform, false);
+									GameObject selectionIndicator = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.SharedReferences.SelectionParent, false);
 									selectionIndicator.transform.position = tile.obj.transform.position + (Vector3)selectedPrefab.prefab.anchorPositionOffset[rotationIndex];
 									;
 									selectionIndicator.name = "Selection Indicator";
