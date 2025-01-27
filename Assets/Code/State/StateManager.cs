@@ -4,8 +4,7 @@ using Snowship.NUI;
 
 namespace Snowship.NState {
 	public partial class StateManager : IManager {
-
-		private State state;
+		private State<EState> state;
 
 		public EState State => state.Type;
 
@@ -49,7 +48,7 @@ namespace Snowship.NState {
 					throw new ArgumentOutOfRangeException(nameof(transitionUIAction), transitionUIAction, null);
 			}
 
-			foreach (Func<UniTask> action in state.ActionsOnOpen) {
+			foreach (Func<UniTask> action in state.ActionsOnTransition) {
 				await action();
 			}
 

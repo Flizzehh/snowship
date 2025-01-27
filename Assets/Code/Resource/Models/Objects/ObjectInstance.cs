@@ -109,14 +109,14 @@ namespace Snowship.NResource
 			sr.color = new Color(newColour.r, newColour.g, newColour.b, 1f);
 		}
 
-		public void SetActiveSprite(Job job, bool jobActive) {
+		public void SetActiveSprite(JobInstance jobInstance, bool jobActive) {
 			if (active && jobActive) {
 				if (prefab.GetActiveSpritesForVariation(variation).Count > 0) {
 					if (prefab.type == ObjectPrefab.ObjectEnum.SplittingBlock) {
 						int customActiveSpriteIndex = 0;
-						if (job.createResource.resource.type == EResource.Wood) {
+						if (jobInstance.createResource.resource.type == EResource.Wood) {
 							customActiveSpriteIndex = 0;
-						} else if (job.createResource.resource.type == EResource.Firewood) {
+						} else if (jobInstance.createResource.resource.type == EResource.Firewood) {
 							customActiveSpriteIndex = 1;
 						}
 						aosr.sprite = prefab.GetActiveSpritesForVariation(variation)[4 * customActiveSpriteIndex + rotationIndex];

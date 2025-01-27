@@ -73,7 +73,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static void CalculateNeedValue(NeedInstance need) {
-			if (need.colonist.Job != null && need.prefab.relatedJobs.Contains(need.colonist.Job.objectPrefab.jobType)) {
+			if (need.colonist.JobInstance != null && need.prefab.relatedJobs.Contains(need.colonist.JobInstance.objectPrefab.jobType)) {
 				return;
 			}
 			float needIncreaseAmount = need.prefab.baseIncreaseRate;
@@ -139,14 +139,14 @@ namespace Snowship.NColonist {
 				if (closestFood.Key != null) {
 					if (closestFood.Key.parent is Container container) {
 						container.GetInventory().ReserveResources(resourcesToReserve, need.colonist);
-						Job job = new Job(
+						JobInstance jobInstance = new JobInstance(
 							JobPrefab.GetJobPrefabByName("CollectFood"),
 							container.tile,
 							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectFood),
 							null,
 							0
 						);
-						need.colonist.SetJob(new ColonistJob(need.colonist, job, null, null));
+						need.colonist.SetJob(new ColonistJob(need.colonist, jobInstance, null, null));
 						return true;
 					} else if (closestFood.Key.parent is HumanManager.Human) {
 						// TODO Take food from another human
@@ -211,7 +211,7 @@ namespace Snowship.NColonist {
 					need.colonist.SetJob(
 						new ColonistJob(
 							need.colonist,
-							new Job(
+							new JobInstance(
 								JobPrefab.GetJobPrefabByName("Sleep"),
 								chosenSleepSpot.tile,
 								ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Sleep),
@@ -228,7 +228,7 @@ namespace Snowship.NColonist {
 				need.colonist.SetJob(
 					new ColonistJob(
 						need.colonist,
-						new Job(
+						new JobInstance(
 							JobPrefab.GetJobPrefabByName("Sleep"),
 							need.colonist.overTile,
 							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Sleep),
@@ -243,7 +243,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static bool DetermineFoodNeedReaction(NeedInstance need) {
-			if (need.colonist.Job == null || !(need.colonist.Job.objectPrefab.jobType == "CollectFood" || need.colonist.Job.objectPrefab.jobType == "Eat")) {
+			if (need.colonist.JobInstance == null || !(need.colonist.JobInstance.objectPrefab.jobType == "CollectFood" || need.colonist.JobInstance.objectPrefab.jobType == "Eat")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
 					// TODO Check that this still works properly - (removed timeM.minuteChanged check before each of these 3 blocks)
@@ -263,7 +263,7 @@ namespace Snowship.NColonist {
 					return false;
 				}
 				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.Job == null) {
+					if (need.colonist.JobInstance == null) {
 						if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
 							if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
 								need.colonist.ReturnJob();
@@ -278,7 +278,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static bool DetermineRestNeedReaction(NeedInstance need) {
-			if (need.colonist.Job == null || !(need.colonist.Job.objectPrefab.jobType == "Sleep")) {
+			if (need.colonist.JobInstance == null || !(need.colonist.JobInstance.objectPrefab.jobType == "Sleep")) {
 				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
 					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
 					need.colonist.ReturnJob();
@@ -293,7 +293,7 @@ namespace Snowship.NColonist {
 					return false;
 				}
 				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.Job == null) {
+					if (need.colonist.JobInstance == null) {
 						if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
 							need.colonist.ReturnJob();
 							GetSleep(need, false);

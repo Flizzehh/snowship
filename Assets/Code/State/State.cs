@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace Snowship.NState {
-	public class State {
-		public readonly EState Type;
-		public readonly List<EState> ValidNextStates;
-		public readonly List<Func<UniTask>> ActionsOnOpen;
+	public class State<TStateEnum> where TStateEnum : Enum
+	{
+		public readonly TStateEnum Type;
+		public readonly List<TStateEnum> ValidNextStates;
+		public readonly List<Func<UniTask>> ActionsOnTransition;
 
 		public State(
-			EState type,
-			List<EState> validNextStates,
-			List<Func<UniTask>> actionsOnOpen
+			TStateEnum type,
+			List<TStateEnum> validNextStates,
+			List<Func<UniTask>> actionsOnTransition
 		) {
 			Type = type;
 			ValidNextStates = validNextStates;
-			ActionsOnOpen = actionsOnOpen;
+			ActionsOnTransition = actionsOnTransition;
 		}
 	}
 }

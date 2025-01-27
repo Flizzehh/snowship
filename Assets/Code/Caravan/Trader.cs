@@ -49,7 +49,7 @@ namespace Snowship.NCaravan {
 				}
 
 				if (tradingPosts.Count <= 0) {
-					Job job = new Job(
+					JobInstance jobInstance = new JobInstance(
 						JobPrefab.GetJobPrefabByName("CollectResources"),
 						tradingPost.tile,
 						ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources),
@@ -62,12 +62,12 @@ namespace Snowship.NCaravan {
 						if (confirmedTradeResourceAmount.tradeAmount > 0) {
 							tradingPost.GetInventory().ChangeResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount, false);
 							confirmedTradeResourceAmount.amountRemaining = 0;
-							job.transferResources.Add(new ResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount));
+							jobInstance.transferResources.Add(new ResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount));
 						}
 					}
 
 					caravan.confirmedResourcesToTrade.Clear();
-					GameManager.Get<JobManager>().CreateJob(job);
+					GameManager.Get<JobManager>().CreateJob(jobInstance);
 				}
 			}
 			else {

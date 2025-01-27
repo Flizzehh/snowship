@@ -11,17 +11,17 @@ namespace Snowship.NState
 {
 	public partial class StateManager
 	{
-		public Dictionary<EState, State> States => states;
+		public Dictionary<EState, State<EState>> States => states;
 
-		private static readonly Dictionary<EState, State> states = new() {
+		private static readonly Dictionary<EState, State<EState>> states = new() {
 			{
-				EState.Boot, new State(
+				EState.Boot, new State<EState>(
 					EState.Boot,
 					new List<EState> { EState.MainMenu },
 					null
 				)
 			}, {
-				EState.MainMenu, new State(
+				EState.MainMenu, new State<EState>(
 					EState.MainMenu,
 					new List<EState> { EState.LoadToSimulation, EState.QuitToDesktop },
 					new List<Func<UniTask>> {
@@ -29,7 +29,7 @@ namespace Snowship.NState
 					}
 				)
 			}, {
-				EState.LoadToSimulation, new State(
+				EState.LoadToSimulation, new State<EState>(
 					EState.LoadToSimulation,
 					new List<EState> { EState.Simulation },
 					new List<Func<UniTask>> {
@@ -37,7 +37,7 @@ namespace Snowship.NState
 					}
 				)
 			}, {
-				EState.Simulation, new State(
+				EState.Simulation, new State<EState>(
 					EState.Simulation,
 					new List<EState> { EState.PauseMenu, EState.Saving, EState.QuitToMenu, EState.QuitToDesktop },
 					new List<Func<UniTask>> {
@@ -45,7 +45,7 @@ namespace Snowship.NState
 					}
 				)
 			}, {
-				EState.PauseMenu, new State(
+				EState.PauseMenu, new State<EState>(
 					EState.PauseMenu,
 					new List<EState> { EState.Simulation },
 					new List<Func<UniTask>> {
@@ -53,19 +53,19 @@ namespace Snowship.NState
 					}
 				)
 			}, {
-				EState.Saving, new State(
+				EState.Saving, new State<EState>(
 					EState.Saving,
 					new List<EState> { EState.PauseMenu, EState.Simulation },
 					null
 				)
 			}, {
-				EState.QuitToMenu, new State(
+				EState.QuitToMenu, new State<EState>(
 					EState.QuitToMenu,
 					new List<EState> { EState.MainMenu },
 					null
 				)
 			}, {
-				EState.QuitToDesktop, new State(
+				EState.QuitToDesktop, new State<EState>(
 					EState.QuitToDesktop,
 					null,
 					null

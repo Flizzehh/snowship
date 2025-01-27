@@ -40,7 +40,7 @@ namespace Snowship.NResource
 				if (!GameManager.Get<JobManager>().JobOfTypeExistsAtTile("HarvestFarm", tile)) {
 					GameManager.Get<JobManager>()
 						.CreateJob(
-						new Job(
+							new JobInstance(
 							JobPrefab.GetJobPrefabByName("HarvestFarm"),
 							tile,
 							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.HarvestFarm),

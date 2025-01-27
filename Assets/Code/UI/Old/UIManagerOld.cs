@@ -1943,15 +1943,15 @@ namespace Snowship.NUI {
 				}
 
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					Job job = new(JobPrefab.GetJobPrefabByName("TransferResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.TransferResources), null, 0);
+					JobInstance jobInstance = new(JobPrefab.GetJobPrefabByName("TransferResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.TransferResources), null, 0);
 					foreach (ResourceTransferElement rte in tradingPostResourceTransferElements) {
 						if (rte.transferAmount > 0) {
-							job.requiredResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
+							jobInstance.requiredResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
 						}
 					}
 
-					if (job.requiredResources.Count > 0) {
-						GameManager.Get<JobManager>().CreateJob(job);
+					if (jobInstance.requiredResources.Count > 0) {
+						GameManager.Get<JobManager>().CreateJob(jobInstance);
 					}
 				});
 
@@ -1976,18 +1976,18 @@ namespace Snowship.NUI {
 				}
 
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					Job job = new Job(JobPrefab.GetJobPrefabByName("CollectResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources), null, 0) {
+					JobInstance jobInstance = new JobInstance(JobPrefab.GetJobPrefabByName("CollectResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources), null, 0) {
 						transferResources = new List<ResourceAmount>()
 					};
 					foreach (ResourceTransferElement rte in tradingPostInventoryElements) {
 						if (rte.transferAmount > 0) {
-							job.transferResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
+							jobInstance.transferResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
 							rte.transferAmountInput.text = "0";
 						}
 					}
 
-					if (job.transferResources.Count > 0) {
-						GameManager.Get<JobManager>().CreateJob(job);
+					if (jobInstance.transferResources.Count > 0) {
+						GameManager.Get<JobManager>().CreateJob(jobInstance);
 					}
 				});
 

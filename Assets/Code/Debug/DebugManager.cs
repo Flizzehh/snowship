@@ -1537,7 +1537,7 @@ public class DebugManager : IManager
 				if (parameters.Count == 0) {
 					foreach (Colonist colonist in Colonist.colonists) {
 						Output(colonist.name);
-						foreach (Job job in JobManager.GetSortedJobs(colonist)) {
+						foreach (JobInstance job in JobManager.GetSortedJobs(colonist)) {
 							Output($"\t{job.objectPrefab.jobType} {job.objectPrefab.type} {JobManager.CalculateJobCost(colonist, job, null)}");
 						}
 					}

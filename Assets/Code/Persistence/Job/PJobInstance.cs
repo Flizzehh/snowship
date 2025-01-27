@@ -9,7 +9,7 @@ using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PJob : Job
+	public class PJobInstance : JobInstance
 	{
 
 		private readonly PInventory pInventory = new PInventory();
@@ -47,43 +47,43 @@ namespace Snowship.NPersistence {
 
 			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "jobs.snowship");
 
-			foreach (Job job in Job.jobs) {
+			foreach (JobInstance job in jobs) {
 				WriteJobLines(file, job, JobProperty.Job, 0);
 			}
 
 			file.Close();
 		}
 
-		public void WriteJobLines(StreamWriter file, Job job, JobProperty jobType, int startLevel) {
+		public void WriteJobLines(StreamWriter file, JobInstance jobInstance, JobProperty jobType, int startLevel) {
 			file.WriteLine(PU.CreateKeyValueString(jobType, string.Empty, startLevel));
 
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Prefab, job.prefab.name, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Type, job.objectPrefab.type, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Variation, job.variation == null ? "null" : job.variation.name, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Position, PU.FormatVector2ToString(job.tile.obj.transform.position), startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.RotationIndex, job.rotationIndex, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Priority, job.priority, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Started, job.started, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.Progress, job.jobProgress, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(JobProperty.ColonistBuildTime, job.colonistBuildTime, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Prefab, jobInstance.prefab.name, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Type, jobInstance.objectPrefab.type, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Variation, jobInstance.variation == null ? "null" : jobInstance.variation.name, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Position, PU.FormatVector2ToString(jobInstance.tile.obj.transform.position), startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.RotationIndex, jobInstance.rotationIndex, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Priority, jobInstance.priority, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Started, jobInstance.started, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.Progress, jobInstance.jobProgress, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(JobProperty.ColonistBuildTime, jobInstance.colonistBuildTime, startLevel + 1));
 
-			if (job.requiredResources is { Count: > 0 }) {
+			if (jobInstance.requiredResources is { Count: > 0 }) {
 				file.WriteLine(PU.CreateKeyValueString(JobProperty.RequiredResources, string.Empty, startLevel + 1));
-				foreach (ResourceAmount resourceAmount in job.requiredResources) {
+				foreach (ResourceAmount resourceAmount in jobInstance.requiredResources) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
 
-			if (job.resourcesColonistHas is { Count: > 0 }) {
+			if (jobInstance.resourcesColonistHas is { Count: > 0 }) {
 				file.WriteLine(PU.CreateKeyValueString(JobProperty.ResourcesColonistHas, string.Empty, startLevel + 1));
-				foreach (ResourceAmount resourceAmount in job.resourcesColonistHas) {
+				foreach (ResourceAmount resourceAmount in jobInstance.resourcesColonistHas) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
 
-			if (job.containerPickups is { Count: > 0 }) {
+			if (jobInstance.containerPickups is { Count: > 0 }) {
 				file.WriteLine(PU.CreateKeyValueString(JobProperty.ContainerPickups, string.Empty, startLevel + 1));
-				foreach (ContainerPickup containerPickup in job.containerPickups) {
+				foreach (ContainerPickup containerPickup in jobInstance.containerPickups) {
 					file.WriteLine(PU.CreateKeyValueString(ContainerPickupProperty.ContainerPickup, string.Empty, startLevel + 2));
 
 					file.WriteLine(PU.CreateKeyValueString(ContainerPickupProperty.Position, PU.FormatVector2ToString(containerPickup.container.zeroPointTile.obj.transform.position), startLevel + 3));
@@ -97,20 +97,20 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			if (job.createResource != null) {
-				file.WriteLine(PU.CreateKeyValueString(JobProperty.CreateResource, job.createResource.resource.type, startLevel + 1));
+			if (jobInstance.createResource != null) {
+				file.WriteLine(PU.CreateKeyValueString(JobProperty.CreateResource, jobInstance.createResource.resource.type, startLevel + 1));
 			}
 
-			if (job.activeObject != null) {
+			if (jobInstance.activeObject != null) {
 				file.WriteLine(PU.CreateKeyValueString(JobProperty.ActiveObject, string.Empty, startLevel + 1));
 
-				file.WriteLine(PU.CreateKeyValueString(PObject.ObjectProperty.Position, PU.FormatVector2ToString(job.activeObject.zeroPointTile.obj.transform.position), startLevel + 2));
-				file.WriteLine(PU.CreateKeyValueString(PObject.ObjectProperty.Type, job.activeObject.prefab.type, startLevel + 2));
+				file.WriteLine(PU.CreateKeyValueString(PObject.ObjectProperty.Position, PU.FormatVector2ToString(jobInstance.activeObject.zeroPointTile.obj.transform.position), startLevel + 2));
+				file.WriteLine(PU.CreateKeyValueString(PObject.ObjectProperty.Type, jobInstance.activeObject.prefab.type, startLevel + 2));
 			}
 
-			if (job.transferResources is { Count: > 0 }) {
+			if (jobInstance.transferResources is { Count: > 0 }) {
 				file.WriteLine(PU.CreateKeyValueString(JobProperty.TransferResources, string.Empty, startLevel + 1));
-				foreach (ResourceAmount resourceAmount in job.transferResources) {
+				foreach (ResourceAmount resourceAmount in jobInstance.transferResources) {
 					pInventory.WriteResourceAmountLines(file, resourceAmount, startLevel + 2);
 				}
 			}
@@ -370,7 +370,7 @@ namespace Snowship.NPersistence {
 			}
 		}
 
-		public Job LoadJob(PersistenceJob persistenceJob) {
+		public JobInstance LoadJob(PersistenceJob persistenceJob) {
 			List<ContainerPickup> containerPickups = null;
 			if (persistenceJob.containerPickups != null) {
 				containerPickups = new List<ContainerPickup>();
@@ -384,7 +384,7 @@ namespace Snowship.NPersistence {
 				}
 			}
 
-			Job job = new(
+			JobInstance jobInstance = new(
 				JobPrefab.GetJobPrefabByName(persistenceJob.prefab),
 				GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceJob.position.Value),
 				ObjectPrefab.GetObjectPrefabByEnum(persistenceJob.type.Value),
@@ -392,16 +392,16 @@ namespace Snowship.NPersistence {
 				persistenceJob.rotationIndex.Value
 			) { started = persistenceJob.started ?? false, jobProgress = persistenceJob.progress ?? 0, colonistBuildTime = persistenceJob.colonistBuildTime ?? 0, requiredResources = persistenceJob.requiredResources, resourcesColonistHas = persistenceJob.resourcesColonistHas, containerPickups = containerPickups, transferResources = persistenceJob.transferResources };
 			if (persistenceJob.priority.HasValue) {
-				job.ChangePriority(persistenceJob.priority.Value);
+				jobInstance.ChangePriority(persistenceJob.priority.Value);
 			}
 
 			if (persistenceJob.createResource != null) {
-				CraftingObject craftingObject = (CraftingObject)job.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeObject.type);
+				CraftingObject craftingObject = (CraftingObject)jobInstance.tile.GetAllObjectInstances().Find(o => o.prefab.type == persistenceJob.activeObject.type);
 				CraftableResourceInstance craftableResourceInstance = craftingObject.resources.Find(r => r.resource == persistenceJob.createResource);
-				job.SetCreateResourceData(craftableResourceInstance, false);
-				craftableResourceInstance.job = job;
+				jobInstance.SetCreateResourceData(craftableResourceInstance, false);
+				craftableResourceInstance.JobInstance = jobInstance;
 			}
-			return job;
+			return jobInstance;
 		}
 
 	}

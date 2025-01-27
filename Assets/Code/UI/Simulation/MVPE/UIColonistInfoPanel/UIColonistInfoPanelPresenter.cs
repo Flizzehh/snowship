@@ -37,8 +37,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			colonist.OnJobChanged += OnJobChanged;
 			colonist.OnStoredJobChanged += OnStoredJobChanged;
-			OnJobChanged(colonist.Job);
-			OnStoredJobChanged(colonist.StoredJob);
+			OnJobChanged(colonist.JobInstance);
+			OnStoredJobChanged(colonist.StoredJobInstance);
 
 			View.SetupHealthSlider((0, 1), colonist.Health, true);
 			View.OnHealthChanged(colonist.Health);
@@ -100,11 +100,11 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			}
 		}
 
-		private void OnJobChanged(Job job) {
+		private void OnJobChanged(JobInstance jobInstance) {
 			View.SetCurrentActionText(colonist.GetCurrentActionString());
 		}
 
-		private void OnStoredJobChanged(Job job) {
+		private void OnStoredJobChanged(JobInstance jobInstance) {
 			View.SetStoredActionText(colonist.GetStoredActionString());
 		}
 

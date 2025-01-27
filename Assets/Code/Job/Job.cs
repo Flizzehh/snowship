@@ -1,147 +1,111 @@
+﻿using System;
 using System.Collections.Generic;
-using Snowship.NColonist;
 using Snowship.NResource;
-using Snowship.NUtilities;
 using UnityEngine;
 
-namespace Snowship.NJob {
+namespace Snowship.NJob
+{
+	public class Job : IJob
+	{
+		public JobPrefab JobPrefab { get; }
+		public TileManager.Tile Tile { get; }
+		public EJobState JobState { get; private set; }
+		public float Progress { get; }
+		public HumanManager.Human Worker { get; private set; }
+		public string TargetName { get; protected set; }
+		public string Description { get; protected set; }
+		public List<ResourceAmount> RequiredResources { get; protected set; }
+		public bool Returnable = true;
+		public bool ShouldBeCancelled { get; protected set; }
 
-	public class Job {
+		protected Job(JobPrefab jobPrefab, TileManager.Tile tile) {
+			JobPrefab = jobPrefab;
+			Tile = tile;
+			// TODO Set Progress Value?
 
-		public static readonly List<Job> jobs = new List<Job>();
+			JobState = EJobState.Ready;
 
-		public JobPrefab prefab;
-
-		public TileManager.Tile tile;
-		public ObjectPrefab objectPrefab;
-		public Variation variation;
-		public Colonist colonist;
-
-		public int rotationIndex;
-
-		public GameObject jobPreview;
-		public GameObject priorityIndicator;
-
-		public int priority;
-		public bool started;
-		public float jobProgress;
-		public float colonistBuildTime;
-
-		public List<ResourceAmount> requiredResources = new();
-
-		public List<ResourceAmount> resourcesColonistHas;
-		public List<ContainerPickup> containerPickups;
-
-		// public UIManagerOld.JobElement jobUIElement;
-
-		public CraftableResourceInstance createResource;
-		public ObjectInstance activeObject;
-
-		public List<ResourceAmount> transferResources;
-
-		public Job(JobPrefab prefab, TileManager.Tile tile, ObjectPrefab objectPrefab, Variation variation, int rotationIndex) {
-
-			this.prefab = prefab;
-
-			this.tile = tile;
-
-			this.objectPrefab = objectPrefab;
-			this.variation = variation;
-
-			this.rotationIndex = rotationIndex;
-
-			SetRequiredResources();
-
-			jobPreview = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, GameManager.SharedReferences.JobParent, false);
-			jobPreview.transform.position = tile.obj.transform.position + (Vector3)objectPrefab.anchorPositionOffset[rotationIndex];
-			jobPreview.name = "JobPreview: " + objectPrefab.name + " at " + jobPreview.transform.position;
-			SpriteRenderer jPSR = jobPreview.GetComponent<SpriteRenderer>();
-			if (objectPrefab.GetBaseSpriteForVariation(variation) != null) {
-				jPSR.sprite = objectPrefab.GetBaseSpriteForVariation(variation);
-			}
-			if (!objectPrefab.bitmasking && objectPrefab.GetBitmaskSpritesForVariation(variation).Count > 0) {
-				jPSR.sprite = objectPrefab.GetBitmaskSpritesForVariation(variation)[rotationIndex];
-			}
-			jPSR.sortingOrder = 5 + objectPrefab.layer; // Job Preview Sprite
-			jPSR.color = ColourUtilities.GetColour(ColourUtilities.EColour.WhiteAlpha128);
-
-			jobProgress = objectPrefab.timeToBuild;
-			colonistBuildTime = objectPrefab.timeToBuild;
+			TargetName = jobPrefab.name;
+			Description = jobPrefab.name;
 		}
 
-		protected Job() {
+		public void AssignWorker(HumanManager.Human worker) {
+			Worker = worker;
 		}
 
-		private void SetRequiredResources() {
+		public virtual void OnJobTaken() {
+		}
 
-			if (requiredResources.Count > 0) {
-				Debug.LogError("Attempting to set requiredResources on Job when they are already set.");
-			}
+		public virtual void OnJobStarted() {
+		}
 
-			requiredResources.AddRange(objectPrefab.commonResources);
-			if (variation != null) {
-				requiredResources.AddRange(variation.uniqueResources);
+		public virtual void OnJobInProgress() {
+		}
+
+		public virtual void OnJobFinished() {
+			foreach (ResourceAmount resourceAmount in RequiredResources) {
+				Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
 			}
 		}
 
-		public void SetCreateResourceData(CraftableResourceInstance resource, bool addToResourcesToBuild = true) {
-			createResource = resource;
-
-			jobProgress += createResource.resource.craftingTime;
-			colonistBuildTime += createResource.resource.craftingTime;
-
-			if (addToResourcesToBuild) {
-				requiredResources.AddRange(createResource.resource.craftingResources);
-				if (resource.resource.craftingEnergy != 0) {
-					requiredResources.AddRange(resource.fuelAmounts);
-				}
-			}
-			activeObject = resource.craftingObject;
-			jobPreview.GetComponent<SpriteRenderer>().sprite = resource.resource.image;
+		public virtual void OnJobReturned() {
 		}
 
-		public void SetColonist(Colonist colonist) {
-			this.colonist = colonist;
-			if (prefab.name != "PickupResources" && containerPickups != null && containerPickups.Count > 0) {
-				colonist.StoredJob = this;
-				colonist.SetJob(
-					new ColonistJob(
-						colonist,
-						new Job(
-							JobPrefab.GetJobPrefabByName("PickupResources"),
-							containerPickups[0].container.tile,
-							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.PickupResources),
-							null,
-							0),
-						null,
-						null
-					)
-				);
+		public EJobState ChangeJobState(EJobState newState) {
+			Action stateChangedMethod = null;
+			switch (newState) {
+				case EJobState.Ready:
+					if (JobState != EJobState.Returned) {
+						Debug.LogError("Must progress from Returned -> Ready (or set at init).");
+						return JobState;
+					}
+					break;
+				case EJobState.Taken:
+					if (JobState != EJobState.Ready) {
+						Debug.LogError("Must progress from Ready -> Taken.");
+						return JobState;
+					}
+					if (Worker == null) {
+						Debug.LogError("Worker not assigned to job.");
+						return JobState;
+					}
+					stateChangedMethod = OnJobTaken;
+					break;
+				case EJobState.Started:
+					if (JobState != EJobState.Taken) {
+						Debug.LogError("Must progress from Taken -> Started.");
+						return JobState;
+					}
+					stateChangedMethod = OnJobStarted;
+					break;
+				case EJobState.InProgress:
+					if (JobState != EJobState.Started) {
+						Debug.LogError("Must progress from Started -> InProgress.");
+						return JobState;
+					}
+					stateChangedMethod = OnJobInProgress;
+					break;
+				case EJobState.Finished:
+					if (JobState != EJobState.InProgress) {
+						Debug.LogError("Must progress from InProgress -> Finished.");
+						return JobState;
+					}
+					stateChangedMethod = OnJobFinished;
+					break;
+				case EJobState.Returned:
+					if (JobState == EJobState.Ready) {
+						Debug.LogError("Job shouldn't go from Ready -> Returned.");
+						return JobState;
+					}
+					stateChangedMethod = OnJobReturned;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
 			}
-		}
 
-		public void ChangePriority(int amount) {
-			priority += amount;
-			if (priorityIndicator == null && jobPreview != null) {
-				priorityIndicator = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, jobPreview.transform, false);
-				priorityIndicator.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(@"UI/priorityIndicator");
-				priorityIndicator.GetComponent<SpriteRenderer>().sortingOrder = jobPreview.GetComponent<SpriteRenderer>().sortingOrder + 1; // Priority Indicator Sprite
-				if (priority == 1) {
-					priorityIndicator.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightYellow);
-				} else if (priority == -1) {
-					priorityIndicator.GetComponent<SpriteRenderer>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightRed);
-				}
-			}
-			if (priority == 0) {
-				MonoBehaviour.Destroy(priorityIndicator);
-			}
-		}
-
-		public void Remove() {
-			// if (jobUIElement != null) {
-			// 	jobUIElement.Remove();
-			// }
-			MonoBehaviour.Destroy(jobPreview);
+			JobState = newState;
+			stateChangedMethod?.Invoke();
+			return JobState;
 		}
 	}
 }

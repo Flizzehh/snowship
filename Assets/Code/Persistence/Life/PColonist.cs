@@ -15,7 +15,7 @@ namespace Snowship.NPersistence {
 		private readonly PLife pLife = new PLife();
 		private readonly PHuman pHuman = new PHuman();
 
-		private readonly PJob pJob = new PJob();
+		private readonly PJobInstance pJobInstance = new();
 
 		public enum ColonistProperty {
 			Colonist,
@@ -81,16 +81,16 @@ namespace Snowship.NPersistence {
 
 				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.PlayerMoved, colonist.playerMoved, 1));
 
-				if (colonist.Job != null) {
-					pJob.WriteJobLines(file, colonist.Job, PJob.JobProperty.Job, 1);
+				if (colonist.JobInstance != null) {
+					pJobInstance.WriteJobLines(file, colonist.JobInstance, PJobInstance.JobProperty.Job, 1);
 				}
-				if (colonist.StoredJob != null) {
-					pJob.WriteJobLines(file, colonist.StoredJob, PJob.JobProperty.StoredJob, 1);
+				if (colonist.StoredJobInstance != null) {
+					pJobInstance.WriteJobLines(file, colonist.StoredJobInstance, PJobInstance.JobProperty.StoredJob, 1);
 				}
 				if (colonist.Backlog.Count > 0) {
 					file.WriteLine(PU.CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
-					foreach (Job backlogJob in colonist.Backlog) {
-						pJob.WriteJobLines(file, backlogJob, PJob.JobProperty.BacklogJob, 2);
+					foreach (JobInstance backlogJob in colonist.Backlog) {
+						pJobInstance.WriteJobLines(file, backlogJob, PJobInstance.JobProperty.BacklogJob, 2);
 					}
 				}
 
@@ -151,9 +151,9 @@ namespace Snowship.NPersistence {
 			public PHuman.PersistenceHuman persistenceHuman;
 
 			public bool? playerMoved;
-			public PJob.PersistenceJob persistenceJob;
-			public PJob.PersistenceJob persistenceStoredJob;
-			public List<PJob.PersistenceJob> persistenceBacklogJobs;
+			public PJobInstance.PersistenceJob persistenceJob;
+			public PJobInstance.PersistenceJob persistenceStoredJob;
+			public List<PJobInstance.PersistenceJob> persistenceBacklogJobs;
 			public List<PersistenceProfession> persistenceProfessions;
 			public List<PersistenceSkill> persistenceSkills;
 			public List<PersistenceTrait> persistenceTraits;
@@ -165,9 +165,9 @@ namespace Snowship.NPersistence {
 				PLife.PersistenceLife persistenceLife,
 				PHuman.PersistenceHuman persistenceHuman,
 				bool? playerMoved,
-				PJob.PersistenceJob persistenceJob,
-				PJob.PersistenceJob persistenceStoredJob,
-				List<PJob.PersistenceJob> persistenceBacklogJobs,
+				PJobInstance.PersistenceJob persistenceJob,
+				PJobInstance.PersistenceJob persistenceStoredJob,
+				List<PJobInstance.PersistenceJob> persistenceBacklogJobs,
 				List<PersistenceProfession> persistenceProfessions,
 				List<PersistenceSkill> persistenceSkills,
 				List<PersistenceTrait> persistenceTraits,
@@ -274,9 +274,9 @@ namespace Snowship.NPersistence {
 						PHuman.PersistenceHuman persistenceHuman = null;
 
 						bool? playerMoved = null;
-						PJob.PersistenceJob persistenceJob = null;
-						PJob.PersistenceJob persistenceStoredJob = null;
-						List<PJob.PersistenceJob> persistenceBacklogJobs = new List<PJob.PersistenceJob>();
+						PJobInstance.PersistenceJob persistenceJob = null;
+						PJobInstance.PersistenceJob persistenceStoredJob = null;
+						List<PJobInstance.PersistenceJob> persistenceBacklogJobs = new();
 						List<PersistenceProfession> persistenceProfessions = new List<PersistenceProfession>();
 						List<PersistenceSkill> persistenceSkills = new List<PersistenceSkill>();
 						List<PersistenceTrait> persistenceTraits = new List<PersistenceTrait>();
@@ -296,16 +296,16 @@ namespace Snowship.NPersistence {
 									playerMoved = bool.Parse((string)colonistProperty.Value);
 									break;
 								case ColonistProperty.Job:
-									persistenceJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+									persistenceJob = pJobInstance.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
 									break;
 								case ColonistProperty.StoredJob:
-									persistenceStoredJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+									persistenceStoredJob = pJobInstance.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
 									break;
 								case ColonistProperty.BacklogJobs:
 									foreach (KeyValuePair<string, object> backlogJobProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
 										switch ((BacklogJobProperty)Enum.Parse(typeof(BacklogJobProperty), backlogJobProperty.Key)) {
 											case BacklogJobProperty.BacklogJob:
-												persistenceBacklogJobs.Add(pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
+												persistenceBacklogJobs.Add(pJobInstance.LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
 												break;
 										}
 									}
@@ -543,18 +543,18 @@ namespace Snowship.NPersistence {
 				}
 
 				if (persistenceColonist.persistenceStoredJob != null) {
-					Job storedJob = pJob.LoadJob(persistenceColonist.persistenceStoredJob);
-					colonist.StoredJob = storedJob;
+					JobInstance storedJobInstance = pJobInstance.LoadJob(persistenceColonist.persistenceStoredJob);
+					colonist.StoredJobInstance = storedJobInstance;
 				}
 
 				if (persistenceColonist.persistenceJob != null) {
-					Job job = pJob.LoadJob(persistenceColonist.persistenceJob);
-					colonist.SetJob(new ColonistJob(colonist, job, persistenceColonist.persistenceJob.resourcesColonistHas, job.containerPickups));
+					JobInstance jobInstance = pJobInstance.LoadJob(persistenceColonist.persistenceJob);
+					colonist.SetJob(new ColonistJob(colonist, jobInstance, persistenceColonist.persistenceJob.resourcesColonistHas, jobInstance.containerPickups));
 				}
 
-				foreach (PJob.PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
-					Job backlogJob = pJob.LoadJob(persistenceBacklogJob);
-					colonist.Backlog.Add(backlogJob);
+				foreach (PJobInstance.PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
+					JobInstance backlogJobInstance = pJobInstance.LoadJob(persistenceBacklogJob);
+					colonist.Backlog.Add(backlogJobInstance);
 				}
 
 				if (persistenceColonist.persistenceLife.pathEndPosition.HasValue) {

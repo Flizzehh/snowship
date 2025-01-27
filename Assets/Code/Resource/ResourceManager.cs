@@ -436,17 +436,17 @@ public class ResourceManager : IManager, IDisposable
 		return resource;
 	}
 
-	public Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
-		Job job = new(
+	public JobInstance CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
+		JobInstance jobInstance = new(
 			JobPrefab.GetJobPrefabByName("CreateResource"),
 			craftingObject.tile,
 			ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CreateResource),
 			null,
 			0
 		);
-		job.SetCreateResourceData(resource);
-		GameManager.Get<JobManager>().CreateJob(job);
-		return job;
+		jobInstance.SetCreateResourceData(resource);
+		GameManager.Get<JobManager>().CreateJob(jobInstance);
+		return jobInstance;
 	}
 
 	public void CalculateResourceTotals() {
