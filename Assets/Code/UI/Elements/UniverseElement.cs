@@ -4,7 +4,8 @@ using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.LoadSave {
+namespace Snowship.NUI
+{
 	internal class UniverseElement {
 
 		public static event Action<UniverseElement> OnUniverseElementClicked;

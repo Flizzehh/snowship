@@ -6,11 +6,17 @@ namespace Snowship.NJob
 	public class RegisterJobAttribute : Attribute
 	{
 		public string Group { get; }
+		public string SubGroup { get; }
 		public string JobName { get; }
 
-		public RegisterJobAttribute(string group, string jobName) {
+		public bool SelectableAction { get; }
+
+		public RegisterJobAttribute(string group, string subGroup, string jobName, bool selectableAction) {
 			Group = group;
+			SubGroup = subGroup;
 			JobName = jobName;
+
+			SelectableAction = selectableAction;
 		}
 	}
 }

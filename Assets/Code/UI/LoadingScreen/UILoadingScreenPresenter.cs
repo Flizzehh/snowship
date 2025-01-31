@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 
-namespace Snowship.NUI.LoadingScreen {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UILoadingScreenPresenter : UIPresenter<UILoadingScreenView> {

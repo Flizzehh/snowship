@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Simulation.UIDateTime {
+﻿namespace Snowship.NUI
+{
 	public class UIDateTime : UIConfig<UIDateTimeView, UIDateTimePresenter> {
 
 	}

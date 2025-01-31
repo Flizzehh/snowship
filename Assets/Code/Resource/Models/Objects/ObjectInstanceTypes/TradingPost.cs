@@ -20,7 +20,7 @@ namespace Snowship.NResource
 		public static List<ResourceAmount> GetAvailableResourcesInTradingPostsInRegion(TileManager.Map.Region region) {
 			List<ResourceAmount> availableResources = new();
 			foreach (TradingPost tradingPost in GetTradingPostsInRegion(region)) {
-				foreach (ResourceAmount resourceAmount in tradingPost.GetInventory().resources) {
+				foreach (ResourceAmount resourceAmount in tradingPost.Inventory.resources) {
 					ResourceAmount accessibleResource = availableResources.Find(ra => ra.Resource == resourceAmount.Resource);
 					if (accessibleResource != null) {
 						accessibleResource.Amount += resourceAmount.Amount;

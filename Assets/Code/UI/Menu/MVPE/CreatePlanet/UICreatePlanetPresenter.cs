@@ -2,12 +2,11 @@
 using JetBrains.Annotations;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
-using Snowship.NUI.Menu.CreateColony;
-using Snowship.NUI.Modules;
 using Snowship.NUtilities;
 using UnityEngine;
 
-namespace Snowship.NUI.Menu.CreatePlanet {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UICreatePlanetPresenter : UIPresenter<UICreatePlanetView> {

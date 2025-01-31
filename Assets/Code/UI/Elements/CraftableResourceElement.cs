@@ -3,7 +3,8 @@ using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.LoadSave {
+namespace Snowship.NUI
+{
 
 	internal class CraftableResourceElement : PriorityResourceElement {
 

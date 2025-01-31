@@ -3,7 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.MainMenu {
+namespace Snowship.NUI
+{
 	public class UIMainMenuView : UIView {
 
 		[Header("General")]

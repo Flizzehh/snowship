@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Snowship.NColonist;
 using Snowship.NColony;
-using Snowship.NJob;
+using Snowship.NHuman;
 using Snowship.NProfession;
 using Snowship.NResource;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace Snowship.NPersistence {
 		private readonly PLife pLife = new PLife();
 		private readonly PHuman pHuman = new PHuman();
 
-		private readonly PJobInstance pJobInstance = new();
+		private readonly PJob pJob = new();
 
 		public enum ColonistProperty {
 			Colonist,
@@ -81,18 +81,19 @@ namespace Snowship.NPersistence {
 
 				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.PlayerMoved, colonist.playerMoved, 1));
 
-				if (colonist.JobInstance != null) {
-					pJobInstance.WriteJobLines(file, colonist.JobInstance, PJobInstance.JobProperty.Job, 1);
-				}
-				if (colonist.StoredJobInstance != null) {
-					pJobInstance.WriteJobLines(file, colonist.StoredJobInstance, PJobInstance.JobProperty.StoredJob, 1);
-				}
-				if (colonist.Backlog.Count > 0) {
-					file.WriteLine(PU.CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
-					foreach (JobInstance backlogJob in colonist.Backlog) {
-						pJobInstance.WriteJobLines(file, backlogJob, PJobInstance.JobProperty.BacklogJob, 2);
-					}
-				}
+				// TODO Load Colonist Jobs
+				// if (colonist.Job != null) {
+				// 	pJob.WriteJobLines(file, colonist.Job, PJob.JobProperty.Job, 1);
+				// }
+				// if (colonist.StoredJob != null) {
+				// 	pJob.WriteJobLines(file, colonist.StoredJob, PJob.JobProperty.StoredJob, 1);
+				// }
+				// if (colonist.Backlog.Count > 0) {
+				// 	file.WriteLine(PU.CreateKeyValueString(ColonistProperty.BacklogJobs, string.Empty, 1));
+				// 	foreach (JobInstance backlogJob in colonist.Backlog) {
+				// 		pJob.WriteJobLines(file, backlogJob, PJob.JobProperty.BacklogJob, 2);
+				// 	}
+				// }
 
 				file.WriteLine(PU.CreateKeyValueString(ColonistProperty.Professions, string.Empty, 1));
 				foreach (Profession profession in colonist.professions) {
@@ -151,9 +152,9 @@ namespace Snowship.NPersistence {
 			public PHuman.PersistenceHuman persistenceHuman;
 
 			public bool? playerMoved;
-			public PJobInstance.PersistenceJob persistenceJob;
-			public PJobInstance.PersistenceJob persistenceStoredJob;
-			public List<PJobInstance.PersistenceJob> persistenceBacklogJobs;
+			public PJob.PersistenceJob persistenceJob;
+			public PJob.PersistenceJob persistenceStoredJob;
+			public List<PJob.PersistenceJob> persistenceBacklogJobs;
 			public List<PersistenceProfession> persistenceProfessions;
 			public List<PersistenceSkill> persistenceSkills;
 			public List<PersistenceTrait> persistenceTraits;
@@ -165,9 +166,9 @@ namespace Snowship.NPersistence {
 				PLife.PersistenceLife persistenceLife,
 				PHuman.PersistenceHuman persistenceHuman,
 				bool? playerMoved,
-				PJobInstance.PersistenceJob persistenceJob,
-				PJobInstance.PersistenceJob persistenceStoredJob,
-				List<PJobInstance.PersistenceJob> persistenceBacklogJobs,
+				PJob.PersistenceJob persistenceJob,
+				PJob.PersistenceJob persistenceStoredJob,
+				List<PJob.PersistenceJob> persistenceBacklogJobs,
 				List<PersistenceProfession> persistenceProfessions,
 				List<PersistenceSkill> persistenceSkills,
 				List<PersistenceTrait> persistenceTraits,
@@ -274,9 +275,9 @@ namespace Snowship.NPersistence {
 						PHuman.PersistenceHuman persistenceHuman = null;
 
 						bool? playerMoved = null;
-						PJobInstance.PersistenceJob persistenceJob = null;
-						PJobInstance.PersistenceJob persistenceStoredJob = null;
-						List<PJobInstance.PersistenceJob> persistenceBacklogJobs = new();
+						PJob.PersistenceJob persistenceJob = null;
+						PJob.PersistenceJob persistenceStoredJob = null;
+						List<PJob.PersistenceJob> persistenceBacklogJobs = new();
 						List<PersistenceProfession> persistenceProfessions = new List<PersistenceProfession>();
 						List<PersistenceSkill> persistenceSkills = new List<PersistenceSkill>();
 						List<PersistenceTrait> persistenceTraits = new List<PersistenceTrait>();
@@ -296,16 +297,16 @@ namespace Snowship.NPersistence {
 									playerMoved = bool.Parse((string)colonistProperty.Value);
 									break;
 								case ColonistProperty.Job:
-									persistenceJob = pJobInstance.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+									persistenceJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
 									break;
 								case ColonistProperty.StoredJob:
-									persistenceStoredJob = pJobInstance.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+									persistenceStoredJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
 									break;
 								case ColonistProperty.BacklogJobs:
 									foreach (KeyValuePair<string, object> backlogJobProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
 										switch ((BacklogJobProperty)Enum.Parse(typeof(BacklogJobProperty), backlogJobProperty.Key)) {
 											case BacklogJobProperty.BacklogJob:
-												persistenceBacklogJobs.Add(pJobInstance.LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
+												persistenceBacklogJobs.Add(pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
 												break;
 										}
 									}
@@ -527,35 +528,35 @@ namespace Snowship.NPersistence {
 
 				colonist.SetName(persistenceColonist.persistenceHuman.name);
 
-				colonist.bodyIndices[HumanManager.Human.Appearance.Skin] = persistenceColonist.persistenceHuman.skinIndex.Value;
-				colonist.moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[colonist.bodyIndices[Appearance.Skin]];
-				colonist.bodyIndices[HumanManager.Human.Appearance.Hair] = persistenceColonist.persistenceHuman.hairIndex.Value;
+				colonist.bodyIndices[BodySection.Skin] = persistenceColonist.persistenceHuman.skinIndex.Value;
+				colonist.moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[colonist.bodyIndices[BodySection.Skin]];
+				colonist.bodyIndices[BodySection.Hair] = persistenceColonist.persistenceHuman.hairIndex.Value;
 
-				colonist.GetInventory().maxWeight = persistenceColonist.persistenceHuman.persistenceInventory.maxWeight.Value;
-				colonist.GetInventory().maxVolume = persistenceColonist.persistenceHuman.persistenceInventory.maxVolume.Value;
+				colonist.Inventory.maxWeight = persistenceColonist.persistenceHuman.persistenceInventory.maxWeight.Value;
+				colonist.Inventory.maxVolume = persistenceColonist.persistenceHuman.persistenceInventory.maxVolume.Value;
 				foreach (ResourceAmount resourceAmount in persistenceColonist.persistenceHuman.persistenceInventory.resources) {
-					colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+					colonist.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 				}
 
-				foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothingKVP in persistenceColonist.persistenceHuman.clothes) {
-					colonist.GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
+				foreach (KeyValuePair<BodySection, Clothing> appearanceToClothingKVP in persistenceColonist.persistenceHuman.clothes) {
+					colonist.Inventory.ChangeResourceAmount(Resource.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
 					colonist.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value);
 				}
 
-				if (persistenceColonist.persistenceStoredJob != null) {
-					JobInstance storedJobInstance = pJobInstance.LoadJob(persistenceColonist.persistenceStoredJob);
-					colonist.StoredJobInstance = storedJobInstance;
-				}
-
-				if (persistenceColonist.persistenceJob != null) {
-					JobInstance jobInstance = pJobInstance.LoadJob(persistenceColonist.persistenceJob);
-					colonist.SetJob(new ColonistJob(colonist, jobInstance, persistenceColonist.persistenceJob.resourcesColonistHas, jobInstance.containerPickups));
-				}
-
-				foreach (PJobInstance.PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
-					JobInstance backlogJobInstance = pJobInstance.LoadJob(persistenceBacklogJob);
-					colonist.Backlog.Add(backlogJobInstance);
-				}
+				// if (persistenceColonist.persistenceStoredJob != null) {
+				// 	Job storedJob = pJob.LoadJob(persistenceColonist.persistenceStoredJob);
+				// 	colonist.StoredJob = storedJob;
+				// }
+				//
+				// if (persistenceColonist.persistenceJob != null) {
+				// 	Job job = pJob.LoadJob(persistenceColonist.persistenceJob);
+				// 	colonist.SetJob(new ColonistJob(colonist, job, persistenceColonist.persistenceJob.resourcesColonistHas, job.containerPickups));
+				// }
+				//
+				// foreach (PJob.PersistenceJob persistenceBacklogJob in persistenceColonist.persistenceBacklogJobs) {
+				// 	Job backlogJob = pJob.LoadJob(persistenceBacklogJob);
+				// 	colonist.Backlog.Add(backlogJob);
+				// }
 
 				if (persistenceColonist.persistenceLife.pathEndPosition.HasValue) {
 					colonist.MoveToTile(GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceColonist.persistenceLife.pathEndPosition.Value), true);
@@ -599,9 +600,9 @@ namespace Snowship.NPersistence {
 
 				foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceColonist.persistenceHuman.persistenceInventory.reservedResources) {
 					foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-						colonist.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+						colonist.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 					}
-					colonist.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+					colonist.Inventory.ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.Name == humanToReservedResourcesKVP.Key));
 				}
 			}
 

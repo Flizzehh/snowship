@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Simulation.TradeMenu {
+﻿namespace Snowship.NUI
+{
 	public class UITradeMenu : UIConfig<UITradeMenuView, UITradeMenuPresenter> {
 
 	}

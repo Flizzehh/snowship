@@ -8,12 +8,12 @@ using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NInput;
-using Snowship.NJob;
+using Snowship.NLife;
 using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.NUI;
-using Snowship.NUI.Simulation.DebugConsole;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -214,7 +214,7 @@ public class DebugManager : IManager
 
 	private void SelectTileMouseUpdate() {
 		selectedTiles.Clear();
-		selectedTiles.Add(GameManager.Get<UIManagerOld>().mouseOverTile);
+		// selectedTiles.Add(GameManager.Get<UIManagerOld>().mouseOverTile);
 	}
 
 	private bool toggleSunCycleToggle;
@@ -257,11 +257,11 @@ public class DebugManager : IManager
 			Commands.selecthuman,
 			delegate(List<string> parameters) {
 				if (parameters.Count == 1) {
-					HumanManager.Human selectedHuman = GameManager.Get<HumanManager>().humans.Find(human => human.name == parameters[0]);
+					Human selectedHuman = GameManager.Get<HumanManager>().humans.Find(human => human.Name == parameters[0]);
 					if (selectedHuman != null) {
 						GameManager.Get<HumanManager>().SetSelectedHuman(selectedHuman);
 						if (GameManager.Get<HumanManager>().selectedHuman == selectedHuman) {
-							Output($"SUCCESS: Selected {GameManager.Get<HumanManager>().selectedHuman.name}.");
+							Output($"SUCCESS: Selected {GameManager.Get<HumanManager>().selectedHuman.Name}.");
 						}
 					} else {
 						Output($"ERROR: Invalid colonist name: {parameters[0]}");
@@ -331,14 +331,14 @@ public class DebugManager : IManager
 					if (float.TryParse(parameters[0], out float newHealth)) {
 						if (newHealth is >= 0 and <= 1) {
 							if (GameManager.Get<HumanManager>().selectedHuman != null) {
-								FieldInfo field = typeof(LifeManager.Life).GetField("Health", BindingFlags.NonPublic | BindingFlags.Instance);
+								FieldInfo field = typeof(Life).GetField("Health", BindingFlags.NonPublic | BindingFlags.Instance);
 								if (field != null) {
 									field.SetValue(GameManager.Get<HumanManager>().selectedHuman, 100);
 								}
 								if (Mathf.Approximately(GameManager.Get<HumanManager>().selectedHuman.Health, newHealth)) {
-									Output($"SUCCESS: {GameManager.Get<HumanManager>().selectedHuman.name}'s health is now {GameManager.Get<HumanManager>().selectedHuman.Health}.");
+									Output($"SUCCESS: {GameManager.Get<HumanManager>().selectedHuman.Name}'s health is now {GameManager.Get<HumanManager>().selectedHuman.Health}.");
 								} else {
-									Output($"ERROR: Unable to change {GameManager.Get<HumanManager>().selectedHuman.name}'s health.");
+									Output($"ERROR: Unable to change {GameManager.Get<HumanManager>().selectedHuman.Name}'s health.");
 								}
 							} else {
 								Output("ERROR: No human selected.");
@@ -437,10 +437,10 @@ public class DebugManager : IManager
 				if (parameters.Count == 2) {
 					Resource resource = Resource.GetResources().Find(r => r.type.ToString() == parameters[0]);
 					if (resource != null) {
-						if (GameManager.Get<HumanManager>().selectedHuman != null || GameManager.Get<UIManagerOld>().selectedContainer != null) {
+						if (GameManager.Get<HumanManager>().selectedHuman != null /* || GameManager.Get<UIManagerOld>().selectedContainer != null*/) {
 							if (GameManager.Get<HumanManager>().selectedHuman != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
-									GameManager.Get<HumanManager>().selectedHuman.GetInventory().ChangeResourceAmount(resource, amount, false);
+									GameManager.Get<HumanManager>().selectedHuman.Inventory.ChangeResourceAmount(resource, amount, false);
 									Output($"SUCCESS: Added {amount} {resource.name} to {GameManager.Get<HumanManager>().selectedHuman}.");
 								} else {
 									Output("ERROR: Unable to parse resource amount as int.");
@@ -448,23 +448,23 @@ public class DebugManager : IManager
 							} else {
 								Output("No colonist selected, skipping.");
 							}
-							if (GameManager.Get<UIManagerOld>().selectedContainer != null) {
+							/*if (GameManager.Get<UIManagerOld>().selectedContainer != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
-									GameManager.Get<UIManagerOld>().selectedContainer.GetInventory().ChangeResourceAmount(resource, amount, false);
+									GameManager.Get<UIManagerOld>().selectedContainer.Inventory.ChangeResourceAmount(resource, amount, false);
 									Output($"SUCCESS: Added {amount} {resource.name} to container.");
 								} else {
 									Output("ERROR: Unable to parse resource amount as int.");
 								}
 							} else {
 								Output("No container selected, skipping.");
-							}
+							}*/
 						} else {
 							if (int.TryParse(parameters[1], out int amount)) {
 								foreach (Colonist colonist in Colonist.colonists) {
-									colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
+									colonist.Inventory.ChangeResourceAmount(resource, amount, false);
 								}
 								foreach (Container container in Container.containers) {
-									container.GetInventory().ChangeResourceAmount(resource, amount, false);
+									container.Inventory.ChangeResourceAmount(resource, amount, false);
 								}
 								Output($"SUCCESS: Added {amount} {resource.name} to all colonists and all containers.");
 							} else {
@@ -481,7 +481,7 @@ public class DebugManager : IManager
 							if (resource != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
 									foreach (Colonist colonist in Colonist.colonists) {
-										colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
+										colonist.Inventory.ChangeResourceAmount(resource, amount, false);
 									}
 								} else {
 									Output("ERROR: Unable to parse resource amount as int.");
@@ -500,7 +500,7 @@ public class DebugManager : IManager
 							if (resource != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
 									foreach (Colonist colonist in Colonist.colonists) {
-										colonist.GetInventory().ChangeResourceAmount(resource, amount, false);
+										colonist.Inventory.ChangeResourceAmount(resource, amount, false);
 									}
 								} else {
 									Output("ERROR: Unable to parse resource amount as int.");
@@ -518,7 +518,7 @@ public class DebugManager : IManager
 							if (resource != null) {
 								if (int.TryParse(parameters[1], out int amount)) {
 									foreach (Container container in Container.containers) {
-										container.GetInventory().ChangeResourceAmount(resource, amount, false);
+										container.Inventory.ChangeResourceAmount(resource, amount, false);
 									}
 								} else {
 									Output("ERROR: Unable to parse resource amount as int.");
@@ -553,7 +553,7 @@ public class DebugManager : IManager
 				if (parameters.Count == 1) {
 					if (int.TryParse(parameters[0], out int index)) {
 						if (index >= 0 && index < Container.containers.Count) {
-							GameManager.Get<UIManagerOld>().SetSelectedContainer(Container.containers[index]);
+							// GameManager.Get<UIManagerOld>().SetSelectedContainer(Container.containers[index]);
 						} else {
 							Output("ERROR: Container index out of range.");
 						}
@@ -1536,10 +1536,10 @@ public class DebugManager : IManager
 			delegate(List<string> parameters) {
 				if (parameters.Count == 0) {
 					foreach (Colonist colonist in Colonist.colonists) {
-						Output(colonist.name);
-						foreach (JobInstance job in JobManager.GetSortedJobs(colonist)) {
-							Output($"\t{job.objectPrefab.jobType} {job.objectPrefab.type} {JobManager.CalculateJobCost(colonist, job, null)}");
-						}
+						Output(colonist.Name);
+						// foreach (JobInstance job in JobManager.GetSortedJobs(colonist)) {
+						// 	Output($"\t{job.objectPrefab.jobType} {job.objectPrefab.type} {JobManager.CalculateJobCost(colonist, job, null)}");
+						// }
 					}
 				} else if (parameters.Count == 1) {
 					Output("ERROR: Not yet implemented.");

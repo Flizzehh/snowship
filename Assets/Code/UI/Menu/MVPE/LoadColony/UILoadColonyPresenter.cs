@@ -3,12 +3,9 @@ using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
-using Snowship.NUI.Menu.CreateColony;
-using Snowship.NUI.Menu.LoadColony;
-using Snowship.NUI.Modules;
-using Snowship.NUI.Menu.LoadSave;
 
-namespace Snowship.NUI.Presenters {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UILoadColonyPresenter : UIPresenter<UILoadColonyView> {

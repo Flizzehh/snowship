@@ -3,7 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.Settings {
+namespace Snowship.NUI
+{
 	public class UISettingsView : UIView {
 
 		[Header("General")]

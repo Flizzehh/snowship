@@ -85,6 +85,9 @@ namespace Snowship.NUI
 
 			foreach (IUIGroup child in children) {
 				IUIGroup foundGroup = child.FindGroup(presenterToFind);
+				if (foundGroup == null) {
+					continue;
+				}
 				if (foundGroup.Presenter.Equals(presenterToFind)) {
 					return foundGroup;
 				}

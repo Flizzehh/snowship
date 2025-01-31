@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UIHumanBodyElementComponent : UIElementComponent
 	{
 		[SerializeField] private List<UIHumanBodyClothingSection> clothingSections = new();
 
-		public void SetClothingOnBodySection(HumanManager.Human.Appearance appearance, Clothing clothing) {
-			SetBodySectionSprite(appearance, clothing.moveSprites[0]);
+		public void SetClothingOnBodySection(BodySection bodySection, Clothing clothing) {
+			SetBodySectionSprite(bodySection, clothing.moveSprites[0]);
 		}
 
-		public void SetBodySectionSprite(HumanManager.Human.Appearance appearance, Sprite sprite) {
+		public void SetBodySectionSprite(BodySection bodySection, Sprite sprite) {
 			foreach (UIHumanBodyClothingSection clothingSection in clothingSections) {
-				if (clothingSection.appearance != appearance) {
+				if (clothingSection.bodySection != bodySection) {
 					continue;
 				}
 				if (clothingSection.sectionImage == null) {
@@ -31,7 +32,7 @@ namespace Snowship.NUI.Simulation
 	[Serializable]
 	public struct UIHumanBodyClothingSection
 	{
-		public HumanManager.Human.Appearance appearance;
+		public BodySection bodySection;
 		public Image sectionImage;
 	}
 }

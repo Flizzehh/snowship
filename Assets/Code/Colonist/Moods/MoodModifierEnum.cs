@@ -13,6 +13,7 @@
 		Quenched,
 		WellRested,
 		Rested,
+		SleptOnTheGround,
 		Tired,
 		Exhausted,
 		Overencumbered

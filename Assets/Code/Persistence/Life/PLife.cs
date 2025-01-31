@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NLife;
 using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PLife : LifeManager.Life
+	public class PLife : Life
 	{
 
 		public enum LifeProperty {
@@ -17,7 +18,7 @@ namespace Snowship.NPersistence {
 			PathEndPosition
 		}
 
-		public void WriteLifeLines(StreamWriter file, LifeManager.Life life, int startLevel) {
+		public void WriteLifeLines(StreamWriter file, Life life, int startLevel) {
 			file.WriteLine(PU.CreateKeyValueString(LifeProperty.Life, string.Empty, startLevel));
 
 			file.WriteLine(PU.CreateKeyValueString(LifeProperty.Health, life.Health, startLevel + 1));
@@ -31,12 +32,12 @@ namespace Snowship.NPersistence {
 
 		public class PersistenceLife {
 			public float? health;
-			public LifeManager.Life.Gender? gender;
+			public Gender? gender;
 			public Vector2? position;
 			public Vector2? previousPosition;
 			public Vector2? pathEndPosition;
 
-			public PersistenceLife(float? health, LifeManager.Life.Gender? gender, Vector2? position, Vector2? previousPosition, Vector2? pathEndPosition) {
+			public PersistenceLife(float? health, Gender? gender, Vector2? position, Vector2? previousPosition, Vector2? pathEndPosition) {
 				this.health = health;
 				this.gender = gender;
 				this.position = position;
@@ -65,7 +66,7 @@ namespace Snowship.NPersistence {
 
 		public PersistenceLife LoadPersistenceLife(List<KeyValuePair<string, object>> properties) {
 			float? health = null;
-			LifeManager.Life.Gender? gender = null;
+			Gender? gender = null;
 			Vector2? position = null;
 			Vector2? previousPosition = null;
 			Vector2? pathEndPosition = null;
@@ -76,7 +77,7 @@ namespace Snowship.NPersistence {
 						health = float.Parse((string)lifeProperty.Value);
 						break;
 					case LifeProperty.Gender:
-						gender = (LifeManager.Life.Gender)Enum.Parse(typeof(LifeManager.Life.Gender), (string)lifeProperty.Value);
+						gender = (Gender)Enum.Parse(typeof(Gender), (string)lifeProperty.Value);
 						break;
 					case LifeProperty.Position:
 						position = new Vector2(float.Parse(((string)lifeProperty.Value).Split(',')[0]), float.Parse(((string)lifeProperty.Value).Split(',')[1]));

@@ -15,6 +15,10 @@
 		<EffectAmount>10
 		<EffectLengthSeconds>180
 	<MoodModifier>
+		<Type>SleptOnTheGround
+		<EffectAmount>-5
+		<EffectLengthSeconds>180
+	<MoodModifier>
 		<Type>Tired
 		<EffectAmount>-10
 		<EffectLengthSeconds>UntilNot

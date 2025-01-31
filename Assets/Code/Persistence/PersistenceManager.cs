@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NPlanet;
 using Snowship.NResource;
 using Snowship.NState;
@@ -36,7 +36,7 @@ namespace Snowship.NPersistence {
 		public PInventory PInventory { get; } = new PInventory();
 
 		public PColonist PColonist { get; } = new PColonist();
-		public PJobInstance PJobInstance { get; } = new();
+		public PJob PJob { get; } = new();
 
 		public PCaravan PCaravan { get; } = new PCaravan();
 
@@ -58,7 +58,7 @@ namespace Snowship.NPersistence {
 				PCamera.SaveCamera(saveDirectoryPath);
 				PCaravan.SaveCaravans(saveDirectoryPath);
 				PColonist.SaveColonists(saveDirectoryPath);
-				PJobInstance.SaveJobs(saveDirectoryPath);
+				PJob.SaveJobs(saveDirectoryPath);
 				PObject.SaveObjects(saveDirectoryPath);
 				PResource.SaveResources(saveDirectoryPath);
 				PRiver.SaveModifiedRivers(saveDirectoryPath, PRiver.LoadRivers(colony.directory + "/Map/rivers.snowship"));
@@ -124,7 +124,7 @@ namespace Snowship.NPersistence {
 			if (persistenceSave != null) {
 				GameManager.Get<TileManager>().mapState = TileManager.MapState.Generating;
 
-				GameManager.Get<UIManagerOld>().SetGameUIActive(false);
+				// GameManager.Get<UIManagerOld>().SetGameUIActive(false);
 
 				UIEvents.UpdateLoadingScreenText("Loading Colony", string.Empty);
 				await UniTask.WaitForEndOfFrame();
@@ -203,8 +203,8 @@ namespace Snowship.NPersistence {
 				loadingState = LoadingState.LoadingJobs;
 				UIEvents.UpdateLoadingScreenText("Loading Job Data", string.Empty);
 				await UniTask.WaitForEndOfFrame();
-				List<PJobInstance.PersistenceJob> persistenceJobs = PJobInstance.LoadJobs(saveDirectoryPath + "/jobs.snowship");
-				PJobInstance.ApplyLoadedJobs(persistenceJobs);
+				List<PJob.PersistenceJob> persistenceJobs = PJob.LoadJobs(saveDirectoryPath + "/jobs.snowship");
+				PJob.ApplyLoadedJobs(persistenceJobs);
 				while (loadingState != LoadingState.LoadedJobs) {
 					await UniTask.WaitForEndOfFrame();
 				}
@@ -227,19 +227,19 @@ namespace Snowship.NPersistence {
 							Container container = (Container)objectInstance;
 							foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceObject.persistenceInventory.reservedResources) {
 								foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-									container.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+									container.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 								}
-								container.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+								container.Inventory.ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.Name == humanToReservedResourcesKVP.Key));
 							}
 							break;
 						case ObjectInstance.ObjectInstanceType.CraftingObject:
 							CraftingObject craftingObject = (CraftingObject)objectInstance;
 							craftingObject.SetActive(persistenceObject.active.Value);
 							break;
-						case ObjectInstance.ObjectInstanceType.SleepSpot:
-							SleepSpot sleepSpot = (SleepSpot)objectInstance;
+						case ObjectInstance.ObjectInstanceType.Bed:
+							Bed bed = (Bed)objectInstance;
 							if (persistenceObject.occupyingColonistName != null) {
-								sleepSpot.occupyingColonist = Colonist.colonists.Find(c => c.name == persistenceObject.occupyingColonistName);
+								bed.Occupant = Colonist.colonists.Find(c => c.Name == persistenceObject.occupyingColonistName);
 							}
 							break;
 					}
@@ -253,9 +253,9 @@ namespace Snowship.NPersistence {
 
 					foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceCaravan.persistenceInventory.reservedResources) {
 						foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-							caravan.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+							caravan.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 						}
-						caravan.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+						caravan.Inventory.ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.Name == humanToReservedResourcesKVP.Key));
 					}
 
 					for (int t = 0; t < caravan.traders.Count; t++) {
@@ -264,9 +264,9 @@ namespace Snowship.NPersistence {
 
 						foreach (KeyValuePair<string, List<ResourceAmount>> humanToReservedResourcesKVP in persistenceTrader.persistenceHuman.persistenceInventory.reservedResources) {
 							foreach (ResourceAmount resourceAmount in humanToReservedResourcesKVP.Value) {
-								trader.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+								trader.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 							}
-							trader.GetInventory().ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.name == humanToReservedResourcesKVP.Key));
+							trader.Inventory.ReserveResources(humanToReservedResourcesKVP.Value, GameManager.Get<HumanManager>().humans.Find(h => h.Name == humanToReservedResourcesKVP.Key));
 						}
 					}
 				}

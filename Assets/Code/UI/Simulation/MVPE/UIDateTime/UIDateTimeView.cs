@@ -1,7 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Snowship.NUI.Simulation.UIDateTime {
+namespace Snowship.NUI
+{
 	public class UIDateTimeView : UIView {
 
 		[SerializeField] private TMP_Text speedText;

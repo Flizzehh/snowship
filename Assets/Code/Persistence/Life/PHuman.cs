@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PHuman : HumanManager.Human
+	public class PHuman : Human
 	{
 
 		private readonly PInventory pInventory = new PInventory();
@@ -21,33 +22,33 @@ namespace Snowship.NPersistence {
 			Inventory
 		}
 
-		public void WriteHumanLines(StreamWriter file, HumanManager.Human human, int startLevel) {
+		public void WriteHumanLines(StreamWriter file, Human human, int startLevel) {
 			file.WriteLine(PU.CreateKeyValueString(HumanProperty.Human, string.Empty, startLevel));
 
-			file.WriteLine(PU.CreateKeyValueString(HumanProperty.Name, human.name, startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(HumanProperty.SkinIndex, human.bodyIndices[Appearance.Skin], startLevel + 1));
-			file.WriteLine(PU.CreateKeyValueString(HumanProperty.HairIndex, human.bodyIndices[Appearance.Hair], startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.Name, human.Name, startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.SkinIndex, human.bodyIndices[BodySection.Skin], startLevel + 1));
+			file.WriteLine(PU.CreateKeyValueString(HumanProperty.HairIndex, human.bodyIndices[BodySection.Hair], startLevel + 1));
 
 			if (human.clothes.Any(kvp => kvp.Value != null)) {
 				file.WriteLine(PU.CreateKeyValueString(HumanProperty.Clothes, string.Empty, startLevel + 1));
-				foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothing in human.clothes) {
+				foreach (KeyValuePair<BodySection, Clothing> appearanceToClothing in human.clothes) {
 					if (appearanceToClothing.Value != null) {
 						file.WriteLine(PU.CreateKeyValueString(appearanceToClothing.Key, appearanceToClothing.Value.prefab.clothingType + ":" + appearanceToClothing.Value.colour, startLevel + 2));
 					}
 				}
 			}
 
-			pInventory.WriteInventoryLines(file, human.GetInventory(), startLevel + 1);
+			pInventory.WriteInventoryLines(file, human.Inventory, startLevel + 1);
 		}
 
 		public class PersistenceHuman {
 			public string name;
 			public int? skinIndex;
 			public int? hairIndex;
-			public Dictionary<HumanManager.Human.Appearance, Clothing> clothes;
+			public Dictionary<BodySection, Clothing> clothes;
 			public PInventory.PersistenceInventory persistenceInventory;
 
-			public PersistenceHuman(string name, int? skinIndex, int? hairIndex, Dictionary<HumanManager.Human.Appearance, Clothing> clothes, PInventory.PersistenceInventory persistenceInventory) {
+			public PersistenceHuman(string name, int? skinIndex, int? hairIndex, Dictionary<BodySection, Clothing> clothes, PInventory.PersistenceInventory persistenceInventory) {
 				this.name = name;
 				this.skinIndex = skinIndex;
 				this.hairIndex = hairIndex;
@@ -78,7 +79,7 @@ namespace Snowship.NPersistence {
 			string name = null;
 			int? skinIndex = null;
 			int? hairIndex = null;
-			Dictionary<HumanManager.Human.Appearance, Clothing> clothes = new();
+			Dictionary<BodySection, Clothing> clothes = new();
 			PInventory.PersistenceInventory persistenceInventory = null;
 
 			foreach (KeyValuePair<string, object> humanProperty in properties) {
@@ -94,7 +95,7 @@ namespace Snowship.NPersistence {
 						break;
 					case HumanProperty.Clothes:
 						foreach (KeyValuePair<string, object> clothingProperty in (List<KeyValuePair<string, object>>)humanProperty.Value) {
-							HumanManager.Human.Appearance clothingPropertyKey = (HumanManager.Human.Appearance)Enum.Parse(typeof(HumanManager.Human.Appearance), clothingProperty.Key);
+							BodySection clothingPropertyKey = (BodySection)Enum.Parse(typeof(BodySection), clothingProperty.Key);
 							Clothing.ClothingEnum clothingType = (Clothing.ClothingEnum)Enum.Parse(typeof(Clothing.ClothingEnum), ((string)clothingProperty.Value).Split(':')[0]);
 							string colour = ((string)clothingProperty.Value).Split(':')[1];
 							clothes.Add(clothingPropertyKey, Clothing.GetClothesByAppearance(clothingPropertyKey).Find(c => c.prefab.clothingType == clothingType && c.colour == colour));

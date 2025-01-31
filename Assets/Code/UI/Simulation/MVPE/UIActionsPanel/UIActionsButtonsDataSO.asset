@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a61b942445754947a2056078f6b6a2a9, type: 3}
+  m_Name: UIActionsButtonsDataSO
+  m_EditorClassIdentifier: 
+  buttons:
+  - buttonName: Build
+    buttonSprite: {fileID: 21300000, guid: f95901fb8c5cac04d95fb594318d659b, type: 3}
+  - buttonName: Terraform
+    buttonSprite: {fileID: 21300000, guid: 38c42bd490c931341b742aec8a99af66, type: 3}
+  - buttonName: Farm
+    buttonSprite: {fileID: 21300000, guid: 7445ec9b36d78aa459eefc6919f9a09d, type: 3}
+  - buttonName: Remove
+    buttonSprite: {fileID: 21300000, guid: e0968eb27be5271408ec254f06d78eaf, type: 3}
+  - buttonName: Priority
+    buttonSprite: {fileID: 21300000, guid: 51f3d89c4ab790b4bbf0457421964251, type: 3}

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Snowship.NUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,7 +45,7 @@ namespace Snowship.NPersistence {
 				Resolution.refreshRateRatio
 			);
 
-			GameManager.Get<UIManagerOld>().canvas.GetComponent<CanvasScaler>().uiScaleMode = ScaleMode;
+			GameManager.SharedReferences.Canvas.GetComponent<CanvasScaler>().uiScaleMode = ScaleMode;
 		}
 
 		public void LoadSetting(Setting setting, string value) {

@@ -1,5 +1,4 @@
 ﻿using Snowship.NColonist;
-using Snowship.NJob;
 
 namespace Snowship.NProfession {
 
@@ -34,7 +33,7 @@ namespace Snowship.NProfession {
 
 			this.priority = priority;
 
-			ColonistJob.UpdateSingleColonistJobs(colonist);
+			// ColonistJob.UpdateSingleColonistJobs(colonist);
 		}
 
 		public void IncreasePriority() {

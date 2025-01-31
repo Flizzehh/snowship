@@ -4,7 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.DebugConsole {
+namespace Snowship.NUI
+{
 	public class UIDebugConsoleView : UIView {
 
 		[SerializeField] private TMP_InputField debugInputField;

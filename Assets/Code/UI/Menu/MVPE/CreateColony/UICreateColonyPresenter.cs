@@ -4,11 +4,11 @@ using Snowship.NColony;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
-using Snowship.NUI.Modules;
 using Snowship.NUtilities;
 using UnityEngine;
 
-namespace Snowship.NUI.Menu.CreateColony {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UICreateColonyPresenter : UIPresenter<UICreateColonyView> {

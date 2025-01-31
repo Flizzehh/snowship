@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Snowship.NHuman;
 using Snowship.NJob;
 using Snowship.NResource;
 using Snowship.NUtilities;
 
 namespace Snowship.NCaravan {
-	public class Trader : HumanManager.Human {
+	public class Trader : Human
+	{
 
 		public Caravan caravan;
 
@@ -27,16 +30,16 @@ namespace Snowship.NCaravan {
 		public override void Update() {
 			base.Update();
 
-			if (tradingPosts != null && tradingPosts.Count > 0) {
+			if (tradingPosts is { Count: > 0 }) {
 				TradingPost tradingPost = tradingPosts[0];
 				if (path.Count <= 0) {
 					MoveToTile(tradingPost.zeroPointTile, false);
 				}
 
 				if (overTile == tradingPost.zeroPointTile) {
-					foreach (ReservedResources rr in tradingPost.GetInventory().TakeReservedResources(this)) {
+					foreach (ReservedResources rr in tradingPost.Inventory.TakeReservedResourcesWithoutTransfer(this)) {
 						foreach (ResourceAmount ra in rr.resources) {
-							caravan.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
+							caravan.Inventory.ChangeResourceAmount(ra.Resource, ra.Amount, false);
 
 							ConfirmedTradeResourceAmount confirmedTradeResourceAmount = caravan.confirmedResourcesToTrade.Find(crtt => crtt.resource == ra.Resource);
 							if (confirmedTradeResourceAmount != null) {
@@ -49,33 +52,26 @@ namespace Snowship.NCaravan {
 				}
 
 				if (tradingPosts.Count <= 0) {
-					JobInstance jobInstance = new JobInstance(
-						JobPrefab.GetJobPrefabByName("CollectResources"),
-						tradingPost.tile,
-						ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources),
-						null,
-						0
-					) {
-						transferResources = new List<ResourceAmount>()
-					};
-					foreach (ConfirmedTradeResourceAmount confirmedTradeResourceAmount in caravan.confirmedResourcesToTrade) {
-						if (confirmedTradeResourceAmount.tradeAmount > 0) {
-							tradingPost.GetInventory().ChangeResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount, false);
-							confirmedTradeResourceAmount.amountRemaining = 0;
-							jobInstance.transferResources.Add(new ResourceAmount(confirmedTradeResourceAmount.resource, confirmedTradeResourceAmount.tradeAmount));
-						}
-					}
+					List<ResourceAmount> transferResources = caravan.confirmedResourcesToTrade
+						.Where(ctra => ctra.tradeAmount > 0)
+						.Select(
+							ctra => {
+								tradingPost.Inventory.ChangeResourceAmount(ctra.resource, ctra.tradeAmount, false);
+								ctra.amountRemaining = 0;
+								return new ResourceAmount(ctra.resource, ctra.tradeAmount);
+							}
+						)
+						.ToList();
+					Job job = new CollectResourcesJob(tradingPost, transferResources);
 
 					caravan.confirmedResourcesToTrade.Clear();
-					GameManager.Get<JobManager>().CreateJob(jobInstance);
+					GameManager.Get<JobManager>().AddJob(job);
 				}
-			}
-			else {
+			} else {
 				if (path.Count <= 0) {
 					Wander(caravan.targetTile, 4);
-				}
-				else {
-					wanderTimer = UnityEngine.Random.Range(10f, 20f);
+				} else {
+					WanderTimer = UnityEngine.Random.Range(10f, 20f);
 				}
 			}
 		}

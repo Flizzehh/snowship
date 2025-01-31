@@ -1,24 +1,31 @@
-﻿using System.Linq;
-using Snowship.NResource;
+﻿using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Wear Clothes")]
+	[RegisterJob("Needs", "Clothing", "WearClothes", false)]
 	public class WearClothesJob : Job
 	{
-		protected WearClothesJob(JobPrefab jobPrefab, TileManager.Tile tile) : base(jobPrefab, tile) {
-			Description = $"Wearing {RequiredResources[0].Resource.name}.";
+		private readonly Container container;
+		private readonly Clothing clothing;
+
+		public WearClothesJob(TileManager.Tile tile, Container container, Clothing clothing) : base(tile) {
+			this.container = container;
+			this.clothing = clothing;
+
+			Description = $"Wearing {clothing.name}.";
 
 			Returnable = false;
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
-			foreach (ResourceAmount resourceAmount in RequiredResources.Where(ra => ra.Resource.classes.Contains(Resource.ResourceClassEnum.Clothing))) {
-				Clothing clothing = (Clothing)resourceAmount.Resource;
-				Worker.ChangeClothing(clothing.prefab.appearance, clothing);
+			container?.Inventory.TakeReservedResources(Worker);
+			ResourceAmount clothingFromInventory = Worker.Inventory.TakeResourceAmount(new ResourceAmount(clothing, 1));
+			if (clothingFromInventory == null) {
+				return;
 			}
+			Worker.ChangeClothing(clothing.prefab.BodySection, clothing);
 		}
 	}
 }

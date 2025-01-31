@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NPersistence;
 
-namespace Snowship.NUI.Menu.LoadSave {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UILoadSavePresenter : UIPresenter<UILoadSaveView> {

@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Menu.LoadSave {
+﻿namespace Snowship.NUI
+{
 	public class LoadUniverseView {
 		
 	}

@@ -1,7 +1,6 @@
 ﻿using Snowship.NInput;
 using Snowship.NState;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Snowship.NCamera {
@@ -46,7 +45,7 @@ namespace Snowship.NCamera {
 
 		private void OnZoomCameraPerformed(InputAction.CallbackContext callbackContext) {
 
-			if (EventSystem.current.IsPointerOverGameObject()) {
+			if (GameManager.Get<InputManager>().IsPointerOverUI()) {
 				return;
 			}
 

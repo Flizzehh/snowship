@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Snowship.NHuman;
 using Snowship.NResource;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UIReservedResourcesElementComponent : UIElementComponent
 	{
@@ -15,7 +16,7 @@ namespace Snowship.NUI.Simulation
 
 		private readonly List<UIResourceAmountElement> resourceAmountElements = new();
 
-		public UIHumanBodyElement SetReserverBodyElement(HumanManager.Human human) {
+		public UIHumanBodyElement SetReserverBodyElement(Human human) {
 			return new UIHumanBodyElement(colonistBodyElementLocation, human);
 		}
 

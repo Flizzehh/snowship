@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.TradeMenu {
+namespace Snowship.NUI
+{
 	public class UITradeResourceElementComponent : UIElementComponent {
 
 		[SerializeField] private InputField tradeAmountInputField;

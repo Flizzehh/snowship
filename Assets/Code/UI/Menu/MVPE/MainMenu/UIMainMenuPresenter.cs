@@ -3,12 +3,10 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NPersistence;
-using Snowship.NUI.Menu.CreatePlanet;
-using Snowship.NUI.Menu.LoadColony;
-using Snowship.NUI.Menu.Settings;
 using UnityEngine;
 
-namespace Snowship.NUI.Menu.MainMenu {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UIMainMenuPresenter : UIPresenter<UIMainMenuView> {

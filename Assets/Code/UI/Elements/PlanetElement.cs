@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Snowship.NUI.Menu.LoadSave {
+namespace Snowship.NUI
+{
 	internal class PlanetElement {
 		public PersistencePlanet persistencePlanet;
 

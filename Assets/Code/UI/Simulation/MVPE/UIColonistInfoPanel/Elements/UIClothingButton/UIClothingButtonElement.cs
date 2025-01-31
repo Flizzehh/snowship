@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UIClothingButtonElement : UIElement<UIClothingButtonElementComponent>
 	{
-		public readonly HumanManager.Human.Appearance Appearance;
+		public readonly BodySection BodySection;
 		private Clothing clothing;
 
-		public event Action<HumanManager.Human.Appearance> OnButtonClicked;
+		public event Action<BodySection> OnButtonClicked;
 
 		public UIClothingButtonElement(
 			Transform parent,
-			HumanManager.Human.Appearance appearance,
+			BodySection bodySection,
 			Clothing clothing
 		) : base(
 			parent
 		) {
-			Appearance = appearance;
+			BodySection = bodySection;
 
-			Component.SetTypeText(appearance.ToString());
+			Component.SetTypeText(bodySection.ToString());
 			SetClothing(clothing);
 
 			Component.OnButtonClicked += OnComponentButtonClicked;
@@ -35,7 +36,7 @@ namespace Snowship.NUI.Simulation
 		}
 
 		private void OnComponentButtonClicked() {
-			OnButtonClicked?.Invoke(Appearance);
+			OnButtonClicked?.Invoke(BodySection);
 		}
 
 		[SuppressMessage("ReSharper", "ParameterHidesMember")]

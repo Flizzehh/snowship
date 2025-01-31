@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Snowship.NCamera;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NLife;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NResource;
@@ -1320,7 +1321,7 @@ public class TileManager : IManager {
 
 	public async UniTask Initialize(Colony colony, MapInitializeType mapInitializeType) {
 
-		GameManager.Get<UIManagerOld>().SetGameUIActive(false);
+		// GameManager.Get<UIManagerOld>().SetGameUIActive(false);
 
 		mapState = MapState.Generating;
 
@@ -1350,7 +1351,7 @@ public class TileManager : IManager {
 		cameraM.OnCameraPositionChanged += map.OnCameraPositionChanged;
 		cameraM.OnCameraZoomChanged += map.OnCameraZoomChanged;
 
-		GameManager.Get<UIManagerOld>().SetGameUIActive(true);
+		// GameManager.Get<UIManagerOld>().SetGameUIActive(true);
 	}
 
 	public Map CreateMap(MapData mapData) {
@@ -2924,7 +2925,7 @@ public class TileManager : IManager {
 					}
 				}
 			}
-			foreach (LifeManager.Life life in GameManager.Get<LifeManager>().life) {
+			foreach (Life life in GameManager.Get<LifeManager>().life) {
 				life.SetColour(life.overTile.sr.color);
 			}
 			GameManager.Get<CameraManager>().camera.backgroundColor = newColour * 0.5f;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Snowship.NUtilities.ColourUtilities;
 
-namespace Snowship.NUI.Components
+namespace Snowship.NUI
 {
 	[RequireComponent(typeof(Slider))]
 	[DisallowMultipleComponent]

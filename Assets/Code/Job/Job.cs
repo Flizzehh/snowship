@@ -1,64 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
+using Snowship.NHuman;
 using Snowship.NResource;
+using Snowship.NTime;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Snowship.NJob
 {
-	public class Job : IJob
+	public abstract class Job : IJob
 	{
-		public JobPrefab JobPrefab { get; }
-		public TileManager.Tile Tile { get; }
-		public EJobState JobState { get; private set; }
-		public float Progress { get; }
-		public HumanManager.Human Worker { get; private set; }
-		public string TargetName { get; protected set; }
-		public string Description { get; protected set; }
-		public List<ResourceAmount> RequiredResources { get; protected set; }
-		public bool Returnable = true;
-		public bool ShouldBeCancelled { get; protected set; }
+		// General
+		public TileManager.Tile Tile { get; private set; }
+		public EJobState JobState { get; private set; } = EJobState.Ready;
+		public float TimeToWork { get; protected set; } = 0;
+		public float Progress { get; private set; } = 0;
+		public Human Worker { get; private set; }
+		public string TargetName { get; protected set; } = string.Empty;
+		public string Description { get; protected set; } = string.Empty;
+		public List<ResourceAmount> RequiredResources { get; } = new();
+		public List<ContainerPickup> ContainerPickups { get; protected set; } = new();
+		public bool Returnable { get; protected set; } = true;
+		public bool ShouldBeCancelled { get; protected set; } = false;
+		public GameObject JobPreviewObject { get; protected set; }
+		public int Priority { get; private set; } = 1;
+		public int Layer { get; protected set; } = 0;
 
-		protected Job(JobPrefab jobPrefab, TileManager.Tile tile) {
-			JobPrefab = jobPrefab;
+		// State Shortcuts
+		public bool Started => JobState >= EJobState.Started;
+		public bool InProgress => JobState >= EJobState.InProgress;
+		public bool Finished => JobState >= EJobState.Finished;
+
+		// Attribute Shortcuts
+		public string Group => GameManager.Get<JobManager>().JobRegistry.GetJobAttributes(GetType()).Group;
+		public string SubGroup => GameManager.Get<JobManager>().JobRegistry.GetJobAttributes(GetType()).SubGroup;
+		public string JobName => GameManager.Get<JobManager>().JobRegistry.GetJobAttributes(GetType()).JobName;
+
+		// Events
+		public event Action<Job, Human> OnWorkerAssigned;
+		public event Action<Job, EJobState> OnJobStateChanged;
+		public event Action<Job, int> OnPriorityChanged;
+
+		// Methods
+		protected Job(TileManager.Tile tile) {
 			Tile = tile;
-			// TODO Set Progress Value?
-
-			JobState = EJobState.Ready;
-
-			TargetName = jobPrefab.name;
-			Description = jobPrefab.name;
+			GameManager.Get<TimeManager>().OnTimeChanged += OnTimeChanged;
 		}
 
-		public void AssignWorker(HumanManager.Human worker) {
-			Worker = worker;
+		protected Job() {
 		}
 
-		public virtual void OnJobTaken() {
+		protected void SetTimeToWork(float timeToWork) {
+			TimeToWork = timeToWork;
+			Progress = TimeToWork;
 		}
 
-		public virtual void OnJobStarted() {
-		}
-
-		public virtual void OnJobInProgress() {
-		}
-
-		public virtual void OnJobFinished() {
-			foreach (ResourceAmount resourceAmount in RequiredResources) {
-				Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
+		protected void ChangeTile(TileManager.Tile tile) {
+			Tile = tile;
+			if (JobPreviewObject) {
+				JobPreviewObject.transform.SetParent(Tile.obj.transform, false);
 			}
 		}
 
-		public virtual void OnJobReturned() {
+		public void ChangePriority(int amount) {
+			Priority += amount;
+			OnPriorityChanged?.Invoke(this, Priority);
+		}
+
+		public void AssignWorker(Human worker) {
+			Worker = worker;
+			OnWorkerAssigned?.Invoke(this, Worker);
+			ChangeJobState(worker == null ? EJobState.Returned : EJobState.Taken);
+		}
+
+		protected virtual void OnJobTaken() {
+		}
+
+		protected virtual void OnJobStarted() {
+		}
+
+		private void OnTimeChanged(SimulationDateTime time) {
+			OnJobInProgress();
+		}
+
+		protected virtual void OnJobInProgress() {
+			Progress -= 1;
+		}
+
+		protected virtual void OnJobFinished() {
+			foreach (ResourceAmount resourceAmount in RequiredResources) {
+				Worker.Inventory.ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
+			}
+		}
+
+		protected virtual void OnJobReturned() {
+			if (Returnable) {
+				ChangeJobState(EJobState.Ready);
+				return;
+			}
+
+			if (JobPreviewObject) {
+				Object.Destroy(JobPreviewObject);
+			}
 		}
 
 		public EJobState ChangeJobState(EJobState newState) {
 			Action stateChangedMethod = null;
 			switch (newState) {
 				case EJobState.Ready:
-					if (JobState != EJobState.Returned) {
-						Debug.LogError("Must progress from Returned -> Ready (or set at init).");
-						return JobState;
-					}
 					break;
 				case EJobState.Taken:
 					if (JobState != EJobState.Ready) {
@@ -93,10 +142,6 @@ namespace Snowship.NJob
 					stateChangedMethod = OnJobFinished;
 					break;
 				case EJobState.Returned:
-					if (JobState == EJobState.Ready) {
-						Debug.LogError("Job shouldn't go from Ready -> Returned.");
-						return JobState;
-					}
 					stateChangedMethod = OnJobReturned;
 					break;
 				default:
@@ -105,7 +150,12 @@ namespace Snowship.NJob
 
 			JobState = newState;
 			stateChangedMethod?.Invoke();
+			OnJobStateChanged?.Invoke(this, JobState);
 			return JobState;
+		}
+
+		public void Close() {
+			Object.Destroy(JobPreviewObject.gameObject);
 		}
 	}
 }

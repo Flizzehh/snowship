@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
@@ -35,8 +36,8 @@ namespace Snowship.NPersistence {
 			file.WriteLine(PU.CreateKeyValueString(InventoryProperty.Inventory, string.Empty, startLevel));
 			file.WriteLine(PU.CreateKeyValueString(InventoryProperty.MaxWeight, inventory.maxWeight, startLevel + 1));
 			file.WriteLine(PU.CreateKeyValueString(InventoryProperty.MaxVolume, inventory.maxVolume, startLevel + 1));
-			if (inventory.parent is HumanManager.Human human) {
-				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.HumanName, human.name, startLevel + 1));
+			if (inventory.parent is Human human) {
+				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.HumanName, human.Name, startLevel + 1));
 			} else if (inventory.parent is Container container) {
 				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.ContainerPosition, PU.FormatVector2ToString(container.zeroPointTile.obj.transform.position), startLevel + 1));
 			}
@@ -50,7 +51,7 @@ namespace Snowship.NPersistence {
 				file.WriteLine(PU.CreateKeyValueString(InventoryProperty.ReservedResources, string.Empty, startLevel + 1));
 				foreach (ReservedResources reservedResources in inventory.reservedResources) {
 					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.ReservedResourceAmounts, string.Empty, startLevel + 2));
-					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.HumanName, reservedResources.human.name, startLevel + 3));
+					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.HumanName, reservedResources.human.Name, startLevel + 3));
 					file.WriteLine(PU.CreateKeyValueString(ReservedResourcesProperty.Resources, string.Empty, startLevel + 3));
 					foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 						WriteResourceAmountLines(file, resourceAmount, startLevel + 4);

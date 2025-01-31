@@ -63,7 +63,7 @@ namespace Snowship.NResource
 		public readonly List<ResourceAmount> commonResources = new();
 		public readonly List<Variation> variations = new();
 		public readonly Variation.VariationNameOrderEnum variationNameOrder;
-		public readonly List<JobManager.SelectionModifiersEnum> selectionModifiers = new();
+		public readonly List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers = new();
 		public readonly string jobType;
 		public readonly bool addToTileWhenBuilt;
 
@@ -108,7 +108,7 @@ namespace Snowship.NResource
 			List<ResourceAmount> commonResources,
 			List<Variation> variations,
 			Variation.VariationNameOrderEnum variationNameOrder,
-			List<JobManager.SelectionModifiersEnum> selectionModifiers,
+			List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers,
 			string jobType,
 			bool addToTileWhenBuilt
 		) {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Snowship.NUI.Simulation.DebugConsole {
+namespace Snowship.NUI
+{
 	public class UIDebugConsoleOutputTextbox : UIElement<UIDebugConsoleOutputTextboxComponent> {
 
 		public UIDebugConsoleOutputTextbox(Transform parent, string text) : base(parent) {

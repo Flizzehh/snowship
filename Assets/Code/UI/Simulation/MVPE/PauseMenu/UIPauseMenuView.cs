@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.PauseMenu {
+namespace Snowship.NUI
+{
 	public class UIPauseMenuView : UIView {
 
 		[SerializeField] private Button continueButton;

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Snowship.NJob;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 
 public class Inventory
 {
-	public List<ResourceAmount> resources = new();
-	public List<ReservedResources> reservedResources = new();
+	public readonly List<ResourceAmount> resources = new();
+	public readonly List<ReservedResources> reservedResources = new();
 
-	public IInventory parent;
+	public readonly IInventory parent;
 
 	public int maxWeight;
 	public int maxVolume;
@@ -22,7 +22,7 @@ public class Inventory
 	public event Action<ReservedResources> OnReservedResourcesAdded;
 	public event Action<ReservedResources> OnReservedResourcesRemoved;
 
-	public Inventory(IInventory parent, /*int maxAmount*/int maxWeight, int maxVolume) {
+	public Inventory(IInventory parent, int maxWeight, int maxVolume) {
 		this.parent = parent;
 		this.maxWeight = maxWeight;
 		this.maxVolume = maxVolume;
@@ -74,15 +74,14 @@ public class Inventory
 		}
 
 		GameManager.Get<ResourceManager>().CalculateResourceTotals();
-		ColonistJob.UpdateColonistJobs();
+		// ColonistJob.UpdateColonistJobs();
 
 		OnInventoryChanged?.Invoke(this);
 
-		//return remainingAmount;
 		return highestOverflowAmount;
 	}
 
-	public bool ReserveResources(List<ResourceAmount> resourcesToReserve, HumanManager.Human humanReservingResources) {
+	public bool ReserveResources(List<ResourceAmount> resourcesToReserve, Human humanReservingResources) {
 		bool allResourcesFound = true;
 		foreach (ResourceAmount raReserve in resourcesToReserve) {
 			ResourceAmount raInventory = resources.Find(ra => ra.Resource == raReserve.Resource);
@@ -105,24 +104,27 @@ public class Inventory
 		return allResourcesFound;
 	}
 
-	public List<ReservedResources> TakeReservedResources(HumanManager.Human humanReservingResources, List<ResourceAmount> resourcesToTake = null) {
+	public List<ReservedResources> TakeReservedResourcesWithoutTransfer(Human reserver, List<ResourceAmount> resourcesToTake = null) {
 		List<ReservedResources> reservedResourcesByHuman = new();
 		foreach (ReservedResources rr in reservedResources) {
-			if (rr.human == humanReservingResources && (resourcesToTake == null || rr.resources.Find(ra => resourcesToTake.Find(rtt => rtt.Resource == ra.Resource) != null) != null)) {
+			if (rr.human == reserver && (resourcesToTake == null || rr.resources.Find(ra => resourcesToTake.Find(rtt => rtt.Resource == ra.Resource) != null) != null)) {
 				reservedResourcesByHuman.Add(rr);
 			}
 		}
-		foreach (ReservedResources rr in reservedResourcesByHuman) {
+		return reservedResourcesByHuman;
+	}
+
+	public void TakeReservedResources(Human reserver, List<ResourceAmount> resourcesToTake = null) {
+		foreach (ReservedResources rr in TakeReservedResourcesWithoutTransfer(reserver, resourcesToTake)) {
 			reservedResources.Remove(rr);
+			TransferResourcesBetweenInventories(this, reserver.Inventory, rr.resources, false);
 			OnReservedResourcesRemoved?.Invoke(rr);
 		}
 
 		OnInventoryChanged?.Invoke(this);
-
-		return reservedResourcesByHuman;
 	}
 
-	public void ReleaseReservedResources(HumanManager.Human human) {
+	public void ReleaseReservedResources(Human human) {
 		List<ReservedResources> reservedResourcesToRemove = new();
 		foreach (ReservedResources rr in reservedResources) {
 			if (rr.human == human) {
@@ -170,7 +172,24 @@ public class Inventory
 		return false;
 	}
 
-	public List<ReservedResources> GetReservedResourcesByHuman(HumanManager.Human human) {
+	public ResourceAmount TakeResourceAmount(ResourceAmount resourceAmount) {
+		ResourceAmount foundResourceAmount = ContainsResource(resourceAmount.Resource);
+		if (foundResourceAmount == null) {
+			return null;
+		}
+		ChangeResourceAmount(foundResourceAmount.Resource, -resourceAmount.Amount, false);
+		return foundResourceAmount;
+	}
+
+	public ResourceAmount ContainsResource(Resource resource) {
+		return resources.Find(r => r.Resource == resource);
+	}
+
+	public List<ReservedResources> GetReservedResourcesByHuman(Human human) {
 		return reservedResources.Where(rr => rr.human == human).ToList();
+	}
+
+	public IEnumerable<ResourceAmount> GetResourcesByClass(Resource.ResourceClassEnum resourceClass) {
+		return resources.Where(ra => ra.Resource.IsResourceInClass(resourceClass));
 	}
 }

@@ -5,12 +5,12 @@ using Snowship.NColony;
 using Snowship.NInput;
 using Snowship.NPersistence;
 using Snowship.NState;
-using Snowship.NUI.Menu.Settings;
 using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Snowship.NUI.Menu.PauseMenu {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UIPauseMenuPresenter : UIPresenter<UIPauseMenuView> {

@@ -1,4 +1,6 @@
-﻿using Snowship.NJob;
+﻿#if OLD_CODE
+
+using Snowship.NJob;
 using Snowship.NProfession;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,7 @@ using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NResource;
 using Snowship.NUI.Menu.LoadSave;
 using Snowship.NUtilities;
@@ -1068,7 +1071,7 @@ namespace Snowship.NUI {
 					int newTransferAmount = 0;
 					if (int.TryParse(transferAmountInput.text, out newTransferAmount)) {
 						if (newTransferAmount != transferAmount && newTransferAmount >= 0) {
-							int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.Resource == resource).Amount;
+							int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.Inventory.resources.Find(r => r.Resource == resource).Amount;
 							if (newTransferAmount > availableAmount) {
 								newTransferAmount = availableAmount;
 							}
@@ -1089,7 +1092,7 @@ namespace Snowship.NUI {
 			}
 
 			public void Update() {
-				int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.GetInventory().resources.Find(r => r.Resource == resource).Amount;
+				int availableAmount = transferType == TransferType.In ? resource.GetAvailableAmount() : tradingPost.Inventory.resources.Find(r => r.Resource == resource).Amount;
 				obj.transform.Find("Amount").GetComponent<Text>().text = availableAmount.ToString();
 				if (transferAmount > availableAmount) {
 					transferAmount = availableAmount;
@@ -1103,12 +1106,12 @@ namespace Snowship.NUI {
 			public List<InventoryElement> reservedResourceElements = new List<InventoryElement>();
 			public GameObject obj;
 
-			public ReservedResourcesColonistElement(HumanManager.Human human, ReservedResources reservedResources, Transform parent) {
+			public ReservedResourcesColonistElement(Human human, ReservedResources reservedResources, Transform parent) {
 				this.reservedResources = reservedResources;
 
 				obj = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/ReservedResourcesColonistInfoElement-Panel"), parent, false);
 
-				obj.transform.Find("ColonistInfo-Panel/ColonistName-Text").GetComponent<Text>().text = human.name;
+				obj.transform.Find("ColonistInfo-Panel/ColonistName-Text").GetComponent<Text>().text = human.Name;
 				obj.transform.Find("ColonistInfo-Panel/ColonistReservedCount-Text").GetComponent<Text>().text = reservedResources.resources.Count.ToString();
 				obj.transform.Find("ColonistInfo-Panel/ColonistImage").GetComponent<Image>().sprite = human.moveSprites[0];
 
@@ -1228,11 +1231,11 @@ namespace Snowship.NUI {
 			}
 
 			selectedColonistInventoryElements.Clear();
-			foreach (ResourceManager.ReservedResources rr in GameManager.Get<HumanManager>().selectedHuman.GetInventory().reservedResources) {
+			foreach (ResourceManager.ReservedResources rr in GameManager.Get<HumanManager>().selectedHuman.Inventory.reservedResources) {
 				selectedColonistReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedColonistInventoryPanel.transform.Find("Inventory-ScrollPanel/InventoryList-Panel")));
 			}
 
-			foreach (ResourceManager.ResourceAmount ra in GameManager.Get<HumanManager>().selectedHuman.GetInventory().resources) {
+			foreach (ResourceManager.ResourceAmount ra in GameManager.Get<HumanManager>().selectedHuman.Inventory.resources) {
 				selectedColonistInventoryElements.Add(new InventoryElement(ra, selectedColonistInventoryPanel.transform.Find("Inventory-ScrollPanel/InventoryList-Panel")));
 			}
 
@@ -1387,14 +1390,14 @@ namespace Snowship.NUI {
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistMood-Panel/ColonistMood-Slider/Handle Slide Area/Handle").GetComponent<Image>().color = Color.Lerp(ColourUtilities.GetColour(ColourUtilities.EColour.LightRed), ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen), selectedColonist.effectiveMood / 100f);
 
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().minValue = 0;
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().maxValue = selectedColonist.GetInventory().maxWeight;
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().value = selectedColonist.GetInventory().UsedWeight();
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider/Handle Slide Area/Handle/Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.GetInventory().UsedWeight() / (float)selectedColonist.GetInventory().maxWeight * 100).ToString();
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().maxValue = selectedColonist.Inventory.maxWeight;
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider").GetComponent<Slider>().value = selectedColonist.Inventory.UsedWeight();
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryWeight-Slider/Handle Slide Area/Handle/Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.Inventory.UsedWeight() / (float)selectedColonist.Inventory.maxWeight * 100).ToString();
 
 				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider").GetComponent<Slider>().minValue = 0;
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider").GetComponent<Slider>().maxValue = selectedColonist.GetInventory().maxVolume;
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider").GetComponent<Slider>().value = selectedColonist.GetInventory().UsedVolume();
-				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider/Handle Slide Area/Handle/Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.GetInventory().UsedVolume() / (float)selectedColonist.GetInventory().maxVolume * 100).ToString();
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider").GetComponent<Slider>().maxValue = selectedColonist.Inventory.maxVolume;
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider").GetComponent<Slider>().value = selectedColonist.Inventory.UsedVolume();
+				selectedColonistInformationPanel.transform.Find("ColonistStatusBars-Panel/ColonistInventorySlider-Panel/SliderSplitter-Panel/ColonistInventoryVolume-Slider/Handle Slide Area/Handle/Text").GetComponent<Text>().text = Mathf.RoundToInt(selectedColonist.Inventory.UsedVolume() / (float)selectedColonist.Inventory.maxVolume * 100).ToString();
 
 				selectedColonistInformationPanel.transform.Find("ColonistCurrentAction-Text").GetComponent<Text>().text = selectedColonist.GetCurrentActionString();
 				if (selectedColonist.storedJob != null) {
@@ -1467,7 +1470,7 @@ namespace Snowship.NUI {
 				obj.GetComponent<RectTransform>().sizeDelta = new Vector2(135, obj.GetComponent<RectTransform>().sizeDelta.y);
 
 				obj.transform.Find("BodySprite").GetComponent<Image>().sprite = colonist.moveSprites[0];
-				obj.transform.Find("Name").GetComponent<Text>().text = colonist.name;
+				obj.transform.Find("Name").GetComponent<Text>().text = colonist.Name;
 				obj.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<HumanManager>().SetSelectedHuman(colonist); });
 
 				Update();
@@ -1832,35 +1835,35 @@ namespace Snowship.NUI {
 				selectedContainerInventoryPanel.transform.Find("SelectedContainerInventoryName-Text").GetComponent<Text>().text = selectedContainer.prefab.name;
 				selectedContainerInventoryPanel.transform.Find("SelectedContainerSprite-Image").GetComponent<Image>().sprite = selectedContainer.obj.GetComponent<SpriteRenderer>().sprite;
 
-				if (selectedContainer.GetInventory().maxWeight != int.MaxValue) {
+				if (selectedContainer.Inventory.maxWeight != int.MaxValue) {
 					weightSliderPanel.SetActive(true);
 
 					Slider weightSlider = weightSliderPanel.transform.Find("SelectedContainerInventoryWeight-Slider").GetComponent<Slider>();
 
 					weightSlider.minValue = 0;
-					weightSlider.maxValue = selectedContainer.GetInventory().maxWeight;
-					weightSlider.value = selectedContainer.GetInventory().UsedWeight();
+					weightSlider.maxValue = selectedContainer.Inventory.maxWeight;
+					weightSlider.value = selectedContainer.Inventory.UsedWeight();
 				} else {
 					weightSliderPanel.SetActive(false);
 				}
 
-				if (selectedContainer.GetInventory().maxVolume != int.MaxValue) {
+				if (selectedContainer.Inventory.maxVolume != int.MaxValue) {
 					volumeSliderPanel.SetActive(true);
 
 					Slider volumeSlider = volumeSliderPanel.transform.Find("SelectedContainerInventoryVolume-Slider").GetComponent<Slider>();
 
 					volumeSlider.minValue = 0;
-					volumeSlider.maxValue = selectedContainer.GetInventory().maxVolume;
-					volumeSlider.value = selectedContainer.GetInventory().UsedVolume();
+					volumeSlider.maxValue = selectedContainer.Inventory.maxVolume;
+					volumeSlider.value = selectedContainer.Inventory.UsedVolume();
 				} else {
 					volumeSliderPanel.SetActive(false);
 				}
 
-				foreach (ReservedResources rr in selectedContainer.GetInventory().reservedResources) {
+				foreach (ReservedResources rr in selectedContainer.Inventory.reservedResources) {
 					containerReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel")));
 				}
 
-				foreach (ResourceAmount ra in selectedContainer.GetInventory().resources.OrderByDescending(ra => ra.Amount)) {
+				foreach (ResourceAmount ra in selectedContainer.Inventory.resources.OrderByDescending(ra => ra.Amount)) {
 					InventoryElement inventoryElement = new InventoryElement(ra, selectedContainerInventoryPanel.transform.Find("SelectedContainerInventory-ScrollPanel/InventoryList-Panel"));
 					inventoryElement.obj.GetComponent<Image>().color = ColourUtilities.GetColour(ColourUtilities.EColour.LightGrey200);
 					containerInventoryElements.Add(inventoryElement);
@@ -1931,10 +1934,10 @@ namespace Snowship.NUI {
 
 				// Available Resources
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceWeight-Slider").GetComponent<Slider>().minValue = 0;
-				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceWeight-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.GetInventory().maxWeight;
+				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceWeight-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.Inventory.maxWeight;
 
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().minValue = 0;
-				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.GetInventory().maxVolume;
+				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.Inventory.maxVolume;
 
 				foreach (Resource resource in Resource.GetResources()) {
 					if (resource.GetAvailableAmount() > 0) {
@@ -1943,52 +1946,49 @@ namespace Snowship.NUI {
 				}
 
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					JobInstance jobInstance = new(JobPrefab.GetJobPrefabByName("TransferResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.TransferResources), null, 0);
-					foreach (ResourceTransferElement rte in tradingPostResourceTransferElements) {
-						if (rte.transferAmount > 0) {
-							jobInstance.requiredResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
-						}
+					List<ResourceAmount> transferResources = tradingPostResourceTransferElements
+						.Where(rte => rte.transferAmount > 0)
+						.Select(rte => new ResourceAmount(rte.resource, rte.transferAmount))
+						.ToList();
+					if (transferResources.Count <= 0) {
+						return;
 					}
-
-					if (jobInstance.requiredResources.Count > 0) {
-						GameManager.Get<JobManager>().CreateJob(jobInstance);
-					}
+					Job job = new TransferResourcesJob(selectedTradingPost, transferResources);
+					GameManager.Get<JobManager>().CreateJob(job);
 				});
 
 				// Inventory
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceWeight-Slider").GetComponent<Slider>().minValue = 0;
-				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceWeight-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.GetInventory().maxWeight;
-				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceWeight-Slider").GetComponent<Slider>().value = selectedTradingPost.GetInventory().UsedWeight();
+				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceWeight-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.Inventory.maxWeight;
+				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceWeight-Slider").GetComponent<Slider>().value = selectedTradingPost.Inventory.UsedWeight();
 
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceVolume-Slider").GetComponent<Slider>().minValue = 0;
-				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceVolume-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.GetInventory().maxVolume;
-				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceVolume-Slider").GetComponent<Slider>().value = selectedTradingPost.GetInventory().UsedVolume();
+				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceVolume-Slider").GetComponent<Slider>().maxValue = selectedTradingPost.Inventory.maxVolume;
+				selectedTradingPostPanel.transform.Find("Inventory-Panel/SliderSplitter-Panel/InventorySpaceVolume-Slider").GetComponent<Slider>().value = selectedTradingPost.Inventory.UsedVolume();
 
 				//selectedTradingPostPanel.transform.Find("Inventory-Panel/InventorySpacePercentage-Text").GetComponent<Text>().text = Mathf.RoundToInt((inventorySpace / (float)selectedTradingPost.prefab.maxInventoryAmount) * 100) + "%";
 
-				foreach (ReservedResources rr in selectedTradingPost.GetInventory().reservedResources) {
+				foreach (ReservedResources rr in selectedTradingPost.Inventory.reservedResources) {
 					tradingPostReservedResourcesColonistElements.Add(new ReservedResourcesColonistElement(rr.human, rr, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel")));
 				}
 
-				foreach (ResourceAmount ra in selectedTradingPost.GetInventory().resources) {
+				foreach (ResourceAmount ra in selectedTradingPost.Inventory.resources) {
 					ResourceTransferElement inventoryElement = new(ra.Resource, selectedTradingPost, ResourceTransferElement.TransferType.Out, selectedTradingPostPanel.transform.Find("Inventory-Panel/Inventory-ScrollPanel/InventoryResourcesList-Panel"));
 					tradingPostInventoryElements.Add(inventoryElement);
 				}
 
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().onClick.AddListener(delegate {
-					JobInstance jobInstance = new JobInstance(JobPrefab.GetJobPrefabByName("CollectResources"), selectedTradingPost.tile, ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectResources), null, 0) {
-						transferResources = new List<ResourceAmount>()
-					};
-					foreach (ResourceTransferElement rte in tradingPostInventoryElements) {
-						if (rte.transferAmount > 0) {
-							jobInstance.transferResources.Add(new ResourceAmount(rte.resource, rte.transferAmount));
-							rte.transferAmountInput.text = "0";
-						}
-					}
-
-					if (jobInstance.transferResources.Count > 0) {
-						GameManager.Get<JobManager>().CreateJob(jobInstance);
-					}
+					List<ResourceAmount> collectResources = tradingPostInventoryElements
+						.Where(rte => rte.transferAmount > 0)
+						.Select(rte => {
+								ResourceAmount resourceAmount = new(rte.resource, rte.transferAmount);
+								rte.transferAmountText.text = "0";
+								return resourceAmount;
+							}
+						)
+						.ToList();
+					Job job = new CollectResourcesJob(selectedTradingPost, collectResources);
+					GameManager.Get<JobManager>().CreateJob(job);
 				});
 
 				UpdateSelectedTradingPostInfo();
@@ -2000,10 +2000,10 @@ namespace Snowship.NUI {
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/TransferIn-Button").GetComponent<Button>().interactable = tradingPostResourceTransferElements.Sum(rte => rte.transferAmount) > 0;
 				selectedTradingPostPanel.transform.Find("Inventory-Panel/TransferOut-Button").GetComponent<Button>().interactable = tradingPostInventoryElements.Sum(rte => rte.transferAmount) > 0;
 
-				int plannedSpaceWeight = selectedTradingPost.GetInventory().UsedWeight() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resource.weight);
+				int plannedSpaceWeight = selectedTradingPost.Inventory.UsedWeight() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resource.weight);
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceWeight-Slider").GetComponent<Slider>().value = plannedSpaceWeight;
 
-				int plannedSpaceVolume = selectedTradingPost.GetInventory().UsedVolume() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resource.volume);
+				int plannedSpaceVolume = selectedTradingPost.Inventory.UsedVolume() + tradingPostResourceTransferElements.Sum(rte => rte.transferAmount * rte.resource.volume);
 				selectedTradingPostPanel.transform.Find("AvailableResources-Panel/SliderSplitter-Panel/PlannedSpaceVolume-Slider").GetComponent<Slider>().value = plannedSpaceVolume;
 
 				//selectedTradingPostPanel.transform.Find("AvailableResources-Panel/PlannedSpacePercentage-Text").GetComponent<Text>().text = Mathf.RoundToInt((plannedSpace / (float)selectedTradingPost.prefab.maxInventoryAmount) * 100) + "%";
@@ -2107,7 +2107,7 @@ namespace Snowship.NUI {
 
 				obj.transform.Find("Colonist-Button").GetComponent<Button>().onClick.AddListener(delegate { GameManager.Get<HumanManager>().SetSelectedHuman(colonist); });
 
-				obj.transform.Find("Colonist-Button/Text").GetComponent<Text>().text = colonist.name;
+				obj.transform.Find("Colonist-Button/Text").GetComponent<Text>().text = colonist.Name;
 				obj.transform.Find("Colonist-Button/Image").GetComponent<Image>().sprite = colonist.moveSprites[0];
 			}
 
@@ -2186,7 +2186,7 @@ namespace Snowship.NUI {
 
 				selectedTraderMenu.transform.Find("TraderBaseSprite-Image").GetComponent<Image>().sprite = selectedTrader.moveSprites[0];
 
-				selectedTraderMenu.transform.Find("TraderName-Text").GetComponent<Text>().text = selectedTrader.name;
+				selectedTraderMenu.transform.Find("TraderName-Text").GetComponent<Text>().text = selectedTrader.Name;
 
 				selectedTraderMenu.transform.Find("TraderAffiliationName-Text").GetComponent<Text>().text = "Trader of " + caravan.location.name;
 				selectedTraderMenu.transform.Find("TraderCurrentAction-Text").GetComponent<Text>().text = caravan.leaving ? "Leaving the Area" : "Ready to Trade";
@@ -2805,3 +2805,5 @@ namespace Snowship.NUI {
 		}
 	}
 }
+
+#endif

@@ -24,7 +24,7 @@ namespace Snowship.NPersistence {
 			Container,
 			CraftingObject,
 			Farm,
-			SleepSpot
+			Bed
 		}
 
 		public enum ContainerProperty {
@@ -58,7 +58,8 @@ namespace Snowship.NPersistence {
 			GrowTimer
 		}
 
-		public enum SleepSpotProperty {
+		public enum BedProperty
+		{
 			OccupyingColonistName
 		}
 
@@ -79,7 +80,7 @@ namespace Snowship.NPersistence {
 
 					if (instance is Container container) {
 						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Container, string.Empty, 1));
-						pInventory.WriteInventoryLines(file, container.GetInventory(), 2);
+						pInventory.WriteInventoryLines(file, container.Inventory, 2);
 					} else if (instance is CraftingObject craftingObject) {
 						if (craftingObject.resources.Count > 0 || craftingObject.fuels.Count > 0) {
 							file.WriteLine(PU.CreateKeyValueString(ObjectProperty.CraftingObject, string.Empty, 1));
@@ -116,9 +117,9 @@ namespace Snowship.NPersistence {
 					} else if (instance is Farm farm) {
 						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Farm, string.Empty, 1));
 						file.WriteLine(PU.CreateKeyValueString(FarmProperty.GrowTimer, farm.growTimer, 2));
-					} else if (instance is SleepSpot sleepSpot) {
-						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.SleepSpot, string.Empty, 1));
-						file.WriteLine(PU.CreateKeyValueString(SleepSpotProperty.OccupyingColonistName, sleepSpot.occupyingColonist.name, 2));
+					} else if (instance is Bed bed) {
+						file.WriteLine(PU.CreateKeyValueString(ObjectProperty.Bed, string.Empty, 1));
+						file.WriteLine(PU.CreateKeyValueString(BedProperty.OccupyingColonistName, bed.Occupant.Name, 2));
 					}
 				}
 			}
@@ -373,14 +374,14 @@ namespace Snowship.NPersistence {
 										}
 									}
 									break;
-								case ObjectProperty.SleepSpot:
-									foreach (KeyValuePair<string, object> sleepSpotProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
-										switch ((SleepSpotProperty)Enum.Parse(typeof(SleepSpotProperty), sleepSpotProperty.Key)) {
-											case SleepSpotProperty.OccupyingColonistName:
-												occupyingColonistName = (string)sleepSpotProperty.Value;
+								case ObjectProperty.Bed:
+									foreach (KeyValuePair<string, object> bedProperty in (List<KeyValuePair<string, object>>)objectProperty.Value) {
+										switch ((BedProperty)Enum.Parse(typeof(BedProperty), bedProperty.Key)) {
+											case BedProperty.OccupyingColonistName:
+												occupyingColonistName = (string)bedProperty.Value;
 												break;
 											default:
-												Debug.LogError("Unknown sleep spot property: " + sleepSpotProperty.Key + " " + sleepSpotProperty.Value);
+												Debug.LogError("Unknown sleep spot property: " + bedProperty.Key + " " + bedProperty.Value);
 												break;
 										}
 									}
@@ -436,10 +437,10 @@ namespace Snowship.NPersistence {
 					case ObjectInstance.ObjectInstanceType.Container:
 					case ObjectInstance.ObjectInstanceType.TradingPost:
 						Container container = (Container)objectInstance;
-						container.GetInventory().maxWeight = persistenceObject.persistenceInventory.maxWeight.Value;
-						container.GetInventory().maxVolume = persistenceObject.persistenceInventory.maxVolume.Value;
+						container.Inventory.maxWeight = persistenceObject.persistenceInventory.maxWeight.Value;
+						container.Inventory.maxVolume = persistenceObject.persistenceInventory.maxVolume.Value;
 						foreach (ResourceAmount resourceAmount in persistenceObject.persistenceInventory.resources) {
-							container.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+							container.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 						}
 						// TODO (maybe already done?) Reserved resources must be set after colonists are loaded
 						break;
@@ -464,7 +465,7 @@ namespace Snowship.NPersistence {
 						}
 						craftingObject.fuels = persistenceObject.fuels;
 						break;
-					case ObjectInstance.ObjectInstanceType.SleepSpot:
+					case ObjectInstance.ObjectInstanceType.Bed:
 						// Occupying colonist must be set after colonists are loaded
 						break;
 				}

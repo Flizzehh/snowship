@@ -3,15 +3,16 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Remove Roof")]
+	[RegisterJob("Command", "Remove", "RemoveRoof", true)]
 	public class RemoveRoofJob : Job
 	{
-		protected RemoveRoofJob(JobPrefab jobPrefab, TileManager.Tile tile) : base(jobPrefab, tile) {
+		protected RemoveRoofJob(TileManager.Tile tile) : base(tile) {
 			TargetName = "Roof";
 			Description = "Removing a roof.";
+			Layer = 2;
 		}
 
-		public override void OnJobTaken() {
+		protected override void OnJobTaken() {
 			base.OnJobTaken();
 
 			if (!Tile.HasRoof()) {
@@ -20,7 +21,7 @@ namespace Snowship.NJob
 			}
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
 			if (!Tile.HasRoof()) {
@@ -29,7 +30,7 @@ namespace Snowship.NJob
 
 			Tile.SetRoof(false);
 			foreach (ResourceAmount resourceAmount in ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Roof).commonResources) {
-				Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
+				Worker.Inventory.ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
 			}
 		}
 	}

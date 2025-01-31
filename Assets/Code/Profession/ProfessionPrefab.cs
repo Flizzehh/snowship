@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColonist;
+using Snowship.NJob;
 using Snowship.NPersistence;
 using Snowship.NUtilities;
 using UnityEngine;
@@ -17,13 +18,13 @@ namespace Snowship.NProfession {
 
 		public static readonly int maxPriority = 9;
 
-		public List<string> jobs;
+		public List<Type> jobs;
 
 		public ESkill relatedSkill;
 
 		public ProfessionPrefab(
 			string type,
-			List<string> jobs
+			List<Type> jobs
 		) {
 			this.type = type;
 			name = StringUtilities.SplitByCapitals(type.ToString());
@@ -50,7 +51,7 @@ namespace Snowship.NProfession {
 					case "Profession":
 
 						string type = null;
-						List<string> jobs = new();
+						List<Type> jobs = new();
 
 						foreach (KeyValuePair<string, object> professionSubProperty in (List<KeyValuePair<string, object>>)professionProperty.Value) {
 							switch (professionSubProperty.Key) {
@@ -59,7 +60,7 @@ namespace Snowship.NProfession {
 									break;
 								case "Jobs":
 									foreach (string jobString in ((string)professionSubProperty.Value).Split(',')) {
-										jobs.Add(jobString);
+										jobs.Add(GameManager.Get<JobManager>().JobRegistry.GetJobType(jobString));
 									}
 									break;
 								default:

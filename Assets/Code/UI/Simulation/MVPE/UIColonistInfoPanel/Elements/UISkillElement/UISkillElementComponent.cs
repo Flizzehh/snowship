@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UISkillElementComponent : UIElementComponent
 	{

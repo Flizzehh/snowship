@@ -2,7 +2,7 @@
 using Snowship.NResource;
 using UnityEngine;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UIClothingElement : UIElement<UIClothingElementComponent>
 	{

@@ -151,7 +151,7 @@
 			<Objects>
 				<Object>
 					<Type>WoodenBed
-					<InstanceType>SleepSpot
+					<InstanceType>Bed
 					<Layer>2
 					<Integrity>150
 					<WalkSpeed>0.5
@@ -496,64 +496,6 @@
 					<JobType>Fill
 					<AddToTileWhenBuilt>false
 <Group>
-	<Type>Command
-	<SubGroups>
-		<SubGroup>
-			<Type>Remove
-			<Objects>
-				<Object>
-					<Type>RemoveRoof
-					<Layer>0
-					<TimeToBuild>3
-					<SelectionModifiers>Roofs,OmitSameLayerJobs
-					<JobType>Remove
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>RemoveObject
-					<Layer>2
-					<TimeToBuild>3
-					<SelectionModifiers>ObjectsAtSameLayer,OmitSameLayerJobs
-					<JobType>Remove
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>RemoveFloor
-					<Layer>1
-					<TimeToBuild>3
-					<SelectionModifiers>ObjectsAtSameLayer,OmitSameLayerJobs
-					<JobType>Remove
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>RemoveAll
-					<Layer>0
-					<TimeToBuild>3
-					<SelectionModifiers>Objects,OmitSameLayerJobs
-					<JobType>Remove
-					<AddToTileWhenBuilt>false
-		<SubGroup>
-			<Type>Cancel
-			<Objects>
-				<Object>
-					<Type>Cancel
-					<Layer>0
-					<TimeToBuild>0
-					<JobType>Cancel
-					<AddToTileWhenBuilt>false
-		<SubGroup>
-			<Type>Priority
-			<Objects>
-				<Object>
-					<Type>IncreasePriority
-					<Layer>0
-					<TimeToBuild>0
-					<JobType>IncreasePriority
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>DecreasePriority
-					<Layer>0
-					<TimeToBuild>0
-					<JobType>DecreasePriority
-					<AddToTileWhenBuilt>false
-<Group>
 	<Type>Farm
 	<SubGroups>
 		<SubGroup>
@@ -616,76 +558,4 @@
 					<TimeToBuild>2
 					<SelectionModifiers>Walkable,Buildable,Farms,OmitSameLayerJobs
 					<JobType>HarvestFarm
-					<AddToTileWhenBuilt>false
-<Group>
-	<Type>None
-	<SubGroups>
-		<SubGroup>
-			<Type>None
-			<Objects>
-				<Object>
-					<Type>CreateResource
-					<Layer>0
-					<TimeToBuild>0
-					<JobType>CreateResource
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>PickupResources
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>PickupResources
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>TransferResources
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>TransferResources
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>CollectResources
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>CollectResources
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>EmptyInventory
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>EmptyInventory
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>Sleep
-					<Layer>0
-					<TimeToBuild>0
-					<JobType>Sleep
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>CollectWater
-					<Layer>0
-					<TimeToBuild>1
-					<JobType>CollectWater
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>Drink
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>Eat
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>CollectFood
-					<Layer>0
-					<TimeToBuild>1
-					<JobType>CollectFood
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>Eat
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>Eat
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>WearClothes
-					<Layer>0
-					<TimeToBuild>3
-					<JobType>WearClothes
 					<AddToTileWhenBuilt>false

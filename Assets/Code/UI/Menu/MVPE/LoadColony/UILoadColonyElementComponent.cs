@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.LoadColony {
+namespace Snowship.NUI
+{
 	public class UILoadColonyElementComponent : UIElementComponent {
 
 		[SerializeField] private Text colonyNameText;

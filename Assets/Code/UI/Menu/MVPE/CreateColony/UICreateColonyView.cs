@@ -5,7 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.CreateColony {
+namespace Snowship.NUI
+{
 	public class UICreateColonyView : UIView {
 
 		[Header("General")]

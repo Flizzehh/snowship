@@ -1,27 +1,29 @@
-﻿using Snowship.NResource;
+﻿using System.Collections.Generic;
+using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Hauling", "Transfer Resources")]
+	[RegisterJob("Hauling", "Hauling", "TransferResources", false)]
 	public class TransferResourcesJob : Job
 	{
 		private readonly Container container;
 
-		protected TransferResourcesJob(JobPrefab jobPrefab, TileManager.Tile tile, Container container) : base(jobPrefab, tile) {
+		public TransferResourcesJob(Container container, List<ResourceAmount> requiredResources) : base(container.tile) {
 			this.container = container;
+			RequiredResources.AddRange(requiredResources);
 
 			Description = "Transferring resources.";
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
 			if (container == null) {
 				return;
 			}
 			Inventory.TransferResourcesBetweenInventories(
-				Worker.GetInventory(),
-				container.GetInventory(),
+				Worker.Inventory,
+				container.Inventory,
 				RequiredResources,
 				true
 			);

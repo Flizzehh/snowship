@@ -3,7 +3,8 @@ using Snowship.NResource;
 using Snowship.NUtilities;
 using UnityEngine;
 
-namespace Snowship.NUI.Simulation.TradeMenu {
+namespace Snowship.NUI
+{
 	public class UITradeResourceElement : UIElement<UITradeResourceElementComponent> {
 
 		public readonly TradeResourceAmount tradeResourceAmount;

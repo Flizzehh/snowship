@@ -2,12 +2,12 @@
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Hauling", "Empty Inventory")]
+	[RegisterJob("Hauling", "Hauling", "EmptyInventory", false)]
 	public class EmptyInventoryJob : Job
 	{
 		private readonly Container container;
 
-		protected EmptyInventoryJob(JobPrefab jobPrefab, TileManager.Tile tile, Container container) : base(jobPrefab, tile) {
+		public EmptyInventoryJob(Container container) : base(container.tile) {
 			this.container = container;
 
 			Description = "Emptying inventory.";
@@ -15,14 +15,14 @@ namespace Snowship.NJob
 			Returnable = false;
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
 			if (container != null) {
 				Inventory.TransferResourcesBetweenInventories(
-					Worker.GetInventory(),
-					container.GetInventory(),
-					Worker.GetInventory().resources,
+					Worker.Inventory,
+					container.Inventory,
+					Worker.Inventory.resources,
 					true
 				);
 			}

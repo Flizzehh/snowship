@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Simulation.DebugConsole {
+﻿namespace Snowship.NUI
+{
 	public class UIDebugConsole : UIConfig<UIDebugConsoleView, UIDebugConsolePresenter> {
 
 

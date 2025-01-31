@@ -2,7 +2,8 @@
 using Snowship.NPersistence;
 using UnityEngine;
 
-namespace Snowship.NUI.Menu.LoadColony {
+namespace Snowship.NUI
+{
 
 	public class UILoadColonyElement : UIElement<UILoadColonyElementComponent> {
 

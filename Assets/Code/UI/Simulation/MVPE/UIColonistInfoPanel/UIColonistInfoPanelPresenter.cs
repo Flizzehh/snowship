@@ -3,12 +3,14 @@ using System.Linq;
 using JetBrains.Annotations;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NJob;
 using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UIColonistInfoPanelPresenter : UIPresenter<UIColonistInfoPanelView, UIColonistInfoPanelParameters>
@@ -18,7 +20,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 		public UIColonistInfoPanelPresenter(UIColonistInfoPanelView view, UIColonistInfoPanelParameters parameters) : base(view, parameters) {
 			colonist = Parameters.Colonist;
-			inventory = colonist.GetInventory();
+			inventory = colonist.Inventory;
 		}
 
 		public override void OnCreate() {
@@ -29,16 +31,14 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 
 			View.SetColonistInformation(
 				colonist.moveSprites[0],
-				$"{colonist.name} ({colonist.gender.ToString()[0]})",
+				$"{colonist.Name} ({colonist.gender.ToString()[0]})",
 				$"Colonist of {GameManager.Get<ColonyManager>().colony.name}"
 			);
 
 			SetupNeedsSkillsTab();
 
 			colonist.OnJobChanged += OnJobChanged;
-			colonist.OnStoredJobChanged += OnStoredJobChanged;
-			OnJobChanged(colonist.JobInstance);
-			OnStoredJobChanged(colonist.StoredJobInstance);
+			OnJobChanged(colonist.Job);
 
 			View.SetupHealthSlider((0, 1), colonist.Health, true);
 			View.OnHealthChanged(colonist.Health);
@@ -71,7 +71,6 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			View.OnTabSelected -= OnTabSelected;
 
 			colonist.OnJobChanged -= OnJobChanged;
-			colonist.OnStoredJobChanged -= OnStoredJobChanged;
 
 			colonist.OnHealthChanged -= View.OnHealthChanged;
 
@@ -100,12 +99,9 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			}
 		}
 
-		private void OnJobChanged(JobInstance jobInstance) {
-			View.SetCurrentActionText(colonist.GetCurrentActionString());
-		}
-
-		private void OnStoredJobChanged(JobInstance jobInstance) {
-			View.SetStoredActionText(colonist.GetStoredActionString());
+		private void OnJobChanged(Job job) {
+			View.SetCurrentActionText(job?.Description);
+			View.SetStoredActionText(string.Empty);
 		}
 
 		private void OnMoodAdded(MoodModifierInstance mood) {
@@ -141,21 +137,21 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		}
 
 		private void SetupClothingTab() {
-			foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> clothingMapping in colonist.clothes) {
+			foreach (KeyValuePair<BodySection, Clothing> clothingMapping in colonist.clothes) {
 				UIClothingButtonElement clothingButton = View.CreateClothingButton(clothingMapping.Key, clothingMapping.Value);
 				clothingButton.OnButtonClicked += OnClothingButtonClicked;
 			}
 		}
 
-		private void OnClothingButtonClicked(HumanManager.Human.Appearance appearance) {
+		private void OnClothingButtonClicked(BodySection bodySection) {
 
 			View.SetClothingSelectionPanelActive(true);
 			View.SetClothesAvailableTitleTextPanelActive(false);
 			View.SetClothesTakenTitleTextPanelActive(false);
 
-			View.SetDisrobeButtonTarget(appearance);
+			View.SetDisrobeButtonTarget(bodySection);
 
-			List<Clothing> clothesByAppearance = Clothing.GetClothesByAppearance(appearance);
+			List<Clothing> clothesByAppearance = Clothing.GetClothesByAppearance(bodySection);
 			foreach (Clothing clothing in clothesByAppearance) {
 				if (clothing.GetWorldTotalAmount() <= 0) {
 					continue;
@@ -166,7 +162,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 				if (clothing.GetAvailableAmount() > 0) {
 					clothingElement = View.CreateAvailableClothingElement(clothing);
 					View.SetClothesAvailableTitleTextPanelActive(true);
-				} else if (colonist.clothes[appearance] == null || clothing.name != colonist.clothes[appearance].name) {
+				} else if (colonist.clothes[bodySection] == null || clothing.name != colonist.clothes[bodySection].name) {
 					clothingElement = View.CreateTakenClothingElement(clothing);
 					View.SetClothesTakenTitleTextPanelActive(true);
 				}
@@ -178,7 +174,7 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		}
 
 		private void OnClothingElementClicked(Clothing clothing) {
-			colonist.ChangeClothing(clothing.prefab.appearance, clothing);
+			colonist.ChangeClothing(clothing.prefab.BodySection, clothing);
 			View.SetClothingSelectionPanelActive(false);
 		}
 	}

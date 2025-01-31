@@ -18,7 +18,7 @@ namespace Snowship.NResource
 
 		public bool enableable = false;
 		public List<ResourceAmount> fuelAmounts = new();
-		public JobInstance JobInstance = null;
+		public Job Job = null;
 
 		public CraftableResourceInstance(
 			Resource resource,

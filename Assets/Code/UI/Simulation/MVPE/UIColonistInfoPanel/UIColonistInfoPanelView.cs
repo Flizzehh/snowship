@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Snowship.NColonist;
+using Snowship.NHuman;
 using Snowship.NResource;
-using Snowship.NUI.Components;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Snowship.NUtilities.ColourUtilities;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
+namespace Snowship.NUI
+{
 	public class UIColonistInfoPanelView : UIView {
 		[Header("General Information")]
 		[SerializeField] private UIHumanBodyElementComponent humanImage;
@@ -129,8 +130,8 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 		}
 
 		public void SetColonistInformation(Sprite colonistSprite, string colonistName, string colonistAffiliation) {
-			humanImage.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
-			humanBody.SetBodySectionSprite(HumanManager.Human.Appearance.Skin, colonistSprite);
+			humanImage.SetBodySectionSprite(BodySection.Skin, colonistSprite);
+			humanBody.SetBodySectionSprite(BodySection.Skin, colonistSprite);
 			colonistNameText.SetText(colonistName);
 			affiliationText.SetText(colonistAffiliation);
 		}
@@ -225,10 +226,10 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			resourceAmountElementToRemove.Close();
 		}
 
-		public UIClothingButtonElement CreateClothingButton(HumanManager.Human.Appearance appearance, Clothing clothing) {
+		public UIClothingButtonElement CreateClothingButton(BodySection bodySection, Clothing clothing) {
 			UIClothingButtonElement clothingButton = new(
 				clothingButtonsListVerticalLayoutGroup.transform,
-				appearance,
+				bodySection,
 				clothing
 			);
 			clothingButtonElements.Add(clothingButton);
@@ -245,13 +246,13 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			clothingSelectionPanel.SetActive(active);
 		}
 
-		public void SetDisrobeButtonTarget(HumanManager.Human.Appearance appearance) {
+		public void SetDisrobeButtonTarget(BodySection bodySection) {
 			disrobeButton.onClick.RemoveAllListeners();
-			disrobeButton.onClick.AddListener(() => OnDisrobeButtonClicked(appearance));
+			disrobeButton.onClick.AddListener(() => OnDisrobeButtonClicked(bodySection));
 		}
 
-		private void OnDisrobeButtonClicked(HumanManager.Human.Appearance appearance) {
-			OnColonistClothingChanged(appearance, null);
+		private void OnDisrobeButtonClicked(BodySection bodySection) {
+			OnColonistClothingChanged(bodySection, null);
 			SetClothingSelectionPanelActive(false);
 		}
 
@@ -277,14 +278,14 @@ namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
 			clothesTakenTitleTextPanel.SetActive(active);
 		}
 
-		public void OnColonistClothingChanged(HumanManager.Human.Appearance appearance, Clothing clothing) {
+		public void OnColonistClothingChanged(BodySection bodySection, Clothing clothing) {
 			foreach (UIClothingButtonElement clothingButtonElement in clothingButtonElements) {
-				if (clothingButtonElement.Appearance != appearance) {
+				if (clothingButtonElement.BodySection != bodySection) {
 					continue;
 				}
 				clothingButtonElement.SetClothing(clothing);
-				humanBody.SetClothingOnBodySection(appearance, clothing);
-				humanImage.SetClothingOnBodySection(appearance, clothing);
+				humanBody.SetClothingOnBodySection(bodySection, clothing);
+				humanImage.SetClothingOnBodySection(bodySection, clothing);
 				return;
 			}
 		}

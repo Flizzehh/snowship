@@ -1,40 +1,69 @@
-﻿using Snowship.NColonist;
+﻿using System.Linq;
+using Snowship.NColonist;
 using Snowship.NResource;
+using Snowship.NTime;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Sleep")]
+	[RegisterJob("Needs", "Rest", "Sleep", false)]
 	public class SleepJob : Job
 	{
-		private readonly SleepSpot sleepSpot;
+		private Colonist colonist;
+		private NeedInstance sleepNeed;
+		private float startSleepNeedValue;
+		private float sleepTime;
+		private Bed bed;
 
-		protected SleepJob(JobPrefab jobPrefab, TileManager.Tile tile, SleepSpot sleepSpot) : base(jobPrefab, tile) {
-			this.sleepSpot = sleepSpot;
-
+		public SleepJob(TileManager.Tile tile) : base(tile) {
 			Description = "Sleeping.";
-
 			Returnable = false;
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobTaken() {
+			base.OnJobTaken();
+
+			bed = Bed.Beds
+				.Where(b => b.Occupant == null && b.tile.region == Worker.overTile.region)
+				.OrderByDescending(b => b.prefab.restComfortAmount)
+				.ThenByDescending(b => PathManager.RegionBlockDistance(Worker.overTile.regionBlock, b.tile.regionBlock, true, true, false))
+				.FirstOrDefault();
+
+			if (bed != null) {
+				ChangeTile(bed.tile);
+			}
+
+			colonist = (Colonist)Worker; // TODO Remove cast when Humans have Job ability
+			sleepNeed = colonist.needs.Find(n => n.prefab.name == "Sleep");
+			startSleepNeedValue = sleepNeed.GetValue();
+			sleepTime = SimulationDateTime.DayLengthSeconds * (8 / 24f) - (bed?.prefab.restComfortAmount).GetValueOrDefault(0);
+		}
+
+		protected override void OnJobStarted() {
+			base.OnJobStarted();
+
+			bed.StartSleeping(Worker);
+		}
+
+		protected override void OnJobInProgress() {
+			base.OnJobInProgress();
+
+			sleepNeed?.ChangeValue(-(startSleepNeedValue / sleepTime));
+		}
+
+		protected override void OnJobReturned() {
+			base.OnJobReturned();
+
+			bed?.StopSleeping();
+		}
+
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
-			Colonist colonist = (Colonist)Worker; // TODO Remove cast when Humans have Job ability
-
-			if (sleepSpot != null) {
-				sleepSpot.StopSleeping();
-				if (sleepSpot.prefab.restComfortAmount >= 10) {
-					colonist.Moods.AddMoodModifier(MoodModifierEnum.WellRested);
-				} else {
-					colonist.Moods.AddMoodModifier(MoodModifierEnum.Rested);
-				}
+			if (bed != null) {
+				bed.StopSleeping();
+				colonist.Moods.AddMoodModifier(bed.prefab.restComfortAmount >= 10 ? MoodModifierEnum.WellRested : MoodModifierEnum.Rested);
 			} else {
-				colonist.Moods.AddMoodModifier(MoodModifierEnum.Rested);
-			}
-			foreach (SleepSpot sleepSpot in SleepSpot.sleepSpots) {
-				if (sleepSpot.occupyingColonist == colonist) {
-					sleepSpot.StopSleeping();
-				}
+				colonist.Moods.AddMoodModifier(MoodModifierEnum.SleptOnTheGround);
 			}
 		}
 	}

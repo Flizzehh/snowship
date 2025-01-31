@@ -2,7 +2,7 @@
 using UnityEngine;
 using static Snowship.NUtilities.ColourUtilities;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UISkillElement : UIElement<UISkillElementComponent>
 	{

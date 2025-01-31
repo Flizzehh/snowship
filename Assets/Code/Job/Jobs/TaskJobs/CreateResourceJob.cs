@@ -3,40 +3,42 @@ using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Create Resource")]
+	[RegisterJob("Task", "Craft", "CreateResource", false)]
 	public class CreateResourceJob : Job
 	{
-		private readonly CraftableResourceInstance createResource;
+		public readonly CraftingObject CraftingObject;
+		public readonly CraftableResourceInstance CreateResource;
 
-		protected CreateResourceJob(JobPrefab jobPrefab, TileManager.Tile tile, CraftableResourceInstance createResource) : base(jobPrefab, tile) {
-			this.createResource = createResource;
+		public CreateResourceJob(CraftingObject craftingObject, CraftableResourceInstance createResource) : base(craftingObject.tile) {
+			CraftingObject = craftingObject;
+			CreateResource = createResource;
 
 			TargetName = createResource.resource.name;
 			Description = $"Creating {createResource.resource.name}.";
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
 			foreach (ResourceAmount resourceAmount in RequiredResources) {
-				Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
+				Worker.Inventory.ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
 			}
-			Worker.GetInventory().ChangeResourceAmount(createResource.resource, createResource.resource.amountCreated, false);
+			Worker.Inventory.ChangeResourceAmount(CreateResource.resource, CreateResource.resource.amountCreated, false);
 
-			switch (createResource.creationMethod) {
+			switch (CreateResource.creationMethod) {
 				case CraftableResourceInstance.CreationMethod.SingleRun:
-					createResource.SetRemainingAmount(createResource.GetRemainingAmount() - createResource.resource.amountCreated);
+					CreateResource.SetRemainingAmount(CreateResource.GetRemainingAmount() - CreateResource.resource.amountCreated);
 					break;
 				case CraftableResourceInstance.CreationMethod.MaintainStock:
-					createResource.SetRemainingAmount(createResource.GetTargetAmount() - createResource.resource.GetAvailableAmount());
+					CreateResource.SetRemainingAmount(CreateResource.GetTargetAmount() - CreateResource.resource.GetAvailableAmount());
 					break;
 				case CraftableResourceInstance.CreationMethod.ContinuousRun:
-					createResource.SetRemainingAmount(0);
+					CreateResource.SetRemainingAmount(0);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			createResource.JobInstance = null;
+			CreateResource.Job = null;
 		}
 	}
 }

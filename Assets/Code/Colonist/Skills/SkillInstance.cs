@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Snowship.NJob;
 
 namespace Snowship.NColonist {
 	public class SkillInstance {
@@ -38,7 +37,7 @@ namespace Snowship.NColonist {
 				OnLevelChanged?.Invoke(Level);
 			}
 			OnExperienceChanged?.Invoke(CurrentExperience, NextLevelExperience);
-			ColonistJob.UpdateColonistJobCosts(colonist);
+			// ColonistJob.UpdateColonistJobCosts(colonist);
 		}
 
 		private int CalculateNextLevelExperience() {

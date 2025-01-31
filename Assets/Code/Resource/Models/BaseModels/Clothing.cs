@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NHuman;
 using Snowship.NUtilities;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace Snowship.NResource
 		public Clothing(
 			EResource type,
 			ResourceGroup.ResourceGroupEnum groupType,
-			List<ResourceClassEnum> classes,
+			HashSet<ResourceClassEnum> classes,
 			int weight,
 			int volume,
 			int price,
@@ -47,15 +48,15 @@ namespace Snowship.NResource
 				moveSprites.Add(prefab.moveSprites[i][0]);
 			}
 
-			if (prefab.appearance == HumanManager.Human.Appearance.Backpack) {
+			if (prefab.BodySection == BodySection.Backpack) {
 				image = moveSprites[1];
 			} else {
 				image = moveSprites[0];
 			}
 		}
 
-		public static List<Clothing> GetClothesByAppearance(HumanManager.Human.Appearance appearance) {
-			return GetResourcesInClass(ResourceClassEnum.Clothing).Select(r => (Clothing)r).Where(c => c.prefab.appearance == appearance).ToList();
+		public static List<Clothing> GetClothesByAppearance(BodySection bodySection) {
+			return GetResourcesInClass(ResourceClassEnum.Clothing).Select(r => (Clothing)r).Where(c => c.prefab.BodySection == bodySection).ToList();
 		}
 
 		public enum ClothingEnum

@@ -1,70 +1,71 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Remove")]
+	[RegisterJob("Command", "Remove", "Remove", true)]
 	public class RemoveJob : Job
 	{
 		private readonly ObjectPrefab objectPrefab;
 
-		public RemoveJob(JobPrefab jobPrefab, TileManager.Tile tile, ObjectPrefab objectPrefab) : base(jobPrefab, tile) {
+		public RemoveJob(TileManager.Tile tile, ObjectPrefab objectPrefab) : base(tile) {
 			TargetName = Tile.GetObjectInstanceAtLayer(objectPrefab.layer).prefab.name;
 			Description = $"Removing a {TargetName}.";
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
 			bool previousWalkability = Tile.walkable;
 			ObjectInstance instance = Tile.GetObjectInstanceAtLayer(objectPrefab.layer);
 			if (instance != null) {
 				foreach (ResourceAmount resourceAmount in instance.prefab.commonResources) {
-					Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
+					Worker.Inventory.ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
 				}
 				if (instance.variation != null) {
 					foreach (ResourceAmount resourceAmount in instance.variation.uniqueResources) {
-						Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
+						Worker.Inventory.ChangeResourceAmount(resourceAmount.Resource, Mathf.RoundToInt(resourceAmount.Amount), false);
 					}
 				}
 				switch (instance) {
 					case Farm farm: {
 						if (farm.growProgressSpriteIndex == 0) {
-							Worker.GetInventory().ChangeResourceAmount(farm.prefab.seedResource, 1, false);
+							Worker.Inventory.ChangeResourceAmount(farm.prefab.seedResource, 1, false);
 						}
 						break;
 					}
 					case IInventory inventory: {
 						List<ResourceAmount> nonReservedResourcesToRemove = new();
-						foreach (ResourceAmount resourceAmount in inventory.GetInventory().resources) {
+						foreach (ResourceAmount resourceAmount in inventory.Inventory.resources) {
 							nonReservedResourcesToRemove.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
-							Worker.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+							Worker.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 						}
 						foreach (ResourceAmount resourceAmount in nonReservedResourcesToRemove) {
-							inventory.GetInventory().ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
+							inventory.Inventory.ChangeResourceAmount(resourceAmount.Resource, -resourceAmount.Amount, false);
 						}
-						List<HumanManager.Human> humansWithReservedResources = inventory
-							.GetInventory()
+						List<Human> humansWithReservedResources = inventory
+							.Inventory
 							.reservedResources
 							.Select(rr => rr.human)
 							.Distinct()
 							.ToList();
-						foreach (HumanManager.Human reserver in humansWithReservedResources) {
-							Worker.GetInventory().ReleaseReservedResources(reserver);
+						foreach (Human reserver in humansWithReservedResources) {
+							Worker.Inventory.ReleaseReservedResources(reserver);
 						}
 						break;
 					}
 					case CraftingObject craftingObject: {
-						foreach (JobInstance removeJob in craftingObject.resources.Where(resource => resource.JobInstance != null).Select(resource => resource.JobInstance)) {
-							GameManager.Get<JobManager>().CancelJob(removeJob);
+						foreach (Job removeJob in craftingObject.resources.Where(craftableResourceInstance => craftableResourceInstance.Job != null).Select(resource => resource.Job)) {
+							GameManager.Get<JobManager>().RemoveJob(removeJob);
 						}
 						break;
 					}
-					case SleepSpot sleepSpot: {
-						sleepSpot.occupyingColonist?.ReturnJob();
+					case Bed bed: {
+						bed.StopSleeping();
 						break;
 					}
 				}

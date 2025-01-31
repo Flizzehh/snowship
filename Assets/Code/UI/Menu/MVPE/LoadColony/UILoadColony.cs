@@ -1,7 +1,5 @@
-﻿using Snowship.NUI.Presenters;
-using Snowship.NUI.Menu.LoadSave;
-
-namespace Snowship.NUI.Menu.LoadColony {
+﻿namespace Snowship.NUI
+{
 	public class UILoadColony : UIConfig<UILoadColonyView, UILoadColonyPresenter> {
 	}
 }

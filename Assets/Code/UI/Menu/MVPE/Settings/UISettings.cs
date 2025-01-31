@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Menu.Settings {
+﻿namespace Snowship.NUI
+{
 	public class UISettings : UIConfig<UISettingsView, UISettingsPresenter> {
 	}
 }

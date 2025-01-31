@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Snowship.NUI.Modules {
+namespace Snowship.NUI
+{
 	public class PlanetViewModule {
 
 		private readonly GridLayoutGroup planetGrid;

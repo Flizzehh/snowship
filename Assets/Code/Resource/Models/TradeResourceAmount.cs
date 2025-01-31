@@ -41,7 +41,7 @@ namespace Snowship.NResource
 
 		public void UpdateCaravanAmount() {
 
-			ResourceAmount caravanResourceAmount = caravan.GetInventory().resources.Find(ra => ra.Resource == resource);
+			ResourceAmount caravanResourceAmount = caravan.Inventory.resources.Find(ra => ra.Resource == resource);
 			if (caravanResourceAmount == null) {
 				OnCaravanAmountUpdated?.Invoke(-1);
 				return;

@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Menu.CreatePlanet {
+﻿namespace Snowship.NUI
+{
 	public class UICreatePlanet : UIConfig<UICreatePlanetView, UICreatePlanetPresenter> {
 	}
 }

@@ -4,7 +4,8 @@ using JetBrains.Annotations;
 using Snowship.NCaravan;
 using Snowship.NResource;
 
-namespace Snowship.NUI.Simulation.TradeMenu {
+namespace Snowship.NUI
+{
 	[UsedImplicitly]
 	public class UITradeMenuPresenter : UIPresenter<UITradeMenuView> {
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class ClothingPrefab
 {
 	public static readonly List<ClothingPrefab> clothingPrefabs = new();
 
-	public HumanManager.Human.Appearance appearance;
+	public BodySection BodySection;
 	public Clothing.ClothingEnum clothingType;
 	public int insulation;
 	public int waterResistance;
@@ -21,7 +22,7 @@ public class ClothingPrefab
 	public List<Clothing> clothes = new();
 
 	public ClothingPrefab(
-		HumanManager.Human.Appearance appearance,
+		BodySection bodySection,
 		Clothing.ClothingEnum clothingType,
 		int insulation,
 		int waterResistance,
@@ -30,7 +31,7 @@ public class ClothingPrefab
 		List<string> colours,
 		int typeIndex
 	) {
-		this.appearance = appearance;
+		BodySection = bodySection;
 		this.clothingType = clothingType;
 		this.insulation = insulation;
 		this.waterResistance = waterResistance;
@@ -39,11 +40,11 @@ public class ClothingPrefab
 		this.colours = colours;
 
 		for (int i = 0; i < 4; i++) {
-			moveSprites.Add(Resources.LoadAll<Sprite>(@"Sprites/Clothes/" + appearance + "/clothes-" + appearance.ToString().ToLower() + "-" + i).Skip(typeIndex).Take(colours.Count).ToList());
+			moveSprites.Add(Resources.LoadAll<Sprite>(@"Sprites/Clothes/" + bodySection + "/clothes-" + bodySection.ToString().ToLower() + "-" + i).Skip(typeIndex).Take(colours.Count).ToList());
 		}
 	}
 
-	public static List<ClothingPrefab> GetClothingPrefabsByAppearance(HumanManager.Human.Appearance appearance) {
-		return clothingPrefabs.FindAll(c => c.appearance == appearance);
+	public static List<ClothingPrefab> GetClothingPrefabsByAppearance(BodySection bodySection) {
+		return clothingPrefabs.FindAll(c => c.BodySection == bodySection);
 	}
 }

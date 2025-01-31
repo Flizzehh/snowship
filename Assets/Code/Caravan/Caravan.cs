@@ -4,12 +4,11 @@ using System.Linq;
 using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NTime;
-using Snowship.Selectable;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Snowship.NCaravan {
-	public class Caravan : IInventory, ISelectable, IDisposable
+	public class Caravan : IInventory, IDisposable
 	{
 
 		public List<Trader> traders = new List<Trader>();
@@ -18,7 +17,7 @@ namespace Snowship.NCaravan {
 
 		public Location location;
 
-		private readonly Inventory inventory;
+		public Inventory Inventory { get; }
 
 		public List<TradeResourceAmount> resourcesToTrade = new List<TradeResourceAmount>();
 
@@ -42,7 +41,7 @@ namespace Snowship.NCaravan {
 		private readonly List<Trader> removeTraders = new List<Trader>();
 
 		public Caravan() {
-			inventory = new Inventory(this, int.MaxValue, int.MaxValue);
+			Inventory = new Inventory(this, int.MaxValue, int.MaxValue);
 		}
 
 		public Caravan(
@@ -63,15 +62,15 @@ namespace Snowship.NCaravan {
 				spawnTiles.Remove(spawnTile);
 			}
 
-			inventory = new Inventory(this, int.MaxValue, int.MaxValue);
+			Inventory = new Inventory(this, int.MaxValue, int.MaxValue);
 
 			resourceGroup = ResourceGroup.GetRandomResourceGroup();
 			foreach (Resource resource in resourceGroup.resources.OrderBy(r => Random.Range(0f, 1f))) { // Randomize resource group list
 				int resourceGroupResourceCount = Mathf.Clamp(resourceGroup.resources.Count, MinDistinctResources + 1, int.MaxValue); // Ensure minimum count of (minimumDistinctResources + 1)
-				if (Random.Range(0f, 1f) < Mathf.Clamp(((resourceGroupResourceCount - inventory.resources.Count) - MinDistinctResources) / (float)(resourceGroupResourceCount - MinDistinctResources), MinDistinctResourceChance, 1f)) { // Decrease chance of additional distinct resources on caravan as distinct resources on caravan increase
+				if (Random.Range(0f, 1f) < Mathf.Clamp((resourceGroupResourceCount - Inventory.resources.Count - MinDistinctResources) / (float)(resourceGroupResourceCount - MinDistinctResources), MinDistinctResourceChance, 1f)) { // Decrease chance of additional distinct resources on caravan as distinct resources on caravan increase
 					int resourceAvailableAmount = resource.GetAvailableAmount();
 					int caravanAmount = Mathf.RoundToInt(Mathf.Clamp(Random.Range(resourceAvailableAmount * MinAvailableAmountModifier, resourceAvailableAmount * MaxAvailableAmountModifier), Random.Range(MinMinimumCaravanAmount, MaxMinimumCaravanAmount), int.MaxValue)); // Ensure a minimum number of the resource on the caravan
-					inventory.ChangeResourceAmount(resource, caravanAmount, false);
+					Inventory.ChangeResourceAmount(resource, caravanAmount, false);
 				}
 			}
 
@@ -103,7 +102,7 @@ namespace Snowship.NCaravan {
 			List<TradeResourceAmount> tradeResourceAmounts = new List<TradeResourceAmount>();
 			tradeResourceAmounts.AddRange(resourcesToTrade);
 
-			List<ResourceAmount> caravanResourceAmounts = inventory.resources;
+			List<ResourceAmount> caravanResourceAmounts = Inventory.resources;
 
 			foreach (ResourceAmount resourceAmount in caravanResourceAmounts) {
 				TradeResourceAmount existingTradeResourceAmount = tradeResourceAmounts.Find(tra => tra.resource == resourceAmount.Resource);
@@ -182,7 +181,7 @@ namespace Snowship.NCaravan {
 
 			foreach (TradeResourceAmount tradeResourceAmount in resourcesToTrade) {
 				if (tradeResourceAmount.GetTradeAmount() > 0) {
-					inventory.ChangeResourceAmount(tradeResourceAmount.resource, -tradeResourceAmount.GetTradeAmount(), false);
+					Inventory.ChangeResourceAmount(tradeResourceAmount.resource, -tradeResourceAmount.GetTradeAmount(), false);
 				}
 			}
 
@@ -196,7 +195,7 @@ namespace Snowship.NCaravan {
 					List<ResourceAmount> resourcesToReserveAtThisTradingPost = new();
 					List<ResourceAmount> resourcesToReserveToRemove = new();
 					foreach (ResourceAmount resourceToReserve in resourcesToReserve) {
-						ResourceAmount resourceAmount = tradingPost.GetInventory().resources.Find(r => r.Resource == resourceToReserve.Resource);
+						ResourceAmount resourceAmount = tradingPost.Inventory.resources.Find(r => r.Resource == resourceToReserve.Resource);
 						if (resourceAmount != null) {
 							int amountToReserve = resourceToReserve.Amount < resourceAmount.Amount ? resourceToReserve.Amount : resourceAmount.Amount;
 							resourcesToReserveAtThisTradingPost.Add(new ResourceAmount(resourceToReserve.Resource, amountToReserve));
@@ -208,7 +207,7 @@ namespace Snowship.NCaravan {
 					}
 
 					if (resourcesToReserveAtThisTradingPost.Count > 0) {
-						tradingPost.GetInventory().ReserveResources(resourcesToReserveAtThisTradingPost, primaryTrader);
+						tradingPost.Inventory.ReserveResources(resourcesToReserveAtThisTradingPost, primaryTrader);
 						tradingPostsWithReservedResources.Add(tradingPost);
 					}
 
@@ -272,18 +271,6 @@ namespace Snowship.NCaravan {
 			} else {
 				leaveTimer += 1;
 			}
-		}
-
-		public Inventory GetInventory() {
-			return inventory;
-		}
-
-		void ISelectable.Select() {
-
-		}
-
-		void ISelectable.Deselect() {
-
 		}
 	}
 }

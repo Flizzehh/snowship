@@ -1,4 +1,4 @@
 ﻿public interface IInventory
 {
-	Inventory GetInventory();
+	Inventory Inventory { get; }
 }

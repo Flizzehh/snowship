@@ -2,7 +2,6 @@
 using System.Linq;
 using Snowship.NCamera;
 using Snowship.NColony;
-using Snowship.NJob;
 using Snowship.NResource;
 using Snowship.NTime;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace Snowship.NColonist {
 
 		public void OnUpdate() {
 			UpdateColonists();
-			UpdateColonistJobs();
+			// UpdateColonistJobs();
 		}
 
 		private void UpdateColonists() {
@@ -31,11 +30,11 @@ namespace Snowship.NColonist {
 			deadColonists.Clear();
 		}
 
-		private void UpdateColonistJobs() {
-			if (!GameManager.Get<TimeManager>().Time.Paused) {
-				GameManager.Get<JobManager>().GiveJobsToColonists();
-			}
-		}
+		// private void UpdateColonistJobs() {
+		// 	if (!GameManager.Get<TimeManager>().Time.Paused) {
+		// 		GameManager.Get<JobManager>().GiveJobsToColonists();
+		// 	}
+		// }
 
 		public void SpawnStartColonists(int amount) {
 			SpawnColonists(amount);
@@ -48,9 +47,9 @@ namespace Snowship.NColonist {
 			GameManager.Get<CameraManager>().SetCameraPosition(averageColonistPosition);
 
 			// TODO TEMPORARY COLONIST TESTING STUFF
-			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.WheatSeed), Random.Range(5, 11), false);
-			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.Potato), Random.Range(5, 11), false);
-			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.CottonSeed), Random.Range(5, 11), false);
+			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].Inventory.ChangeResourceAmount(Resource.GetResourceByEnum(EResource.WheatSeed), Random.Range(5, 11), false);
+			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].Inventory.ChangeResourceAmount(Resource.GetResourceByEnum(EResource.Potato), Random.Range(5, 11), false);
+			Colonist.colonists[Random.Range(0, Colonist.colonists.Count)].Inventory.ChangeResourceAmount(Resource.GetResourceByEnum(EResource.CottonSeed), Random.Range(5, 11), false);
 		}
 
 		public void SpawnColonists(int amount) {

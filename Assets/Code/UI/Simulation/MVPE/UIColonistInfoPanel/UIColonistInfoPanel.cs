@@ -1,4 +1,5 @@
-﻿namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
+﻿namespace Snowship.NUI
+{
 	public class UIColonistInfoPanel : UIConfig<UIColonistInfoPanelView, UIColonistInfoPanelPresenter, UIColonistInfoPanelParameters>
 	{
 

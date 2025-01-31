@@ -5,7 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.CreatePlanet {
+namespace Snowship.NUI
+{
 	public class UICreatePlanetView : UIView {
 
 		[Header("General")]

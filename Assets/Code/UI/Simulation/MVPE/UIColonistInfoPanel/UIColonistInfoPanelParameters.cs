@@ -1,6 +1,7 @@
 ﻿using Snowship.NColonist;
 
-namespace Snowship.NUI.Simulation.UIColonistInfoPanel {
+namespace Snowship.NUI
+{
 	public class UIColonistInfoPanelParameters : IUIParameters {
 
 		public Colonist Colonist { get; }

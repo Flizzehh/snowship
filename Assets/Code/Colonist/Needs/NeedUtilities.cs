@@ -11,21 +11,17 @@ namespace Snowship.NColonist {
 		// TODO Add "relatedNeeds" variable to JobPrefab and then find a way to delete this
 		public static readonly Dictionary<string, ENeed> jobToNeedMap = new Dictionary<string, ENeed> {
 			{ "Sleep", ENeed.Rest },
-			// { "CollectWater", ENeed.Water },
-			// { "Drink", ENeed.Water },
 			{ "CollectFood", ENeed.Food },
 			{ "Eat", ENeed.Food }
 		};
 
 		public static readonly Dictionary<ENeed, Func<NeedInstance, float>> NeedToSpecialValueFunctionMap = new Dictionary<ENeed, Func<NeedInstance, float>> {
 			{ ENeed.Rest, CalculateRestNeedSpecialValueIncrease },
-			// { ENeed.Water, CalculateWaterNeedSpecialValueIncrease },
 			{ ENeed.Food, CalculateFoodNeedSpecialValueIncrease }
 		};
 
 		public static readonly Dictionary<ENeed, Func<NeedInstance, bool>> NeedToReactionFunctionMap = new Dictionary<ENeed, Func<NeedInstance, bool>> {
 			{ ENeed.Rest, DetermineRestNeedReaction },
-			// { ENeed.Water, null },
 			{ ENeed.Food, DetermineFoodNeedReaction }
 		};
 
@@ -48,17 +44,6 @@ namespace Snowship.NColonist {
 			return totalSpecialIncrease;
 		}
 
-		/*private static float CalculateWaterNeedSpecialValueIncrease(NeedInstance needInstance) {
-			float totalSpecialIncrease = 0;
-			MoodModifierInstance moodModifier = needInstance.colonist.moodModifiers.Find(findMoodModifier => findMoodModifier.prefab.group.type == MoodModifierGroupEnum.Water);
-			if (moodModifier != null) {
-				if (moodModifier.prefab.type == MoodModifierEnum.Quenched) {
-					totalSpecialIncrease -= needInstance.prefab.baseIncreaseRate * 0.5f;
-				}
-			}
-			return totalSpecialIncrease;
-		}*/
-
 		public static float CalculateFoodNeedSpecialValueIncrease(NeedInstance needInstance) {
 			float totalSpecialIncrease = 0;
 			MoodModifierInstance moodModifier = needInstance.colonist.Moods.MoodModifiers.Find(findMoodModifier => findMoodModifier.Prefab.group.type == MoodModifierGroupEnum.Food);
@@ -73,7 +58,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static void CalculateNeedValue(NeedInstance need) {
-			if (need.colonist.JobInstance != null && need.prefab.relatedJobs.Contains(need.colonist.JobInstance.objectPrefab.jobType)) {
+			if (need.colonist.Job != null && need.prefab.relatedJobs.Contains(need.colonist.Job.JobName)) {
 				return;
 			}
 			float needIncreaseAmount = need.prefab.baseIncreaseRate;
@@ -90,74 +75,11 @@ namespace Snowship.NColonist {
 			List<Container> containersWithResourceAmount = new();
 
 			foreach (Container container in Container.GetContainersInRegion(colonist.overTile.region)) {
-				if (container.GetInventory().ContainsResourceAmount(resourceAmount)) {
+				if (container.Inventory.ContainsResourceAmount(resourceAmount)) {
 					containersWithResourceAmount.Add(container);
 				}
 			}
 			return containersWithResourceAmount.OrderBy(container => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, container.tile.regionBlock, true, true, false)).FirstOrDefault();
-		}
-
-		private static KeyValuePair<Inventory, List<ResourceAmount>> FindClosestFood(Colonist colonist, float minimumNutritionRequired, bool takeFromOtherColonists, bool eatAnything) {
-			List<KeyValuePair<KeyValuePair<Inventory, List<ResourceAmount>>, int>> resourcesPerInventory = new();
-			int totalNutrition = 0;
-			foreach (Container container in Container.GetContainersInRegion(colonist.overTile.region).OrderBy(c => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, c.tile.regionBlock, true, true, false))) {
-				List<ResourceAmount> resourcesToReserve = new();
-				foreach (ResourceAmount ra in container.GetInventory().resources.Where(ra => ra.Resource.classes.Contains(Resource.ResourceClassEnum.Food)).OrderBy(ra => ((Food)ra.Resource).nutrition).ToList()) {
-					int numReserved = 0;
-					for (int i = 0; i < ra.Amount; i++) {
-						numReserved += 1;
-						totalNutrition += ((Food)ra.Resource).nutrition;
-						if (totalNutrition >= minimumNutritionRequired) {
-							break;
-						}
-					}
-					resourcesToReserve.Add(new ResourceAmount(ra.Resource, numReserved));
-					if (totalNutrition >= minimumNutritionRequired) {
-						break;
-					}
-				}
-				if (totalNutrition >= minimumNutritionRequired) {
-					resourcesPerInventory.Add(new KeyValuePair<KeyValuePair<Inventory, List<ResourceAmount>>, int>(new KeyValuePair<Inventory, List<ResourceAmount>>(container.GetInventory(), resourcesToReserve), totalNutrition));
-					break;
-				}
-			}
-			if (takeFromOtherColonists) {
-				// TODO Take from other colonists
-			}
-			if (resourcesPerInventory.Count > 0) {
-				return resourcesPerInventory[0].Key;
-			} else {
-				return new KeyValuePair<Inventory, List<ResourceAmount>>(null, null);
-			}
-		}
-
-		public static bool GetFood(NeedInstance need, bool takeFromOtherColonists, bool eatAnything) {
-			if (need.colonist.GetInventory().resources.Find(ra => ra.Resource.groupType == ResourceGroup.ResourceGroupEnum.Foods) == null) {
-				KeyValuePair<Inventory, List<ResourceAmount>> closestFood = FindClosestFood(need.colonist, need.GetValue(), takeFromOtherColonists, eatAnything);
-
-				List<ResourceAmount> resourcesToReserve = closestFood.Value;
-				if (closestFood.Key != null) {
-					if (closestFood.Key.parent is Container container) {
-						container.GetInventory().ReserveResources(resourcesToReserve, need.colonist);
-						JobInstance jobInstance = new JobInstance(
-							JobPrefab.GetJobPrefabByName("CollectFood"),
-							container.tile,
-							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CollectFood),
-							null,
-							0
-						);
-						need.colonist.SetJob(new ColonistJob(need.colonist, jobInstance, null, null));
-						return true;
-					} else if (closestFood.Key.parent is HumanManager.Human) {
-						// TODO Take food from another human
-						//Human human = closestFood.Key.human;
-					}
-				}
-			} else {
-				need.colonist.SetEatJob();
-				return true;
-			}
-			return false;
 		}
 
 		public static int FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum resourceGroup, Colonist colonist, bool worldTotal, bool includeOtherColonists) {
@@ -173,7 +95,7 @@ namespace Snowship.NColonist {
 				int total = 0;
 
 				int amountOnThisColonist = 0;
-				foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources.Where(ra => ra.Resource.groupType == resourceGroup)) {
+				foreach (ResourceAmount resourceAmount in colonist.Inventory.resources.Where(ra => ra.Resource.groupType == resourceGroup)) {
 					amountOnThisColonist += resourceAmount.Amount;
 				}
 				total += amountOnThisColonist;
@@ -189,7 +111,7 @@ namespace Snowship.NColonist {
 					foreach (Colonist otherColonist in Colonist.colonists) {
 						if (colonist != otherColonist) {
 							int amountOnOtherColonist = 0;
-							foreach (ResourceAmount resourceAmount in otherColonist.GetInventory().resources.Where(ra => ra.Resource.groupType == resourceGroup)) {
+							foreach (ResourceAmount resourceAmount in otherColonist.Inventory.resources.Where(ra => ra.Resource.groupType == resourceGroup)) {
 								amountOnOtherColonist += resourceAmount.Amount;
 							}
 							total += amountOnOtherColonist;
@@ -202,107 +124,25 @@ namespace Snowship.NColonist {
 			}
 		}
 
-		public static bool GetSleep(NeedInstance need, bool sleepAnywhere) {
-			if (SleepSpot.sleepSpots.Count > 0) {
-				List<SleepSpot> validSleepSpots = SleepSpot.sleepSpots.Where(sleepSpot => sleepSpot.occupyingColonist == null && sleepSpot.tile.region == need.colonist.overTile.region).ToList();
-				if (validSleepSpots.Count > 0) {
-					SleepSpot chosenSleepSpot = validSleepSpots.OrderByDescending(sleepSpot => sleepSpot.prefab.restComfortAmount / (PathManager.RegionBlockDistance(need.colonist.overTile.regionBlock, sleepSpot.tile.regionBlock, true, true, false) + 1)).ToList()[0];
-					chosenSleepSpot.StartSleeping(need.colonist);
-					need.colonist.SetJob(
-						new ColonistJob(
-							need.colonist,
-							new JobInstance(
-								JobPrefab.GetJobPrefabByName("Sleep"),
-								chosenSleepSpot.tile,
-								ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Sleep),
-								null,
-								0
-							),
-							null,
-							null
-						));
-					return true;
-				}
-			}
-			if (sleepAnywhere) {
-				need.colonist.SetJob(
-					new ColonistJob(
-						need.colonist,
-						new JobInstance(
-							JobPrefab.GetJobPrefabByName("Sleep"),
-							need.colonist.overTile,
-							ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.Sleep),
-							null,
-							0),
-						null,
-						null
-					));
-				return true;
-			}
-			return false;
-		}
-
 		public static bool DetermineFoodNeedReaction(NeedInstance need) {
-			if (need.colonist.JobInstance == null || !(need.colonist.JobInstance.objectPrefab.jobType == "CollectFood" || need.colonist.JobInstance.objectPrefab.jobType == "Eat")) {
-				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
-					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
-					// TODO Check that this still works properly - (removed timeM.minuteChanged check before each of these 3 blocks)
-					if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // true, true
-						need.colonist.ReturnJob();
-						return GetFood(need, false, false); // true, true - TODO use these once implemented
-					}
-					return false;
-				}
-				if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
-					if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) { // false, true
-						if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue)) {
-							need.colonist.ReturnJob();
-							return GetFood(need, false, false); // true, false - TODO use these once implemented
-						}
-					}
-					return false;
-				}
-				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.JobInstance == null) {
-						if (FindAvailableResourceAmount(ResourceGroup.ResourceGroupEnum.Foods, need.colonist, false, false) > 0) {
-							if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
-								need.colonist.ReturnJob();
-								return GetFood(need, false, false);
-							}
-						}
-					}
-					return false;
-				}
+			if (need.GetValue() < 50) {
+				return false;
 			}
+			if (need.colonist.Job is { Group: "Needs", SubGroup: "Food" }) {
+				return false;
+			}
+			need.colonist.SetJob(new CollectFoodJob(need.colonist.overTile, null, null, need.GetValue()));
 			return false;
 		}
 
 		public static bool DetermineRestNeedReaction(NeedInstance need) {
-			if (need.colonist.JobInstance == null || !(need.colonist.JobInstance.objectPrefab.jobType == "Sleep")) {
-				if (need.prefab.critValueAction && need.GetValue() >= need.prefab.critValue) {
-					need.colonist.ChangeHealthValue(need.prefab.healthDecreaseRate);
-					need.colonist.ReturnJob();
-					GetSleep(need, true);
-					return false;
-				}
-				if (need.prefab.maxValueAction && need.GetValue() >= need.prefab.maxValue) {
-					if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.maxValue) / (need.prefab.critValue - need.prefab.maxValue)) {
-						need.colonist.ReturnJob();
-						GetSleep(need, true);
-					}
-					return false;
-				}
-				if (need.prefab.minValueAction && need.GetValue() >= need.prefab.minValue) {
-					if (need.colonist.JobInstance == null) {
-						if (UnityEngine.Random.Range(0f, 1f) < (need.GetValue() - need.prefab.minValue) / (need.prefab.maxValue - need.prefab.minValue)) {
-							need.colonist.ReturnJob();
-							GetSleep(need, false);
-						}
-
-					}
-					return false;
-				}
+			if (need.GetValue() < 50) {
+				return false;
 			}
+			if (need.colonist.Job is { Group: "Needs", SubGroup: "Rest" }) {
+				return false;
+			}
+			need.colonist.SetJob(new SleepJob(need.colonist.overTile));
 			return false;
 		}
 

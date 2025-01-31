@@ -1,26 +1,56 @@
-﻿using Snowship.NResource;
+﻿using Snowship.NColonist;
+using Snowship.NResource;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Build")]
+	[RegisterJob("Task", "Build", "Build", true)]
 	public class BuildJob : Job
 	{
-		private readonly ObjectPrefab objectPrefab;
+		public ObjectPrefab ObjectPrefab { get; }
+		public Variation Variation { get; }
+		public int Rotation { get; }
 
-		public BuildJob(JobPrefab jobPrefab, TileManager.Tile tile, ObjectPrefab objectPrefab, Variation variation) : base(jobPrefab, tile) {
-			this.objectPrefab = objectPrefab;
+		public BuildJob(TileManager.Tile tile, ObjectPrefab objectPrefab, Variation variation, int rotation) : base(tile) {
+			Variation = variation;
+			ObjectPrefab = objectPrefab;
+			Rotation = rotation;
 
 			Description = $"Building a {objectPrefab.name}.";
 			RequiredResources.AddRange(objectPrefab.commonResources);
 			RequiredResources.AddRange(variation.uniqueResources);
+			SetTimeToWork(ObjectPrefab.timeToBuild);
+
+			JobPreviewObject = Object.Instantiate(
+				GameManager.Get<ResourceManager>().tilePrefab, // TODO Create separate Class/Prefab for JobPreviewObject
+				Tile.obj.transform,
+				false
+			);
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
-			if (objectPrefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.Roofs) {
+			Colonist colonist = (Colonist)Worker; // TODO Remove when Human has Job ability
+
+			if (ObjectPrefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.Roofs) {
 				Tile.SetRoof(true);
+				return;
 			}
+
+			ObjectInstance objectInstance = ObjectInstance.CreateObjectInstance(ObjectPrefab, Variation, Tile, Rotation, true);
+			Tile.SetObject(objectInstance);
+			objectInstance.sr.color = Color.white; // TODO This should be in FinishCreation or SetObject probably?
+			objectInstance.FinishCreation();
+			if (ObjectPrefab.canRotate) {
+				objectInstance.sr.sprite = ObjectPrefab.GetBitmaskSpritesForVariation(Variation)[Rotation];
+			}
+
+			// TODO Move this to Job parent class
+			SkillInstance skill = ((Colonist)Worker).GetSkillFromJobType(JobName);
+			skill?.AddExperience(ObjectPrefab.timeToBuild);
+
+			colonist.MoveToClosestWalkableTile(true);
 		}
 	}
 }

@@ -5,7 +5,8 @@ using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.Settings {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UISettingsPresenter : UIPresenter<UISettingsView> {

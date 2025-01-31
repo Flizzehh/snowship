@@ -4,6 +4,7 @@ using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NJob;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
@@ -32,7 +33,6 @@ public class ResourceManager : IManager, IDisposable
 
 	public void OnCreate() {
 		SetResourceReferences();
-		CreateJobPrefabs();
 		CreateResources();
 		CreatePlantPrefabs();
 		CreateObjectPrefabs();
@@ -234,7 +234,7 @@ public class ResourceManager : IManager, IDisposable
 		KeyValuePair<string, object> resourceProperty
 	) {
 		EResource? type = null;
-		List<Resource.ResourceClassEnum> classes = new();
+		HashSet<Resource.ResourceClassEnum> classes = new();
 		int? weight = null;
 		int? volume = null;
 		int? price = null;
@@ -252,7 +252,7 @@ public class ResourceManager : IManager, IDisposable
 		// craftingResources -> craftingResourcesTemp
 
 		// Clothing
-		HumanManager.Human.Appearance? clothingAppearance = null;
+		BodySection? clothingAppearance = null;
 		Clothing.ClothingEnum? clothingType = null;
 		int? clothingInsulation = null;
 		int? clothingWaterResistance = null;
@@ -345,7 +345,7 @@ public class ResourceManager : IManager, IDisposable
 					foreach (KeyValuePair<string, object> clothingProperty in (List<KeyValuePair<string, object>>)resourceSubProperty.Value) {
 						switch ((ResourceClothingPropertyEnum)Enum.Parse(typeof(ResourceClothingPropertyEnum), clothingProperty.Key)) {
 							case ResourceClothingPropertyEnum.Appearance:
-								clothingAppearance = (HumanManager.Human.Appearance)Enum.Parse(typeof(HumanManager.Human.Appearance), (string)clothingProperty.Value);
+								clothingAppearance = (BodySection)Enum.Parse(typeof(BodySection), (string)clothingProperty.Value);
 								break;
 							case ResourceClothingPropertyEnum.ClothingType:
 								clothingType = (Clothing.ClothingEnum)Enum.Parse(typeof(Clothing.ClothingEnum), (string)clothingProperty.Value);
@@ -403,7 +403,7 @@ public class ResourceManager : IManager, IDisposable
 				clothingWeightCapacity.Value,
 				clothingVolumeCapacity.Value,
 				clothingColours,
-				ClothingPrefab.clothingPrefabs.Where(c => c.appearance == clothingAppearance.Value).Sum(c => c.colours.Count)
+				ClothingPrefab.clothingPrefabs.Where(c => c.BodySection == clothingAppearance.Value).Sum(c => c.colours.Count)
 			);
 			ClothingPrefab.clothingPrefabs.Add(clothingPrefab);
 			return new Clothing( // TODO This will only return a colourless clothing resource, need to move Clothing to a ResourceInstance system for colours
@@ -436,17 +436,10 @@ public class ResourceManager : IManager, IDisposable
 		return resource;
 	}
 
-	public JobInstance CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
-		JobInstance jobInstance = new(
-			JobPrefab.GetJobPrefabByName("CreateResource"),
-			craftingObject.tile,
-			ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.CreateResource),
-			null,
-			0
-		);
-		jobInstance.SetCreateResourceData(resource);
-		GameManager.Get<JobManager>().CreateJob(jobInstance);
-		return jobInstance;
+	public Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
+		Job job = new CreateResourceJob(craftingObject, resource);
+		GameManager.Get<JobManager>().AddJob(job);
+		return job;
 	}
 
 	public void CalculateResourceTotals() {
@@ -460,11 +453,11 @@ public class ResourceManager : IManager, IDisposable
 		}
 
 		foreach (Colonist colonist in Colonist.colonists) {
-			foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources) {
+			foreach (ResourceAmount resourceAmount in colonist.Inventory.resources) {
 				resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
 				resourceAmount.Resource.AddToColonistsTotalAmount(resourceAmount.Amount);
 			}
-			foreach (ReservedResources reservedResources in colonist.GetInventory().reservedResources) {
+			foreach (ReservedResources reservedResources in colonist.Inventory.reservedResources) {
 				foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 					resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
 					resourceAmount.Resource.AddToColonistsTotalAmount(resourceAmount.Amount);
@@ -472,12 +465,12 @@ public class ResourceManager : IManager, IDisposable
 			}
 		}
 		foreach (Container container in Container.containers) {
-			foreach (ResourceAmount resourceAmount in container.GetInventory().resources) {
+			foreach (ResourceAmount resourceAmount in container.Inventory.resources) {
 				resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
 				resourceAmount.Resource.AddToContainerTotalAmount(resourceAmount.Amount);
 				resourceAmount.Resource.AddToUnreservedContainerTotalAmount(resourceAmount.Amount);
 			}
-			foreach (ReservedResources reservedResources in container.GetInventory().reservedResources) {
+			foreach (ReservedResources reservedResources in container.Inventory.reservedResources) {
 				foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 					resourceAmount.Resource.AddToWorldTotalAmount(resourceAmount.Amount);
 					resourceAmount.Resource.AddToContainerTotalAmount(resourceAmount.Amount);
@@ -485,7 +478,7 @@ public class ResourceManager : IManager, IDisposable
 			}
 		}
 		foreach (TradingPost tradingPost in TradingPost.tradingPosts) {
-			foreach (ResourceAmount resourceAmount in tradingPost.GetInventory().resources) {
+			foreach (ResourceAmount resourceAmount in tradingPost.Inventory.resources) {
 				resourceAmount.Resource.AddToUnreservedTradingPostTotalAmount(resourceAmount.Amount);
 			}
 		}
@@ -502,7 +495,7 @@ public class ResourceManager : IManager, IDisposable
 		if (colonistInventory || colonistReserved) {
 			foreach (Colonist colonist in Colonist.colonists) {
 				if (colonistInventory) {
-					foreach (ResourceAmount resourceAmount in colonist.GetInventory().resources) {
+					foreach (ResourceAmount resourceAmount in colonist.Inventory.resources) {
 						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 						if (existingResourceAmount == null) {
 							returnResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
@@ -512,7 +505,7 @@ public class ResourceManager : IManager, IDisposable
 					}
 				}
 				if (colonistReserved) {
-					foreach (ReservedResources reservedResources in colonist.GetInventory().reservedResources) {
+					foreach (ReservedResources reservedResources in colonist.Inventory.reservedResources) {
 						foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 							ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 							if (existingResourceAmount == null) {
@@ -528,7 +521,7 @@ public class ResourceManager : IManager, IDisposable
 		if (containerInventory || containerReserved) {
 			foreach (Container container in Container.containers) {
 				if (containerInventory) {
-					foreach (ResourceAmount resourceAmount in container.GetInventory().resources) {
+					foreach (ResourceAmount resourceAmount in container.Inventory.resources) {
 						ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 						if (existingResourceAmount == null) {
 							returnResources.Add(new ResourceAmount(resourceAmount.Resource, resourceAmount.Amount));
@@ -538,7 +531,7 @@ public class ResourceManager : IManager, IDisposable
 					}
 				}
 				if (containerReserved) {
-					foreach (ReservedResources reservedResources in container.GetInventory().reservedResources) {
+					foreach (ReservedResources reservedResources in container.Inventory.reservedResources) {
 						foreach (ResourceAmount resourceAmount in reservedResources.resources) {
 							ResourceAmount existingResourceAmount = returnResources.Find(ra => ra.Resource == resourceAmount.Resource);
 							if (existingResourceAmount == null) {
@@ -552,106 +545,6 @@ public class ResourceManager : IManager, IDisposable
 			}
 		}
 		return returnResources;
-	}
-
-	private enum JobPrefabGroupPropertyEnum
-	{
-		Group,
-		Name,
-		Returnable,
-		JobPrefabs
-	}
-
-	private enum JobPrefabPropertyEnum
-	{
-		JobPrefab,
-		Name,
-		Returnable
-	}
-
-	private void CreateJobPrefabs() {
-		List<KeyValuePair<string, object>> jobPrefabGroupProperties = PersistenceUtilities.GetKeyValuePairsFromLines(Resources.Load<TextAsset>(@"Data/job-prefabs").text.Split('\n').ToList());
-		foreach (KeyValuePair<string, object> jobPrefabGroupProperty in jobPrefabGroupProperties) {
-			switch ((JobPrefabGroupPropertyEnum)Enum.Parse(typeof(JobPrefabGroupPropertyEnum), jobPrefabGroupProperty.Key)) {
-				case JobPrefabGroupPropertyEnum.Group:
-
-					JobPrefabGroup jobPrefabGroup = ParseJobPrefabGroup(jobPrefabGroupProperty);
-					JobPrefabGroup.jobPrefabGroups.Add(jobPrefabGroup.name, jobPrefabGroup);
-
-					break;
-				default:
-					Debug.LogError($"Unknown job prefab group property: {jobPrefabGroupProperty.Key} {jobPrefabGroupProperty.Value}");
-					break;
-			}
-		}
-	}
-
-	private JobPrefabGroup ParseJobPrefabGroup(KeyValuePair<string, object> jobPrefabGroupProperty) {
-
-		string jobPrefabGroupName = null;
-		bool? returnableAsGroup = null;
-		List<JobPrefab> jobPrefabs = new();
-
-		foreach (KeyValuePair<string, object> jobPrefabGroupSubProperty in (List<KeyValuePair<string, object>>)jobPrefabGroupProperty.Value) {
-			switch ((JobPrefabGroupPropertyEnum)Enum.Parse(typeof(JobPrefabGroupPropertyEnum), jobPrefabGroupSubProperty.Key)) {
-				case JobPrefabGroupPropertyEnum.Name:
-					jobPrefabGroupName = (string)jobPrefabGroupSubProperty.Value;
-					break;
-				case JobPrefabGroupPropertyEnum.Returnable:
-					returnableAsGroup = bool.Parse((string)jobPrefabGroupSubProperty.Value);
-					break;
-				case JobPrefabGroupPropertyEnum.JobPrefabs:
-					foreach (KeyValuePair<string, object> jobPrefabProperty in (List<KeyValuePair<string, object>>)jobPrefabGroupSubProperty.Value) {
-						switch ((JobPrefabPropertyEnum)Enum.Parse(typeof(JobPrefabPropertyEnum), jobPrefabProperty.Key)) {
-							case JobPrefabPropertyEnum.JobPrefab:
-
-								System.Diagnostics.Debug.Assert(returnableAsGroup != null, nameof(returnableAsGroup) + " != null");
-
-								JobPrefab jobPrefab = ParseJobPrefab(returnableAsGroup.Value, jobPrefabProperty);
-								jobPrefabs.Add(jobPrefab);
-								JobPrefab.jobPrefabs.Add(jobPrefab.name, jobPrefab);
-
-								break;
-							default:
-								Debug.LogError($"Unknown job prefab property: {jobPrefabProperty.Key} {jobPrefabProperty.Value}");
-								break;
-						}
-					}
-					break;
-				default:
-					Debug.LogError($"Unknown job prefab group sub property: {jobPrefabGroupSubProperty.Key} {jobPrefabGroupSubProperty.Value}");
-					break;
-			}
-		}
-
-		return new JobPrefabGroup(
-			jobPrefabGroupName,
-			jobPrefabs
-		);
-	}
-
-	private JobPrefab ParseJobPrefab(bool returnableAsGroup, KeyValuePair<string, object> jobPrefabProperty) {
-		string jobPrefabName = null;
-		bool? returnableIndividually = returnableAsGroup;
-
-		foreach (KeyValuePair<string, object> jobPrefabSubProperty in (List<KeyValuePair<string, object>>)jobPrefabProperty.Value) {
-			switch ((JobPrefabPropertyEnum)Enum.Parse(typeof(JobPrefabPropertyEnum), jobPrefabSubProperty.Key)) {
-				case JobPrefabPropertyEnum.Name:
-					jobPrefabName = (string)jobPrefabSubProperty.Value;
-					break;
-				case JobPrefabPropertyEnum.Returnable:
-					returnableIndividually = bool.Parse((string)jobPrefabSubProperty.Value);
-					break;
-				default:
-					Debug.LogError($"Unknown job prefab sub property: {jobPrefabSubProperty.Key} {jobPrefabSubProperty.Value}");
-					break;
-			}
-		}
-
-		return new JobPrefab(
-			jobPrefabName,
-			returnableIndividually.Value
-		);
 	}
 
 	private enum ObjectGroupPropertyEnum
@@ -853,7 +746,7 @@ public class ResourceManager : IManager, IDisposable
 		List<ResourceAmount> commonResources = new();
 		List<Variation> variations = new();
 		Variation.VariationNameOrderEnum variationNameOrder = Variation.VariationNameOrderEnum.VariationObject;
-		List<JobManager.SelectionModifiersEnum> selectionModifiers = new();
+		List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers = new();
 		string jobType = null;
 		bool? addToTileWhenBuilt = true;
 
@@ -949,7 +842,7 @@ public class ResourceManager : IManager, IDisposable
 					break;
 				case ObjectPropertyEnum.SelectionModifiers:
 					foreach (string selectionModifierString in ((string)objectSubProperty.Value).Split(',')) {
-						selectionModifiers.Add((JobManager.SelectionModifiersEnum)Enum.Parse(typeof(JobManager.SelectionModifiersEnum), selectionModifierString));
+						selectionModifiers.Add((SelectionModifiers.SelectionModifiersEnum)Enum.Parse(typeof(SelectionModifiers.SelectionModifiersEnum), selectionModifierString));
 					}
 					break;
 				case ObjectPropertyEnum.JobType:
@@ -974,7 +867,7 @@ public class ResourceManager : IManager, IDisposable
 			lightColour ??= Color.white;
 		}
 
-		if (instanceType != ObjectInstance.ObjectInstanceType.SleepSpot) {
+		if (instanceType != ObjectInstance.ObjectInstanceType.Bed) {
 			restComfortAmount ??= 0;
 		}
 

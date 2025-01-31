@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.DebugConsole {
+namespace Snowship.NUI
+{
 	public class UIDebugConsoleOutputTextboxComponent : UIElementComponent {
 
 		[Header("Properties")]

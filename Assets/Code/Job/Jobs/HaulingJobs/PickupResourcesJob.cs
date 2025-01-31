@@ -3,12 +3,12 @@ using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Hauling", "Pickup Resources")]
+	[RegisterJob("Hauling", "Hauling", "PickupResources", false)]
 	public class PickupResourcesJob : Job
 	{
 		private readonly Container container;
 
-		protected PickupResourcesJob(JobPrefab jobPrefab, TileManager.Tile tile, Container container) : base(jobPrefab, tile) {
+		protected PickupResourcesJob(Container container) : base(container.tile) {
 			this.container = container;
 
 			Description = "Picking up some resources.";
@@ -16,47 +16,41 @@ namespace Snowship.NJob
 			Returnable = false;
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
-			// TODO Remove (Colonist) cast once Human class is given Job ability
-			Colonist colonist = (Colonist)Worker;
+			Colonist colonist = (Colonist)Worker; // TODO Remove (Colonist) cast once Human class is given Job ability
 
-			if (container != null && colonist.StoredJobInstance != null) {
-				ContainerPickup containerPickup = colonist.StoredJobInstance.containerPickups.Find(pickup => pickup.container == container);
+			// TODO Rework to work similarly to CollectFoodJob perhaps?
+			/*if (container != null && colonist.StoredJob != null) {
+				ContainerPickup containerPickup = colonist.StoredJob.containerPickups.Find(pickup => pickup.container == container);
 				if (containerPickup != null) {
-					foreach (ReservedResources rr in containerPickup.container.GetInventory().TakeReservedResources(colonist, containerPickup.resourcesToPickup)) {
+					foreach (ReservedResources rr in containerPickup.container.Inventory.TakeReservedResources(colonist, containerPickup.resourcesToPickup)) {
 						foreach (ResourceAmount ra in rr.resources) {
 							if (containerPickup.resourcesToPickup.Find(rtp => rtp.Resource == ra.Resource) != null) {
-								colonist.GetInventory().ChangeResourceAmount(ra.Resource, ra.Amount, false);
+								colonist.Inventory.ChangeResourceAmount(ra.Resource, ra.Amount, false);
 							}
 						}
 					}
-					colonist.StoredJobInstance.containerPickups.RemoveAt(0);
+					colonist.StoredJob.containerPickups.RemoveAt(0);
 				}
 			}
-			if (colonist.StoredJobInstance != null) {
-				if (colonist.StoredJobInstance.containerPickups.Count <= 0) {
-					colonist.SetJob(new ColonistJob(colonist, colonist.StoredJobInstance, colonist.StoredJobInstance.resourcesColonistHas, null));
-					colonist.StoredJobInstance = null;
+			if (colonist.StoredJob != null) {
+				if (colonist.StoredJob.containerPickups.Count <= 0) {
+					colonist.SetJob(colonist.StoredJob);
+					colonist.StoredJob = null;
 				} else {
 					colonist.SetJob(
 						new ColonistJob(
 							colonist,
-							new JobInstance(
-								JobPrefab.GetJobPrefabByName("PickupResources"),
-								colonist.StoredJobInstance.containerPickups[0].container.tile,
-								ObjectPrefab.GetObjectPrefabByEnum(ObjectPrefab.ObjectEnum.PickupResources),
-								null,
-								0
-							),
-							colonist.StoredJobInstance.resourcesColonistHas,
-							colonist.StoredJobInstance.containerPickups
+							new PickupResourcesJob(colonist.StoredJob.containerPickups[0].container),
+							colonist.StoredJob.resourcesColonistHas,
+							colonist.StoredJob.containerPickups
 						),
 						false
 					);
 				}
-			}
+			}*/
 		}
 	}
 }

@@ -6,7 +6,8 @@ using Snowship.NResource;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation.TradeMenu {
+namespace Snowship.NUI
+{
 	public class UITradeMenuView : UIView {
 
 		[Header("Buttons")]

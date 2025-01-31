@@ -33,5 +33,9 @@ namespace Snowship.NInput {
 		public bool IsPlayerTyping() {
 			return EventSystem.current.currentSelectedGameObject && EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>();
 		}
+
+		public bool IsPointerOverUI() {
+			return EventSystem.current.IsPointerOverGameObject();
+		}
 	}
 }

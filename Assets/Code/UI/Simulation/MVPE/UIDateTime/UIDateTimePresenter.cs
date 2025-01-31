@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Snowship.NTime;
 
-namespace Snowship.NUI.Simulation.UIDateTime {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UIDateTimePresenter : UIPresenter<UIDateTimeView> {

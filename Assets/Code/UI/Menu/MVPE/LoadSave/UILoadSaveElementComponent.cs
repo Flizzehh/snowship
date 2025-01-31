@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Menu.LoadSave {
+namespace Snowship.NUI
+{
 	public class UILoadSaveElementComponent : UIElementComponent {
 
 		[SerializeField] private Image saveElementBackground;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Snowship.NCaravan;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NResource;
 using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
@@ -88,7 +89,7 @@ namespace Snowship.NPersistence {
 				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.LeaveTimer, caravan.leaveTimer, 1));
 				file.WriteLine(PU.CreateKeyValueString(CaravanProperty.Leaving, caravan.leaving, 1));
 
-				pInventory.WriteInventoryLines(file, caravan.GetInventory(), 1);
+				pInventory.WriteInventoryLines(file, caravan.Inventory, 1);
 
 				List<TradeResourceAmount> tradeResourceAmounts = caravan.GenerateTradeResourceAmounts();
 				if (tradeResourceAmounts.Count > 0) {
@@ -387,10 +388,10 @@ namespace Snowship.NPersistence {
 			foreach (PersistenceCaravan persistenceCaravan in persistenceCaravans) {
 				Caravan caravan = new() { numTraders = persistenceCaravan.persistenceTraders.Count, caravanType = persistenceCaravan.type.Value, location = persistenceCaravan.location, targetTile = GameManager.Get<ColonyManager>().colony.map.GetTileFromPosition(persistenceCaravan.targetTilePosition.Value), resourceGroup = persistenceCaravan.resourceGroup, leaveTimer = persistenceCaravan.leaveTimer.Value, leaving = persistenceCaravan.leaving.Value };
 
-				caravan.GetInventory().maxWeight = persistenceCaravan.persistenceInventory.maxWeight.Value;
-				caravan.GetInventory().maxVolume = persistenceCaravan.persistenceInventory.maxVolume.Value;
+				caravan.Inventory.maxWeight = persistenceCaravan.persistenceInventory.maxWeight.Value;
+				caravan.Inventory.maxVolume = persistenceCaravan.persistenceInventory.maxVolume.Value;
 				foreach (ResourceAmount resourceAmount in persistenceCaravan.persistenceInventory.resources) {
-					caravan.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+					caravan.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 				}
 
 				foreach (PersistenceTradeResourceAmount persistenceTradeResourceAmount in persistenceCaravan.persistenceResourcesToTrade) {
@@ -423,18 +424,18 @@ namespace Snowship.NPersistence {
 
 					trader.SetName(persistenceTrader.persistenceHuman.name);
 
-					trader.bodyIndices[HumanManager.Human.Appearance.Skin] = persistenceTrader.persistenceHuman.skinIndex.Value;
-					trader.moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[trader.bodyIndices[HumanManager.Human.Appearance.Skin]];
-					trader.bodyIndices[HumanManager.Human.Appearance.Hair] = persistenceTrader.persistenceHuman.hairIndex.Value;
+					trader.bodyIndices[BodySection.Skin] = persistenceTrader.persistenceHuman.skinIndex.Value;
+					trader.moveSprites = GameManager.Get<HumanManager>().humanMoveSprites[trader.bodyIndices[BodySection.Skin]];
+					trader.bodyIndices[BodySection.Hair] = persistenceTrader.persistenceHuman.hairIndex.Value;
 
-					trader.GetInventory().maxWeight = persistenceTrader.persistenceHuman.persistenceInventory.maxWeight.Value;
-					trader.GetInventory().maxVolume = persistenceTrader.persistenceHuman.persistenceInventory.maxVolume.Value;
+					trader.Inventory.maxWeight = persistenceTrader.persistenceHuman.persistenceInventory.maxWeight.Value;
+					trader.Inventory.maxVolume = persistenceTrader.persistenceHuman.persistenceInventory.maxVolume.Value;
 					foreach (ResourceAmount resourceAmount in persistenceTrader.persistenceHuman.persistenceInventory.resources) {
-						trader.GetInventory().ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
+						trader.Inventory.ChangeResourceAmount(resourceAmount.Resource, resourceAmount.Amount, false);
 					}
 
-					foreach (KeyValuePair<HumanManager.Human.Appearance, Clothing> appearanceToClothingKVP in persistenceTrader.persistenceHuman.clothes) {
-						trader.GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
+					foreach (KeyValuePair<BodySection, Clothing> appearanceToClothingKVP in persistenceTrader.persistenceHuman.clothes) {
+						trader.Inventory.ChangeResourceAmount(Resource.GetResourceByEnum(appearanceToClothingKVP.Value.type), 1, false);
 						trader.ChangeClothing(appearanceToClothingKVP.Key, appearanceToClothingKVP.Value);
 					}
 

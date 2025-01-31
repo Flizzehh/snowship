@@ -23,7 +23,7 @@ namespace Snowship.NResource
 				foreach (CraftableResourceInstance resource in resources) {
 
 					// Not enableable if job already exists
-					if (resource.JobInstance != null) {
+					if (resource.Job != null) {
 						continue;
 					}
 
@@ -69,16 +69,16 @@ namespace Snowship.NResource
 						switch (resource.creationMethod) {
 							case CraftableResourceInstance.CreationMethod.SingleRun:
 								if (resource.GetRemainingAmount() > 0) {
-									resource.JobInstance = GameManager.Get<ResourceManager>().CreateResource(resource, this);
+									resource.Job = GameManager.Get<ResourceManager>().CreateResource(resource, this);
 								}
 								break;
 							case CraftableResourceInstance.CreationMethod.MaintainStock:
 								if (resource.GetTargetAmount() > resource.resource.GetAvailableAmount()) {
-									resource.JobInstance = GameManager.Get<ResourceManager>().CreateResource(resource, this);
+									resource.Job = GameManager.Get<ResourceManager>().CreateResource(resource, this);
 								}
 								break;
 							case CraftableResourceInstance.CreationMethod.ContinuousRun:
-								resource.JobInstance = GameManager.Get<ResourceManager>().CreateResource(resource, this);
+								resource.Job = GameManager.Get<ResourceManager>().CreateResource(resource, this);
 								break;
 						}
 					}
@@ -95,9 +95,9 @@ namespace Snowship.NResource
 
 			if (!active) {
 				foreach (CraftableResourceInstance resource in resources) {
-					if (resource.JobInstance != null) {
-						GameManager.Get<JobManager>().CancelJob(resource.JobInstance);
-						resource.JobInstance = null;
+					if (resource.Job != null) {
+						GameManager.Get<JobManager>().RemoveJob(resource.Job);
+						resource.Job = null;
 					}
 				}
 			}
@@ -110,9 +110,9 @@ namespace Snowship.NResource
 				resources.Add(existingResource);
 			} else {
 				resources.Remove(existingResource);
-				if (existingResource.JobInstance != null) {
-					GameManager.Get<JobManager>().CancelJob(existingResource.JobInstance);
-					existingResource.JobInstance = null;
+				if (existingResource.Job != null) {
+					GameManager.Get<JobManager>().RemoveJob(existingResource.Job);
+					existingResource.Job = null;
 				}
 				existingResource = null;
 			}
@@ -128,9 +128,9 @@ namespace Snowship.NResource
 				fuels.Remove(existingFuel);
 				foreach (CraftableResourceInstance resource in resources) {
 					if (resource.fuelAmounts.Find(ra => ra.Resource == fuel) != null) {
-						if (resource.JobInstance != null) {
-							GameManager.Get<JobManager>().CancelJob(resource.JobInstance);
-							resource.JobInstance = null;
+						if (resource.Job != null) {
+							GameManager.Get<JobManager>().RemoveJob(resource.Job);
+							resource.Job = null;
 						}
 					}
 				}

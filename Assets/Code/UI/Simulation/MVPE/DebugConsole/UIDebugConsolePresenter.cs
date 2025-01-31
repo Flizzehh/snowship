@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 
-namespace Snowship.NUI.Simulation.DebugConsole {
+namespace Snowship.NUI
+{
 
 	[UsedImplicitly]
 	public class UIDebugConsolePresenter : UIPresenter<UIDebugConsoleView> {

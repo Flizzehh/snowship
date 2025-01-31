@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Snowship.NUI.Simulation
+namespace Snowship.NUI
 {
 	public class UIClothingElementComponent : UIElementComponent
 	{
@@ -18,14 +18,10 @@ namespace Snowship.NUI.Simulation
 		public event Action OnButtonClicked;
 
 		public override void OnCreate() {
-			base.OnCreate();
-
 			button.onClick.AddListener(() => OnButtonClicked?.Invoke());
 		}
 
 		protected override void OnClose() {
-			base.OnClose();
-
 			button.onClick.RemoveListener(() => OnButtonClicked?.Invoke());
 		}
 

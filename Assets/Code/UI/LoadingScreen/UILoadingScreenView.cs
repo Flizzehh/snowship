@@ -1,7 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Snowship.NUI.LoadingScreen {
+namespace Snowship.NUI
+{
 	public class UILoadingScreenView : UIView {
 
 		[SerializeField] private TMP_Text loadingStateText;

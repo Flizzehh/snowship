@@ -9,7 +9,7 @@ namespace Snowship.NResource
 		public Food(
 			EResource type,
 			ResourceGroup.ResourceGroupEnum groupType,
-			List<ResourceClassEnum> classes,
+			HashSet<ResourceClassEnum> classes,
 			int weight,
 			int volume,
 			int price,

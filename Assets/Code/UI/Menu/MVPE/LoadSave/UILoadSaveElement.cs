@@ -3,7 +3,8 @@ using Snowship.NPersistence;
 using Snowship.NUtilities;
 using UnityEngine;
 
-namespace Snowship.NUI.Menu.LoadSave {
+namespace Snowship.NUI
+{
 	internal class UILoadSaveElement : UIElement<UILoadSaveElementComponent> {
 
 		private readonly PSave.PersistenceSave save;

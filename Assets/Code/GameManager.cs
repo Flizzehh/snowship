@@ -9,7 +9,9 @@ using Snowship.NCamera;
 using Snowship.NCaravan;
 using Snowship.NColonist;
 using Snowship.NColony;
+using Snowship.NHuman;
 using Snowship.NInput;
+using Snowship.NLife;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
 using Snowship.NState;
@@ -52,7 +54,7 @@ public class GameManager : MonoBehaviour {
 		Create<UniverseManager>();
 		Create<PersistenceManager>();
 		Create<UIManager>();
-		Create<UIManagerOld>();
+		// Create<UIManagerOld>();
 		Create<SelectableManager>();
 		Create<DebugManager>();
 		Create<StateManager>();
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour {
 		NeedPrefab.CreateColonistNeeds();
 		MoodModifierGroup.CreateMoodModifiers();
 
-		Get<UIManagerOld>().SetupUI();
+		// Get<UIManagerOld>().SetupUI();
 
 		Get<PersistenceManager>().PSettings.CreateSettingsState();
 	}

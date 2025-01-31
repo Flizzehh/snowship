@@ -6,7 +6,6 @@ using Cysharp.Threading.Tasks;
 using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NUI;
-using Snowship.NUI.Simulation.TradeMenu;
 using UnityEngine;
 
 namespace Snowship.NCaravan {
@@ -44,7 +43,7 @@ namespace Snowship.NCaravan {
 
 				caravans.Remove(caravan);
 
-				GameManager.Get<UIManagerOld>().SetCaravanElements();
+				// GameManager.Get<UIManagerOld>().SetCaravanElements();
 			}
 
 			removeCaravans.Clear();
@@ -151,7 +150,7 @@ namespace Snowship.NCaravan {
 		public void AddCaravan(Caravan caravan) {
 			caravans.Add(caravan);
 
-			GameManager.Get<UIManagerOld>().SetCaravanElements();
+			// GameManager.Get<UIManagerOld>().SetCaravanElements();
 		}
 
 		public void SetSelectedCaravan(Caravan selectedCaravan) {

@@ -2,29 +2,68 @@
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NResource;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Eat")]
+	[RegisterJob("Needs", "Food", "Eat", false)]
 	public class EatJob : Job
 	{
-		protected EatJob(JobPrefab jobPrefab, TileManager.Tile tile) : base(jobPrefab, tile) {
+		private Colonist colonist;
+		private NeedInstance foodNeed;
+
+		public EatJob(TileManager.Tile tile) : base(tile) {
 			Description = "Eating.";
 
 			Returnable = false;
 		}
 
-		public override void OnJobFinished() {
+		protected override void OnJobTaken() {
+			base.OnJobTaken();
+
+			colonist = Worker as Colonist; // TODO Remove cast when Humans have Job ability
+			foodNeed = colonist?.needs.Find(n => n.prefab.type == ENeed.Food);
+		}
+
+		protected override void OnJobStarted() {
+			base.OnJobStarted();
+
+			// Find a chair (ideally next to a table) for the colonist to sit at to eat
+			List<ObjectInstance> chairs = new();
+			foreach (ObjectPrefab chairPrefab in ObjectPrefabSubGroup.GetObjectPrefabSubGroupByEnum(ObjectPrefabSubGroup.ObjectSubGroupEnum.Chairs).prefabs) {
+				List<ObjectInstance> chairsFromPrefab = ObjectInstance.GetObjectInstancesByPrefab(chairPrefab);
+				if (chairsFromPrefab != null) {
+					chairs.AddRange(chairsFromPrefab);
+				}
+			}
+
+			ObjectInstance chair = chairs
+				.Where(chair => chair.tile.region == colonist.overTile.region)
+				.OrderBy(chair => PathManager.RegionBlockDistance(colonist.overTile.regionBlock, chair.tile.regionBlock, true, true, false))
+				.ThenByDescending(
+					chair => chair.tile.surroundingTiles.Find(
+						surroundingTile => {
+							ObjectInstance tableNextToChair = surroundingTile.GetObjectInstanceAtLayer(2);
+							return tableNextToChair?.prefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.Tables;
+						}
+					) != null
+				)
+				.FirstOrDefault();
+
+		}
+
+		protected override void OnJobInProgress() {
+			base.OnJobInProgress();
+
+		}
+
+		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
-			Colonist colonist = (Colonist)Worker; // TODO Remove cast when Humans have Job ability
-
-			List<ResourceAmount> resourcesToEat = colonist.GetInventory()
-				.resources
+			List<ResourceAmount> resourcesToEat = colonist.Inventory.resources
 				.Where(r => r.Resource.classes.Contains(Resource.ResourceClassEnum.Food))
 				.OrderBy(r => ((Food)r.Resource).nutrition)
 				.ToList();
-			NeedInstance foodNeed = colonist.needs.Find(need => need.prefab.type == ENeed.Food);
 
 			float startingFoodNeedValue = foodNeed.GetValue();
 			foreach (ResourceAmount ra in resourcesToEat) {
@@ -35,9 +74,9 @@ namespace Snowship.NJob
 						break;
 					}
 					foodNeed.ChangeValue(-((Food)ra.Resource).nutrition);
-					colonist.GetInventory().ChangeResourceAmount(ra.Resource, -1, false);
+					colonist.Inventory.ChangeResourceAmount(ra.Resource, -1, false);
 					if (ra.Resource.type == EResource.Apple || ra.Resource.type == EResource.BakedApple) {
-						colonist.GetInventory().ChangeResourceAmount(Resource.GetResourceByEnum(EResource.AppleSeed), UnityEngine.Random.Range(1, 5), false);
+						colonist.Inventory.ChangeResourceAmount(Resource.GetResourceByEnum(EResource.AppleSeed), Random.Range(1, 5), false);
 					}
 				}
 				if (stopEating) {

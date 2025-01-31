@@ -47,7 +47,7 @@ namespace Snowship.NColonist {
 				}
 			}, {
 				MoodModifierGroupEnum.Inventory, delegate(Colonist colonist) {
-					if (colonist.GetInventory().UsedWeight() > colonist.GetInventory().maxWeight) {
+					if (colonist.Inventory.UsedWeight() > colonist.Inventory.maxWeight) {
 						colonist.Moods.AddMoodModifier(MoodModifierEnum.Overencumbered);
 					} else {
 						colonist.Moods.RemoveMoodModifier(MoodModifierEnum.Overencumbered);

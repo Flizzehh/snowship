@@ -2,7 +2,6 @@
 using System.Linq;
 using Snowship.NColony;
 using Snowship.NJob;
-using Snowship.NUI;
 using Snowship.Selectable;
 using UnityEngine;
 
@@ -38,7 +37,7 @@ namespace Snowship.NResource
 			Normal,
 			Container,
 			TradingPost,
-			SleepSpot,
+			Bed,
 			LightSource,
 			CraftingObject,
 			Farm
@@ -109,14 +108,14 @@ namespace Snowship.NResource
 			sr.color = new Color(newColour.r, newColour.g, newColour.b, 1f);
 		}
 
-		public void SetActiveSprite(JobInstance jobInstance, bool jobActive) {
+		public void SetActiveSprite(CreateResourceJob createResourceJob, bool jobActive) {
 			if (active && jobActive) {
 				if (prefab.GetActiveSpritesForVariation(variation).Count > 0) {
 					if (prefab.type == ObjectPrefab.ObjectEnum.SplittingBlock) {
 						int customActiveSpriteIndex = 0;
-						if (jobInstance.createResource.resource.type == EResource.Wood) {
+						if (createResourceJob.CreateResource.resource.type == EResource.Wood) {
 							customActiveSpriteIndex = 0;
-						} else if (jobInstance.createResource.resource.type == EResource.Firewood) {
+						} else if (createResourceJob.CreateResource.resource.type == EResource.Firewood) {
 							customActiveSpriteIndex = 1;
 						}
 						aosr.sprite = prefab.GetActiveSpritesForVariation(variation)[4 * customActiveSpriteIndex + rotationIndex];
@@ -165,9 +164,9 @@ namespace Snowship.NResource
 					instance = new TradingPost(prefab, variation, tile, rotationIndex);
 					TradingPost.tradingPosts.Add((TradingPost)instance);
 					break;
-				case ObjectInstanceType.SleepSpot:
-					instance = new SleepSpot(prefab, variation, tile, rotationIndex);
-					SleepSpot.sleepSpots.Add((SleepSpot)instance);
+				case ObjectInstanceType.Bed:
+					instance = new Bed(prefab, variation, tile, rotationIndex);
+					Bed.Beds.Add((Bed)instance);
 					break;
 				case ObjectInstanceType.LightSource:
 					instance = new LightSource(prefab, variation, tile, rotationIndex);
@@ -202,10 +201,10 @@ namespace Snowship.NResource
 		public static void AddObjectInstance(ObjectInstance objectInstance) {
 			if (ObjectInstances.ContainsKey(objectInstance.prefab)) {
 				ObjectInstances[objectInstance.prefab].Add(objectInstance);
-				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, objectInstance.prefab);
+				// GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, objectInstance.prefab);
 			} else {
 				ObjectInstances.Add(objectInstance.prefab, new List<ObjectInstance>() { objectInstance });
-				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Add, objectInstance.prefab);
+				// GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Add, objectInstance.prefab);
 			}
 		}
 
@@ -216,25 +215,25 @@ namespace Snowship.NResource
 				case ObjectInstanceType.Container:
 					Container container = (Container)instance;
 
-					if (GameManager.Get<UIManagerOld>().selectedContainer == container) {
-						GameManager.Get<UIManagerOld>().SetSelectedContainer(null);
-					}
+					// if (GameManager.Get<UIManagerOld>().selectedContainer == container) {
+					// 	GameManager.Get<UIManagerOld>().SetSelectedContainer(null);
+					// }
 
 					Container.containers.Remove(container);
 					break;
 				case ObjectInstanceType.TradingPost:
 					TradingPost tradingPost = (TradingPost)instance;
 
-					if (GameManager.Get<UIManagerOld>().selectedTradingPost == tradingPost) {
-						GameManager.Get<UIManagerOld>().SetSelectedTradingPost(null);
-					}
+					// if (GameManager.Get<UIManagerOld>().selectedTradingPost == tradingPost) {
+					// 	GameManager.Get<UIManagerOld>().SetSelectedTradingPost(null);
+					// }
 
 					TradingPost.tradingPosts.Remove(tradingPost);
 					break;
-				case ObjectInstanceType.SleepSpot:
-					SleepSpot sleepSpot = (SleepSpot)instance;
+				case ObjectInstanceType.Bed:
+					Bed bed = (Bed)instance;
 
-					SleepSpot.sleepSpots.Remove(sleepSpot);
+					Bed.Beds.Remove(bed);
 					break;
 				case ObjectInstanceType.LightSource:
 					LightSource lightSource = (LightSource)instance;
@@ -246,9 +245,9 @@ namespace Snowship.NResource
 				case ObjectInstanceType.CraftingObject:
 					CraftingObject craftingObject = (CraftingObject)instance;
 
-					if (GameManager.Get<UIManagerOld>().selectedCraftingObject == craftingObject) {
-						GameManager.Get<UIManagerOld>().SetSelectedCraftingObject(null);
-					}
+					// if (GameManager.Get<UIManagerOld>().selectedCraftingObject == craftingObject) {
+					// 	GameManager.Get<UIManagerOld>().SetSelectedCraftingObject(null);
+					// }
 
 					CraftingObject.craftingObjectInstances.Remove(craftingObject);
 					break;
@@ -267,7 +266,7 @@ namespace Snowship.NResource
 			if (ObjectInstances.ContainsKey(instance.prefab)) {
 				ObjectInstances[instance.prefab].Remove(instance);
 
-				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, instance.prefab);
+				// GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Update, instance.prefab);
 			} else {
 				Debug.LogWarning("Tried removing a tile object instance which isn't in the list");
 			}
@@ -275,7 +274,7 @@ namespace Snowship.NResource
 			if (ObjectInstances[instance.prefab].Count <= 0) {
 				ObjectInstances.Remove(instance.prefab);
 
-				GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Remove, instance.prefab);
+				// GameManager.Get<UIManagerOld>().ChangeObjectPrefabElements(UIManagerOld.ChangeTypeEnum.Remove, instance.prefab);
 			}
 		}
 	}

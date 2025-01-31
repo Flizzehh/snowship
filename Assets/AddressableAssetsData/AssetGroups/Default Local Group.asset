@@ -25,6 +25,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a541c95e0af0d146a178f25c200fd9b
+    m_Address: UI/UIActionsPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 201854b6271e597438f2b0d2e84c1dea
+    m_Address: UI/Element/UIActionItemButtonElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 321ea3eb773e9f041b9202c6887aef25
     m_Address: UI/UILoadingScreen
     m_ReadOnly: 0
@@ -42,6 +52,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5065d9636a7630e47b5d1f542f8608c8
     m_Address: UI/Element/UIClothingElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56f74c747316aaf489dc991c72ed9a28
+    m_Address: UI/Element/UIActionGroupButtonElement
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -107,6 +122,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: efedd53ee1e0303488385c3716204e94
     m_Address: UI/UICreateColony
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9d7fe7275fd04847bb12eedc1ab8bee
+    m_Address: UI/
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -16,7 +16,7 @@ namespace Snowship.NResource
 
 		public readonly ResourceGroup.ResourceGroupEnum groupType;
 
-		public readonly List<ResourceClassEnum> classes;
+		public readonly HashSet<ResourceClassEnum> classes;
 
 		public readonly int weight;
 		public readonly int volume;
@@ -62,7 +62,7 @@ namespace Snowship.NResource
 		public Resource(
 			EResource type,
 			ResourceGroup.ResourceGroupEnum groupType,
-			List<ResourceClassEnum> classes,
+			HashSet<ResourceClassEnum> classes,
 			int weight,
 			int volume,
 			int price,
@@ -212,6 +212,10 @@ namespace Snowship.NResource
 			return false;
 		}
 
+		public bool IsResourceInClass(ResourceClassEnum resourceClass) {
+			return classes.Contains(resourceClass);
+		}
+
 		public static List<Resource> GetResources() {
 			return Resources.Values.ToList();
 		}
@@ -226,10 +230,6 @@ namespace Snowship.NResource
 
 		public static List<Resource> GetResourcesInClass(ResourceClassEnum resourceClass) {
 			return resourceClassToResources[resourceClass];
-		}
-
-		public static bool IsResourceInClass(ResourceClassEnum resourceClass, Resource resource) {
-			return resource.classes.Contains(resourceClass);
 		}
 	}
 }
