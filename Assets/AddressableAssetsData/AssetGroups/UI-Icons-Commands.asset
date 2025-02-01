@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI-Icons-Commands
+  m_EditorClassIdentifier: 
+  m_GroupName: UI-Icons-Commands
+  m_GUID: 69c0303a49bcf20478aa36c21c2f625d
+  m_SerializeEntries:
+  - m_GUID: 085843a5836865549a1207a77d9bc5c9
+    m_Address: ui_icon_job_Cancel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Command
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51f3d89c4ab790b4bbf0457421964251
+    m_Address: ui_icon_job_IncreasePriority
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Command
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2e1d8536507ebc4ab91f3a7777b18bd
+    m_Address: ui_icon_job_DecreasePriority
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Command
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: e2a3f755bf78a09469378ac57b1c2f58, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 56c41587be04c7f43a8c0a6e2fba37b6, type: 2}
+    - {fileID: 11400000, guid: 933d9b48369428442a77d3c881887889, type: 2}

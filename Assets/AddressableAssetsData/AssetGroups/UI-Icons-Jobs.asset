@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI-Icons-Jobs
+  m_EditorClassIdentifier: 
+  m_GroupName: UI-Icons-Jobs
+  m_GUID: cd756bb8a3848c444a8416a592d39dc9
+  m_SerializeEntries:
+  - m_GUID: 032f9bcd313007940826fe789a202592
+    m_Address: ui_icon_job_Mine
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06d9674c9e14f5347b22add084dcd9a7
+    m_Address: ui_icon_job_RemoveRoof
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1357f24a439af234cbee06a037f3e877
+    m_Address: ui_icon_job_HarvestFarm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38c42bd490c931341b742aec8a99af66
+    m_Address: ui_icon_job_Fill
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4109ad4dd85d68e4caced6ffa3f280f6
+    m_Address: ui_icon_job_RemoveAll
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5305cac0bf797024bb52959ef6706644
+    m_Address: ui_icon_job_CollectResources
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 647be430aae7b114c90d81b8ce008ded
+    m_Address: ui_icon_job_PickupResources
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7afc1329f84b7124caead64851755173
+    m_Address: ui_icon_job_Eat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a4239d3678c819448a36f0d58b7f31c
+    m_Address: ui_icon_job_CreateResource
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9184eff58413fbd4e80de5f3def288ff
+    m_Address: ui_icon_job_Sleep
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b62f8bf539924345bb8e58316e8fc57
+    m_Address: ui_icon_job_EmptyInventory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8c272c26bbec84459eee97ec9d40a0a
+    m_Address: ui_icon_job_RemoveFloor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd6ae8e37e5bd3f48acc8be2e413d8b8
+    m_Address: ui_icon_job_ChopPlant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: beb8ee13c4924dd4ea7bd3b309adad0e
+    m_Address: ui_icon_job_CollectFood
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dfbf3802a97224c4fb08935f7d68a354
+    m_Address: ui_icon_job_WearClothes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0968eb27be5271408ec254f06d78eaf
+    m_Address: ui_icon_job_RemoveObject
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec4ea60af8902ff46a1ed558b0c0975c
+    m_Address: ui_icon_job_TransferResources
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe70e29e4bb3cd64a83e1653a9a17a05
+    m_Address: ui_icon_job_Dig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: e2a3f755bf78a09469378ac57b1c2f58, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f9c3d26e16fd40d438b6d3ce37765007, type: 2}
+    - {fileID: 11400000, guid: 3d3c1386a8eb97b4480ab3d2d2feb1c6, type: 2}

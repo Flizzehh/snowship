@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI-Prefabs
+  m_EditorClassIdentifier: 
+  m_GroupName: UI-Prefabs
+  m_GUID: 977bb9e83e7fffe4f87075cb3e945f71
+  m_SerializeEntries:
+  - m_GUID: 0227b4a9dd7ad3e418a4bc62aa7ca210
+    m_Address: UI/UIColonistInfoPanel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13440c2087776ad48b8d3e8b929a53b2
+    m_Address: UI/UIPauseMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a541c95e0af0d146a178f25c200fd9b
+    m_Address: UI/UIActionsPanel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 321ea3eb773e9f041b9202c6887aef25
+    m_Address: UI/UILoadingScreen
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43198d5ef214d8243b389faa845b1547
+    m_Address: UI/Element/UIResourceAmountElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c952355c3e8bce49a4e749d587812b1
+    m_Address: UI/UICreatePlanet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5065d9636a7630e47b5d1f542f8608c8
+    m_Address: UI/Element/UIClothingElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56f74c747316aaf489dc991c72ed9a28
+    m_Address: UI/Element/UIActionGroupButtonElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5724e56e6d8f4aa4795584190e6f8866
+    m_Address: UI/Element/UIDebugConsoleOutputTextbox
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62be4476a9304cb44bf864b3a9d7dd2a
+    m_Address: UI/Element/UINeedElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8aaccaedbd598a849bea7f8bfb6e5879
+    m_Address: UI/Element/UIActionItemButtonElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9dd8381cd844f7e4991e97dbbce532e2
+    m_Address: UI/UISimulation
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1fa6b616b868c344b6746511c9e471b
+    m_Address: UI/UIDebugConsole
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c313895e634f59140b0986d5026675a1
+    m_Address: UI/Element/UIClothingButtonElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3b4be9a4c4e3b44892d398b06c5a979
+    m_Address: UI/Element/UIHumanBodyElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c49c4dd6d232d1f4186ecbaa0f7d7bee
+    m_Address: UI/Element/UIReservedResourcesElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ced627a98e233904ca0c5206f4442b1e
+    m_Address: UI/Element/UISkillElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d28405e4d4ad5fd44be2d8a8a80c29c9
+    m_Address: UI/Element/UIMoodElement
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9decf2a2a00759489913c49bbce3d64
+    m_Address: UI/UISettings
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e44f647e65e1e4548b9207a17b6eee49
+    m_Address: UI/UIMainMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb4110b3d51cbd643a194d51dc84552b
+    m_Address: UI/UIDateTime
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efedd53ee1e0303488385c3716204e94
+    m_Address: UI/UICreateColony
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Prefabs
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: e2a3f755bf78a09469378ac57b1c2f58, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 806c09a0b9cb48f45836a3a37a19f97e, type: 2}
+    - {fileID: 11400000, guid: f31174f920479c14b8f3263b61723d85, type: 2}

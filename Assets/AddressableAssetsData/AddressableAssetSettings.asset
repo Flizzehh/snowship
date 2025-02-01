@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: bd301d844f272e2409e42eb949b92b5b
   m_currentHash:
     serializedVersion: 2
-    Hash: 3a6cd879f18fe1c5687f1fa26a60b536
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -59,7 +59,10 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: 2c2c6a9317e14e4498acb67443ea0025, type: 2}
+  - {fileID: 11400000, guid: 4a8dc23c3ca00a44b84bce8870d227c6, type: 2}
   - {fileID: 11400000, guid: 18178f731c12abf458ae19fa641476f7, type: 2}
+  - {fileID: 11400000, guid: 316d64d91baa2fd4495ecfbccb17d0ad, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -99,6 +102,9 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - UI/Prefabs
+    - UI/Icon/Job
+    - UI/Icon/Command
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: ae2cb329f1fe26e49b3523ab16afc38d, type: 2}
