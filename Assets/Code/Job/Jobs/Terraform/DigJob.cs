@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Terraform", "Terrain", "Dig", true)]
+	[RegisterJob("Terraform", "Terrain", "Dig")]
 	public class DigJob : Job
 	{
 		protected DigJob(TileManager.Tile tile) : base(tile) {

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using Snowship.NHuman;
 using Snowship.NResource;
 using Snowship.NTime;
+using Snowship.NUtilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Snowship.NJob
 {
-	public abstract class Job : IJob
+	public abstract class Job : IJob, IGroupItem
 	{
-		// General
+		// Job Instance Properties
 		public TileManager.Tile Tile { get; private set; }
 		public EJobState JobState { get; private set; } = EJobState.Ready;
 		public float TimeToWork { get; protected set; } = 0;
@@ -32,9 +33,13 @@ namespace Snowship.NJob
 		public bool Finished => JobState >= EJobState.Finished;
 
 		// Attribute Shortcuts
-		public string Group => GameManager.Get<JobManager>().JobRegistry.GetJobAttributes(GetType()).Group;
-		public string SubGroup => GameManager.Get<JobManager>().JobRegistry.GetJobAttributes(GetType()).SubGroup;
-		public string JobName => GameManager.Get<JobManager>().JobRegistry.GetJobAttributes(GetType()).JobName;
+		public JobGroup Group => GameManager.Get<JobManager>().JobRegistry.GetJobTypeData(GetType()).Group as JobGroup;
+		public JobGroup SubGroup => GameManager.Get<JobManager>().JobRegistry.GetJobTypeData(GetType()).SubGroup as JobGroup;
+
+		// IGroupItem
+		public string Name => GameManager.Get<JobManager>().JobRegistry.GetJobTypeData(GetType()).Name;
+		public Sprite Icon { get; } // TODO Load image from a registry of job images?
+		public List<IGroupItem> Children => null;
 
 		// Events
 		public event Action<Job, Human> OnWorkerAssigned;

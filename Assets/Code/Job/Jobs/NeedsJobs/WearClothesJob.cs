@@ -2,7 +2,7 @@
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Clothing", "WearClothes", false)]
+	[RegisterJob("Needs", "Clothing", "WearClothes")]
 	public class WearClothesJob : Job
 	{
 		private readonly Container container;

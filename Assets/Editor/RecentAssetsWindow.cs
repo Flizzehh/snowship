@@ -1,15 +1,14 @@
-using UnityEditor;
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
 public class RecentAssetsWindow : EditorWindow
 {
 	private List<string> recentAssets = new();
 	private const string PrefsKey = "RecentAssetsHistory";
 	private Vector2 scrollPos;
-	private int currentIndex = -1;
 
 	[MenuItem("Window/Recent Assets Tracker")]
 	public static void ShowWindow() {
@@ -20,14 +19,12 @@ public class RecentAssetsWindow : EditorWindow
 		LoadHistory();
 		EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemGUI;
 		EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyWindowItemGUI;
-		SceneView.duringSceneGui += OnSceneGUI;
 	}
 
 	private void OnDisable() {
 		SaveHistory();
 		EditorApplication.projectWindowItemOnGUI -= OnProjectWindowItemGUI;
 		EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyWindowItemGUI;
-		SceneView.duringSceneGui -= OnSceneGUI;
 	}
 
 	private void OnGUI() {
@@ -35,11 +32,10 @@ public class RecentAssetsWindow : EditorWindow
 
 		for (int i = recentAssets.Count - 1; i >= 0; i--) {
 			string assetPath = recentAssets[i];
-			Object asset = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
 			Texture icon = AssetDatabase.GetCachedIcon(assetPath);
 
 			EditorGUILayout.BeginHorizontal();
-			if (icon != null) {
+			if (icon) {
 				GUILayout.Label(icon, GUILayout.Width(20), GUILayout.Height(20));
 			}
 			if (GUILayout.Button(Path.GetFileName(assetPath))) {
@@ -49,6 +45,10 @@ public class RecentAssetsWindow : EditorWindow
 		}
 
 		EditorGUILayout.EndScrollView();
+
+		if (GUILayout.Button("Clear")) {
+			ClearHistory();
+		}
 	}
 
 	private void OnProjectWindowItemGUI(string guid, Rect selectionRect) {
@@ -61,7 +61,7 @@ public class RecentAssetsWindow : EditorWindow
 	private void OnHierarchyWindowItemGUI(int instanceID, Rect selectionRect) {
 		if (Event.current.type == EventType.MouseDown && selectionRect.Contains(Event.current.mousePosition)) {
 			Object obj = EditorUtility.InstanceIDToObject(instanceID);
-			if (obj != null) {
+			if (obj) {
 				string path = AssetDatabase.GetAssetPath(obj);
 				if (!string.IsNullOrEmpty(path)) {
 					RegisterAsset(path);
@@ -70,30 +70,13 @@ public class RecentAssetsWindow : EditorWindow
 		}
 	}
 
-	private void OnSceneGUI(SceneView sceneView) {
-		Event e = Event.current;
-		if (e.type == EventType.KeyDown) {
-			if (e.keyCode == KeyCode.Mouse3) // Back button
-			{
-				GoBack();
-				e.Use();
-			} else if (e.keyCode == KeyCode.Mouse4) // Forward button
-			{
-				GoForward();
-				e.Use();
-			}
-		}
-	}
-
 	private void RegisterAsset(string path) {
 		if (!string.IsNullOrEmpty(path)) {
-			recentAssets.Remove(path); // Remove previous occurrence if exists
+			recentAssets.Remove(path);
 			recentAssets.Add(path);
-			currentIndex = recentAssets.Count - 1;
 			if (recentAssets.Count > 20) // Limit to last 20 items
 			{
 				recentAssets.RemoveAt(0);
-				currentIndex--;
 			}
 			SaveHistory();
 			Repaint();
@@ -107,34 +90,20 @@ public class RecentAssetsWindow : EditorWindow
 			if (obj) {
 				Selection.activeObject = obj;
 				EditorGUIUtility.PingObject(obj);
-				recentAssets.RemoveAt(index); // Remove previous occurrence
-				recentAssets.Add(assetPath); // Add it to the end to reflect most recent selection
-				currentIndex = recentAssets.Count - 1;
-				SaveHistory();
-				Repaint();
 			}
 		}
 	}
 
-	private void GoBack() {
-		if (currentIndex > 0) {
-			currentIndex--;
-			SelectAsset(currentIndex);
-		}
-	}
-
-	private void GoForward() {
-		if (currentIndex < recentAssets.Count - 1) {
-			currentIndex++;
-			SelectAsset(currentIndex);
-		}
+	private void ClearHistory() {
+		recentAssets.Clear();
+		SaveHistory();
+		Repaint();
 	}
 
 	private void LoadHistory() {
 		string data = EditorPrefs.GetString(PrefsKey, "");
 		if (!string.IsNullOrEmpty(data)) {
 			recentAssets = data.Split('|').ToList();
-			currentIndex = recentAssets.Count - 1;
 		}
 	}
 

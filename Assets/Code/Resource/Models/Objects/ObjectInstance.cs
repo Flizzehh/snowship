@@ -67,7 +67,7 @@ namespace Snowship.NResource
 			obj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().objectPrefab, zeroPointTile.obj.transform, false);
 			sr = obj.GetComponent<SpriteRenderer>();
 			obj.transform.position += (Vector3)prefab.anchorPositionOffset[rotationIndex];
-			obj.name = "Tile Object Instance: " + prefab.name;
+			obj.name = "Tile Object Instance: " + prefab.Name;
 			sr.sortingOrder = 1 + prefab.layer; // Tile Object Sprite
 			sr.sprite = prefab.GetBaseSpriteForVariation(variation);
 
@@ -183,7 +183,7 @@ namespace Snowship.NResource
 					break;
 			}
 			if (instance == null) {
-				Debug.LogError("Instance is null for prefab " + (prefab != null ? prefab.name : "null") + " at tile " + tile.obj.transform.position);
+				Debug.LogError("Instance is null for prefab " + (prefab != null ? prefab.Name : "null") + " at tile " + tile.obj.transform.position);
 			}
 			if (addToList) {
 				AddObjectInstance(instance);
@@ -259,7 +259,7 @@ namespace Snowship.NResource
 					Farm.farms.Remove(farm);
 					break;
 				default:
-					Debug.LogWarning("No removal case for removing " + instance.prefab.name);
+					Debug.LogWarning("No removal case for removing " + instance.prefab.Name);
 					break;
 			}
 

@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NResource
 {
-	public class ObjectPrefabGroup
+	public class ObjectPrefabGroup : IGroupItem
 	{
 		public static readonly Dictionary<ObjectGroupEnum, ObjectPrefabGroup> objectPrefabGroups = new();
 
 		public readonly ObjectGroupEnum type;
-		public readonly string name;
 
-		public readonly List<ObjectPrefabSubGroup> subGroups = new();
+		public string Name { get; }
+		public Sprite Icon { get; }
 
-		public ObjectPrefabGroup(ObjectGroupEnum type, List<ObjectPrefabSubGroup> subGroups) {
+		public List<IGroupItem> Children { get; }
+
+		public ObjectPrefabGroup(ObjectGroupEnum type, List<IGroupItem> children) {
 			this.type = type;
-			name = StringUtilities.SplitByCapitals(type.ToString());
+			Name = StringUtilities.SplitByCapitals(type.ToString());
 
-			this.subGroups = subGroups;
+			Children = children;
 		}
 
 		public static ObjectPrefabGroup GetObjectPrefabGroupByString(string objectPrefabGroupString) {

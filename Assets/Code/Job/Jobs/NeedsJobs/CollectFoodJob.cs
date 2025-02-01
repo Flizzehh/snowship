@@ -5,7 +5,7 @@ using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Food", "CollectFood", false)]
+	[RegisterJob("Needs", "Food", "CollectFood")]
 	public class CollectFoodJob : Job
 	{
 		private readonly Container container;

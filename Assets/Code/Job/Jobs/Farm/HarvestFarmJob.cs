@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Farm", "Harvest", "HarvestFarm", true)]
+	[RegisterJob("Farm", "Harvest", "HarvestFarm")]
 	public class HarvestFarmJob : Job
 	{
 		private readonly Farm farm;

@@ -58,7 +58,7 @@ namespace Snowship.NColonist {
 		}
 
 		public static void CalculateNeedValue(NeedInstance need) {
-			if (need.colonist.Job != null && need.prefab.relatedJobs.Contains(need.colonist.Job.JobName)) {
+			if (need.colonist.Job != null && need.prefab.relatedJobs.Contains(need.colonist.Job.Name)) {
 				return;
 			}
 			float needIncreaseAmount = need.prefab.baseIncreaseRate;
@@ -128,7 +128,7 @@ namespace Snowship.NColonist {
 			if (need.GetValue() < 50) {
 				return false;
 			}
-			if (need.colonist.Job is { Group: "Needs", SubGroup: "Food" }) {
+			if (need.colonist.Job is { Group: { Name: "Needs" }, SubGroup: { Name: "Food" } }) {
 				return false;
 			}
 			need.colonist.SetJob(new CollectFoodJob(need.colonist.overTile, null, null, need.GetValue()));
@@ -139,7 +139,7 @@ namespace Snowship.NColonist {
 			if (need.GetValue() < 50) {
 				return false;
 			}
-			if (need.colonist.Job is { Group: "Needs", SubGroup: "Rest" }) {
+			if (need.colonist.Job is { Group: { Name: "Needs" }, SubGroup: { Name: "Rest" } }) {
 				return false;
 			}
 			need.colonist.SetJob(new SleepJob(need.colonist.overTile));

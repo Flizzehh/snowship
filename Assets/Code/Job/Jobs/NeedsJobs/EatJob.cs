@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Food", "Eat", false)]
+	[RegisterJob("Needs", "Food", "Eat")]
 	public class EatJob : Job
 	{
 		private Colonist colonist;
@@ -30,7 +30,7 @@ namespace Snowship.NJob
 
 			// Find a chair (ideally next to a table) for the colonist to sit at to eat
 			List<ObjectInstance> chairs = new();
-			foreach (ObjectPrefab chairPrefab in ObjectPrefabSubGroup.GetObjectPrefabSubGroupByEnum(ObjectPrefabSubGroup.ObjectSubGroupEnum.Chairs).prefabs) {
+			foreach (ObjectPrefab chairPrefab in ObjectPrefabSubGroup.GetObjectPrefabSubGroupByEnum(ObjectPrefabSubGroup.ObjectSubGroupEnum.Chairs).Children) {
 				List<ObjectInstance> chairsFromPrefab = ObjectInstance.GetObjectInstancesByPrefab(chairPrefab);
 				if (chairsFromPrefab != null) {
 					chairs.AddRange(chairsFromPrefab);

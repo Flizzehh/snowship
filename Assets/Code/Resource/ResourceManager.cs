@@ -625,7 +625,7 @@ public class ResourceManager : IManager, IDisposable
 	private ObjectPrefabGroup ParseObjectPrefabGroup(KeyValuePair<string, object> objectGroupProperty) {
 
 		ObjectPrefabGroup.ObjectGroupEnum? groupType = null;
-		List<ObjectPrefabSubGroup> subGroups = new();
+		List<IGroupItem> subGroups = new();
 
 		foreach (KeyValuePair<string, object> objectGroupSubProperty in (List<KeyValuePair<string, object>>)objectGroupProperty.Value) {
 			switch ((ObjectGroupPropertyEnum)Enum.Parse(typeof(ObjectGroupPropertyEnum), objectGroupSubProperty.Key)) {
@@ -665,7 +665,7 @@ public class ResourceManager : IManager, IDisposable
 	private ObjectPrefabSubGroup ParseObjectPrefabSubGroup(ObjectPrefabGroup.ObjectGroupEnum? groupType, KeyValuePair<string, object> objectSubGroupProperty) {
 
 		ObjectPrefabSubGroup.ObjectSubGroupEnum? subGroupType = null;
-		List<ObjectPrefab> prefabs = new();
+		List<IGroupItem> prefabs = new();
 
 		foreach (KeyValuePair<string, object> objectSubGroupSubProperty in (List<KeyValuePair<string, object>>)objectSubGroupProperty.Value) {
 			switch ((ObjectSubGroupPropertyEnum)Enum.Parse(typeof(ObjectSubGroupPropertyEnum), objectSubGroupSubProperty.Key)) {
@@ -699,7 +699,6 @@ public class ResourceManager : IManager, IDisposable
 
 		return new ObjectPrefabSubGroup(
 			subGroupType.Value,
-			groupType.Value,
 			prefabs
 		);
 	}

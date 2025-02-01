@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Terraform", "Plants", "PlantPlant", true)]
+	[RegisterJob("Terraform", "Plants", "PlantPlant")]
 	public class PlantPlantJob : Job
 	{
 		private readonly Variation variation;

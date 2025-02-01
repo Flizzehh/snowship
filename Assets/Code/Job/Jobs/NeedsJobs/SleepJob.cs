@@ -5,7 +5,7 @@ using Snowship.NTime;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Needs", "Rest", "Sleep", false)]
+	[RegisterJob("Needs", "Rest", "Sleep")]
 	public class SleepJob : Job
 	{
 		private Colonist colonist;

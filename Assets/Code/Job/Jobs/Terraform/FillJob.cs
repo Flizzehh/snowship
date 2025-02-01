@@ -2,7 +2,7 @@
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Terraform", "Terrain", "Fill", true)]
+	[RegisterJob("Terraform", "Terrain", "Fill")]
 	public class FillJob : Job
 	{
 		protected FillJob(TileManager.Tile tile) : base(tile) {

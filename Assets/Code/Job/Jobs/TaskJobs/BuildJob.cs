@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Build", "Build", true)]
+	[RegisterJob("Task", "Build", "Build")]
 	public class BuildJob : Job
 	{
 		public ObjectPrefab ObjectPrefab { get; }
@@ -16,7 +16,7 @@ namespace Snowship.NJob
 			ObjectPrefab = objectPrefab;
 			Rotation = rotation;
 
-			Description = $"Building a {objectPrefab.name}.";
+			Description = $"Building a {objectPrefab.Name}.";
 			RequiredResources.AddRange(objectPrefab.commonResources);
 			RequiredResources.AddRange(variation.uniqueResources);
 			SetTimeToWork(ObjectPrefab.timeToBuild);
@@ -47,7 +47,7 @@ namespace Snowship.NJob
 			}
 
 			// TODO Move this to Job parent class
-			SkillInstance skill = ((Colonist)Worker).GetSkillFromJobType(JobName);
+			SkillInstance skill = ((Colonist)Worker).GetSkillFromJobType(Name);
 			skill?.AddExperience(ObjectPrefab.timeToBuild);
 
 			colonist.MoveToClosestWalkableTile(true);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Command", "Remove", "RemoveRoof", true)]
+	[RegisterJob("Command", "Remove", "RemoveRoof")]
 	public class RemoveRoofJob : Job
 	{
 		protected RemoveRoofJob(TileManager.Tile tile) : base(tile) {

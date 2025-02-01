@@ -3,7 +3,7 @@ using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Hauling", "Hauling", "PickupResources", false)]
+	[RegisterJob("Hauling", "Hauling", "PickupResources")]
 	public class PickupResourcesJob : Job
 	{
 		private readonly Container container;

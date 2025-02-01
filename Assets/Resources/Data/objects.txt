@@ -549,13 +549,3 @@
 					<CommonResources>CottonSeed:1
 					<SelectionModifiers>Walkable,Buildable,OmitObjects,OmitPlants,OmitSameLayerJobs
 					<JobType>PlantFarm
-		<SubGroup>
-			<Type>HarvestFarm
-			<Objects>
-				<Object>
-					<Type>HarvestFarm
-					<Layer>0
-					<TimeToBuild>2
-					<SelectionModifiers>Walkable,Buildable,Farms,OmitSameLayerJobs
-					<JobType>HarvestFarm
-					<AddToTileWhenBuilt>false

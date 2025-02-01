@@ -160,9 +160,9 @@ namespace Snowship.NColonist {
 				if (need.colonist.Job == null) {
 					checkNeed = true;
 				} else {
-					if (need.colonist.Job.Group == "Needs") {
-						if (NeedUtilities.jobToNeedMap.ContainsKey(need.colonist.Job.JobName)) {
-							if (need.prefab.priority < NeedPrefab.GetNeedPrefabFromEnum(NeedUtilities.jobToNeedMap[need.colonist.Job.JobName]).priority) {
+					if (need.colonist.Job.Group.Name == "Needs") {
+						if (NeedUtilities.jobToNeedMap.ContainsKey(need.colonist.Job.Name)) {
+							if (need.prefab.priority < NeedPrefab.GetNeedPrefabFromEnum(NeedUtilities.jobToNeedMap[need.colonist.Job.Name]).priority) {
 								checkNeed = true;
 							}
 						} else {

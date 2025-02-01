@@ -3,7 +3,7 @@ using Snowship.NResource;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Craft", "CreateResource", false)]
+	[RegisterJob("Task", "Craft", "CreateResource")]
 	public class CreateResourceJob : Job
 	{
 		public readonly CraftingObject CraftingObject;

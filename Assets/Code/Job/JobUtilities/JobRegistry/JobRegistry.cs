@@ -2,65 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.Collections;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	public class JobRegistry
 	{
-		private readonly HashSet<Type> jobTypes;
-		private readonly Dictionary<string, Type> jobNameToTypeMap = new();
-		private readonly Dictionary<Type, RegisterJobAttribute> jobToAttributesMap = new();
-
-		private readonly Dictionary<string, HashSet<Type>> jobGroupToJobs = new();
-		private readonly Dictionary<string, HashSet<string>> jobGroupToSubGroups = new();
-
-		private readonly Dictionary<string, HashSet<Type>> jobSubGroupToTypeMap = new();
+		private readonly List<JobGroup> jobGroups = new();
+		private readonly Dictionary<Type, JobTypeData> jobTypeToDataMap = new();
+		private readonly Dictionary<string, JobTypeData> jobNameToDataMap = new();
 
 		public JobRegistry() {
-			jobTypes = Assembly
+			List<Type> jobTypes = Assembly
 				.GetExecutingAssembly()
 				.GetTypes()
 				.Where(type => type.GetCustomAttributes(typeof(RegisterJobAttribute), false).Any())
-				.ToHashSet();
+				.ToList();
 
 			foreach (Type jobType in jobTypes) {
+
+				JobTypeData jobTypeData = new(jobType);
+				jobTypeToDataMap.Add(jobType, jobTypeData);
+
 				RegisterJobAttribute attribute = (RegisterJobAttribute)jobType
 					.GetCustomAttributes(typeof(RegisterJobAttribute), false)
 					.First();
+				jobTypeData.SetAttributeData(attribute);
 
-				if (!jobGroupToJobs.TryAdd(attribute.Group, new HashSet<Type> { jobType })) {
-					jobGroupToJobs[attribute.Group].Add(jobType);
-				}
-
-				if (!jobGroupToSubGroups.TryAdd(attribute.Group, new HashSet<string> { attribute.SubGroup })) {
-					jobGroupToSubGroups[attribute.Group].Add(attribute.SubGroup);
-				}
-
-				if (!jobSubGroupToTypeMap.TryAdd(attribute.SubGroup, new HashSet<Type> { jobType })) {
-					jobSubGroupToTypeMap[attribute.SubGroup].Add(jobType);
+				JobGroup jobGroup = jobGroups.Find(g => g.Name == attribute.Group);
+				if (jobGroup == null) {
+					jobGroup = new JobGroup(attribute.Group, null);
+					jobGroups.Add(jobGroup);
 				}
 
-				if (!jobNameToTypeMap.TryAdd(attribute.JobName, jobType)) {
-					Debug.LogError($"Duplicate Job Name: {attribute.JobName} (Group: {attribute.Group}/{attribute.SubGroup})");
+				if (jobGroup.Children.Find(g => g.Name == attribute.SubGroup) is not JobGroup jobSubGroup) {
+					jobSubGroup = new JobGroup(attribute.SubGroup, null);
+					jobGroup.Children.Add(jobSubGroup);
 				}
-				if (!jobToAttributesMap.TryAdd(jobType, attribute)) {
-					Debug.LogError($"Duplicate Job Name: {jobType} (Group: {attribute.Group}/{attribute.SubGroup})");
-				}
+
+				jobSubGroup.Children.Add(jobTypeData);
+
+				jobTypeData.SetGroups(jobGroup, jobSubGroup);
+				jobNameToDataMap.Add(jobTypeData.Name, jobTypeData);
 			}
 		}
 
-		public Type GetJobType(string jobName) {
-			return jobNameToTypeMap[jobName];
+		public JobTypeData GetJobTypeData(Type jobType) {
+			return jobTypeToDataMap[jobType];
 		}
 
-		public RegisterJobAttribute GetJobAttributes(Type jobType) {
-			return jobToAttributesMap[jobType];
+		public JobTypeData GetJobTypeFromName(string jobName) {
+			return jobNameToDataMap[jobName];
 		}
 
-		public HashSet<Type> GetJobTypes() {
-			return jobTypes.ToHashSet();
+		public JobGroup GetJobGroup(string jobGroup) {
+			return jobGroups.FirstOrDefault(jg => jg.Name == jobGroup);
 		}
 	}
 }

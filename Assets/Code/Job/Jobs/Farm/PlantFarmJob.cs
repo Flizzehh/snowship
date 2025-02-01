@@ -2,7 +2,7 @@
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Farm", "PlantFarm", "PlantFarm", true)]
+	[RegisterJob("Farm", "PlantFarm", "PlantFarm")]
 	public class PlantFarmJob : BuildJob
 	{
 		public PlantFarmJob(

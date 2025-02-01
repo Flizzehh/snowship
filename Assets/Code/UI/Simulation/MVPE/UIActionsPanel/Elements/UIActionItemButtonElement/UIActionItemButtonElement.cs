@@ -33,8 +33,18 @@ namespace Snowship.NUI
 			Component.SetChildElementsActive(active);
 		}
 
-		public void AddVariation(ObjectPrefab prefab, Variation variation) {
-			Component.AddVariation(prefab, variation);
+		public UIActionItemButtonElement AddVariation(ObjectPrefab prefab, Variation variation) {
+			return Component.AddVariation(prefab, variation);
+		}
+
+		public void SetVariation(ObjectPrefab prefab, Variation variation, UIActionItemButtonElement variationButton) {
+			prefab.SetVariation(variation);
+
+			Component.SetItemIcon(prefab.GetBaseSpriteForVariation(variation));
+			// TODO Refresh Required Resources
+
+			SetChildElementsActive(false);
+			variationButton.SetChildElementsActive(false);
 		}
 	}
 }

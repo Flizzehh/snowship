@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Terraform", "Plants", "ChopPlant", true)]
+	[RegisterJob("Terraform", "Plants", "ChopPlant")]
 	public class ChopPlantJob : Job
 	{
 		protected ChopPlantJob(TileManager.Tile tile) : base(tile) {

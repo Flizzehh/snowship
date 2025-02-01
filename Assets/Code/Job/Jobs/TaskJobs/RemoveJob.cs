@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Command", "Remove", "Remove", true)]
+	[RegisterJob("Command", "Remove", "Remove")]
 	public class RemoveJob : Job
 	{
 		private readonly ObjectPrefab objectPrefab;
 
 		public RemoveJob(TileManager.Tile tile, ObjectPrefab objectPrefab) : base(tile) {
-			TargetName = Tile.GetObjectInstanceAtLayer(objectPrefab.layer).prefab.name;
+			TargetName = Tile.GetObjectInstanceAtLayer(objectPrefab.layer).prefab.Name;
 			Description = $"Removing a {TargetName}.";
 		}
 

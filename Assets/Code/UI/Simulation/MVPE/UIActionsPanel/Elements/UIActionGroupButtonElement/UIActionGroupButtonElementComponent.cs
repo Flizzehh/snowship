@@ -9,6 +9,7 @@ namespace Snowship.NUI
 	{
 		[SerializeField] private TMP_Text groupNameText;
 		[SerializeField] private Image groupIconImage;
+		[SerializeField] private LayoutElement groupIconLayoutElement;
 
 		[SerializeField] private Button button;
 		[SerializeField] private GameObject selectedIndicator;
@@ -28,6 +29,7 @@ namespace Snowship.NUI
 
 		public void SetGroupIcon(Sprite groupIcon) {
 			groupIconImage.sprite = groupIcon;
+			groupIconLayoutElement.preferredWidth = groupIconLayoutElement.preferredHeight * (groupIcon?.rect.width / groupIcon?.rect.height) ?? 0;
 		}
 
 		public void SetGroupName(string groupName) {

@@ -7,12 +7,14 @@ using UnityEngine;
 
 namespace Snowship.NResource
 {
-	public class ObjectPrefab
+	public class ObjectPrefab : IGroupItem
 	{
 		public static Dictionary<ObjectEnum, ObjectPrefab> objectPrefabs = new();
 
 		public readonly ObjectEnum type;
-		public readonly string name;
+		public string Name { get; }
+		public Sprite Icon => GetBaseSpriteForVariation(lastSelectedVariation);
+		public List<IGroupItem> Children => null;
 
 		public readonly ObjectPrefabGroup.ObjectGroupEnum groupType;
 		public readonly ObjectPrefabSubGroup.ObjectSubGroupEnum subGroupType;
@@ -113,7 +115,7 @@ namespace Snowship.NResource
 			bool addToTileWhenBuilt
 		) {
 			this.type = type;
-			name = StringUtilities.SplitByCapitals(type.ToString());
+			Name = StringUtilities.SplitByCapitals(type.ToString());
 
 			this.groupType = groupType;
 			this.subGroupType = subGroupType;
@@ -166,17 +168,17 @@ namespace Snowship.NResource
 			// Sprites
 			if (variations.Count == 0) {
 				Dictionary<SpriteType, List<Sprite>> spriteGroups = new() {
-					{ SpriteType.Base, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + name.Replace(' ', '-') + "-base").ToList() },
-					{ SpriteType.Bitmask, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + name.Replace(' ', '-') + "-bitmask").ToList() },
-					{ SpriteType.Active, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + name.Replace(' ', '-') + "-active").ToList() }
+					{ SpriteType.Base, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + Name + "/" + Name.Replace(' ', '-') + "-base").ToList() },
+					{ SpriteType.Bitmask, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + Name + "/" + Name.Replace(' ', '-') + "-bitmask").ToList() },
+					{ SpriteType.Active, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + Name + "/" + Name.Replace(' ', '-') + "-active").ToList() }
 				};
 				sprites.Add(Variation.nullVariation, spriteGroups);
 			} else {
 				foreach (Variation variation in variations) {
 					Dictionary<SpriteType, List<Sprite>> spriteGroups = new() {
-						{ SpriteType.Base, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? variation.name + " " + name : name + " " + variation.name).Replace(' ', '-') + "-base").ToList() },
-						{ SpriteType.Bitmask, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? variation.name + " " + name : name + " " + variation.name).Replace(' ', '-') + "-bitmask").ToList() },
-						{ SpriteType.Active, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + name + "/" + variation.name + "/" + (variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? variation.name + " " + name : name + " " + variation.name).Replace(' ', '-') + "-active").ToList() }
+						{ SpriteType.Base, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + Name + "/" + variation.name + "/" + (variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? variation.name + " " + Name : Name + " " + variation.name).Replace(' ', '-') + "-base").ToList() },
+						{ SpriteType.Bitmask, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + Name + "/" + variation.name + "/" + (variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? variation.name + " " + Name : Name + " " + variation.name).Replace(' ', '-') + "-bitmask").ToList() },
+						{ SpriteType.Active, Resources.LoadAll<Sprite>(@"Sprites/Objects/" + Name + "/" + variation.name + "/" + (variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? variation.name + " " + Name : Name + " " + variation.name).Replace(' ', '-') + "-active").ToList() }
 					};
 
 					sprites.Add(variation, spriteGroups);
@@ -205,7 +207,7 @@ namespace Snowship.NResource
 					foreach (Variation variation in variations) {
 						Debug.Log(variation.name + " " + GetBitmaskSpritesForVariation(variation).Count);
 					}
-					Debug.LogError("Differing number of bitmask sprites between different variations on object: " + name);
+					Debug.LogError("Differing number of bitmask sprites between different variations on object: " + Name);
 				}
 			}
 
@@ -253,12 +255,12 @@ namespace Snowship.NResource
 
 		public string GetInstanceNameFromVariation(Variation variation) { // TODO Make better
 			return variation == null
-				? name
-				: (variation.prefab.variationNameOrder == Variation.VariationNameOrderEnum.ObjectVariation ? name : string.Empty)
+				? Name
+				: (variation.prefab.variationNameOrder == Variation.VariationNameOrderEnum.ObjectVariation ? Name : string.Empty)
 				+ (string.IsNullOrEmpty(variation.name) || variation.prefab.variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? string.Empty : " ")
 				+ variation.name
 				+ (string.IsNullOrEmpty(variation.name) || variation.prefab.variationNameOrder == Variation.VariationNameOrderEnum.ObjectVariation ? string.Empty : " ")
-				+ (variation.prefab.variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? name : string.Empty);
+				+ (variation.prefab.variationNameOrder == Variation.VariationNameOrderEnum.VariationObject ? Name : string.Empty);
 		}
 
 		public Sprite GetBaseSpriteForVariation(Variation variation) {
