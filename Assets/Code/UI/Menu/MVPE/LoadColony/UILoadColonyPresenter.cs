@@ -71,7 +71,8 @@ namespace Snowship.NUI
 			planetViewModule.DisplayPlanet(GameManager.Get<PlanetManager>().planet, colonies, true);
 
 			foreach (PersistenceColony colony in colonies) {
-				UILoadColonyElement loadColonyElement = new UILoadColonyElement(colony, View.ColonyElementsParent);
+				UILoadColonyElement loadColonyElement = new(colony);
+				loadColonyElement.Open(View.ColonyElementsParent).Forget();
 				loadColonyElement.OnLoadColonyElementClicked += OnColonyElementClicked;
 			}
 		}

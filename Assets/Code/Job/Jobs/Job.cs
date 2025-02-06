@@ -9,55 +9,61 @@ using Object = UnityEngine.Object;
 
 namespace Snowship.NJob
 {
-	public abstract class Job : IJob, IGroupItem
+	public abstract class Job<TJobDefinition> : IJob where TJobDefinition : class, IJobDefinition
 	{
+		// Job Definition Properties
+		public TJobDefinition Definition { get; }
+		public int Layer => Definition.Layer;
+		public string Name => Definition.Name;
+		public IGroupItem Group => Definition.Group;
+		public IGroupItem SubGroup => Definition.SubGroup;
+
 		// Job Instance Properties
 		public TileManager.Tile Tile { get; private set; }
 		public EJobState JobState { get; private set; } = EJobState.Ready;
-		public float TimeToWork { get; protected set; } = 0;
 		public float Progress { get; private set; } = 0;
 		public Human Worker { get; private set; }
 		public string TargetName { get; protected set; } = string.Empty;
 		public string Description { get; protected set; } = string.Empty;
 		public List<ResourceAmount> RequiredResources { get; } = new();
 		public List<ContainerPickup> ContainerPickups { get; protected set; } = new();
-		public bool Returnable { get; protected set; } = true;
 		public bool ShouldBeCancelled { get; protected set; } = false;
 		public GameObject JobPreviewObject { get; protected set; }
 		public int Priority { get; private set; } = 1;
-		public int Layer { get; protected set; } = 0;
 
 		// State Shortcuts
 		public bool Started => JobState >= EJobState.Started;
 		public bool InProgress => JobState >= EJobState.InProgress;
 		public bool Finished => JobState >= EJobState.Finished;
 
-		// Attribute Shortcuts
-		public JobGroup Group => GameManager.Get<JobManager>().JobRegistry.GetJobTypeData(GetType()).Group as JobGroup;
-		public JobGroup SubGroup => GameManager.Get<JobManager>().JobRegistry.GetJobTypeData(GetType()).SubGroup as JobGroup;
-
-		// IGroupItem
-		public string Name => GameManager.Get<JobManager>().JobRegistry.GetJobTypeData(GetType()).Name;
-		public Sprite Icon { get; } // TODO Load image from a registry of job images?
-		public List<IGroupItem> Children => null;
-
 		// Events
-		public event Action<Job, Human> OnWorkerAssigned;
-		public event Action<Job, EJobState> OnJobStateChanged;
-		public event Action<Job, int> OnPriorityChanged;
+		public event Action<Job<TJobDefinition>, Human> OnWorkerAssigned;
+		public event Action<Job<TJobDefinition>, EJobState> OnJobStateChanged;
+		public event Action<Job<TJobDefinition>, int> OnPriorityChanged;
 
-		// Methods
 		protected Job(TileManager.Tile tile) {
+			Definition = GameManager.Get<JobManager>().JobRegistry.GetJobDefinition<TJobDefinition>() as TJobDefinition
+				?? throw new InvalidOperationException();
 			Tile = tile;
+
+			RequiredResources.AddRange(Definition.BaseRequiredResources);
+
 			GameManager.Get<TimeManager>().OnTimeChanged += OnTimeChanged;
+
+			if (Definition.HasPreviewObject) {
+				JobPreviewObject = Object.Instantiate(
+					GameManager.Get<ResourceManager>().tilePrefab, // TODO Create separate Class/Prefab for JobPreviewObject
+					Tile.obj.transform,
+					false
+				);
+			}
 		}
 
 		protected Job() {
 		}
 
 		protected void SetTimeToWork(float timeToWork) {
-			TimeToWork = timeToWork;
-			Progress = TimeToWork;
+			Progress = Definition.TimeToWork;
 		}
 
 		protected void ChangeTile(TileManager.Tile tile) {
@@ -76,6 +82,9 @@ namespace Snowship.NJob
 			Worker = worker;
 			OnWorkerAssigned?.Invoke(this, Worker);
 			ChangeJobState(worker == null ? EJobState.Returned : EJobState.Taken);
+			if (worker != null) {
+				Debug.Log($"Assigned {worker.Name} to job {Name} at {Tile.position}");
+			}
 		}
 
 		protected virtual void OnJobTaken() {
@@ -99,7 +108,7 @@ namespace Snowship.NJob
 		}
 
 		protected virtual void OnJobReturned() {
-			if (Returnable) {
+			if (Definition.Returnable) {
 				ChangeJobState(EJobState.Ready);
 				return;
 			}

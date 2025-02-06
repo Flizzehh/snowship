@@ -19,12 +19,12 @@ namespace Snowship.NColonist {
 		public bool playerMoved;
 
 		// Job
-		public Job Job { get; private set; }
+		public IJob Job { get; private set; }
 
-		public readonly Queue<Job> Backlog = new();
+		public readonly Queue<IJob> Backlog = new();
 
-		public event Action<Job> OnJobChanged;
-		public event Action<Job> OnStoredJobChanged;
+		public event Action<IJob> OnJobChanged;
+		public event Action<IJob> OnStoredJobChanged;
 
 		// Professions
 		public readonly List<Profession> professions = new List<Profession>();
@@ -105,6 +105,13 @@ namespace Snowship.NColonist {
 				return;
 			}
 
+			if (Job == null) {
+				IJob selectedJob = GameManager.Get<JobManager>().Jobs.Where(j => j.Worker == null).FirstOrDefault();
+				if (selectedJob != null) {
+					GameManager.Get<JobManager>().TakeJob(selectedJob, this);
+				}
+			}
+
 			// TODO Create event for OnTileChanged or something
 			// if (overTileChanged) {
 			// 	ColonistJob.UpdateColonistJobCosts(this);
@@ -180,7 +187,7 @@ namespace Snowship.NColonist {
 			}
 		}
 
-		public void SetJob(Job job) {
+		public void SetJob(IJob job) {
 
 			Job?.Close(); // Close existing Job
 

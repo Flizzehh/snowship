@@ -33,14 +33,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - UI/Icon/Job
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 335d7e0ce0fea3e408bc7552729f179c
+    m_Address: ui_icon_job_Plant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 38c42bd490c931341b742aec8a99af66
     m_Address: ui_icon_job_Fill
     m_ReadOnly: 0
     m_SerializedLabels:
     - UI/Icon/Job
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3cd6f4ad0e993274d9253b2bb7f720d4
+    m_Address: ui_icon_job_Build
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4109ad4dd85d68e4caced6ffa3f280f6
-    m_Address: ui_icon_job_RemoveAll
+    m_Address: ui_icon_job_Remove
     m_ReadOnly: 0
     m_SerializedLabels:
     - UI/Icon/Job
@@ -83,6 +95,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a8c272c26bbec84459eee97ec9d40a0a
     m_Address: ui_icon_job_RemoveFloor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI/Icon/Job
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3c288a9479ba44448ba418bb1de60de
+    m_Address: ui_icon_job_PlantFarm
     m_ReadOnly: 0
     m_SerializedLabels:
     - UI/Icon/Job

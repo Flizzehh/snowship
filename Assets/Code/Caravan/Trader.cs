@@ -62,7 +62,7 @@ namespace Snowship.NCaravan {
 							}
 						)
 						.ToList();
-					Job job = new CollectResourcesJob(tradingPost, transferResources);
+					CollectResourcesJob job = new(tradingPost, transferResources);
 
 					caravan.confirmedResourcesToTrade.Clear();
 					GameManager.Get<JobManager>().AddJob(job);

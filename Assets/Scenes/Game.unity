@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 556783373}
   - component: {fileID: 556783372}
   m_Layer: 0
-  m_Name: SelectedPrefabPreview
+  m_Name: SelectedJobPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1179,6 +1179,7 @@ MonoBehaviour:
   lifeParent: {fileID: 1164091695}
   selectionParent: {fileID: 822783343}
   jobParent: {fileID: 1352574862}
+  selectedJobPreview: {fileID: 556783372}
 --- !u!1 &1604625817
 GameObject:
   m_ObjectHideFlags: 0

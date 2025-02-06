@@ -2,11 +2,20 @@
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NResource;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Food", "CollectFood")]
-	public class CollectFoodJob : Job
+	public class CollectFoodJobDefinition : JobDefinition
+	{
+		public CollectFoodJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Returnable = false;
+		}
+	}
+
+	public class CollectFoodJob : Job<CollectFoodJobDefinition>
 	{
 		private readonly Container container;
 		private List<Container> alreadyCheckedContainers;
@@ -27,8 +36,6 @@ namespace Snowship.NJob
 			this.nutritionTarget = nutritionTarget;
 
 			Description = "Finding something to eat.";
-
-			Returnable = false;
 		}
 
 		protected override void OnJobTaken() {

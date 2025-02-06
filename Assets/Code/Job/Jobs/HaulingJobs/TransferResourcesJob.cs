@@ -1,10 +1,18 @@
 ﻿using System.Collections.Generic;
 using Snowship.NResource;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Hauling", "Hauling", "TransferResources")]
-	public class TransferResourcesJob : Job
+	public class TransferResourcesJobDefinition : JobDefinition
+	{
+		public TransferResourcesJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class TransferResourcesJob : Job<TransferResourcesJobDefinition>
 	{
 		private readonly Container container;
 

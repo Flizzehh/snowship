@@ -14,6 +14,7 @@ using Snowship.NInput;
 using Snowship.NLife;
 using Snowship.NPersistence;
 using Snowship.NPlanet;
+using Snowship.NResource;
 using Snowship.NState;
 using Snowship.NUI;
 using UnityEngine;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour {
 		Create<TimeManager>();
 		Create<CameraManager>();
 		Create<ResourceManager>();
+		Create<BuildableManager>();
 		Create<LifeManager>();
 		Create<HumanManager>();
 		Create<ColonistManager>();
@@ -54,8 +56,7 @@ public class GameManager : MonoBehaviour {
 		Create<UniverseManager>();
 		Create<PersistenceManager>();
 		Create<UIManager>();
-		// Create<UIManagerOld>();
-		Create<SelectableManager>();
+		Create<SelectionManager>();
 		Create<DebugManager>();
 		Create<StateManager>();
 	}

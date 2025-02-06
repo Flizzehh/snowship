@@ -89,6 +89,24 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""14c8b821-0db6-438a-96f2-4048473b4292"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Deselect"",
+                    ""type"": ""Button"",
+                    ""id"": ""bcd14a9f-01aa-4d7c-9447-2e21a8b1849f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +250,28 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC"",
                     ""action"": ""Time/SlowDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d006e57-d2f5-473a-8393-dfb0df8a5119"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0bf08d7-d95e-4c43-9fc8-2f0ba1956a32"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Deselect"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -782,6 +822,8 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         m_Simulation_Pause = m_Simulation.FindAction("Pause", throwIfNotFound: true);
         m_Simulation_TimeSpeedUp = m_Simulation.FindAction("Time/SpeedUp", throwIfNotFound: true);
         m_Simulation_TimeSlowDown = m_Simulation.FindAction("Time/SlowDown", throwIfNotFound: true);
+        m_Simulation_Select = m_Simulation.FindAction("Select", throwIfNotFound: true);
+        m_Simulation_Deselect = m_Simulation.FindAction("Deselect", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -868,6 +910,8 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Simulation_Pause;
     private readonly InputAction m_Simulation_TimeSpeedUp;
     private readonly InputAction m_Simulation_TimeSlowDown;
+    private readonly InputAction m_Simulation_Select;
+    private readonly InputAction m_Simulation_Deselect;
     public struct SimulationActions
     {
         private @InputSystemActions m_Wrapper;
@@ -879,6 +923,8 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Simulation_Pause;
         public InputAction @TimeSpeedUp => m_Wrapper.m_Simulation_TimeSpeedUp;
         public InputAction @TimeSlowDown => m_Wrapper.m_Simulation_TimeSlowDown;
+        public InputAction @Select => m_Wrapper.m_Simulation_Select;
+        public InputAction @Deselect => m_Wrapper.m_Simulation_Deselect;
         public InputActionMap Get() { return m_Wrapper.m_Simulation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -909,6 +955,12 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
             @TimeSlowDown.started += instance.OnTimeSlowDown;
             @TimeSlowDown.performed += instance.OnTimeSlowDown;
             @TimeSlowDown.canceled += instance.OnTimeSlowDown;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
+            @Deselect.started += instance.OnDeselect;
+            @Deselect.performed += instance.OnDeselect;
+            @Deselect.canceled += instance.OnDeselect;
         }
 
         private void UnregisterCallbacks(ISimulationActions instance)
@@ -934,6 +986,12 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
             @TimeSlowDown.started -= instance.OnTimeSlowDown;
             @TimeSlowDown.performed -= instance.OnTimeSlowDown;
             @TimeSlowDown.canceled -= instance.OnTimeSlowDown;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
+            @Deselect.started -= instance.OnDeselect;
+            @Deselect.performed -= instance.OnDeselect;
+            @Deselect.canceled -= instance.OnDeselect;
         }
 
         public void RemoveCallbacks(ISimulationActions instance)
@@ -1087,6 +1145,8 @@ public partial class @InputSystemActions: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnTimeSpeedUp(InputAction.CallbackContext context);
         void OnTimeSlowDown(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnDeselect(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

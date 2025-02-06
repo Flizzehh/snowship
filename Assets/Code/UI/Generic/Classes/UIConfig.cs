@@ -12,7 +12,7 @@ namespace Snowship.NUI
 		where TPresenter : IUIPresenter {
 
 		private string AddressableKey() {
-			return GetType().Name;
+			return $"UI/{GetType().Name}";
 		}
 
 		public async UniTask<(IUIView view, IUIPresenter presenter)> Open(Transform parent) {
@@ -27,8 +27,7 @@ namespace Snowship.NUI
 		}
 
 		protected async UniTask<GameObject> GetViewPrefab() {
-			Debug.Log(AddressableKey());
-			AsyncOperationHandle<GameObject> viewPrefabOperationHandle = Addressables.LoadAssetAsync<GameObject>($"UI/{AddressableKey()}");
+			AsyncOperationHandle<GameObject> viewPrefabOperationHandle = Addressables.LoadAssetAsync<GameObject>(AddressableKey());
 			viewPrefabOperationHandle.ReleaseHandleOnCompletion();
 			return await viewPrefabOperationHandle;
 		}

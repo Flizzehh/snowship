@@ -36,7 +36,7 @@ namespace Snowship.NPersistence {
 		public PInventory PInventory { get; } = new PInventory();
 
 		public PColonist PColonist { get; } = new PColonist();
-		public PJob PJob { get; } = new();
+		// public PJob PJob { get; } = new();
 
 		public PCaravan PCaravan { get; } = new PCaravan();
 
@@ -58,7 +58,7 @@ namespace Snowship.NPersistence {
 				PCamera.SaveCamera(saveDirectoryPath);
 				PCaravan.SaveCaravans(saveDirectoryPath);
 				PColonist.SaveColonists(saveDirectoryPath);
-				PJob.SaveJobs(saveDirectoryPath);
+				// PJob.SaveJobs(saveDirectoryPath);
 				PObject.SaveObjects(saveDirectoryPath);
 				PResource.SaveResources(saveDirectoryPath);
 				PRiver.SaveModifiedRivers(saveDirectoryPath, PRiver.LoadRivers(colony.directory + "/Map/rivers.snowship"));
@@ -203,11 +203,11 @@ namespace Snowship.NPersistence {
 				loadingState = LoadingState.LoadingJobs;
 				UIEvents.UpdateLoadingScreenText("Loading Job Data", string.Empty);
 				await UniTask.WaitForEndOfFrame();
-				List<PJob.PersistenceJob> persistenceJobs = PJob.LoadJobs(saveDirectoryPath + "/jobs.snowship");
-				PJob.ApplyLoadedJobs(persistenceJobs);
-				while (loadingState != LoadingState.LoadedJobs) {
-					await UniTask.WaitForEndOfFrame();
-				}
+				// List<PJob.PersistenceJob> persistenceJobs = PJob.LoadJobs(saveDirectoryPath + "/jobs.snowship");
+				// PJob.ApplyLoadedJobs(persistenceJobs);
+				// while (loadingState != LoadingState.LoadedJobs) {
+				// 	await UniTask.WaitForEndOfFrame();
+				// }
 
 				loadingState = LoadingState.LoadingColonists;
 				UIEvents.UpdateLoadingScreenText("Loading Colonist Data", string.Empty);

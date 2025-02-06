@@ -435,13 +435,6 @@
 			<Type>Plants
 			<Objects>
 				<Object>
-					<Type>ChopPlant
-					<Layer>0
-					<TimeToBuild>2
-					<SelectionModifiers>Walkable,Plants,OmitSameLayerJobs
-					<JobType>ChopPlant
-					<AddToTileWhenBuilt>false
-				<Object>
 					<Type>Plant
 					<Layer>0
 					<TimeToBuild>3
@@ -470,31 +463,6 @@
 							<UniqueResources>Blueberry:1
 							<Plants>Bush:Blueberry
 					<VariationNameOrder>ObjectVariation
-		<SubGroup>
-			<Type>Terrain
-			<Objects>
-				<Object>
-					<Type>Mine
-					<Layer>0
-					<TimeToBuild>3
-					<SelectionModifiers>StoneTypes,OmitSameLayerJobs
-					<JobType>Mine
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>Dig
-					<Layer>0
-					<TimeToBuild>3
-					<SelectionModifiers>OmitNonCoastWater,OmitHoles,OmitPreviousDig,OmitStoneTypes,OmitObjects,OmitPlants,OmitSameLayerJobs
-					<JobType>Dig
-					<AddToTileWhenBuilt>false
-				<Object>
-					<Type>Fill
-					<Layer>0
-					<TimeToBuild>3
-					<CommonResources>Dirt:4
-					<SelectionModifiers>Fillable,OmitObjects,OmitPlants,OmitSameLayerJobs
-					<JobType>Fill
-					<AddToTileWhenBuilt>false
 <Group>
 	<Type>Farm
 	<SubGroups>

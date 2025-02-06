@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Snowship.NJob
 {
 	public class JobRegistry
 	{
 		private readonly List<JobGroup> jobGroups = new();
-		private readonly Dictionary<Type, JobTypeData> jobTypeToDataMap = new();
-		private readonly Dictionary<string, JobTypeData> jobNameToDataMap = new();
+		private readonly Dictionary<Type, JobDefinition> jobDefinitionTypeToDefinitionMap = new();
+		private readonly Dictionary<string, JobDefinition> jobNameToDefinitionMap = new();
 
 		public JobRegistry() {
 			List<Type> jobTypes = Assembly
@@ -20,13 +23,9 @@ namespace Snowship.NJob
 
 			foreach (Type jobType in jobTypes) {
 
-				JobTypeData jobTypeData = new(jobType);
-				jobTypeToDataMap.Add(jobType, jobTypeData);
-
 				RegisterJobAttribute attribute = (RegisterJobAttribute)jobType
 					.GetCustomAttributes(typeof(RegisterJobAttribute), false)
 					.First();
-				jobTypeData.SetAttributeData(attribute);
 
 				JobGroup jobGroup = jobGroups.Find(g => g.Name == attribute.Group);
 				if (jobGroup == null) {
@@ -39,23 +38,37 @@ namespace Snowship.NJob
 					jobGroup.Children.Add(jobSubGroup);
 				}
 
-				jobSubGroup.Children.Add(jobTypeData);
+				string jobName = attribute.JobName;
 
-				jobTypeData.SetGroups(jobGroup, jobSubGroup);
-				jobNameToDataMap.Add(jobTypeData.Name, jobTypeData);
+				JobDefinition jobDefinition = Activator.CreateInstance(jobType, jobGroup, jobSubGroup, jobName, LoadIcon(jobName)) as JobDefinition
+					?? throw new InvalidOperationException();
+
+				jobSubGroup.Children.Add(jobDefinition);
+				jobDefinitionTypeToDefinitionMap.Add(jobDefinition.GetType(), jobDefinition);
+				jobNameToDefinitionMap.Add(jobName, jobDefinition);
 			}
 		}
 
-		public JobTypeData GetJobTypeData(Type jobType) {
-			return jobTypeToDataMap[jobType];
+		public IJobDefinition GetJobDefinition<TJobDefinition>() where TJobDefinition : IJobDefinition {
+			return jobDefinitionTypeToDefinitionMap.GetValueOrDefault(typeof(TJobDefinition));
 		}
 
-		public JobTypeData GetJobTypeFromName(string jobName) {
-			return jobNameToDataMap[jobName];
+		public IJobDefinition GetJobDefinition(Type jobDefinitionType) {
+			return jobDefinitionTypeToDefinitionMap.GetValueOrDefault(jobDefinitionType);
 		}
 
-		public JobGroup GetJobGroup(string jobGroup) {
-			return jobGroups.FirstOrDefault(jg => jg.Name == jobGroup);
+		public JobDefinition GetJobTypeFromName(string jobName) {
+			return jobNameToDefinitionMap[jobName];
+		}
+
+		public JobGroup GetJobGroup(string groupToFind) {
+			return jobGroups.FirstOrDefault(group => group.Name == groupToFind);
+		}
+
+		private Sprite LoadIcon(string jobName) {
+			AsyncOperationHandle<Sprite> jobIconOperationHandle = Addressables.LoadAssetAsync<Sprite>($"ui_icon_job_{jobName}");
+			jobIconOperationHandle.ReleaseHandleOnCompletion();
+			return jobIconOperationHandle.WaitForCompletion();
 		}
 	}
 }

@@ -11,8 +11,12 @@ namespace Snowship.NUI
 
 		public event Action<UITradeResourceElement> OnTradeResourceElementShouldBeRemoved;
 
-		public UITradeResourceElement(TradeResourceAmount tradeResourceAmount, Transform parent) : base(parent) {
+		public UITradeResourceElement(TradeResourceAmount tradeResourceAmount) {
 			this.tradeResourceAmount = tradeResourceAmount;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			tradeResourceAmount.OnColonyAmountUpdated += Component.SetColonyAmount;
 			tradeResourceAmount.OnCaravanAmountUpdated += Component.SetCaravanAmount;

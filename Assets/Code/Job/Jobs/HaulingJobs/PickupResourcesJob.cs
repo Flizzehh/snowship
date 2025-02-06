@@ -1,10 +1,19 @@
 ﻿using Snowship.NColonist;
 using Snowship.NResource;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Hauling", "Hauling", "PickupResources")]
-	public class PickupResourcesJob : Job
+	public class PickupResourcesJobDefinition : JobDefinition
+	{
+		public PickupResourcesJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Returnable = false;
+		}
+	}
+
+	public class PickupResourcesJob : Job<PickupResourcesJobDefinition>
 	{
 		private readonly Container container;
 
@@ -12,8 +21,6 @@ namespace Snowship.NJob
 			this.container = container;
 
 			Description = "Picking up some resources.";
-
-			Returnable = false;
 		}
 
 		protected override void OnJobFinished() {

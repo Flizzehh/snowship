@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Snowship.NHuman;
 using Snowship.NResource;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -13,16 +12,15 @@ namespace Snowship.NUI
 
 		public event Action<BodySection> OnButtonClicked;
 
-		public UIClothingButtonElement(
-			Transform parent,
-			BodySection bodySection,
-			Clothing clothing
-		) : base(
-			parent
-		) {
+		public UIClothingButtonElement(BodySection bodySection, Clothing clothing) {
 			BodySection = bodySection;
+			this.clothing = clothing;
+		}
 
-			Component.SetTypeText(bodySection.ToString());
+		protected override void OnCreate() {
+			base.OnCreate();
+
+			Component.SetTypeText(BodySection.ToString());
 			SetClothing(clothing);
 
 			Component.OnButtonClicked += OnComponentButtonClicked;

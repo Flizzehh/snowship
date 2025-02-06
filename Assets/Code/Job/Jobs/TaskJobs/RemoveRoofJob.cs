@@ -1,15 +1,28 @@
-﻿using Snowship.NResource;
+﻿using System;
+using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Command", "Remove", "RemoveRoof")]
-	public class RemoveRoofJob : Job
+	[RegisterJob("Remove", "Remove", "RemoveRoof")]
+	public class RemoveRoofJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Roof,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public RemoveRoofJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Layer = 2;
+		}
+	}
+
+	public class RemoveRoofJob : Job<RemoveRoofJobDefinition>
 	{
 		protected RemoveRoofJob(TileManager.Tile tile) : base(tile) {
 			TargetName = "Roof";
 			Description = "Removing a roof.";
-			Layer = 2;
 		}
 
 		protected override void OnJobTaken() {

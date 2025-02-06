@@ -1,6 +1,5 @@
 ﻿using Snowship.NHuman;
 using Snowship.NResource;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -8,19 +7,24 @@ namespace Snowship.NUI
 	{
 		public readonly ReservedResources ReservedResources;
 		private readonly Human reserver;
-		private readonly UIHumanBodyElement reserverBodyElement;
 
-		public UIReservedResourcesElement(Transform parent, ReservedResources reservedResources) : base(parent) {
+		private UIHumanBodyElement reserverBodyElement;
+
+		public UIReservedResourcesElement(ReservedResources reservedResources) {
 			ReservedResources = reservedResources;
 			reserver = reservedResources.human;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			reserverBodyElement = Component.SetReserverBodyElement(reserver);
 			reserver.OnClothingChanged += reserverBodyElement.SetClothingOnBodySection;
 
 			Component.SetReserverNameText(reserver.Name);
 
-			Component.SetReservedCountText(reservedResources.resources.Count.ToString());
-			foreach (ResourceAmount resourceAmount in reservedResources.resources) {
+			Component.SetReservedCountText(ReservedResources.resources.Count.ToString());
+			foreach (ResourceAmount resourceAmount in ReservedResources.resources) {
 				Component.AddResourceAmountElement(resourceAmount);
 			}
 		}

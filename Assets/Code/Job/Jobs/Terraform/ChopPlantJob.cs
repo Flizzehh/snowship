@@ -1,10 +1,24 @@
-﻿using Snowship.NResource;
+﻿using System;
+using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Plants", "ChopPlant")]
-	public class ChopPlantJob : Job
+	public class ChopPlantJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Plant,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public ChopPlantJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class ChopPlantJob : Job<ChopPlantJobDefinition>
 	{
 		protected ChopPlantJob(TileManager.Tile tile) : base(tile) {
 			TargetName = Tile.plant.name;

@@ -1,7 +1,6 @@
 ﻿using System;
 using Snowship.NPersistence;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -11,8 +10,12 @@ namespace Snowship.NUI
 
 		public event Action<PSave.PersistenceSave> OnLoadSaveElementClicked;
 
-		public UILoadSaveElement(PSave.PersistenceSave save, Transform parent) : base(parent) {
+		public UILoadSaveElement(PSave.PersistenceSave save) {
 			this.save = save;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			if (save.loadable) {
 				Component.OnLoadSaveElementComponentButtonClicked += OnLoadSaveElementComponentButtonClicked;

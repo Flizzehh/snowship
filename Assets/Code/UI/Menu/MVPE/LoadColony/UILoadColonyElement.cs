@@ -1,6 +1,5 @@
 ﻿using System;
 using Snowship.NPersistence;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -11,8 +10,12 @@ namespace Snowship.NUI
 
 		public event Action<PersistenceColony> OnLoadColonyElementClicked;
 
-		public UILoadColonyElement(PersistenceColony colony, Transform parent) : base(parent) {
+		public UILoadColonyElement(PersistenceColony colony) {
 			this.colony = colony;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			Component.OnLoadColonyElementComponentButtonClicked += OnLoadColonyElementComponentButtonClicked;
 

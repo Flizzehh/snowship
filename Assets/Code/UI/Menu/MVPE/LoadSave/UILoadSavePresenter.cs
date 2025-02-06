@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Snowship.NPersistence;
 
 namespace Snowship.NUI
@@ -27,7 +28,8 @@ namespace Snowship.NUI
 
 		private void CreateSaveElements() {
 			foreach (PSave.PersistenceSave save in pSave.GetPersistenceSaves()) {
-				UILoadSaveElement loadSaveElement = new UILoadSaveElement(save, View.GetSaveElementsParentTransform());
+				UILoadSaveElement loadSaveElement = new(save);
+				loadSaveElement.Open(View.GetSaveElementsParentTransform()).Forget();
 				loadSaveElement.OnLoadSaveElementClicked += OnSaveElementClicked;
 			}
 		}

@@ -8,8 +8,17 @@ namespace Snowship.NUI
 	[UsedImplicitly]
 	public class UIHumanBodyElement : UIElement<UIHumanBodyElementComponent>
 	{
-		public UIHumanBodyElement(Transform parent, Human colonist) : base(parent) {
-			foreach ((BodySection appearance, Clothing clothing) in colonist.clothes) {
+		private readonly Human human;
+
+		public UIHumanBodyElement(Human human) {
+			this.human = human;
+
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
+
+			foreach ((BodySection appearance, Clothing clothing) in human.clothes) {
 				SetClothingOnBodySection(appearance, clothing);
 			}
 		}

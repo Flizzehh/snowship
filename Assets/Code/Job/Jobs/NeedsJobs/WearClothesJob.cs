@@ -1,9 +1,18 @@
 ﻿using Snowship.NResource;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Clothing", "WearClothes")]
-	public class WearClothesJob : Job
+	public class WearClothesJobDefinition : JobDefinition
+	{
+		public WearClothesJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Returnable = false;
+		}
+	}
+
+	public class WearClothesJob : Job<WearClothesJobDefinition>
 	{
 		private readonly Container container;
 		private readonly Clothing clothing;
@@ -13,8 +22,6 @@ namespace Snowship.NJob
 			this.clothing = clothing;
 
 			Description = $"Wearing {clothing.name}.";
-
-			Returnable = false;
 		}
 
 		protected override void OnJobFinished() {

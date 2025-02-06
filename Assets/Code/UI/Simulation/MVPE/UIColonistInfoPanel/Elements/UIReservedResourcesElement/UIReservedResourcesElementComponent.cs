@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Snowship.NHuman;
 using Snowship.NResource;
 using TMPro;
@@ -17,7 +18,9 @@ namespace Snowship.NUI
 		private readonly List<UIResourceAmountElement> resourceAmountElements = new();
 
 		public UIHumanBodyElement SetReserverBodyElement(Human human) {
-			return new UIHumanBodyElement(colonistBodyElementLocation, human);
+			UIHumanBodyElement humanBodyElement = new(human);
+			humanBodyElement.Open(colonistBodyElementLocation).Forget();
+			return humanBodyElement;
 		}
 
 		protected override void OnClose() {
@@ -38,7 +41,8 @@ namespace Snowship.NUI
 		}
 
 		public void AddResourceAmountElement(ResourceAmount resourceAmount) {
-			UIResourceAmountElement resourceAmountElement = new(reservedResourcesListVerticalLayoutGroup.transform, resourceAmount);
+			UIResourceAmountElement resourceAmountElement = new(resourceAmount);
+			resourceAmountElement.Open(reservedResourcesListVerticalLayoutGroup.transform).Forget();
 			resourceAmountElements.Add(resourceAmountElement);
 		}
 	}

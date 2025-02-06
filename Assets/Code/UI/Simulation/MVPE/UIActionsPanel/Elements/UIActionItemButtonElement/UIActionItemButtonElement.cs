@@ -6,11 +6,22 @@ namespace Snowship.NUI
 {
 	public class UIActionItemButtonElement : UIElement<UIActionItemButtonElementComponent>, ITreeButton
 	{
+		private string itemName;
+		private Sprite itemIcon;
+
 		public bool ChildElementsActiveState { get; private set; } = false;
 
 		public event Action OnButtonClicked;
 
-		public UIActionItemButtonElement(Transform parent, string itemName, Sprite itemIcon) : base(parent) {
+		public UIActionItemButtonElement(string itemName, Sprite itemIcon) {
+			this.itemName = itemName;
+			this.itemIcon = itemIcon;
+
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
+
 			Component.SetItemName(itemName);
 			Component.SetItemIcon(itemIcon);
 
@@ -40,7 +51,12 @@ namespace Snowship.NUI
 		public void SetVariation(ObjectPrefab prefab, Variation variation, UIActionItemButtonElement variationButton) {
 			prefab.SetVariation(variation);
 
-			Component.SetItemIcon(prefab.GetBaseSpriteForVariation(variation));
+			itemName = prefab.lastSelectedVariation.instanceName;
+			itemIcon = prefab.GetBaseSpriteForVariation(variation);
+
+			Component.SetItemName(itemName);
+			Component.SetItemIcon(itemIcon);
+
 			// TODO Refresh Required Resources
 
 			SetChildElementsActive(false);

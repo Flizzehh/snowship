@@ -1,6 +1,5 @@
 ﻿using System;
 using Snowship.NResource;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -10,8 +9,12 @@ namespace Snowship.NUI
 
 		public event Action<Clothing> OnButtonClicked;
 
-		public UIClothingElement(Transform parent, Clothing clothing) : base(parent) {
+		public UIClothingElement(Clothing clothing) {
 			this.clothing = clothing;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			Component.SetClothingImage(clothing.image);
 			Component.SetClothingNameText(clothing.name);

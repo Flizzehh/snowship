@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Snowship.NJob;
 using Snowship.NResource;
 using Snowship.NUtilities;
+using Snowship.Selectable;
 using UnityEngine;
 
 namespace Snowship.NUI
@@ -15,10 +17,10 @@ namespace Snowship.NUI
 		private readonly List<ITreeButton> childButtons = new();
 
 		public UIActionsPanelPresenter(UIActionsPanelView view) : base(view) {
-			CreateButtons();
 		}
 
 		public override void OnCreate() {
+			CreateButtons();
 		}
 
 		public override void OnClose() {
@@ -26,7 +28,8 @@ namespace Snowship.NUI
 
 		private void CreateButtons() {
 			foreach (UIActionButtonData buttonData in View.ButtonsData.buttons) {
-				UIActionGroupButtonElement button = new(View.ButtonsLayoutGroup.transform, buttonData.buttonName, buttonData.buttonSprite);
+				UIActionGroupButtonElement button = new(buttonData.buttonName, buttonData.buttonSprite);
+				button.Open(View.ButtonsLayoutGroup.transform).Forget();
 				button.OnButtonClicked += () => SetButtonChildrenActive(button);
 				childButtons.Add(button);
 
@@ -38,8 +41,10 @@ namespace Snowship.NUI
 						CreateTerraformButtons(button);
 						break;
 					case "Farm":
+						CreateFarmButtons(button);
 						break;
 					case "Remove":
+						CreateRemoveButtons(button);
 						break;
 				}
 			}
@@ -52,10 +57,10 @@ namespace Snowship.NUI
 		}
 
 		private void CreateGroupButtons(ITreeButton parentButton, IGroupItem baseGroupItem, Action<ITreeButton, IGroupItem> handleLastChildrenAction) {
-			CreateGroupButtons(parentButton, new List<IGroupItem> { baseGroupItem }, handleLastChildrenAction);
+			CreateGroupButtons(parentButton, new List<IGroupItem> { baseGroupItem }, handleLastChildrenAction).Forget();
 		}
 
-		private void CreateGroupButtons(ITreeButton parentButton, List<IGroupItem> baseGroupItems, Action<ITreeButton, IGroupItem> handleLastChildrenAction) {
+		private async UniTaskVoid CreateGroupButtons(ITreeButton parentButton, List<IGroupItem> baseGroupItems, Action<ITreeButton, IGroupItem> handleLastChildrenAction) {
 
 			foreach (IGroupItem group in baseGroupItems) {
 
@@ -63,7 +68,7 @@ namespace Snowship.NUI
 				if (baseGroupItems.Count == 1) {
 					groupButton = parentButton;
 				} else {
-					groupButton = ((UIActionGroupButtonElement)parentButton).AddChildGroupButton(group.Name, group.Icon);
+					groupButton = await ((UIActionGroupButtonElement)parentButton).AddChildGroupButton(group.Name, group.Icon);
 					groupButton.SetChildElementsActive(false);
 					groupButton.OnButtonClicked += () => parentButton.SetChildSiblingChildElementsActive(groupButton);
 				}
@@ -73,13 +78,13 @@ namespace Snowship.NUI
 					if (group.Children.Count == 1) {
 						subGroupButton = groupButton;
 					} else {
-						subGroupButton = ((UIActionGroupButtonElement)groupButton).AddChildGroupButton(subGroup.Name, subGroup.Icon);
+						subGroupButton = await ((UIActionGroupButtonElement)groupButton).AddChildGroupButton(subGroup.Name, subGroup.Icon);
 						subGroupButton.SetChildElementsActive(false);
 						subGroupButton.OnButtonClicked += () => groupButton.SetChildSiblingChildElementsActive(subGroupButton);
 					}
 
 					foreach (IGroupItem prefab in subGroup.Children) {
-						UIActionItemButtonElement prefabButton = ((UIActionGroupButtonElement)subGroupButton).AddChildItemButton(prefab.Name, prefab.Icon);
+						UIActionItemButtonElement prefabButton = await ((UIActionGroupButtonElement)subGroupButton).AddChildItemButton(prefab.Name, prefab.Icon);
 						prefabButton.SetChildElementsActive(false);
 
 						handleLastChildrenAction(prefabButton, prefab);
@@ -96,7 +101,7 @@ namespace Snowship.NUI
 				.Cast<IGroupItem>()
 				.ToList();
 
-			CreateGroupButtons(button, groups, SetupIndividualBuildButton);
+			CreateGroupButtons(button, groups, SetupIndividualBuildButton).Forget();
 		}
 
 		private void SetupIndividualBuildButton(ITreeButton button, IGroupItem item) {
@@ -108,9 +113,10 @@ namespace Snowship.NUI
 				return;
 			}
 
-			Debug.Log($"Create Build Button for {prefab.Name}");
+			BuildJobParams buildJobParams = new(prefab, prefab.lastSelectedVariation, 0);
+
 			button.OnButtonClicked += () => Debug.Log($"Build Button for {prefab.Name} clicked");
-			// TODO OnButtonClick > SelectionManager > SelectObject(?) > Selection Area > Build Jobs
+			button.OnButtonClicked += () => GameManager.Get<SelectionManager>().SetSelectedJob<BuildJob, BuildJobDefinition>(buildJobParams);
 
 			foreach (Variation variation in prefab.variations) {
 				UIActionItemButtonElement variationButton = prefabButton.AddVariation(prefab, variation);
@@ -130,12 +136,49 @@ namespace Snowship.NUI
 			if (button is not UIActionItemButtonElement jobButton) {
 				return;
 			}
-			if (item is not JobTypeData job) {
+			if (item is not JobDefinition job) {
 				return;
 			}
 
-			Debug.Log($"Create Terraform Button for {job.Name}");
 			button.OnButtonClicked += () => Debug.Log($"Terraform Button for {job.Name} clicked");
+		}
+
+		// Farm Buttons
+
+		private void CreateFarmButtons(ITreeButton button) {
+			JobGroup group = GameManager.Get<JobManager>().JobRegistry.GetJobGroup("Farm");
+
+			CreateGroupButtons(button, group, SetupIndividualFarmButton);
+		}
+
+		private void SetupIndividualFarmButton(ITreeButton button, IGroupItem item) {
+			if (button is not UIActionItemButtonElement jobButton) {
+				return;
+			}
+			if (item is not JobDefinition job) {
+				return;
+			}
+
+			button.OnButtonClicked += () => Debug.Log($"Farm Button for {job.Name} clicked");
+		}
+
+		// Remove Buttons
+
+		private void CreateRemoveButtons(ITreeButton button) {
+			JobGroup group = GameManager.Get<JobManager>().JobRegistry.GetJobGroup("Remove");
+
+			CreateGroupButtons(button, group, SetupIndividualRemoveButton);
+		}
+
+		private void SetupIndividualRemoveButton(ITreeButton button, IGroupItem item) {
+			if (button is not UIActionItemButtonElement jobButton) {
+				return;
+			}
+			if (item is not JobDefinition job) {
+				return;
+			}
+
+			button.OnButtonClicked += () => Debug.Log($"Remove Button for {job.Name} clicked");
 		}
 	}
 }

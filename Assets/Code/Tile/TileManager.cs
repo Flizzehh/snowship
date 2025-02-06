@@ -733,6 +733,7 @@ public class TileManager : IManager {
 		public bool blocksLight = false;
 
 		private bool roof = false;
+		public bool CoastalWater { get; set; } = false;
 
 		public float brightness = 0;
 		public Dictionary<int, float> brightnessAtHour = new Dictionary<int, float>();
@@ -1508,6 +1509,10 @@ public class TileManager : IManager {
 				UIEvents.UpdateLoadingScreenText("Roofs", "Determining Roofs");
 				await UniTask.NextFrame();
 				SetRoofs();
+
+				UIEvents.UpdateLoadingScreenText("Water", "Determining Coastal Water");
+				await UniTask.NextFrame();
+				SetCoastalWater();
 
 				UIEvents.UpdateLoadingScreenText("Resources", "Creating Resource Veins");
 				await UniTask.NextFrame();
@@ -2625,6 +2630,12 @@ public class TileManager : IManager {
 			}
 		}
 
+		private void SetCoastalWater() {
+			foreach (Tile tile in tiles) {
+				tile.CoastalWater = tile.tileType.groupType == TileTypeGroup.TypeEnum.Water && tile.surroundingTiles.Count(t => t != null && t.tileType.groupType != TileTypeGroup.TypeEnum.Water) > 0;
+			}
+		}
+
 		public void SetResourceVeins() {
 
 			List<Tile> stoneTiles = new List<Tile>();
@@ -3082,8 +3093,15 @@ public class TileManager : IManager {
 		}
 
 		public Tile GetTileFromPosition(Vector2 position) {
-			position = new Vector2(Mathf.Clamp(position.x, 0, mapData.mapSize - 1), Mathf.Clamp(position.y, 0, mapData.mapSize - 1));
-			return sortedTiles[Mathf.FloorToInt(position.y)][Mathf.FloorToInt(position.x)];
+			return GetTileFromPosition(position.x, position.y);
+		}
+
+		public Tile GetTileFromPosition(float x, float y) {
+			return GetTileFromPosition(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
+		}
+
+		public Tile GetTileFromPosition(int x, int y) {
+			return sortedTiles[Mathf.Clamp(y, 0, mapData.mapSize - 1)][Mathf.Clamp(x, 0, mapData.mapSize - 1)];
 		}
 
 		public static int GetRandomMapSeed() {

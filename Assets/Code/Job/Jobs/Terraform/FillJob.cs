@@ -1,9 +1,30 @@
-﻿using Snowship.NResource;
+﻿using System;
+using System.Collections.Generic;
+using Snowship.NResource;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Terrain", "Fill")]
-	public class FillJob : Job
+	public class FillJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Fillable,
+			Selectable.SelectionConditions.NoObjects,
+			Selectable.SelectionConditions.NoPlant,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public override List<ResourceAmount> BaseRequiredResources { get; } = new() {
+			new ResourceAmount(Resource.GetResourceByEnum(EResource.Dirt), 4)
+		};
+
+		public FillJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class FillJob : Job<FillJobDefinition>
 	{
 		protected FillJob(TileManager.Tile tile) : base(tile) {
 			Description = $"Filling {Tile.tileType.groupType.ToString().ToLower()}.";

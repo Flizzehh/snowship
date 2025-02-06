@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Snowship.NUI
 {
 	public class UIActionGroupButtonElement : UIElement<UIActionGroupButtonElementComponent>, ITreeButton
 	{
+		private readonly string groupName;
+		private readonly Sprite groupIcon;
+
 		public bool ChildElementsActiveState { get; private set; } = false;
 		private readonly List<ITreeButton> childButtons = new();
 
 		public event Action OnButtonClicked;
 
-		public UIActionGroupButtonElement(Transform parent, string groupName, Sprite groupIcon) : base(parent) {
+		public UIActionGroupButtonElement(string groupName, Sprite groupIcon) {
+			this.groupName = groupName;
+			this.groupIcon = groupIcon;
+
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
+
 			Component.SetGroupName(groupName);
 			Component.SetGroupIcon(groupIcon);
 
@@ -46,14 +58,18 @@ namespace Snowship.NUI
 			}
 		}
 
-		public UIActionGroupButtonElement AddChildGroupButton(string groupName, Sprite groupIcon) {
-			UIActionGroupButtonElement childButton = new(Component.SubGroupsLayoutGroup.transform, groupName, groupIcon);
+		public async UniTask<UIActionGroupButtonElement> AddChildGroupButton(string groupName, Sprite groupIcon) {
+			UIActionGroupButtonElement childButton = new(groupName, groupIcon);
+			await UniTask.WaitUntil(() => Component);
+			await childButton.Open(Component.SubGroupsLayoutGroup.transform);
 			childButtons.Add(childButton);
 			return childButton;
 		}
 
-		public UIActionItemButtonElement AddChildItemButton(string itemName, Sprite itemIcon) {
-			UIActionItemButtonElement childButton = new(Component.SubGroupsLayoutGroup.transform, itemName, itemIcon);
+		public async UniTask<UIActionItemButtonElement> AddChildItemButton(string itemName, Sprite itemIcon) {
+			UIActionItemButtonElement childButton = new(itemName, itemIcon);
+			await UniTask.WaitUntil(() => Component);
+			await childButton.Open(Component.SubGroupsLayoutGroup.transform);
 			childButtons.Add(childButton);
 			return childButton;
 		}

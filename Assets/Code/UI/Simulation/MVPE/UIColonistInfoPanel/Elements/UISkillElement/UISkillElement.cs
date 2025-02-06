@@ -8,8 +8,12 @@ namespace Snowship.NUI
 	{
 		private readonly SkillInstance skill;
 
-		public UISkillElement(Transform parent, SkillInstance skill) : base(parent) {
+		public UISkillElement(SkillInstance skill) {
 			this.skill = skill;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			Component.SetSkillName(skill.prefab.name);
 			Component.SetSkillLevelText($"{skill.Level}.{Mathf.RoundToInt(skill.CurrentExperience / skill.NextLevelExperience * 100)}");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Snowship.NCaravan;
 using Snowship.NResource;
 using UnityEngine;
@@ -69,12 +70,10 @@ namespace Snowship.NUI
 
 			// Create new elements
 			foreach (TradeResourceAmount tradeResourceAmount in tradeResourceAmounts) {
-				UITradeResourceElement tradeResourceElement = new UITradeResourceElement(
-					tradeResourceAmount,
-					tradeResourcesLayoutGroup.transform
-				);
-				tradeResourceElements.Add(tradeResourceElement);
+				UITradeResourceElement tradeResourceElement = new(tradeResourceAmount);
+				tradeResourceElement.Open(tradeResourcesLayoutGroup.transform).Forget();
 				tradeResourceElement.OnTradeResourceElementShouldBeRemoved += OnTradeResourceElementShouldBeRemoved;
+				tradeResourceElements.Add(tradeResourceElement);
 			}
 		}
 
@@ -88,12 +87,15 @@ namespace Snowship.NUI
 			int colonyAmount,
 			Caravan caravan
 		) {
-			if (tradeResourceElements.Find(tre => tre.tradeResourceAmount.resource == resource) == null) {
-				tradeResourceElements.Add(new UITradeResourceElement(
-					new TradeResourceAmount(resource, caravanAmount, colonyAmount, caravan),
-					tradeResourcesLayoutGroup.transform
-				));
+			if (tradeResourceElements.Find(tre => tre.tradeResourceAmount.resource == resource) != null) {
+				return;
 			}
+
+			UITradeResourceElement tradeResourceElement = new(
+				new TradeResourceAmount(resource, caravanAmount, colonyAmount, caravan)
+			);
+			tradeResourceElement.Open(tradeResourcesLayoutGroup.transform).Forget();
+			tradeResourceElements.Add(tradeResourceElement);
 		}
 
 		public void CreateConfirmedTradeResourceElements(
@@ -108,17 +110,15 @@ namespace Snowship.NUI
 
 			// Create new elements
 			foreach (ConfirmedTradeResourceAmount confirmedTradeResourceAmount in colonyConfirmedTradeResourceAmounts) {
-				confirmedTradeResourceElements.Add(new UIConfirmedTradeResourceElement(
-					confirmedTradeResourceAmount,
-					confirmedTradeResourcesLayoutGroup.transform
-				));
+				UIConfirmedTradeResourceElement confirmedTradeResourceElement = new(confirmedTradeResourceAmount);
+				confirmedTradeResourceElement.Open(confirmedTradeResourcesLayoutGroup.transform).Forget();
+				confirmedTradeResourceElements.Add(confirmedTradeResourceElement);
 			}
 
 			foreach (ConfirmedTradeResourceAmount confirmedTradeResourceAmount in caravanConfirmedTradeResourceAmounts) {
-				confirmedTradeResourceElements.Add(new UIConfirmedTradeResourceElement(
-					confirmedTradeResourceAmount,
-					confirmedTradeResourcesLayoutGroup.transform
-				));
+				UIConfirmedTradeResourceElement confirmedTradeResourceElement = new(confirmedTradeResourceAmount);
+				confirmedTradeResourceElement.Open(confirmedTradeResourcesLayoutGroup.transform).Forget();
+				confirmedTradeResourceElements.Add(confirmedTradeResourceElement);
 			}
 		}
 

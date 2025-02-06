@@ -21,5 +21,8 @@ namespace Snowship
 
 		[SerializeField] private Transform jobParent;
 		public Transform JobParent => jobParent;
+
+		[SerializeField] private SpriteRenderer selectedJobPreview;
+		public SpriteRenderer SelectedJobPreview => selectedJobPreview;
 	}
 }

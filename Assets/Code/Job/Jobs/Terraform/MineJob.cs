@@ -1,11 +1,25 @@
-﻿using Snowship.NColony;
+﻿using System;
+using Snowship.NColony;
 using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Terrain", "Mine")]
-	public class MineJob : Job
+	public class MineJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Stone,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public MineJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class MineJob : Job<MineJobDefinition>
 	{
 		protected MineJob(TileManager.Tile tile) : base(tile) {
 			TargetName = Tile.tileType.name;

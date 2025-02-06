@@ -1,31 +1,69 @@
-﻿using Snowship.NColonist;
+﻿using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+using Snowship.NColonist;
 using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Task", "Build", "Build")]
-	public class BuildJob : Job
+	[UsedImplicitly]
+	[RegisterJob("Build", "Build", "Build")]
+	public class BuildJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.WalkableIncludingFences,
+			Selectable.SelectionConditions.Buildable,
+			Selectable.SelectionConditions.NoPlant,
+			Selectable.SelectionConditions.NoSameLayerObject,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public BuildJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class BuildJobParams : IJobParams
+	{
+		public List<Func<TileManager.Tile, int, bool>> SelectionConditions { get; }
+		public Sprite SelectedJobPreviewSprite { get; }
+
+		public ObjectPrefab ObjectPrefab;
+		public Variation Variation;
+		public int Rotation;
+
+		public BuildJobParams(ObjectPrefab objectPrefab, Variation variation, int rotation) {
+			ObjectPrefab = objectPrefab;
+			Variation = variation;
+			Rotation = rotation;
+
+			// SelectionConditions.AddRange(ObjectPrefab.SelectionConditions); // TODO
+			SelectedJobPreviewSprite = ObjectPrefab.canRotate
+				? ObjectPrefab.GetBitmaskSpritesForVariation(Variation)[Rotation]
+				: ObjectPrefab.GetBaseSpriteForVariation(Variation);
+		}
+	}
+
+	public class BuildJob : Job<BuildJobDefinition>
 	{
 		public ObjectPrefab ObjectPrefab { get; }
 		public Variation Variation { get; }
 		public int Rotation { get; }
 
-		public BuildJob(TileManager.Tile tile, ObjectPrefab objectPrefab, Variation variation, int rotation) : base(tile) {
-			Variation = variation;
-			ObjectPrefab = objectPrefab;
-			Rotation = rotation;
+		public BuildJob(TileManager.Tile tile, BuildJobParams args) : base(tile) {
+			Variation = args.Variation;
+			ObjectPrefab = args.ObjectPrefab;
+			Rotation = args.Rotation;
 
-			Description = $"Building a {objectPrefab.Name}.";
-			RequiredResources.AddRange(objectPrefab.commonResources);
-			RequiredResources.AddRange(variation.uniqueResources);
+			Description = $"Building a {ObjectPrefab.Name}.";
+			RequiredResources.AddRange(ObjectPrefab.commonResources);
+			if (Variation != null) {
+				RequiredResources.AddRange(Variation.uniqueResources);
+			}
 			SetTimeToWork(ObjectPrefab.timeToBuild);
 
-			JobPreviewObject = Object.Instantiate(
-				GameManager.Get<ResourceManager>().tilePrefab, // TODO Create separate Class/Prefab for JobPreviewObject
-				Tile.obj.transform,
-				false
-			);
+			JobPreviewObject.GetComponent<SpriteRenderer>().sprite = ObjectPrefab.GetBitmaskSpritesForVariation(Variation)[Rotation];
 		}
 
 		protected override void OnJobFinished() {
@@ -47,7 +85,7 @@ namespace Snowship.NJob
 			}
 
 			// TODO Move this to Job parent class
-			SkillInstance skill = ((Colonist)Worker).GetSkillFromJobType(Name);
+			SkillInstance skill = ((Colonist)Worker).GetSkillFromJobType(Definition.Name);
 			skill?.AddExperience(ObjectPrefab.timeToBuild);
 
 			colonist.MoveToClosestWalkableTile(true);

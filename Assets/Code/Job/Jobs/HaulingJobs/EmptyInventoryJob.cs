@@ -1,9 +1,18 @@
 ﻿using Snowship.NResource;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Hauling", "Hauling", "EmptyInventory")]
-	public class EmptyInventoryJob : Job
+	public class EmptyInventoryJobDefinition : JobDefinition
+	{
+		public EmptyInventoryJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Returnable = false;
+		}
+	}
+
+	public class EmptyInventoryJob : Job<EmptyInventoryJobDefinition>
 	{
 		private readonly Container container;
 
@@ -11,8 +20,6 @@ namespace Snowship.NJob
 			this.container = container;
 
 			Description = "Emptying inventory.";
-
-			Returnable = false;
 		}
 
 		protected override void OnJobFinished() {

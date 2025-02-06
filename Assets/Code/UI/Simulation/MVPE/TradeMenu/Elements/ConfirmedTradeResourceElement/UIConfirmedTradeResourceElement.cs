@@ -1,18 +1,17 @@
 ﻿using Snowship.NResource;
 using Snowship.NUI;
-using UnityEngine;
 
 public class UIConfirmedTradeResourceElement : UIElement<UIConfirmedTradeResourceElementComponent> {
 
 	private readonly ConfirmedTradeResourceAmount resourceAmount;
 
-	public UIConfirmedTradeResourceElement(ConfirmedTradeResourceAmount resourceAmount, Transform parent) : base(parent) {
+	public UIConfirmedTradeResourceElement(ConfirmedTradeResourceAmount resourceAmount) {
 		this.resourceAmount = resourceAmount;
+	}
+
+	protected override void OnCreate() {
+		base.OnCreate();
 
 		Component.SetResource(resourceAmount);
 	}
-
-	// public override void OnUpdate() {
-	// 	Component.UpdateCollectedAmount(resourceAmount);
-	// }
 }

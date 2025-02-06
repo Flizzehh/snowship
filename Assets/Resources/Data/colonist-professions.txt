@@ -9,7 +9,7 @@
 	<Jobs>PlantFarm,HarvestFarm
 <Profession>
 	<Type>Forestry
-	<Jobs>ChopPlant,PlantPlant
+	<Jobs>ChopPlant,Plant
 <Profession>
 	<Type>Crafting
 	<Jobs>CreateResource

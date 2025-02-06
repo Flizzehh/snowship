@@ -1,22 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NTime;
+using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Terraform", "Plants", "PlantPlant")]
-	public class PlantPlantJob : Job
+	[RegisterJob("Terraform", "Plants", "Plant")]
+	public class PlantJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Walkable,
+			Selectable.SelectionConditions.Buildable,
+			Selectable.SelectionConditions.NoObjects,
+			Selectable.SelectionConditions.NoRoof,
+			Selectable.SelectionConditions.NoPlant,
+			Selectable.SelectionConditions.NoSameLayerJobs
+			//Selectable.SelectionConditions.BiomeSupportsSelectedPlants, // TODO (?)
+		};
+
+		public PlantJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class PlantJob : Job<PlantJobDefinition>
 	{
 		private readonly Variation variation;
 
-		protected PlantPlantJob(TileManager.Tile tile, Variation variation) : base(tile) {
+		protected PlantJob(TileManager.Tile tile, Variation variation) : base(tile) {
 			this.variation = variation;
 
 			TargetName = PlantGroup.GetPlantGroupByEnum(variation.plants.First().Key.groupType).name;
 			Description = "Planting a plant.";
+
+			RequiredResources.AddRange(variation.uniqueResources);
 		}
 
 		protected override void OnJobFinished() {

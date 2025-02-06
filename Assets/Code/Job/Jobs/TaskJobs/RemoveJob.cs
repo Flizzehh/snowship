@@ -1,14 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Snowship.NColony;
 using Snowship.NHuman;
 using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[RegisterJob("Command", "Remove", "Remove")]
-	public class RemoveJob : Job
+	[RegisterJob("Remove", "Remove", "Remove")]
+	public class RemoveJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.SameLayerObject,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public RemoveJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class RemoveJob : Job<RemoveJobDefinition>
 	{
 		private readonly ObjectPrefab objectPrefab;
 
@@ -59,8 +72,8 @@ namespace Snowship.NJob
 						break;
 					}
 					case CraftingObject craftingObject: {
-						foreach (Job removeJob in craftingObject.resources.Where(craftableResourceInstance => craftableResourceInstance.Job != null).Select(resource => resource.Job)) {
-							GameManager.Get<JobManager>().RemoveJob(removeJob);
+						foreach (CreateResourceJob createResourceJob in craftingObject.resources.Where(craftableResourceInstance => craftableResourceInstance.Job != null).Select(resource => resource.Job)) {
+							GameManager.Get<JobManager>().RemoveJob(createResourceJob);
 						}
 						break;
 					}

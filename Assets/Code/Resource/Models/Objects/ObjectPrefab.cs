@@ -110,7 +110,7 @@ namespace Snowship.NResource
 			List<ResourceAmount> commonResources,
 			List<Variation> variations,
 			Variation.VariationNameOrderEnum variationNameOrder,
-			List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers,
+			// List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers,
 			string jobType,
 			bool addToTileWhenBuilt
 		) {
@@ -161,7 +161,7 @@ namespace Snowship.NResource
 			this.commonResources = commonResources;
 			this.variations = variations;
 			this.variationNameOrder = variationNameOrder;
-			this.selectionModifiers = selectionModifiers;
+			// this.selectionModifiers = selectionModifiers;
 			this.jobType = jobType;
 			this.addToTileWhenBuilt = addToTileWhenBuilt;
 

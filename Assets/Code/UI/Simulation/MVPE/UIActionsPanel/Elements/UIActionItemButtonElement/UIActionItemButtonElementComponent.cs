@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using Snowship.NResource;
 using TMPro;
 using UnityEngine;
@@ -54,7 +55,8 @@ namespace Snowship.NUI
 			variationIndicatorImage.gameObject.SetActive(true);
 			buttonLayoutGroup.padding.right = 12;
 
-			UIActionItemButtonElement variationButton = new(variationsLayoutGroup.transform, variation.name, prefab.GetBaseSpriteForVariation(variation));
+			UIActionItemButtonElement variationButton = new(variation.name, prefab.GetBaseSpriteForVariation(variation));
+			variationButton.Open(variationsLayoutGroup.transform).Forget();
 			return variationButton;
 		}
 	}

@@ -1,5 +1,4 @@
 ﻿using Snowship.NColonist;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -7,13 +6,17 @@ namespace Snowship.NUI
 	{
 		public MoodModifierInstance Mood { get; }
 
-		public UIMoodElement(Transform parent, MoodModifierInstance mood) : base(parent) {
+		public UIMoodElement(MoodModifierInstance mood) {
 			Mood = mood;
+		}
 
-			mood.OnTimerChanged += OnMoodTimerChanged;
+		protected override void OnCreate() {
+			base.OnCreate();
 
-			Component.SetMoodNameText(mood.Prefab.name);
-			Component.SetMoodEffectAmountText(mood.Prefab.effectAmount);
+			Mood.OnTimerChanged += OnMoodTimerChanged;
+
+			Component.SetMoodNameText(Mood.Prefab.name);
+			Component.SetMoodEffectAmountText(Mood.Prefab.effectAmount);
 			OnMoodTimerChanged(Mood.Timer);
 		}
 

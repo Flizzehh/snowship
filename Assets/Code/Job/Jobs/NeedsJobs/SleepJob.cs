@@ -2,11 +2,20 @@
 using Snowship.NColonist;
 using Snowship.NResource;
 using Snowship.NTime;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Rest", "Sleep")]
-	public class SleepJob : Job
+	public class SleepJobDefinition : JobDefinition
+	{
+		public SleepJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Returnable = false;
+		}
+	}
+
+	public class SleepJob : Job<SleepJobDefinition>
 	{
 		private Colonist colonist;
 		private NeedInstance sleepNeed;
@@ -16,7 +25,6 @@ namespace Snowship.NJob
 
 		public SleepJob(TileManager.Tile tile) : base(tile) {
 			Description = "Sleeping.";
-			Returnable = false;
 		}
 
 		protected override void OnJobTaken() {

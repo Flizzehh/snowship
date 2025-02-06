@@ -1,5 +1,4 @@
 ﻿using Snowship.NColonist;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -7,8 +6,12 @@ namespace Snowship.NUI
 	{
 		private readonly NeedInstance need;
 
-		public UINeedElement(Transform parent, NeedInstance need) : base(parent) {
+		public UINeedElement(NeedInstance need) {
 			this.need = need;
+		}
+
+		protected override void OnCreate() {
+			base.OnCreate();
 
 			need.OnValueChanged += OnNeedValueChanged;
 

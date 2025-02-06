@@ -8,6 +8,6 @@ namespace Snowship.NUtilities
 		string Name { get; }
 		Sprite Icon { get; }
 
-		List<IGroupItem> Children { get; }
+		virtual List<IGroupItem> Children => null;
 	}
 }

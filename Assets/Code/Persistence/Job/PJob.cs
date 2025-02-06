@@ -8,7 +8,7 @@ using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PJob : Job
+	public class PJob<TJobDefinition> : Job<TJobDefinition> where TJobDefinition : JobDefinition
 	{
 
 		private readonly PInventory pInventory = new PInventory();
@@ -46,14 +46,14 @@ namespace Snowship.NPersistence {
 
 			StreamWriter file = PU.CreateFileAtDirectory(saveDirectoryPath, "jobs.snowship");
 
-			foreach (Job job in GameManager.Get<JobManager>().Jobs) {
+			foreach (IJob job in GameManager.Get<JobManager>().Jobs) {
 				WriteJobLines(file, job, JobProperty.Job, 0);
 			}
 
 			file.Close();
 		}
 
-		public void WriteJobLines(StreamWriter file, Job job, JobProperty jobType, int startLevel) {
+		public void WriteJobLines(StreamWriter file, IJob job, JobProperty jobType, int startLevel) {
 			Debug.LogWarning("Write job lines"); // TODO
 			// file.WriteLine(PU.CreateKeyValueString(jobType, string.Empty, startLevel));
 			//
@@ -370,7 +370,7 @@ namespace Snowship.NPersistence {
 			}
 		}
 
-		public Job LoadJob(PersistenceJob persistenceJob) {
+		public IJob LoadJob(PersistenceJob persistenceJob) {
 			// TODO Load Job
 			// List<ContainerPickup> containerPickups = null;
 			// if (persistenceJob.containerPickups != null) {

@@ -1,12 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Terrain", "Dig")]
-	public class DigJob : Job
+	public class DigJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.CoastalWater,
+			Selectable.SelectionConditions.NoHole,
+			Selectable.SelectionConditions.NotDugPreviously,
+			Selectable.SelectionConditions.NotStone,
+			Selectable.SelectionConditions.NoObjects,
+			Selectable.SelectionConditions.NoPlant,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public DigJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
+	public class DigJob : Job<DigJobDefinition>
 	{
 		protected DigJob(TileManager.Tile tile) : base(tile) {
 			TargetName = Tile.tileType.name;

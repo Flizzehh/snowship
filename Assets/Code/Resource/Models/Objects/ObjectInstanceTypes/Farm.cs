@@ -39,7 +39,7 @@ namespace Snowship.NResource
 			if (growTimer >= prefab.growthTimeDays * SimulationDateTime.DayLengthSeconds) {
 				JobManager jobManager = GameManager.Get<JobManager>();
 				if (jobManager.JobOfTypeExistsAtTile<HarvestFarmJob>(tile) == null) {
-					jobManager.AddJob(new HarvestFarmJob(this));
+					jobManager.AddJob(new HarvestFarmJob(tile));
 				}
 			} else {
 				growTimer += CalculateGrowthRate();

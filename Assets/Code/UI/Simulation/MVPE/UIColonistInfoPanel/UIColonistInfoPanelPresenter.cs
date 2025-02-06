@@ -99,7 +99,7 @@ namespace Snowship.NUI
 			}
 		}
 
-		private void OnJobChanged(Job job) {
+		private void OnJobChanged(IJob job) {
 			View.SetCurrentActionText(job?.Description);
 			View.SetStoredActionText(string.Empty);
 		}

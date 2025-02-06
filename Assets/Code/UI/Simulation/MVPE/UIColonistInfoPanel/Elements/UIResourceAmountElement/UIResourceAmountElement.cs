@@ -1,6 +1,5 @@
 ﻿using System;
 using Snowship.NResource;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -9,14 +8,18 @@ namespace Snowship.NUI
 		public readonly ResourceAmount ResourceAmount;
 		public event Action<UIResourceAmountElement> OnAmountChanged;
 
-		public UIResourceAmountElement(Transform parent, ResourceAmount resourceAmount) : base(parent) {
+		public UIResourceAmountElement(ResourceAmount resourceAmount) {
 			ResourceAmount = resourceAmount;
+		}
 
-			Component.SetResourceImage(resourceAmount.Resource.image);
-			Component.SetResourceName(resourceAmount.Resource.name);
+		protected override void OnCreate() {
+			base.OnCreate();
 
-			resourceAmount.OnAmountChanged += OnResourceAmountChanged;
-			OnResourceAmountChanged(resourceAmount.Amount);
+			Component.SetResourceImage(ResourceAmount.Resource.image);
+			Component.SetResourceName(ResourceAmount.Resource.name);
+
+			ResourceAmount.OnAmountChanged += OnResourceAmountChanged;
+			OnResourceAmountChanged(ResourceAmount.Amount);
 		}
 
 		protected override void OnClose() {

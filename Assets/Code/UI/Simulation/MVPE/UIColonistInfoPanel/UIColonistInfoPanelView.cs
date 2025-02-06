@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Snowship.NColonist;
 using Snowship.NHuman;
 using Snowship.NResource;
@@ -168,7 +169,9 @@ namespace Snowship.NUI
 		}
 
 		public void AddNeedElement(NeedInstance need) {
-			needElements.Add(new UINeedElement(needsListVerticalLayoutGroup.transform, need));
+			UINeedElement needElement = new(need);
+			needElement.Open(needsListVerticalLayoutGroup.transform).Forget();
+			needElements.Add(needElement);
 		}
 
 		private void SetMoodPanelActive(bool active) {
@@ -182,7 +185,9 @@ namespace Snowship.NUI
 		}
 
 		public void AddMoodElement(MoodModifierInstance mood) {
-			moodElements.Add(new UIMoodElement(moodListVerticalLayoutGroup.transform, mood));
+			UIMoodElement moodElement = new(mood);
+			moodElement.Open(moodListVerticalLayoutGroup.transform).Forget();
+			moodElements.Add(moodElement);
 		}
 
 		public void OnMoodAdded(MoodModifierInstance mood) {
@@ -213,11 +218,15 @@ namespace Snowship.NUI
 		}
 
 		public void AddSkillElement(SkillInstance skill) {
-			skillElements.Add(new UISkillElement(skillsListVerticalLayoutGroup.transform, skill));
+			UISkillElement skillElement = new(skill);
+			skillElement.Open(skillsListVerticalLayoutGroup.transform).Forget();
+			skillElements.Add(skillElement);
 		}
 
 		public void OnInventoryResourceAmountAdded(ResourceAmount resourceAmount) {
-			inventoryResourceAmountElements.Add(new UIResourceAmountElement(inventoryListGridLayoutGroup.transform, resourceAmount));
+			UIResourceAmountElement resourceAmountElement = new(resourceAmount);
+			resourceAmountElement.Open(inventoryListGridLayoutGroup.transform).Forget();
+			inventoryResourceAmountElements.Add(resourceAmountElement);
 		}
 
 		public void OnInventoryResourceAmountRemoved(ResourceAmount resourceAmount) {
@@ -227,11 +236,8 @@ namespace Snowship.NUI
 		}
 
 		public UIClothingButtonElement CreateClothingButton(BodySection bodySection, Clothing clothing) {
-			UIClothingButtonElement clothingButton = new(
-				clothingButtonsListVerticalLayoutGroup.transform,
-				bodySection,
-				clothing
-			);
+			UIClothingButtonElement clothingButton = new(bodySection, clothing);
+			clothingButton.Open(clothingButtonsListVerticalLayoutGroup.transform).Forget();
 			clothingButtonElements.Add(clothingButton);
 			return clothingButton;
 		}
@@ -265,7 +271,8 @@ namespace Snowship.NUI
 		}
 
 		private UIClothingElement CreateClothingElement(Clothing clothing, bool available) {
-			UIClothingElement clothingElement = new((available ? clothesAvailableGridLayoutGroup : clothesTakenGridLayoutGroup).transform, clothing);
+			UIClothingElement clothingElement = new(clothing);
+			clothingElement.Open((available ? clothesAvailableGridLayoutGroup : clothesTakenGridLayoutGroup).transform).Forget();
 			clothingElements.Add(clothingElement);
 			return clothingElement;
 		}
@@ -291,7 +298,9 @@ namespace Snowship.NUI
 		}
 
 		public void OnInventoryReservedResourcesAdded(ReservedResources reservedResources) {
-			reservedResourcesElements.Add(new UIReservedResourcesElement(inventoryListGridLayoutGroup.transform, reservedResources));
+			UIReservedResourcesElement reservedResourcesElement = new(reservedResources);
+			reservedResourcesElement.Open(inventoryListGridLayoutGroup.transform).Forget();
+			reservedResourcesElements.Add(reservedResourcesElement);
 		}
 
 		public void OnInventoryReservedResourcesRemoved(ReservedResources reservedResources) {

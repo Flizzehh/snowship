@@ -15,7 +15,7 @@ namespace Snowship.NPersistence {
 		private readonly PLife pLife = new PLife();
 		private readonly PHuman pHuman = new PHuman();
 
-		private readonly PJob pJob = new();
+		// private readonly PJob pJob = new(); // TODO
 
 		public enum ColonistProperty {
 			Colonist,
@@ -152,9 +152,9 @@ namespace Snowship.NPersistence {
 			public PHuman.PersistenceHuman persistenceHuman;
 
 			public bool? playerMoved;
-			public PJob.PersistenceJob persistenceJob;
-			public PJob.PersistenceJob persistenceStoredJob;
-			public List<PJob.PersistenceJob> persistenceBacklogJobs;
+			// public PJob.PersistenceJob persistenceJob;
+			// public PJob.PersistenceJob persistenceStoredJob;
+			// public List<PJob.PersistenceJob> persistenceBacklogJobs;
 			public List<PersistenceProfession> persistenceProfessions;
 			public List<PersistenceSkill> persistenceSkills;
 			public List<PersistenceTrait> persistenceTraits;
@@ -166,9 +166,9 @@ namespace Snowship.NPersistence {
 				PLife.PersistenceLife persistenceLife,
 				PHuman.PersistenceHuman persistenceHuman,
 				bool? playerMoved,
-				PJob.PersistenceJob persistenceJob,
-				PJob.PersistenceJob persistenceStoredJob,
-				List<PJob.PersistenceJob> persistenceBacklogJobs,
+				// PJob.PersistenceJob persistenceJob,
+				// PJob.PersistenceJob persistenceStoredJob,
+				// List<PJob.PersistenceJob> persistenceBacklogJobs,
 				List<PersistenceProfession> persistenceProfessions,
 				List<PersistenceSkill> persistenceSkills,
 				List<PersistenceTrait> persistenceTraits,
@@ -179,9 +179,9 @@ namespace Snowship.NPersistence {
 				this.persistenceLife = persistenceLife;
 				this.persistenceHuman = persistenceHuman;
 				this.playerMoved = playerMoved;
-				this.persistenceJob = persistenceJob;
-				this.persistenceStoredJob = persistenceStoredJob;
-				this.persistenceBacklogJobs = persistenceBacklogJobs;
+				// this.persistenceJob = persistenceJob;
+				// this.persistenceStoredJob = persistenceStoredJob;
+				// this.persistenceBacklogJobs = persistenceBacklogJobs;
 				this.persistenceProfessions = persistenceProfessions;
 				this.persistenceSkills = persistenceSkills;
 				this.persistenceTraits = persistenceTraits;
@@ -275,9 +275,9 @@ namespace Snowship.NPersistence {
 						PHuman.PersistenceHuman persistenceHuman = null;
 
 						bool? playerMoved = null;
-						PJob.PersistenceJob persistenceJob = null;
-						PJob.PersistenceJob persistenceStoredJob = null;
-						List<PJob.PersistenceJob> persistenceBacklogJobs = new();
+						// PJob.PersistenceJob persistenceJob = null;
+						// PJob.PersistenceJob persistenceStoredJob = null;
+						// List<PJob.PersistenceJob> persistenceBacklogJobs = new();
 						List<PersistenceProfession> persistenceProfessions = new List<PersistenceProfession>();
 						List<PersistenceSkill> persistenceSkills = new List<PersistenceSkill>();
 						List<PersistenceTrait> persistenceTraits = new List<PersistenceTrait>();
@@ -296,21 +296,21 @@ namespace Snowship.NPersistence {
 								case ColonistProperty.PlayerMoved:
 									playerMoved = bool.Parse((string)colonistProperty.Value);
 									break;
-								case ColonistProperty.Job:
-									persistenceJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
-									break;
-								case ColonistProperty.StoredJob:
-									persistenceStoredJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
-									break;
-								case ColonistProperty.BacklogJobs:
-									foreach (KeyValuePair<string, object> backlogJobProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
-										switch ((BacklogJobProperty)Enum.Parse(typeof(BacklogJobProperty), backlogJobProperty.Key)) {
-											case BacklogJobProperty.BacklogJob:
-												persistenceBacklogJobs.Add(pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
-												break;
-										}
-									}
-									break;
+								// case ColonistProperty.Job:
+								// 	persistenceJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+								// 	break;
+								// case ColonistProperty.StoredJob:
+								// 	persistenceStoredJob = pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)colonistProperty.Value);
+								// 	break;
+								// case ColonistProperty.BacklogJobs:
+								// 	foreach (KeyValuePair<string, object> backlogJobProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
+								// 		switch ((BacklogJobProperty)Enum.Parse(typeof(BacklogJobProperty), backlogJobProperty.Key)) {
+								// 			case BacklogJobProperty.BacklogJob:
+								// 				persistenceBacklogJobs.Add(pJob.LoadPersistenceJob((List<KeyValuePair<string, object>>)backlogJobProperty.Value));
+								// 				break;
+								// 		}
+								// 	}
+								// 	break;
 								case ColonistProperty.Professions:
 									foreach (KeyValuePair<string, object> professionProperty in (List<KeyValuePair<string, object>>)colonistProperty.Value) {
 										switch ((ProfessionProperty)Enum.Parse(typeof(ProfessionProperty), professionProperty.Key)) {
@@ -496,9 +496,9 @@ namespace Snowship.NPersistence {
 								persistenceLife,
 								persistenceHuman,
 								playerMoved,
-								persistenceJob,
-								persistenceStoredJob,
-								persistenceBacklogJobs,
+								// persistenceJob,
+								// persistenceStoredJob,
+								// persistenceBacklogJobs,
 								persistenceProfessions,
 								persistenceSkills,
 								persistenceTraits,

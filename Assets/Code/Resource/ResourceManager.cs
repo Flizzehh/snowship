@@ -436,8 +436,8 @@ public class ResourceManager : IManager, IDisposable
 		return resource;
 	}
 
-	public Job CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
-		Job job = new CreateResourceJob(craftingObject, resource);
+	public CreateResourceJob CreateResource(CraftableResourceInstance resource, CraftingObject craftingObject) {
+		CreateResourceJob job = new(craftingObject, resource);
 		GameManager.Get<JobManager>().AddJob(job);
 		return job;
 	}
@@ -745,7 +745,7 @@ public class ResourceManager : IManager, IDisposable
 		List<ResourceAmount> commonResources = new();
 		List<Variation> variations = new();
 		Variation.VariationNameOrderEnum variationNameOrder = Variation.VariationNameOrderEnum.VariationObject;
-		List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers = new();
+		// List<SelectionModifiers.SelectionModifiersEnum> selectionModifiers = new();
 		string jobType = null;
 		bool? addToTileWhenBuilt = true;
 
@@ -840,9 +840,9 @@ public class ResourceManager : IManager, IDisposable
 					variationNameOrder = (Variation.VariationNameOrderEnum)Enum.Parse(typeof(Variation.VariationNameOrderEnum), (string)objectSubProperty.Value);
 					break;
 				case ObjectPropertyEnum.SelectionModifiers:
-					foreach (string selectionModifierString in ((string)objectSubProperty.Value).Split(',')) {
-						selectionModifiers.Add((SelectionModifiers.SelectionModifiersEnum)Enum.Parse(typeof(SelectionModifiers.SelectionModifiersEnum), selectionModifierString));
-					}
+					// 	foreach (string selectionModifierString in ((string)objectSubProperty.Value).Split(',')) {
+					// 		selectionModifiers.Add((SelectionModifiers.SelectionModifiersEnum)Enum.Parse(typeof(SelectionModifiers.SelectionModifiersEnum), selectionModifierString));
+					// 	}
 					break;
 				case ObjectPropertyEnum.JobType:
 					jobType = (string)objectSubProperty.Value;
@@ -905,7 +905,7 @@ public class ResourceManager : IManager, IDisposable
 			commonResources,
 			variations,
 			variationNameOrder,
-			selectionModifiers,
+			// selectionModifiers,
 			jobType,
 			addToTileWhenBuilt.Value
 		);

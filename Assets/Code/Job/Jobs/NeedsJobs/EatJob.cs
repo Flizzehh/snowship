@@ -2,20 +2,26 @@
 using System.Linq;
 using Snowship.NColonist;
 using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Food", "Eat")]
-	public class EatJob : Job
+	public class EatJobDefinition : JobDefinition
+	{
+		public EatJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+			Returnable = false;
+		}
+	}
+
+	public class EatJob : Job<EatJobDefinition>
 	{
 		private Colonist colonist;
 		private NeedInstance foodNeed;
 
 		public EatJob(TileManager.Tile tile) : base(tile) {
 			Description = "Eating.";
-
-			Returnable = false;
 		}
 
 		protected override void OnJobTaken() {

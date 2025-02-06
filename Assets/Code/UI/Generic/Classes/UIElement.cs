@@ -1,20 +1,33 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 namespace Snowship.NUI {
 	public abstract class UIElement<TComponent> where TComponent : UIElementComponent {
+		protected TComponent Component { get; private set; }
 
-		protected readonly TComponent Component;
+		public async UniTask Open(Transform parent) {
+			await CreateComponent(parent);
+			OnCreate();
+		}
 
-		private AsyncOperationHandle<GameObject> viewPrefabOperationHandle;
+		private string AddressableKey() {
+			return $"UI/Element/{GetType().Name}";
+		}
 
-		protected UIElement(Transform parent) {
-			string addressableKey = $"UI/Element/{GetType().Name}";
-			GameObject addressablePrefab = Addressables.LoadAssetAsync<GameObject>(addressableKey).WaitForCompletion();
-			Component = Object.Instantiate(addressablePrefab, parent, false).GetComponent<TComponent>();
+		private async UniTask CreateComponent(Transform parent) {
+			AsyncOperationHandle<GameObject> componentPrefabOperationHandle = Addressables.LoadAssetAsync<GameObject>(AddressableKey());
+			componentPrefabOperationHandle.ReleaseHandleOnCompletion();
+			GameObject componentPrefab = await componentPrefabOperationHandle;
+
+			Component = Object.Instantiate(componentPrefab, parent, false).GetComponent<TComponent>();
 			Component.OnCreate();
+		}
+
+		protected virtual void OnCreate() {
+
 		}
 
 		protected virtual void OnClose() {

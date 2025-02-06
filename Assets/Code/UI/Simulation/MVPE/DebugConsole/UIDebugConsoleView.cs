@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,12 +47,9 @@ namespace Snowship.NUI
 		}
 
 		public void OutputToConsole(string text) {
-			outputTextboxes.Add(
-				new UIDebugConsoleOutputTextbox(
-					debugConsoleVerticalLayoutGroup.transform,
-					text
-				)
-			);
+			UIDebugConsoleOutputTextbox outputTextbox = new(text);
+			outputTextbox.Open(debugConsoleVerticalLayoutGroup.transform).Forget();
+			outputTextboxes.Add(outputTextbox);
 		}
 
 		public void ClearConsole() {

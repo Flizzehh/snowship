@@ -1,22 +1,35 @@
-﻿using Snowship.NResource;
+﻿using System;
+using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Farm", "PlantFarm", "PlantFarm")]
+	public class PlantFarmJobDefinition : JobDefinition
+	{
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Walkable,
+			Selectable.SelectionConditions.Buildable,
+			Selectable.SelectionConditions.NoObjects,
+			Selectable.SelectionConditions.NoRoof,
+			Selectable.SelectionConditions.NoPlant,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
+
+		public PlantFarmJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
+
 	public class PlantFarmJob : BuildJob
 	{
 		public PlantFarmJob(
 			TileManager.Tile tile,
-			ObjectPrefab objectPrefab,
-			Variation variation,
-			int rotation
+			BuildJobParams args
 		) : base(
 			tile,
-			objectPrefab,
-			variation,
-			rotation
+			args
 		) {
-			Description = $"Planting a {variation.name}.";
+			Description = $"Planting a {Variation.name}.";
 		}
 
 		protected override void OnJobFinished() {

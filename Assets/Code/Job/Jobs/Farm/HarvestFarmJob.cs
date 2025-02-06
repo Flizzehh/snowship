@@ -1,38 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Snowship.NResource;
+using Snowship.NUtilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Farm", "Harvest", "HarvestFarm")]
-	public class HarvestFarmJob : Job
+	public class HarvestFarmJobDefinition : JobDefinition
 	{
-		private readonly Farm farm;
+		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
+			Selectable.SelectionConditions.Farm,
+			Selectable.SelectionConditions.NoSameLayerJobs
+		};
 
-		public HarvestFarmJob(Farm farm) : base(farm.tile) {
-			this.farm = farm;
+		public HarvestFarmJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		}
+	}
 
-			TargetName = Tile.farm.name;
-			Description = $"Harvesting a farm of {Tile.farm.name}.";
+	public class HarvestFarmJob : Job<HarvestFarmJobDefinition>
+	{
+		private Farm Farm { get; }
+
+		public HarvestFarmJob(TileManager.Tile tile) : base(tile) {
+			Farm = tile.farm;
+
+			TargetName = Farm.name;
+			Description = $"Harvesting a farm of {Farm.name}.";
 		}
 
 		protected override void OnJobFinished() {
 			base.OnJobFinished();
 
-			if (Tile.farm != null) {
+			if (Farm != null) {
 				// TODO Set the amount of seeds returned from a data file
-				Worker.Inventory.ChangeResourceAmount(Tile.farm.prefab.seedResource, Random.Range(1, 3), false);
-				foreach (ResourceRange harvestResourceRange in Tile.farm.prefab.harvestResources) {
+				Worker.Inventory.ChangeResourceAmount(Farm.prefab.seedResource, Random.Range(1, 3), false);
+				foreach (ResourceRange harvestResourceRange in Farm.prefab.harvestResources) {
 					Worker.Inventory.ChangeResourceAmount(harvestResourceRange.resource, Random.Range(harvestResourceRange.min, harvestResourceRange.max), false);
 				}
 
-				GameManager.Get<JobManager>().AddJob(new PlantFarmJob(Tile, Tile.farm.prefab, Tile.farm.variation, 0));
+				GameManager.Get<JobManager>().AddJob(new PlantFarmJob(Tile, new BuildJobParams(Farm.prefab, Farm.variation, 0)));
 
 				// TODO ObjectInstance.RemoveObjectInstance should probably be called inside of Tile.RemoveObjectAtLayer?
-				int layer = Tile.farm.prefab.layer; // Required because RemoveObjectInstance sets Tile.farm = null but must happen before RemoveObjectAtLayer
-				ObjectInstance.RemoveObjectInstance(Tile.farm);
-				Tile.RemoveObjectAtLayer(layer);
+				ObjectInstance.RemoveObjectInstance(Farm);
+				Tile.RemoveObjectAtLayer(Farm.prefab.layer);
 			}
 			GameManager.Get<ResourceManager>().Bitmask(new List<TileManager.Tile> { Tile }.Concat(Tile.surroundingTiles).ToList());
 		}
