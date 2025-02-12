@@ -13,7 +13,10 @@ namespace Snowship.NResource
 
 		public readonly ObjectEnum type;
 		public string Name { get; }
-		public Sprite Icon => GetBaseSpriteForVariation(lastSelectedVariation);
+		public Sprite Icon {
+			get => GetBaseSpriteForVariation(lastSelectedVariation);
+			set => throw new NotImplementedException();
+		}
 		public List<IGroupItem> Children => null;
 
 		public readonly ObjectPrefabGroup.ObjectGroupEnum groupType;

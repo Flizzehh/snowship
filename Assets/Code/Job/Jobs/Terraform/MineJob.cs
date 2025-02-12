@@ -8,20 +8,20 @@ using Random = UnityEngine.Random;
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Terrain", "Mine")]
-	public class MineJobDefinition : JobDefinition
+	public class MineJobDefinition : JobDefinition<MineJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Stone,
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public MineJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public MineJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 
 	public class MineJob : Job<MineJobDefinition>
 	{
-		protected MineJob(TileManager.Tile tile) : base(tile) {
+		public MineJob(TileManager.Tile tile) : base(tile) {
 			TargetName = Tile.tileType.name;
 			Description = $"Mining {Tile.tileType.name}.";
 		}

@@ -1,13 +1,12 @@
 ﻿using Snowship.NResource;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Clothing", "WearClothes")]
-	public class WearClothesJobDefinition : JobDefinition
+	public class WearClothesJobDefinition : JobDefinition<WearClothesJob>
 	{
-		public WearClothesJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public WearClothesJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 			Returnable = false;
 		}
 	}

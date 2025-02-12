@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NResource
@@ -60,7 +61,7 @@ namespace Snowship.NResource
 				name = prefab.name;
 				sr.sprite = this.small ? prefab.smallSprites[Random.Range(0, prefab.smallSprites.Count)] : prefab.fullSprites[Random.Range(0, prefab.fullSprites.Count)];
 			}
-			sr.sortingOrder = 1; // Plant Sprite
+			sr.sortingOrder = (int)SortingOrder.Object; // Plant Sprite
 
 			obj.name = "Plant: " + prefab.name + " " + sr.sprite.name;
 			obj.transform.parent = tile.obj.transform;

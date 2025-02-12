@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Snowship.NColony;
 using Snowship.NTime;
+using Snowship.NUtilities;
 using Snowship.Selectable;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -33,7 +34,7 @@ namespace Snowship.NLife
 
 			overTile = spawnTile;
 			obj = MonoBehaviour.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, overTile.obj.transform.position, Quaternion.identity);
-			obj.GetComponent<SpriteRenderer>().sortingOrder = 10; // Life Sprite
+			obj.GetComponent<SpriteRenderer>().sortingOrder = (int)SortingOrder.Life; // Life Sprite
 
 			previousPosition = obj.transform.position;
 

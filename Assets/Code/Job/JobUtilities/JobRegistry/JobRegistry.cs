@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -11,8 +12,8 @@ namespace Snowship.NJob
 	public class JobRegistry
 	{
 		private readonly List<JobGroup> jobGroups = new();
-		private readonly Dictionary<Type, JobDefinition> jobDefinitionTypeToDefinitionMap = new();
-		private readonly Dictionary<string, JobDefinition> jobNameToDefinitionMap = new();
+		private readonly Dictionary<Type, object> jobDefinitionTypeToDefinitionMap = new();
+		private readonly Dictionary<string, object> jobNameToDefinitionMap = new();
 
 		public JobRegistry() {
 			List<Type> jobTypes = Assembly
@@ -40,35 +41,41 @@ namespace Snowship.NJob
 
 				string jobName = attribute.JobName;
 
-				JobDefinition jobDefinition = Activator.CreateInstance(jobType, jobGroup, jobSubGroup, jobName, LoadIcon(jobName)) as JobDefinition
-					?? throw new InvalidOperationException();
-
-				jobSubGroup.Children.Add(jobDefinition);
-				jobDefinitionTypeToDefinitionMap.Add(jobDefinition.GetType(), jobDefinition);
-				jobNameToDefinitionMap.Add(jobName, jobDefinition);
+				CreateJobDefinition(jobType, jobGroup, jobSubGroup, jobName);
 			}
 		}
 
-		public IJobDefinition GetJobDefinition<TJobDefinition>() where TJobDefinition : IJobDefinition {
-			return jobDefinitionTypeToDefinitionMap.GetValueOrDefault(typeof(TJobDefinition));
+		private void CreateJobDefinition(Type jobType, JobGroup jobGroup, JobGroup jobSubGroup, string jobName) {
+			IJobDefinition jobDefinition = Activator.CreateInstance(jobType, jobGroup, jobSubGroup, jobName) as IJobDefinition
+				?? throw new InvalidOperationException();
+
+			jobSubGroup.Children.Add(jobDefinition);
+			jobDefinitionTypeToDefinitionMap.Add(jobDefinition.GetType(), jobDefinition);
+			jobNameToDefinitionMap.Add(jobName, jobDefinition);
+
+			jobDefinition.SetIcon(LoadIcon(jobName)).Forget();
+		}
+
+		public IJobDefinition GetJobDefinition<TJob, TJobDefinition>() where TJobDefinition : class, IJobDefinition {
+			return jobDefinitionTypeToDefinitionMap.GetValueOrDefault(typeof(TJobDefinition)) as IJobDefinition;
 		}
 
 		public IJobDefinition GetJobDefinition(Type jobDefinitionType) {
-			return jobDefinitionTypeToDefinitionMap.GetValueOrDefault(jobDefinitionType);
+			return jobDefinitionTypeToDefinitionMap.GetValueOrDefault(jobDefinitionType) as IJobDefinition;
 		}
 
-		public JobDefinition GetJobTypeFromName(string jobName) {
-			return jobNameToDefinitionMap[jobName];
+		public IJobDefinition GetJobTypeFromName(string jobName) {
+			return jobNameToDefinitionMap[jobName] as IJobDefinition;
 		}
 
 		public JobGroup GetJobGroup(string groupToFind) {
 			return jobGroups.FirstOrDefault(group => group.Name == groupToFind);
 		}
 
-		private Sprite LoadIcon(string jobName) {
+		private async UniTask<Sprite> LoadIcon(string jobName) {
 			AsyncOperationHandle<Sprite> jobIconOperationHandle = Addressables.LoadAssetAsync<Sprite>($"ui_icon_job_{jobName}");
 			jobIconOperationHandle.ReleaseHandleOnCompletion();
-			return jobIconOperationHandle.WaitForCompletion();
+			return await jobIconOperationHandle;
 		}
 	}
 }

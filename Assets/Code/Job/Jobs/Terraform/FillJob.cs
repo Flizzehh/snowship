@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using Snowship.NResource;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Terrain", "Fill")]
-	public class FillJobDefinition : JobDefinition
+	public class FillJobDefinition : JobDefinition<FillJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Fillable,
@@ -20,13 +19,13 @@ namespace Snowship.NJob
 			new ResourceAmount(Resource.GetResourceByEnum(EResource.Dirt), 4)
 		};
 
-		public FillJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public FillJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 
 	public class FillJob : Job<FillJobDefinition>
 	{
-		protected FillJob(TileManager.Tile tile) : base(tile) {
+		public FillJob(TileManager.Tile tile) : base(tile) {
 			Description = $"Filling {Tile.tileType.groupType.ToString().ToLower()}.";
 		}
 

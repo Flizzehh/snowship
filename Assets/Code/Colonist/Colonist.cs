@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Snowship.NColony;
 using Snowship.NHuman;
 using Snowship.NJob;
 using Snowship.NProfession;
@@ -17,14 +15,6 @@ namespace Snowship.NColonist {
 		public static readonly List<Colonist> colonists = new List<Colonist>();
 
 		public bool playerMoved;
-
-		// Job
-		public IJob Job { get; private set; }
-
-		public readonly Queue<IJob> Backlog = new();
-
-		public event Action<IJob> OnJobChanged;
-		public event Action<IJob> OnStoredJobChanged;
 
 		// Professions
 		public readonly List<Profession> professions = new List<Profession>();
@@ -92,8 +82,7 @@ namespace Snowship.NColonist {
 		}
 
 		public override void Update() {
-			moveSpeedMultiplier = -((Inventory.UsedWeight() - Inventory.maxWeight) / (float)Inventory.maxWeight) + 1;
-			moveSpeedMultiplier = Mathf.Clamp(moveSpeedMultiplier, 0.1f, 1f);
+
 
 			if (playerMoved && path.Count <= 0) {
 				playerMoved = false;
@@ -103,13 +92,6 @@ namespace Snowship.NColonist {
 
 			if (dead) {
 				return;
-			}
-
-			if (Job == null) {
-				IJob selectedJob = GameManager.Get<JobManager>().Jobs.Where(j => j.Worker == null).FirstOrDefault();
-				if (selectedJob != null) {
-					GameManager.Get<JobManager>().TakeJob(selectedJob, this);
-				}
 			}
 
 			// TODO Create event for OnTileChanged or something
@@ -185,17 +167,6 @@ namespace Snowship.NColonist {
 					}
 				}
 			}
-		}
-
-		public void SetJob(IJob job) {
-
-			Job?.Close(); // Close existing Job
-
-			Job = job;
-
-			Job.AssignWorker(this);
-			MoveToTile(Job.Tile, !Job.Tile.walkable);
-			OnJobChanged?.Invoke(Job);
 		}
 
 		/*public void SetJob(ColonistJob colonistJob, bool reserveResourcesInContainerPickups = true) {
@@ -387,33 +358,6 @@ namespace Snowship.NColonist {
 				Job = null;
 			}
 		}*/
-
-		public void MoveToClosestWalkableTile(bool careIfOvertileIsWalkable) {
-			if (!careIfOvertileIsWalkable || !overTile.walkable) {
-				List<TileManager.Tile> walkableSurroundingTiles = overTile.surroundingTiles.Where(tile => tile != null && tile.walkable).ToList();
-				if (walkableSurroundingTiles.Count > 0) {
-					MoveToTile(walkableSurroundingTiles[Random.Range(0, walkableSurroundingTiles.Count)], false);
-				} else {
-					walkableSurroundingTiles.Clear();
-					List<TileManager.Tile> potentialWalkableSurroundingTiles = new List<TileManager.Tile>();
-					foreach (TileManager.Map.RegionBlock regionBlock in overTile.regionBlock.horizontalSurroundingRegionBlocks) {
-						if (regionBlock.tileType.walkable) {
-							potentialWalkableSurroundingTiles.AddRange(regionBlock.tiles);
-						}
-					}
-					walkableSurroundingTiles = potentialWalkableSurroundingTiles.Where(tile => tile.surroundingTiles.Find(nTile => !nTile.walkable && nTile.regionBlock == overTile.regionBlock) != null).ToList();
-					if (walkableSurroundingTiles.Count > 0) {
-						walkableSurroundingTiles = walkableSurroundingTiles.OrderBy(tile => Vector2.Distance(tile.obj.transform.position, overTile.obj.transform.position)).ToList();
-						MoveToTile(walkableSurroundingTiles[0], false);
-					} else {
-						List<TileManager.Tile> validTiles = GameManager.Get<ColonyManager>().colony.map.tiles.Where(tile => tile.walkable).OrderBy(tile => Vector2.Distance(tile.obj.transform.position, overTile.obj.transform.position)).ToList();
-						if (validTiles.Count > 0) {
-							MoveToTile(validTiles[0], false);
-						}
-					}
-				}
-			}
-		}
 
 		public void PlayerMoveToTile(TileManager.Tile tile) {
 			playerMoved = true;

@@ -6,21 +6,21 @@ using UnityEngine;
 namespace Snowship.NJob
 {
 	[RegisterJob("Remove", "Remove", "RemoveRoof")]
-	public class RemoveRoofJobDefinition : JobDefinition
+	public class RemoveRoofJobDefinition : JobDefinition<RemoveRoofJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Roof,
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public RemoveRoofJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public RemoveRoofJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 			Layer = 2;
 		}
 	}
 
 	public class RemoveRoofJob : Job<RemoveRoofJobDefinition>
 	{
-		protected RemoveRoofJob(TileManager.Tile tile) : base(tile) {
+		public RemoveRoofJob(TileManager.Tile tile) : base(tile) {
 			TargetName = "Roof";
 			Description = "Removing a roof.";
 		}

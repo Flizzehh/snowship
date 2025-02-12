@@ -1,11 +1,10 @@
 ﻿using System;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Farm", "PlantFarm", "PlantFarm")]
-	public class PlantFarmJobDefinition : JobDefinition
+	public class PlantFarmJobDefinition : JobDefinition<PlantFarmJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Walkable,
@@ -16,7 +15,7 @@ namespace Snowship.NJob
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public PlantFarmJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public PlantFarmJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 

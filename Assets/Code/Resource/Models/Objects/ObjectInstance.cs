@@ -2,6 +2,7 @@
 using System.Linq;
 using Snowship.NColony;
 using Snowship.NJob;
+using Snowship.NUtilities;
 using Snowship.Selectable;
 using UnityEngine;
 
@@ -68,7 +69,7 @@ namespace Snowship.NResource
 			sr = obj.GetComponent<SpriteRenderer>();
 			obj.transform.position += (Vector3)prefab.anchorPositionOffset[rotationIndex];
 			obj.name = "Tile Object Instance: " + prefab.Name;
-			sr.sortingOrder = 1 + prefab.layer; // Tile Object Sprite
+			sr.sortingOrder = (int)SortingOrder.Object + prefab.layer; // Tile Object Sprite
 			sr.sprite = prefab.GetBaseSpriteForVariation(variation);
 
 			activeOverlay = obj.transform.Find("ActiveOverlay").gameObject;

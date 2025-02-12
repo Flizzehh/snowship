@@ -11,6 +11,8 @@ namespace Snowship.NUI
 
 		public bool ChildElementsActiveState { get; private set; } = false;
 
+		private bool hasVariations = false;
+
 		public event Action OnButtonClicked;
 
 		public UIActionItemButtonElement(string itemName, Sprite itemIcon) {
@@ -32,7 +34,7 @@ namespace Snowship.NUI
 
 		private void OnComponentButtonClicked() {
 			OnButtonClicked?.Invoke();
-			SetChildElementsActive(!ChildElementsActiveState);
+			SetChildElementsActive(!ChildElementsActiveState && hasVariations);
 		}
 
 		public void SetChildSiblingChildElementsActive(ITreeButton childButtonToBeActive) {
@@ -45,6 +47,7 @@ namespace Snowship.NUI
 		}
 
 		public UIActionItemButtonElement AddVariation(ObjectPrefab prefab, Variation variation) {
+			hasVariations = true;
 			return Component.AddVariation(prefab, variation);
 		}
 

@@ -8,9 +8,9 @@ using UnityEngine;
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Food", "Eat")]
-	public class EatJobDefinition : JobDefinition
+	public class EatJobDefinition : JobDefinition<EatJob>
 	{
-		public EatJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public EatJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 			Returnable = false;
 		}
 	}

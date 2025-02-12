@@ -9,12 +9,14 @@ using Object = UnityEngine.Object;
 
 namespace Snowship.NJob
 {
-	public abstract class Job<TJobDefinition> : IJob where TJobDefinition : class, IJobDefinition
+	public abstract class Job<TJobDefinition> : IJob
+		where TJobDefinition : class, IJobDefinition
 	{
 		// Job Definition Properties
 		public TJobDefinition Definition { get; }
-		public int Layer => Definition.Layer;
+		public int Layer { get; protected set; }
 		public string Name => Definition.Name;
+		public Sprite Icon => Definition.Icon;
 		public IGroupItem Group => Definition.Group;
 		public IGroupItem SubGroup => Definition.SubGroup;
 
@@ -42,9 +44,10 @@ namespace Snowship.NJob
 		public event Action<Job<TJobDefinition>, int> OnPriorityChanged;
 
 		protected Job(TileManager.Tile tile) {
-			Definition = GameManager.Get<JobManager>().JobRegistry.GetJobDefinition<TJobDefinition>() as TJobDefinition
+			Definition = GameManager.Get<JobManager>().JobRegistry.GetJobDefinition(typeof(TJobDefinition)) as TJobDefinition
 				?? throw new InvalidOperationException();
 			Tile = tile;
+			Layer = Definition.Layer;
 
 			RequiredResources.AddRange(Definition.BaseRequiredResources);
 
@@ -56,6 +59,8 @@ namespace Snowship.NJob
 					Tile.obj.transform,
 					false
 				);
+				JobPreviewObject.GetComponent<SpriteRenderer>().sprite = Icon;
+				JobPreviewObject.GetComponent<SpriteRenderer>().sortingOrder = (int)SortingOrder.Job + Layer;
 			}
 		}
 

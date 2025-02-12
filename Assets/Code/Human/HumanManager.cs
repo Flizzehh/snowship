@@ -6,6 +6,7 @@ using Snowship.NColonist;
 using Snowship.NColony;
 using Snowship.NInput;
 using Snowship.NLife;
+using Snowship.NUtilities;
 using UnityEngine;
 
 namespace Snowship.NHuman
@@ -101,7 +102,7 @@ namespace Snowship.NHuman
 
 				SpriteRenderer sCISR = selectedHumanIndicator.GetComponent<SpriteRenderer>();
 				sCISR.sprite = GameManager.Get<ResourceManager>().selectionCornersSprite;
-				sCISR.sortingOrder = 20; // Selected Colonist Indicator Sprite
+				sCISR.sortingOrder = (int)SortingOrder.UI; // Selected Colonist Indicator Sprite
 				sCISR.color = new Color(1f, 1f, 1f, 0.75f);
 			}
 		}

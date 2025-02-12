@@ -10,14 +10,14 @@ using UnityEngine;
 namespace Snowship.NJob
 {
 	[RegisterJob("Remove", "Remove", "Remove")]
-	public class RemoveJobDefinition : JobDefinition
+	public class RemoveJobDefinition : JobDefinition<RemoveJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.SameLayerObject,
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public RemoveJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public RemoveJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Snowship.NCamera;
+using Snowship.NColony;
+using Snowship.NJob;
 using Snowship.NLife;
 using Snowship.NResource;
 using Snowship.NTime;
@@ -22,6 +24,10 @@ namespace Snowship.NHuman
 		// Inventory
 		public Inventory Inventory { get; }
 
+		// Job
+		public IJob Job { get; private set; }
+		public readonly Queue<IJob> Backlog = new();
+
 		// Wandering
 		protected const int WanderTimerMin = 10;
 		protected const int WanderTimerMax = 20;
@@ -41,6 +47,8 @@ namespace Snowship.NHuman
 
 		// Events
 		public event Action<BodySection, Clothing> OnClothingChanged;
+		public event Action<IJob> OnJobChanged;
+		public event Action<IJob> OnStoredJobChanged;
 
 		public Human(TileManager.Tile spawnTile, float startingHealth) : base(spawnTile, startingHealth) {
 
@@ -62,7 +70,6 @@ namespace Snowship.NHuman
 		}
 
 		protected Human() {
-
 		}
 
 		public virtual void SetName(string name) {
@@ -75,6 +82,7 @@ namespace Snowship.NHuman
 			}
 			nameCanvas = Object.Instantiate(Resources.Load<GameObject>(@"UI/UIElements/Human-Canvas"), obj.transform, false);
 			nameCanvas.transform.Find("NameBackground-Image/Name-Text").GetComponent<Text>().text = name;
+			nameCanvas.GetComponent<Canvas>().sortingOrder = (int)SortingOrder.UI;
 		}
 
 		public static Dictionary<BodySection, int> GetBodyIndices(Gender gender) {
@@ -92,14 +100,27 @@ namespace Snowship.NHuman
 		public override void Update() {
 			base.Update();
 
-			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * Mathf.Clamp(GameManager.Get<CameraManager>().camera.orthographicSize, 2, 10) * 0.001f;
+			nameCanvas.transform.Find("NameBackground-Image").localScale = Vector2.one * (Mathf.Clamp(GameManager.Get<CameraManager>().camera.orthographicSize, 2, 10) * 0.001f);
 			nameCanvas.transform.Find("NameBackground-Image/HealthIndicator-Image").GetComponent<Image>().color = Color.Lerp(
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightRed100),
 				ColourUtilities.GetColour(ColourUtilities.EColour.LightGreen100),
 				Health
 			);
 
+			moveSpeedMultiplier = -((Inventory.UsedWeight() - Inventory.maxWeight) / (float)Inventory.maxWeight) + 1;
+			moveSpeedMultiplier = Mathf.Clamp(moveSpeedMultiplier, 0.1f, 1f);
+
 			SetMoveSprite();
+		}
+
+		public void SetJob(IJob job) {
+			Job?.Close(); // Close existing Job
+
+			Job = job;
+
+			Job.AssignWorker(this);
+			MoveToTile(Job.Tile, !Job.Tile.walkable);
+			OnJobChanged?.Invoke(Job);
 		}
 
 		public virtual void ChangeClothing(BodySection bodySection, Clothing clothing) {
@@ -159,6 +180,33 @@ namespace Snowship.NHuman
 				WanderTimer = UnityEngine.Random.Range(10f, 20f);
 			} else {
 				WanderTimer -= 1 * GameManager.Get<TimeManager>().Time.DeltaTime;
+			}
+		}
+
+		public void MoveToClosestWalkableTile(bool careIfOvertileIsWalkable) {
+			if (!careIfOvertileIsWalkable || !overTile.walkable) {
+				List<TileManager.Tile> walkableSurroundingTiles = overTile.surroundingTiles.Where(tile => tile != null && tile.walkable).ToList();
+				if (walkableSurroundingTiles.Count > 0) {
+					MoveToTile(walkableSurroundingTiles[UnityEngine.Random.Range(0, walkableSurroundingTiles.Count)], false);
+				} else {
+					walkableSurroundingTiles.Clear();
+					List<TileManager.Tile> potentialWalkableSurroundingTiles = new();
+					foreach (TileManager.Map.RegionBlock regionBlock in overTile.regionBlock.horizontalSurroundingRegionBlocks) {
+						if (regionBlock.tileType.walkable) {
+							potentialWalkableSurroundingTiles.AddRange(regionBlock.tiles);
+						}
+					}
+					walkableSurroundingTiles = potentialWalkableSurroundingTiles.Where(tile => tile.surroundingTiles.Find(nTile => !nTile.walkable && nTile.regionBlock == overTile.regionBlock) != null).ToList();
+					if (walkableSurroundingTiles.Count > 0) {
+						walkableSurroundingTiles = walkableSurroundingTiles.OrderBy(tile => Vector2.Distance(tile.obj.transform.position, overTile.obj.transform.position)).ToList();
+						MoveToTile(walkableSurroundingTiles[0], false);
+					} else {
+						List<TileManager.Tile> validTiles = GameManager.Get<ColonyManager>().colony.map.tiles.Where(tile => tile.walkable).OrderBy(tile => Vector2.Distance(tile.obj.transform.position, overTile.obj.transform.position)).ToList();
+						if (validTiles.Count > 0) {
+							MoveToTile(validTiles[0], false);
+						}
+					}
+				}
 			}
 		}
 

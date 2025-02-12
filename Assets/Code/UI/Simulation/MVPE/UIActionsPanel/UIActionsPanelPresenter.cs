@@ -7,7 +7,6 @@ using Snowship.NJob;
 using Snowship.NResource;
 using Snowship.NUtilities;
 using Snowship.Selectable;
-using UnityEngine;
 
 namespace Snowship.NUI
 {
@@ -83,11 +82,11 @@ namespace Snowship.NUI
 						subGroupButton.OnButtonClicked += () => groupButton.SetChildSiblingChildElementsActive(subGroupButton);
 					}
 
-					foreach (IGroupItem prefab in subGroup.Children) {
-						UIActionItemButtonElement prefabButton = await ((UIActionGroupButtonElement)subGroupButton).AddChildItemButton(prefab.Name, prefab.Icon);
-						prefabButton.SetChildElementsActive(false);
+					foreach (IGroupItem item in subGroup.Children) {
+						UIActionItemButtonElement itemButton = await ((UIActionGroupButtonElement)subGroupButton).AddChildItemButton(item.Name, item.Icon);
+						itemButton.SetChildElementsActive(false);
 
-						handleLastChildrenAction(prefabButton, prefab);
+						handleLastChildrenAction(itemButton, item);
 					}
 				}
 			}
@@ -113,15 +112,13 @@ namespace Snowship.NUI
 				return;
 			}
 
-			BuildJobParams buildJobParams = new(prefab, prefab.lastSelectedVariation, 0);
-
-			button.OnButtonClicked += () => Debug.Log($"Build Button for {prefab.Name} clicked");
-			button.OnButtonClicked += () => GameManager.Get<SelectionManager>().SetSelectedJob<BuildJob, BuildJobDefinition>(buildJobParams);
-
 			foreach (Variation variation in prefab.variations) {
 				UIActionItemButtonElement variationButton = prefabButton.AddVariation(prefab, variation);
 				variationButton.OnButtonClicked += () => prefabButton.SetVariation(prefab, variation, variationButton);
 			}
+
+			BuildJobParams buildJobParams = new(prefab, prefab.lastSelectedVariation, 0);
+			prefabButton.OnButtonClicked += () => GameManager.Get<SelectionManager>().SetSelectedJob<BuildJob, BuildJobDefinition>(buildJobParams);
 		}
 
 		// Terraform Buttons
@@ -136,11 +133,11 @@ namespace Snowship.NUI
 			if (button is not UIActionItemButtonElement jobButton) {
 				return;
 			}
-			if (item is not JobDefinition job) {
+			if (item is not IJobDefinition jobDefinition) {
 				return;
 			}
 
-			button.OnButtonClicked += () => Debug.Log($"Terraform Button for {job.Name} clicked");
+			jobButton.OnButtonClicked += () => GameManager.Get<SelectionManager>().SetSelectedJob(jobDefinition);
 		}
 
 		// Farm Buttons
@@ -155,11 +152,11 @@ namespace Snowship.NUI
 			if (button is not UIActionItemButtonElement jobButton) {
 				return;
 			}
-			if (item is not JobDefinition job) {
+			if (item is not IJobDefinition jobDefinition) {
 				return;
 			}
 
-			button.OnButtonClicked += () => Debug.Log($"Farm Button for {job.Name} clicked");
+			jobButton.OnButtonClicked += () => GameManager.Get<SelectionManager>().SetSelectedJob(jobDefinition);
 		}
 
 		// Remove Buttons
@@ -174,11 +171,11 @@ namespace Snowship.NUI
 			if (button is not UIActionItemButtonElement jobButton) {
 				return;
 			}
-			if (item is not JobDefinition job) {
+			if (item is not IJobDefinition jobDefinition) {
 				return;
 			}
 
-			button.OnButtonClicked += () => Debug.Log($"Remove Button for {job.Name} clicked");
+			jobButton.OnButtonClicked += () => GameManager.Get<SelectionManager>().SetSelectedJob(jobDefinition);
 		}
 	}
 }

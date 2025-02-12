@@ -1,14 +1,13 @@
 ﻿using System;
 using Snowship.NResource;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Task", "Craft", "CreateResource")]
-	public class CreateResourceJobDefinition : JobDefinition
+	public class CreateResourceJobDefinition : JobDefinition<CreateResourceJob>
 	{
-		public CreateResourceJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public CreateResourceJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 

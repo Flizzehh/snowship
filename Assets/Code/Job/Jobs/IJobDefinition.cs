@@ -8,6 +8,9 @@ namespace Snowship.NJob
 {
 	public interface IJobDefinition : IGroupItem
 	{
+		public Type JobType { get; }
+		public Type JobParamsType { get; }
+
 		// Job Definition Properties
 		Func<TileManager.Tile, int, bool>[] SelectionConditions { get; }
 		List<ResourceAmount> BaseRequiredResources { get; }

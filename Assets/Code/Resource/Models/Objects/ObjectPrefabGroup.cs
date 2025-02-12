@@ -13,7 +13,7 @@ namespace Snowship.NResource
 		public readonly ObjectGroupEnum type;
 
 		public string Name { get; }
-		public Sprite Icon { get; }
+		public Sprite Icon { get; set; }
 
 		public List<IGroupItem> Children { get; }
 

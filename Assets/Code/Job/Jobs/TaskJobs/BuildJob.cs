@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Snowship.NColonist;
 using Snowship.NResource;
 using Snowship.NUtilities;
@@ -8,9 +7,8 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	[UsedImplicitly]
 	[RegisterJob("Build", "Build", "Build")]
-	public class BuildJobDefinition : JobDefinition
+	public class BuildJobDefinition : JobDefinition<BuildJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.WalkableIncludingFences,
@@ -20,26 +18,30 @@ namespace Snowship.NJob
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public BuildJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public override int Layer { get; protected set; } = 100;
+
+		public BuildJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 
 	public class BuildJobParams : IJobParams
 	{
 		public List<Func<TileManager.Tile, int, bool>> SelectionConditions { get; }
-		public Sprite SelectedJobPreviewSprite { get; }
+		public Sprite JobPreviewSprite { get; }
 
-		public ObjectPrefab ObjectPrefab;
-		public Variation Variation;
-		public int Rotation;
+		public readonly ObjectPrefab ObjectPrefab;
+		public readonly Variation Variation;
+		public readonly int Layer;
+		public readonly int Rotation;
 
 		public BuildJobParams(ObjectPrefab objectPrefab, Variation variation, int rotation) {
 			ObjectPrefab = objectPrefab;
 			Variation = variation;
+			Layer += ObjectPrefab.layer;
 			Rotation = rotation;
 
 			// SelectionConditions.AddRange(ObjectPrefab.SelectionConditions); // TODO
-			SelectedJobPreviewSprite = ObjectPrefab.canRotate
+			JobPreviewSprite = ObjectPrefab.canRotate
 				? ObjectPrefab.GetBitmaskSpritesForVariation(Variation)[Rotation]
 				: ObjectPrefab.GetBaseSpriteForVariation(Variation);
 		}
@@ -55,6 +57,7 @@ namespace Snowship.NJob
 			Variation = args.Variation;
 			ObjectPrefab = args.ObjectPrefab;
 			Rotation = args.Rotation;
+			Layer = args.Layer;
 
 			Description = $"Building a {ObjectPrefab.Name}.";
 			RequiredResources.AddRange(ObjectPrefab.commonResources);
@@ -64,12 +67,11 @@ namespace Snowship.NJob
 			SetTimeToWork(ObjectPrefab.timeToBuild);
 
 			JobPreviewObject.GetComponent<SpriteRenderer>().sprite = ObjectPrefab.GetBitmaskSpritesForVariation(Variation)[Rotation];
+			JobPreviewObject.GetComponent<SpriteRenderer>().sortingOrder = (int)SortingOrder.Job + Layer;
 		}
 
 		protected override void OnJobFinished() {
 			base.OnJobFinished();
-
-			Colonist colonist = (Colonist)Worker; // TODO Remove when Human has Job ability
 
 			if (ObjectPrefab.subGroupType == ObjectPrefabSubGroup.ObjectSubGroupEnum.Roofs) {
 				Tile.SetRoof(true);
@@ -88,7 +90,7 @@ namespace Snowship.NJob
 			SkillInstance skill = ((Colonist)Worker).GetSkillFromJobType(Definition.Name);
 			skill?.AddExperience(ObjectPrefab.timeToBuild);
 
-			colonist.MoveToClosestWalkableTile(true);
+			Worker.MoveToClosestWalkableTile(true);
 		}
 	}
 }

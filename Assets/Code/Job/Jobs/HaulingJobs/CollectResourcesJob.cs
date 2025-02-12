@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using Snowship.NResource;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Hauling", "Hauling", "CollectResources")]
-	public class CollectResourcesJobDefinition : JobDefinition
+	public class CollectResourcesJobDefinition : JobDefinition<CollectResourcesJob>
 	{
-		public CollectResourcesJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public CollectResourcesJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 

@@ -3,14 +3,13 @@ using Snowship.NColonist;
 using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.NUtilities;
-using UnityEngine;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Needs", "Rest", "Sleep")]
-	public class SleepJobDefinition : JobDefinition
+	public class SleepJobDefinition : JobDefinition<SleepJob>
 	{
-		public SleepJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public SleepJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 			Returnable = false;
 		}
 	}

@@ -6,6 +6,7 @@ using Snowship.NColony;
 using Snowship.NInput;
 using Snowship.NJob;
 using Snowship.NState;
+using Snowship.NUtilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
@@ -20,6 +21,7 @@ namespace Snowship.Selectable
 		private IJobDefinition selectedJobDefinition;
 		private IJobParams selectedJobParams;
 		private bool selecting = false;
+		private SpriteRenderer selectedJobPreviewObject;
 
 		private TileManager.Tile firstTile;
 		private TileManager.Tile secondTile;
@@ -38,6 +40,8 @@ namespace Snowship.Selectable
 			GameManager.Get<InputManager>().InputSystemActions.Simulation.Deselect.canceled += OnDeselectCanceled;
 
 			GameManager.Get<StateManager>().OnStateChanged += OnStateChanged;
+
+			selectedJobPreviewObject = GameManager.SharedReferences.SelectedJobPreview;
 		}
 
 		private void OnStateChanged((EState previousState, EState newState) state) {
@@ -79,7 +83,7 @@ namespace Snowship.Selectable
 			where TJobDefinition : class, IJobDefinition {
 
 			selectedJobType = typeof(TJob);
-			selectedJobDefinition = GameManager.Get<JobManager>().JobRegistry.GetJobDefinition<TJobDefinition>() as TJobDefinition;
+			selectedJobDefinition = GameManager.Get<JobManager>().JobRegistry.GetJobDefinition(typeof(TJobDefinition)) as TJobDefinition;
 			selectedJobParams = null;
 		}
 
@@ -88,6 +92,17 @@ namespace Snowship.Selectable
 			where TJobDefinition : class, IJobDefinition {
 
 			SetSelectedJob<TJob, TJobDefinition>();
+			selectedJobParams = jobParams;
+		}
+
+		public void SetSelectedJob<TJobDefinition>(TJobDefinition jobDefinition) where TJobDefinition : class, IJobDefinition {
+			selectedJobType = jobDefinition.JobType;
+			selectedJobDefinition = jobDefinition;
+			selectedJobParams = null;
+		}
+
+		public void SetSelectedJob<TJobDefinition>(TJobDefinition jobDefinition, IJobParams jobParams) where TJobDefinition : class, IJobDefinition {
+			SetSelectedJob(jobDefinition);
 			selectedJobParams = jobParams;
 		}
 
@@ -136,17 +151,17 @@ namespace Snowship.Selectable
 
 		private void UpdateSelectedJobPreview() {
 
-			SpriteRenderer selectedJobPreview = GameManager.SharedReferences.SelectedJobPreview;
-
 			if (selectedJobDefinition == null || selecting) {
-				selectedJobPreview.gameObject.SetActive(false);
+				selectedJobPreviewObject.gameObject.SetActive(false);
 				return;
 			}
 
-			selectedJobPreview.gameObject.SetActive(true);
+			selectedJobPreviewObject.gameObject.SetActive(true);
 
-			selectedJobPreview.sprite = selectedJobParams?.SelectedJobPreviewSprite ?? GameManager.Get<ResourceManager>().selectionCornersSprite;
-			selectedJobPreview.transform.position = GetTileFromMouseScreenPosition(Input.mousePosition).obj.transform.position;
+			selectedJobPreviewObject.sprite = GameManager.Get<JobManager>().GetJobSprite(selectedJobDefinition, selectedJobParams);
+			TileManager.Tile overTile = GetTileFromMouseScreenPosition(Input.mousePosition);
+			selectedJobPreviewObject.transform.position = overTile.obj.transform.position;
+			selectedJobPreviewObject.sortingOrder = selectedJobDefinition.Layer + overTile.sr.sortingOrder + (int)SortingOrder.Selection;
 		}
 
 		private void UpdateSelectionArea() {
@@ -251,7 +266,9 @@ namespace Snowship.Selectable
 			foreach (TileManager.Tile tile in selectionArea) {
 				if (!selectionIndicators.ContainsKey(tile)) {
 					GameObject selectionIndicator = Object.Instantiate(GameManager.Get<ResourceManager>().tilePrefab, tile.obj.transform, false);
-					selectionIndicator.GetComponent<SpriteRenderer>().sprite = jobParams?.SelectedJobPreviewSprite ?? GameManager.Get<ResourceManager>().selectionCornersSprite;
+					SpriteRenderer selectionIndicatorSpriteRenderer = selectionIndicator.GetComponent<SpriteRenderer>();
+					selectionIndicatorSpriteRenderer.sprite = GameManager.Get<JobManager>().GetJobSprite(selectedJobDefinition, selectedJobParams);
+					selectionIndicatorSpriteRenderer.sortingOrder = selectedJobDefinition.Layer + tile.sr.sortingOrder + (int)SortingOrder.Selection;
 					selectionIndicators.Add(tile, selectionIndicator);
 				}
 			}

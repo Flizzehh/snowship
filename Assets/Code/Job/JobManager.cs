@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Snowship.NHuman;
+using Snowship.NColonist;
+using Snowship.NTime;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
@@ -17,6 +19,33 @@ namespace Snowship.NJob
 
 		public void OnCreate() {
 			JobRegistry = new JobRegistry();
+			GameManager.Get<TimeManager>().OnTimeChanged += OnTimeChanged;
+		}
+
+		private void OnTimeChanged(SimulationDateTime _) {
+			AssignJobs();
+		}
+
+		private void AssignJobs() {
+			foreach (Colonist colonist in Colonist.colonists) {
+				if (colonist.dead) {
+					continue;
+				}
+				if (colonist.Job != null) {
+					continue;
+				}
+
+				IJob selectedJob = Jobs
+					.Where(j => j.Worker == null)
+					.Where(j => j.Tile.region == colonist.overTile.region || (!j.Tile.walkable && j.Tile.surroundingTiles.Any(t => t.region == colonist.overTile.region)))
+					.OrderBy(j => PathManager.RegionBlockDistance(j.Tile.regionBlock, colonist.overTile.regionBlock, true, true, true))
+					.ThenByDescending(j => colonist.GetSkillFromJobType(j.Name)?.CalculateTotalSkillLevel() * 5f ?? 0)
+					.FirstOrDefault();
+
+				if (selectedJob != null) {
+					colonist.SetJob(selectedJob);
+				}
+			}
 		}
 
 		public void AddJob(IJob job) {
@@ -31,10 +60,7 @@ namespace Snowship.NJob
 			}
 
 			OnJobAdded?.Invoke(job);
-		}
-
-		public void TakeJob(IJob job, Human human) {
-			job.AssignWorker(human);
+			Debug.Log($"Job added: {job.Name} at {job.Tile}");
 		}
 
 		public void RemoveJob(IJob job) {
@@ -67,6 +93,10 @@ namespace Snowship.NJob
 
 		public HashSet<IJob> JobsAtTile(TileManager.Tile tile) {
 			return jobsByTile.GetValueOrDefault(tile);
+		}
+
+		public Sprite GetJobSprite(IJobDefinition jobDefinition, IJobParams args) {
+			return args?.JobPreviewSprite ?? jobDefinition?.Icon ?? GameManager.Get<ResourceManager>().selectionCornersSprite;
 		}
 	}
 }

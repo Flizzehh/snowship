@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NResource;
 using Snowship.NUtilities;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Terrain", "Dig")]
-	public class DigJobDefinition : JobDefinition
+	public class DigJobDefinition : JobDefinition<DigJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.CoastalWater,
@@ -21,13 +20,13 @@ namespace Snowship.NJob
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public DigJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public DigJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 
 	public class DigJob : Job<DigJobDefinition>
 	{
-		protected DigJob(TileManager.Tile tile) : base(tile) {
+		public DigJob(TileManager.Tile tile) : base(tile) {
 			TargetName = Tile.tileType.name;
 			Description = $"Digging {string.Join(" and ", Tile.tileType.resourceRanges.Select(rr => rr.resource.name).ToArray())}";
 		}

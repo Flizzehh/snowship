@@ -7,23 +7,27 @@ using UnityEngine;
 
 namespace Snowship.NJob
 {
-	public abstract class JobDefinition<TJobParams> : JobDefinition where TJobParams : IJobParams, new()
+	public abstract class JobDefinition<TJob, TJobParams> : JobDefinition<TJob>
+		where TJobParams : IJobParams, new()
+		where TJob : class, IJob
 	{
-		public Type JobParams { get; }
-
-		protected JobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
-			JobParams = typeof(TJobParams);
+		protected JobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name) {
+			JobParamsType = typeof(TJobParams);
 		}
 	}
 
-	public abstract class JobDefinition : IJobDefinition
+	public abstract class JobDefinition<TJob> : IJobDefinition
+		where TJob : class, IJob
 	{
+		public Type JobType => typeof(TJob);
+		public Type JobParamsType { get; protected set; } = null;
+
 		// Job Definition Properties
 		public virtual Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; }
 		public virtual List<ResourceAmount> BaseRequiredResources { get; } = new();
 		public float TimeToWork { get; protected set; } = 3;
 		public bool Returnable { get; protected set; } = true;
-		public int Layer { get; protected set; } = 0;
+		public virtual int Layer { get; protected set; } = 0;
 		public SelectionType SelectionType { get; protected set; } = SelectionType.Full;
 		public bool HasPreviewObject { get; } = true;
 
@@ -33,13 +37,12 @@ namespace Snowship.NJob
 
 		// IGroupItem
 		public string Name { get; }
-		public Sprite Icon { get; }
+		public Sprite Icon { get; set; }
 
-		protected JobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) {
+		protected JobDefinition(IGroupItem group, IGroupItem subGroup, string name) {
 			Group = group;
 			SubGroup = subGroup;
 			Name = name;
-			Icon = icon;
 		}
 	}
 }

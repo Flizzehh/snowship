@@ -1,5 +1,6 @@
 ﻿using Snowship.NHuman;
 using Snowship.NUtilities;
+using UnityEngine;
 
 namespace Snowship.NJob
 {
@@ -8,6 +9,7 @@ namespace Snowship.NJob
 		TileManager.Tile Tile { get; }
 		int Layer { get; }
 		string Name { get; }
+		Sprite Icon { get; }
 		string Description { get; }
 		IGroupItem Group { get; }
 		IGroupItem SubGroup { get; }

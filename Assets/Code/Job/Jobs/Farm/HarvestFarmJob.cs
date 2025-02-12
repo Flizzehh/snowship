@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Snowship.NResource;
 using Snowship.NUtilities;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Farm", "Harvest", "HarvestFarm")]
-	public class HarvestFarmJobDefinition : JobDefinition
+	public class HarvestFarmJobDefinition : JobDefinition<HarvestFarmJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Farm,
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public HarvestFarmJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public HarvestFarmJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 

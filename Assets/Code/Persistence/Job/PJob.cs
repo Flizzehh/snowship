@@ -8,7 +8,7 @@ using UnityEngine;
 using PU = Snowship.NPersistence.PersistenceUtilities;
 
 namespace Snowship.NPersistence {
-	public class PJob<TJobDefinition> : Job<TJobDefinition> where TJobDefinition : JobDefinition
+	public class PJob<TJobDefinition> : Job<TJobDefinition> where TJobDefinition : class, IJobDefinition
 	{
 
 		private readonly PInventory pInventory = new PInventory();

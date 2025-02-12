@@ -7,20 +7,20 @@ using Random = UnityEngine.Random;
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Plants", "ChopPlant")]
-	public class ChopPlantJobDefinition : JobDefinition
+	public class ChopPlantJobDefinition : JobDefinition<ChopPlantJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Plant,
 			Selectable.SelectionConditions.NoSameLayerJobs
 		};
 
-		public ChopPlantJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public ChopPlantJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 
 	public class ChopPlantJob : Job<ChopPlantJobDefinition>
 	{
-		protected ChopPlantJob(TileManager.Tile tile) : base(tile) {
+		public ChopPlantJob(TileManager.Tile tile) : base(tile) {
 			TargetName = Tile.plant.name;
 			Description = $"Chopping down a {Tile.plant.prefab.name}";
 		}

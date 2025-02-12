@@ -7,6 +7,6 @@ namespace Snowship.NJob
 	public interface IJobParams
 	{
 		virtual List<Func<TileManager.Tile, int, bool>> SelectionConditions => null;
-		Sprite SelectedJobPreviewSprite { get; }
+		Sprite JobPreviewSprite { get; }
 	}
 }

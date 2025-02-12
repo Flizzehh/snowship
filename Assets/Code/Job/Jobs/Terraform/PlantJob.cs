@@ -5,13 +5,12 @@ using Snowship.NColony;
 using Snowship.NResource;
 using Snowship.NTime;
 using Snowship.NUtilities;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Snowship.NJob
 {
 	[RegisterJob("Terraform", "Plants", "Plant")]
-	public class PlantJobDefinition : JobDefinition
+	public class PlantJobDefinition : JobDefinition<PlantJob>
 	{
 		public override Func<TileManager.Tile, int, bool>[] SelectionConditions { get; protected set; } = {
 			Selectable.SelectionConditions.Walkable,
@@ -23,7 +22,7 @@ namespace Snowship.NJob
 			//Selectable.SelectionConditions.BiomeSupportsSelectedPlants, // TODO (?)
 		};
 
-		public PlantJobDefinition(IGroupItem group, IGroupItem subGroup, string name, Sprite icon) : base(group, subGroup, name, icon) {
+		public PlantJobDefinition(IGroupItem group, IGroupItem subGroup, string name) : base(group, subGroup, name) {
 		}
 	}
 
@@ -31,7 +30,7 @@ namespace Snowship.NJob
 	{
 		private readonly Variation variation;
 
-		protected PlantJob(TileManager.Tile tile, Variation variation) : base(tile) {
+		public PlantJob(TileManager.Tile tile, Variation variation) : base(tile) {
 			this.variation = variation;
 
 			TargetName = PlantGroup.GetPlantGroupByEnum(variation.plants.First().Key.groupType).name;

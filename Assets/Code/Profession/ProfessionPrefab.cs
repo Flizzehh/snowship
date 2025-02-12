@@ -18,13 +18,13 @@ namespace Snowship.NProfession {
 
 		public static readonly int maxPriority = 9;
 
-		public List<JobDefinition> jobs;
+		public List<IJobDefinition> jobs;
 
 		public ESkill relatedSkill;
 
 		public ProfessionPrefab(
 			string type,
-			List<JobDefinition> jobs
+			List<IJobDefinition> jobs
 		) {
 			this.type = type;
 			name = StringUtilities.SplitByCapitals(type.ToString());
@@ -51,7 +51,7 @@ namespace Snowship.NProfession {
 					case "Profession":
 
 						string type = null;
-						List<JobDefinition> jobs = new();
+						List<IJobDefinition> jobs = new();
 
 						foreach (KeyValuePair<string, object> professionSubProperty in (List<KeyValuePair<string, object>>)professionProperty.Value) {
 							switch (professionSubProperty.Key) {
